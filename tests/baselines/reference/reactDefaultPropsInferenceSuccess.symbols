@@ -42,8 +42,8 @@ class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
 >render : Symbol(FieldFeedback.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 15, 4))
 
     return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
   }
 }
 
@@ -89,8 +89,8 @@ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> 
 >render : Symbol(FieldFeedbackBeta.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 31, 4))
 
     return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
   }
 }
 
@@ -153,8 +153,8 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 >when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 38))
 
     return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
   }
 }
 

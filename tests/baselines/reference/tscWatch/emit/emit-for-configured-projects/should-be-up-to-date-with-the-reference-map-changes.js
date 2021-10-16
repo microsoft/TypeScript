@@ -36,13 +36,13 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -58,6 +58,14 @@ Semantic diagnostics in builder refreshed for::
 /a/b/file1Consumer2.ts
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/file1consumer1.ts (used version)
+/a/b/file1consumer2.ts (used version)
+/a/b/globalfile3.ts (used version)
+/a/b/modulefile2.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -129,12 +137,10 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -142,6 +148,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /a/b/file1Consumer1.ts
@@ -152,6 +159,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/b/file1Consumer1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/file1consumer1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -198,12 +208,10 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
 
@@ -211,6 +219,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/file1Consumer1.ts
@@ -222,6 +231,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile1.ts
 /a/b/file1Consumer2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile1.ts (computed .d.ts)
+/a/b/file1consumer2.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -271,13 +284,13 @@ Output::
 >> Screen clear
 [[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -288,6 +301,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/b/file1Consumer1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/file1consumer1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -319,7 +335,7 @@ exitCode:: ExitStatus.undefined
 "use strict";
 exports.__esModule = true;
 var moduleFile1_1 = require("./moduleFile1");
-var y = moduleFile1_1.Foo();
+var y = (0, moduleFile1_1.Foo)();
 
 
 
@@ -334,24 +350,20 @@ Output::
 >> Screen clear
 [[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
 [7m1[0m import {Foo} from "./moduleFile1";let y = Foo();
 [7m [0m [91m        ~~~[0m
-
 
 [96ma/b/file1Consumer2.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
 [7m1[0m import {Foo} from "./moduleFile1"; let z = 10;
 [7m [0m [91m        ~~~[0m
 
-
 [96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:01:15 AM[0m] Found 3 errors. Watching for file changes.
 
@@ -359,6 +371,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -371,6 +384,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
 /a/b/file1Consumer2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile1.ts (computed .d.ts)
+/a/b/file1consumer2.ts (computed .d.ts)
+/a/b/file1consumer1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -420,13 +438,13 @@ Output::
 >> Screen clear
 [[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -439,6 +457,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
 /a/b/file1Consumer2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile1.ts (computed .d.ts)
+/a/b/file1consumer2.ts (computed .d.ts)
+/a/b/file1consumer1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

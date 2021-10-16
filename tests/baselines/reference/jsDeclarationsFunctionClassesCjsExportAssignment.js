@@ -231,7 +231,7 @@ type Input = {
 /**
  * Imports
  */
-type HookHandler = (arg: Context) => void;
+type HookHandler = import("./hook").HookHandler;
 /**
  * State type definition
  */
@@ -264,7 +264,7 @@ declare class Hook {
      * @param {HookHandler} handle
      */
     constructor(handle: HookHandler);
-    handle: (arg: import("./context")) => void;
+    handle: HookHandler;
 }
 declare namespace Hook {
     export { HookHandler };

@@ -204,6 +204,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -577,10 +579,6 @@ export class N<T> extends L {
  * @extends {N<U>}
  */
 export class O<U> extends N<U> {
-    /**
-     * @param {U} param
-     */
-    constructor(param: U);
     another2: U;
 }
 declare const VariableBase_base: any;

@@ -27,8 +27,8 @@ define(["require", "exports", "tslib", "./a", "./a", "./a"], function (require, 
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = exports.default = void 0;
-    a_3 = tslib_1.__importDefault(a_3);
-    Object.defineProperty(exports, "default", { enumerable: true, get: function () { return tslib_1.__importDefault(a_1).default; } });
-    Object.defineProperty(exports, "a", { enumerable: true, get: function () { return tslib_1.__importDefault(a_2).default; } });
+    a_3 = (0, tslib_1.__importDefault)(a_3);
+    Object.defineProperty(exports, "default", { enumerable: true, get: function () { return (0, tslib_1.__importDefault)(a_1).default; } });
+    Object.defineProperty(exports, "a", { enumerable: true, get: function () { return (0, tslib_1.__importDefault)(a_2).default; } });
     void a_3.default;
 });

@@ -1,6 +1,6 @@
 //// [commaOperatorOtherInvalidOperation.ts]
 //Expect to have compiler errors
-//Comma operator in fuction arguments and return
+//Comma operator in function arguments and return
 function foo(x: number, y: string) {
     return x, y;
 }
@@ -15,7 +15,7 @@ function foo1<T1, T2>() {
 
 //// [commaOperatorOtherInvalidOperation.js]
 //Expect to have compiler errors
-//Comma operator in fuction arguments and return
+//Comma operator in function arguments and return
 function foo(x, y) {
     return x, y;
 }

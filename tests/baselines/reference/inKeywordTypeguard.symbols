@@ -261,8 +261,105 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
     }
 }
+
+// Repro from #38608
+declare const error: Error;
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+if ('extra' in error) {
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+
+    error // Still Error
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+
+} else {
+    error // Error
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+>narrowsToNever : Symbol(narrowsToNever, Decl(inKeywordTypeguard.ts, 112, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+>r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+
+    let v: number;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+
+    if ("l" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+
+        v = x.l;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x.l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+    }
+    else if ("r" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+
+        v = x.r;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x.r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+    }
+    else {
+        v = x
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+    }
+    return v;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+}
+
+type AOrB = { aProp: number } | { bProp: number };
+>AOrB : Symbol(AOrB, Decl(inKeywordTypeguard.ts, 126, 1))
+>aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+>bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+
+declare function isAOrB(x: unknown): x is AOrB;
+>isAOrB : Symbol(isAOrB, Decl(inKeywordTypeguard.ts, 128, 50))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 129, 24))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 129, 24))
+>AOrB : Symbol(AOrB, Decl(inKeywordTypeguard.ts, 126, 1))
+
+declare var x: unknown;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+if (isAOrB(x)) {
+>isAOrB : Symbol(isAOrB, Decl(inKeywordTypeguard.ts, 128, 50))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+    if ("aProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        x.aProp;
+>x.aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+>aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+    }
+    else if ("bProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        x.bProp;
+>x.bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+>bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+    }
+    // x is never because of the type predicate from unknown
+    else if ("cProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        const _never: never = x;
+>_never : Symbol(_never, Decl(inKeywordTypeguard.ts, 141, 13))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+    }
+}
+
 function negativeIntersectionTest() {
->negativeIntersectionTest : Symbol(negativeIntersectionTest, Decl(inKeywordTypeguard.ts, 104, 1))
+>negativeIntersectionTest : Symbol(negativeIntersectionTest, Decl(inKeywordTypeguard.ts, 143, 1))
 
     if ("ontouchstart" in window) {
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))

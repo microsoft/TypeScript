@@ -1,0 +1,120 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as cjsi from "inner/cjs/index";
+>cjsi : typeof cjsi
+
+import * as mjsi from "inner/mjs/index";
+>mjsi : typeof cjsi.mjs
+
+import * as typei from "inner/js/index";
+>typei : typeof cjsi.mjs.type
+
+cjsi;
+>cjsi : typeof cjsi
+
+mjsi;
+>mjsi : typeof cjsi.mjs
+
+typei;
+>typei : typeof cjsi.mjs.type
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as cjsi from "inner/cjs/index";
+>cjsi : typeof cjsi
+
+import * as mjsi from "inner/mjs/index";
+>mjsi : typeof cjsi.mjs
+
+import * as typei from "inner/js/index";
+>typei : typeof cjsi.mjs.type
+
+cjsi;
+>cjsi : typeof cjsi
+
+mjsi;
+>mjsi : typeof cjsi.mjs
+
+typei;
+>typei : typeof cjsi.mjs.type
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+import * as cjsi from "inner/cjs/index";
+>cjsi : typeof cjsi
+
+import * as mjsi from "inner/mjs/index";
+>mjsi : typeof cjsi.mjs
+
+import * as typei from "inner/js/index";
+>typei : typeof cjsi.mjs.type
+
+cjsi;
+>cjsi : typeof cjsi
+
+mjsi;
+>mjsi : typeof cjsi.mjs
+
+typei;
+>typei : typeof cjsi.mjs.type
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// cjs format file
+import * as cjs from "inner/cjs/index";
+>cjs : any
+
+import * as mjs from "inner/mjs/index";
+>mjs : typeof mjs
+
+import * as type from "inner/js/index";
+>type : typeof mjs.cjs.type
+
+export { cjs };
+>cjs : any
+
+export { mjs };
+>mjs : typeof mjs
+
+export { type };
+>type : typeof mjs.cjs.type
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+// esm format file
+import * as cjs from "inner/cjs/index";
+>cjs : typeof cjs
+
+import * as mjs from "inner/mjs/index";
+>mjs : typeof cjs.mjs
+
+import * as type from "inner/js/index";
+>type : typeof cjs.mjs.type
+
+export { cjs };
+>cjs : typeof cjs
+
+export { mjs };
+>mjs : typeof cjs.mjs
+
+export { type };
+>type : typeof cjs.mjs.type
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+// cjs format file
+import * as cjs from "inner/cjs/index";
+>cjs : typeof cjs
+
+import * as mjs from "inner/mjs/index";
+>mjs : typeof cjs.mjs
+
+import * as type from "inner/js/index";
+>type : typeof cjs.mjs.type
+
+export { cjs };
+>cjs : typeof cjs
+
+export { mjs };
+>mjs : typeof cjs.mjs
+
+export { type };
+>type : typeof cjs.mjs.type
+

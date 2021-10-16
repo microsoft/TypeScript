@@ -1,7 +1,5 @@
 tests/cases/conformance/jsdoc/mod1.js(3,23): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/conformance/jsdoc/mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/conformance/jsdoc/mod1.js(6,23): error TS2300: Duplicate identifier 'Bar'.
-tests/cases/conformance/jsdoc/mod1.js(7,9): error TS2300: Duplicate identifier 'Bar'.
 tests/cases/conformance/jsdoc/mod1.js(9,23): error TS2300: Duplicate identifier 'Baz'.
 tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
 
@@ -14,7 +12,7 @@ tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 
     var bb;
     var bbb = new mod.Baz();
     
-==== tests/cases/conformance/jsdoc/mod1.js (6 errors) ====
+==== tests/cases/conformance/jsdoc/mod1.js (4 errors) ====
     // error
     
     /** @typedef {number} Foo */
@@ -25,11 +23,7 @@ tests/cases/conformance/jsdoc/mod1.js(11,5): error TS2300: Duplicate identifier 
 !!! error TS2300: Duplicate identifier 'Foo'.
     
     /** @typedef {number} Bar */
-                          ~~~
-!!! error TS2300: Duplicate identifier 'Bar'.
     exports.Bar = class { }
-            ~~~
-!!! error TS2300: Duplicate identifier 'Bar'.
     
     /** @typedef {number} Baz */
                           ~~~

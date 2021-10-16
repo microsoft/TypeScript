@@ -41,6 +41,29 @@ let c: C;
 let d: C.Two;
 console.log(c, d);
 
+//// [h.ts]
+class H {}
+export = H;
+
+//// [i.ts]
+import H = require('./h'); // Error
+let h: H = {};
+console.log(h);
+
+//// [j.ts]
+import H = require('./h'); // noUnusedLocals error only
+
+//// [k.ts]
+const enum K { One, Two }
+export = K;
+
+//// [l.ts]
+import K = require('./k');
+K.One;
+
+//// [j.ts]
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
+
 //// [a.js]
 "use strict";
 exports.__esModule = true;
@@ -97,3 +120,25 @@ require("./a");
 var c;
 var d;
 console.log(c, d);
+//// [h.js]
+"use strict";
+var H = /** @class */ (function () {
+    function H() {
+    }
+    return H;
+}());
+module.exports = H;
+//// [i.js]
+"use strict";
+exports.__esModule = true;
+var h = {};
+console.log(h);
+//// [j.js]
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
+//// [k.js]
+"use strict";
+exports.__esModule = true;
+//// [l.js]
+"use strict";
+exports.__esModule = true;
+0 /* One */;

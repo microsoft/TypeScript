@@ -8,7 +8,7 @@ const m = require("./exporter");
 module.exports = m.default;
 >module.exports = m.default : typeof m.default
 >module.exports : typeof m.default
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof m.default; }
+>module : { exports: typeof m.default; }
 >exports : typeof m.default
 >m.default : { (): void; memberName: string; }
 >m : typeof m
@@ -18,7 +18,7 @@ module.exports.memberName = "thing";
 >module.exports.memberName = "thing" : "thing"
 >module.exports.memberName : string
 >module.exports : typeof m.default
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof m.default; }
+>module : { exports: typeof m.default; }
 >exports : typeof m.default
 >memberName : string
 >"thing" : "thing"

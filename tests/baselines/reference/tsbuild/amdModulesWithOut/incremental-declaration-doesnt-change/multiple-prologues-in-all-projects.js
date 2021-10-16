@@ -334,6 +334,81 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":13,"kind":"prologue","data":"use strict"},{"pos":15,"end":28,"kind":"prologue","data":"myPrologue"},{"pos":30,"end":44,"kind":"prologue","data":"myPrologue3"},{"pos":46,"end":60,"kind":"prologue","data":"myPrologue2"},{"pos":62,"end":573,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":62,"end":573,"kind":"text"}]},{"pos":573,"end":818,"kind":"text"}],"sources":{"prologues":[{"file":1,"text":"\"myPrologue2\";","directives":[{"pos":-1,"end":-1,"expression":{"pos":-1,"end":-1,"text":"use strict"}},{"pos":0,"end":14,"expression":{"pos":0,"end":13,"text":"myPrologue2"}}]}]}},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":253,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/app/module.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/app/module.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+prologue: (15-28):: myPrologue
+"myPrologue";
+----------------------------------------------------------------------
+prologue: (30-44):: myPrologue3
+"myPrologue3";
+----------------------------------------------------------------------
+prologue: (46-60):: myPrologue2
+"myPrologue2";
+----------------------------------------------------------------------
+prepend: (62-573):: ../lib/module.js texts:: 1
+>>--------------------------------------------------------------------
+text: (62-573)
+var myGlob = 20;
+define("file1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
+    exports.x = 10;
+    console.log(exports.x);
+});
+define("file2", ["require", "exports"], function (require, exports) {
+    "use strict";
+    "myPrologueFile";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
+    exports.y = 20;
+});
+var globalConst = 10;
+
+----------------------------------------------------------------------
+text: (573-818)
+define("file3", ["require", "exports"], function (require, exports) {
+    "use strict";
+    "myPrologue";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.z = void 0;
+    exports.z = 30;
+});
+var myVar = 30;
+
+======================================================================
+======================================================================
+File:: /src/app/module.d.ts
+----------------------------------------------------------------------
+prepend: (0-171):: ../lib/module.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-171)
+declare const myGlob = 20;
+declare module "file1" {
+    export const x = 10;
+}
+declare module "file2" {
+    export const y = 20;
+}
+declare const globalConst = 10;
+
+----------------------------------------------------------------------
+text: (171-253)
+declare module "file3" {
+    export const z = 30;
+}
+declare const myVar = 30;
+
+======================================================================
+
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -438,80 +513,9 @@ sourceFile:file4.ts
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 896
 }
-
-//// [/src/app/module.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/app/module.js
-----------------------------------------------------------------------
-prologue: (0-13):: use strict
-"use strict";
-----------------------------------------------------------------------
-prologue: (15-28):: myPrologue
-"myPrologue";
-----------------------------------------------------------------------
-prologue: (30-44):: myPrologue3
-"myPrologue3";
-----------------------------------------------------------------------
-prologue: (46-60):: myPrologue2
-"myPrologue2";
-----------------------------------------------------------------------
-prepend: (62-573):: ../lib/module.js texts:: 1
->>--------------------------------------------------------------------
-text: (62-573)
-var myGlob = 20;
-define("file1", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.x = void 0;
-    exports.x = 10;
-    console.log(exports.x);
-});
-define("file2", ["require", "exports"], function (require, exports) {
-    "use strict";
-    "myPrologueFile";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.y = void 0;
-    exports.y = 20;
-});
-var globalConst = 10;
-
-----------------------------------------------------------------------
-text: (573-818)
-define("file3", ["require", "exports"], function (require, exports) {
-    "use strict";
-    "myPrologue";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.z = void 0;
-    exports.z = 30;
-});
-var myVar = 30;
-
-======================================================================
-======================================================================
-File:: /src/app/module.d.ts
-----------------------------------------------------------------------
-prepend: (0-171):: ../lib/module.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-171)
-declare const myGlob = 20;
-declare module "file1" {
-    export const x = 10;
-}
-declare module "file2" {
-    export const y = 20;
-}
-declare const globalConst = 10;
-
-----------------------------------------------------------------------
-text: (171-253)
-declare module "file3" {
-    export const z = 30;
-}
-declare const myVar = 30;
-
-======================================================================
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -734,6 +738,56 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":13,"kind":"prologue","data":"use strict"},{"pos":15,"end":28,"kind":"prologue","data":"myPrologue"},{"pos":30,"end":44,"kind":"prologue","data":"myPrologue3"},{"pos":46,"end":557,"kind":"text"}],"sources":{"prologues":[{"file":0,"text":"\"myPrologue\"","directives":[{"pos":-1,"end":-1,"expression":{"pos":-1,"end":-1,"text":"use strict"}},{"pos":0,"end":12,"expression":{"pos":0,"end":12,"text":"myPrologue"}}]},{"file":3,"text":"\"myPrologue3\"","directives":[{"pos":0,"end":13,"expression":{"pos":0,"end":13,"text":"myPrologue3"}}]}]}},"dts":{"sections":[{"pos":0,"end":171,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/lib/module.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/lib/module.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+prologue: (15-28):: myPrologue
+"myPrologue";
+----------------------------------------------------------------------
+prologue: (30-44):: myPrologue3
+"myPrologue3";
+----------------------------------------------------------------------
+text: (46-557)
+var myGlob = 20;
+define("file1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
+    exports.x = 10;
+    console.log(exports.x);
+});
+define("file2", ["require", "exports"], function (require, exports) {
+    "use strict";
+    "myPrologueFile";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
+    exports.y = 20;
+});
+var globalConst = 10;
+
+======================================================================
+======================================================================
+File:: /src/lib/module.d.ts
+----------------------------------------------------------------------
+text: (0-171)
+declare const myGlob = 20;
+declare module "file1" {
+    export const x = 10;
+}
+declare module "file2" {
+    export const y = 20;
+}
+declare const globalConst = 10;
+
+======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -823,53 +877,7 @@ sourceFile:global.ts
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 763
 }
-
-//// [/src/lib/module.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/lib/module.js
-----------------------------------------------------------------------
-prologue: (0-13):: use strict
-"use strict";
-----------------------------------------------------------------------
-prologue: (15-28):: myPrologue
-"myPrologue";
-----------------------------------------------------------------------
-prologue: (30-44):: myPrologue3
-"myPrologue3";
-----------------------------------------------------------------------
-text: (46-557)
-var myGlob = 20;
-define("file1", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.x = void 0;
-    exports.x = 10;
-    console.log(exports.x);
-});
-define("file2", ["require", "exports"], function (require, exports) {
-    "use strict";
-    "myPrologueFile";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.y = void 0;
-    exports.y = 20;
-});
-var globalConst = 10;
-
-======================================================================
-======================================================================
-File:: /src/lib/module.d.ts
-----------------------------------------------------------------------
-text: (0-171)
-declare const myGlob = 20;
-declare module "file1" {
-    export const x = 10;
-}
-declare module "file2" {
-    export const y = 20;
-}
-declare const globalConst = 10;
-
-======================================================================
 

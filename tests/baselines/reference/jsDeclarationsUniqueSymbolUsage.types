@@ -15,9 +15,9 @@ export const kSymbol = Symbol("my-symbol");
  */
 export function b(value) {
 >b : (value: import('./a').WithSymbol) => import('./a').WithSymbol
->value : { [kSymbol]: true; }
+>value : import("tests/cases/conformance/jsdoc/declarations/a").WithSymbol
 
     return value;
->value : { [kSymbol]: true; }
+>value : import("tests/cases/conformance/jsdoc/declarations/a").WithSymbol
 }
 

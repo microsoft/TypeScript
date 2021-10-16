@@ -57,19 +57,19 @@ verify.codeFixAll({
     x; z;
 }
 {
-    const [x] = o;
+    const [x, y] = o;
     x;
 }
 {
-    const [, y] = o;
+    const [x, y] = o;
     y;
 }
 {
-    const [, y] = o;
+    const [x, y, z] = o;
     y;
 }
 {
-    const [x,, z] = o;
+    const [x, y, z] = o;
     x; z;
 }`,
 });

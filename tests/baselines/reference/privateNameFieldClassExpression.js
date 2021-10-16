@@ -15,21 +15,21 @@ class B {
 
 
 //// [privateNameFieldClassExpression.js]
-var _foo, _foo2;
+var _B_foo, _B_foo2;
 class B {
     constructor() {
         var _a, _b;
-        _foo.set(this, (_a = class {
+        _B_foo.set(this, (_a = class {
                 constructor() {
                     console.log("hello");
                 }
             },
             _a.test = 123,
             _a));
-        _foo2.set(this, (_b = class Foo {
+        _B_foo2.set(this, (_b = class Foo {
             },
             _b.otherClass = 123,
             _b));
     }
 }
-_foo = new WeakMap(), _foo2 = new WeakMap();
+_B_foo = new WeakMap(), _B_foo2 = new WeakMap();

@@ -68,9 +68,9 @@ exports["default"] = { x: "x" };
 module.exports["c"] = { x: "x" };
 >module.exports["c"] = { x: "x" } : { x: string; }
 >module.exports["c"] : { x: string; }
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof import("tests/cases/conformance/jsdoc/mod1"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >"c" : "c"
 >{ x: "x" } : { x: string; }
 >x : string
@@ -79,8 +79,8 @@ module.exports["c"] = { x: "x" };
 module["exports"]["d"] = {};
 >module["exports"]["d"] = {} : typeof "d"
 >module["exports"]["d"] : typeof "d"
->module["exports"] : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>module["exports"] : typeof module.exports
+>module : { exports: typeof module.exports; }
 >"exports" : "exports"
 >"d" : "d"
 >{} : {}
@@ -89,8 +89,8 @@ module["exports"]["d"].e = 0;
 >module["exports"]["d"].e = 0 : 0
 >module["exports"]["d"].e : number
 >module["exports"]["d"] : typeof "d"
->module["exports"] : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>module["exports"] : typeof module.exports
+>module : { exports: typeof module.exports; }
 >"exports" : "exports"
 >"d" : "d"
 >e : number

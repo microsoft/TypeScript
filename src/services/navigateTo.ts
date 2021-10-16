@@ -129,7 +129,7 @@ namespace ts.NavigateTo {
             fileName: rawItem.fileName,
             textSpan: createTextSpanFromNode(declaration),
             // TODO(jfreeman): What should be the containerName when the container has a computed name?
-            containerName: containerName ? (<Identifier>containerName).text : "",
+            containerName: containerName ? (containerName as Identifier).text : "",
             containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown, // TODO: GH#18217 Just use `container ? ...`
         };
     }

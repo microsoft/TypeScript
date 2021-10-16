@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty4.ts ===
 var x = {
->x : { [x: string]: number | (() => void); }
->{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : { [x: string]: number | (() => void); }
+>x : { [x: symbol]: number | (() => void); }
+>{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : { [x: symbol]: number | (() => void); }
 
     [Symbol()]: 0,
 >[Symbol()] : number

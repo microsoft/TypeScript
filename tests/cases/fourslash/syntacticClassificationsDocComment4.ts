@@ -3,7 +3,7 @@
 //// /** @param {number} p1 */
 //// function foo(p1) {}
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/** "),
     c.punctuation("@"),
@@ -22,3 +22,9 @@ verify.syntacticClassificationsAre(
     c.punctuation(")"),
     c.punctuation("{"),
     c.punctuation("}"));
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("function.declaration", "foo"), 
+    c2.semanticToken("parameter.declaration", "p1"), 
+);

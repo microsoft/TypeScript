@@ -237,6 +237,17 @@ function ff(o: O, k: K) {
     return o[k];
 }
 
+// Repro from #35431
+type A = { kind: "abc" } | { kind: "def" };
+
+function f35431(a: A) {
+  switch (a.kind) {
+    case "abc":
+    case "def": return;
+    default:
+      a!.kind; // Error expected
+  }
+}
 
 //// [exhaustiveSwitchStatements1.js]
 "use strict";
@@ -453,6 +464,14 @@ function ff(o, k) {
     k === 'c'; // Error
     return o[k];
 }
+function f35431(a) {
+    switch (a.kind) {
+        case "abc":
+        case "def": return;
+        default:
+            a.kind; // Error expected
+    }
+}
 
 
 //// [exhaustiveSwitchStatements1.d.ts]
@@ -524,3 +543,9 @@ declare type O = {
 };
 declare type K = keyof O | 'c';
 declare function ff(o: O, k: K): number;
+declare type A = {
+    kind: "abc";
+} | {
+    kind: "def";
+};
+declare function f35431(a: A): void;

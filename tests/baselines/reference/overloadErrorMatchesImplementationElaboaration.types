@@ -1,0 +1,27 @@
+=== tests/cases/compiler/overloadErrorMatchesImplementationElaboaration.ts ===
+class EventAggregator
+>EventAggregator : EventAggregator
+{
+    publish(event: string, data?: any): void;
+>publish : (event: string, data?: any) => void
+>event : string
+>data : any
+
+    publish<T>(event: T): void {}
+>publish : (event: string, data?: any) => void
+>event : T
+}
+
+var ea: EventAggregator;
+>ea : EventAggregator
+
+ea.publish([1,2,3]);
+>ea.publish([1,2,3]) : void
+>ea.publish : (event: string, data?: any) => void
+>ea : EventAggregator
+>publish : (event: string, data?: any) => void
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+

@@ -36,10 +36,20 @@ const types: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
     ...completion.typeKeywords,
 ];
 
+const filterValuesByName = (name: string) => {
+    return values.filter(entry => {
+        if (typeof entry === 'string') {
+            return entry !== name;
+        }
+
+        return entry.name !== name;
+    })
+}
+
 verify.completions(
-    { marker: "valueExpr", exact: values, isNewIdentifierLocation: true },
+    { marker: "valueExpr", exact: filterValuesByName('tt'), isNewIdentifierLocation: true },
     { marker: "typeExpr", exact: types, },
-    { marker: "valueExprInObjectLiteral", exact: values },
+    { marker: "valueExprInObjectLiteral", exact: filterValuesByName('yy') },
     { marker: "membertypeExpr", exact: [{ name: "point3", text: "interface m3.point3" }] },
     { marker: "membervalueExpr", exact: [{ name: "zz2", text: "var m3.zz2: number" }] },
 );

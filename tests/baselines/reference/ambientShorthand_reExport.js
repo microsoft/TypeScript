@@ -49,4 +49,4 @@ exports.__esModule = true;
 var reExportX_1 = require("./reExportX");
 var $ = require("./reExportAll");
 // '$' is not callable, it is an object.
-reExportX_1.x($);
+(0, reExportX_1.x)($);

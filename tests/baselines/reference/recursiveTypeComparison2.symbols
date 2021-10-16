@@ -74,6 +74,7 @@ declare module Bacon {
 >event : Symbol(event, Decl(recursiveTypeComparison2.ts, 12, 58))
 >Event : Symbol(Event, Decl(recursiveTypeComparison2.ts, 2, 22))
 >T : Symbol(T, Decl(recursiveTypeComparison2.ts, 7, 25))
+>StateValue : Symbol(StateValue)
 >U : Symbol(U, Decl(recursiveTypeComparison2.ts, 12, 25))
 >V : Symbol(V, Decl(recursiveTypeComparison2.ts, 12, 27))
 >EventStream : Symbol(EventStream, Decl(recursiveTypeComparison2.ts, 21, 5))

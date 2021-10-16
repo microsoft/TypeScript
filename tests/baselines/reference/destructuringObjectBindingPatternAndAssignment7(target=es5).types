@@ -1,0 +1,47 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment7.ts ===
+enum K {
+>K : K
+
+    a = "a",
+>a : K.a
+>"a" : "a"
+
+    b = "b"
+>b : K.b
+>"b" : "b"
+}
+const { [K.a]: aVal, [K.b]: bVal } = (() => {
+>K.a : K.a
+>K : typeof K
+>a : K.a
+>aVal : number
+>K.b : K.b
+>K : typeof K
+>b : K.b
+>bVal : number
+>(() => {	return { [K.a]: 1, [K.b]: 1 };})() : { a: number; b: number; }
+>(() => {	return { [K.a]: 1, [K.b]: 1 };}) : () => { a: number; b: number; }
+>() => {	return { [K.a]: 1, [K.b]: 1 };} : () => { a: number; b: number; }
+
+	return { [K.a]: 1, [K.b]: 1 };
+>{ [K.a]: 1, [K.b]: 1 } : { a: number; b: number; }
+>[K.a] : number
+>K.a : K.a
+>K : typeof K
+>a : K.a
+>1 : 1
+>[K.b] : number
+>K.b : K.b
+>K : typeof K
+>b : K.b
+>1 : 1
+
+})();
+console.log(aVal, bVal);
+>console.log(aVal, bVal) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>aVal : number
+>bVal : number
+

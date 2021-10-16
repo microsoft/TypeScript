@@ -173,8 +173,8 @@ define(["require", "exports"], function (require, exports) {
     exports.publicUse_im_public_c_private = new exports.im_public_c_private();
     var privateUse_im_public_e_private = exports.im_public_e_private.Happy;
     exports.publicUse_im_public_e_private = exports.im_public_e_private.Grumpy;
-    var privateUse_im_public_f_private = exports.im_public_f_private();
-    exports.publicUse_im_public_f_private = exports.im_public_f_private();
+    var privateUse_im_public_f_private = (0, exports.im_public_f_private)();
+    exports.publicUse_im_public_f_private = (0, exports.im_public_f_private)();
     var privateUse_im_public_v_private = exports.im_public_v_private;
     exports.publicUse_im_public_v_private = exports.im_public_v_private;
     var privateUse_im_public_i_private;
@@ -192,8 +192,8 @@ define(["require", "exports"], function (require, exports) {
     exports.publicUse_im_public_c_public = new exports.im_public_c_public();
     var privateUse_im_public_e_public = exports.im_public_e_public.Happy;
     exports.publicUse_im_public_e_public = exports.im_public_e_public.Grumpy;
-    var privateUse_im_public_f_public = exports.im_public_f_public();
-    exports.publicUse_im_public_f_public = exports.im_public_f_public();
+    var privateUse_im_public_f_public = (0, exports.im_public_f_public)();
+    exports.publicUse_im_public_f_public = (0, exports.im_public_f_public)();
     var privateUse_im_public_v_public = exports.im_public_v_public;
     exports.publicUse_im_public_v_public = exports.im_public_v_public;
     var privateUse_im_public_i_public;

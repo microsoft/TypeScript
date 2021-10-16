@@ -5,8 +5,8 @@ interface SymbolConstructor {
 }
 
 var obj = {
->obj : { [Symbol.foo]: number; }
->{    [Symbol.foo]: 0} : { [Symbol.foo]: number; }
+>obj : { [x: string]: number; }
+>{    [Symbol.foo]: 0} : { [x: string]: number; }
 
     [Symbol.foo]: 0
 >[Symbol.foo] : number

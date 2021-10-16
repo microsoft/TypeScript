@@ -112,7 +112,7 @@ export function useState<T>(initial: T): [value: T, setter: (T) => void] {
 
 
 export type Iter = Func<[step: number, iterations: number]>;
->Iter : Func<[step: number, iterations: number]>
+>Iter : Iter
 
 export function readSegment([length, count]: [number, number]) {}
 >readSegment : ([length, count]: [number, number]) => void

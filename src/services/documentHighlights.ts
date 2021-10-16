@@ -32,9 +32,12 @@ namespace ts {
             const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
             if (!referenceEntries) return undefined;
             const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
-            return arrayFrom(map.entries(), ([fileName, highlightSpans]) => {
+            const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
+            return mapDefined(arrayFrom(map.entries()), ([fileName, highlightSpans]) => {
                 if (!sourceFilesSet.has(fileName)) {
-                    Debug.assert(program.redirectTargetsMap.has(fileName));
+                    if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
+                        return undefined;
+                    }
                     const redirectTarget = program.getSourceFile(fileName);
                     const redirect = find(sourceFilesToSearch, f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
                     fileName = redirect.fileName;
@@ -204,7 +207,7 @@ namespace ts {
 
         function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
             // Types of node whose children might have modifiers.
-            const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration;
+            const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration | ObjectLiteralExpression;
             switch (container.kind) {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SourceFile:
@@ -240,6 +243,11 @@ namespace ts {
                         return [...nodes, container];
                     }
                     return nodes;
+
+                // Syntactically invalid positions that the parser might produce anyway
+                case SyntaxKind.ObjectLiteralExpression:
+                    return undefined;
+
                 default:
                     Debug.assertNever(container, "Invalid container kind.");
             }
@@ -289,9 +297,9 @@ namespace ts {
                     case SyntaxKind.ForOfStatement:
                     case SyntaxKind.DoStatement:
                     case SyntaxKind.WhileStatement:
-                        return getLoopBreakContinueOccurrences(<IterationStatement>owner);
+                        return getLoopBreakContinueOccurrences(owner as IterationStatement);
                     case SyntaxKind.SwitchStatement:
-                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+                        return getSwitchCaseDefaultOccurrences(owner as SwitchStatement);
 
                 }
             }
@@ -351,7 +359,7 @@ namespace ts {
             // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
             // ability to "jump out" of the function, and include occurrences for both.
             if (isFunctionBlock(owner)) {
-                forEachReturnStatement(<Block>owner, returnStatement => {
+                forEachReturnStatement(owner as Block, returnStatement => {
                     keywords.push(findChildOfKind(returnStatement, SyntaxKind.ReturnKeyword, sourceFile)!);
                 });
             }
@@ -360,7 +368,7 @@ namespace ts {
         }
 
         function getReturnOccurrences(returnStatement: ReturnStatement, sourceFile: SourceFile): Node[] | undefined {
-            const func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
+            const func = getContainingFunction(returnStatement) as FunctionLikeDeclaration;
             if (!func) {
                 return undefined;
             }
@@ -379,7 +387,7 @@ namespace ts {
         }
 
         function getAsyncAndAwaitOccurrences(node: Node): Node[] | undefined {
-            const func = <FunctionLikeDeclaration>getContainingFunction(node);
+            const func = getContainingFunction(node) as FunctionLikeDeclaration;
             if (!func) {
                 return undefined;
             }

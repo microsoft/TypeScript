@@ -26,18 +26,22 @@
 ////}
 //// Derived./*2*/
 
-const publicCompletions: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = ["publicMethod", "publicProperty", ...completion.functionMembers];
+const publicCompletions: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
+    { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
+    ...completion.functionMembers
+];
 
 verify.completions(
     {
         // Sub class, everything but private is visible
         marker: "1",
         exact: [
-            "prototype",
-            "protectedOverriddenMethod",
-            "protectedOverriddenProperty",
-            "protectedMethod",
-            "protectedProperty",
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedProperty", sortText: completion.SortText.LocalDeclarationPriority },
             ...publicCompletions
         ],
     },
@@ -45,9 +49,9 @@ verify.completions(
         // Can see protected methods elevated to public
         marker: "2",
         exact: [
-            "prototype",
-            "protectedOverriddenMethod",
-            "protectedOverriddenProperty",
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
             ...publicCompletions,
         ],
     },

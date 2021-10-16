@@ -1,0 +1,8 @@
+=== tests/cases/compiler/spellingSuggestionGlobal4.ts ===
+export {}
+declare global { var x: any }
+>global : Symbol(global, Decl(spellingSuggestionGlobal4.ts, 0, 9))
+>x : Symbol(x, Decl(spellingSuggestionGlobal4.ts, 1, 20))
+
+global.x // should not suggest `global` (GH#42209)
+

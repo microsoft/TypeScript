@@ -26,7 +26,14 @@
 verify.completions(
     {
         marker: "staticsInsideClassScope",
-        exact: ["prototype", "privateStaticProperty", "publicStaticProperty", "privateStaticMethod", "publicStaticMethod", ...completion.functionMembers],
+        exact: [
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "privateStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "privateStaticMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicStaticMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            ...completion.functionMembers
+        ],
     },
     {
         marker: "instanceMembersInsideClassScope",
@@ -34,7 +41,12 @@ verify.completions(
     },
     {
         marker: "staticsOutsideClassScope",
-        exact: ["prototype", "publicStaticProperty", "publicStaticMethod", ...completion.functionMembers],
+        exact: [
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "publicStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicStaticMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            ...completion.functionMembers
+        ],
     },
     {
         marker: "instanceMembersOutsideClassScope",

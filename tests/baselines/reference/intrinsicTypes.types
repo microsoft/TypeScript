@@ -1,0 +1,151 @@
+=== tests/cases/conformance/types/typeAliases/intrinsicTypes.ts ===
+type TU1 = Uppercase<'hello'>;  // "HELLO"
+>TU1 : "HELLO"
+
+type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
+>TU2 : "FOO" | "BAR"
+
+type TU3 = Uppercase<string>;  // string
+>TU3 : string
+
+type TU4 = Uppercase<any>;  // any
+>TU4 : any
+
+type TU5 = Uppercase<never>;  // never
+>TU5 : never
+
+type TU6 = Uppercase<42>;  // Error
+>TU6 : 42
+
+type TL1 = Lowercase<'HELLO'>;  // "hello"
+>TL1 : "hello"
+
+type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
+>TL2 : "foo" | "bar"
+
+type TL3 = Lowercase<string>;  // string
+>TL3 : string
+
+type TL4 = Lowercase<any>;  // any
+>TL4 : any
+
+type TL5 = Lowercase<never>;  // never
+>TL5 : never
+
+type TL6 = Lowercase<42>;  // Error
+>TL6 : 42
+
+type TC1 = Capitalize<'hello'>;  // "Hello"
+>TC1 : "Hello"
+
+type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
+>TC2 : "Foo" | "Bar"
+
+type TC3 = Capitalize<string>;  // string
+>TC3 : string
+
+type TC4 = Capitalize<any>;  // any
+>TC4 : any
+
+type TC5 = Capitalize<never>;  // never
+>TC5 : never
+
+type TC6 = Capitalize<42>;  // Error
+>TC6 : 42
+
+type TN1 = Uncapitalize<'Hello'>;  // "hello"
+>TN1 : "hello"
+
+type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
+>TN2 : "foo" | "bar"
+
+type TN3 = Uncapitalize<string>;  // string
+>TN3 : string
+
+type TN4 = Uncapitalize<any>;  // any
+>TN4 : any
+
+type TN5 = Uncapitalize<never>;  // never
+>TN5 : never
+
+type TN6 = Uncapitalize<42>;  // Error
+>TN6 : 42
+
+type TX1<S extends string> = Uppercase<`aB${S}`>;
+>TX1 : Uppercase<`aB${S}`>
+
+type TX2 = TX1<'xYz'>;  // "ABXYZ"
+>TX2 : "ABXYZ"
+
+type TX3<S extends string> = Lowercase<`aB${S}`>;
+>TX3 : Lowercase<`aB${S}`>
+
+type TX4 = TX3<'xYz'>;  // "abxyz"
+>TX4 : "abxyz"
+
+type TX5 = `${Uppercase<'abc'>}${Lowercase<'XYZ'>}`;  // "ABCxyz"
+>TX5 : "ABCxyz"
+
+type MyUppercase<S extends string> = intrinsic;  // Error
+>MyUppercase : intrinsic
+
+function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppercase<U>) {
+>foo1 : <T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppercase<U>) => void
+>s : string
+>x : Uppercase<T>
+>y : Uppercase<U>
+
+    s = x;
+>s = x : Uppercase<T>
+>s : string
+>x : Uppercase<T>
+
+    s = y;
+>s = y : Uppercase<U>
+>s : string
+>y : Uppercase<U>
+
+    x = s;  // Error
+>x = s : string
+>x : Uppercase<T>
+>s : string
+
+    x = y;
+>x = y : Uppercase<U>
+>x : Uppercase<T>
+>y : Uppercase<U>
+
+    y = s;  // Error
+>y = s : string
+>y : Uppercase<U>
+>s : string
+
+    y = x;  // Error
+>y = x : Uppercase<T>
+>y : Uppercase<U>
+>x : Uppercase<T>
+}
+
+function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
+>foo2 : <T extends "foo" | "bar">(x: Uppercase<T>) => void
+>x : Uppercase<T>
+
+    let s: 'FOO' | 'BAR' = x;
+>s : "FOO" | "BAR"
+>x : "FOO" | "BAR"
+}
+
+declare function foo3<T extends string>(x: Uppercase<T>): T;
+>foo3 : <T extends string>(x: Uppercase<T>) => T
+>x : Uppercase<T>
+
+function foo4<U extends string>(x: Uppercase<U>) {
+>foo4 : <U extends string>(x: Uppercase<U>) => U
+>x : Uppercase<U>
+
+    return foo3(x);
+>foo3(x) : U
+>foo3 : <T extends string>(x: Uppercase<T>) => T
+>x : Uppercase<U>
+}
+

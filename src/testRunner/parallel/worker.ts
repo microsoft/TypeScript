@@ -98,10 +98,10 @@ namespace Harness.Parallel.Worker {
          */
         function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
             const suites = [rootSuite];
-            context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeAll(title as string, fn); };
-            context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterAll(title as string, fn); };
-            context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeEach(title as string, fn); };
-            context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterEach(title as string, fn); };
+            context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].beforeAll(title as string, fn);
+            context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].afterAll(title as string, fn);
+            context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].beforeEach(title as string, fn);
+            context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].afterEach(title as string, fn);
             context.describe = context.context = ((title: string, fn: (this: Mocha.Suite) => void) => addSuite(title, fn)) as Mocha.SuiteFunction;
             context.describe.skip = context.xdescribe = context.xcontext = (title: string) => addSuite(title, /*fn*/ undefined);
             context.describe.only = (title: string, fn?: (this: Mocha.Suite) => void) => addSuite(title, fn);
@@ -209,13 +209,11 @@ namespace Harness.Parallel.Worker {
             const errors: ErrorInfo[] = [];
             const passes: TestInfo[] = [];
             const start = +new Date();
-            const runner = new Mocha.Runner(suite, /*delay*/ false);
-            const uncaught = (err: any) => runner.uncaught(err);
+            const runner = new Mocha.Runner(suite, { delay: false });
 
             runner
                 .on("start", () => {
                     unhookUncaughtExceptions(); // turn off global uncaught handling
-                    process.on("unhandledRejection", uncaught); // turn on unhandled rejection handling (not currently handled in mocha)
                 })
                 .on("pass", (test: Mocha.Test) => {
                     passes.push({ name: test.titlePath() });
@@ -224,8 +222,8 @@ namespace Harness.Parallel.Worker {
                     errors.push({ name: test.titlePath(), error: err.message, stack: err.stack });
                 })
                 .on("end", () => {
-                    process.removeListener("unhandledRejection", uncaught);
                     hookUncaughtExceptions();
+                    runner.dispose();
                 })
                 .run(() => {
                     fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });

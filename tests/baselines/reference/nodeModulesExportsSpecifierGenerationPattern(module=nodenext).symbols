@@ -1,0 +1,25 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import { Thing } from "inner/other";
+>Thing : Symbol(Thing, Decl(index.ts, 1, 8))
+
+export const a = (await import("inner/index.js")).x();
+>a : Symbol(a, Decl(index.ts, 2, 12))
+>(await import("inner/index.js")).x : Symbol(x, Decl(index.d.ts, 1, 8))
+>"inner/index.js" : Symbol("tests/cases/conformance/node/node_modules/inner/index", Decl(index.d.ts, 0, 0))
+>x : Symbol(x, Decl(index.d.ts, 1, 8))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// esm format file
+export { x } from "./other.js";
+>x : Symbol(x, Decl(index.d.ts, 1, 8))
+
+=== tests/cases/conformance/node/node_modules/inner/other.d.ts ===
+// esm format file
+export interface Thing {}
+>Thing : Symbol(Thing, Decl(other.d.ts, 0, 0))
+
+export const x: () => Thing;
+>x : Symbol(x, Decl(other.d.ts, 2, 12))
+>Thing : Symbol(Thing, Decl(other.d.ts, 0, 0))
+

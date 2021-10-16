@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameSetterExprReturnValue.ts ===
+class C {
+>C : C
+
+    set #foo(a: number) {}
+>#foo : number
+>a : number
+
+    bar() {
+>bar : () => void
+
+        let x = (this.#foo = 42 * 2);
+>x : number
+>(this.#foo = 42 * 2) : number
+>this.#foo = 42 * 2 : number
+>this.#foo : number
+>this : this
+>42 * 2 : number
+>42 : 42
+>2 : 2
+
+        console.log(x); // 84
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : number
+    }
+}
+
+new C().bar();
+>new C().bar() : void
+>new C().bar : () => void
+>new C() : C
+>C : typeof C
+>bar : () => void
+

@@ -27,19 +27,18 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [96ma.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m1[0m import { x } from "../b";
 [7m [0m [91m                  ~~~~~~[0m
 
-
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts
@@ -49,6 +48,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts
 /user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/b.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -70,14 +74,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib/b.js]
+//// [/user/username/projects/b.js]
 "use strict";
 exports.__esModule = true;
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/user/username/projects/myproject/lib/myproject/a.js]
+//// [/user/username/projects/myproject/lib/a.js]
 "use strict";
 exports.__esModule = true;
 
@@ -94,21 +98,20 @@ import { x } from "../b";
 
 Output::
 >> Screen clear
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
-
+[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m3[0m import { x } from "../b";
 [7m [0m [91m                  ~~~~~~[0m
 
-
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts
@@ -116,6 +119,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -137,4 +143,4 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/lib/a.js] file written with same contents

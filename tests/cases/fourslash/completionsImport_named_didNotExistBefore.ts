@@ -16,7 +16,8 @@ verify.completions({
         {
             name: "Test2",
             text: "(alias) function Test2(): void\nimport Test2",
-            kind: "alias"
+            kind: "alias",
+            kindModifiers: "export"
         },
         completion.globalThisEntry,
         completion.undefinedVarEntry,

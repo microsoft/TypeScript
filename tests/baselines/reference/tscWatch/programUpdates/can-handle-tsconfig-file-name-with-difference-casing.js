@@ -24,13 +24,13 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/A/B/app.ts"]
 Program options: {"watch":true,"project":"/A/B/tsconfig.json","configFilePath":"/A/B/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /A/B/app.ts
@@ -38,6 +38,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /A/B/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/app.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:

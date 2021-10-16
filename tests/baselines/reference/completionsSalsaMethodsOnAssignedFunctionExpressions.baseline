@@ -1,0 +1,164 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/something.js",
+      "position": 156,
+      "name": "2"
+    },
+    "completionList": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 156,
+        "length": 1
+      },
+      "entries": [
+        {
+          "name": "m",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "C",
+              "kind": "localName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "m",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "The prototype method.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Parameter definition.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "C",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "f",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "a",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "prototype",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "x",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        }
+      ]
+    }
+  }
+]

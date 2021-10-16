@@ -7,6 +7,7 @@
 ////}
 
 verify.codeFix({
+    index: 0,
     description: "Add async modifier to containing function",
     newFileContent:
 `async function f() {

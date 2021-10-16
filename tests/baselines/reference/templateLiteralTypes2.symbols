@@ -1,0 +1,380 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypes2.ts ===
+function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
+>ft1 : Symbol(ft1, Decl(templateLiteralTypes2.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 0, 13))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 0, 31))
+>n : Symbol(n, Decl(templateLiteralTypes2.ts, 0, 41))
+>u : Symbol(u, Decl(templateLiteralTypes2.ts, 0, 52))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 0, 78))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 0, 13))
+
+    const c1 = `abc${s}`;  // `abc${string}`
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 1, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 0, 31))
+
+    const c2 = `abc${n}`;  // `abc${number}`
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 2, 9))
+>n : Symbol(n, Decl(templateLiteralTypes2.ts, 0, 41))
+
+    const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 3, 9))
+>u : Symbol(u, Decl(templateLiteralTypes2.ts, 0, 52))
+
+    const c4 = `abc${t}`;  // `abc${T}
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 4, 9))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 0, 78))
+
+    const d1: `abc${string}` = `abc${s}`;
+>d1 : Symbol(d1, Decl(templateLiteralTypes2.ts, 5, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 0, 31))
+
+    const d2: `abc${number}` = `abc${n}`;
+>d2 : Symbol(d2, Decl(templateLiteralTypes2.ts, 6, 9))
+>n : Symbol(n, Decl(templateLiteralTypes2.ts, 0, 41))
+
+    const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
+>d3 : Symbol(d3, Decl(templateLiteralTypes2.ts, 7, 9))
+>u : Symbol(u, Decl(templateLiteralTypes2.ts, 0, 52))
+
+    const d4: `abc${T}` = `abc${t}`;
+>d4 : Symbol(d4, Decl(templateLiteralTypes2.ts, 8, 9))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 0, 13))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 0, 78))
+}
+
+function ft2(s: string) {
+>ft2 : Symbol(ft2, Decl(templateLiteralTypes2.ts, 9, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 11, 13))
+
+    return `abc${s}`;
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 11, 13))
+}
+
+function ft10(s: string) {
+>ft10 : Symbol(ft10, Decl(templateLiteralTypes2.ts, 13, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 15, 14))
+
+    const c1 = `abc${s}`;  // Widening type `abc${string}`
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 15, 14))
+
+    let v1 = c1;  // Type string
+>v1 : Symbol(v1, Decl(templateLiteralTypes2.ts, 17, 7))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
+
+    const c2 = c1;  // Widening type `abc${string}`
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 18, 9))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
+
+    let v2 = c2;  // Type string
+>v2 : Symbol(v2, Decl(templateLiteralTypes2.ts, 19, 7))
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 18, 9))
+
+    const c3: `abc${string}` = `abc${s}`;
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 20, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 15, 14))
+
+    let v3 = c3;  // Type `abc${string}`
+>v3 : Symbol(v3, Decl(templateLiteralTypes2.ts, 21, 7))
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 20, 9))
+
+    const c4: `abc${string}` = c1;  // Type `abc${string}`
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 22, 9))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 16, 9))
+
+    let v4 = c4;  // Type `abc${string}`
+>v4 : Symbol(v4, Decl(templateLiteralTypes2.ts, 23, 7))
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 22, 9))
+}
+
+function ft11(s: string, cond: boolean) {
+>ft11 : Symbol(ft11, Decl(templateLiteralTypes2.ts, 24, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 26, 14))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
+
+    const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 26, 14))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 26, 14))
+
+    const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 28, 9))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
+
+    const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 29, 9))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 28, 9))
+
+    const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 30, 9))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 26, 24))
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 29, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 26, 14))
+
+    const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
+>c5 : Symbol(c5, Decl(templateLiteralTypes2.ts, 31, 9))
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 30, 9))
+
+    let v1 = c1;  // string
+>v1 : Symbol(v1, Decl(templateLiteralTypes2.ts, 32, 7))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 27, 9))
+
+    let v2 = c2;  // `foo${string}` | `bar${string}`
+>v2 : Symbol(v2, Decl(templateLiteralTypes2.ts, 33, 7))
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 28, 9))
+
+    let v3 = c3;  // `foo${string}` | `bar${string}`
+>v3 : Symbol(v3, Decl(templateLiteralTypes2.ts, 34, 7))
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 29, 9))
+
+    let v4 = c4;  // string
+>v4 : Symbol(v4, Decl(templateLiteralTypes2.ts, 35, 7))
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 30, 9))
+
+    let v5 = c5;  // `foo${string}` | `bar${string}` | `baz${string}`
+>v5 : Symbol(v5, Decl(templateLiteralTypes2.ts, 36, 7))
+>c5 : Symbol(c5, Decl(templateLiteralTypes2.ts, 31, 9))
+}
+
+function ft12(s: string) {
+>ft12 : Symbol(ft12, Decl(templateLiteralTypes2.ts, 37, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+
+    const c1 = `foo${s}`;
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 40, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+
+    let v1 = c1;
+>v1 : Symbol(v1, Decl(templateLiteralTypes2.ts, 41, 7))
+>c1 : Symbol(c1, Decl(templateLiteralTypes2.ts, 40, 9))
+
+    const c2: `foo${string}` = `foo${s}`;
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 42, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+
+    let v2 = c2;
+>v2 : Symbol(v2, Decl(templateLiteralTypes2.ts, 43, 7))
+>c2 : Symbol(c2, Decl(templateLiteralTypes2.ts, 42, 9))
+
+    const c3 = `foo${s}` as `foo${string}`;
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 44, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+
+    let v3 = c3;
+>v3 : Symbol(v3, Decl(templateLiteralTypes2.ts, 45, 7))
+>c3 : Symbol(c3, Decl(templateLiteralTypes2.ts, 44, 9))
+
+    const c4 = <`foo${string}`>`foo${s}`;
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 46, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+
+    let v4 = c4;
+>v4 : Symbol(v4, Decl(templateLiteralTypes2.ts, 47, 7))
+>c4 : Symbol(c4, Decl(templateLiteralTypes2.ts, 46, 9))
+
+    const c5 = `foo${s}` as const;
+>c5 : Symbol(c5, Decl(templateLiteralTypes2.ts, 48, 9))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 39, 14))
+>const : Symbol(const)
+
+    let v5 = c5;
+>v5 : Symbol(v5, Decl(templateLiteralTypes2.ts, 49, 7))
+>c5 : Symbol(c5, Decl(templateLiteralTypes2.ts, 48, 9))
+}
+
+declare function widening<T>(x: T): T;
+>widening : Symbol(widening, Decl(templateLiteralTypes2.ts, 50, 1))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 52, 26))
+>x : Symbol(x, Decl(templateLiteralTypes2.ts, 52, 29))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 52, 26))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 52, 26))
+
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+>nonWidening : Symbol(nonWidening, Decl(templateLiteralTypes2.ts, 52, 38))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 53, 29))
+>x : Symbol(x, Decl(templateLiteralTypes2.ts, 53, 65))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 53, 29))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 53, 29))
+
+function ft13(s: string, cond: boolean) {
+>ft13 : Symbol(ft13, Decl(templateLiteralTypes2.ts, 53, 74))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 55, 14))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 55, 24))
+
+    let x1 = widening(`foo${s}`);
+>x1 : Symbol(x1, Decl(templateLiteralTypes2.ts, 56, 7))
+>widening : Symbol(widening, Decl(templateLiteralTypes2.ts, 50, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 55, 14))
+
+    let x2 = widening(cond ? 'a' : `foo${s}`);
+>x2 : Symbol(x2, Decl(templateLiteralTypes2.ts, 57, 7))
+>widening : Symbol(widening, Decl(templateLiteralTypes2.ts, 50, 1))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 55, 24))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 55, 14))
+
+    let y1 = nonWidening(`foo${s}`);
+>y1 : Symbol(y1, Decl(templateLiteralTypes2.ts, 58, 7))
+>nonWidening : Symbol(nonWidening, Decl(templateLiteralTypes2.ts, 52, 38))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 55, 14))
+
+    let y2 = nonWidening(cond ? 'a' : `foo${s}`);
+>y2 : Symbol(y2, Decl(templateLiteralTypes2.ts, 59, 7))
+>nonWidening : Symbol(nonWidening, Decl(templateLiteralTypes2.ts, 52, 38))
+>cond : Symbol(cond, Decl(templateLiteralTypes2.ts, 55, 24))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 55, 14))
+}
+
+type T0 = string | `${number}px`;
+>T0 : Symbol(T0, Decl(templateLiteralTypes2.ts, 60, 1))
+
+function ft14(t: `foo${number}`) {
+>ft14 : Symbol(ft14, Decl(templateLiteralTypes2.ts, 62, 33))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
+
+    let x1: string = t;
+>x1 : Symbol(x1, Decl(templateLiteralTypes2.ts, 65, 7))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
+
+    let x2: String = t;
+>x2 : Symbol(x2, Decl(templateLiteralTypes2.ts, 66, 7))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
+
+    let x3: Object = t;
+>x3 : Symbol(x3, Decl(templateLiteralTypes2.ts, 67, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
+
+    let x4: {} = t;
+>x4 : Symbol(x4, Decl(templateLiteralTypes2.ts, 68, 7))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
+
+    let x6: { length: number } = t;
+>x6 : Symbol(x6, Decl(templateLiteralTypes2.ts, 69, 7))
+>length : Symbol(length, Decl(templateLiteralTypes2.ts, 69, 13))
+>t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
+}
+
+declare function g1<T>(x: T): T;
+>g1 : Symbol(g1, Decl(templateLiteralTypes2.ts, 70, 1))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 72, 20))
+>x : Symbol(x, Decl(templateLiteralTypes2.ts, 72, 23))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 72, 20))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 72, 20))
+
+declare function g2<T extends string>(x: T): T;
+>g2 : Symbol(g2, Decl(templateLiteralTypes2.ts, 72, 32))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 73, 20))
+>x : Symbol(x, Decl(templateLiteralTypes2.ts, 73, 38))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 73, 20))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 73, 20))
+
+function ft20(s: string) {
+>ft20 : Symbol(ft20, Decl(templateLiteralTypes2.ts, 73, 47))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 75, 14))
+
+    let x1 = g1(`xyz-${s}`);  // string
+>x1 : Symbol(x1, Decl(templateLiteralTypes2.ts, 76, 7))
+>g1 : Symbol(g1, Decl(templateLiteralTypes2.ts, 70, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 75, 14))
+
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+>x2 : Symbol(x2, Decl(templateLiteralTypes2.ts, 77, 7))
+>g2 : Symbol(g2, Decl(templateLiteralTypes2.ts, 72, 32))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 75, 14))
+}
+
+// Repro from #41631
+
+declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 82, 30))
+>literal : Symbol(literal, Decl(templateLiteralTypes2.ts, 82, 48))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 82, 30))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 82, 30))
+>R : Symbol(R, Decl(templateLiteralTypes2.ts, 82, 87))
+>R : Symbol(R, Decl(templateLiteralTypes2.ts, 82, 87))
+
+const t1 = takesLiteral("foo.bar.baz"); // "baz"
+>t1 : Symbol(t1, Decl(templateLiteralTypes2.ts, 84, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+
+const id2 = "foo.bar.baz";
+>id2 : Symbol(id2, Decl(templateLiteralTypes2.ts, 85, 5))
+
+const t2 = takesLiteral(id2); // "baz"
+>t2 : Symbol(t2, Decl(templateLiteralTypes2.ts, 86, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>id2 : Symbol(id2, Decl(templateLiteralTypes2.ts, 85, 5))
+
+declare const someString: string;
+>someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
+
+const t3 = takesLiteral(`foo.bar.${someString}`);  // string
+>t3 : Symbol(t3, Decl(templateLiteralTypes2.ts, 89, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
+
+const id4 = `foo.bar.${someString}`;
+>id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 91, 5))
+>someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
+
+const t4 = takesLiteral(id4);  // string
+>t4 : Symbol(t4, Decl(templateLiteralTypes2.ts, 92, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 91, 5))
+
+declare const someUnion: 'abc' | 'def' | 'ghi';
+>someUnion : Symbol(someUnion, Decl(templateLiteralTypes2.ts, 94, 13))
+
+const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
+>t5 : Symbol(t5, Decl(templateLiteralTypes2.ts, 95, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>someUnion : Symbol(someUnion, Decl(templateLiteralTypes2.ts, 94, 13))
+
+// Repro from #41732
+
+const pixelValue: number = 22;
+>pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 99, 5))
+
+type PixelValueType = `${number}px`;
+>PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 99, 30))
+
+const pixelString: PixelValueType = `22px`;
+>pixelString : Symbol(pixelString, Decl(templateLiteralTypes2.ts, 103, 5))
+>PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 99, 30))
+
+const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
+>pixelStringWithTemplate : Symbol(pixelStringWithTemplate, Decl(templateLiteralTypes2.ts, 105, 5))
+>PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 99, 30))
+>pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 99, 5))
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : Symbol(getCardTitle, Decl(templateLiteralTypes2.ts, 105, 66))
+>title : Symbol(title, Decl(templateLiteralTypes2.ts, 109, 22))
+
+    return `test-${title}`;
+>title : Symbol(title, Decl(templateLiteralTypes2.ts, 109, 22))
+}
+
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+>interpolatedStyle : Symbol(interpolatedStyle, Decl(templateLiteralTypes2.ts, 115, 5))
+>rotate : Symbol(rotate, Decl(templateLiteralTypes2.ts, 115, 27))
+
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+>C2 : Symbol(C2, Decl(templateLiteralTypes2.ts, 115, 41))
+>transform : Symbol(transform, Decl(templateLiteralTypes2.ts, 116, 12))
+
+C2(`rotate(${interpolatedStyle.rotate}dig)`);
+>C2 : Symbol(C2, Decl(templateLiteralTypes2.ts, 115, 41))
+>interpolatedStyle.rotate : Symbol(rotate, Decl(templateLiteralTypes2.ts, 115, 27))
+>interpolatedStyle : Symbol(interpolatedStyle, Decl(templateLiteralTypes2.ts, 115, 5))
+>rotate : Symbol(rotate, Decl(templateLiteralTypes2.ts, 115, 27))
+

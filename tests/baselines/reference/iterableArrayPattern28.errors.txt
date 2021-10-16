@@ -7,7 +7,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
               Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
-                  Types of property '1' are incompatible.
+                  Type at position 1 in source is not compatible with type at position 1 in target.
                     Type 'boolean' is not assignable to type 'number'.
   Overload 2 of 3, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
     Type 'boolean' is not assignable to type 'number'.
@@ -26,7 +26,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
 !!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
 !!! error TS2769:               Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
 !!! error TS2769:                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
-!!! error TS2769:                   Types of property '1' are incompatible.
+!!! error TS2769:                   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2769:                     Type 'boolean' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
 !!! error TS2769:     Type 'boolean' is not assignable to type 'number'.

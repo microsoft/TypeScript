@@ -63,6 +63,50 @@ let e1 = v1 as const;  // Error
 let e2 = (true ? 1 : 0) as const;  // Error
 let e3 = id(1) as const;  // Error
 
+let t1 = 'foo' as const;
+let t2 = 'bar' as const;
+let t3 = `${t1}-${t2}` as const;
+let t4 = `${`(${t1})`}-${`(${t2})`}` as const;
+
+function ff1(x: 'foo' | 'bar', y: 1 | 2) {
+    return `${x}-${y}` as const;
+}
+
+function ff2<T extends string, U extends string>(x: T, y: U) {
+    return `${x}-${y}` as const;
+}
+
+const ts1 = ff2('foo', 'bar');
+const ts2 = ff2('foo', !!true ? '0' : '1');
+const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
+
+function ff3(x: 'foo' | 'bar', y: object) {
+    return `${x}${y}` as const;
+}
+
+type Action = "verify" | "write";
+type ContentMatch = "match" | "nonMatch";
+type Outcome = `${Action}_${ContentMatch}`;
+
+function ff4(verify: boolean, contentMatches: boolean) {
+    const action : Action = verify ? `verify` : `write`;
+    const contentMatch: ContentMatch = contentMatches ? `match` : `nonMatch`;
+    const outcome: Outcome = `${action}_${contentMatch}` as const;
+    return outcome;
+}
+
+function ff5(verify: boolean, contentMatches: boolean) {
+    const action = verify ? `verify` : `write`;
+    const contentMatch = contentMatches ? `match` : `nonMatch`;
+    const outcome = `${action}_${contentMatch}` as const;
+    return outcome;
+}
+
+function accessorNames<S extends string>(propName: S) {
+    return [`get-${propName}`, `set-${propName}`] as const;
+}
+
+const ns1 = accessorNames('foo');
 
 //// [constAssertions.js]
 "use strict";
@@ -117,6 +161,38 @@ let q5 = { x: 10, y: 20 };
 let e1 = v1; // Error
 let e2 = (true ? 1 : 0); // Error
 let e3 = id(1); // Error
+let t1 = 'foo';
+let t2 = 'bar';
+let t3 = `${t1}-${t2}`;
+let t4 = `${`(${t1})`}-${`(${t2})`}`;
+function ff1(x, y) {
+    return `${x}-${y}`;
+}
+function ff2(x, y) {
+    return `${x}-${y}`;
+}
+const ts1 = ff2('foo', 'bar');
+const ts2 = ff2('foo', !!true ? '0' : '1');
+const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
+function ff3(x, y) {
+    return `${x}${y}`;
+}
+function ff4(verify, contentMatches) {
+    const action = verify ? `verify` : `write`;
+    const contentMatch = contentMatches ? `match` : `nonMatch`;
+    const outcome = `${action}_${contentMatch}`;
+    return outcome;
+}
+function ff5(verify, contentMatches) {
+    const action = verify ? `verify` : `write`;
+    const contentMatch = contentMatches ? `match` : `nonMatch`;
+    const outcome = `${action}_${contentMatch}`;
+    return outcome;
+}
+function accessorNames(propName) {
+    return [`get-${propName}`, `set-${propName}`];
+}
+const ns1 = accessorNames('foo');
 
 
 //// [constAssertions.d.ts]
@@ -218,3 +294,20 @@ declare function id<T>(x: T): T;
 declare let e1: "abc";
 declare let e2: 0 | 1;
 declare let e3: 1;
+declare let t1: "foo";
+declare let t2: "bar";
+declare let t3: "foo-bar";
+declare let t4: "(foo)-(bar)";
+declare function ff1(x: 'foo' | 'bar', y: 1 | 2): "foo-1" | "foo-2" | "bar-1" | "bar-2";
+declare function ff2<T extends string, U extends string>(x: T, y: U): `${T}-${U}`;
+declare const ts1: "foo-bar";
+declare const ts2: "foo-1" | "foo-0";
+declare const ts3: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+declare function ff3(x: 'foo' | 'bar', y: object): `foo${string}` | `bar${string}`;
+declare type Action = "verify" | "write";
+declare type ContentMatch = "match" | "nonMatch";
+declare type Outcome = `${Action}_${ContentMatch}`;
+declare function ff4(verify: boolean, contentMatches: boolean): "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch";
+declare function ff5(verify: boolean, contentMatches: boolean): "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch";
+declare function accessorNames<S extends string>(propName: S): readonly [`get-${S}`, `set-${S}`];
+declare const ns1: readonly ["get-foo", "set-foo"];

@@ -3,20 +3,26 @@ namespace ts.refactor.convertToOptionalChainExpression {
     const refactorName = "Convert to optional chain expression";
     const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
 
-    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
+    const toOptionalChainAction = {
+        name: refactorName,
+        description: convertToOptionalChainExpressionMessage,
+        kind: "refactor.rewrite.expression.optionalChain",
+    };
+    registerRefactor(refactorName, {
+        kinds: [toOptionalChainAction.kind],
+        getAvailableActions,
+        getEditsForAction
+    });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
-        if (!info.error) {
+        if (!isRefactorErrorInfo(info)) {
             return [{
                 name: refactorName,
                 description: convertToOptionalChainExpressionMessage,
-                actions: [{
-                    name: refactorName,
-                    description: convertToOptionalChainExpressionMessage
-                }]
+                actions: [toOptionalChainAction],
             }];
         }
 
@@ -24,11 +30,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             return [{
                 name: refactorName,
                 description: convertToOptionalChainExpressionMessage,
-                actions: [{
-                    name: refactorName,
-                    description: convertToOptionalChainExpressionMessage,
-                    notApplicableReason: info.error
-                }]
+                actions: [{ ...toOptionalChainAction, notApplicableReason: info.error }],
             }];
         }
         return emptyArray;
@@ -36,24 +38,18 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const info = getInfo(context);
-        if (!info || !info.info) return undefined;
+        Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(context, t =>
-            doChange(context.file, context.program.getTypeChecker(), t, Debug.checkDefined(info.info, "context must have info"), actionName)
+            doChange(context.file, context.program.getTypeChecker(), t, info, actionName)
         );
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 
-    type InfoOrError = {
-        info: Info,
-        error?: never;
-    } | {
-        info?: never,
-        error: string;
-    };
+    type Occurrence = PropertyAccessExpression | ElementAccessExpression | Identifier;
 
-    interface Info {
-        finalExpression: PropertyAccessExpression | CallExpression,
-        occurrences: (PropertyAccessExpression | Identifier)[],
+    interface OptionalChainInfo {
+        finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression,
+        occurrences: Occurrence[],
         expression: ValidExpression,
     };
 
@@ -81,7 +77,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return isValidExpression(node) || isValidStatement(node);
     }
 
-    function getInfo(context: RefactorContext, considerEmptySpans = true): InfoOrError | undefined {
+    function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalChainInfo | RefactorErrorInfo | undefined {
         const { file, program } = context;
         const span = getRefactorContextSpan(context);
 
@@ -101,26 +97,26 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
     }
 
-    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): InfoOrError | undefined {
+    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): OptionalChainInfo | RefactorErrorInfo | undefined {
         const condition = expression.condition;
         const finalExpression = getFinalExpressionInChain(expression.whenTrue);
 
         if (!finalExpression || checker.isNullableType(checker.getTypeAtLocation(finalExpression))) {
             return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
-        };
+        }
 
         if ((isPropertyAccessExpression(condition) || isIdentifier(condition))
             && getMatchingStart(condition, finalExpression.expression)) {
-            return { info: { finalExpression, occurrences: [condition], expression } };
+            return { finalExpression, occurrences: [condition], expression };
         }
         else if (isBinaryExpression(condition)) {
             const occurrences = getOccurrencesInExpression(finalExpression.expression, condition);
-            return occurrences ? { info: { finalExpression, occurrences, expression } } :
+            return occurrences ? { finalExpression, occurrences, expression } :
                 { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
         }
     }
 
-    function getBinaryInfo(expression: BinaryExpression): InfoOrError | undefined {
+    function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | RefactorErrorInfo | undefined {
         if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) {
             return { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_logical_AND_access_chains) };
         };
@@ -129,15 +125,15 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
         const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
-        return occurrences ? { info: { finalExpression, occurrences, expression } } :
+        return occurrences ? { finalExpression, occurrences, expression } :
             { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
     }
 
     /**
      * Gets a list of property accesses that appear in matchTo and occur in sequence in expression.
      */
-    function getOccurrencesInExpression(matchTo: Expression, expression: Expression): (PropertyAccessExpression | Identifier)[] | undefined {
-        const occurrences: (PropertyAccessExpression | Identifier)[] = [];
+    function getOccurrencesInExpression(matchTo: Expression, expression: Expression): Occurrence[] | undefined {
+        const occurrences: Occurrence[] = [];
         while (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
             const match = getMatchingStart(skipParentheses(matchTo), skipParentheses(expression.right));
             if (!match) {
@@ -157,9 +153,11 @@ namespace ts.refactor.convertToOptionalChainExpression {
     /**
      * Returns subchain if chain begins with subchain syntactically.
      */
-    function getMatchingStart(chain: Expression, subchain: Expression): PropertyAccessExpression | Identifier | undefined {
-        return (isIdentifier(subchain) || isPropertyAccessExpression(subchain)) &&
-        chainStartsWith(chain, subchain) ? subchain : undefined;
+    function getMatchingStart(chain: Expression, subchain: Expression): PropertyAccessExpression | ElementAccessExpression | Identifier | undefined {
+        if (!isIdentifier(subchain) && !isPropertyAccessExpression(subchain) && !isElementAccessExpression(subchain)) {
+            return undefined;
+        }
+        return chainStartsWith(chain, subchain) ? subchain : undefined;
     }
 
     /**
@@ -167,19 +165,32 @@ namespace ts.refactor.convertToOptionalChainExpression {
      */
     function chainStartsWith(chain: Node, subchain: Node): boolean {
         // skip until we find a matching identifier.
-        while (isCallExpression(chain) || isPropertyAccessExpression(chain)) {
-            const subchainName = isPropertyAccessExpression(subchain) ? subchain.name.getText() : subchain.getText();
-            if (isPropertyAccessExpression(chain) && chain.name.getText() === subchainName) break;
+        while (isCallExpression(chain) || isPropertyAccessExpression(chain) || isElementAccessExpression(chain)) {
+            if (getTextOfChainNode(chain) === getTextOfChainNode(subchain)) break;
             chain = chain.expression;
         }
-        // check that the chains match at each access.  Call chains in subchain are not valid.
-        while (isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) {
-            if (chain.name.getText() !== subchain.name.getText()) return false;
+        // check that the chains match at each access. Call chains in subchain are not valid.
+        while ((isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) ||
+               (isElementAccessExpression(chain) && isElementAccessExpression(subchain))) {
+            if (getTextOfChainNode(chain) !== getTextOfChainNode(subchain)) return false;
             chain = chain.expression;
             subchain = subchain.expression;
         }
         // check if we have reached a final identifier.
         return isIdentifier(chain) && isIdentifier(subchain) && chain.getText() === subchain.getText();
+    }
+
+    function getTextOfChainNode(node: Node): string | undefined {
+        if (isIdentifier(node) || isStringOrNumericLiteralLike(node)) {
+            return node.getText();
+        }
+        if (isPropertyAccessExpression(node)) {
+            return getTextOfChainNode(node.name);
+        }
+        if (isElementAccessExpression(node)) {
+            return getTextOfChainNode(node.argumentExpression);
+        }
+        return undefined;
     }
 
     /**
@@ -229,7 +240,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
      * it is followed by a different binary operator.
      * @param node the right child of a binary expression or a call expression.
      */
-    function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | undefined {
+    function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
         // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.
         // the rightmost member of the && chain should be the leftmost child of that expression.
         node = skipParentheses(node);
@@ -237,7 +248,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             return getFinalExpressionInChain(node.left);
         }
         // foo && |foo.bar()()| - nested calls are treated like further accesses.
-        else if ((isPropertyAccessExpression(node) || isCallExpression(node)) && !isOptionalChain(node)) {
+        else if ((isPropertyAccessExpression(node) || isElementAccessExpression(node) || isCallExpression(node)) && !isOptionalChain(node)) {
             return node;
         }
         return undefined;
@@ -246,8 +257,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
     /**
      * Creates an access chain from toConvert with '?.' accesses at expressions appearing in occurrences.
      */
-    function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurrences: (PropertyAccessExpression | Identifier)[]): Expression {
-        if (isPropertyAccessExpression(toConvert) || isCallExpression(toConvert)) {
+    function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurrences: Occurrence[]): Expression {
+        if (isPropertyAccessExpression(toConvert) || isElementAccessExpression(toConvert) || isCallExpression(toConvert)) {
             const chain = convertOccurrences(checker, toConvert.expression, occurrences);
             const lastOccurrence = occurrences.length > 0 ? occurrences[occurrences.length - 1] : undefined;
             const isOccurrence = lastOccurrence?.getText() === toConvert.expression.getText();
@@ -262,15 +273,20 @@ namespace ts.refactor.convertToOptionalChainExpression {
                     factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name) :
                     factory.createPropertyAccessChain(chain, toConvert.questionDotToken, toConvert.name);
             }
+            else if (isElementAccessExpression(toConvert)) {
+                return isOccurrence ?
+                    factory.createElementAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.argumentExpression) :
+                    factory.createElementAccessChain(chain, toConvert.questionDotToken, toConvert.argumentExpression);
+            }
         }
         return toConvert;
     }
 
-    function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
+    function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
         const { finalExpression, occurrences, expression } = info;
         const firstOccurrence = occurrences[occurrences.length - 1];
         const convertedChain = convertOccurrences(checker, finalExpression, occurrences);
-        if (convertedChain && (isPropertyAccessExpression(convertedChain) || isCallExpression(convertedChain))) {
+        if (convertedChain && (isPropertyAccessExpression(convertedChain) || isElementAccessExpression(convertedChain) || isCallExpression(convertedChain))) {
             if (isBinaryExpression(expression)) {
                 changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
             }

@@ -169,7 +169,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 3 >         ^^^^
 4 >             ^
 5 >              ^^
-6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -183,58 +183,64 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 5 >Emitted(6, 17) Source(11, 60) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? [-1, "name", "skill"] : _a)[0], numberB = _b === void 0 ? -1 : _b;
+>>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberB = _c === void 0 ? -1 : _c;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^
-4 >                               ^
-5 >                                ^
-6 >                                 ^^
-7 >                                   ^^^^^^
-8 >                                         ^^
-9 >                                           ^^^^^^^
-10>                                                  ^
-11>                                                   ^^^^^^^^^
-12>                                                            ^^
-13>                                                              ^^^^^^^
-14>                                                                     ^^^^^^^^^^^^^^^^^^^
-15>                                                                                        ^
-16>                                                                                         ^
-17>                                                                                          ^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+3 >                             ^
+4 >                              ^
+5 >                               ^
+6 >                                ^^
+7 >                                  ^^^^^^
+8 >                                        ^^
+9 >                                          ^^^^^^^
+10>                                                 ^
+11>                                                  ^^^^^
+12>                                                       ^^
+13>                                                         ^^^^^^^^^^
+14>                                                                   ^^
+15>                                                                     ^^^^^^^
+16>                                                                            ^^^^^^^^^^^^^^^^^^^
+17>                                                                                               ^
+18>                                                                                                ^
+19>                                                                                                 ^^^^^
 1->
-2 >        numberB = -1]: Robot = 
-3 >                              [
-4 >                               -
-5 >                                1
-6 >                                 , 
-7 >                                   "name"
-8 >                                         , 
-9 >                                           "skill"
-10>                                                  ]
-11>                                                   
-12>                                                            
-13>                                                              numberB
-14>                                                                      = 
-15>                                                                                        -
-16>                                                                                         1
-17>                                                                                          
-1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
-2 >Emitted(7, 31) Source(11, 39) + SourceIndex(0)
-3 >Emitted(7, 32) Source(11, 40) + SourceIndex(0)
-4 >Emitted(7, 33) Source(11, 41) + SourceIndex(0)
-5 >Emitted(7, 34) Source(11, 42) + SourceIndex(0)
-6 >Emitted(7, 36) Source(11, 44) + SourceIndex(0)
-7 >Emitted(7, 42) Source(11, 50) + SourceIndex(0)
-8 >Emitted(7, 44) Source(11, 52) + SourceIndex(0)
-9 >Emitted(7, 51) Source(11, 59) + SourceIndex(0)
-10>Emitted(7, 52) Source(11, 60) + SourceIndex(0)
-11>Emitted(7, 61) Source(11, 28) + SourceIndex(0)
-12>Emitted(7, 63) Source(11, 16) + SourceIndex(0)
-13>Emitted(7, 70) Source(11, 23) + SourceIndex(0)
-14>Emitted(7, 89) Source(11, 26) + SourceIndex(0)
-15>Emitted(7, 90) Source(11, 27) + SourceIndex(0)
-16>Emitted(7, 91) Source(11, 28) + SourceIndex(0)
-17>Emitted(7, 96) Source(11, 28) + SourceIndex(0)
+2 >        [numberB = -1]: Robot = 
+3 >                             [
+4 >                              -
+5 >                               1
+6 >                                , 
+7 >                                  "name"
+8 >                                        , 
+9 >                                          "skill"
+10>                                                 ]
+11>                                                  
+12>                                                       
+13>                                                         numberB = -1
+14>                                                                   
+15>                                                                     numberB
+16>                                                                             = 
+17>                                                                                               -
+18>                                                                                                1
+19>                                                                                                 
+1->Emitted(7, 9) Source(11, 15) + SourceIndex(0)
+2 >Emitted(7, 30) Source(11, 39) + SourceIndex(0)
+3 >Emitted(7, 31) Source(11, 40) + SourceIndex(0)
+4 >Emitted(7, 32) Source(11, 41) + SourceIndex(0)
+5 >Emitted(7, 33) Source(11, 42) + SourceIndex(0)
+6 >Emitted(7, 35) Source(11, 44) + SourceIndex(0)
+7 >Emitted(7, 41) Source(11, 50) + SourceIndex(0)
+8 >Emitted(7, 43) Source(11, 52) + SourceIndex(0)
+9 >Emitted(7, 50) Source(11, 59) + SourceIndex(0)
+10>Emitted(7, 51) Source(11, 60) + SourceIndex(0)
+11>Emitted(7, 56) Source(11, 60) + SourceIndex(0)
+12>Emitted(7, 58) Source(11, 16) + SourceIndex(0)
+13>Emitted(7, 68) Source(11, 28) + SourceIndex(0)
+14>Emitted(7, 70) Source(11, 16) + SourceIndex(0)
+15>Emitted(7, 77) Source(11, 23) + SourceIndex(0)
+16>Emitted(7, 96) Source(11, 26) + SourceIndex(0)
+17>Emitted(7, 97) Source(11, 27) + SourceIndex(0)
+18>Emitted(7, 98) Source(11, 28) + SourceIndex(0)
+19>Emitted(7, 103) Source(11, 28) + SourceIndex(0)
 ---
 >>>    console.log(numberB);
 1 >^^^^

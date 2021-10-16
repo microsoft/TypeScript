@@ -25,11 +25,11 @@ declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T
 f2<0, 0, 1>(async function* () {
 >f2<0, 0, 1>(async function* () {	const a = yield 0;	return 0;}) : void
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
->async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1>
+>async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1 | undefined>
 
 	const a = yield 0;
->a : 1
->yield 0 : 1
+>a : 1 | undefined
+>yield 0 : 1 | undefined
 >0 : 0
 
 	return 0;

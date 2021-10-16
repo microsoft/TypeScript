@@ -44,7 +44,6 @@ Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
-
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -55,13 +54,13 @@ Output::
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -73,6 +72,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/noemitonerror/shared/types/db.ts (used version)
+/user/username/projects/noemitonerror/src/main.ts (used version)
+/user/username/projects/noemitonerror/src/other.ts (used version)
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -106,7 +111,6 @@ Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -117,13 +121,13 @@ Output::
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -131,6 +135,8 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -169,13 +175,13 @@ Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:58 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -184,6 +190,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -239,12 +248,10 @@ Output::
 >> Screen clear
 [[90m12:01:02 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
-
 
 [[90m12:01:03 AM[0m] Found 1 error. Watching for file changes.
 
@@ -252,6 +259,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -260,6 +268,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -293,12 +304,10 @@ Output::
 >> Screen clear
 [[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
-
 
 [[90m12:01:08 AM[0m] Found 1 error. Watching for file changes.
 
@@ -306,6 +315,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -313,6 +323,8 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -349,13 +361,13 @@ Output::
 >> Screen clear
 [[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -364,6 +376,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/noEmitOnError/src/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
@@ -403,13 +418,13 @@ Output::
 >> Screen clear
 [[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -417,6 +432,8 @@ Program files::
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:

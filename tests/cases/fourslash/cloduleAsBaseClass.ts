@@ -25,6 +25,16 @@
 
 verify.completions({ marker: "1", exact: ["foo2", "foo"] });
 edit.insert('foo()');
-verify.completions({ marker: "2", exact: ["prototype", "bar2", "bar", "baz", "x", ...completion.functionMembers] });
+verify.completions({
+    marker: "2",
+    exact: [
+        { name: "prototype", sortText: completion.SortText.LocationPriority },
+        { name: "bar2", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "bar", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "baz", sortText: completion.SortText.LocationPriority },
+        { name: "x", sortText: completion.SortText.LocationPriority },
+        ...completion.functionMembers
+    ]
+});
 edit.insert('bar()');
 verify.noErrors();

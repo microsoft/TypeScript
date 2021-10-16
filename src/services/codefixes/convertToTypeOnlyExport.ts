@@ -12,10 +12,10 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const fixedExportDeclarations = new Map<string, true>();
+            const fixedExportDeclarations = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
-                if (exportSpecifier && !addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
+                if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
                     fixSingleExportDeclaration(changes, exportSpecifier, context);
                 }
             });
@@ -35,16 +35,7 @@ namespace ts.codefix {
         const exportDeclaration = exportClause.parent;
         const typeExportSpecifiers = getTypeExportSpecifiers(exportSpecifier, context);
         if (typeExportSpecifiers.length === exportClause.elements.length) {
-            changes.replaceNode(
-                context.sourceFile,
-                exportDeclaration,
-                factory.updateExportDeclaration(
-                    exportDeclaration,
-                    exportDeclaration.decorators,
-                    exportDeclaration.modifiers,
-                    /*isTypeOnly*/ true,
-                    exportClause,
-                    exportDeclaration.moduleSpecifier));
+            changes.insertModifierBefore(context.sourceFile, SyntaxKind.TypeKeyword, exportClause);
         }
         else {
             const valueExportDeclaration = factory.updateExportDeclaration(
@@ -53,15 +44,22 @@ namespace ts.codefix {
                 exportDeclaration.modifiers,
                 /*isTypeOnly*/ false,
                 factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
-                exportDeclaration.moduleSpecifier);
+                exportDeclaration.moduleSpecifier,
+                /*assertClause*/ undefined
+            );
             const typeExportDeclaration = factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ true,
                 factory.createNamedExports(typeExportSpecifiers),
-                exportDeclaration.moduleSpecifier);
+                exportDeclaration.moduleSpecifier,
+                /*assertClause*/ undefined
+            );
 
-            changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration);
+            changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
+                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+            });
             changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
         }
     }

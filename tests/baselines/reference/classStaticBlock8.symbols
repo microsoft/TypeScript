@@ -1,0 +1,86 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts ===
+function foo (v: number) {
+>foo : Symbol(foo, Decl(classStaticBlock8.ts, 0, 0))
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+    label: while (v) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+        class C {
+>C : Symbol(C, Decl(classStaticBlock8.ts, 1, 22))
+
+            static {
+                if (v === 1) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                    break label;
+                }
+                if (v === 2) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                    continue label;
+                }
+                if (v === 3) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                    break
+                }
+                if (v === 4) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                    continue
+                }
+            }
+        }
+
+        if (v === 5) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+            break label;
+        }
+        if (v === 6) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+            continue label;
+        }
+        if (v === 7) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+            break;
+        }
+        if (v === 8) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+            continue;
+        }
+    }
+
+    class C {
+>C : Symbol(C, Decl(classStaticBlock8.ts, 31, 5))
+
+        static {
+            outer: break outer; // valid
+            loop: while (v) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 1) break loop; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 2) continue loop; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 3) break; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 4) continue; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+            }
+            switch (v) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                default: break; // valid
+            }
+        }
+    }
+}
+

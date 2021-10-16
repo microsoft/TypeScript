@@ -1,0 +1,27 @@
+=== tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts ===
+type T = any extends number ? 1 : 0;
+>T : Symbol(T, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 0, 0))
+
+let x: T;
+>x : Symbol(x, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 1, 3))
+>T : Symbol(T, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 0, 0))
+
+x = 1;
+>x : Symbol(x, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 1, 3))
+
+x = 0; // not an error
+>x : Symbol(x, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 1, 3))
+
+type U = [any] extends [number] ? 1 : 0;
+>U : Symbol(U, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 3, 6))
+
+let y: U;
+>y : Symbol(y, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 6, 3))
+>U : Symbol(U, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 3, 6))
+
+y = 1;
+>y : Symbol(y, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 6, 3))
+
+y = 0; // error
+>y : Symbol(y, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 6, 3))
+

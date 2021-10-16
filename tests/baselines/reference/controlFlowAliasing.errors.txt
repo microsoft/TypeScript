@@ -1,0 +1,378 @@
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(59,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(74,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(91,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(94,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(101,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(104,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(112,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(115,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(134,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(137,13): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(154,19): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(157,19): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+  Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(219,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(232,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(233,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(267,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(270,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowAliasing.ts (19 errors) ====
+    // Narrowing by aliased conditional expressions
+    
+    function f10(x: string | number) {
+        const isString = typeof x === "string";
+        if (isString) {
+            let t: string = x;
+        }
+        else {
+            let t: number = x;
+        }
+    }
+    
+    function f11(x: unknown) {
+        const isString = typeof x === "string";
+        if (isString) {
+            let t: string = x;
+        }
+    }
+    
+    function f12(x: string | number | boolean) {
+        const isString = typeof x === "string";
+        const isNumber = typeof x === "number";
+        if (isString || isNumber) {
+            let t: string | number = x;
+        }
+        else {
+            let t: boolean = x;
+        }
+    }
+    
+    function f13(x: string | number | boolean) {
+        const isString = typeof x === "string";
+        const isNumber = typeof x === "number";
+        const isStringOrNumber = isString || isNumber;
+        if (isStringOrNumber) {
+            let t: string | number = x;
+        }
+        else {
+            let t: boolean = x;
+        }
+    }
+    
+    function f14(x: number | null | undefined): number | null {
+        const notUndefined = x !== undefined;
+        return notUndefined ? x : 0;
+    }
+    
+    function f15(obj: { readonly x: string | number }) {
+        const isString = typeof obj.x === 'string';
+        if (isString) {
+            let s: string = obj.x;
+        }
+    }
+    
+    function f16(obj: { readonly x: string | number }) {
+        const isString = typeof obj.x === 'string';
+        obj = { x: 42 };
+        if (isString) {
+            let s: string = obj.x;  // Not narrowed because of is assigned in function body
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+        }
+    }
+    
+    function f17(obj: readonly [string | number]) {
+        const isString = typeof obj[0] === 'string';
+        if (isString) {
+            let s: string = obj[0];
+        }
+    }
+    
+    function f18(obj: readonly [string | number]) {
+        const isString = typeof obj[0] === 'string';
+        obj = [42];
+        if (isString) {
+            let s: string = obj[0];  // Not narrowed because of is assigned in function body
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+        }
+    }
+    
+    function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const isFoo = obj.kind === 'foo';
+        if (isFoo) {
+            obj.foo;
+        }
+        else {
+            obj.bar;
+        }
+    }
+    
+    function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const isFoo: boolean = obj.kind === 'foo';
+        if (isFoo) {
+            obj.foo;  // Not narrowed because isFoo has type annotation
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+        }
+        else {
+            obj.bar;  // Not narrowed because isFoo has type annotation
+                ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+        }
+    }
+    
+    function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        let isFoo = obj.kind === 'foo';
+        if (isFoo) {
+            obj.foo;  // Not narrowed because isFoo is mutable
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+        }
+        else {
+            obj.bar;  // Not narrowed because isFoo is mutable
+                ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+        }
+    }
+    
+    function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const isFoo = obj.kind === 'foo';
+        obj = obj;
+        if (isFoo) {
+            obj.foo;  // Not narrowed because obj is assigned in function body
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+        }
+        else {
+            obj.bar;  // Not narrowed because obj is assigned in function body
+                ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+        }
+    }
+    
+    function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const obj = arg;
+        const isFoo = obj.kind === 'foo';
+        if (isFoo) {
+            obj.foo;
+        }
+        else {
+            obj.bar;
+        }
+    }
+    
+    function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        let obj = arg;
+        const isFoo = obj.kind === 'foo';
+        if (isFoo) {
+            obj.foo;  // Not narrowed because obj is mutable
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+        }
+        else {
+            obj.bar;  // Not narrowed because obj is mutable
+                ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+        }
+    }
+    
+    function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
+        const isFoo = outer.obj.kind === 'foo';
+        if (isFoo) {
+            outer.obj.foo;
+        }
+        else {
+            outer.obj.bar;
+        }
+    }
+    
+    function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
+        const isFoo = outer.obj.kind === 'foo';
+        if (isFoo) {
+            outer.obj.foo;  // Not narrowed because obj is mutable
+                      ~~~
+!!! error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
+        }
+        else {
+            outer.obj.bar;  // Not narrowed because obj is mutable
+                      ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
+!!! error TS2339:   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
+        }
+    }
+    
+    function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const isFoo = obj && obj.kind === 'foo';
+        const isBar = obj && obj.kind === 'bar';
+        if (isFoo) {
+            obj.foo;
+        }
+        if (isBar) {
+            obj.bar;
+        }
+    }
+    
+    // Narrowing by aliased discriminant property access
+    
+    function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const kind = obj.kind;
+        if (kind === 'foo') {
+            obj.foo;
+        }
+        else {
+            obj.bar;
+        }
+    }
+    
+    function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const { kind } = obj;
+        if (kind === 'foo') {
+            obj.foo;
+        }
+        else {
+            obj.bar;
+        }
+    }
+    
+    function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const { kind: k } = obj;
+        if (k === 'foo') {
+            obj.foo;
+        }
+        else {
+            obj.bar;
+        }
+    }
+    
+    function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+        const { kind } = obj;
+        switch (kind) {
+            case 'foo': obj.foo; break;
+            case 'bar': obj.bar; break;
+        }
+    }
+    
+    
+    class C10 {
+        constructor(readonly x: string | number) {
+            const thisX_isString = typeof this.x === 'string';
+            const xIsString = typeof x === 'string';
+            if (thisX_isString && xIsString) {
+                let s: string;
+                s = this.x;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                s = x;
+            }
+        }
+    }
+    
+    class C11 {
+        constructor(readonly x: string | number) {
+            const thisX_isString = typeof this.x === 'string';
+            const xIsString = typeof x === 'string';
+            if (thisX_isString && xIsString) {
+                // Some narrowings may be invalidated due to later assignments.
+                let s: string;
+                s = this.x;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                s = x;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+            }
+            else {
+                this.x = 10;
+                x = 10;
+            }
+        }
+    }
+    
+    // Mixing of aliased discriminants and conditionals
+    
+    function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
+        const { kind } = obj;
+        const isFoo = kind == 'foo';
+        if (isFoo && obj.foo) {
+            let t: string = obj.foo;
+        }
+    }
+    
+    // Unsupported narrowing of destructured payload by destructured discriminant
+    
+    type Data = { kind: 'str', payload: string } | { kind: 'num', payload: number };
+    
+    function gg2(obj: Data) {
+        if (obj.kind === 'str') {
+            let t: string = obj.payload;
+        }
+        else {
+            let t: number = obj.payload;
+        }
+    }
+    
+    function foo({ kind, payload }: Data) {
+        if (kind === 'str') {
+            let t: string = payload;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+        }
+        else {
+            let t: number = payload;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+        }
+    }
+    
+    // Repro from #45830
+    
+    const obj = {
+        fn: () => true
+    };
+    
+    if (a) { }
+        ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/conformance/controlFlow/controlFlowAliasing.ts:282:7: 'a' is declared here.
+        ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    const a = obj.fn();
+    

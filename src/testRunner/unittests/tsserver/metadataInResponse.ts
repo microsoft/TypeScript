@@ -55,8 +55,8 @@ namespace ts.projectSystem {
                 offset: aTs.content.indexOf("this.") + 1 + "this.".length
             };
             const expectedCompletionEntries: readonly protocol.CompletionEntry[] = [
-                { name: "foo", kind: ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: "0" },
-                { name: "prop", kind: ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: "0" }
+                { name: "foo", kind: ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority },
+                { name: "prop", kind: ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority }
             ];
 
             it("can pass through metadata when the command returns array", () => {

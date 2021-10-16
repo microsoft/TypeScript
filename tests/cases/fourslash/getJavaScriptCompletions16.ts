@@ -30,7 +30,7 @@ edit.backspace();
 verify.signatureHelp({
     marker: "sig",
     text: "Something(a: number, b: any): Something",
-    tags: [{ name: "param", text: "a" }],
+    tags: [{ name: "param", text: [{ kind: "text", text: "a" }] }],
 });
 
 goTo.marker('method');

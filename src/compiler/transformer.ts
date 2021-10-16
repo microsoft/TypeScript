@@ -3,11 +3,15 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2022:
             case ModuleKind.ES2020:
             case ModuleKind.ES2015:
                 return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
+                return transformNodeModule;
             default:
                 return transformModule;
         }
@@ -37,7 +41,6 @@ namespace ts {
     function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
         if (emitOnlyDtsFiles) return emptyArray;
 
-        const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
@@ -47,12 +50,16 @@ namespace ts {
         transformers.push(transformTypeScript);
         transformers.push(transformClassFields);
 
-        if (jsx === JsxEmit.React) {
+        if (getJSXTransformEnabled(compilerOptions)) {
             transformers.push(transformJsx);
         }
 
         if (languageVersion < ScriptTarget.ESNext) {
             transformers.push(transformESNext);
+        }
+
+        if (languageVersion < ScriptTarget.ES2021) {
+            transformers.push(transformES2021);
         }
 
         if (languageVersion < ScriptTarget.ES2020) {
@@ -156,6 +163,9 @@ namespace ts {
         let lexicalEnvironmentFlagsStack: LexicalEnvironmentFlags[] = [];
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
+        let blockScopedVariableDeclarationsStack: Identifier[][] = [];
+        let blockScopeStackOffset = 0;
+        let blockScopedVariableDeclarations: Identifier[];
         let emitHelpers: EmitHelper[] | undefined;
         let onSubstituteNode: TransformationContext["onSubstituteNode"] = noEmitSubstitution;
         let onEmitNode: TransformationContext["onEmitNode"] = noEmitNotification;
@@ -179,6 +189,9 @@ namespace ts {
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             addInitializationStatement,
+            startBlockScope,
+            endBlockScope,
+            addBlockScopedVariable,
             requestEmitHelper,
             readEmitHelpers,
             enableSubstitution,
@@ -222,7 +235,12 @@ namespace ts {
         state = TransformationState.Initialized;
 
         // Transform each node.
-        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
+        const transformed: T[] = [];
+        for (const node of nodes) {
+            tracing?.push(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
+            transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
+            tracing?.pop();
+        }
 
         // prevent modification of the lexical environment.
         state = TransformationState.Completed;
@@ -465,6 +483,46 @@ namespace ts {
             return lexicalEnvironmentFlags;
         }
 
+        /**
+         * Starts a block scope. Any existing block hoisted variables are pushed onto the stack and the related storage variables are reset.
+         */
+        function startBlockScope() {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot start a block scope during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot start a block scope after transformation has completed.");
+            blockScopedVariableDeclarationsStack[blockScopeStackOffset] = blockScopedVariableDeclarations;
+            blockScopeStackOffset++;
+            blockScopedVariableDeclarations = undefined!;
+        }
+
+        /**
+         * Ends a block scope. The previous set of block hoisted variables are restored. Any hoisted declarations are returned.
+         */
+        function endBlockScope() {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot end a block scope during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot end a block scope after transformation has completed.");
+            const statements: Statement[] | undefined = some(blockScopedVariableDeclarations) ?
+                [
+                    factory.createVariableStatement(
+                        /*modifiers*/ undefined,
+                        factory.createVariableDeclarationList(
+                            blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
+                            NodeFlags.Let
+                        )
+                    )
+                ] : undefined;
+            blockScopeStackOffset--;
+            blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];
+            if (blockScopeStackOffset === 0) {
+                blockScopedVariableDeclarationsStack = [];
+            }
+            return statements;
+        }
+
+        function addBlockScopedVariable(name: Identifier): void {
+            Debug.assert(blockScopeStackOffset > 0, "Cannot add a block scoped variable outside of an iteration body.");
+            (blockScopedVariableDeclarations || (blockScopedVariableDeclarations = [])).push(name);
+        }
+
         function requestEmitHelper(helper: EmitHelper): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
@@ -508,28 +566,31 @@ namespace ts {
     }
 
     export const nullTransformationContext: TransformationContext = {
-        get factory() { return factory; },
-        enableEmitNotification: noop,
-        enableSubstitution: noop,
-        endLexicalEnvironment: returnUndefined,
+        factory,
         getCompilerOptions: () => ({}),
-        getEmitHost: notImplemented,
         getEmitResolver: notImplemented,
+        getEmitHost: notImplemented,
         getEmitHelperFactory: notImplemented,
+        startLexicalEnvironment: noop,
+        resumeLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop,
+        endLexicalEnvironment: returnUndefined,
         setLexicalEnvironmentFlags: noop,
         getLexicalEnvironmentFlags: () => 0,
-        hoistFunctionDeclaration: noop,
         hoistVariableDeclaration: noop,
+        hoistFunctionDeclaration: noop,
         addInitializationStatement: noop,
-        isEmitNotificationEnabled: notImplemented,
-        isSubstitutionEnabled: notImplemented,
-        onEmitNode: noop,
-        onSubstituteNode: notImplemented,
-        readEmitHelpers: notImplemented,
+        startBlockScope: noop,
+        endBlockScope: returnUndefined,
+        addBlockScopedVariable: noop,
         requestEmitHelper: noop,
-        resumeLexicalEnvironment: noop,
-        startLexicalEnvironment: noop,
-        suspendLexicalEnvironment: noop,
+        readEmitHelpers: notImplemented,
+        enableSubstitution: noop,
+        enableEmitNotification: noop,
+        isSubstitutionEnabled: notImplemented,
+        isEmitNotificationEnabled: notImplemented,
+        onSubstituteNode: noEmitSubstitution,
+        onEmitNode: noEmitNotification,
         addDiagnostic: noop,
     };
 }

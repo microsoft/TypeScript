@@ -67,7 +67,9 @@ function test() {}`;
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
-        assert.equal(tags[0].comment, "Some\n text\r\n with newlines.");
+        assert.isDefined(tags[0].comment![0]);
+        assert.isString(tags[0].comment);
+        assert.equal(tags[0].comment as string, "Some\n text\r\n with newlines.");
     });
 });
 
@@ -123,4 +125,60 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const type = checker.getTypeAtLocation(file);
         assert.equal(type.flags, ts.TypeFlags.Any);
     });
+});
+
+describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
+    let savedUILocale: string | undefined;
+    beforeEach(() => savedUILocale = ts.getUILocale());
+    afterEach(() => ts.setUILocale(savedUILocale));
+
+    function verifyValidateLocale(locale: string, expectedToReadFile: boolean) {
+        it(`Verifying ${locale} ${expectedToReadFile ? "reads" : "does not read"} file`, () => {
+            const errors: ts.Diagnostic[] = [];
+            ts.validateLocaleAndSetLanguage(locale, {
+                getExecutingFilePath: () => "/tsc.js",
+                resolvePath: ts.identity,
+                fileExists: fileName => {
+                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} check if ${fileName} exists.`);
+                    return expectedToReadFile;
+                },
+                readFile: fileName => {
+                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
+                    // Throw error here so that actual change to localized diagnostics messages doesnt take place
+                    throw new Error("cannot read file");
+                }
+            }, errors);
+        });
+    }
+    ts.supportedLocaleDirectories.forEach(locale => verifyValidateLocale(locale, /*expectedToReadFile*/ true));
+    ["en", "en-us"].forEach(locale => verifyValidateLocale(locale, /*expectedToReadFile*/ false));
+});
+
+describe("unittests:: Public APIs :: forEachChild of @param comments in JSDoc", () => {
+    const content = `
+/**
+ * @param The {@link TypeReferencesInAedoc}.
+ */
+var x
+`;
+    const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+    const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
+    const kids = paramTag.getChildren();
+    const seen: Set<ts.Node> = new Set();
+    ts.forEachChild(paramTag, n => {
+        assert.strictEqual(/*actual*/ false, seen.has(n), "Found a duplicate-added child");
+        seen.add(n);
+    });
+    assert.equal(5, kids.length);
+});
+
+describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSDoc", () => {
+    const content = `
+/** jsdoc comment attached to EndOfFileToken */
+`;
+    const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+    const endOfFileToken = sourceFile.getChildren()[1];
+    assert.equal(endOfFileToken.getChildren().length, 1);
+    assert.equal(endOfFileToken.getChildCount(), 1);
+    assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
 });

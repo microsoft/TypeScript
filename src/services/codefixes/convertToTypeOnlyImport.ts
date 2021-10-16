@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is_set_to_error.code];
+    const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
     const fixId = "convertToTypeOnlyImport";
     registerCodeFix({
         errorCodes,
@@ -46,7 +46,8 @@ namespace ts.codefix {
                     /*isTypeOnly*/ true,
                     importClause.name,
                     /*namedBindings*/ undefined),
-                importDeclaration.moduleSpecifier));
+                importDeclaration.moduleSpecifier,
+                /*assertClause*/ undefined));
         }
     }
 }

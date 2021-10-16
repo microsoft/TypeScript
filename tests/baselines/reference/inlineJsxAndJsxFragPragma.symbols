@@ -45,3 +45,74 @@ import {jsx} from "./renderer";
 >span : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 >span : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
 
+=== tests/cases/conformance/jsx/inline/preacty-only-fragment.tsx ===
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+import {h, Fragment} from "./renderer";
+>h : Symbol(h, Decl(preacty-only-fragment.tsx, 4, 8))
+>Fragment : Symbol(Fragment, Decl(preacty-only-fragment.tsx, 4, 10))
+
+<></>
+
+=== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment.tsx ===
+/* @jsx jsx */
+/* @jsxfrag null */
+import {jsx} from "./renderer";
+>jsx : Symbol(jsx, Decl(snabbdomy-only-fragment.tsx, 2, 8))
+
+<></>
+
+=== tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx ===
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+import {Fragment} from "./renderer";
+>Fragment : Symbol(Fragment, Decl(preacty-only-fragment-no-jsx.tsx, 4, 8))
+
+<></>
+
+=== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx ===
+/* @jsx jsx */
+No type information for this code./* @jsxfrag null */
+No type information for this code.import {} from "./renderer";
+No type information for this code.<></>
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx ===
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+import {h, Fragment} from "./renderer";
+>h : Symbol(h, Decl(preacty-no-fragment.tsx, 4, 8))
+>Fragment : Symbol(Fragment, Decl(preacty-no-fragment.tsx, 4, 10))
+
+<div></div>
+>div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/snabbdomy-no-fragment.tsx ===
+/* @jsx jsx */
+/* @jsxfrag null */
+import {jsx} from "./renderer";
+>jsx : Symbol(jsx, Decl(snabbdomy-no-fragment.tsx, 2, 8))
+
+<div></div>
+>div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>div : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/preacty-only-component.tsx ===
+/**
+ * @jsx h
+ */
+import {h} from "./renderer";
+>h : Symbol(h, Decl(preacty-only-component.tsx, 3, 8))
+
+function Component() { return null; }
+>Component : Symbol(Component, Decl(preacty-only-component.tsx, 3, 29))
+
+<Component />
+>Component : Symbol(Component, Decl(preacty-only-component.tsx, 3, 29))
+

@@ -7,7 +7,7 @@ export type Thunk<T> = (() => T) | T;
 >Thunk : Thunk<T>
 
 export type ComposeOutputTypeDefinition = Readonly<ObjectTypeComposer<any, any> | EnumTypeComposer>;
->ComposeOutputTypeDefinition : Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>
+>ComposeOutputTypeDefinition : ComposeOutputTypeDefinition
 
 export class EnumTypeComposer {
 >EnumTypeComposer : EnumTypeComposer
@@ -29,7 +29,7 @@ export class ObjectTypeComposer<TSource, TContext> {
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
 >addResolver : <TResolverSource>(opts: {    type?: Thunk<ComposeOutputTypeDefinition>;}) => this
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
->type : Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>>
+>type : Thunk<ComposeOutputTypeDefinition>
 }
 
 export class Resolver {
@@ -61,9 +61,9 @@ declare const User: ObjectTypeComposer<any, any>;
 
 User.addResolver({
 >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
->User.addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<import("tests/cases/compiler/graphql-compose").EnumTypeComposer>>; }) => ObjectTypeComposer<any, any>
+>User.addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<import("tests/cases/compiler/graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 >User : ObjectTypeComposer<any, any>
->addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<import("tests/cases/compiler/graphql-compose").EnumTypeComposer>>; }) => ObjectTypeComposer<any, any>
+>addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<import("tests/cases/compiler/graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
 
   type: User, // `User as any` fix the problem

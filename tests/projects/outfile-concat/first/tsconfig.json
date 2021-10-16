@@ -7,7 +7,7 @@
     "sourceMap": true,
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "first_PART1.ts",

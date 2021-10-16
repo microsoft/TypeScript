@@ -47,7 +47,7 @@ class C implements I<number> {
         throw new Error("Method not implemented.");
     }
     [Symbol.match]: boolean;
-    [Symbol.replace](...args: {}) {
+    [Symbol.replace](...args: any[]) {
         throw new Error("Method not implemented.");
     }
     [Symbol.search](str: string): number {
@@ -56,16 +56,16 @@ class C implements I<number> {
     [Symbol.species](): number {
         throw new Error("Method not implemented.");
     }
-    [Symbol.split](str: string, limit?: number): {} {
+    [Symbol.split](str: string, limit?: number): string[] {
         throw new Error("Method not implemented.");
     }
     [Symbol.toPrimitive](hint: "number"): number;
     [Symbol.toPrimitive](hint: "default"): number;
     [Symbol.toPrimitive](hint: "string"): string;
-    [Symbol.toPrimitive](hint: any) {
+    [Symbol.toPrimitive](hint: any): string | number {
         throw new Error("Method not implemented.");
     }
-    [Symbol.toStringTag]: string\;
+    [Symbol.toStringTag]: string;
     [Symbol.unscopables]: any;
 }`,
 });

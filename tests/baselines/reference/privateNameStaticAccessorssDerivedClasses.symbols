@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorssDerivedClasses.ts ===
+class Base {
+>Base : Symbol(Base, Decl(privateNameStaticAccessorssDerivedClasses.ts, 0, 0))
+
+    static get #prop(): number { return  123; }
+>#prop : Symbol(Base.#prop, Decl(privateNameStaticAccessorssDerivedClasses.ts, 0, 12))
+
+    static method(x: typeof Derived) {
+>method : Symbol(Base.method, Decl(privateNameStaticAccessorssDerivedClasses.ts, 1, 47))
+>x : Symbol(x, Decl(privateNameStaticAccessorssDerivedClasses.ts, 2, 18))
+>Derived : Symbol(Derived, Decl(privateNameStaticAccessorssDerivedClasses.ts, 5, 1))
+
+        console.log(x.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(privateNameStaticAccessorssDerivedClasses.ts, 2, 18))
+    }
+}
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(privateNameStaticAccessorssDerivedClasses.ts, 5, 1))
+>Base : Symbol(Base, Decl(privateNameStaticAccessorssDerivedClasses.ts, 0, 0))
+
+    static method(x: typeof Derived) {
+>method : Symbol(Derived.method, Decl(privateNameStaticAccessorssDerivedClasses.ts, 6, 28))
+>x : Symbol(x, Decl(privateNameStaticAccessorssDerivedClasses.ts, 7, 18))
+>Derived : Symbol(Derived, Decl(privateNameStaticAccessorssDerivedClasses.ts, 5, 1))
+
+        console.log(x.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(privateNameStaticAccessorssDerivedClasses.ts, 7, 18))
+    }
+}
+

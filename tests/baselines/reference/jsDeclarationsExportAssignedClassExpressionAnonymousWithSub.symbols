@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 module.exports = class {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(export=, Decl(index.js, 0, 0))
 >exports : Symbol(export=, Decl(index.js, 0, 0))
 
@@ -21,7 +21,7 @@ module.exports.Sub = class {
 >module.exports.Sub : Symbol(Sub, Decl(index.js, 7, 1))
 >module.exports : Symbol(Sub, Decl(index.js, 7, 1))
 >module : Symbol(module, Decl(index.js, 0, 0), Decl(index.js, 10, 27))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >Sub : Symbol(Sub, Decl(index.js, 7, 1))
 
     constructor() {
@@ -29,9 +29,9 @@ module.exports.Sub = class {
 >this.instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
 >this : Symbol(Sub, Decl(index.js, 8, 20))
 >instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(module, Decl(index.js, 0, 0), Decl(index.js, 10, 27))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
     }
 }
 

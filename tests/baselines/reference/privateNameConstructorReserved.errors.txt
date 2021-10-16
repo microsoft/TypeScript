@@ -1,13 +1,10 @@
 tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts(2,5): error TS18012: '#constructor' is a reserved word.
-tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts(2,5): error TS18022: A method cannot be named with a private identifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts (2 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts (1 errors) ====
     class A {
         #constructor() {}      // Error: `#constructor` is a reserved word.
         ~~~~~~~~~~~~
 !!! error TS18012: '#constructor' is a reserved word.
-        ~~~~~~~~~~~~
-!!! error TS18022: A method cannot be named with a private identifier.
     }
     

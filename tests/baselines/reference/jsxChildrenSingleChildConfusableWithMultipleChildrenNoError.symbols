@@ -23,7 +23,7 @@ function TabLayout(props: Props) {
 >Props : Symbol(Props, Decl(jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx, 4, 36))
 
     return <div/>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 
 export class App extends React.Component<{}> {
@@ -40,10 +40,10 @@ export class App extends React.Component<{}> {
 
             {[
                 ['Users', <div/>],
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
                 ['Products', <div/>]
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
             ]}
         </TabLayout>

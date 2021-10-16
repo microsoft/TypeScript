@@ -2,9 +2,9 @@
 module.exports.n = {};
 >module.exports.n = {} : typeof n
 >module.exports.n : typeof n
->module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >n : typeof n
 >{} : {}
 
@@ -12,9 +12,9 @@ module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : typeof C
 >module.exports.n.K : typeof C
 >module.exports.n : typeof n
->module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >n : typeof n
 >K : typeof C
 >function C() {    this.x = 10;} : typeof C
@@ -30,9 +30,9 @@ module.exports.n.K = function C() {
 module.exports.Classic = class {
 >module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
 >module.exports.Classic : typeof Classic
->module.exports : typeof import("tests/cases/conformance/salsa/mod")
->module : { "\"tests/cases/conformance/salsa/mod\"": typeof import("tests/cases/conformance/salsa/mod"); }
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >Classic : typeof Classic
 >class {    constructor() {        this.p = 1    }} : typeof Classic
 
@@ -65,11 +65,11 @@ k.x
 >x : number
 
 var classic = new s.Classic()
->classic : Classic
->new s.Classic() : Classic
->s.Classic : typeof Classic
+>classic : s.Classic
+>new s.Classic() : s.Classic
+>s.Classic : typeof s.Classic
 >s : typeof s
->Classic : typeof Classic
+>Classic : typeof s.Classic
 
 
 /** @param {s.n.K} c
@@ -77,7 +77,7 @@ var classic = new s.Classic()
 function f(c, classic) {
 >f : (c: C, classic: s.Classic) => void
 >c : C
->classic : Classic
+>classic : s.Classic
 
     c.x
 >c.x : number
@@ -86,7 +86,7 @@ function f(c, classic) {
 
     classic.p
 >classic.p : number
->classic : Classic
+>classic : s.Classic
 >p : number
 }
 

@@ -27,13 +27,13 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/dist","declaration":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
@@ -44,6 +44,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
+/user/username/projects/myproject/src/file1.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -53,6 +58,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/file2/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/file2/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/myproject/src:
@@ -97,6 +104,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/file2/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/file2/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/myproject/src:
@@ -135,6 +144,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/file2/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/file2/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/file2/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/myproject/src:
@@ -163,13 +174,13 @@ Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:45 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file3.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/dist","declaration":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
@@ -178,6 +189,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/src/file3.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/src/file3.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

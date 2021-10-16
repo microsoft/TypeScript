@@ -5,6 +5,7 @@ on:
         # This is probably 6am UTC, which is 10pm PST or 11pm PDT
         # Alternatively, 6am local is also fine
         - cron: '0 6 * * *'
+    workflow_dispatch: {}
 
 jobs:
   build:

@@ -59,16 +59,16 @@ namespace ts {
                 case "include":
                 case "exclude": {
                     const foundExactMatch = updatePaths(property);
-                    if (!foundExactMatch && propertyName === "include" && isArrayLiteralExpression(property.initializer)) {
-                        const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
-                        const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
-                        // If there isn't some include for this, add a new one.
-                        if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                            !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
-                            changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
-                        }
+                    if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
+                    const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
+                    if (includes.length === 0) return;
+                    const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
+                    // If there isn't some include for this, add a new one.
+                    if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                        !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                        changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                     }
-                    break;
+                    return;
                 }
                 case "compilerOptions":
                     forEachProperty(property.initializer, (property, propertyName) => {
@@ -85,13 +85,12 @@ namespace ts {
                             });
                         }
                     });
-                    break;
+                    return;
             }
         });
 
         function updatePaths(property: PropertyAssignment): boolean {
-            // Type annotation needed due to #7294
-            const elements: readonly Expression[] = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+            const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
             let foundExactMatch = false;
             for (const element of elements) {
                 foundExactMatch = tryUpdateString(element) || foundExactMatch;
@@ -146,12 +145,12 @@ namespace ts {
                 importLiteral => {
                     const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
                     // No need to update if it's an ambient module^M
-                    if (importedModuleSymbol && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
+                    if (importedModuleSymbol?.declarations && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
 
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost),
+                        ? getSourceFileToImportFromResolved(importLiteral, resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost),
                                                             oldToNew, allFiles)
                         : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
@@ -185,19 +184,20 @@ namespace ts {
     ): ToImport | undefined {
         if (importedModuleSymbol) {
             // `find` should succeed because we checked for ambient modules before calling this function.
-            const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
+            const oldFileName = find(importedModuleSymbol.declarations!, isSourceFile)!.fileName;
             const newFileName = oldToNew(oldFileName);
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
+            const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
             const resolved = host.resolveModuleNames
-                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
-                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, program.getSourceFiles());
+                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
+                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+            return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, sourceFiles: readonly SourceFile[]): ToImport | undefined {
+    function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, sourceFiles: readonly SourceFile[]): ToImport | undefined {
         // Search through all locations looking for a moved file, and only then test already existing files.
         // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
         if (!resolved) return undefined;
@@ -210,8 +210,9 @@ namespace ts {
 
         // Then failed lookups that are in the list of sources
         const result = forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJsonExisting)
-            // Then failed lookups except package.json since we dont want to touch them (only included ts/js files)
-            || forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
+            // Then failed lookups except package.json since we dont want to touch them (only included ts/js files).
+            // At this point, the confidence level of this fix being correct is too low to change bare specifiers or absolute paths.
+            || pathIsRelative(importLiteral.text) && forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
         if (result) return result;
 
         // If nothing changed, then result is resolved module file thats not updated

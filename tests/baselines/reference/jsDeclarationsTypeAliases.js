@@ -119,9 +119,9 @@ export type MixinName<T> = T & {
  */
 export type Identity<T> = (x: T) => T;
 //// [mixed.d.ts]
-export type SomeType = number | {
+export type SomeType = {
     x: string;
-} | LocalThing | ExportedThing;
+} | number | LocalThing | ExportedThing;
 /**
  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
  */

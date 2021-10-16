@@ -57,6 +57,11 @@ namespace ts {
     /* @internal */
     export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
 
+    /* @internal */
+    export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
+        return host.getModifiedTime(fileName) || missingFileModifiedTime;
+    }
+
     interface Levels {
         Low: number;
         Medium: number;
@@ -126,6 +131,64 @@ namespace ts {
         }
     }
 
+    interface WatchedFileWithIsClosed extends WatchedFile {
+        isClosed?: boolean;
+    }
+    function pollWatchedFileQueue<T extends WatchedFileWithIsClosed>(
+        host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; },
+        queue: (T | undefined)[],
+        pollIndex: number, chunkSize: number,
+        callbackOnWatchFileStat?: (watchedFile: T, pollIndex: number, fileChanged: boolean) => void
+    ) {
+        let definedValueCopyToIndex = pollIndex;
+        // Max visit would be all elements of the queue
+        for (let canVisit = queue.length; chunkSize && canVisit; nextPollIndex(), canVisit--) {
+            const watchedFile = queue[pollIndex];
+            if (!watchedFile) {
+                continue;
+            }
+            else if (watchedFile.isClosed) {
+                queue[pollIndex] = undefined;
+                continue;
+            }
+
+            // Only files polled count towards chunkSize
+            chunkSize--;
+            const fileChanged = onWatchedFileStat(watchedFile, getModifiedTime(host, watchedFile.fileName));
+            if (watchedFile.isClosed) {
+                // Closed watcher as part of callback
+                queue[pollIndex] = undefined;
+                continue;
+            }
+
+            callbackOnWatchFileStat?.(watchedFile, pollIndex, fileChanged);
+            // Defragment the queue while we are at it
+            if (queue[pollIndex]) {
+                // Copy this file to the non hole location
+                if (definedValueCopyToIndex < pollIndex) {
+                    queue[definedValueCopyToIndex] = watchedFile;
+                    queue[pollIndex] = undefined;
+                }
+                definedValueCopyToIndex++;
+            }
+        }
+
+        // Return next poll index
+        return pollIndex;
+
+        function nextPollIndex() {
+            pollIndex++;
+            if (pollIndex === queue.length) {
+                if (definedValueCopyToIndex < pollIndex) {
+                    // There are holes from definedValueCopyToIndex to end of queue, change queue size
+                    queue.length = definedValueCopyToIndex;
+                }
+                pollIndex = 0;
+                definedValueCopyToIndex = 0;
+            }
+        }
+    }
+
     /* @internal */
     export function createDynamicPriorityPollingWatchFile(host: {
         getModifiedTime: NonNullable<System["getModifiedTime"]>;
@@ -154,7 +217,7 @@ namespace ts {
                 fileName,
                 callback,
                 unchangedPolls: 0,
-                mtime: getModifiedTime(fileName)
+                mtime: getModifiedTime(host, fileName)
             };
             watchedFiles.push(file);
 
@@ -203,26 +266,16 @@ namespace ts {
         }
 
         function pollQueue(queue: (WatchedFile | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
-            // Max visit would be all elements of the queue
-            let needsVisit = queue.length;
-            let definedValueCopyToIndex = pollIndex;
-            for (let polled = 0; polled < chunkSize && needsVisit > 0; nextPollIndex(), needsVisit--) {
-                const watchedFile = queue[pollIndex];
-                if (!watchedFile) {
-                    continue;
-                }
-                else if (watchedFile.isClosed) {
-                    queue[pollIndex] = undefined;
-                    continue;
-                }
+            return pollWatchedFileQueue(
+                host,
+                queue,
+                pollIndex,
+                chunkSize,
+                onWatchFileStat
+            );
 
-                polled++;
-                const fileChanged = onWatchedFileStat(watchedFile, getModifiedTime(watchedFile.fileName));
-                if (watchedFile.isClosed) {
-                    // Closed watcher as part of callback
-                    queue[pollIndex] = undefined;
-                }
-                else if (fileChanged) {
+            function onWatchFileStat(watchedFile: WatchedFile, pollIndex: number, fileChanged: boolean) {
+                if (fileChanged) {
                     watchedFile.unchangedPolls = 0;
                     // Changed files go to changedFilesInLastPoll queue
                     if (queue !== changedFilesInLastPoll) {
@@ -243,30 +296,6 @@ namespace ts {
                     watchedFile.unchangedPolls++;
                     queue[pollIndex] = undefined;
                     addToPollingIntervalQueue(watchedFile, pollingInterval === PollingInterval.Low ? PollingInterval.Medium : PollingInterval.High);
-                }
-
-                if (queue[pollIndex]) {
-                    // Copy this file to the non hole location
-                    if (definedValueCopyToIndex < pollIndex) {
-                        queue[definedValueCopyToIndex] = watchedFile;
-                        queue[pollIndex] = undefined;
-                    }
-                    definedValueCopyToIndex++;
-                }
-            }
-
-            // Return next poll index
-            return pollIndex;
-
-            function nextPollIndex() {
-                pollIndex++;
-                if (pollIndex === queue.length) {
-                    if (definedValueCopyToIndex < pollIndex) {
-                        // There are holes from nextDefinedValueIndex to end of queue, change queue size
-                        queue.length = definedValueCopyToIndex;
-                    }
-                    pollIndex = 0;
-                    definedValueCopyToIndex = 0;
                 }
             }
         }
@@ -300,10 +329,6 @@ namespace ts {
 
         function scheduleNextPoll(pollingInterval: PollingInterval) {
             pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
-        }
-
-        function getModifiedTime(fileName: string) {
-            return host.getModifiedTime(fileName) || missingFileModifiedTime;
         }
     }
 
@@ -341,7 +366,7 @@ namespace ts {
                 FileSystemEntryKind.Directory,
                 (_eventName: string, relativeFileName) => {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    if (!isString(relativeFileName)) { return; }
+                    if (!isString(relativeFileName)) return;
                     const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                     // Some applications save a working file via rename operations
                     const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
@@ -358,6 +383,43 @@ namespace ts {
             watcher.referenceCount = 0;
             dirWatchers.set(dirPath, watcher);
             return watcher;
+        }
+    }
+
+    function createFixedChunkSizePollingWatchFile(host: {
+        getModifiedTime: NonNullable<System["getModifiedTime"]>;
+        setTimeout: NonNullable<System["setTimeout"]>;
+    }): HostWatchFile {
+        const watchedFiles: (WatchedFileWithIsClosed | undefined)[] = [];
+        let pollIndex = 0;
+        let pollScheduled: any;
+        return watchFile;
+
+        function watchFile(fileName: string, callback: FileWatcherCallback): FileWatcher {
+            const file: WatchedFileWithIsClosed = {
+                fileName,
+                callback,
+                mtime: getModifiedTime(host, fileName)
+            };
+            watchedFiles.push(file);
+            scheduleNextPoll();
+            return {
+                close: () => {
+                    file.isClosed = true;
+                    unorderedRemoveItem(watchedFiles, file);
+                }
+            };
+        }
+
+        function pollQueue() {
+            pollScheduled = undefined;
+            pollIndex = pollWatchedFileQueue(host, watchedFiles, pollIndex, pollingChunkSize[PollingInterval.Low]);
+            scheduleNextPoll();
+        }
+
+        function scheduleNextPoll() {
+            if (!watchedFiles.length || pollScheduled) return;
+            pollScheduled = host.setTimeout(pollQueue, PollingInterval.High);
         }
     }
 
@@ -449,6 +511,7 @@ namespace ts {
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
+        getCurrentDirectory: System["getCurrentDirectory"];
         getAccessibleSortedChildDirectories(path: string): readonly string[];
         directoryExists(dir: string): boolean;
         realpath(s: string): string;
@@ -462,7 +525,16 @@ namespace ts {
      * (eg on OS that dont support recursive watch using fs.watch use fs.watchFile)
      */
     /*@internal*/
-    export function createDirectoryWatcherSupportingRecursive(host: RecursiveDirectoryWatcherHost): HostWatchDirectory {
+    export function createDirectoryWatcherSupportingRecursive({
+        watchDirectory,
+        useCaseSensitiveFileNames,
+        getCurrentDirectory,
+        getAccessibleSortedChildDirectories,
+        directoryExists,
+        realpath,
+        setTimeout,
+        clearTimeout
+    }: RecursiveDirectoryWatcherHost): HostWatchDirectory {
         interface ChildDirectoryWatcher extends FileWatcher {
             dirName: string;
         }
@@ -478,12 +550,12 @@ namespace ts {
         const cacheToUpdateChildWatches = new Map<Path, { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
         let timerToUpdateChildWatches: any;
 
-        const filePathComparer = getStringComparer(!host.useCaseSensitiveFileNames);
-        const toCanonicalFilePath = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        const filePathComparer = getStringComparer(!useCaseSensitiveFileNames);
+        const toCanonicalFilePath = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         return (dirName, callback, recursive, options) => recursive ?
             createDirectoryWatcher(dirName, options, callback) :
-            host.watchDirectory(dirName, callback, recursive, options);
+            watchDirectory(dirName, callback, recursive, options);
 
         /**
          * Create the directory watcher for the dirPath.
@@ -496,8 +568,8 @@ namespace ts {
             }
             else {
                 directoryWatcher = {
-                    watcher: host.watchDirectory(dirName, fileName => {
-                        if (isIgnoredPath(fileName)) return;
+                    watcher: watchDirectory(dirName, fileName => {
+                        if (isIgnoredPath(fileName, options)) return;
 
                         if (options?.synchronousWatchDirectory) {
                             // Call the actual callback
@@ -578,7 +650,7 @@ namespace ts {
         function nonSyncUpdateChildWatches(dirName: string, dirPath: Path, fileName: string, options: WatchOptions | undefined) {
             // Iterate through existing children and update the watches if needed
             const parentWatcher = cache.get(dirPath);
-            if (parentWatcher && host.directoryExists(dirName)) {
+            if (parentWatcher && directoryExists(dirName)) {
                 // Schedule the update and postpone invoke for callbacks
                 scheduleUpdateChildWatches(dirName, dirPath, fileName, options);
                 return;
@@ -598,10 +670,10 @@ namespace ts {
                 cacheToUpdateChildWatches.set(dirPath, { dirName, options, fileNames: [fileName] });
             }
             if (timerToUpdateChildWatches) {
-                host.clearTimeout(timerToUpdateChildWatches);
+                clearTimeout(timerToUpdateChildWatches);
                 timerToUpdateChildWatches = undefined;
             }
-            timerToUpdateChildWatches = host.setTimeout(onTimerToUpdateChildWatches, 1000);
+            timerToUpdateChildWatches = setTimeout(onTimerToUpdateChildWatches, 1000);
         }
 
         function onTimerToUpdateChildWatches() {
@@ -611,8 +683,9 @@ namespace ts {
             const invokeMap = new Map<Path, string[]>();
 
             while (!timerToUpdateChildWatches && cacheToUpdateChildWatches.size) {
-                const { value: [dirPath, { dirName, options, fileNames }], done } = cacheToUpdateChildWatches.entries().next();
-                Debug.assert(!done);
+                const result = cacheToUpdateChildWatches.entries().next();
+                Debug.assert(!result.done);
+                const { value: [dirPath, { dirName, options, fileNames }] } = result;
                 cacheToUpdateChildWatches.delete(dirPath);
                 // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
                 // to ensure that all the changes are reflected at this time
@@ -620,7 +693,7 @@ namespace ts {
                 invokeCallbacks(dirPath, invokeMap, hasChanges ? undefined : fileNames);
             }
 
-            sysLog(`sysLog:: invokingWatchers:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);
+            sysLog(`sysLog:: invokingWatchers:: Elapsed:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);
             callbackCache.forEach((callbacks, rootDirName) => {
                 const existing = invokeMap.get(rootDirName);
                 if (existing) {
@@ -636,7 +709,7 @@ namespace ts {
             });
 
             const elapsed = timestamp() - start;
-            sysLog(`sysLog:: Elapsed ${elapsed}ms:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size} ${timerToUpdateChildWatches}`);
+            sysLog(`sysLog:: Elapsed:: ${elapsed}ms:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size} ${timerToUpdateChildWatches}`);
         }
 
         function removeChildWatches(parentWatcher: HostDirectoryWatcher | undefined) {
@@ -655,11 +728,11 @@ namespace ts {
             if (!parentWatcher) return false;
             let newChildWatches: ChildDirectoryWatcher[] | undefined;
             const hasChanges = enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
-                host.directoryExists(parentDir) ? mapDefined(host.getAccessibleSortedChildDirectories(parentDir), child => {
+                directoryExists(parentDir) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), child => {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
-                    return !isIgnoredPath(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                    return !isIgnoredPath(childFullName, options) && filePathComparer(childFullName, normalizePath(realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 parentWatcher.childWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -686,13 +759,14 @@ namespace ts {
             }
         }
 
-        function isIgnoredPath(path: string) {
-            return some(ignoredPaths, searchPath => isInPath(path, searchPath));
+        function isIgnoredPath(path: string, options: WatchOptions | undefined) {
+            return some(ignoredPaths, searchPath => isInPath(path, searchPath)) ||
+                isIgnoredByWatchOptions(path, options, useCaseSensitiveFileNames, getCurrentDirectory);
         }
 
         function isInPath(path: string, searchPath: string) {
             if (stringContains(path, searchPath)) return true;
-            if (host.useCaseSensitiveFileNames) return false;
+            if (useCaseSensitiveFileNames) return false;
             return stringContains(toCanonicalFilePath(path), searchPath);
         }
     }
@@ -729,14 +803,35 @@ namespace ts {
         };
     }
 
-    function createFsWatchCallbackForDirectoryWatcherCallback(directoryName: string, callback: DirectoryWatcherCallback): FsWatchCallback {
+    function isIgnoredByWatchOptions(
+        pathToCheck: string,
+        options: WatchOptions | undefined,
+        useCaseSensitiveFileNames: boolean,
+        getCurrentDirectory: System["getCurrentDirectory"],
+    ) {
+        return (options?.excludeDirectories || options?.excludeFiles) && (
+            matchesExclude(pathToCheck, options?.excludeFiles, useCaseSensitiveFileNames, getCurrentDirectory()) ||
+            matchesExclude(pathToCheck, options?.excludeDirectories, useCaseSensitiveFileNames, getCurrentDirectory())
+        );
+    }
+
+    function createFsWatchCallbackForDirectoryWatcherCallback(
+        directoryName: string,
+        callback: DirectoryWatcherCallback,
+        options: WatchOptions | undefined,
+        useCaseSensitiveFileNames: boolean,
+        getCurrentDirectory: System["getCurrentDirectory"],
+    ): FsWatchCallback {
         return (eventName, relativeFileName) => {
             // In watchDirectory we only care about adding and removing files (when event name is
             // "rename"); changes made within files are handled by corresponding fileWatchers (when
             // event name is "change")
             if (eventName === "rename") {
                 // When deleting a file, the passed baseFileName is null
-                callback(!relativeFileName ? directoryName : normalizePath(combinePaths(directoryName, relativeFileName)));
+                const fileName = !relativeFileName ? directoryName : normalizePath(combinePaths(directoryName, relativeFileName));
+                if (!relativeFileName || !isIgnoredByWatchOptions(fileName, options, useCaseSensitiveFileNames, getCurrentDirectory)) {
+                    callback(fileName);
+                }
             }
         };
     }
@@ -753,6 +848,7 @@ namespace ts {
         fsWatch: FsWatch;
         fileExists: System["fileExists"];
         useCaseSensitiveFileNames: boolean;
+        getCurrentDirectory: System["getCurrentDirectory"];
         fsSupportsRecursiveFsWatch: boolean;
         directoryExists: System["directoryExists"];
         getAccessibleSortedChildDirectories(path: string): readonly string[];
@@ -761,6 +857,7 @@ namespace ts {
         tscWatchFile: string | undefined;
         useNonPollingWatchers?: boolean;
         tscWatchDirectory: string | undefined;
+        defaultWatchFileKind: System["defaultWatchFileKind"];
     }
 
     /*@internal*/
@@ -772,6 +869,7 @@ namespace ts {
         fsWatch,
         fileExists,
         useCaseSensitiveFileNames,
+        getCurrentDirectory,
         fsSupportsRecursiveFsWatch,
         directoryExists,
         getAccessibleSortedChildDirectories,
@@ -779,8 +877,10 @@ namespace ts {
         tscWatchFile,
         useNonPollingWatchers,
         tscWatchDirectory,
+        defaultWatchFileKind,
     }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
         let dynamicPollingWatchFile: HostWatchFile | undefined;
+        let fixedChunkSizePollingWatchFile: HostWatchFile | undefined;
         let nonPollingWatchFile: HostWatchFile | undefined;
         let hostRecursiveDirectoryWatcher: HostWatchDirectory | undefined;
         return {
@@ -798,6 +898,8 @@ namespace ts {
                     return pollingWatchFile(fileName, callback, pollingInterval, /*options*/ undefined);
                 case WatchFileKind.DynamicPriorityPolling:
                     return ensureDynamicPollingWatchFile()(fileName, callback, pollingInterval, /*options*/ undefined);
+                case WatchFileKind.FixedChunkSizePolling:
+                    return ensureFixedChunkSizePollingWatchFile()(fileName, callback, /* pollingInterval */ undefined!, /*options*/ undefined);
                 case WatchFileKind.UseFsEvents:
                     return fsWatch(
                         fileName,
@@ -818,8 +920,11 @@ namespace ts {
         }
 
         function ensureDynamicPollingWatchFile() {
-            return dynamicPollingWatchFile ||
-                (dynamicPollingWatchFile = createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout }));
+            return dynamicPollingWatchFile ||= createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
+        }
+
+        function ensureFixedChunkSizePollingWatchFile() {
+            return fixedChunkSizePollingWatchFile ||= createFixedChunkSizePollingWatchFile({ getModifiedTime, setTimeout });
         }
 
         function updateOptionsForWatchFile(options: WatchOptions | undefined, useNonPollingWatchers?: boolean): WatchOptions {
@@ -845,7 +950,7 @@ namespace ts {
                         // Use notifications from FS to watch with falling back to fs.watchFile
                         generateWatchFileOptions(WatchFileKind.UseFsEventsOnParentDirectory, PollingWatchKind.PriorityInterval, options) :
                         // Default to do not use fixed polling interval
-                        { watchFile: WatchFileKind.FixedPollingInterval };
+                        { watchFile: defaultWatchFileKind?.() || WatchFileKind.FixedPollingInterval };
             }
         }
 
@@ -868,7 +973,7 @@ namespace ts {
                 return fsWatch(
                     directoryName,
                     FileSystemEntryKind.Directory,
-                    createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback),
+                    createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback, options, useCaseSensitiveFileNames, getCurrentDirectory),
                     recursive,
                     PollingInterval.Medium,
                     getFallbackOptions(options)
@@ -878,6 +983,7 @@ namespace ts {
             if (!hostRecursiveDirectoryWatcher) {
                 hostRecursiveDirectoryWatcher = createDirectoryWatcherSupportingRecursive({
                     useCaseSensitiveFileNames,
+                    getCurrentDirectory,
                     directoryExists,
                     getAccessibleSortedChildDirectories,
                     watchDirectory: nonRecursiveWatchDirectory,
@@ -891,8 +997,8 @@ namespace ts {
 
         function nonRecursiveWatchDirectory(directoryName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher {
             Debug.assert(!recursive);
-            options = updateOptionsForWatchDirectory(options);
-            const watchDirectoryKind = Debug.checkDefined(options.watchDirectory);
+            const watchDirectoryOptions = updateOptionsForWatchDirectory(options);
+            const watchDirectoryKind = Debug.checkDefined(watchDirectoryOptions.watchDirectory);
             switch (watchDirectoryKind) {
                 case WatchDirectoryKind.FixedPollingInterval:
                     return pollingWatchFile(
@@ -908,14 +1014,21 @@ namespace ts {
                         PollingInterval.Medium,
                         /*options*/ undefined
                     );
+                case WatchDirectoryKind.FixedChunkSizePolling:
+                    return ensureFixedChunkSizePollingWatchFile()(
+                        directoryName,
+                        () => callback(directoryName),
+                        /* pollingInterval */ undefined!,
+                        /*options*/ undefined
+                    );
                 case WatchDirectoryKind.UseFsEvents:
                     return fsWatch(
                         directoryName,
                         FileSystemEntryKind.Directory,
-                        createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback),
+                        createFsWatchCallbackForDirectoryWatcherCallback(directoryName, callback, options, useCaseSensitiveFileNames, getCurrentDirectory),
                         recursive,
                         PollingInterval.Medium,
-                        getFallbackOptions(options)
+                        getFallbackOptions(watchDirectoryOptions)
                     );
                 default:
                     Debug.assertNever(watchDirectoryKind);
@@ -1049,6 +1162,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
+        getWidthOfTerminal?(): number;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -1080,6 +1194,7 @@ namespace ts {
         exit(exitCode?: number): void;
         /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): boolean;
         /*@internal*/ disableCPUProfiler?(continuation: () => void): boolean;
+        /*@internal*/ cpuProfilingEnabled?(): boolean;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -1093,7 +1208,9 @@ namespace ts {
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
         // For testing
         /*@internal*/ now?(): Date;
+        /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
+        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
     }
 
     export interface FileWatcher {
@@ -1149,6 +1266,8 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
+            let hitSystemWatcherLimit = false;
+
             const Buffer: {
                 new (input: string, encoding?: string): any;
                 from?(input: string, encoding?: string): any;
@@ -1160,7 +1279,10 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
+            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
+
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
+            const getCurrentDirectory = memoize(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
                 pollingWatchFile: createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames),
                 getModifiedTime,
@@ -1168,6 +1290,7 @@ namespace ts {
                 clearTimeout,
                 fsWatch,
                 useCaseSensitiveFileNames,
+                getCurrentDirectory,
                 fileExists,
                 // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                 // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
@@ -1178,6 +1301,7 @@ namespace ts {
                 tscWatchFile: process.env.TSC_WATCHFILE,
                 useNonPollingWatchers: process.env.TSC_NONPOLLING_WATCHER,
                 tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
+                defaultWatchFileKind: () => sys!.defaultWatchFileKind?.(),
             });
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -1185,6 +1309,9 @@ namespace ts {
                 useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
+                },
+                getWidthOfTerminal(){
+                    return process.stdout.columns;
                 },
                 writeOutputIsTTY() {
                     return process.stdout.isTTY;
@@ -1214,9 +1341,7 @@ namespace ts {
                 getExecutingFilePath() {
                     return __filename;
                 },
-                getCurrentDirectory() {
-                    return process.cwd();
-                },
+                getCurrentDirectory,
                 getDirectories,
                 getEnvironmentVariable(name: string) {
                     return process.env[name] || "";
@@ -1235,8 +1360,8 @@ namespace ts {
                 },
                 getFileSize(path) {
                     try {
-                        const stat = _fs.statSync(path);
-                        if (stat.isFile()) {
+                        const stat = statSync(path);
+                        if (stat?.isFile()) {
                             return stat.size;
                         }
                     }
@@ -1248,8 +1373,9 @@ namespace ts {
                 },
                 enableCPUProfiler,
                 disableCPUProfiler,
+                cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
                 realpath,
-                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();
@@ -1282,6 +1408,16 @@ namespace ts {
                 }
             };
             return nodeSystem;
+
+            /**
+             * `throwIfNoEntry` was added so recently that it's not in the node types.
+             * This helper encapsulates the mitigating usage of `any`.
+             * See https://github.com/nodejs/node/pull/33716
+             */
+            function statSync(path: string): import("fs").Stats | undefined {
+                // throwIfNoEntry will be ignored by older versions of node
+                return (_fs as any).statSync(path, { throwIfNoEntry: false });
+            }
 
             /**
              * Uses the builtin inspector APIs to capture a CPU profile
@@ -1341,7 +1477,7 @@ namespace ts {
                     activeSession.post("Profiler.stop", (err, { profile }) => {
                         if (!err) {
                             try {
-                                if (_fs.statSync(profilePath).isDirectory()) {
+                                if (statSync(profilePath)?.isDirectory()) {
                                     profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
                                 }
                             }
@@ -1484,6 +1620,12 @@ namespace ts {
                             options = { persistent: true };
                         }
                     }
+
+                    if (hitSystemWatcherLimit) {
+                        sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
+                        return watchPresentFileSystemEntryWithFsWatchFile();
+                    }
+
                     try {
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
@@ -1500,6 +1642,8 @@ namespace ts {
                         // Catch the exception and use polling instead
                         // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                         // so instead of throwing error, use fs.watchFile
+                        hitSystemWatcherLimit ||= e.code === "ENOSPC";
+                        sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
                 }
@@ -1510,7 +1654,7 @@ namespace ts {
                     return event === "rename" &&
                         (!relativeName ||
                             relativeName === lastDirectoryPart ||
-                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                            (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
                         !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                         invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
                         callback(event, relativeName);
@@ -1521,7 +1665,6 @@ namespace ts {
                  * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                  */
                 function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
-                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                     return watchFile(
                         fileOrDirectory,
                         createFileWatcherCallback(callback),
@@ -1631,7 +1774,10 @@ namespace ts {
                             const name = combinePaths(path, entry);
 
                             try {
-                                stat = _fs.statSync(name);
+                                stat = statSync(name);
+                                if (!stat) {
+                                    continue;
+                                }
                             }
                             catch (e) {
                                 continue;
@@ -1658,7 +1804,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath, directoryExists);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
@@ -1668,7 +1814,10 @@ namespace ts {
                 Error.stackTraceLimit = 0;
 
                 try {
-                    const stat = _fs.statSync(path);
+                    const stat = statSync(path);
+                    if (!stat) {
+                        return false;
+                    }
                     switch (entryKind) {
                         case FileSystemEntryKind.File: return stat.isFile();
                         case FileSystemEntryKind.Directory: return stat.isDirectory();
@@ -1697,7 +1846,7 @@ namespace ts {
 
             function realpath(path: string): string {
                 try {
-                    return _fs.realpathSync(path);
+                    return realpathSync(path);
                 }
                 catch {
                     return path;
@@ -1706,7 +1855,7 @@ namespace ts {
 
             function getModifiedTime(path: string) {
                 try {
-                    return _fs.statSync(path).mtime;
+                    return statSync(path)?.mtime;
                 }
                 catch (e) {
                     return undefined;

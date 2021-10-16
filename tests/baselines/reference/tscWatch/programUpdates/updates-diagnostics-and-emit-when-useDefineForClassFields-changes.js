@@ -25,12 +25,10 @@ Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
-
 [96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
-
 
 [[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
 
@@ -38,6 +36,7 @@ Output::
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"watch":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a.ts
 /a/lib/lib.d.ts
@@ -45,6 +44,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a.ts
 /a/lib/lib.d.ts
+
+Shape signatures in builder refreshed for::
+/a.ts (used version)
+/a/lib/lib.d.ts (used version)
 
 WatchedFiles::
 /tsconfig.json:
@@ -86,12 +89,10 @@ Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
-
 
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
@@ -99,6 +100,7 @@ Output::
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"useDefineForClassFields":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a.ts
 /a/lib/lib.d.ts
@@ -106,6 +108,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a.ts
 /a/lib/lib.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /tsconfig.json:

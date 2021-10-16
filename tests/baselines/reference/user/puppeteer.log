@@ -1,0 +1,9 @@
+Exit Code: 2
+Standard output:
+src/common/fetch.ts(21,3): error TS2322: Type '((input: RequestInfo, init?: RequestInit) => Promise<Response>) | typeof import("../../../node_modules/@types/node-fetch/index")' is not assignable to type '(input: RequestInfo, init?: RequestInit) => Promise<Response>'.
+  Type 'typeof import("../../../node_modules/@types/node-fetch/index")' is not assignable to type '(input: RequestInfo, init?: RequestInit) => Promise<Response>'.
+    Type 'typeof import("../../../node_modules/@types/node-fetch/index")' provides no match for the signature '(input: RequestInfo, init?: RequestInit): Promise<Response>'.
+
+
+
+Standard error:

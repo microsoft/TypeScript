@@ -1,0 +1,55 @@
+=== tests/cases/conformance/controlFlow/controlFlowForInStatement2.ts ===
+const keywordA = 'a';
+>keywordA : Symbol(keywordA, Decl(controlFlowForInStatement2.ts, 0, 5))
+
+const keywordB = 'b';
+>keywordB : Symbol(keywordB, Decl(controlFlowForInStatement2.ts, 1, 5))
+
+type A = { [keywordA]: number };
+>A : Symbol(A, Decl(controlFlowForInStatement2.ts, 1, 21))
+>[keywordA] : Symbol([keywordA], Decl(controlFlowForInStatement2.ts, 3, 10))
+>keywordA : Symbol(keywordA, Decl(controlFlowForInStatement2.ts, 0, 5))
+
+type B = { [keywordB]: string };
+>B : Symbol(B, Decl(controlFlowForInStatement2.ts, 3, 32))
+>[keywordB] : Symbol([keywordB], Decl(controlFlowForInStatement2.ts, 4, 10))
+>keywordB : Symbol(keywordB, Decl(controlFlowForInStatement2.ts, 1, 5))
+
+declare const c: A | B;
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+>A : Symbol(A, Decl(controlFlowForInStatement2.ts, 1, 21))
+>B : Symbol(B, Decl(controlFlowForInStatement2.ts, 3, 32))
+
+if ('a' in c) {
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+
+    c; // narrowed to `A`
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+}
+
+if (keywordA in c) {
+>keywordA : Symbol(keywordA, Decl(controlFlowForInStatement2.ts, 0, 5))
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+
+    c; // also narrowed to `A`
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+}
+
+let stringB: string = 'b';
+>stringB : Symbol(stringB, Decl(controlFlowForInStatement2.ts, 16, 3))
+
+if ((stringB as 'b') in c) {
+>stringB : Symbol(stringB, Decl(controlFlowForInStatement2.ts, 16, 3))
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+
+    c; // narrowed to `B`
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+}
+
+if ((stringB as ('a' | 'b')) in c) {
+>stringB : Symbol(stringB, Decl(controlFlowForInStatement2.ts, 16, 3))
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+
+    c; // not narrowed
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+}

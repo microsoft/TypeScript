@@ -292,7 +292,7 @@ namespace ts {
         return -1;
     }
 
-    export function countWhere<T>(array: readonly T[], predicate: (x: T, i: number) => boolean): number {
+    export function countWhere<T>(array: readonly T[] | undefined, predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
             for (let i = 0; i < array.length; i++) {
@@ -1195,7 +1195,7 @@ namespace ts {
      * @param keyComparer A callback used to compare two keys in a sorted array.
      * @param offset An offset into `array` at which to start the search.
      */
-    export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
+    export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: (v: T, i: number) => U, keyComparer: Comparer<U>, offset?: number): number {
         if (!some(array)) {
             return -1;
         }
@@ -1204,7 +1204,7 @@ namespace ts {
         let high = array.length - 1;
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
-            const midKey = keySelector(array[middle]);
+            const midKey = keySelector(array[middle], middle);
             switch (keyComparer(midKey, key)) {
                 case Comparison.LessThan:
                     low = middle + 1;
@@ -1429,7 +1429,7 @@ namespace ts {
         const result: any = {};
         for (const id in object) {
             if (hasOwnProperty.call(object, id)) {
-                result[id] = (<any>object)[id];
+                result[id] = (object as any)[id];
             }
         }
         return result;
@@ -1441,7 +1441,7 @@ namespace ts {
      * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
      */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
+        const result: T1 & T2 = {} as any;
         for (const id in second) {
             if (hasOwnProperty.call(second, id)) {
                 (result as any)[id] = (second as any)[id];
@@ -1568,19 +1568,29 @@ namespace ts {
     export function noop(_?: {} | null | undefined): void { }
 
     /** Do nothing and return false */
-    export function returnFalse(): false { return false; }
+    export function returnFalse(): false {
+        return false;
+    }
 
     /** Do nothing and return true */
-    export function returnTrue(): true { return true; }
+    export function returnTrue(): true {
+        return true;
+    }
 
     /** Do nothing and return undefined */
-    export function returnUndefined(): undefined { return undefined; }
+    export function returnUndefined(): undefined {
+        return undefined;
+    }
 
     /** Returns its argument. */
-    export function identity<T>(x: T) { return x; }
+    export function identity<T>(x: T) {
+        return x;
+    }
 
     /** Returns lower case string */
-    export function toLowerCase(x: string) { return x.toLowerCase(); }
+    export function toLowerCase(x: string) {
+        return x.toLowerCase();
+    }
 
     // We convert the file names to lower case as key for file name on case insensitive file system
     // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert
@@ -1591,7 +1601,7 @@ namespace ts {
     // | 1. | i        | 105       | Ascii i                                                                |
     // | 2. | I        | 73        | Ascii I                                                                |
     // |-------- Special characters ------------------------------------------------------------------------|
-    // | 3. | \u0130   | 304       | Uppper case I with dot above                                           |
+    // | 3. | \u0130   | 304       | Upper case I with dot above                                            |
     // | 4. | i,\u0307 | 105,775   | i, followed by 775: Lower case of (3rd item)                           |
     // | 5. | I,\u0307 | 73,775    | I, followed by 775: Upper case of (4th item), lower case is (4th item) |
     // | 6. | \u0131   | 305       | Lower case i without dot, upper case is I (2nd item)                   |
@@ -1927,11 +1937,9 @@ namespace ts {
 
     /**
      * Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
-     * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     * Names less than length 3 only check for case-insensitive equality.
      *
-     * If there is a candidate that's the same except for case, return that.
-     * If there is a candidate that's within one edit of the name, return that.
-     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     * find the candidate with the smallest Levenshtein distance,
      *    except for candidates:
      *      * With no name
      *      * Whose length differs from the target name by more than 0.34 of the length of the name.
@@ -1941,41 +1949,28 @@ namespace ts {
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
-        let justCheckExactMatches = false;
-        const nameLowerCase = name.toLowerCase();
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
-            if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
-                const candidateNameLowerCase = candidateName.toLowerCase();
-                if (candidateNameLowerCase === nameLowerCase) {
-                    if (candidateName === name) {
-                        continue;
-                    }
-                    return candidate;
-                }
-                if (justCheckExactMatches) {
+            if (candidateName !== undefined && Math.abs(candidateName.length - name.length) <= maximumLengthDifference) {
+                if (candidateName === name) {
                     continue;
                 }
-                if (candidateName.length < 3) {
-                    // Don't bother, user would have noticed a 2-character name having an extra character
+                // Only consider candidates less than 3 characters long when they differ by case.
+                // Otherwise, don't bother, since a user would usually notice differences of a 2-character name.
+                if (candidateName.length < 3 && candidateName.toLowerCase() !== name.toLowerCase()) {
                     continue;
                 }
-                // Only care about a result better than the best so far.
-                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+
+                const distance = levenshteinWithMax(name, candidateName, bestDistance - 0.1);
                 if (distance === undefined) {
                     continue;
                 }
-                if (distance < 3) {
-                    justCheckExactMatches = true;
-                    bestCandidate = candidate;
-                }
-                else {
-                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
-                    bestDistance = distance;
-                    bestCandidate = candidate;
-                }
+
+                Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+                bestDistance = distance;
+                bestCandidate = candidate;
             }
         }
         return bestCandidate;
@@ -1985,7 +1980,7 @@ namespace ts {
         let previous = new Array(s2.length + 1);
         let current = new Array(s2.length + 1);
         /** Represents any value > max. We don't care about the particular value. */
-        const big = max + 1;
+        const big = max + 0.01;
 
         for (let i = 0; i <= s2.length; i++) {
             previous[i] = i;
@@ -1993,8 +1988,8 @@ namespace ts {
 
         for (let i = 1; i <= s1.length; i++) {
             const c1 = s1.charCodeAt(i - 1);
-            const minJ = i > max ? i - max : 1;
-            const maxJ = s2.length > max + i ? max + i : s2.length;
+            const minJ = Math.ceil(i > max ? i - max : 1);
+            const maxJ = Math.floor(s2.length > max + i ? max + i : s2.length);
             current[0] = i;
             /** Smallest value of the matrix in the ith column. */
             let colMin = i;
@@ -2002,9 +1997,13 @@ namespace ts {
                 current[j] = big;
             }
             for (let j = minJ; j <= maxJ; j++) {
+                // case difference should be significantly cheaper than other differences
+                const substitutionDistance = s1[i - 1].toLowerCase() === s2[j-1].toLowerCase()
+                    ? (previous[j - 1] + 0.1)
+                    : (previous[j - 1] + 2);
                 const dist = c1 === s2.charCodeAt(j - 1)
                     ? previous[j - 1]
-                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ substitutionDistance);
                 current[j] = dist;
                 colMin = Math.min(colMin, dist);
             }
@@ -2046,11 +2045,51 @@ namespace ts {
      * Takes a string like "jquery-min.4.2.3" and returns "jquery"
      */
     export function removeMinAndVersionNumbers(fileName: string) {
-        // Match a "." or "-" followed by a version number or 'min' at the end of the name
-        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+        // We used to use the regex /[.-]((min)|(\d+(\.\d+)*))$/ and would just .replace it twice.
+        // Unfortunately, that regex has O(n^2) performance because v8 doesn't match from the end of the string.
+        // Instead, we now essentially scan the filename (backwards) ourselves.
 
-        // The "min" or version may both be present, in either order, so try applying the above twice.
-        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+        let end: number = fileName.length;
+
+        for (let pos = end - 1; pos > 0; pos--) {
+            let ch: number = fileName.charCodeAt(pos);
+            if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
+                // Match a \d+ segment
+                do {
+                    --pos;
+                    ch = fileName.charCodeAt(pos);
+                } while (pos > 0 && ch >= CharacterCodes._0 && ch <= CharacterCodes._9);
+            }
+            else if (pos > 4 && (ch === CharacterCodes.n || ch === CharacterCodes.N)) {
+                // Looking for "min" or "min"
+                // Already matched the 'n'
+                --pos;
+                ch = fileName.charCodeAt(pos);
+                if (ch !== CharacterCodes.i && ch !== CharacterCodes.I) {
+                    break;
+                }
+                --pos;
+                ch = fileName.charCodeAt(pos);
+                if (ch !== CharacterCodes.m && ch !== CharacterCodes.M) {
+                    break;
+                }
+                --pos;
+                ch = fileName.charCodeAt(pos);
+            }
+            else {
+                // This character is not part of either suffix pattern
+                break;
+            }
+
+            if (ch !== CharacterCodes.minus && ch !== CharacterCodes.dot) {
+                break;
+            }
+
+            end = pos;
+        }
+
+        // end might be fileName.length, in which case this should internally no-op
+        return end === fileName.length ? fileName : fileName.slice(0, end);
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */
@@ -2250,18 +2289,66 @@ namespace ts {
         }
     }
 
-    export function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
-        }
-        return s;
+
+    /**
+     * Returns string left-padded with spaces or zeros until it reaches the given length.
+     *
+     * @param s String to pad.
+     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString Character to use as padding (default " ").
+     */
+    export function padLeft(s: string, length: number, padString: " " | "0" = " ") {
+        return length <= s.length ? s : padString.repeat(length - s.length) + s;
     }
 
-    export function padRight(s: string, length: number) {
-        while (s.length < length) {
-            s = s + " ";
-        }
+    /**
+     * Returns string right-padded with spaces until it reaches the given length.
+     *
+     * @param s String to pad.
+     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString Character to use as padding (default " ").
+     */
+    export function padRight(s: string, length: number, padString: " " = " ") {
+        return length <= s.length ? s : s + padString.repeat(length - s.length);
+    }
 
-        return s;
+    export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
+    export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
+        const len = array.length;
+        let index = 0;
+        while (index < len && predicate(array[index])) {
+            index++;
+        }
+        return array.slice(0, index);
+    }
+
+    /**
+     * Removes the leading and trailing white space and line terminator characters from a string.
+     */
+    export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
+
+    /**
+     * Returns a copy with trailing whitespace removed.
+     */
+    export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
+
+    /**
+     * Returns a copy with leading whitespace removed.
+     */
+    export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
+
+    /**
+     * https://jsbench.me/gjkoxld4au/1
+     * The simple regex for this, /\s+$/g is O(n^2) in v8.
+     * The native .trimEnd method is by far best, but since that's technically ES2019,
+     * we provide a (still much faster than the simple regex) fallback.
+     */
+    function trimEndImpl(s: string) {
+        let end = s.length - 1;
+        while (end >= 0) {
+            if (!isWhiteSpaceLike(s.charCodeAt(end))) break;
+            end--;
+        }
+        return s.slice(0, end + 1);
     }
 }
