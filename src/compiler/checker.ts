@@ -24094,8 +24094,8 @@ namespace ts {
                 return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
             }
 
-            function widdenTypeWithSymbol(type: Type, newSymbol: Symbol): Type {
-                // If type is this/any/unknown, it could not be widden.
+            function widenTypeWithSymbol(type: Type, newSymbol: Symbol): Type {
+                // If type is this/any/unknown, it could not be widened.
                 if ((type.flags & TypeFlags.AnyOrUnknown) || isThisTypeParameter(type)) {
                     return type;
                 }
@@ -24110,7 +24110,7 @@ namespace ts {
                 }
 
                 // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
-                // else add a new anonymous object type which contains the type and widden the origional type with it.
+                // else add a new anonymous object type which contains the type and widen the original type with it.
 
                 if (isIntersectionType(type)) {
                     // try to get the first Anonymous Object type to add new type to it.
@@ -24152,18 +24152,18 @@ namespace ts {
                 }
             }
 
-	    function narrowOrWiddenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
+	    function narrowOrWidenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
 		if ((type.flags & TypeFlags.Union
 		    || type.flags & TypeFlags.Object && declaredType !== type
 		    || isThisTypeParameter(type)
 		    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && isSomeDirectSubtypeContainsPropName(type, name)) {
 		    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
-                // only widden property when the type does not contain string-index/name in any of the constituents.
+                // only widen property when the type does not contain string-index/name in any of the constituents.
                 else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, name) && !getIndexInfoOfType(type, stringType)) {
 		    const addSymbol = createSymbol(SymbolFlags.Property, name);
 		    addSymbol.type = unknownType;
-                    return widdenTypeWithSymbol(type, addSymbol);
+                    return widenTypeWithSymbol(type, addSymbol);
                 }
                 return type;
 
@@ -24260,7 +24260,7 @@ namespace ts {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowOrWiddenTypeByInKeyword(type, name, assumeTrue);
+                                return narrowOrWidenTypeByInKeyword(type, name, assumeTrue);
                             }
                         }
                         break;
