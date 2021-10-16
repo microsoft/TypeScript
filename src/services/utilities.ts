@@ -1897,10 +1897,10 @@ namespace ts {
     export function programContainsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
     }
-    export function programContainsEs6Modules(program: Program): boolean {
+    export function programContainsEsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
-    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
+    export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
         return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 

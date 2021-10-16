@@ -138,9 +138,9 @@ namespace ts.refactor {
             return [...prologueDirectives, ...toMove.all];
         }
 
-        const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
+        const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
         const quotePreference = getQuotePreference(oldFile, preferences);
-        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
+        const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEsModuleSyntax, quotePreference);
         if (importsFromNewFile) {
             insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
         }
@@ -149,8 +149,8 @@ namespace ts.refactor {
         deleteMovedStatements(oldFile, toMove.ranges, changes);
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
-        const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference);
-        const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax);
+        const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEsModuleSyntax, quotePreference);
+        const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
         if (imports.length && body.length) {
             return [
                 ...prologueDirectives,
@@ -429,7 +429,7 @@ namespace ts.refactor {
         newFileImportsFromOldFile: ReadonlySymbolSet,
         changes: textChanges.ChangeTracker,
         checker: TypeChecker,
-        useEs6ModuleSyntax: boolean,
+        useEsModuleSyntax: boolean,
         quotePreference: QuotePreference,
     ): readonly SupportedImportStatement[] {
         const copiedOldImports: SupportedImportStatement[] = [];
@@ -454,7 +454,7 @@ namespace ts.refactor {
 
                 const top = getTopLevelDeclarationStatement(decl);
                 if (markSeenTop(top)) {
-                    addExportToChanges(oldFile, top, name, changes, useEs6ModuleSyntax);
+                    addExportToChanges(oldFile, top, name, changes, useEsModuleSyntax);
                 }
                 if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
                     oldFileDefault = name;
@@ -465,7 +465,7 @@ namespace ts.refactor {
             }
         });
 
-        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEs6ModuleSyntax, quotePreference));
+        append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEsModuleSyntax, quotePreference));
         return copiedOldImports;
     }
 

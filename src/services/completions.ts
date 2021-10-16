@@ -1993,10 +1993,10 @@ namespace ts.Completions {
             if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
             if (!preferences.includeCompletionsForModuleExports) return false;
-            // If already using ES6 modules, OK to continue using them.
+            // If already using ES modules, OK to continue using them.
             if (sourceFile.externalModuleIndicator || sourceFile.commonJsModuleIndicator) return true;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
-            if (compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) return true;
+            if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
             // If some file is using ES6 modules, assume that it's OK to add more.
             return programContainsModules(program);
         }
