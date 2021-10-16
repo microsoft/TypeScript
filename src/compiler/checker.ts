@@ -4058,9 +4058,9 @@ namespace ts {
             return resolved;
         }
 
-        function createWidenType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
+        function createWidenType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
             return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous | ObjectFlags.WidenedByNarrow, symbol),
-                members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+                members, callSignatures, constructSignatures, indexInfos);
         }
 
         function createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
@@ -24102,7 +24102,7 @@ namespace ts {
                 const propName = newSymbol.escapedName;
                 const members = createSymbolTable();
                 members.set(propName, newSymbol);
-                const newObjType = createWidenType(/* symbol */ undefined, members, emptyArray, emptyArray, /* stringIndexInfo */ undefined, /* numberIndexInfo */ undefined);
+                const newObjType = createWidenType(/* symbol */ undefined, members, emptyArray, emptyArray, emptyArray);
 
                 // if `type` is never, just return the new anonymous object type.
                 if (type.flags & TypeFlags.Never) {
@@ -24159,8 +24159,10 @@ namespace ts {
 		    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && isSomeDirectSubtypeContainsPropName(type, name)) {
 		    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
-                // only widden property when the type does not contain string-index/propName in any of the constituents.
-                else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, propName) && !getIndexInfoOfType(type, IndexKind.String)) {
+                // only widden property when the type does not contain string-index/name in any of the constituents.
+                else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, name) && !getIndexInfoOfType(type, stringType)) {
+		    const addSymbol = createSymbol(SymbolFlags.Property, name);
+		    addSymbol.type = unknownType;
                     return widdenTypeWithSymbol(type, addSymbol);
                 }
                 return type;
@@ -24258,7 +24260,7 @@ namespace ts {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowOrWiddneByInKeyword(type, name, assumeTrue);
+                                return narrowOrWiddenTypeByInKeyword(type, name, assumeTrue);
                             }
                         }
                         break;
