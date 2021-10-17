@@ -13,7 +13,7 @@ if ('a' in c) {
 }
 
 if ('d' in c) {
-    c; // never
+    c; // (A | B) & { d: unknown; }
 }
 
 if (a in c) {
@@ -22,5 +22,5 @@ if (a in c) {
 }
 
 if (d in c) {
-    c; // never
+    c; // (A | B) & { d: unknown; }
 }

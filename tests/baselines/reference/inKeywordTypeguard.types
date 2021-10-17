@@ -332,7 +332,7 @@ if ('extra' in error) {
 >error : Error
 
     error // Still Error
->error : Error
+>error : Error & { extra: unknown; }
 
 } else {
     error // Error
