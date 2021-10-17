@@ -14362,7 +14362,7 @@ namespace ts {
             const id = getTypeListId(types);
             let type = intersectionTypes.get(id);
             if (!type) {
-                type = <IntersectionType>createType(TypeFlags.Intersection);
+                type = createType(TypeFlags.Intersection) as IntersectionType;
                 intersectionTypes.set(id, type);
                 type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type.types = types;
@@ -14652,7 +14652,7 @@ namespace ts {
                 else {
                     result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
-                intersectionTypes.set(id, <IntersectionType>result);
+                intersectionTypes.set(id, result as IntersectionType);
             }
             return result;
         }
@@ -24134,10 +24134,10 @@ namespace ts {
                 // maybe we should advanced `filterType`, but I do not know whether it would be too far.
                 function filterIntersectionType(type: Type, f: (t: Type) => boolean): Type {
                     if (type.flags & TypeFlags.Intersection) {
-                        const types = (<IntersectionType>type).types;
+                        const types = (type as IntersectionType).types;
                         const filtered = filter(types, f);
 
-                        return filtered === types ? type : getIntersectionTypeFromSortedList(filtered, (<IntersectionType>type).objectFlags);
+                        return filtered === types ? type : getIntersectionTypeFromSortedList(filtered, (type as IntersectionType).objectFlags);
                     }
                     return type.flags & TypeFlags.Never || f(type) ? type : neverType;
                 }
@@ -24152,17 +24152,17 @@ namespace ts {
                 }
             }
 
-	    function narrowOrWidenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
-		if ((type.flags & TypeFlags.Union
-		    || type.flags & TypeFlags.Object && declaredType !== type
-		    || isThisTypeParameter(type)
-		    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && isSomeDirectSubtypeContainsPropName(type, name)) {
-		    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+            function narrowOrWidenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
+                if ((type.flags & TypeFlags.Union
+                    || type.flags & TypeFlags.Object && declaredType !== type
+                    || isThisTypeParameter(type)
+                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && isSomeDirectSubtypeContainsPropName(type, name)) {
+                    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
                 // only widen property when the type does not contain string-index/name in any of the constituents.
                 else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, name) && !getIndexInfoOfType(type, stringType)) {
-		    const addSymbol = createSymbol(SymbolFlags.Property, name);
-		    addSymbol.type = unknownType;
+                    const addSymbol = createSymbol(SymbolFlags.Property, name);
+                    addSymbol.type = unknownType;
                     return widenTypeWithSymbol(type, addSymbol);
                 }
                 return type;
@@ -24172,7 +24172,7 @@ namespace ts {
                 function isSomeDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
                     type = getReducedApparentType(type);
                     if (type.flags & TypeFlags.Object) {
-                        const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                        const resolved = resolveStructuredTypeMembers(type as ObjectType);
                         const symbol = resolved.members.get(name);
                         if (symbol && symbolIsValue(symbol)) {
                             return symbol;
@@ -24190,7 +24190,7 @@ namespace ts {
                         return getPropertyOfObjectType(globalObjectType, name);
                     }
                     if (type.flags & TypeFlags.UnionOrIntersection) {
-                        return getUnionOrIntersectionProperty(<UnionOrIntersectionType>type, name);
+                        return getUnionOrIntersectionProperty(type as UnionOrIntersectionType, name);
                     }
                     return undefined;
                 }
