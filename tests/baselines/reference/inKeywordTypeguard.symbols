@@ -270,7 +270,7 @@ declare const error: Error;
 if ('extra' in error) {
 >error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
 
-    error // Still Error
+    error // Error & { extra: unknown; }
 >error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
 
 } else {

@@ -108,7 +108,7 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 // Repro from #38608
 declare const error: Error;
 if ('extra' in error) {
-    error // Still Error
+    error // Error & { extra: unknown; }
 } else {
     error // Error
 }
@@ -293,7 +293,7 @@ function positiveIntersectionTest(x) {
     }
 }
 if ('extra' in error) {
-    error; // Still Error
+    error; // Error & { extra: unknown; }
 }
 else {
     error; // Error

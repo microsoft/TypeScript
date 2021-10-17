@@ -169,7 +169,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
     // Repro from #38608
     declare const error: Error;
     if ('extra' in error) {
-        error // Still Error
+        error // Error & { extra: unknown; }
     } else {
         error // Error
     }
