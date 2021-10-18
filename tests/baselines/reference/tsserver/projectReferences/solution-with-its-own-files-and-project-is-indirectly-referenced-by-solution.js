@@ -95,7 +95,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -126,7 +126,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -259,7 +259,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -284,7 +284,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -403,7 +403,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -432,7 +432,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -696,7 +696,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -735,7 +735,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -758,7 +758,7 @@ Search path: /user/username/projects/myproject/src
 For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/src/helpers
 For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-response:{"response":{"refs":[{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nexport foo"},"responseRequired":true}
+response:{"response":{"refs":[{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nexport foo"},"responseRequired":true}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (5)
@@ -841,7 +841,7 @@ Project '/user/username/projects/myproject/indirect3/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../target/src/helpers/functions.d.ts
 	  Imported via 'helpers/functions' from file '../target/src/main.d.ts'
 	../target/src/main.d.ts
@@ -867,7 +867,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -890,7 +890,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -910,7 +910,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -932,7 +932,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1071,7 +1071,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1100,7 +1100,7 @@ Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
@@ -1135,7 +1135,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1164,7 +1164,7 @@ Project '/user/username/projects/myproject/tsconfig-indirect2.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -1195,4 +1195,4 @@ Search path: /user/username/projects/myproject/src/helpers
 For info: /user/username/projects/myproject/src/helpers/functions.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Search path: /user/username/projects/myproject/indirect1
 For info: /user/username/projects/myproject/indirect1/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-response:{"response":{"refs":[{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nimport foo"},"responseRequired":true}
+response:{"response":{"refs":[{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect3/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":41},"lineText":"import { foo } from 'helpers/functions';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/main.ts","start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":16},"lineText":"export { foo };","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/src/helpers/functions.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":17},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":22},"lineText":"export const foo = 1;","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect1/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":13},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":28},"lineText":"import { foo } from 'main';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/myproject/indirect2/main.ts","start":{"line":2,"offset":1},"end":{"line":2,"offset":4},"lineText":"foo;","isWriteAccess":false,"isDefinition":false}],"symbolName":"foo","symbolStartOffset":10,"symbolDisplayString":"(alias) const foo: 1\nimport foo"},"responseRequired":true}

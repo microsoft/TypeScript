@@ -1,0 +1,511 @@
+// === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
+// interface [|I|] {}
+// function f<T /*FIND ALL REFS*/extends [|I|]>() {}
+// type A1<T, U> = T extends U ? 1 : 0;
+// type A2<T> = T extends infer U ? 1 : 0;
+// type A3<T> = { [P in keyof T]: 1 };
+// type A4<T> = keyof T;
+// type A5<T> = readonly T[];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 14
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
+// interface I {}
+// function f<T extends I>() {}
+// type A1<T, [|U|]> = T /*FIND ALL REFS*/extends [|U|] ? 1 : 0;
+// type A2<T> = T extends infer U ? 1 : 0;
+// type A3<T> = { [P in keyof T]: 1 };
+// type A4<T> = keyof T;
+// type A5<T> = readonly T[];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+      "kind": "type parameter",
+      "name": "(type parameter) U in type A1<T, U>",
+      "textSpan": {
+        "start": 55,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A1",
+          "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ",",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 55,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
+// interface I {}
+// function f<T extends I>() {}
+// type A1<T, U> = T extends U ? 1 : 0;
+// type A2<T> = T extends /*FIND ALL REFS*/infer [|U|] ? 1 : 0;
+// type A3<T> = { [P in keyof T]: 1 };
+// type A4<T> = keyof T;
+// type A5<T> = readonly T[];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+      "kind": "type parameter",
+      "name": "(type parameter) U",
+      "textSpan": {
+        "start": 110,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 110,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
+// interface I {}
+// function f<T extends I>() {}
+// type A1<T, U> = T extends U ? 1 : 0;
+// type A2<T> = T extends infer U ? 1 : 0;
+// type A3<T> = { [[|P|] /*FIND ALL REFS*/in keyof T]: 1 };
+// type A4<T> = keyof T;
+// type A5<T> = readonly T[];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+      "kind": "type parameter",
+      "name": "(type parameter) P",
+      "textSpan": {
+        "start": 137,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "P",
+          "kind": "typeParameterName"
+        }
+      ],
+      "contextSpan": {
+        "start": 137,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 137,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "contextSpan": {
+          "start": 137,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
+// interface I {}
+// function f<T extends I>() {}
+// type A1<T, U> = T extends U ? 1 : 0;
+// type A2<T> = T extends infer U ? 1 : 0;
+// type A3<T> = { [P in keyof T]: 1 };
+// type A4<[|T|]> = /*FIND ALL REFS*/keyof [|T|];
+// type A5<T> = readonly T[];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+      "kind": "type parameter",
+      "name": "(type parameter) T in type A4<T>",
+      "textSpan": {
+        "start": 165,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A4",
+          "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 165,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 176,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
+// interface I {}
+// function f<T extends I>() {}
+// type A1<T, U> = T extends U ? 1 : 0;
+// type A2<T> = T extends infer U ? 1 : 0;
+// type A3<T> = { [P in keyof T]: 1 };
+// type A4<T> = keyof T;
+// type A5<[|T|]> = /*FIND ALL REFS*/readonly [|T|][];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+      "kind": "type parameter",
+      "name": "(type parameter) T in type A5<T>",
+      "textSpan": {
+        "start": 187,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A5",
+          "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 187,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 201,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

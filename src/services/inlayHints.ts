@@ -279,7 +279,7 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                addTypeHints(typeDisplayString, param.end);
+                addTypeHints(typeDisplayString, param.name.end);
             }
         }
 

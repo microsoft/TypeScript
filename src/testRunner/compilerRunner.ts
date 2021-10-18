@@ -117,6 +117,7 @@ namespace Harness {
     class CompilerTest {
         private static varyBy: readonly string[] = [
             "module",
+            "moduleResolution",
             "target",
             "jsx",
             "removeComments",
@@ -138,7 +139,8 @@ namespace Harness {
             "skipDefaultLibCheck",
             "preserveConstEnums",
             "skipLibCheck",
-            "exactOptionalPropertyTypes"
+            "exactOptionalPropertyTypes",
+            "useUnknownInCatchVariables"
         ];
         private fileName: string;
         private justName: string;

@@ -240,7 +240,7 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 //// [templateLiteralTypes1.js]
 "use strict";
 // Template types example from #12754
-var createScopedActionType = function (scope) { return function (type) { return scope + "/" + type; }; };
+var createScopedActionType = function (scope) { return function (type) { return "".concat(scope, "/").concat(type); }; };
 var createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
 var MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
 // Assignability

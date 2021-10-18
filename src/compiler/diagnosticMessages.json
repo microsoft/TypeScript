@@ -920,15 +920,15 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 1324
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Argument of dynamic import cannot be spread element.": {
         "category": "Error",
         "code": 1325
     },
@@ -992,7 +992,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1116,7 +1116,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1324,7 +1324,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1388,6 +1388,23 @@
         "category": "Message",
         "code": 1449
     },
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+        "category": "Message",
+        "code": 1450
+    },
+    "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
+        "category": "Error",
+        "code": 1451
+    },
+
+    "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
+        "category": "Error",
+        "code": 1470
+    },
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+        "category": "Error",
+        "code": 1471
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1416,6 +1433,14 @@
         "category": "Error",
         "code": 2205,
         "elidedInCompatabilityPyramid": true
+    },
+    "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.": {
+        "category": "Error",
+        "code": 2206
+    },
+    "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
+        "category": "Error",
+        "code": 2207
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1650,7 +1675,7 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.": {
+    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
         "category": "Error",
         "code": 2360
     },
@@ -3304,6 +3329,22 @@
         "category": "Error",
         "code": 2819
     },
+    "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2820
+    },
+    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
+        "category": "Error",
+        "code": 2821
+    },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2822
+    },
+    "Cannot find namespace '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2833
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3709,7 +3750,26 @@
         "category": "Error",
         "code": 4118
     },
-
+    "This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4121
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4122
+    },
+    "This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4123
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -3946,10 +4006,6 @@
     "Generates corresponding '.d.ts' file.": {
         "category": "Message",
         "code": 6002
-    },
-    "Specify the location where debugger should locate map files instead of generated locations.": {
-        "category": "Message",
-        "code": 6003
     },
     "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
@@ -4517,10 +4573,6 @@
         "category": "Message",
         "code": 6163
     },
-    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
-        "category": "Message",
-        "code": 6164
-    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -4861,6 +4913,35 @@
     "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
         "category": "Error",
         "code": 6258
+    },
+
+    "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
+        "category": "Message",
+        "code": 6270
+    },
+    "Import specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6271
+    },
+    "Invalid import specifier '{0}' has no possible resolutions.": {
+        "category": "Message",
+        "code": 6272
+    },
+    "package.json scope '{0}' has no imports defined.": {
+        "category": "Message",
+        "code": 6273
+    },
+    "package.json scope '{0}' explicitly maps specifier '{1}' to null.": {
+        "category": "Message",
+        "code": 6274
+    },
+    "package.json scope '{0}' has invalid type for target of specifier '{1}'": {
+        "category": "Message",
+        "code": 6275
+    },
+    "Export specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6276
     },
 
     "Enable project compilation": {
@@ -5908,6 +5989,14 @@
         "category": "Error",
         "code": 7058
     },
+    "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.": {
+        "category": "Error",
+        "code": 7059
+    },
+    "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.": {
+        "category": "Error",
+        "code": 7060
+    },
 
 
     "You cannot rename this element.": {
@@ -6131,7 +6220,7 @@
         "code": 18003
     },
 
-    "File is a CommonJS module; it may be converted to an ES6 module.": {
+    "File is a CommonJS module; it may be converted to an ES module.": {
         "category": "Suggestion",
         "code": 80001
     },
@@ -6380,7 +6469,7 @@
         "category": "Message",
         "code": 95016
     },
-    "Convert to ES6 module": {
+    "Convert to ES module": {
         "category": "Message",
         "code": 95017
     },

@@ -242,7 +242,7 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -275,7 +275,7 @@ Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -313,7 +313,7 @@ Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -334,7 +334,7 @@ Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -355,7 +355,7 @@ Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.j
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -376,7 +376,7 @@ Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.j
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -397,7 +397,7 @@ Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configu
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -418,7 +418,7 @@ Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/file1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 

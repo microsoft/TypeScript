@@ -281,9 +281,10 @@ namespace ts {
         const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
         const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
         if (!compilerHost.resolveModuleNames) {
-            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
-            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
-                loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
+            const loader = (moduleName: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule!;
+            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile) =>
+                loadWithModeAwareCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, loader);
+            compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
         }
         if (!compilerHost.resolveTypeReferenceDirectives) {
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache).resolvedTypeReferenceDirective!;
@@ -871,12 +872,12 @@ namespace ts {
                 getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
-            state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
-                state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
-                ([path, data]) => ([state.host.realpath ? toPath(state, state.host.realpath(path)) : path, data] as const)
-            ));
-
             if (state.watch) {
+                state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
+                    state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
+                    ([path, data]) => ([state.host.realpath && data ? toPath(state, state.host.realpath(path)) : path, data] as const)
+                ));
+
                 state.builderPrograms.set(projectPath, program);
             }
             step++;

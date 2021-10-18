@@ -22,9 +22,11 @@ module B {
 
 var a: A;
 >a : Symbol(a, Decl(moduleAssignmentCompat4.ts, 11, 3))
+>A : Symbol(A)
 
 var b: B;
 >b : Symbol(b, Decl(moduleAssignmentCompat4.ts, 12, 3))
+>B : Symbol(B)
 
 a = b;
 >a : Symbol(a, Decl(moduleAssignmentCompat4.ts, 11, 3))

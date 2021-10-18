@@ -11,7 +11,7 @@ namespace ts {
     }
 
     export function getDefaultLibFileName(options: CompilerOptions): string {
-        switch (options.target) {
+        switch (getEmitScriptTarget(options)) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
             case ScriptTarget.ES2021:
@@ -1130,7 +1130,7 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
+                return (node as ImportOrExportSpecifier).isTypeOnly || (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
             case SyntaxKind.NamespaceImport:
                 return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
@@ -1139,6 +1139,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    export function isAssertionKey(node: Node): node is AssertionKey {
+        return isStringLiteral(node) || isIdentifier(node);
     }
 
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
@@ -1512,6 +1516,7 @@ namespace ts {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier: // technically this is only an Expression if it's in a `#field in expr` BinaryExpression
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:

@@ -1,4 +1,4 @@
-tests/cases/compiler/test.tsx(9,17): error TS2304: Cannot find name 'createElement'.
+tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'createElement'. Did you mean 'frameElement'?
 
 
 ==== tests/cases/compiler/test.tsx (1 errors) ====
@@ -12,7 +12,8 @@ tests/cases/compiler/test.tsx(9,17): error TS2304: Cannot find name 'createEleme
         render() {
             return <div />;
                     ~~~
-!!! error TS2304: Cannot find name 'createElement'.
+!!! error TS2552: Cannot find name 'createElement'. Did you mean 'frameElement'?
+!!! related TS2728 /.ts/lib.dom.d.ts:17075:13: 'frameElement' is declared here.
         }
     }
     

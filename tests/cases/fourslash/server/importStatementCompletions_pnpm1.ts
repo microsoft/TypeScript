@@ -22,6 +22,9 @@ verify.completions({
     isSnippet: true,
     replacementSpan: test.ranges()[0],
     sourceDisplay: "react",
+  }, {
+    name: "type",
+    sortText: completion.SortText.GlobalsOrKeywords,
   }],
   preferences: {
     includeCompletionsForImportStatements: true,

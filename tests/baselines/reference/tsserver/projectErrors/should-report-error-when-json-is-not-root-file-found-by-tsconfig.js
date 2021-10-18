@@ -35,7 +35,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/blabla.json
 	  Imported via "./blabla.json" from file 'src/test.ts'
 	src/test.ts

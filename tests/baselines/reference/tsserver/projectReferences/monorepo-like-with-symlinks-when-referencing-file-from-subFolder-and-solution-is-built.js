@@ -69,7 +69,7 @@ Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../B/src/foo.ts
 	  Imported via 'b/lib/foo' from file 'src/test.ts'
 	../B/src/bar/foo.ts

@@ -39,6 +39,22 @@ async function main() {
     ])
 }
 
+// https://github.com/microsoft/TypeScript/issues/45924
+class Api<D = {}> {
+	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+	async post<T = D>() { return this.request<T>(); }
+	async request<D>(): Promise<D> { throw new Error(); }
+}
+
+declare const api: Api;
+interface Obj { x: number }
+
+async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
+	// Per #45924, this was failing due to incorrect inference both above and here.
+	// Should not error.
+	return api.post();
+}
+
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;
 
@@ -55,4 +71,15 @@ async function main() {
         MaybePromise('2'),
         MaybePromise(true),
     ]);
+}
+// https://github.com/microsoft/TypeScript/issues/45924
+class Api {
+    // Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+    async post() { return this.request(); }
+    async request() { throw new Error(); }
+}
+async function fn() {
+    // Per #45924, this was failing due to incorrect inference both above and here.
+    // Should not error.
+    return api.post();
 }

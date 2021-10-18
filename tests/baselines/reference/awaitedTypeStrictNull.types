@@ -128,6 +128,42 @@ async function main() {
     ])
 }
 
+// https://github.com/microsoft/TypeScript/issues/45924
+class Api<D = {}> {
+>Api : Api<D>
+
+	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+	async post<T = D>() { return this.request<T>(); }
+>post : <T = D>() => Promise<T>
+>this.request<T>() : Promise<T>
+>this.request : <D>() => Promise<D>
+>this : this
+>request : <D>() => Promise<D>
+
+	async request<D>(): Promise<D> { throw new Error(); }
+>request : <D>() => Promise<D>
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+declare const api: Api;
+>api : Api<{}>
+
+interface Obj { x: number }
+>x : number
+
+async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
+>fn : <T>() => Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
+
+	// Per #45924, this was failing due to incorrect inference both above and here.
+	// Should not error.
+	return api.post();
+>api.post() : Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
+>api.post : <T = {}>() => Promise<T>
+>api : Api<{}>
+>post : <T = {}>() => Promise<T>
+}
+
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;
 >_Expect : TActual

@@ -525,7 +525,7 @@ namespace Harness.Parallel.Host {
                 completeBar();
                 progressBars.disable();
 
-                const replayRunner = new Mocha.Runner(new Mocha.Suite(""), /*delay*/ false);
+                const replayRunner = new Mocha.Runner(new Mocha.Suite(""), { delay: false });
                 replayRunner.started = true;
                 const createStatsCollector = require("mocha/lib/stats-collector");
                 createStatsCollector(replayRunner); // manually init stats collector like mocha.run would

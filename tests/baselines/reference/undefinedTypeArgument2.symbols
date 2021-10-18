@@ -26,5 +26,7 @@ interface Query<T> {
 >T : Symbol(T, Decl(undefinedTypeArgument2.ts, 1, 16))
 >inner : Symbol(inner, Decl(undefinedTypeArgument2.ts, 3, 77))
 >U : Symbol(U, Decl(undefinedTypeArgument2.ts, 3, 15))
+>R : Symbol(R)
 >Query : Symbol(Query, Decl(undefinedTypeArgument2.ts, 0, 0))
+>R : Symbol(R)
 }

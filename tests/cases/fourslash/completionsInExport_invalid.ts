@@ -8,5 +8,5 @@
 
 verify.completions({
   marker: "",
-  exact: ["topLevel"]
+  exact: ["topLevel", { name: "type", sortText: completion.SortText.GlobalsOrKeywords }]
 });
