@@ -2131,6 +2131,7 @@ namespace ts {
                 || node.nameType !== nameType
                 || node.questionToken !== questionToken
                 || node.type !== type
+                || node.members !== members
                 ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), node)
                 : node;
         }
