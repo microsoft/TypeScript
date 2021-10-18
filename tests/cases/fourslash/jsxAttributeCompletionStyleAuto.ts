@@ -84,6 +84,7 @@ verify.completions({
     ],
     preferences: {
         jsxAttributeCompletionStyle: "auto",
-        includeCompletionsWithSnippetText: true
+        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithInsertText: true,
     }
 });
