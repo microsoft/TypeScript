@@ -47,7 +47,12 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
-        changes.replaceNode(sourceFile, container, factory.createMappedTypeNode(/*readonlyToken*/ undefined,
-            factory.createTypeParameterDeclaration(name, factory.createTypeReferenceNode(constraint)), /*nameType*/ undefined, /*questionToken*/ undefined, typeNode));
+        changes.replaceNode(sourceFile, container, factory.createMappedTypeNode(
+            /*readonlyToken*/ undefined,
+            factory.createTypeParameterDeclaration(name, factory.createTypeReferenceNode(constraint)),
+            /*nameType*/ undefined,
+            /*questionToken*/ undefined,
+            typeNode,
+            /*members*/ undefined));
     }
 }
