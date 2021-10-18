@@ -22812,15 +22812,6 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
         }
 
-        // TODO: make this actually performant
-        function compactMap<T>(array: T[], f: (item: T) => T | undefined) {
-            const result = compact(map(array, f));
-
-            return result.length === array.length && every(array, (item, i) => item === result[i])
-                ? array
-                : result;
-        }
-
         function filterAndNarrowType(type: Type, narrow: (t: Type) => Type | undefined) {
             if (type.flags & TypeFlags.Union) {
                 const types = (type as UnionType).types;

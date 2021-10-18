@@ -400,6 +400,32 @@ namespace ts {
     }
 
     /**
+     * Maps, filters for truthiness, and avoids allocation if all elements map to themselves.
+     */
+    export function compactMap<T>(array: T[], f: (item: T) => T | undefined): T[] {
+        for (let i = 0; i < array.length; i++) {
+            const mapped = f(array[i]);
+            if (mapped && mapped === array[i]) {
+                continue;
+            }
+
+            const sliced = array.slice(0, i);
+            const compacted = mapped ? [...sliced, mapped] : sliced;
+
+            for (let j = i + 1; j < array.length; j++) {
+                const nextMapped = f(array[j]);
+                if (nextMapped) {
+                    compacted.push(nextMapped);
+                }
+            }
+
+            return compacted;
+        }
+
+        return array;
+    }
+
+    /**
      * Flattens an array containing a mix of array or non-array elements.
      *
      * @param array The array to flatten.
