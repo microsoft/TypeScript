@@ -733,6 +733,20 @@ namespace ts.server {
                 }
             }
 
+            protected parseMessage(message: any): protocol.Request {
+                if (useNodeIpc) {
+                    return message as protocol.Request;
+                }
+                return super.parseMessage(message);
+            }
+
+            protected toStringMessage(message: any) {
+                if (useNodeIpc) {
+                    return JSON.stringify(message, undefined, 2);
+                }
+                return super.toStringMessage(message);
+            }
+
             event<T extends object>(body: T, eventName: string): void {
                 Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
@@ -768,7 +782,7 @@ namespace ts.server {
             listen() {
                 if (useNodeIpc) {
                     process.on('message', (e: any) => {
-                        this.onMessage(JSON.stringify(e)); // TODO: should not convert to back to a string just to parse again :)
+                        this.onMessage(e);
                     });
                 }
                 else {
