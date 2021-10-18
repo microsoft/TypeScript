@@ -1,5 +1,7 @@
 // @ts-check
 const { exec, Debouncer } = require("./utils");
+const { resolve } = require("path");
+const { findUpRoot } = require("./findUpDir");
 
 class ProjectQueue {
     /**
@@ -33,7 +35,13 @@ class ProjectQueue {
     }
 }
 
-const projectBuilder = new ProjectQueue((projects, lkg, force) => exec(process.execPath, [lkg ? "./lib/tsc" : "./built/local/tsc", "-b", ...(force ? ["--force"] : []), ...projects], { hidePrompt: true }));
+const execTsc = (lkg, ...args) =>
+    exec(process.execPath,
+         [resolve(findUpRoot(), lkg ? "./lib/tsc" : "./built/local/tsc"),
+          "-b", ...args],
+         { hidePrompt: true })
+
+const projectBuilder = new ProjectQueue((projects, lkg, force) => execTsc(lkg, ...(force ? ["--force"] : []), ...projects));
 
 /**
  * @param {string} project
@@ -43,14 +51,14 @@ const projectBuilder = new ProjectQueue((projects, lkg, force) => exec(process.e
  */
 exports.buildProject = (project, { lkg, force } = {}) => projectBuilder.enqueue(project, { lkg, force });
 
-const projectCleaner = new ProjectQueue((projects, lkg) => exec(process.execPath, [lkg ? "./lib/tsc" : "./built/local/tsc", "-b", "--clean", ...projects], { hidePrompt: true }));
+const projectCleaner = new ProjectQueue((projects, lkg) => execTsc(lkg, "--clean", ...projects));
 
 /**
  * @param {string} project
  */
 exports.cleanProject = (project) => projectCleaner.enqueue(project);
 
-const projectWatcher = new ProjectQueue((projects) => exec(process.execPath, ["./lib/tsc", "-b", "--watch", ...projects], { hidePrompt: true }));
+const projectWatcher = new ProjectQueue((projects) => execTsc(true, "--watch", ...projects));
 
 /**
  * @param {string} project
