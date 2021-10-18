@@ -16903,7 +16903,12 @@ namespace ts {
             return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { errors?: Diagnostic[] }): boolean {
+        /**
+         * Starting diagnostic message along with an optional third arg for after the two types.
+         */
+        type AssignabilityMessage = [message: DiagnosticMessage, arg?: number | string];
+
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: AssignabilityMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { errors?: Diagnostic[] }): boolean {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject);
         }
 
@@ -16911,7 +16916,7 @@ namespace ts {
          * Like `checkTypeAssignableTo`, but if it would issue an error, instead performs structural comparisons of the types using the given expression node to
          * attempt to issue more specific errors on, for example, specific object literal properties or tuple members.
          */
-        function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+        function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: AssignabilityMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             return checkTypeRelatedToAndOptionallyElaborate(source, target, assignableRelation, errorNode, expr, headMessage, containingMessageChain, /*errorOutputContainer*/ undefined);
         }
 
@@ -16921,7 +16926,7 @@ namespace ts {
             relation: ESMap<string, RelationComparisonResult>,
             errorNode: Node | undefined,
             expr: Expression | undefined,
-            headMessage: DiagnosticMessage | undefined,
+            headMessage: AssignabilityMessage | undefined,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
@@ -16941,7 +16946,7 @@ namespace ts {
             source: Type,
             target: Type,
             relation: ESMap<string, RelationComparisonResult>,
-            headMessage: DiagnosticMessage | undefined,
+            headMessage: AssignabilityMessage | undefined,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
@@ -16978,7 +16983,7 @@ namespace ts {
             source: Type,
             target: Type,
             relation: ESMap<string, RelationComparisonResult>,
-            headMessage: DiagnosticMessage | undefined,
+            headMessage: AssignabilityMessage | undefined,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
@@ -17124,10 +17129,10 @@ namespace ts {
                             const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
                             targetPropType = removeMissingType(targetPropType, targetIsOptional);
                             sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
-                            const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage && [errorMessage], containingMessageChain, resultObj);
                             if (result && specificSource !== sourcePropType) {
                                 // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                                checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                                checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage && [errorMessage], containingMessageChain, resultObj);
                             }
                         }
                         if (resultObj.errors) {
@@ -17377,7 +17382,7 @@ namespace ts {
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
          */
-        function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+        function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: AssignabilityMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             return checkTypeRelatedTo(source, target, comparableRelation, errorNode, headMessage, containingMessageChain);
         }
 
@@ -17760,7 +17765,7 @@ namespace ts {
             target: Type,
             relation: ESMap<string, RelationComparisonResult>,
             errorNode: Node | undefined,
-            headMessage?: DiagnosticMessage,
+            headMessage?: AssignabilityMessage,
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
             errorOutputContainer?: { errors?: Diagnostic[], skipLogging?: boolean },
         ): boolean {
@@ -17982,7 +17987,7 @@ namespace ts {
                 }
             }
 
-            function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
+            function reportRelationError(message: AssignabilityMessage | undefined, source: Type, target: Type) {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
                 let generalizedSource = source;
@@ -18017,13 +18022,13 @@ namespace ts {
 
                 if (!message) {
                     if (relation === comparableRelation) {
-                        message = Diagnostics.Type_0_is_not_comparable_to_type_1;
+                        message = [Diagnostics.Type_0_is_not_comparable_to_type_1];
                     }
                     else if (sourceType === targetType) {
-                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
+                        message = [Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated];
                     }
                     else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
-                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
+                        message = [Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties];
                     }
                     else {
                         if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
@@ -18033,16 +18038,16 @@ namespace ts {
                                 return;
                             }
                         }
-                        message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                        message = [Diagnostics.Type_0_is_not_assignable_to_type_1];
                     }
                 }
-                else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
+                else if (message[0] === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
                     && exactOptionalPropertyTypes
                     && getExactOptionalUnassignableProperties(source, target).length) {
-                    message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
+                    message = [Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties];
                 }
 
-                reportError(message, generalizedSourceType, targetType);
+                reportError(message[0], generalizedSourceType, targetType, message.length === 1 ? undefined : message[1]);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
@@ -18102,7 +18107,7 @@ namespace ts {
              * * Ternary.Maybe if they are related with assumptions of other relationships, or
              * * Ternary.False if they are not related.
              */
-            function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+            function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: AssignabilityMessage, intersectionState = IntersectionState.None): Ternary {
                 // Before normalization: if `source` is type an object type, and `target` is primitive,
                 // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
                 if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
@@ -19558,8 +19563,8 @@ namespace ts {
                     }
                 }
                 const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
-                if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
-                    headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
+                if (!headMessage || (headMessage[0].code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
+                    headMessage[0].code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
                     shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
                 }
                 if (props.length === 1) {
@@ -27543,14 +27548,14 @@ namespace ts {
             if (refKind === JsxReferenceKind.Function) {
                 const sfcReturnConstraint = getJsxStatelessElementTypeAt(openingLikeElement);
                 if (sfcReturnConstraint) {
-                    checkTypeRelatedTo(elemInstanceType, sfcReturnConstraint, assignableRelation, openingLikeElement.tagName, Diagnostics.Its_return_type_0_is_not_a_valid_JSX_element, generateInitialErrorChain);
+                    checkTypeRelatedTo(elemInstanceType, sfcReturnConstraint, assignableRelation, openingLikeElement.tagName, [Diagnostics.Its_return_type_0_is_not_a_valid_JSX_element], generateInitialErrorChain);
                 }
             }
             else if (refKind === JsxReferenceKind.Component) {
                 const classConstraint = getJsxElementClassTypeAt(openingLikeElement);
                 if (classConstraint) {
                     // Issue an error if this return type isn't assignable to JSX.ElementClass, failing that
-                    checkTypeRelatedTo(elemInstanceType, classConstraint, assignableRelation, openingLikeElement.tagName, Diagnostics.Its_instance_type_0_is_not_a_valid_JSX_element, generateInitialErrorChain);
+                    checkTypeRelatedTo(elemInstanceType, classConstraint, assignableRelation, openingLikeElement.tagName, [Diagnostics.Its_instance_type_0_is_not_a_valid_JSX_element], generateInitialErrorChain);
                 }
             }
             else { // Mixed
@@ -27560,7 +27565,7 @@ namespace ts {
                     return;
                 }
                 const combined = getUnionType([sfcReturnConstraint, classConstraint]);
-                checkTypeRelatedTo(elemInstanceType, combined, assignableRelation, openingLikeElement.tagName, Diagnostics.Its_element_type_0_is_not_a_valid_JSX_element, generateInitialErrorChain);
+                checkTypeRelatedTo(elemInstanceType, combined, assignableRelation, openingLikeElement.tagName, [Diagnostics.Its_element_type_0_is_not_a_valid_JSX_element], generateInitialErrorChain);
             }
 
             function generateInitialErrorChain(): DiagnosticMessageChain {
@@ -29215,7 +29220,7 @@ namespace ts {
                         typeArgument,
                         getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
                         reportErrors ? typeArgumentNodes[i] : undefined,
-                        typeArgumentHeadMessage,
+                        [typeArgumentHeadMessage],
                         errorInfo)) {
                         return undefined;
                     }
@@ -29373,12 +29378,11 @@ namespace ts {
                 const thisArgumentType = getThisArgumentType(thisArgumentNode);
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
-                if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer)) {
+                if (!checkTypeRelatedTo(thisArgumentType, thisType, relation, errorNode, [headMessage], containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "this parameter should have errors when reporting errors");
                     return errorOutputContainer.errors || emptyArray;
                 }
-            }
-            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
+            };
             const restType = getNonArrayRestType(signature);
             const argCount = restType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
             for (let i = 0; i < argCount; i++) {
@@ -29390,7 +29394,10 @@ namespace ts {
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
-                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
+                    const reportedError = argCount > 1 && (arg.kind === SyntaxKind.SpreadElement || skipOuterExpressions(arg.parent).kind === SyntaxKind.SpreadElement) ?
+                        checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, [Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_at_position_2_of_type_1, i], containingMessageChain, errorOutputContainer) :
+                        checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, [Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1], containingMessageChain, errorOutputContainer);
+                    if (!reportedError) {
                         Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
                         maybeAddMissingAwaitInfo(arg, checkArgType, paramType);
                         return errorOutputContainer.errors || emptyArray;
@@ -29404,7 +29411,7 @@ namespace ts {
                     restArgCount === 0 ? node :
                     restArgCount === 1 ? args[argCount] :
                     setTextRangePosEnd(createSyntheticExpression(node, spreadType), args[argCount].pos, args[args.length - 1].end);
-                if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
+                if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, [Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1], /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
                     maybeAddMissingAwaitInfo(errorNode, spreadType, restType);
                     return errorOutputContainer.errors || emptyArray;
@@ -31105,7 +31112,7 @@ namespace ts {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
                     checkTypeComparableTo(exprType, targetType, errNode,
-                        Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
+                        [Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first]);
                 }
             }
             return targetType;
@@ -33143,11 +33150,11 @@ namespace ts {
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)
                         && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
 
-                        let headMessage: DiagnosticMessage | undefined;
+                        let headMessage: AssignabilityMessage | undefined;
                         if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
                             const target = getTypeOfPropertyOfType(getTypeOfExpression(left.expression), left.name.escapedText);
                             if (isExactOptionalPropertyMismatch(valueType, target)) {
-                                headMessage = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target;
+                                headMessage = [Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target];
                             }
                         }
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
@@ -33933,7 +33940,7 @@ namespace ts {
             const constraintType = getConstraintOfTypeParameter(typeParameter);
             const defaultType = getDefaultFromTypeParameter(typeParameter);
             if (constraintType && defaultType) {
-                checkTypeAssignableTo(defaultType, getTypeWithThisArgument(instantiateType(constraintType, makeUnaryTypeMapper(typeParameter, defaultType)), defaultType), node.default, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                checkTypeAssignableTo(defaultType, getTypeWithThisArgument(instantiateType(constraintType, makeUnaryTypeMapper(typeParameter, defaultType)), defaultType), node.default, [Diagnostics.Type_0_does_not_satisfy_the_constraint_1]);
             }
             if (produceDiagnostics) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
@@ -34535,7 +34542,7 @@ namespace ts {
                         const getterType = getAnnotatedAccessorType(getter);
                         const setterType = getAnnotatedAccessorType(setter);
                         if (getterType && setterType) {
-                            checkTypeAssignableTo(getterType, setterType, getter, Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type);
+                            checkTypeAssignableTo(getterType, setterType, getter, [Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type]);
                         }
                     }
                 }
@@ -34572,7 +34579,7 @@ namespace ts {
                         typeArguments[i],
                         instantiateType(constraint, mapper),
                         node.typeArguments![i],
-                        Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                        [Diagnostics.Type_0_does_not_satisfy_the_constraint_1]);
                 }
             }
             return result;
@@ -35569,7 +35576,7 @@ namespace ts {
                 }
 
                 if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, returnTypeNode,
-                    Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value)) {
+                    [Diagnostics.Type_0_is_not_a_valid_async_function_return_type_in_ES5_SlashES3_because_it_does_not_refer_to_a_Promise_compatible_constructor_value])) {
                     return;
                 }
 
@@ -35636,7 +35643,7 @@ namespace ts {
                 returnType,
                 expectedReturnType,
                 node,
-                headMessage,
+                [headMessage],
                 () => errorInfo);
         }
 
@@ -37153,7 +37160,7 @@ namespace ts {
                             use & IterationUse.YieldStarFlag ? Diagnostics.Cannot_delegate_iteration_to_value_because_the_next_method_of_its_iterator_expects_type_1_but_the_containing_generator_will_always_send_0 :
                             undefined;
                         if (diagnostic) {
-                            checkTypeAssignableTo(sentType, iterationTypes.nextType, errorNode, diagnostic);
+                            checkTypeAssignableTo(sentType, iterationTypes.nextType, errorNode, [diagnostic]);
                         }
                     }
                 }
@@ -38364,7 +38371,7 @@ namespace ts {
                     else {
                         // Report static side error only when instance type is assignable
                         checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
-                            Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                            [Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1]);
                     }
                     if (baseConstructorType.flags & TypeFlags.TypeVariable) {
                         if (!isMixinConstructorType(staticType)) {
@@ -38542,7 +38549,7 @@ namespace ts {
             }
             if (!issuedMemberError) {
                 // check again with diagnostics to generate a less-specific error
-                checkTypeAssignableTo(typeWithThis, baseWithThis, node.name || node, broadDiag);
+                checkTypeAssignableTo(typeWithThis, baseWithThis, node.name || node, [broadDiag]);
             }
         }
 
@@ -38846,7 +38853,7 @@ namespace ts {
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
                         for (const baseType of getBaseTypes(type)) {
-                            checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
+                            checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name, [Diagnostics.Interface_0_incorrectly_extends_interface_1]);
                         }
                         checkIndexConstraints(type, symbol);
                     }

@@ -5,10 +5,10 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(17,15): err
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(18,12): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(19,5): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(20,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(21,6): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(21,6): error TS2599: Argument of type 'number' is not assignable to parameter at position 2 of type 'string'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(22,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(23,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): error TS2599: Argument of type 'string' is not assignable to parameter at position 2 of type 'number'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
@@ -49,7 +49,7 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): erro
 !!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
     fs2_(...s2n_); // error on ...s2n_
          ~~~~~~~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+!!! error TS2599: Argument of type 'number' is not assignable to parameter at position 2 of type 'string'.
     fs2_(...s_, ...s_); // error on ...s_
          ~~~~~
 !!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
@@ -59,7 +59,7 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): erro
     // fs2n_(...s2, ...s_); //           FIXME: should be a type error
     fs2n_(...s2_); // error on ...s2_
           ~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+!!! error TS2599: Argument of type 'string' is not assignable to parameter at position 2 of type 'number'.
     
     // ok
     fs2_(...s2_);

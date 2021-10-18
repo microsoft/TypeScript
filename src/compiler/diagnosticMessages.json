@@ -2535,6 +2535,10 @@
         "category": "Error",
         "code": 2598
     },
+    "Argument of type '{0}' is not assignable to parameter at position {2} of type '{1}'.": {
+        "category": "Error",
+        "code": 2599
+    },
     "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
         "category": "Error",
         "code": 2602
