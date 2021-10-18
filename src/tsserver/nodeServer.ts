@@ -715,6 +715,24 @@ namespace ts.server {
                 this.constructed = true;
             }
 
+            public send(msg: protocol.Message) {
+                if (useNodeIpc) {
+                    if (msg.type === "event" && !this.canUseEvents) {
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
+                            this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                        }
+                        return;
+                    }
+                    // TODO: Do we need any perf stuff here?
+                    // const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
+                    // perfLogger.logEvent(`Response message size: ${msgText.length}`);
+                    process.send!(msg);
+                }
+                else {
+                    super.send(msg);
+                }
+            }
+
             event<T extends object>(body: T, eventName: string): void {
                 Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
@@ -748,14 +766,21 @@ namespace ts.server {
             }
 
             listen() {
-                rl.on("line", (input: string) => {
-                    const message = input.trim();
-                    this.onMessage(message);
-                });
+                if (useNodeIpc) {
+                    process.on('message', (e: any) => {
+                        this.onMessage(JSON.stringify(e)); // TODO: should not convert to back to a string just to parse again :)
+                    });
+                }
+                else {
+                    rl.on("line", (input: string) => {
+                        const message = input.trim();
+                        this.onMessage(message);
+                    });
 
-                rl.on("close", () => {
-                    this.exit();
-                });
+                    rl.on("close", () => {
+                        this.exit();
+                    });
+                }
             }
         }
 
@@ -765,6 +790,7 @@ namespace ts.server {
         const npmLocation = findArgument(Arguments.NpmLocation);
         const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
         const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+        const useNodeIpc = hasArgument('--useNodeIpc');
         const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
         const commandLineTraceDir = findArgument("--traceDirectory");
         const traceDir = commandLineTraceDir
