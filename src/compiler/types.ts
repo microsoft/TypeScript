@@ -6340,8 +6340,20 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
-        type: "string" | "number" | "boolean";
+    export interface CommandLineOptionOfStringType extends CommandLineOptionBase {
+        type: "string";
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfNumberType extends CommandLineOptionBase {
+        type: "number";
+        defaultValueDescription: `${number | undefined}` | DiagnosticMessage;
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
+        type: "boolean";
+        defaultValueDescription: `${boolean | undefined}` | DiagnosticMessage;
     }
 
     /* @internal */
@@ -6373,11 +6385,11 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
-        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {
