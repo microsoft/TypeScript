@@ -6168,6 +6168,8 @@ namespace ts {
             case ModuleKind.ES2020:
             case ModuleKind.ES2022:
             case ModuleKind.ESNext:
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
                 return true;
             default:
                 return false;

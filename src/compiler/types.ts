@@ -5579,6 +5579,7 @@ namespace ts {
     /* @internal */
     export interface SyntheticDefaultModuleType extends Type {
         syntheticType?: Type;
+        defaultOnlyType?: Type;
     }
 
     export interface InstantiableType extends Type {
