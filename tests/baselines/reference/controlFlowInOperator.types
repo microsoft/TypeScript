@@ -32,10 +32,19 @@ if ('a' in c) {
     c;      // A
 >c : A
 
-    c['a']; // number;
+    c['a']; // number
 >c['a'] : number
 >c : A
 >'a' : "a"
+
+} else {
+    c;      // B
+>c : B
+
+    c['b']  // string
+>c['b'] : string
+>c : B
+>'b' : "b"
 }
 
 if ('d' in c) {
@@ -45,6 +54,10 @@ if ('d' in c) {
 
     c; // (A | B) & { d: unknown; }
 >c : (A | B) & { d: unknown; }
+
+} else {
+    c; // (A | B)
+>c : A | B
 }
 
 if (a in c) {
@@ -59,6 +72,15 @@ if (a in c) {
 >c[a] : number
 >c : A
 >a : "a"
+
+} else {
+    c;      // B
+>c : B
+
+    c[b]  // string
+>c[b] : string
+>c : B
+>b : "b"
 }
 
 if (d in c) {
@@ -68,5 +90,9 @@ if (d in c) {
 
     c; // (A | B) & { d: unknown; }
 >c : (A | B) & { d: unknown; }
+
+} else {
+    c; // (A | B)
+>c : A | B
 }
 
