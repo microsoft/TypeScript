@@ -5993,7 +5993,10 @@
         "category": "Error",
         "code": 7060
     },
-
+    "A mapped type may not declare properties or methods.": {
+        "category": "Error",
+        "code": 7061
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

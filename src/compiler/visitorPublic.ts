@@ -629,7 +629,8 @@ namespace ts {
                     nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration),
                     nodeVisitor(node.nameType, visitor, isTypeNode),
                     nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken),
-                    nodeVisitor(node.type, visitor, isTypeNode));
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodesVisitor(node.members, visitor, isTypeElement));
 
             case SyntaxKind.LiteralType:
                 Debug.type<LiteralTypeNode>(node);
