@@ -841,7 +841,7 @@ namespace ts.Completions {
             target: options.target,
             omitTrailingSemicolon: true,
             hasSnippet: true,
-            newLine: getNewLineKind(getNewLineCharacter(options, host.getNewLine)),
+            newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
