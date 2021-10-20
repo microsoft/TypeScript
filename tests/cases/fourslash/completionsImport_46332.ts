@@ -77,9 +77,17 @@ verify.completions({
   },
 });
 
-// TODO
 verify.applyCodeActionFromCompletion("", {
   name: "ref",
   source: "vue",
-  description: "TODO"
+  description: `Add 'ref' to existing import declaration from "vue"`,
+  data: {
+    exportName: "ref",
+    fileName: "/node_modules/vue/dist/vue.d.ts",
+  },
+  preferences: {
+    includeCompletionsForModuleExports: true,
+    allowIncompleteCompletions: true,
+  },
+  newFileContent: `import { ref } from "vue";\nref`
 });
