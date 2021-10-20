@@ -2290,9 +2290,9 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.linkText);
     }
 
-    export function linkNamePart(name: EntityName | JSDocMemberName, target: Declaration): JSDocLinkDisplayPart {
+    export function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
         return {
-            text: getTextOfNode(name),
+            text,
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
             target: {
                 fileName: getSourceFileOfNode(target).fileName,
@@ -2315,13 +2315,16 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
+            const trailingParen = link.text.indexOf("()") === 0;
+            const name = getTextOfNode(link.name) + (trailingParen ? "()" : "");
+            const text = trailingParen ? link.text.slice(2) : link.text;
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
-                parts.push(linkNamePart(link.name, decl));
-                if (link.text) parts.push(linkTextPart(link.text));
+                parts.push(linkNamePart(name, decl));
+                if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
+                parts.push(linkTextPart(name + (trailingParen ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
