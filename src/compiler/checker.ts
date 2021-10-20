@@ -33488,6 +33488,7 @@ namespace ts {
             const parent = node.parent;
             return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
                 isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
+                isComputedPropertyName(parent) ||
                 (isParenthesizedExpression(parent) || isArrayLiteralExpression(parent) || isSpreadElement(parent)) && isConstContext(parent) ||
                 (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
         }
