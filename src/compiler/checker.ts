@@ -15642,6 +15642,10 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
+                const isDistributive = !!(checkType.flags & TypeFlags.TypeParameter);
+                const isDistributionDependent = isDistributive && (
+                    isTypeParameterPossiblyReferenced(checkType as TypeParameter, node.trueType) ||
+                    isTypeParameterPossiblyReferenced(checkType as TypeParameter, node.falseType));
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
@@ -15650,7 +15654,8 @@ namespace ts {
                     node,
                     checkType,
                     extendsType: getTypeFromTypeNode(node.extendsType),
-                    isDistributive: !!(checkType.flags & TypeFlags.TypeParameter),
+                    isDistributive,
+                    isDistributionDependent,
                     inferTypeParameters: getInferTypeParameters(node),
                     outerTypeParameters,
                     instantiations: undefined,
@@ -19023,9 +19028,17 @@ namespace ts {
                         resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
-                    if (!(target as ConditionalType).root.inferTypeParameters) {
-                        if (result = isRelatedTo(source, getTrueTypeFromConditionalType(target as ConditionalType), RecursionFlags.Target, /*reportErrors*/ false)) {
-                            result &= isRelatedTo(source, getFalseTypeFromConditionalType(target as ConditionalType), RecursionFlags.Target, /*reportErrors*/ false);
+                    const c = target as ConditionalType;
+                    // We check for a relationship to a conditional type target only when the conditional type has no
+                    // 'infer' positions and is not distributive or is distributive but doesn't reference the check type
+                    // parameter in either of the result types.
+                    if (!c.root.inferTypeParameters && !c.root.isDistributionDependent) {
+                        // Check if the conditional is always true or always false but still deferred for distribution purposes.
+                        const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
+                        const skipFalse = !skipTrue && isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType));
+                        // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
+                        if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false)) {
+                            result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
                             if (result) {
                                 resetErrorInfo(saveErrorInfo);
                                 return result;
