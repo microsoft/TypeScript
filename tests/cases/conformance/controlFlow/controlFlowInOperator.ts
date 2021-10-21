@@ -128,3 +128,28 @@ for (const g of f) {
     }
     g;          // object
 }
+
+function h(i: object) {
+    if ( 'a' in i ) {
+        i;  // { a: unknown; }
+    } else if ( 'b' in i ) {
+        i;  // { b: unknown; }
+    } else {
+        return;
+    }
+    i; // { a: unknown; } | { b: unknown; }
+}
+h(e);
+
+declare const j: { a: 'first'; b: string; } | { a: 'second'; c: string; };
+
+if (j.a === 'first') {
+    j;          // { a: 'first'; b: string; }
+    j['b'];     // string
+    if ( 'c' in j ) {
+        j;      // { a: 'first'; b: string; c: unknown; }
+        j['b']; // string
+        j['c']; // unknown
+    }
+}
+j; // { a: 'first'; b: string; } | { a: 'second'; c: string; }

@@ -342,3 +342,78 @@ for (const g of f) {
 >g : object
 }
 
+function h(i: object) {
+>h : (i: object) => void
+>i : object
+
+    if ( 'a' in i ) {
+>'a' in i : boolean
+>'a' : "a"
+>i : object
+
+        i;  // { a: unknown; }
+>i : object & { a: unknown; }
+
+    } else if ( 'b' in i ) {
+>'b' in i : boolean
+>'b' : "b"
+>i : object
+
+        i;  // { b: unknown; }
+>i : object & { b: unknown; }
+
+    } else {
+        return;
+    }
+    i; // { a: unknown; } | { b: unknown; }
+>i : (object & { a: unknown; }) | (object & { b: unknown; })
+}
+h(e);
+>h(e) : void
+>h : (i: object) => void
+>e : object
+
+declare const j: { a: 'first'; b: string; } | { a: 'second'; c: string; };
+>j : { a: 'first'; b: string; } | { a: 'second'; c: string; }
+>a : "first"
+>b : string
+>a : "second"
+>c : string
+
+if (j.a === 'first') {
+>j.a === 'first' : boolean
+>j.a : "first" | "second"
+>j : { a: "first"; b: string; } | { a: "second"; c: string; }
+>a : "first" | "second"
+>'first' : "first"
+
+    j;          // { a: 'first'; b: string; }
+>j : { a: "first"; b: string; }
+
+    j['b'];     // string
+>j['b'] : string
+>j : { a: "first"; b: string; }
+>'b' : "b"
+
+    if ( 'c' in j ) {
+>'c' in j : boolean
+>'c' : "c"
+>j : { a: "first"; b: string; }
+
+        j;      // { a: 'first'; b: string; c: unknown; }
+>j : { a: "first"; b: string; } & { c: unknown; }
+
+        j['b']; // string
+>j['b'] : string
+>j : { a: "first"; b: string; } & { c: unknown; }
+>'b' : "b"
+
+        j['c']; // unknown
+>j['c'] : unknown
+>j : { a: "first"; b: string; } & { c: unknown; }
+>'c' : "c"
+    }
+}
+j; // { a: 'first'; b: string; } | { a: 'second'; c: string; }
+>j : { a: "first"; b: string; } | { a: "second"; c: string; }
+

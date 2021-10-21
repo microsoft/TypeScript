@@ -302,3 +302,66 @@ for (const g of f) {
 >g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
 }
 
+function h(i: object) {
+>h : Symbol(h, Decl(controlFlowInOperator.ts, 129, 1))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 131, 11))
+
+    if ( 'a' in i ) {
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 131, 11))
+
+        i;  // { a: unknown; }
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 131, 11))
+
+    } else if ( 'b' in i ) {
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 131, 11))
+
+        i;  // { b: unknown; }
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 131, 11))
+
+    } else {
+        return;
+    }
+    i; // { a: unknown; } | { b: unknown; }
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 131, 11))
+}
+h(e);
+>h : Symbol(h, Decl(controlFlowInOperator.ts, 129, 1))
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+declare const j: { a: 'first'; b: string; } | { a: 'second'; c: string; };
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 143, 18))
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 143, 30))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 143, 47))
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 143, 60))
+
+if (j.a === 'first') {
+>j.a : Symbol(a, Decl(controlFlowInOperator.ts, 143, 18), Decl(controlFlowInOperator.ts, 143, 47))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 143, 18), Decl(controlFlowInOperator.ts, 143, 47))
+
+    j;          // { a: 'first'; b: string; }
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+
+    j['b'];     // string
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+>'b' : Symbol(b, Decl(controlFlowInOperator.ts, 143, 30))
+
+    if ( 'c' in j ) {
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+
+        j;      // { a: 'first'; b: string; c: unknown; }
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+
+        j['b']; // string
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+>'b' : Symbol(b, Decl(controlFlowInOperator.ts, 143, 30))
+
+        j['c']; // unknown
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+>'c' : Symbol(c)
+    }
+}
+j; // { a: 'first'; b: string; } | { a: 'second'; c: string; }
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 143, 13))
+
