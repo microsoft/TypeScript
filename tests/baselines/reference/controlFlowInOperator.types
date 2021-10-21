@@ -11,6 +11,8 @@ const d = 'd';
 >d : "d"
 >'d' : "d"
 
+// Type narrowing
+
 type A = { [a]: number; };
 >A : A
 >[a] : number
@@ -94,5 +96,46 @@ if (d in c) {
 } else {
     c; // (A | B)
 >c : A | B
+}
+
+// Type widening
+
+declare const e: object;
+>e : object
+
+if ('a' in e) {
+>'a' in e : boolean
+>'a' : "a"
+>e : object
+
+    e;      // { a: unknown; }
+>e : object & { a: unknown; }
+
+    e['a']  // unknown
+>e['a'] : unknown
+>e : object & { a: unknown; }
+>'a' : "a"
+
+} else {
+    e;      // object
+>e : object
+}
+
+if (a in e) {
+>a in e : boolean
+>a : "a"
+>e : object
+
+    e;      // { a: unknown; }
+>e : object & { a: unknown; }
+
+    e[a]  // unknown
+>e[a] : unknown
+>e : object & { a: unknown; }
+>a : "a"
+
+} else {
+    e;      // object
+>e : object
 }
 

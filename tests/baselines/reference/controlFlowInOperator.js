@@ -3,6 +3,8 @@ const a = 'a';
 const b = 'b';
 const d = 'd';
 
+// Type narrowing
+
 type A = { [a]: number; };
 type B = { [b]: string; };
 
@@ -34,6 +36,24 @@ if (d in c) {
     c; // (A | B) & { d: unknown; }
 } else {
     c; // (A | B)
+}
+
+// Type widening
+
+declare const e: object;
+
+if ('a' in e) {
+    e;      // { a: unknown; }
+    e['a']  // unknown
+} else {
+    e;      // object
+}
+
+if (a in e) {
+    e;      // { a: unknown; }
+    e[a]  // unknown
+} else {
+    e;      // object
 }
 
 
@@ -68,4 +88,18 @@ if (d in c) {
 }
 else {
     c; // (A | B)
+}
+if ('a' in e) {
+    e; // { a: unknown; }
+    e['a']; // unknown
+}
+else {
+    e; // object
+}
+if (a in e) {
+    e; // { a: unknown; }
+    e[a]; // unknown
+}
+else {
+    e; // object
 }
