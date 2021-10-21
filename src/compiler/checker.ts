@@ -24154,11 +24154,11 @@ namespace ts {
                 if ((type.flags & TypeFlags.Union
                     || type.flags & TypeFlags.Object && declaredType !== type
                     || isThisTypeParameter(type)
-                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && isSomeDirectSubtypeContainsPropName(type, name)) {
+                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && someDirectSubtypeContainsPropName(type, name)) {
                     return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
                 // only widen property when the type does not contain string-index/name in any of the constituents.
-                else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, name) && !getIndexInfoOfType(type, stringType)) {
+                else if (assumeTrue && !someDirectSubtypeContainsPropName(type, name) && !getIndexInfoOfType(type, stringType)) {
                     const addSymbol = createSymbol(SymbolFlags.Property, name);
                     addSymbol.type = unknownType;
                     return widenTypeWithSymbol(type, addSymbol);
@@ -24167,7 +24167,7 @@ namespace ts {
 
                 // This function is almost like function `getPropertyOfType`, except when type.flags contains `UnionOrIntersection`
                 // it would return the property rather than undefiend even when property is partial.
-                function isSomeDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
+                function someDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
                     type = getReducedApparentType(type);
                     if (type.flags & TypeFlags.Object) {
                         const resolved = resolveStructuredTypeMembers(type as ObjectType);
