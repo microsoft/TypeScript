@@ -114,12 +114,191 @@ if (a in e) {
     e;      // { a: unknown; }
 >e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
 
-    e[a]  // unknown
+    e[a]    // unknown
 >e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
 >a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
 
 } else {
     e;      // object
 >e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+}
+
+// More complex control flows
+
+e;              // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+if ( 'a' in e ) {
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e;          // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    if ( 'b' in e ) {
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+        e;      // { a: unknown; b: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+        e['a']; // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>'a' : Symbol(a)
+
+        e['b']; // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>'b' : Symbol(b)
+
+    } else {
+        e;      // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+    }
+    e;          // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+}
+e;              // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+e;              // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+if ( a in e ) {
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e;          // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    if ( b in e ) {
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+        e;      // { a: unknown; b: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+        e[a];   // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+
+        e[b];   // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+
+    } else {
+        e;      // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+    }
+    e;          // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+}
+e;              // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+e;          // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+if ( 'a' in e ) {
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e;      // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e['a']; // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>'a' : Symbol(a)
+
+} else if ( 'b' in e ) {
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e;      // { b: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e['b']; // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>'b' : Symbol(b)
+
+} else {
+    e;      // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+}
+e;          // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+e;          // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+if ( a in e ) {
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e;      // { a: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e[a];   // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+
+} else if ( b in e ) {
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e;      // { b: unknown; }
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+    e[b];   // unknown
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+
+} else {
+    e;      // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+}
+e;          // object
+>e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
+
+declare const f: Array<object>
+>f : Symbol(f, Decl(controlFlowInOperator.ts, 111, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+for (const g of f) {
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 113, 10))
+>f : Symbol(f, Decl(controlFlowInOperator.ts, 111, 13))
+
+    g;          // object
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 113, 10))
+
+    if ('a' in g) {
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 113, 10))
+
+        g;      // { a: unknown; }
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 113, 10))
+
+        g['a']; // unknown
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 113, 10))
+>'a' : Symbol(a)
+    }
+    g;          // object
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 113, 10))
+}
+
+for (const g of f) {
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
+>f : Symbol(f, Decl(controlFlowInOperator.ts, 111, 13))
+
+    g;          // object
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
+
+    if (a in g) {
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
+
+        g;      // { a: unknown; }
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
+
+        g[a];   // unknown
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+    }
+    g;          // object
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 122, 10))
 }
 

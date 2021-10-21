@@ -129,7 +129,7 @@ if (a in e) {
     e;      // { a: unknown; }
 >e : object & { a: unknown; }
 
-    e[a]  // unknown
+    e[a]    // unknown
 >e[a] : unknown
 >e : object & { a: unknown; }
 >a : "a"
@@ -137,5 +137,208 @@ if (a in e) {
 } else {
     e;      // object
 >e : object
+}
+
+// More complex control flows
+
+e;              // object
+>e : object
+
+if ( 'a' in e ) {
+>'a' in e : boolean
+>'a' : "a"
+>e : object
+
+    e;          // { a: unknown; }
+>e : object & { a: unknown; }
+
+    if ( 'b' in e ) {
+>'b' in e : boolean
+>'b' : "b"
+>e : object & { a: unknown; }
+
+        e;      // { a: unknown; b: unknown; }
+>e : object & { b: unknown; a: unknown; }
+
+        e['a']; // unknown
+>e['a'] : unknown
+>e : object & { b: unknown; a: unknown; }
+>'a' : "a"
+
+        e['b']; // unknown
+>e['b'] : unknown
+>e : object & { b: unknown; a: unknown; }
+>'b' : "b"
+
+    } else {
+        e;      // { a: unknown; }
+>e : object & { a: unknown; }
+    }
+    e;          // { a: unknown; }
+>e : object & { a: unknown; }
+}
+e;              // object
+>e : object
+
+e;              // object
+>e : object
+
+if ( a in e ) {
+>a in e : boolean
+>a : "a"
+>e : object
+
+    e;          // { a: unknown; }
+>e : object & { a: unknown; }
+
+    if ( b in e ) {
+>b in e : boolean
+>b : "b"
+>e : object & { a: unknown; }
+
+        e;      // { a: unknown; b: unknown; }
+>e : object & { b: unknown; a: unknown; }
+
+        e[a];   // unknown
+>e[a] : unknown
+>e : object & { b: unknown; a: unknown; }
+>a : "a"
+
+        e[b];   // unknown
+>e[b] : unknown
+>e : object & { b: unknown; a: unknown; }
+>b : "b"
+
+    } else {
+        e;      // { a: unknown; }
+>e : object & { a: unknown; }
+    }
+    e;          // { a: unknown; }
+>e : object & { a: unknown; }
+}
+e;              // object
+>e : object
+
+e;          // object
+>e : object
+
+if ( 'a' in e ) {
+>'a' in e : boolean
+>'a' : "a"
+>e : object
+
+    e;      // { a: unknown; }
+>e : object & { a: unknown; }
+
+    e['a']; // unknown
+>e['a'] : unknown
+>e : object & { a: unknown; }
+>'a' : "a"
+
+} else if ( 'b' in e ) {
+>'b' in e : boolean
+>'b' : "b"
+>e : object
+
+    e;      // { b: unknown; }
+>e : object & { b: unknown; }
+
+    e['b']; // unknown
+>e['b'] : unknown
+>e : object & { b: unknown; }
+>'b' : "b"
+
+} else {
+    e;      // object
+>e : object
+}
+e;          // object
+>e : object
+
+e;          // object
+>e : object
+
+if ( a in e ) {
+>a in e : boolean
+>a : "a"
+>e : object
+
+    e;      // { a: unknown; }
+>e : object & { a: unknown; }
+
+    e[a];   // unknown
+>e[a] : unknown
+>e : object & { a: unknown; }
+>a : "a"
+
+} else if ( b in e ) {
+>b in e : boolean
+>b : "b"
+>e : object
+
+    e;      // { b: unknown; }
+>e : object & { b: unknown; }
+
+    e[b];   // unknown
+>e[b] : unknown
+>e : object & { b: unknown; }
+>b : "b"
+
+} else {
+    e;      // object
+>e : object
+}
+e;          // object
+>e : object
+
+declare const f: Array<object>
+>f : object[]
+
+for (const g of f) {
+>g : object
+>f : object[]
+
+    g;          // object
+>g : object
+
+    if ('a' in g) {
+>'a' in g : boolean
+>'a' : "a"
+>g : object
+
+        g;      // { a: unknown; }
+>g : object & { a: unknown; }
+
+        g['a']; // unknown
+>g['a'] : unknown
+>g : object & { a: unknown; }
+>'a' : "a"
+    }
+    g;          // object
+>g : object
+}
+
+for (const g of f) {
+>g : object
+>f : object[]
+
+    g;          // object
+>g : object
+
+    if (a in g) {
+>a in g : boolean
+>a : "a"
+>g : object
+
+        g;      // { a: unknown; }
+>g : object & { a: unknown; }
+
+        g[a];   // unknown
+>g[a] : unknown
+>g : object & { a: unknown; }
+>a : "a"
+    }
+    g;          // object
+>g : object
 }
 
