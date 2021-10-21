@@ -1,26 +1,13 @@
-tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts(9,24): error TS2418: Type of computed property's value is '{ b: string; }', which is not assignable to type '{ a: any; }'.
-  Object literal may only specify known properties, and 'b' does not exist in type '{ a: any; }'.
-tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts(10,33): error TS2418: Type of computed property's value is '{ b: string; }', which is not assignable to type '{ a: any; }'.
+tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts(3,24): error TS2418: Type of computed property's value is '{ b: string; }', which is not assignable to type '{ a: any; }'.
   Object literal may only specify known properties, and 'b' does not exist in type '{ a: any; }'.
 
 
-==== tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts (2 errors) ====
-    interface Person {
-        id: number;
-        name: string;
-    }
-    
-    declare function key(): `person-${number}`
-    /* This only happens if index type is a template literal type */
-    const persons: Record<`person-${Person["id"]}`, { a: any }> = {
+==== tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts (1 errors) ====
+    type Person = { id: number }
+    const persons: Record<string, { a: any }> = {
         [`person-${1}`]: { b: "something" }, // ok, error
                            ~~~~~~~~~~~~~~
 !!! error TS2418: Type of computed property's value is '{ b: string; }', which is not assignable to type '{ a: any; }'.
 !!! error TS2418:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: any; }'.
-        [`person-${1}` as const]: { b: "something" }, // ok, error
-                                    ~~~~~~~~~~~~~~
-!!! error TS2418: Type of computed property's value is '{ b: string; }', which is not assignable to type '{ a: any; }'.
-!!! error TS2418:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: any; }'.
-        [key()]: { b: "something" }, // still no error, it's not a literal
     }
     

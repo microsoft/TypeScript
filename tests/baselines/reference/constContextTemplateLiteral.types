@@ -1,42 +1,17 @@
 === tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts ===
-interface Person {
-    id: number;
+type Person = { id: number }
+>Person : Person
 >id : number
 
-    name: string;
->name : string
-}
-
-declare function key(): `person-${number}`
->key : () => `person-${number}`
-
-/* This only happens if index type is a template literal type */
-const persons: Record<`person-${Person["id"]}`, { a: any }> = {
->persons : Record<`person-${number}`, { a: any; }>
+const persons: Record<string, { a: any }> = {
+>persons : Record<string, { a: any; }>
 >a : any
->{    [`person-${1}`]: { b: "something" }, // ok, error    [`person-${1}` as const]: { b: "something" }, // ok, error    [key()]: { b: "something" }, // still no error, it's not a literal} : { [x: string]: { b: string; }; "person-1": { b: string; }; }
+>{    [`person-${1}`]: { b: "something" }, // ok, error} : { "person-1": { b: string; }; }
 
     [`person-${1}`]: { b: "something" }, // ok, error
 >[`person-${1}`] : { b: string; }
 >`person-${1}` : "person-1"
 >1 : 1
->{ b: "something" } : { b: string; }
->b : string
->"something" : "something"
-
-    [`person-${1}` as const]: { b: "something" }, // ok, error
->[`person-${1}` as const] : { b: string; }
->`person-${1}` as const : "person-1"
->`person-${1}` : "person-1"
->1 : 1
->{ b: "something" } : { b: string; }
->b : string
->"something" : "something"
-
-    [key()]: { b: "something" }, // still no error, it's not a literal
->[key()] : { b: string; }
->key() : `person-${number}`
->key : () => `person-${number}`
 >{ b: "something" } : { b: string; }
 >b : string
 >"something" : "something"

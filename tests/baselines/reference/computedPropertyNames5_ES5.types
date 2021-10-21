@@ -18,7 +18,7 @@ var v = {
 
     [[]]: 0,
 >[[]] : number
->[] : undefined[]
+>[] : readonly []
 >0 : 0
 
     [{}]: 0,

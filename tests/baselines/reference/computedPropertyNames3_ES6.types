@@ -22,7 +22,7 @@ class C {
 
     set [[0, 1]](v) { }
 >[[0, 1]] : any
->[0, 1] : number[]
+>[0, 1] : readonly [0, 1]
 >0 : 0
 >1 : 1
 >v : any

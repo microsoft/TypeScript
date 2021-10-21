@@ -63,7 +63,7 @@ class C {
 
     static [`hello ${a} bye`] = 0
 >[`hello ${a} bye`] : number
->`hello ${a} bye` : string
+>`hello ${a} bye` : `hello ${any} bye`
 >a : any
 >0 : 0
 }

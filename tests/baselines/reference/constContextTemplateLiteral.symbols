@@ -1,36 +1,15 @@
 === tests/cases/conformance/expressions/literals/constContextTemplateLiteral.ts ===
-interface Person {
+type Person = { id: number }
 >Person : Symbol(Person, Decl(constContextTemplateLiteral.ts, 0, 0))
+>id : Symbol(id, Decl(constContextTemplateLiteral.ts, 0, 15))
 
-    id: number;
->id : Symbol(Person.id, Decl(constContextTemplateLiteral.ts, 0, 18))
-
-    name: string;
->name : Symbol(Person.name, Decl(constContextTemplateLiteral.ts, 1, 15))
-}
-
-declare function key(): `person-${number}`
->key : Symbol(key, Decl(constContextTemplateLiteral.ts, 3, 1))
-
-/* This only happens if index type is a template literal type */
-const persons: Record<`person-${Person["id"]}`, { a: any }> = {
->persons : Symbol(persons, Decl(constContextTemplateLiteral.ts, 7, 5))
+const persons: Record<string, { a: any }> = {
+>persons : Symbol(persons, Decl(constContextTemplateLiteral.ts, 1, 5))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->Person : Symbol(Person, Decl(constContextTemplateLiteral.ts, 0, 0))
->a : Symbol(a, Decl(constContextTemplateLiteral.ts, 7, 49))
+>a : Symbol(a, Decl(constContextTemplateLiteral.ts, 1, 31))
 
     [`person-${1}`]: { b: "something" }, // ok, error
->[`person-${1}`] : Symbol([`person-${1}`], Decl(constContextTemplateLiteral.ts, 7, 63))
->b : Symbol(b, Decl(constContextTemplateLiteral.ts, 8, 22))
-
-    [`person-${1}` as const]: { b: "something" }, // ok, error
->[`person-${1}` as const] : Symbol([`person-${1}` as const], Decl(constContextTemplateLiteral.ts, 8, 40))
->const : Symbol(const)
->b : Symbol(b, Decl(constContextTemplateLiteral.ts, 9, 31))
-
-    [key()]: { b: "something" }, // still no error, it's not a literal
->[key()] : Symbol([key()], Decl(constContextTemplateLiteral.ts, 9, 49))
->key : Symbol(key, Decl(constContextTemplateLiteral.ts, 3, 1))
->b : Symbol(b, Decl(constContextTemplateLiteral.ts, 10, 14))
+>[`person-${1}`] : Symbol([`person-${1}`], Decl(constContextTemplateLiteral.ts, 1, 45))
+>b : Symbol(b, Decl(constContextTemplateLiteral.ts, 2, 22))
 }
 

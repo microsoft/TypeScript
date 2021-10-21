@@ -17,7 +17,7 @@ class C {
 
     get [[]]() { return 0; }
 >[[]] : number
->[] : undefined[]
+>[] : readonly []
 >0 : 0
 
     set [{}](v) { }
