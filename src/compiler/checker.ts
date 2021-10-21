@@ -3277,7 +3277,8 @@ namespace ts {
                         const suggestionForNonexistentModule = getSuggestedSymbolForNonexistentModule(right, namespace);
                         const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
                         const containingQualifiedName = isQualifiedName(name) && getContainingQualifiedNameNode(name);
-                        const canSuggestTypeof = containingQualifiedName && !isTypeOfExpression(containingQualifiedName.parent) && tryGetQualifiedNameAsValue(containingQualifiedName);
+                        // Can't pull on types if global types aren't initialized yet
+                        const canSuggestTypeof = !!globalObjectType && containingQualifiedName && !isTypeOfExpression(containingQualifiedName.parent) && tryGetQualifiedNameAsValue(containingQualifiedName);
                         if (suggestionForNonexistentModule) {
                             error(right, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestionForNonexistentModule));
                         }
