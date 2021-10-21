@@ -19,19 +19,18 @@ const persons: Record<`person-${Person["id"]}`, { a: any }> = {
 >Person : Symbol(Person, Decl(constContextTemplateLiteral.ts, 0, 0))
 >a : Symbol(a, Decl(constContextTemplateLiteral.ts, 7, 49))
 
-    ...{},
     [`person-${1}`]: { b: "something" }, // ok, error
->[`person-${1}`] : Symbol([`person-${1}`], Decl(constContextTemplateLiteral.ts, 8, 10))
->b : Symbol(b, Decl(constContextTemplateLiteral.ts, 9, 22))
+>[`person-${1}`] : Symbol([`person-${1}`], Decl(constContextTemplateLiteral.ts, 7, 63))
+>b : Symbol(b, Decl(constContextTemplateLiteral.ts, 8, 22))
 
     [`person-${1}` as const]: { b: "something" }, // ok, error
->[`person-${1}` as const] : Symbol([`person-${1}` as const], Decl(constContextTemplateLiteral.ts, 9, 40))
+>[`person-${1}` as const] : Symbol([`person-${1}` as const], Decl(constContextTemplateLiteral.ts, 8, 40))
 >const : Symbol(const)
->b : Symbol(b, Decl(constContextTemplateLiteral.ts, 10, 31))
+>b : Symbol(b, Decl(constContextTemplateLiteral.ts, 9, 31))
 
-    [key()]: { b: "something" }, // still no error
->[key()] : Symbol([key()], Decl(constContextTemplateLiteral.ts, 10, 49))
+    [key()]: { b: "something" }, // still no error, it's not a literal
+>[key()] : Symbol([key()], Decl(constContextTemplateLiteral.ts, 9, 49))
 >key : Symbol(key, Decl(constContextTemplateLiteral.ts, 3, 1))
->b : Symbol(b, Decl(constContextTemplateLiteral.ts, 11, 14))
+>b : Symbol(b, Decl(constContextTemplateLiteral.ts, 10, 14))
 }
 
