@@ -5344,7 +5344,7 @@ namespace ts {
         IsNeverIntersection = 1 << 26, // Intersection reduces to never
 
         /* @internal */
-        WidenedByNarrow = 1 << 31,   // in keyword could widen type, this mark it as the widen part.
+        WidenedByIn = 1 << 31,   // in keyword can widen type, this marks it as the widened part.
     }
 
     /* @internal */

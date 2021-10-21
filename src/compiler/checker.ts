@@ -4059,7 +4059,7 @@ namespace ts {
         }
 
         function createWidenType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
-            return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous | ObjectFlags.WidenedByNarrow, symbol),
+            return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous | ObjectFlags.WidenedByIn, symbol),
                 members, callSignatures, constructSignatures, indexInfos);
         }
 
@@ -24114,7 +24114,7 @@ namespace ts {
 
                 if (isIntersectionType(type)) {
                     // try to get the first Anonymous Object type to add new type to it.
-                    const widenedType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.WidenedByNarrow);
+                    const widenedType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.WidenedByIn);
                     if (widenedType && isObjectType(widenedType)) {
                         const typeWithOutWiden = filterIntersectionType(type, t => t !== widenedType);
 
