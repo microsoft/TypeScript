@@ -2315,20 +2315,34 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
-            const trailingParen = link.text.indexOf("()") === 0;
-            const name = getTextOfNode(link.name) + (trailingParen ? "()" : "");
-            const text = trailingParen ? link.text.slice(2) : link.text;
+            const suffix = findLinkNameEnd(link.text);
+            const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
+            const text = link.text.slice(suffix);
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
                 parts.push(linkNamePart(name, decl));
                 if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(name + (trailingParen ? "" : " ") + text));
+                parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function findLinkNameEnd(text: string) {
+        if (text.indexOf("()") === 0) return 2;
+        if (text[0] !== "<") return 0;
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
+        return 0;
     }
 
     const carriageReturnLineFeed = "\r\n";
