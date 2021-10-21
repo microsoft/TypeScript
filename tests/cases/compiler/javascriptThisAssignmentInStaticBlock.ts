@@ -21,4 +21,4 @@ class ElementsArray extends Array {
     }
 }
 
-ElementsArray(new ElementsArray());
+ElementsArray.isArray(new ElementsArray());
