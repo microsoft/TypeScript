@@ -74,4 +74,3 @@ class C { m(null: string) {} }
 > : any
 >string : any
 
-
