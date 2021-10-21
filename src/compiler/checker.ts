@@ -4058,11 +4058,6 @@ namespace ts {
             return resolved;
         }
 
-        function createWidenedType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
-            return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous | ObjectFlags.WidenedByIn, symbol),
-                members, callSignatures, constructSignatures, indexInfos);
-        }
-
         function createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
             return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous, symbol),
                 members, callSignatures, constructSignatures, indexInfos);
@@ -24100,7 +24095,7 @@ namespace ts {
                 const propName = newSymbol.escapedName;
                 const members = createSymbolTable();
                 members.set(propName, newSymbol);
-                const newObjType = createWidenedType(/* symbol */ undefined, members, emptyArray, emptyArray, emptyArray);
+                const newObjType = createAnonymousType(/* symbol */ undefined, members, emptyArray, emptyArray, emptyArray);
 
                 // if `type` is never, just return the new anonymous object type.
                 if (type.flags & TypeFlags.Never) {
@@ -24112,18 +24107,18 @@ namespace ts {
 
                 if (isIntersectionType(type)) {
                     // try to get the first Anonymous Object type to add new type to it.
-                    const widenedType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.WidenedByIn);
-                    if (widenedType && isObjectType(widenedType)) {
-                        const typeWithOutWiden = filterIntersectionType(type, t => t !== widenedType);
+                    const anonymousSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
+                    if (anonymousSubtype) {
+                        const restOfIntersection = filterIntersectionType(type, t => t !== anonymousSubtype);
 
                         const members = createSymbolTable();
                         members.set(propName, newSymbol);
-                        if (widenedType.members) {
-                            mergeSymbolTable(members, widenedType.members);
+                        if (anonymousSubtype.members) {
+                            mergeSymbolTable(members, anonymousSubtype.members);
                         }
                         newObjType.members = members;
                         newObjType.properties = getNamedMembers(members);
-                        return createIntersectionType([typeWithOutWiden, newObjType]);
+                        return createIntersectionType([restOfIntersection, newObjType]);
                     }
                 }
                 return createIntersectionType([type, newObjType]);

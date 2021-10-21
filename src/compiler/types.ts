@@ -5342,9 +5342,6 @@ namespace ts {
         IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
         /* @internal */
         IsNeverIntersection = 1 << 26, // Intersection reduces to never
-
-        /* @internal */
-        WidenedByIn = 1 << 31,   // in keyword can widen type, this marks it as the widened part.
     }
 
     /* @internal */
