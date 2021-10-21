@@ -621,6 +621,7 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            dumpVariances,
             getUnionType,
             isTypeAssignableTo,
             createAnonymousType,
@@ -3980,7 +3981,7 @@ namespace ts {
             typeCount++;
             result.id = typeCount;
             if (produceDiagnostics) { // Only record types from one checker
-                tracing?.recordType(result);
+                tracingEnabled.recordType(result);
             }
             return result;
         }
@@ -20186,6 +20187,24 @@ namespace ts {
                 tracing?.pop();
             }
             return variances;
+        }
+
+
+        function getVariancesUltra(type: GenericType, refid: number): { variances: string[], how: 'static' | 'check' | 'dump', refid: number, targetid: number } {
+            // Arrays and tuples are known to be covariant, no need to spend time computing this.
+            if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
+                return { variances: arrayVariances.map(translateEnum), how: 'static', targetid: type.id, refid };
+            }
+            return {
+                how: type.variances ? 'check' : 'dump',
+                variances: getVariancesWorker(type.typeParameters, type, getMarkerTypeReference).map(translateEnum),
+                targetid: type.id,
+                refid,
+            }
+        }
+
+        function translateEnum(flag: VarianceFlags): string {
+            return flag.toString() // laters! (once I find out the distribution)
         }
 
         function getVariances(type: GenericType): VarianceFlags[] {
@@ -40280,6 +40299,14 @@ namespace ts {
             // getDiagnostics
             forEach(host.getSourceFiles(), checkSourceFile);
             return diagnostics.getDiagnostics();
+        }
+
+        function dumpVariances() {
+            tracingEnabled.iterTypes(t => {
+                if (getObjectFlags(t) & ObjectFlags.Reference) {
+                    console.log(JSON.stringify(getVariancesUltra((t as TypeReference).target, t.id)))
+                }
+            })
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {

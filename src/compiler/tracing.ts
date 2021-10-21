@@ -7,7 +7,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
     // enable the above using startTracing()
 
     // `tracingEnabled` should never be used directly, only through the above
-    namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
+    export namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
         type Mode = "project" | "build" | "server";
 
         let fs: typeof import("fs");
@@ -100,6 +100,12 @@ namespace ts { // eslint-disable-line one-namespace-per-file
         export function recordType(type: Type): void {
             if (mode !== "server") {
                 typeCatalog.push(type);
+            }
+        }
+
+        export function iterTypes(action: (t: Type) => void): void {
+            for (const t of typeCatalog) {
+                action(t)
             }
         }
 

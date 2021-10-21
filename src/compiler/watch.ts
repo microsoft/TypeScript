@@ -327,6 +327,7 @@ namespace ts {
 
                 if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
                     addRange(allDiagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+                    (program as Program).getTypeChecker().dumpVariances();
                 }
             }
         }
