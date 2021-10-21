@@ -4058,7 +4058,7 @@ namespace ts {
             return resolved;
         }
 
-        function createWidenType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
+        function createWidenedType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], indexInfos: readonly IndexInfo[]): ResolvedType {
             return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous | ObjectFlags.WidenedByIn, symbol),
                 members, callSignatures, constructSignatures, indexInfos);
         }
@@ -24102,7 +24102,7 @@ namespace ts {
                 const propName = newSymbol.escapedName;
                 const members = createSymbolTable();
                 members.set(propName, newSymbol);
-                const newObjType = createWidenType(/* symbol */ undefined, members, emptyArray, emptyArray, emptyArray);
+                const newObjType = createWidenedType(/* symbol */ undefined, members, emptyArray, emptyArray, emptyArray);
 
                 // if `type` is never, just return the new anonymous object type.
                 if (type.flags & TypeFlags.Never) {
