@@ -14359,21 +14359,19 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const id = getTypeListId(types);
+            const id = getTypeListId(types) + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = intersectionTypes.get(id);
             if (!type) {
                 type = createType(TypeFlags.Intersection) as IntersectionType;
-                intersectionTypes.set(id, type);
                 type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type.types = types;
-                /*
-                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
-                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
-                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
-                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
-                */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
+                if (types.length === 2 && types[0].flags & TypeFlags.BooleanLiteral && types[1].flags & TypeFlags.BooleanLiteral) {
+                    type.flags |= TypeFlags.Boolean;
+                    (type as IntersectionType & IntrinsicType).intrinsicName = "boolean";
+                }
+                intersectionTypes.set(id, type);
             }
             return type;
         }
