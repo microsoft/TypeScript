@@ -24091,7 +24091,7 @@ namespace ts {
             }
 
             function widenTypeWithSymbol(type: Type, newSymbol: Symbol): Type {
-                // If type is this/any/unknown, it could not be widened.
+                // If type is this/any/unknown, it cannot be widened.
                 if ((type.flags & TypeFlags.AnyOrUnknown) || isThisTypeParameter(type)) {
                     return type;
                 }
@@ -24099,28 +24099,24 @@ namespace ts {
                 if (isObjectType(type) && type.objectFlags & ObjectFlags.Anonymous) {
                     return widenObjectType(type, newSymbol);
                 }
-                const propName = newSymbol.escapedName;
-                const members = createSymbolTable();
-                members.set(propName, newSymbol);
-                const newObjType = createAnonymousType(/* symbol */ undefined, members, emptyArray, emptyArray, emptyArray);
-
-                // if `type` is never, just return the new anonymous object type.
-                if (type.flags & TypeFlags.Never) {
-                    return newObjType;
-                }
-
-                // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
-                // else add a new anonymous object type which contains the type and widen the original type with it.
-
+                // If type is intersection, add the symbol to the first anonymous object component of the intersection
                 if (isIntersectionType(type)) {
-                    // try to get the first anonymous object component to add the new type to it.
-                    const anonymousSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
-                    if (anonymousSubtype) {
-                        const restOfIntersection = filterIntersectionType(type, t => t !== anonymousSubtype);
-                        return createIntersectionType([restOfIntersection, widenObjectType(anonymousSubtype, newSymbol)]);
+                    const objectSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
+                    if (objectSubtype) {
+                        const restOfIntersection = filterIntersectionType(type, t => t !== objectSubtype);
+                        return createIntersectionType([restOfIntersection, widenObjectType(objectSubtype, newSymbol)]);
                     }
                 }
-                return createIntersectionType([type, newObjType]);
+
+                const newTypeWithSymbol = widenObjectType(createAnonymousType(undefined, createSymbolTable(), emptyArray, emptyArray, emptyArray), newSymbol);
+
+                // If type is never, return the new object type.
+                if (type.flags & TypeFlags.Never) {
+                    return newTypeWithSymbol;
+                }
+
+                // Otherwise, just add the new object type as an intersection
+                return createIntersectionType([type, newTypeWithSymbol]);
 
                 function widenObjectType(type: ObjectType, newSymbol: Symbol): Type {
                     const members = createSymbolTable();
