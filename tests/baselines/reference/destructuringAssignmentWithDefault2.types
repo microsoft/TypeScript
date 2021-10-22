@@ -37,3 +37,38 @@ let x: number;
 >a : { x?: number | undefined; y?: number | undefined; }
 
 
+declare const r: Iterator<number>;
+>r : Iterator<number, any, undefined>
+
+let done: boolean;
+>done : boolean
+
+let value;
+>value : any
+
+({ done = false, value } = r.next());
+>({ done = false, value } = r.next()) : IteratorResult<number, any>
+>{ done = false, value } = r.next() : IteratorResult<number, any>
+>{ done = false, value } : { done?: boolean; value: any; }
+>done : boolean
+>false : false
+>value : any
+>r.next() : IteratorResult<number, any>
+>r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
+>r : Iterator<number, any, undefined>
+>next : (...args: [] | [undefined]) => IteratorResult<number, any>
+
+({ done: done = false, value } = r.next());
+>({ done: done = false, value } = r.next()) : IteratorResult<number, any>
+>{ done: done = false, value } = r.next() : IteratorResult<number, any>
+>{ done: done = false, value } : { done?: boolean; value: any; }
+>done : boolean
+>done = false : false
+>done : boolean
+>false : false
+>value : any
+>r.next() : IteratorResult<number, any>
+>r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
+>r : Iterator<number, any, undefined>
+>next : (...args: [] | [undefined]) => IteratorResult<number, any>
+

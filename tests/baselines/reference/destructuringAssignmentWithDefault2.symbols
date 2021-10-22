@@ -22,3 +22,28 @@ let x: number;
 >a : Symbol(a, Decl(destructuringAssignmentWithDefault2.ts, 0, 5))
 
 
+declare const r: Iterator<number>;
+>r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 9, 13))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+let done: boolean;
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 10, 3))
+
+let value;
+>value : Symbol(value, Decl(destructuringAssignmentWithDefault2.ts, 11, 3))
+
+({ done = false, value } = r.next());
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 13, 2))
+>value : Symbol(value, Decl(destructuringAssignmentWithDefault2.ts, 13, 16))
+>r.next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 9, 13))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+
+({ done: done = false, value } = r.next());
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 14, 2))
+>done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 10, 3))
+>value : Symbol(value, Decl(destructuringAssignmentWithDefault2.ts, 14, 22))
+>r.next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+>r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 9, 13))
+>next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
+
