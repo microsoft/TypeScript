@@ -3656,8 +3656,8 @@ namespace ts {
             if (exportEquals !== moduleSymbol) {
                 const type = getTypeOfSymbol(exportEquals);
                 if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
-                    getPropertiesOfType(type).forEach(symbol => {
-                        cb(symbol, symbol.escapedName);
+                    forEachPropertyOfType(type, (symbol, escapedName) => {
+                        cb(symbol, escapedName);
                     });
                 }
             }
@@ -4033,11 +4033,15 @@ namespace ts {
         function getNamedMembers(members: SymbolTable): Symbol[] {
             let result: Symbol[] | undefined;
             members.forEach((symbol, id) => {
-                if (!isReservedMemberName(id) && symbolIsValue(symbol)) {
+                if (isNamedMember(symbol, id)) {
                     (result || (result = [])).push(symbol);
                 }
             });
             return result || emptyArray;
+        }
+
+        function isNamedMember(member: Symbol, escapedName: __String) {
+            return !isReservedMemberName(escapedName) && symbolIsValue(member);
         }
 
         function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
@@ -11559,6 +11563,7 @@ namespace ts {
                         break;
                     }
                 }
+                type.members = members;
                 type.resolvedProperties = getNamedMembers(members);
             }
             return type.resolvedProperties;
@@ -11569,6 +11574,16 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(type as UnionType) :
                 getPropertiesOfObjectType(type);
+        }
+
+        function forEachPropertyOfType(type: Type, action: (symbol: Symbol, escapedName: __String) => void): void {
+            type = getReducedApparentType(type);
+            getPropertiesOfType(type);
+            (type as ResolvedType | UnionOrIntersectionType).members?.forEach((symbol, escapedName) => {
+                if (isNamedMember(symbol, escapedName)) {
+                    action(symbol, escapedName);
+                }
+            });
         }
 
         function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
