@@ -3496,7 +3496,6 @@ namespace ts {
                 }
                 else {
                     const tsExtension = tryExtractTSExtension(moduleReference);
-                    const isESMFile = currentSourceFile.impliedNodeFormat === ModuleKind.ESNext;
                     const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
                     const resolutionIsNode12OrHigher = getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node12;
                     if (tsExtension) {
@@ -3518,7 +3517,7 @@ namespace ts {
                         hasJsonModuleEmitEnabled(compilerOptions)) {
                         error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
                     }
-                    else if (isESMFile && resolutionIsNode12OrHigher && isExtensionlessRelativePathImport) {
+                    else if (mode === ModuleKind.ESNext && resolutionIsNode12OrHigher && isExtensionlessRelativePathImport) {
                         const absoluteRef =  getNormalizedAbsolutePath(moduleReference, getDirectoryPath(currentSourceFile.path));
                         const suggestedExt = suggestedExtensions.find(([actualExt, _importExt]) => host.fileExists(absoluteRef + actualExt))?.[1];
                         if (suggestedExt) {
