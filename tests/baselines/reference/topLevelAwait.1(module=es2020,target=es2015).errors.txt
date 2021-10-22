@@ -1,11 +1,16 @@
+tests/cases/conformance/externalModules/index.ts(2,1): error TS1378: The 'module' setting 'ES2020' does not support top-level 'await' expressions. Consider switching to 'ES2022'.
 tests/cases/conformance/externalModules/index.ts(2,1): error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
+tests/cases/conformance/externalModules/index.ts(46,3): error TS1378: The 'module' setting 'ES2020' does not support top-level 'await' expressions. Consider switching to 'ES2022'.
 tests/cases/conformance/externalModules/index.ts(46,3): error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
+tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'module' setting 'ES2020' does not support top-level 'for await' loops. Consider switching to 'ES2022'.
 tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target' setting 'ES2015' does not support top-level 'for await' loops. Consider switching to 'ES2017'.
 
 
-==== tests/cases/conformance/externalModules/index.ts (2 errors) ====
+==== tests/cases/conformance/externalModules/index.ts (4 errors) ====
     export const x = 1;
     await x;
+    ~~~~~
+!!! error TS1378: The 'module' setting 'ES2020' does not support top-level 'await' expressions. Consider switching to 'ES2022'.
     ~~~~~
 !!! error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
     
@@ -53,6 +58,8 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target
     declare const dec: any;
     @(await dec)
       ~~~~~
+!!! error TS1378: The 'module' setting 'ES2020' does not support top-level 'await' expressions. Consider switching to 'ES2022'.
+      ~~~~~
 !!! error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
     class C {
     }
@@ -73,7 +80,7 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target
     await
         1;
     
-==== tests/cases/conformance/externalModules/other.ts (1 errors) ====
+==== tests/cases/conformance/externalModules/other.ts (2 errors) ====
     const _await = 1;
     
     // await allowed in aliased export
@@ -83,6 +90,8 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target
     const arr = [Promise.resolve()];
     
     for await (const item of arr) {
+        ~~~~~
+!!! error TS1432: The 'module' setting 'ES2020' does not support top-level 'for await' loops. Consider switching to 'ES2022'.
         ~~~~~
 !!! error TS1432: The 'target' setting 'ES2015' does not support top-level 'for await' loops. Consider switching to 'ES2017'.
       item;

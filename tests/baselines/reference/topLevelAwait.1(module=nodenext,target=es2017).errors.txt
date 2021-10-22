@@ -1,13 +1,13 @@
-tests/cases/conformance/externalModules/index.ts(2,1): error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
-tests/cases/conformance/externalModules/index.ts(46,3): error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
-tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target' setting 'ES2015' does not support top-level 'for await' loops. Consider switching to 'ES2017'.
+tests/cases/conformance/externalModules/index.ts(2,1): error TS1472: Top-level 'await' expression is not allowed in CommonJS modules. Please convert to ES module.
+tests/cases/conformance/externalModules/index.ts(46,3): error TS1472: Top-level 'await' expression is not allowed in CommonJS modules. Please convert to ES module.
+tests/cases/conformance/externalModules/other.ts(9,5): error TS1472: Top-level 'for await' loop is not allowed in CommonJS modules. Please convert to ES module.
 
 
 ==== tests/cases/conformance/externalModules/index.ts (2 errors) ====
     export const x = 1;
     await x;
     ~~~~~
-!!! error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
+!!! error TS1472: Top-level 'await' expression is not allowed in CommonJS modules. Please convert to ES module.
     
     // reparse element access as await
     await [x];
@@ -53,7 +53,7 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target
     declare const dec: any;
     @(await dec)
       ~~~~~
-!!! error TS1378: The 'target' setting 'ES2015' does not support top-level 'await' expressions. Consider switching to 'ES2017'.
+!!! error TS1472: Top-level 'await' expression is not allowed in CommonJS modules. Please convert to ES module.
     class C {
     }
     
@@ -84,7 +84,7 @@ tests/cases/conformance/externalModules/other.ts(9,5): error TS1432: The 'target
     
     for await (const item of arr) {
         ~~~~~
-!!! error TS1432: The 'target' setting 'ES2015' does not support top-level 'for await' loops. Consider switching to 'ES2017'.
+!!! error TS1472: Top-level 'for await' loop is not allowed in CommonJS modules. Please convert to ES module.
       item;
     }
     

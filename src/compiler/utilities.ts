@@ -800,6 +800,10 @@ namespace ts {
         return isExternalModule(node) || compilerOptions.isolatedModules || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
     }
 
+    export function isNotTopLevelAwaitSupportedModuleKind(kind: ModuleKind, impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS){
+        return kind !== ModuleKind.ES2022 && kind !== ModuleKind.ESNext && kind !== ModuleKind.System && !(kind === ModuleKind.NodeNext && impliedNodeFormat === ModuleKind.ESNext);
+    }
+
     /**
      * Returns whether the source file will be treated as if it were in strict mode at runtime.
      */

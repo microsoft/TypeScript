@@ -1,5 +1,5 @@
 // @target: es2015,es2017
-// @module: es2022,esnext,system
+// @module: es2020,es2022,esnext,system,node12,nodenext
 // @experimentalDecorators: true
 // @noEmitHelpers: true
 // @filename: index.ts

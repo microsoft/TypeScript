@@ -32183,10 +32183,23 @@ namespace ts {
                                     Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
                                 diagnostics.add(diagnostic);
                             }
-                            if ((moduleKind !== ModuleKind.ES2022 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
-                                span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                            span = getSpanOfTokenAtPosition(sourceFile, node.pos);
+                            if (isNotTopLevelAwaitSupportedModuleKind(moduleKind, getSourceFileOfNode(node).impliedNodeFormat)) {
+                                if(moduleKind !== ModuleKind.NodeNext) {
+                                    const suggestedKind = moduleKind === ModuleKind.Node12 ? ModuleKind.NodeNext : ModuleKind.ES2022;
+                                    const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
+                                        Diagnostics.The_0_setting_1_does_not_support_top_level_await_expressions_Consider_switching_to_2, "module", ModuleKind[moduleKind], ModuleKind[suggestedKind]);
+                                    diagnostics.add(diagnostic);
+                                }
+                                else {
+                                    const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
+                                        Diagnostics._0_is_not_allowed_in_CommonJS_modules_Please_convert_to_ES_module, "Top-level 'await' expression");
+                                    diagnostics.add(diagnostic);
+                                }
+                            }
+                            if(languageVersion < ScriptTarget.ES2017) {
                                 const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher);
+                                    Diagnostics.The_0_setting_1_does_not_support_top_level_await_expressions_Consider_switching_to_2, "target", ScriptTarget[languageVersion], ScriptTarget[ScriptTarget.ES2017]);
                                 diagnostics.add(diagnostic);
                             }
                         }
@@ -42867,9 +42880,23 @@ namespace ts {
                                 diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
                                     Diagnostics.for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module));
                             }
-                            if ((moduleKind !== ModuleKind.ES2022 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(forInOrOfStatement).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
-                                diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher));
+                            if (isNotTopLevelAwaitSupportedModuleKind(moduleKind, getSourceFileOfNode(forInOrOfStatement).impliedNodeFormat)) {
+                                if(moduleKind !== ModuleKind.NodeNext) {
+                                    const suggestedKind = moduleKind === ModuleKind.Node12 ? ModuleKind.NodeNext : ModuleKind.ES2022;
+                                    const diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
+                                        Diagnostics.The_0_setting_1_does_not_support_top_level_for_await_loops_Consider_switching_to_2, "module", ModuleKind[moduleKind], ModuleKind[suggestedKind]);
+                                    diagnostics.add(diagnostic);
+                                }
+                                else {
+                                    const diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
+                                        Diagnostics._0_is_not_allowed_in_CommonJS_modules_Please_convert_to_ES_module, "Top-level 'for await' loop");
+                                    diagnostics.add(diagnostic);
+                                }
+                            }
+                            if(languageVersion < ScriptTarget.ES2017) {
+                                const diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
+                                    Diagnostics.The_0_setting_1_does_not_support_top_level_for_await_loops_Consider_switching_to_2, "target", ScriptTarget[languageVersion], ScriptTarget[ScriptTarget.ES2017]);
+                                diagnostics.add(diagnostic);
                             }
                         }
                     }

@@ -1116,7 +1116,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "The '{0}' setting '{1}' does not support top-level 'await' expressions. Consider switching to '{2}'.": {
         "category": "Error",
         "code": 1378
     },
@@ -1324,7 +1324,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "The '{0}' setting '{1}' does not support top-level 'for await' loops. Consider switching to '{2}'.": {
         "category": "Error",
         "code": 1432
     },
@@ -1404,6 +1404,10 @@
     "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
         "category": "Error",
         "code": 1471
+    },
+    "{0} is not allowed in CommonJS modules. Please convert to ES module.": {
+        "category": "Error",
+        "code": 1472
     },
 
     "The types of '{0}' are incompatible between these types.": {
