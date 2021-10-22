@@ -24164,7 +24164,7 @@ namespace ts {
                 return type;
 
                 function someDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
-                    return getPropertyOfType(type, name, false, true);
+                    return getPropertyOfType(type, name, /* skipObjectFunctionPropertyAugment */ false, /* includePartialProperties */ true);
                 }
             }
 
