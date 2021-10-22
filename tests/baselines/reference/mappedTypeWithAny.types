@@ -119,7 +119,7 @@ declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readon
 
 let def: [any, any] = stringifyPair(void 0 as any);
 >def : [any, any]
->stringifyPair(void 0 as any) : string[]
+>stringifyPair(void 0 as any) : { [x: string]: string; }
 >stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
 >void 0 as any : any
 >void 0 : undefined
