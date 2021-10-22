@@ -55,6 +55,42 @@ if (a in e) {
     e;      // object
 }
 
+// Widening different types
+
+declare const e1: any;
+if ('a' in e1) {
+    e1;      // any
+}
+
+declare const e2: object;
+if ('a' in e2) {
+    e2;      // object & { a: unknown; }
+    e2['a']  // unknown
+}
+
+declare const e3: {b: string} & {c: number};
+if ('a' in e3) {
+    e3;      // { a: unknown; b: string; } & { c: number }
+    e3['a']  // unknown
+}
+
+interface C {
+    cProp: string
+}
+interface D {
+    dProp: number
+}
+declare const e4: C & D;
+if ('a' in e4) {
+    e4;      // C & D & { a: unknown; }
+    e4['a']  // unknown
+}
+
+declare const e5: never;
+if ('a' in e5) {
+    e5;      // never
+}
+
 // More complex control flows
 
 e;              // object
