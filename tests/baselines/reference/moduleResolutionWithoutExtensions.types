@@ -6,12 +6,12 @@ export function foo() {
 >"" : ""
 }
 
-// Extensionless relative import in an ES module
 === /src/bar.mts ===
-import { foo } from "./foo";
+// Extensionless relative path ES import in an ES module
+import { foo } from "./foo"; // should error
 >foo : any
 
-import { baz } from "./baz";
+import { baz } from "./baz"; // should also error
 >baz : any
 
 foo;

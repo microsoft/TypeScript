@@ -5,17 +5,17 @@ export function foo() {
     return "";
 }
 
-// Extensionless relative import in an ES module
 === /src/bar.mts ===
-import { foo } from "./foo";
->foo : Symbol(foo, Decl(bar.mts, 0, 8))
+// Extensionless relative path ES import in an ES module
+import { foo } from "./foo"; // should error
+>foo : Symbol(foo, Decl(bar.mts, 1, 8))
 
-import { baz } from "./baz";
->baz : Symbol(baz, Decl(bar.mts, 1, 8))
+import { baz } from "./baz"; // should also error
+>baz : Symbol(baz, Decl(bar.mts, 2, 8))
 
 foo;
->foo : Symbol(foo, Decl(bar.mts, 0, 8))
+>foo : Symbol(foo, Decl(bar.mts, 1, 8))
 
 baz;
->baz : Symbol(baz, Decl(bar.mts, 1, 8))
+>baz : Symbol(baz, Decl(bar.mts, 2, 8))
 

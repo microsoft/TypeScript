@@ -5,10 +5,10 @@ export function foo() {
     return "";
 }
 
-// Extensionless relative import in an ES module
 //// [bar.mts]
-import { foo } from "./foo";
-import { baz } from "./baz";
+// Extensionless relative path ES import in an ES module
+import { foo } from "./foo"; // should error
+import { baz } from "./baz"; // should also error
 foo;
 baz;
 
@@ -17,9 +17,9 @@ baz;
 export function foo() {
     return "";
 }
-// Extensionless relative import in an ES module
 //// [bar.mjs]
-import { foo } from "./foo";
-import { baz } from "./baz";
+// Extensionless relative path ES import in an ES module
+import { foo } from "./foo"; // should error
+import { baz } from "./baz"; // should also error
 foo;
 baz;

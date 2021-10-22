@@ -1,5 +1,5 @@
-/src/bar.mts(1,21): error TS2835: Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher. Did you mean './foo.mjs'?
-/src/bar.mts(2,21): error TS2834: Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher.
+/src/bar.mts(2,21): error TS2835: Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher. Did you mean './foo.mjs'?
+/src/bar.mts(3,21): error TS2834: Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher.
 
 
 ==== /src/foo.mts (0 errors) ====
@@ -7,12 +7,12 @@
         return "";
     }
     
-    // Extensionless relative import in an ES module
 ==== /src/bar.mts (2 errors) ====
-    import { foo } from "./foo";
+    // Extensionless relative path ES import in an ES module
+    import { foo } from "./foo"; // should error
                         ~~~~~~~
 !!! error TS2835: Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher. Did you mean './foo.mjs'?
-    import { baz } from "./baz";
+    import { baz } from "./baz"; // should also error
                         ~~~~~~~
 !!! error TS2834: Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher.
     foo;
