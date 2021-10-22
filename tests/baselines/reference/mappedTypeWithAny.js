@@ -50,6 +50,9 @@ function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayis
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
 let abc: any[] = stringifyArray(void 0 as any);
 
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
+let def: [any, any] = stringifyPair(void 0 as any);
+
 //// [mappedTypeWithAny.js]
 "use strict";
 for (var id in z) {
@@ -63,6 +66,7 @@ function bar(arrayish, objectish, indirectArrayish) {
     arr = indirectArrayish;
 }
 var abc = stringifyArray(void 0);
+var def = stringifyPair(void 0);
 
 
 //// [mappedTypeWithAny.d.ts]
@@ -102,3 +106,7 @@ declare function stringifyArray<T extends readonly any[]>(arr: T): {
     -readonly [K in keyof T]: string;
 };
 declare let abc: any[];
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): {
+    -readonly [K in keyof T]: string;
+};
+declare let def: [any, any];
