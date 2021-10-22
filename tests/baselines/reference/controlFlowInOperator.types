@@ -158,16 +158,16 @@ if ( 'a' in e ) {
 >e : object & { a: unknown; }
 
         e;      // { a: unknown; b: unknown; }
->e : object & { b: unknown; a: unknown; }
+>e : object & { a: unknown; b: unknown; }
 
         e['a']; // unknown
 >e['a'] : unknown
->e : object & { b: unknown; a: unknown; }
+>e : object & { a: unknown; b: unknown; }
 >'a' : "a"
 
         e['b']; // unknown
 >e['b'] : unknown
->e : object & { b: unknown; a: unknown; }
+>e : object & { a: unknown; b: unknown; }
 >'b' : "b"
 
     } else {
@@ -197,16 +197,16 @@ if ( a in e ) {
 >e : object & { a: unknown; }
 
         e;      // { a: unknown; b: unknown; }
->e : object & { b: unknown; a: unknown; }
+>e : object & { a: unknown; b: unknown; }
 
         e[a];   // unknown
 >e[a] : unknown
->e : object & { b: unknown; a: unknown; }
+>e : object & { a: unknown; b: unknown; }
 >a : "a"
 
         e[b];   // unknown
 >e[b] : unknown
->e : object & { b: unknown; a: unknown; }
+>e : object & { a: unknown; b: unknown; }
 >b : "b"
 
     } else {

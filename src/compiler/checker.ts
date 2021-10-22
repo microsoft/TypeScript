@@ -24113,18 +24113,20 @@ namespace ts {
                     const anonymousSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
                     if (anonymousSubtype) {
                         const restOfIntersection = filterIntersectionType(type, t => t !== anonymousSubtype);
-
-                        const members = createSymbolTable();
-                        members.set(propName, newSymbol);
-                        if (anonymousSubtype.members) {
-                            mergeSymbolTable(members, anonymousSubtype.members);
-                        }
-                        newObjType.members = members;
-                        newObjType.properties = getNamedMembers(members);
-                        return createIntersectionType([restOfIntersection, newObjType]);
+                        return createIntersectionType([restOfIntersection, widenObjectType(anonymousSubtype, newSymbol)]);
                     }
                 }
                 return createIntersectionType([type, newObjType]);
+
+                function widenObjectType(type: ObjectType, newSymbol: Symbol): Type {
+                    const members = createSymbolTable();
+                    if (type.members !== undefined) {
+                        mergeSymbolTable(members, type.members);
+                    }
+                    members.set(newSymbol.escapedName, newSymbol);
+                    // TODO: Add test for types with call signatures, construct signatures and indexInfos
+                    return createAnonymousType(undefined, members, type.callSignatures ?? emptyArray, type.constructSignatures ?? emptyArray, type.indexInfos ?? emptyArray);
+                }
 
                 // this function is almost like `filterType`, expect that the `type` is Intersection rather than Union.
                 // maybe we should advanced `filterType`, but I do not know whether it would be too far.
