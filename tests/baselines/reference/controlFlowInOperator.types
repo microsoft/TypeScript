@@ -401,16 +401,16 @@ if (j.a === 'first') {
 >j : { a: "first"; b: string; }
 
         j;      // { a: 'first'; b: string; c: unknown; }
->j : { a: "first"; b: string; } & { c: unknown; }
+>j : { a: "first"; b: string; c: unknown; }
 
         j['b']; // string
 >j['b'] : string
->j : { a: "first"; b: string; } & { c: unknown; }
+>j : { a: "first"; b: string; c: unknown; }
 >'b' : "b"
 
         j['c']; // unknown
 >j['c'] : unknown
->j : { a: "first"; b: string; } & { c: unknown; }
+>j : { a: "first"; b: string; c: unknown; }
 >'c' : "c"
     }
 }

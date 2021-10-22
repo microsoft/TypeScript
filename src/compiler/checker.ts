@@ -24095,6 +24095,10 @@ namespace ts {
                 if ((type.flags & TypeFlags.AnyOrUnknown) || isThisTypeParameter(type)) {
                     return type;
                 }
+                // If type is object, add the symbol directly
+                if (isObjectType(type)) {
+                    return widenObjectType(type, newSymbol);
+                }
                 const propName = newSymbol.escapedName;
                 const members = createSymbolTable();
                 members.set(propName, newSymbol);
@@ -24113,7 +24117,7 @@ namespace ts {
                     const anonymousSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
                     if (anonymousSubtype) {
                         const restOfIntersection = filterIntersectionType(type, t => t !== anonymousSubtype);
-                        return createIntersectionType([restOfIntersection, widenObjectType(anonymousSubtype, newSymbol)]);
+                        return createIntersectionType([restOfIntersection, widenTypeWithSymbol(anonymousSubtype, newSymbol)]);
                     }
                 }
                 return createIntersectionType([type, newObjType]);
@@ -24140,7 +24144,6 @@ namespace ts {
                     return type.flags & TypeFlags.Never || f(type) ? type : neverType;
                 }
 
-                // I would be very glad to create a helper file like `nodeTests.ts` if feedback positive review.
                 function isIntersectionType(type: Type): type is IntersectionType {
                     return !!(type.flags & TypeFlags.Intersection);
                 }
