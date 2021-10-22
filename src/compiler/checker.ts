@@ -15315,13 +15315,6 @@ namespace ts {
             return type[cache] = type;
         }
 
-        function isConditionalTypeAlwaysTrueDisregardingInferTypes(type: ConditionalType) {
-            const extendsInferParamMapper = type.root.inferTypeParameters && createTypeMapper(type.root.inferTypeParameters, map(type.root.inferTypeParameters, () => wildcardType));
-            const checkType = type.checkType;
-            const extendsType = type.extendsType;
-            return isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(instantiateType(extendsType, extendsInferParamMapper)));
-        }
-
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
             const checkType = type.checkType;
             const extendsType = type.extendsType;
@@ -15649,6 +15642,10 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
+                const isDistributive = !!(checkType.flags & TypeFlags.TypeParameter);
+                const isDistributionDependent = isDistributive && (
+                    isTypeParameterPossiblyReferenced(checkType as TypeParameter, node.trueType) ||
+                    isTypeParameterPossiblyReferenced(checkType as TypeParameter, node.falseType));
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
@@ -15657,7 +15654,8 @@ namespace ts {
                     node,
                     checkType,
                     extendsType: getTypeFromTypeNode(node.extendsType),
-                    isDistributive: !!(checkType.flags & TypeFlags.TypeParameter),
+                    isDistributive,
+                    isDistributionDependent,
                     inferTypeParameters: getInferTypeParameters(node),
                     outerTypeParameters,
                     instantiations: undefined,
@@ -19031,33 +19029,21 @@ namespace ts {
                         return Ternary.Maybe;
                     }
                     const c = target as ConditionalType;
-                    // Check if the conditional is always true or always false but still deferred for distribution purposes
-                    const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
-                    const skipFalse = !skipTrue && isConditionalTypeAlwaysTrueDisregardingInferTypes(c);
-
-                    // Instantiate with a replacement mapper if the conditional is distributive, replacing the check type with a clone of itself,
-                    // this way {x: string | number, y: string | number} -> (T extends T ? { x: T, y: T } : never) appropriately _fails_ when
-                    // T = string | number (since that will end up distributing and producing `{x: string, y: string} | {x: number, y: number}`,
-                    // to which `{x: string | number, y: string | number}` isn't assignable)
-                    let distributionMapper: TypeMapper | undefined;
-                    const checkVar = getActualTypeVariable(c.root.checkType);
-                    if (c.root.isDistributive && checkVar.flags & TypeFlags.TypeParameter) {
-                        const newParam = cloneTypeParameter(checkVar);
-                        distributionMapper = prependTypeMapping(checkVar, newParam, c.mapper);
-                        newParam.mapper = distributionMapper;
-                    }
-
-                    // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
-                    const expanding = isDeeplyNestedType(target, targetStack, targetDepth);
-                    let localResult: Ternary | undefined = expanding ? Ternary.Maybe : undefined;
-                    if (skipTrue || expanding || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false))) {
-                        if (!skipFalse && !expanding) {
-                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
+                    // We check for a relationship to a conditional type target only when the conditional type has no
+                    // 'infer' positions and is not distributive or is distributive but doesn't reference the check type
+                    // parameter in either of the result types.
+                    if (!c.root.inferTypeParameters && !c.root.isDistributionDependent) {
+                        // Check if the conditional is always true or always false but still deferred for distribution purposes.
+                        const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
+                        const skipFalse = !skipTrue && isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType));
+                        // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
+                        if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false)) {
+                            result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
+                            if (result) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
                         }
-                    }
-                    if (localResult) {
-                        resetErrorInfo(saveErrorInfo);
-                        return localResult;
                     }
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral) {
