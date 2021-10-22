@@ -24108,14 +24108,8 @@ namespace ts {
                     }
                 }
 
-                const newTypeWithSymbol = widenObjectType(createAnonymousType(undefined, createSymbolTable(), emptyArray, emptyArray, emptyArray), newSymbol);
-
-                // If type is never, return the new object type.
-                if (type.flags & TypeFlags.Never) {
-                    return newTypeWithSymbol;
-                }
-
                 // Otherwise, just add the new object type as an intersection
+                const newTypeWithSymbol = widenObjectType(createAnonymousType(undefined, createSymbolTable(), emptyArray, emptyArray, emptyArray), newSymbol);
                 return createIntersectionType([type, newTypeWithSymbol]);
 
                 function widenObjectType(type: ObjectType, newSymbol: Symbol): Type {
