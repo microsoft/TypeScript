@@ -1,0 +1,21 @@
+=== /src/foo.mts ===
+export function foo() {
+>foo : Symbol(foo, Decl(foo.mts, 0, 0))
+
+    return "";
+}
+
+// Extensionless relative import in an ES module
+=== /src/bar.mts ===
+import { foo } from "./foo";
+>foo : Symbol(foo, Decl(bar.mts, 0, 8))
+
+import { baz } from "./baz";
+>baz : Symbol(baz, Decl(bar.mts, 1, 8))
+
+foo;
+>foo : Symbol(foo, Decl(bar.mts, 0, 8))
+
+baz;
+>baz : Symbol(baz, Decl(bar.mts, 1, 8))
+

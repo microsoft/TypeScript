@@ -3341,6 +3341,14 @@
         "category": "Error",
         "code": 2833
     },
+    "Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher.": {
+        "category": "Error",
+        "code": 2834
+    },
+    "Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 2835
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

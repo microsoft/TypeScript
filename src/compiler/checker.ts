@@ -1015,6 +1015,18 @@ namespace ts {
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
 
+        // Extensions suggested for path imports when module resolution is node12 or higher.
+        // The first element of each tuple is the extension a file has.
+        // The second element of each tuple is the extension that should be used in a path import.
+        // e.g. if we want to import file `foo.mts`, we should write `import {} from "./foo.mjs".
+        const suggestedExtensions: [string, string][] = [
+            [".mts", ".mjs"],
+            [".ts", ".js"],
+            [".cts", ".cjs"],
+            [".mjs", ".mjs"],
+            [".js", ".js"],
+            [".cjs", ".cjs"]];
+
         initializeTypeChecker();
 
         return checker;
@@ -3417,7 +3429,7 @@ namespace ts {
                     (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
             const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
-            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode)!; // TODO: GH#18217
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode)!; // TODO: GH#18217 >> Why is that assert defined?
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
@@ -3484,6 +3496,9 @@ namespace ts {
                 }
                 else {
                     const tsExtension = tryExtractTSExtension(moduleReference);
+                    const isESMFile = currentSourceFile.impliedNodeFormat === ModuleKind.ESNext;
+                    const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
+                    const resolutionIsNode12OrHigher = getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node12;
                     if (tsExtension) {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
                         const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
@@ -3502,6 +3517,18 @@ namespace ts {
                         getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic &&
                         hasJsonModuleEmitEnabled(compilerOptions)) {
                         error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
+                    }
+                    else if (isESMFile && resolutionIsNode12OrHigher && isExtensionlessRelativePathImport) {
+                        const absoluteRef =  getNormalizedAbsolutePath(moduleReference, getDirectoryPath(currentSourceFile.path));
+                        const suggestedExt = suggestedExtensions.find(([actualExt, _importExt]) => host.fileExists(absoluteRef + actualExt))?.[1];
+                        if (suggestedExt) {
+                            error(errorNode,
+                                Diagnostics.Cannot_use_a_relative_import_path_without_an_extension_in_an_ES_module_when_moduleResolution_is_node12_or_higher_Did_you_mean_0,
+                                moduleReference + suggestedExt);
+                        }
+                        else {
+                            error(errorNode, Diagnostics.Cannot_use_a_relative_import_path_without_an_extension_in_an_ES_module_when_moduleResolution_is_node12_or_higher);
+                        }
                     }
                     else {
                         error(errorNode, moduleNotFoundError, moduleReference);
