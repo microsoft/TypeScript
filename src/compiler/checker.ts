@@ -24095,8 +24095,8 @@ namespace ts {
                 if ((type.flags & TypeFlags.AnyOrUnknown) || isThisTypeParameter(type)) {
                     return type;
                 }
-                // If type is object, add the symbol directly
-                if (isObjectType(type)) {
+                // If type is anonymous object, add the symbol directly
+                if (isObjectType(type) && type.objectFlags & ObjectFlags.Anonymous) {
                     return widenObjectType(type, newSymbol);
                 }
                 const propName = newSymbol.escapedName;
@@ -24113,11 +24113,11 @@ namespace ts {
                 // else add a new anonymous object type which contains the type and widen the original type with it.
 
                 if (isIntersectionType(type)) {
-                    // try to get the first Anonymous Object type to add new type to it.
+                    // try to get the first anonymous object component to add the new type to it.
                     const anonymousSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
                     if (anonymousSubtype) {
                         const restOfIntersection = filterIntersectionType(type, t => t !== anonymousSubtype);
-                        return createIntersectionType([restOfIntersection, widenTypeWithSymbol(anonymousSubtype, newSymbol)]);
+                        return createIntersectionType([restOfIntersection, widenObjectType(anonymousSubtype, newSymbol)]);
                     }
                 }
                 return createIntersectionType([type, newObjType]);
