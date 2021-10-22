@@ -3429,7 +3429,7 @@ namespace ts {
                     (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
             const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
-            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode)!; // TODO: GH#18217 >> Why is that assert defined?
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode); // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
@@ -3472,10 +3472,10 @@ namespace ts {
             if (resolvedModule && !resolutionExtensionIsTSOrJson(resolvedModule.extension) && resolutionDiagnostic === undefined || resolutionDiagnostic === Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type) {
                 if (isForAugmentation) {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
-                    error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
+                    error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName); // TODO: GH#18217
                 }
                 else {
-                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule, moduleReference);
+                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference); // TODO: GH#18217
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
