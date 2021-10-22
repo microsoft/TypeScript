@@ -41,6 +41,7 @@ namespace Harness {
     export const virtualFileSystemRoot = "/";
 
     function createNodeIO(): IO {
+        const workspaceRoot = Utils.findUpRoot();
         let fs: any, pathModule: any;
         if (require) {
             fs = require("fs");
@@ -154,7 +155,7 @@ namespace Harness {
             log: s => console.log(s),
             args: () => ts.sys.args,
             getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
-            getWorkspaceRoot: () => vpath.resolve(__dirname, "../.."),
+            getWorkspaceRoot: () => workspaceRoot,
             exit: exitCode => ts.sys.exit(exitCode),
             readDirectory: (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth),
             getAccessibleFileSystemEntries,
