@@ -12118,8 +12118,11 @@ namespace ts {
             return property;
         }
 
-        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean, includePartialProperties?: boolean): Symbol | undefined {
             const property = getUnionOrIntersectionProperty(type, name, skipObjectFunctionPropertyAugment);
+            if (includePartialProperties) {
+                return property;
+            }
             // We need to filter out partial properties in union types
             return property && !(getCheckFlags(property) & CheckFlags.ReadPartial) ? property : undefined;
         }
@@ -12197,7 +12200,7 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: __String, skipObjectFunctionPropertyAugment?: boolean, includePartialProperties?: boolean): Symbol | undefined {
             type = getReducedApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(type as ObjectType);
@@ -12219,7 +12222,7 @@ namespace ts {
                 return getPropertyOfObjectType(globalObjectType, name);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
+                return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment, includePartialProperties);
             }
             return undefined;
         }
@@ -24160,32 +24163,8 @@ namespace ts {
                 }
                 return type;
 
-                // This function is almost like function `getPropertyOfType`, except when type.flags contains `UnionOrIntersection`
-                // it would return the property rather than undefiend even when property is partial.
                 function someDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
-                    type = getReducedApparentType(type);
-                    if (type.flags & TypeFlags.Object) {
-                        const resolved = resolveStructuredTypeMembers(type as ObjectType);
-                        const symbol = resolved.members.get(name);
-                        if (symbol && symbolIsValue(symbol)) {
-                            return symbol;
-                        }
-                        const functionType = resolved === anyFunctionType ? globalFunctionType :
-                            resolved.callSignatures.length ? globalCallableFunctionType :
-                                resolved.constructSignatures.length ? globalNewableFunctionType :
-                                    undefined;
-                        if (functionType) {
-                            const symbol = getPropertyOfObjectType(functionType, name);
-                            if (symbol) {
-                                return symbol;
-                            }
-                        }
-                        return getPropertyOfObjectType(globalObjectType, name);
-                    }
-                    if (type.flags & TypeFlags.UnionOrIntersection) {
-                        return getUnionOrIntersectionProperty(type as UnionOrIntersectionType, name);
-                    }
-                    return undefined;
+                    return getPropertyOfType(type, name, false, true);
                 }
             }
 
