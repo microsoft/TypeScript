@@ -51,3 +51,6 @@ function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayis
 
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
 let abc: any[] = stringifyArray(void 0 as any);
+
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
+let def: [any, any] = stringifyPair(void 0 as any);
