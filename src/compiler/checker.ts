@@ -15638,14 +15638,16 @@ namespace ts {
             return result;
         }
 
+        function isDistributionDependent(root: ConditionalRoot) {
+            return root.isDistributive && (
+                isTypeParameterPossiblyReferenced(root.checkType as TypeParameter, root.node.trueType) ||
+                isTypeParameterPossiblyReferenced(root.checkType as TypeParameter, root.node.falseType));
+        }
+
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const checkType = getTypeFromTypeNode(node.checkType);
-                const isDistributive = !!(checkType.flags & TypeFlags.TypeParameter);
-                const isDistributionDependent = isDistributive && (
-                    isTypeParameterPossiblyReferenced(checkType as TypeParameter, node.trueType) ||
-                    isTypeParameterPossiblyReferenced(checkType as TypeParameter, node.falseType));
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
@@ -15654,8 +15656,7 @@ namespace ts {
                     node,
                     checkType,
                     extendsType: getTypeFromTypeNode(node.extendsType),
-                    isDistributive,
-                    isDistributionDependent,
+                    isDistributive: !!(checkType.flags & TypeFlags.TypeParameter),
                     inferTypeParameters: getInferTypeParameters(node),
                     outerTypeParameters,
                     instantiations: undefined,
@@ -19032,7 +19033,7 @@ namespace ts {
                     // We check for a relationship to a conditional type target only when the conditional type has no
                     // 'infer' positions and is not distributive or is distributive but doesn't reference the check type
                     // parameter in either of the result types.
-                    if (!c.root.inferTypeParameters && !c.root.isDistributionDependent) {
+                    if (!c.root.inferTypeParameters && !isDistributionDependent(c.root)) {
                         // Check if the conditional is always true or always false but still deferred for distribution purposes.
                         const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
                         const skipFalse = !skipTrue && isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType));

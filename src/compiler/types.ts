@@ -5648,7 +5648,6 @@ namespace ts {
         checkType: Type;
         extendsType: Type;
         isDistributive: boolean;
-        isDistributionDependent: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
         instantiations?: Map<Type>;
