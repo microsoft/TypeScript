@@ -24,9 +24,12 @@
 //// /**/
 
 format.setOption("newLineCharacter", "\n")
-
 goTo.marker("");
+
+// Create the exportInfoMap
 verify.completions({ marker: "", preferences: { includeCompletionsForModuleExports: true } });
+
+// Create a new program and reuse the exportInfoMap from the last request
 edit.insert("d");
 verify.completions({
   marker: "",
