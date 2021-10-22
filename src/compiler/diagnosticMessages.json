@@ -1164,6 +1164,10 @@
         "category": "Error",
         "code": 1389
     },
+    "'{0}' is not allowed as a parameter name.": {
+        "category": "Error",
+        "code": 1390
+    },
     "An import alias cannot use 'import type'": {
         "category": "Error",
         "code": 1392
