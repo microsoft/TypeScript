@@ -3429,7 +3429,7 @@ namespace ts {
                     (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
             const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
-            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode); // TODO: GH#18217
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
