@@ -11563,7 +11563,6 @@ namespace ts {
                         break;
                     }
                 }
-                type.members = members;
                 type.resolvedProperties = getNamedMembers(members);
             }
             return type.resolvedProperties;
@@ -11578,12 +11577,13 @@ namespace ts {
 
         function forEachPropertyOfType(type: Type, action: (symbol: Symbol, escapedName: __String) => void): void {
             type = getReducedApparentType(type);
-            getPropertiesOfType(type);
-            (type as ResolvedType | UnionOrIntersectionType).members?.forEach((symbol, escapedName) => {
-                if (isNamedMember(symbol, escapedName)) {
-                    action(symbol, escapedName);
-                }
-            });
+            if (type.flags & TypeFlags.StructuredType) {
+                resolveStructuredTypeMembers(type as StructuredType).members.forEach((symbol, escapedName) => {
+                    if (isNamedMember(symbol, escapedName)) {
+                        action(symbol, escapedName);
+                    }
+                });
+            }
         }
 
         function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {

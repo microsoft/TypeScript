@@ -5471,8 +5471,6 @@ namespace ts {
         /* @internal */
         propertyCacheWithoutObjectFunctionPropertyAugment?: SymbolTable; // Cache of resolved properties that does not augment function or object type properties
         /* @internal */
-        members?: SymbolTable;
-        /* @internal */
         resolvedProperties: Symbol[];
         /* @internal */
         resolvedIndexType: IndexType;
