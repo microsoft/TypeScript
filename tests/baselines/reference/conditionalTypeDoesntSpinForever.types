@@ -392,10 +392,10 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >soFar : SO_FAR & { identifier: unknown; }
 >"maxMsToWaitBeforePublishing" in soFar : boolean
 >"maxMsToWaitBeforePublishing" : "maxMsToWaitBeforePublishing"
->soFar : SO_FAR & { object: unknown; identifier: unknown; }
+>soFar : SO_FAR & { identifier: unknown; object: unknown; }
 >"PubSubRecordIsStoredInRedisAsA" in soFar : boolean
 >"PubSubRecordIsStoredInRedisAsA" : "PubSubRecordIsStoredInRedisAsA"
->soFar : SO_FAR & { maxMsToWaitBeforePublishing: unknown; object: unknown; identifier: unknown; }
+>soFar : SO_FAR & { identifier: unknown; object: unknown; maxMsToWaitBeforePublishing: unknown; }
 >{} : {}
 >{      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    } : { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
 
