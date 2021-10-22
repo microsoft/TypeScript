@@ -39,7 +39,7 @@ const execTsc = (lkg, ...args) =>
     exec(process.execPath,
          [resolve(findUpRoot(), lkg ? "./lib/tsc" : "./built/local/tsc"),
           "-b", ...args],
-         { hidePrompt: true })
+         { hidePrompt: true });
 
 const projectBuilder = new ProjectQueue((projects, lkg, force) => execTsc(lkg, ...(force ? ["--force"] : []), ...projects));
 
