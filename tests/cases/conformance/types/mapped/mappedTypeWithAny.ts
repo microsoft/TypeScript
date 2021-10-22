@@ -35,8 +35,11 @@ type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
 
 // When a mapped type whose constraint is `keyof T` is instantiated,
 // `T` may be instantiated with a `U` which is constrained to
-// array and tuple types. When `U` is later instantiated with `any`,
-// the result should also be some sort of array.
+// array and tuple types. *Ideally*, when `U` is later instantiated with `any`,
+// the result should also be some sort of array; however, at the moment we don't seem
+// to have an easy way to preserve that information. More than just that, it would be
+// inconsistent for two instantiations of `Objectish<any>` to produce different outputs
+// depending on the usage-site. As a result, `IndirectArrayish` does not act like `Arrayish`.
 type IndirectArrayish<U extends unknown[]> = Objectish<U>;
 
 function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
