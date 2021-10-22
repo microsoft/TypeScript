@@ -40,20 +40,20 @@ if (d in c) {
 
 // Type widening
 
-declare const e: object;
+declare const e: {};
 
 if ('a' in e) {
     e;      // { a: unknown; }
     e['a']  // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
 
 if (a in e) {
     e;      // { a: unknown; }
     e[a]    // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
 
 // Widening different types
@@ -94,7 +94,7 @@ if ('a' in e5) {
 
 // More complex control flows
 
-e;              // object
+e;              // {}
 if ( 'a' in e ) {
     e;          // { a: unknown; }
     if ( 'b' in e ) {
@@ -106,9 +106,9 @@ if ( 'a' in e ) {
     }
     e;          // { a: unknown; }
 }
-e;              // object
+e;              // {}
 
-e;              // object
+e;              // {}
 if ( a in e ) {
     e;          // { a: unknown; }
     if ( b in e ) {
@@ -120,9 +120,9 @@ if ( a in e ) {
     }
     e;          // { a: unknown; }
 }
-e;              // object
+e;              // {}
 
-e;          // object
+e;          // {}
 if ( 'a' in e ) {
     e;      // { a: unknown; }
     e['a']; // unknown
@@ -130,11 +130,11 @@ if ( 'a' in e ) {
     e;      // { b: unknown; }
     e['b']; // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
-e;          // object
+e;          // {}
 
-e;          // object
+e;          // {}
 if ( a in e ) {
     e;      // { a: unknown; }
     e[a];   // unknown
@@ -142,31 +142,31 @@ if ( a in e ) {
     e;      // { b: unknown; }
     e[b];   // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
-e;          // object
+e;          // {}
 
-declare const f: Array<object>
+declare const f: Array<{}>
 
 for (const g of f) {
-    g;          // object
+    g;          // {}
     if ('a' in g) {
         g;      // { a: unknown; }
         g['a']; // unknown
     }
-    g;          // object
+    g;          // {}
 }
 
 for (const g of f) {
-    g;          // object
+    g;          // {}
     if (a in g) {
         g;      // { a: unknown; }
         g[a];   // unknown
     }
-    g;          // object
+    g;          // {}
 }
 
-function h(i: object) {
+function h(i: {}) {
     if ( 'a' in i ) {
         i;  // { a: unknown; }
     } else if ( 'b' in i ) {
@@ -229,14 +229,14 @@ if ('a' in e) {
     e['a']; // unknown
 }
 else {
-    e; // object
+    e; // {}
 }
 if (a in e) {
     e; // { a: unknown; }
     e[a]; // unknown
 }
 else {
-    e; // object
+    e; // {}
 }
 if ('a' in e1) {
     e1; // any
@@ -257,7 +257,7 @@ if ('a' in e5) {
     e5; // never
 }
 // More complex control flows
-e; // object
+e; // {}
 if ('a' in e) {
     e; // { a: unknown; }
     if ('b' in e) {
@@ -270,8 +270,8 @@ if ('a' in e) {
     }
     e; // { a: unknown; }
 }
-e; // object
-e; // object
+e; // {}
+e; // {}
 if (a in e) {
     e; // { a: unknown; }
     if (b in e) {
@@ -284,8 +284,8 @@ if (a in e) {
     }
     e; // { a: unknown; }
 }
-e; // object
-e; // object
+e; // {}
+e; // {}
 if ('a' in e) {
     e; // { a: unknown; }
     e['a']; // unknown
@@ -295,10 +295,10 @@ else if ('b' in e) {
     e['b']; // unknown
 }
 else {
-    e; // object
+    e; // {}
 }
-e; // object
-e; // object
+e; // {}
+e; // {}
 if (a in e) {
     e; // { a: unknown; }
     e[a]; // unknown
@@ -308,26 +308,26 @@ else if (b in e) {
     e[b]; // unknown
 }
 else {
-    e; // object
+    e; // {}
 }
-e; // object
+e; // {}
 for (var _i = 0, f_1 = f; _i < f_1.length; _i++) {
     var g = f_1[_i];
-    g; // object
+    g; // {}
     if ('a' in g) {
         g; // { a: unknown; }
         g['a']; // unknown
     }
-    g; // object
+    g; // {}
 }
 for (var _a = 0, f_2 = f; _a < f_2.length; _a++) {
     var g = f_2[_a];
-    g; // object
+    g; // {}
     if (a in g) {
         g; // { a: unknown; }
         g[a]; // unknown
     }
-    g; // object
+    g; // {}
 }
 function h(i) {
     if ('a' in i) {

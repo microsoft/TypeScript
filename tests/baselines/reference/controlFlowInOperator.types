@@ -100,43 +100,43 @@ if (d in c) {
 
 // Type widening
 
-declare const e: object;
->e : object
+declare const e: {};
+>e : {}
 
 if ('a' in e) {
 >'a' in e : boolean
 >'a' : "a"
->e : object
+>e : {}
 
     e;      // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
     e['a']  // unknown
 >e['a'] : unknown
->e : object & { a: unknown; }
+>e : { a: unknown; }
 >'a' : "a"
 
 } else {
-    e;      // object
->e : object
+    e;      // {}
+>e : {}
 }
 
 if (a in e) {
 >a in e : boolean
 >a : "a"
->e : object
+>e : {}
 
     e;      // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
     e[a]    // unknown
 >e[a] : unknown
->e : object & { a: unknown; }
+>e : { a: unknown; }
 >a : "a"
 
 } else {
-    e;      // object
->e : object
+    e;      // {}
+>e : {}
 }
 
 // Widening different types
@@ -228,237 +228,237 @@ if ('a' in e5) {
 
 // More complex control flows
 
-e;              // object
->e : object
+e;              // {}
+>e : {}
 
 if ( 'a' in e ) {
 >'a' in e : boolean
 >'a' : "a"
->e : object
+>e : {}
 
     e;          // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
     if ( 'b' in e ) {
 >'b' in e : boolean
 >'b' : "b"
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
         e;      // { a: unknown; b: unknown; }
->e : object & { a: unknown; b: unknown; }
+>e : { a: unknown; b: unknown; }
 
         e['a']; // unknown
 >e['a'] : unknown
->e : object & { a: unknown; b: unknown; }
+>e : { a: unknown; b: unknown; }
 >'a' : "a"
 
         e['b']; // unknown
 >e['b'] : unknown
->e : object & { a: unknown; b: unknown; }
+>e : { a: unknown; b: unknown; }
 >'b' : "b"
 
     } else {
         e;      // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
     }
     e;          // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 }
-e;              // object
->e : object
+e;              // {}
+>e : {}
 
-e;              // object
->e : object
+e;              // {}
+>e : {}
 
 if ( a in e ) {
 >a in e : boolean
 >a : "a"
->e : object
+>e : {}
 
     e;          // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
     if ( b in e ) {
 >b in e : boolean
 >b : "b"
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
         e;      // { a: unknown; b: unknown; }
->e : object & { a: unknown; b: unknown; }
+>e : { a: unknown; b: unknown; }
 
         e[a];   // unknown
 >e[a] : unknown
->e : object & { a: unknown; b: unknown; }
+>e : { a: unknown; b: unknown; }
 >a : "a"
 
         e[b];   // unknown
 >e[b] : unknown
->e : object & { a: unknown; b: unknown; }
+>e : { a: unknown; b: unknown; }
 >b : "b"
 
     } else {
         e;      // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
     }
     e;          // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 }
-e;              // object
->e : object
+e;              // {}
+>e : {}
 
-e;          // object
->e : object
+e;          // {}
+>e : {}
 
 if ( 'a' in e ) {
 >'a' in e : boolean
 >'a' : "a"
->e : object
+>e : {}
 
     e;      // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
     e['a']; // unknown
 >e['a'] : unknown
->e : object & { a: unknown; }
+>e : { a: unknown; }
 >'a' : "a"
 
 } else if ( 'b' in e ) {
 >'b' in e : boolean
 >'b' : "b"
->e : object
+>e : {}
 
     e;      // { b: unknown; }
->e : object & { b: unknown; }
+>e : { b: unknown; }
 
     e['b']; // unknown
 >e['b'] : unknown
->e : object & { b: unknown; }
+>e : { b: unknown; }
 >'b' : "b"
 
 } else {
-    e;      // object
->e : object
+    e;      // {}
+>e : {}
 }
-e;          // object
->e : object
+e;          // {}
+>e : {}
 
-e;          // object
->e : object
+e;          // {}
+>e : {}
 
 if ( a in e ) {
 >a in e : boolean
 >a : "a"
->e : object
+>e : {}
 
     e;      // { a: unknown; }
->e : object & { a: unknown; }
+>e : { a: unknown; }
 
     e[a];   // unknown
 >e[a] : unknown
->e : object & { a: unknown; }
+>e : { a: unknown; }
 >a : "a"
 
 } else if ( b in e ) {
 >b in e : boolean
 >b : "b"
->e : object
+>e : {}
 
     e;      // { b: unknown; }
->e : object & { b: unknown; }
+>e : { b: unknown; }
 
     e[b];   // unknown
 >e[b] : unknown
->e : object & { b: unknown; }
+>e : { b: unknown; }
 >b : "b"
 
 } else {
-    e;      // object
->e : object
+    e;      // {}
+>e : {}
 }
-e;          // object
->e : object
+e;          // {}
+>e : {}
 
-declare const f: Array<object>
->f : object[]
+declare const f: Array<{}>
+>f : {}[]
 
 for (const g of f) {
->g : object
->f : object[]
+>g : {}
+>f : {}[]
 
-    g;          // object
->g : object
+    g;          // {}
+>g : {}
 
     if ('a' in g) {
 >'a' in g : boolean
 >'a' : "a"
->g : object
+>g : {}
 
         g;      // { a: unknown; }
->g : object & { a: unknown; }
+>g : { a: unknown; }
 
         g['a']; // unknown
 >g['a'] : unknown
->g : object & { a: unknown; }
+>g : { a: unknown; }
 >'a' : "a"
     }
-    g;          // object
->g : object
+    g;          // {}
+>g : {}
 }
 
 for (const g of f) {
->g : object
->f : object[]
+>g : {}
+>f : {}[]
 
-    g;          // object
->g : object
+    g;          // {}
+>g : {}
 
     if (a in g) {
 >a in g : boolean
 >a : "a"
->g : object
+>g : {}
 
         g;      // { a: unknown; }
->g : object & { a: unknown; }
+>g : { a: unknown; }
 
         g[a];   // unknown
 >g[a] : unknown
->g : object & { a: unknown; }
+>g : { a: unknown; }
 >a : "a"
     }
-    g;          // object
->g : object
+    g;          // {}
+>g : {}
 }
 
-function h(i: object) {
->h : (i: object) => void
->i : object
+function h(i: {}) {
+>h : (i: {}) => void
+>i : {}
 
     if ( 'a' in i ) {
 >'a' in i : boolean
 >'a' : "a"
->i : object
+>i : {}
 
         i;  // { a: unknown; }
->i : object & { a: unknown; }
+>i : { a: unknown; }
 
     } else if ( 'b' in i ) {
 >'b' in i : boolean
 >'b' : "b"
->i : object
+>i : {}
 
         i;  // { b: unknown; }
->i : object & { b: unknown; }
+>i : { b: unknown; }
 
     } else {
         return;
     }
     i; // { a: unknown; } | { b: unknown; }
->i : (object & { a: unknown; }) | (object & { b: unknown; })
+>i : { a: unknown; } | { b: unknown; }
 }
 h(e);
 >h(e) : void
->h : (i: object) => void
->e : object
+>h : (i: {}) => void
+>e : {}
 
 declare const j: { a: 'first'; b: string; } | { a: 'second'; c: string; };
 >j : { a: 'first'; b: string; } | { a: 'second'; c: string; }

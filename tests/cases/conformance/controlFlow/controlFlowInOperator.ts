@@ -39,20 +39,20 @@ if (d in c) {
 
 // Type widening
 
-declare const e: object;
+declare const e: {};
 
 if ('a' in e) {
     e;      // { a: unknown; }
     e['a']  // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
 
 if (a in e) {
     e;      // { a: unknown; }
     e[a]    // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
 
 // Widening different types
@@ -93,7 +93,7 @@ if ('a' in e5) {
 
 // More complex control flows
 
-e;              // object
+e;              // {}
 if ( 'a' in e ) {
     e;          // { a: unknown; }
     if ( 'b' in e ) {
@@ -105,9 +105,9 @@ if ( 'a' in e ) {
     }
     e;          // { a: unknown; }
 }
-e;              // object
+e;              // {}
 
-e;              // object
+e;              // {}
 if ( a in e ) {
     e;          // { a: unknown; }
     if ( b in e ) {
@@ -119,9 +119,9 @@ if ( a in e ) {
     }
     e;          // { a: unknown; }
 }
-e;              // object
+e;              // {}
 
-e;          // object
+e;          // {}
 if ( 'a' in e ) {
     e;      // { a: unknown; }
     e['a']; // unknown
@@ -129,11 +129,11 @@ if ( 'a' in e ) {
     e;      // { b: unknown; }
     e['b']; // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
-e;          // object
+e;          // {}
 
-e;          // object
+e;          // {}
 if ( a in e ) {
     e;      // { a: unknown; }
     e[a];   // unknown
@@ -141,31 +141,31 @@ if ( a in e ) {
     e;      // { b: unknown; }
     e[b];   // unknown
 } else {
-    e;      // object
+    e;      // {}
 }
-e;          // object
+e;          // {}
 
-declare const f: Array<object>
+declare const f: Array<{}>
 
 for (const g of f) {
-    g;          // object
+    g;          // {}
     if ('a' in g) {
         g;      // { a: unknown; }
         g['a']; // unknown
     }
-    g;          // object
+    g;          // {}
 }
 
 for (const g of f) {
-    g;          // object
+    g;          // {}
     if (a in g) {
         g;      // { a: unknown; }
         g[a];   // unknown
     }
-    g;          // object
+    g;          // {}
 }
 
-function h(i: object) {
+function h(i: {}) {
     if ( 'a' in i ) {
         i;  // { a: unknown; }
     } else if ( 'b' in i ) {
