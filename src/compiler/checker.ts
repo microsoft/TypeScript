@@ -24144,23 +24144,27 @@ namespace ts {
             }
 
             function narrowOrWidenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
-                if ((type.flags & TypeFlags.Union
-                    || type.flags & TypeFlags.Object && declaredType !== type
-                    || isThisTypeParameter(type)
-                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && someDirectSubtypeContainsPropName(type, name)) {
-                    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                const someDirectSubtypeContainsProp = getPropertyOfType(type, name, /* skipObjectFunctionPropertyAugment */ false, /* includePartialProperties */ true);
+                if (someDirectSubtypeContainsProp) {
+                    // If union, filter out all components not containing the property
+                    if (type.flags & TypeFlags.Union) {
+                        return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
+                    }
+                    // Otherwise, either return the type or never
+                    if (type.flags & TypeFlags.Object && declaredType !== type
+                        || isThisTypeParameter(type)
+                        || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)
+                    ) {
+                        return isTypePresencePossible(type, name, assumeTrue) ? type : neverType;
+                    }
                 }
                 // only widen property when the type does not contain string-index/name in any of the constituents.
-                else if (assumeTrue && !someDirectSubtypeContainsPropName(type, name) && !getIndexInfoOfType(type, stringType)) {
+                if (assumeTrue && !someDirectSubtypeContainsProp && !getIndexInfoOfType(type, stringType)) {
                     const addSymbol = createSymbol(SymbolFlags.Property, name);
                     addSymbol.type = unknownType;
                     return widenTypeWithSymbol(type, addSymbol);
                 }
                 return type;
-
-                function someDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
-                    return getPropertyOfType(type, name, /* skipObjectFunctionPropertyAugment */ false, /* includePartialProperties */ true);
-                }
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
