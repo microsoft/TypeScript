@@ -24151,7 +24151,7 @@ namespace ts {
                         return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                     }
                     // Otherwise, either return the type or never
-                    if (type.flags & TypeFlags.Object && declaredType !== type
+                    if (type.flags & TypeFlags.Object
                         || isThisTypeParameter(type)
                         || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)
                     ) {
