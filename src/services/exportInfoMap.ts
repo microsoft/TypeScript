@@ -79,10 +79,14 @@ namespace ts {
                 }
                 const isDefault = exportKind === ExportKind.Default;
                 const namedSymbol = isDefault && getLocalSymbolForExportDefault(symbol) || symbol;
-                // A re-export merged with an export from a module augmentation can result in `symbol`
-                // being an external module symbol; the name it is re-exported by will be `symbolTableKey`
-                // (which comes from the keys of `moduleSymbol.exports`.)
-                const importedName = isExternalModuleSymbol(namedSymbol)
+                // 1. A named export must be imported by its key in `moduleSymbol.exports` or `moduleSymbol.members`.
+                // 2. A re-export merged with an export from a module augmentation can result in `symbol`
+                //    being an external module symbol; the name it is re-exported by will be `symbolTableKey`
+                //    (which comes from the keys of `moduleSymbol.exports`.)
+                // 3. Otherwise, we have a default/namespace import that can be imported by any name, and
+                //    `symbolTableKey` will be something undesirable like `export=` or `default`, so we try to
+                //    get a better name.
+                const importedName = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                     ? unescapeLeadingUnderscores(symbolTableKey)
                     : getNameForExportedSymbol(namedSymbol, scriptTarget);
                 const moduleName = stripQuotes(moduleSymbol.name);
@@ -321,7 +325,7 @@ namespace ts {
         let moduleCount = 0;
         forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
-            const seenExports = new Map<Symbol, true>();
+            const seenExports = new Map<__String, true>();
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
@@ -339,7 +343,7 @@ namespace ts {
                     checker);
             }
             checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, exported)) {
+                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
                     cache.add(
                         importingFile.path,
                         exported,
