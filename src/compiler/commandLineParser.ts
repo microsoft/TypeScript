@@ -117,6 +117,7 @@ namespace ts {
             })),
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Specify_how_the_TypeScript_watch_mode_works,
+            defaultValueDescription: WatchFileKind.UseFsEvents,
         },
         {
             name: "watchDirectory",
@@ -128,6 +129,7 @@ namespace ts {
             })),
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Specify_how_directories_are_watched_on_systems_that_lack_recursive_file_watching_functionality,
+            defaultValueDescription: WatchDirectoryKind.UseFsEvents,
         },
         {
             name: "fallbackPolling",
@@ -139,6 +141,7 @@ namespace ts {
             })),
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Specify_what_approach_the_watcher_should_use_if_the_system_runs_out_of_native_file_watchers,
+            defaultValueDescription: PollingWatchKind.PriorityInterval,
         },
         {
             name: "synchronousWatchDirectory",
@@ -595,7 +598,8 @@ namespace ts {
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Emit,
-            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types
+            description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types,
+            defaultValueDescription: ImportsNotUsedAsValues.Remove,
         },
         {
             name: "downlevelIteration",
