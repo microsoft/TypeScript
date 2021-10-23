@@ -2258,6 +2258,9 @@ namespace ts.Completions {
                     case SyntaxKind.AsyncKeyword:
                         return containingNodeKind === SyntaxKind.MethodDeclaration            // const obj = { async c|()
                             || containingNodeKind === SyntaxKind.ShorthandPropertyAssignment; // const obj = { async c|
+
+                    case SyntaxKind.AsteriskToken:
+                        return containingNodeKind === SyntaxKind.MethodDeclaration;           // const obj = { * c|
                 }
 
                 if (isClassMemberCompletionKeyword(tokenKind)) {
