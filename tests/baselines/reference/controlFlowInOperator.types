@@ -274,6 +274,30 @@ if ('a' in e7) {
 >'' : ""
 }
 
+declare const e8: { b: string; [index: number]: boolean; }
+>e8 : { [index: number]: boolean; b: string; }
+>b : string
+>index : number
+
+if ('a' in e8) {
+>'a' in e8 : boolean
+>'a' : "a"
+>e8 : { [index: number]: boolean; b: string; }
+
+    e8;         // { a: unknown; b: string; [index: number]: boolean; }
+>e8 : { [index: number]: boolean; b: string; a: unknown; }
+
+    e8['a'];    // unknown
+>e8['a'] : unknown
+>e8 : { [index: number]: boolean; b: string; a: unknown; }
+>'a' : "a"
+
+    e8[42];     // boolean;
+>e8[42] : boolean
+>e8 : { [index: number]: boolean; b: string; a: unknown; }
+>42 : 42
+}
+
 // More complex control flows
 
 e;              // {}
