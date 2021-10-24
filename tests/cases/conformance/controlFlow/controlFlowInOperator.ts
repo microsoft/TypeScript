@@ -105,6 +105,13 @@ if ('a' in e7) {
     new e7(''); // boolean;
 }
 
+declare const e8: { b: string; [index: number]: boolean; }
+if ('a' in e8) {
+    e8;         // { a: unknown; b: string; [index: number]: boolean; }
+    e8['a'];    // unknown
+    e8[42];     // boolean;
+}
+
 // More complex control flows
 
 e;              // {}

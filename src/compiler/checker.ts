@@ -24125,7 +24125,6 @@ namespace ts {
                         mergeSymbolTable(members, type.members);
                     }
                     members.set(newSymbol.escapedName, newSymbol);
-                    // TODO: Add test for types with call signatures, construct signatures and indexInfos
                     return createAnonymousType(undefined, members, type.callSignatures ?? emptyArray, type.constructSignatures ?? emptyArray, type.indexInfos ?? emptyArray);
                 }
             }
