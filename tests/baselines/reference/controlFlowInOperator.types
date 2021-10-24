@@ -170,7 +170,7 @@ if ('a' in e2) {
 >'a' : "a"
 }
 
-declare const e3: {b: string} & {c: number};
+declare const e3: { b: string; } & { c: number; };
 >e3 : { b: string; } & { c: number; }
 >b : string
 >c : number
@@ -190,11 +190,11 @@ if ('a' in e3) {
 }
 
 interface C {
-    cProp: string
+    cProp: string;
 >cProp : string
 }
 interface D {
-    dProp: number
+    dProp: number;
 >dProp : number
 }
 declare const e4: C & D;
@@ -224,6 +224,25 @@ if ('a' in e5) {
 
     e5;      // never
 >e5 : never
+}
+
+declare const e6: { b: string; (arg: string): boolean; }
+>e6 : { (arg: string): boolean; b: string; }
+>b : string
+>arg : string
+
+if ('a' in e6) {
+>'a' in e6 : boolean
+>'a' : "a"
+>e6 : { (arg: string): boolean; b: string; }
+
+    e6;     // { a: unknown; b: string; (arg: string): boolean; }
+>e6 : { (arg: string): boolean; b: string; a: unknown; }
+
+    e6(''); // boolean;
+>e6('') : boolean
+>e6 : { (arg: string): boolean; b: string; a: unknown; }
+>'' : ""
 }
 
 // More complex control flows

@@ -68,17 +68,17 @@ if ('a' in e2) {
     e2['a']  // unknown
 }
 
-declare const e3: {b: string} & {c: number};
+declare const e3: { b: string; } & { c: number; };
 if ('a' in e3) {
     e3;      // { a: unknown; b: string; } & { c: number }
     e3['a']  // unknown
 }
 
 interface C {
-    cProp: string
+    cProp: string;
 }
 interface D {
-    dProp: number
+    dProp: number;
 }
 declare const e4: C & D;
 if ('a' in e4) {
@@ -89,6 +89,12 @@ if ('a' in e4) {
 declare const e5: never;
 if ('a' in e5) {
     e5;      // never
+}
+
+declare const e6: { b: string; (arg: string): boolean; }
+if ('a' in e6) {
+    e6;     // { a: unknown; b: string; (arg: string): boolean; }
+    e6(''); // boolean;
 }
 
 // More complex control flows

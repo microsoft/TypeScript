@@ -23128,7 +23128,7 @@ namespace ts {
                 }
                 return getUnionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
             }
-            return getIntersectionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined);
+            return getIntersectionTypeFromSortedList(filtered, type.objectFlags);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
