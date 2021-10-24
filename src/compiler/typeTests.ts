@@ -1,4 +1,8 @@
 namespace ts {
+    export function isUnionOrIntersectionType(type: Type): type is UnionOrIntersectionType {
+        return !!(type.flags & TypeFlags.UnionOrIntersection);
+    }
+
     export function isUnionType(type: Type): type is UnionType {
         return !!(type.flags & TypeFlags.Union);
     }

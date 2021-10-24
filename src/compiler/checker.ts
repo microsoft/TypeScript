@@ -24132,20 +24132,19 @@ namespace ts {
 
             function narrowOrWidenTypeByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
                 // If type contains global this, don't touch it
-                if (filterType(type, t => t.symbol === globalThisSymbol) !== neverType) {
+                if (type.symbol === globalThisSymbol
+                    || isUnionOrIntersectionType(type) && filterUnionOrIntersectionType(type, t => t.symbol === globalThisSymbol) !== neverType
+                   ) {
                     return type;
                 }
                 const someDirectSubtypeContainsProp = getPropertyOfType(type, name, /* skipObjectFunctionPropertyAugment */ false, /* includePartialProperties */ true);
                 if (someDirectSubtypeContainsProp) {
                     // If union, filter out all components not containing the property
-                    if (type.flags & TypeFlags.Union) {
-                        return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
-                    }
                     // Otherwise, either return the type or never
-                    if (type.flags & TypeFlags.Object
+                    if (type.flags & (TypeFlags.Object | TypeFlags.UnionOrIntersection)
                         || isThisTypeParameter(type)
-                        || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol) // TODO: Remove this check after filterType generalization is done
                     ) {
+                        return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                         return isTypePresencePossible(type, name, assumeTrue) ? type : neverType;
                     }
                 }
