@@ -44,6 +44,7 @@
         "checker.ts",
         "visitorPublic.ts",
         "sourcemap.ts",
+        "typeTests.ts",
         "transformers/utilities.ts",
         "transformers/destructuring.ts",
         "transformers/taggedTemplate.ts",

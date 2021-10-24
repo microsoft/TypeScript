@@ -23129,11 +23129,6 @@ namespace ts {
                 return getUnionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
             }
             return getIntersectionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined);
-
-            // TODO: Deduplicate
-            function isUnionType(type: Type): type is UnionType {
-                return !!(type.flags & TypeFlags.Union);
-            }
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
@@ -23141,11 +23136,6 @@ namespace ts {
                 return filterUnionOrIntersectionType(type, f);
             }
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
-
-            // TODO: Deduplicate
-            function isUnionType(type: Type): type is UnionType {
-                return !!(type.flags & TypeFlags.Union);
-            }
         }
 
         function removeType(type: Type, targetType: Type) {
@@ -24137,15 +24127,6 @@ namespace ts {
                     members.set(newSymbol.escapedName, newSymbol);
                     // TODO: Add test for types with call signatures, construct signatures and indexInfos
                     return createAnonymousType(undefined, members, type.callSignatures ?? emptyArray, type.constructSignatures ?? emptyArray, type.indexInfos ?? emptyArray);
-                }
-
-                // TODO: Deduplicate
-                function isIntersectionType(type: Type): type is IntersectionType {
-                    return !!(type.flags & TypeFlags.Intersection);
-                }
-
-                function isObjectType(type: Type): type is ObjectType {
-                    return !!(type.flags & TypeFlags.Object);
                 }
             }
 
