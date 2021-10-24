@@ -18213,7 +18213,7 @@ namespace ts {
                 if (source.flags & TypeFlags.UnionOrIntersection || target.flags & TypeFlags.UnionOrIntersection) {
                     result = getConstituentCount(source) * getConstituentCount(target) >= 4 ?
                         recursiveTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck, recursionFlags) :
-                        structuredTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck);
+                        recursiveTypeRelatedToUncached(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck, recursionFlags);
                 }
                 if (!result && !(source.flags & TypeFlags.Union) && (source.flags & (TypeFlags.StructuredOrInstantiable) || target.flags & TypeFlags.StructuredOrInstantiable)) {
                     if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)) {
@@ -18626,9 +18626,6 @@ namespace ts {
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
             function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, recursionFlags: RecursionFlags): Ternary {
-                if (overflow) {
-                    return Ternary.False;
-                }
                 const id = getRelationKey(source, target, intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0), relation);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
@@ -18652,8 +18649,6 @@ namespace ts {
                 }
                 if (!maybeKeys) {
                     maybeKeys = [];
-                    sourceStack = [];
-                    targetStack = [];
                 }
                 else {
                     // generate a key where all type parameter id positions are replaced with unconstrained type parameter ids
@@ -18669,25 +18664,10 @@ namespace ts {
                             return Ternary.Maybe;
                         }
                     }
-                    if (sourceDepth === 100 || targetDepth === 100) {
-                        overflow = true;
-                        return Ternary.False;
-                    }
                 }
                 const maybeStart = maybeCount;
                 maybeKeys[maybeCount] = id;
                 maybeCount++;
-                if (recursionFlags & RecursionFlags.Source) {
-                    sourceStack[sourceDepth] = source;
-                    sourceDepth++;
-                }
-                if (recursionFlags & RecursionFlags.Target) {
-                    targetStack[targetDepth] = target;
-                    targetDepth++;
-                }
-                const saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
-                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
                 let originalHandler: typeof outofbandVarianceMarkerHandler;
                 let propagatingVarianceFlags: RelationComparisonResult = 0;
                 if (outofbandVarianceMarkerHandler) {
@@ -18697,28 +18677,9 @@ namespace ts {
                         return originalHandler!(onlyUnreliable);
                     };
                 }
-
-                if (expandingFlags === ExpandingFlags.Both) {
-                    tracing?.instant(tracing.Phase.CheckTypes, "recursiveTypeRelatedTo_DepthLimit", {
-                        sourceId: source.id,
-                        sourceIdStack: sourceStack.map(t => t.id),
-                        targetId: target.id,
-                        targetIdStack: targetStack.map(t => t.id),
-                        depth: sourceDepth,
-                        targetDepth
-                    });
-                }
-
-                const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, intersectionState) : Ternary.Maybe;
+                const result = recursiveTypeRelatedToUncached(source, target, reportErrors, intersectionState, recursionFlags);
                 if (outofbandVarianceMarkerHandler) {
                     outofbandVarianceMarkerHandler = originalHandler;
-                }
-                expandingFlags = saveExpandingFlags;
-                if (recursionFlags & RecursionFlags.Source) {
-                    sourceDepth--;
-                }
-                if (recursionFlags & RecursionFlags.Target) {
-                    targetDepth--;
                 }
                 if (result) {
                     if (result === Ternary.True || (sourceDepth === 0 && targetDepth === 0)) {
@@ -18741,14 +18702,52 @@ namespace ts {
                 return result;
             }
 
-            function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                tracing?.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
-                const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                tracing?.pop();
+            function recursiveTypeRelatedToUncached(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, recursionFlags: RecursionFlags): Ternary {
+                if (sourceDepth >= 100 || targetDepth >= 100) {
+                    overflow = true;
+                }
+                if (overflow) {
+                    return Ternary.False;
+                }
+                let result;
+                const saveExpandingFlags = expandingFlags;
+                if (recursionFlags & RecursionFlags.Source) {
+                    (sourceStack || (sourceStack = []))[sourceDepth] = source;
+                    sourceDepth++;
+                }
+                if (recursionFlags & RecursionFlags.Target) {
+                    (targetStack || (targetStack = []))[targetDepth] = target;
+                    targetDepth++;
+                }
+                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
+                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
+                if (expandingFlags !== ExpandingFlags.Both) {
+                    tracing?.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
+                    result = structuredTypeRelatedTo(source, target, reportErrors, intersectionState);
+                    tracing?.pop();
+                }
+                else {
+                    tracing?.instant(tracing.Phase.CheckTypes, "recursiveTypeRelatedTo_DepthLimit", {
+                        sourceId: source.id,
+                        sourceIdStack: sourceStack.map(t => t.id),
+                        targetId: target.id,
+                        targetIdStack: targetStack.map(t => t.id),
+                        depth: sourceDepth,
+                        targetDepth
+                    });
+                    result = Ternary.Maybe;
+                }
+                if (recursionFlags & RecursionFlags.Source) {
+                    sourceDepth--;
+                }
+                if (recursionFlags & RecursionFlags.Target) {
+                    targetDepth--;
+                }
+                expandingFlags = saveExpandingFlags;
                 return result;
             }
 
-            function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+            function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
