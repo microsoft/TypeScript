@@ -1,3 +1,4 @@
+/* @internal */
 namespace ts {
     export function isUnionOrIntersectionType(type: Type): type is UnionOrIntersectionType {
         return !!(type.flags & TypeFlags.UnionOrIntersection);
