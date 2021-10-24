@@ -19,6 +19,25 @@ function f3<U>() {
     let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
 }
 
+// Repro from #46500
+
+type F<T> = {} & (
+    T extends [any, ...any[]]
+        ? { [K in keyof T]?: F<T[K]> }
+        : T extends any[]
+            ? F<T[number]>[]
+            : T extends { [K: string]: any }
+                ? { [K in keyof T]?: F<T[K]> }
+                : { x: string }
+);
+
+declare function f<T = any>(): F<T>;
+
+function g() {
+    return f() as F<any>;
+}
+
+
 //// [deepComparisons.js]
 function f1() {
     var v1 = 0; // Error
@@ -30,4 +49,7 @@ function f2() {
 }
 function f3() {
     var x = 0; // No error!
+}
+function g() {
+    return f();
 }
