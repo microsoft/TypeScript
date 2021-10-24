@@ -23102,14 +23102,14 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
         }
 
-        function filterType(type: Type, f: (t: Type) => boolean): Type {
-            if (type.flags & TypeFlags.Union) {
-                const types = (type as UnionType).types;
-                const filtered = filter(types, f);
-                if (filtered === types) {
-                    return type;
-                }
-                const origin = (type as UnionType).origin;
+        function filterUnionOrIntersectionType(type: UnionOrIntersectionType, f: (t: Type) => boolean): Type {
+            const types = type.types;
+            const filtered = filter(types, f);
+            if (filtered === types) {
+                return type;
+            }
+            if (isUnionType(type)) {
+                const origin = type.origin;
                 let newOrigin: Type | undefined;
                 if (origin && origin.flags & TypeFlags.Union) {
                     // If the origin type is a (denormalized) union type, filter its non-union constituents. If that ends
@@ -23126,9 +23126,26 @@ namespace ts {
                         newOrigin = createOriginUnionOrIntersectionType(TypeFlags.Union, originFiltered);
                     }
                 }
-                return getUnionTypeFromSortedList(filtered, (type as UnionType).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
+                return getUnionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
+            }
+            return getIntersectionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined);
+
+            // TODO: Deduplicate
+            function isUnionType(type: Type): type is UnionType {
+                return !!(type.flags & TypeFlags.Union);
+            }
+        }
+
+        function filterType(type: Type, f: (t: Type) => boolean): Type {
+            if (isUnionType(type)) {
+                return filterUnionOrIntersectionType(type, f);
             }
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
+
+            // TODO: Deduplicate
+            function isUnionType(type: Type): type is UnionType {
+                return !!(type.flags & TypeFlags.Union);
+            }
         }
 
         function removeType(type: Type, targetType: Type) {
@@ -24103,7 +24120,7 @@ namespace ts {
                 if (isIntersectionType(type)) {
                     const objectSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
                     if (objectSubtype) {
-                        const restOfIntersection = filterIntersectionType(type, t => t !== objectSubtype);
+                        const restOfIntersection = filterUnionOrIntersectionType(type, t => t !== objectSubtype);
                         return createIntersectionType([restOfIntersection, widenObjectType(objectSubtype, newSymbol)]);
                     }
                 }
@@ -24122,18 +24139,7 @@ namespace ts {
                     return createAnonymousType(undefined, members, type.callSignatures ?? emptyArray, type.constructSignatures ?? emptyArray, type.indexInfos ?? emptyArray);
                 }
 
-                // this function is almost like `filterType`, expect that the `type` is Intersection rather than Union.
-                // maybe we should advanced `filterType`, but I do not know whether it would be too far.
-                function filterIntersectionType(type: Type, f: (t: Type) => boolean): Type {
-                    if (type.flags & TypeFlags.Intersection) {
-                        const types = (type as IntersectionType).types;
-                        const filtered = filter(types, f);
-
-                        return filtered === types ? type : getIntersectionTypeFromSortedList(filtered, (type as IntersectionType).objectFlags);
-                    }
-                    return type.flags & TypeFlags.Never || f(type) ? type : neverType;
-                }
-
+                // TODO: Deduplicate
                 function isIntersectionType(type: Type): type is IntersectionType {
                     return !!(type.flags & TypeFlags.Intersection);
                 }
