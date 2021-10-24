@@ -144,7 +144,7 @@ if ('a' in e2) {
     e2;      // object & { a: unknown; }
 >e2 : Symbol(e2, Decl(controlFlowInOperator.ts, 64, 13))
 
-    e2['a']  // unknown
+    e2['a']; // unknown
 >e2 : Symbol(e2, Decl(controlFlowInOperator.ts, 64, 13))
 >'a' : Symbol(a)
 }
@@ -160,7 +160,7 @@ if ('a' in e3) {
     e3;      // { a: unknown; b: string; } & { c: number }
 >e3 : Symbol(e3, Decl(controlFlowInOperator.ts, 70, 13))
 
-    e3['a']  // unknown
+    e3['a']; // unknown
 >e3 : Symbol(e3, Decl(controlFlowInOperator.ts, 70, 13))
 >'a' : Symbol(a)
 }
@@ -188,7 +188,7 @@ if ('a' in e4) {
     e4;      // C & D & { a: unknown; }
 >e4 : Symbol(e4, Decl(controlFlowInOperator.ts, 82, 13))
 
-    e4['a']  // unknown
+    e4['a'];  // unknown
 >e4 : Symbol(e4, Decl(controlFlowInOperator.ts, 82, 13))
 >'a' : Symbol(a)
 }
@@ -211,11 +211,34 @@ declare const e6: { b: string; (arg: string): boolean; }
 if ('a' in e6) {
 >e6 : Symbol(e6, Decl(controlFlowInOperator.ts, 93, 13))
 
-    e6;     // { a: unknown; b: string; (arg: string): boolean; }
+    e6;         // { a: unknown; b: string; (arg: string): boolean; }
 >e6 : Symbol(e6, Decl(controlFlowInOperator.ts, 93, 13))
 
-    e6(''); // boolean;
+    e6['a'];    // unknown
 >e6 : Symbol(e6, Decl(controlFlowInOperator.ts, 93, 13))
+>'a' : Symbol(a)
+
+    e6('');     // boolean;
+>e6 : Symbol(e6, Decl(controlFlowInOperator.ts, 93, 13))
+}
+
+declare const e7: { b: string; new (arg: string): boolean; }
+>e7 : Symbol(e7, Decl(controlFlowInOperator.ts, 100, 13))
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 100, 19))
+>arg : Symbol(arg, Decl(controlFlowInOperator.ts, 100, 36))
+
+if ('a' in e7) {
+>e7 : Symbol(e7, Decl(controlFlowInOperator.ts, 100, 13))
+
+    e7;         // { a: unknown; b: string; new (arg: string): boolean; }
+>e7 : Symbol(e7, Decl(controlFlowInOperator.ts, 100, 13))
+
+    e7['a'];    // unknown
+>e7 : Symbol(e7, Decl(controlFlowInOperator.ts, 100, 13))
+>'a' : Symbol(a)
+
+    new e7(''); // boolean;
+>e7 : Symbol(e7, Decl(controlFlowInOperator.ts, 100, 13))
 }
 
 // More complex control flows
@@ -351,112 +374,112 @@ e;          // {}
 >e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
 
 declare const f: Array<{}>
->f : Symbol(f, Decl(controlFlowInOperator.ts, 153, 13))
+>f : Symbol(f, Decl(controlFlowInOperator.ts, 161, 13))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 for (const g of f) {
->g : Symbol(g, Decl(controlFlowInOperator.ts, 155, 10))
->f : Symbol(f, Decl(controlFlowInOperator.ts, 153, 13))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 163, 10))
+>f : Symbol(f, Decl(controlFlowInOperator.ts, 161, 13))
 
     g;          // {}
->g : Symbol(g, Decl(controlFlowInOperator.ts, 155, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 163, 10))
 
     if ('a' in g) {
->g : Symbol(g, Decl(controlFlowInOperator.ts, 155, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 163, 10))
 
         g;      // { a: unknown; }
->g : Symbol(g, Decl(controlFlowInOperator.ts, 155, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 163, 10))
 
         g['a']; // unknown
->g : Symbol(g, Decl(controlFlowInOperator.ts, 155, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 163, 10))
 >'a' : Symbol(a)
     }
     g;          // {}
->g : Symbol(g, Decl(controlFlowInOperator.ts, 155, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 163, 10))
 }
 
 for (const g of f) {
->g : Symbol(g, Decl(controlFlowInOperator.ts, 164, 10))
->f : Symbol(f, Decl(controlFlowInOperator.ts, 153, 13))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 172, 10))
+>f : Symbol(f, Decl(controlFlowInOperator.ts, 161, 13))
 
     g;          // {}
->g : Symbol(g, Decl(controlFlowInOperator.ts, 164, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 172, 10))
 
     if (a in g) {
 >a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
->g : Symbol(g, Decl(controlFlowInOperator.ts, 164, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 172, 10))
 
         g;      // { a: unknown; }
->g : Symbol(g, Decl(controlFlowInOperator.ts, 164, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 172, 10))
 
         g[a];   // unknown
->g : Symbol(g, Decl(controlFlowInOperator.ts, 164, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 172, 10))
 >a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
     }
     g;          // {}
->g : Symbol(g, Decl(controlFlowInOperator.ts, 164, 10))
+>g : Symbol(g, Decl(controlFlowInOperator.ts, 172, 10))
 }
 
 function h(i: {}) {
->h : Symbol(h, Decl(controlFlowInOperator.ts, 171, 1))
->i : Symbol(i, Decl(controlFlowInOperator.ts, 173, 11))
+>h : Symbol(h, Decl(controlFlowInOperator.ts, 179, 1))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 181, 11))
 
     if ( 'a' in i ) {
->i : Symbol(i, Decl(controlFlowInOperator.ts, 173, 11))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 181, 11))
 
         i;  // { a: unknown; }
->i : Symbol(i, Decl(controlFlowInOperator.ts, 173, 11))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 181, 11))
 
     } else if ( 'b' in i ) {
->i : Symbol(i, Decl(controlFlowInOperator.ts, 173, 11))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 181, 11))
 
         i;  // { b: unknown; }
->i : Symbol(i, Decl(controlFlowInOperator.ts, 173, 11))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 181, 11))
 
     } else {
         return;
     }
     i; // { a: unknown; } | { b: unknown; }
->i : Symbol(i, Decl(controlFlowInOperator.ts, 173, 11))
+>i : Symbol(i, Decl(controlFlowInOperator.ts, 181, 11))
 }
 h(e);
->h : Symbol(h, Decl(controlFlowInOperator.ts, 171, 1))
+>h : Symbol(h, Decl(controlFlowInOperator.ts, 179, 1))
 >e : Symbol(e, Decl(controlFlowInOperator.ts, 41, 13))
 
 declare const j: { a: 'first'; b: string; } | { a: 'second'; c: string; };
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
->a : Symbol(a, Decl(controlFlowInOperator.ts, 185, 18))
->b : Symbol(b, Decl(controlFlowInOperator.ts, 185, 30))
->a : Symbol(a, Decl(controlFlowInOperator.ts, 185, 47))
->c : Symbol(c, Decl(controlFlowInOperator.ts, 185, 60))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 193, 18))
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 193, 30))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 193, 47))
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 193, 60))
 
 if (j.a === 'first') {
->j.a : Symbol(a, Decl(controlFlowInOperator.ts, 185, 18), Decl(controlFlowInOperator.ts, 185, 47))
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
->a : Symbol(a, Decl(controlFlowInOperator.ts, 185, 18), Decl(controlFlowInOperator.ts, 185, 47))
+>j.a : Symbol(a, Decl(controlFlowInOperator.ts, 193, 18), Decl(controlFlowInOperator.ts, 193, 47))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 193, 18), Decl(controlFlowInOperator.ts, 193, 47))
 
     j;          // { a: 'first'; b: string; }
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
 
     j['b'];     // string
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
->'b' : Symbol(b, Decl(controlFlowInOperator.ts, 185, 30))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
+>'b' : Symbol(b, Decl(controlFlowInOperator.ts, 193, 30))
 
     if ( 'c' in j ) {
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
 
         j;      // { a: 'first'; b: string; c: unknown; }
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
 
         j['b']; // string
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
->'b' : Symbol(b, Decl(controlFlowInOperator.ts, 185, 30))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
+>'b' : Symbol(b, Decl(controlFlowInOperator.ts, 193, 30))
 
         j['c']; // unknown
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
 >'c' : Symbol(c)
     }
 }
 j; // { a: 'first'; b: string; } | { a: 'second'; c: string; }
->j : Symbol(j, Decl(controlFlowInOperator.ts, 185, 13))
+>j : Symbol(j, Decl(controlFlowInOperator.ts, 193, 13))
 

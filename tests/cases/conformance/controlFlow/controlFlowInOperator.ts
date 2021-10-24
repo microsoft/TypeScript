@@ -65,13 +65,13 @@ if ('a' in e1) {
 declare const e2: object;
 if ('a' in e2) {
     e2;      // object & { a: unknown; }
-    e2['a']  // unknown
+    e2['a']; // unknown
 }
 
 declare const e3: { b: string; } & { c: number; };
 if ('a' in e3) {
     e3;      // { a: unknown; b: string; } & { c: number }
-    e3['a']  // unknown
+    e3['a']; // unknown
 }
 
 interface C {
@@ -83,7 +83,7 @@ interface D {
 declare const e4: C & D;
 if ('a' in e4) {
     e4;      // C & D & { a: unknown; }
-    e4['a']  // unknown
+    e4['a'];  // unknown
 }
 
 declare const e5: never;
@@ -93,8 +93,16 @@ if ('a' in e5) {
 
 declare const e6: { b: string; (arg: string): boolean; }
 if ('a' in e6) {
-    e6;     // { a: unknown; b: string; (arg: string): boolean; }
-    e6(''); // boolean;
+    e6;         // { a: unknown; b: string; (arg: string): boolean; }
+    e6['a'];    // unknown
+    e6('');     // boolean;
+}
+
+declare const e7: { b: string; new (arg: string): boolean; }
+if ('a' in e7) {
+    e7;         // { a: unknown; b: string; new (arg: string): boolean; }
+    e7['a'];    // unknown
+    new e7(''); // boolean;
 }
 
 // More complex control flows
