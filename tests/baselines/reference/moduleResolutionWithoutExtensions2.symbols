@@ -1,8 +1,0 @@
-=== /src/buzz.mts ===
-// Extensionless relative path cjs import in an ES module
-import foo = require("./foo");
->foo : Symbol(foo, Decl(buzz.mts, 0, 0))
-
-foo;
->foo : Symbol(foo, Decl(buzz.mts, 0, 0))
-
