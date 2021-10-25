@@ -3346,7 +3346,7 @@ namespace ts {
         return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
-    export function isParameterDeclaration(node: VariableLikeDeclaration): node is ParameterDeclaration {
+    export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }

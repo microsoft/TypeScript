@@ -981,7 +981,7 @@ namespace ts.Completions {
         }
 
         function addSnippetsWorker(node: Node, parent: Node | undefined) {
-            if (isVariableLike(node) && isParameterDeclaration(node)) {
+            if (isVariableLike(node) && node.kind === SyntaxKind.Parameter) {
                 // Placeholder
                 setSnippetElement(node.name, { kind: SnippetKind.Placeholder, order });
                 order += 1;
