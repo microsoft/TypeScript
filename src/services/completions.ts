@@ -635,6 +635,7 @@ namespace ts.Completions {
         useSemicolons: boolean,
         options: CompilerOptions,
         preferences: UserPreferences,
+        completionKind: CompletionKind,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -697,7 +698,7 @@ namespace ts.Completions {
             }
         }
 
-        if (preferences.includeCompletionsWithInsertText && isClassLikeMemberCompletion(symbol, location)) {
+        if (preferences.includeCompletionsWithInsertText && completionKind === CompletionKind.MemberLike && isClassLikeMemberCompletion(symbol, location)) {
             ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken));
         }
 
@@ -1164,7 +1165,8 @@ namespace ts.Completions {
                 importCompletionNode,
                 useSemicolons,
                 compilerOptions,
-                preferences
+                preferences,
+                kind,
             );
             if (!entry) {
                 continue;

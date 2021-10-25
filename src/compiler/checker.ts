@@ -729,7 +729,7 @@ namespace ts {
             isDeclarationVisible,
             isPropertyAccessible,
             getTypeOnlyAliasDeclaration,
-            getMemberOverrideModifierStatus: getMemberOverrideModifierStatus,
+            getMemberOverrideModifierStatus,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
