@@ -4412,11 +4412,11 @@ namespace ts {
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
         /* @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
-        /* @internal */ getMemberOverrideModifierDiagnostic(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideDiagnostic;
+        /* @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus;
     }
 
     /* @internal */
-    export const enum MemberOverrideDiagnostic {
+    export const enum MemberOverrideStatus {
         Ok,
         NeedsOverride,
         HasInvalidOverride
@@ -6812,19 +6812,23 @@ namespace ts {
         snippetElement?: SnippetElement;         // Snippet element of the node
     }
 
+    /* @internal */
     export type SnippetElement = TabStop | Placeholder;
 
+    /* @internal */
     export interface TabStop {
         kind: SnippetKind.TabStop;
         order: number;
     }
 
+    /* @internal */
     export interface Placeholder {
         kind: SnippetKind.Placeholder;
         order: number;
     }
 
     // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
+    /* @internal */
     export const enum SnippetKind {
         TabStop,                                // `$1`, `$2`
         Placeholder,                            // `${1:foo}`

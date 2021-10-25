@@ -729,7 +729,7 @@ namespace ts {
             isDeclarationVisible,
             isPropertyAccessible,
             getTypeOnlyAliasDeclaration,
-            getMemberOverrideModifierDiagnostic,
+            getMemberOverrideModifierStatus: getMemberOverrideModifierStatus,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
@@ -38482,12 +38482,12 @@ namespace ts {
             member: ClassElement | ParameterPropertyDeclaration,
             memberIsParameterProperty: boolean,
             reportErrors = true,
-        ): MemberOverrideDiagnostic {
+        ): MemberOverrideStatus {
             const declaredProp = member.name
                 && getSymbolAtLocation(member.name)
                 || getSymbolAtLocation(member);
             if (!declaredProp) {
-                return MemberOverrideDiagnostic.Ok;
+                return MemberOverrideStatus.Ok;
             }
 
             return checkMemberForOverrideModifier(
@@ -38527,7 +38527,7 @@ namespace ts {
             memberIsParameterProperty: boolean,
             memberName: string,
             errorNode?: Node,
-        ): MemberOverrideDiagnostic {
+        ): MemberOverrideStatus {
             const isJs = isInJSFile(node);
             const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
             if (baseWithThis && (memberHasOverrideModifier || compilerOptions.noImplicitOverride)) {
@@ -38556,12 +38556,12 @@ namespace ts {
                                     Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0,
                                 baseClassName);
                     }
-                    return MemberOverrideDiagnostic.HasInvalidOverride;
+                    return MemberOverrideStatus.HasInvalidOverride;
                 }
                 else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
                     const baseHasAbstract = some(baseProp.declarations, hasAbstractModifier);
                     if (memberHasOverrideModifier) {
-                        return MemberOverrideDiagnostic.Ok;
+                        return MemberOverrideStatus.Ok;
                     }
 
                     if (!baseHasAbstract) {
@@ -38575,13 +38575,13 @@ namespace ts {
                                     Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
                             error(errorNode, diag, baseClassName);
                         }
-                        return MemberOverrideDiagnostic.NeedsOverride;
+                        return MemberOverrideStatus.NeedsOverride;
                     }
                     else if (memberHasAbstractModifier && baseHasAbstract) {
                         if (errorNode) {
                             error(errorNode, Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0, baseClassName);
                         }
-                        return MemberOverrideDiagnostic.NeedsOverride;
+                        return MemberOverrideStatus.NeedsOverride;
                     }
                 }
             }
@@ -38595,10 +38595,10 @@ namespace ts {
                             Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class,
                         className);
                 }
-                return MemberOverrideDiagnostic.HasInvalidOverride;
+                return MemberOverrideStatus.HasInvalidOverride;
             }
 
-            return MemberOverrideDiagnostic.Ok;
+            return MemberOverrideStatus.Ok;
         }
 
         function issueMemberSpecificError(node: ClassLikeDeclaration, typeWithThis: Type, baseWithThis: Type, broadDiag: DiagnosticMessage) {
@@ -38651,9 +38651,9 @@ namespace ts {
          * @param member Member declaration node.
          * Note: `member` can be a synthetic node without a parent.
          */
-        function getMemberOverrideModifierDiagnostic(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideDiagnostic {
+        function getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus {
             if (!member.name) {
-                return MemberOverrideDiagnostic.Ok;
+                return MemberOverrideStatus.Ok;
             }
 
             const symbol = getSymbolOfNode(node);

@@ -901,7 +901,7 @@ namespace ts.Completions {
                     }
                 }
                 if (isClassElement(node)
-                    && checker.getMemberOverrideModifierDiagnostic(classLikeDeclaration, node) === MemberOverrideDiagnostic.NeedsOverride) {
+                    && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node) === MemberOverrideStatus.NeedsOverride) {
                     requiredModifiers |= ModifierFlags.Override;
                 }
 

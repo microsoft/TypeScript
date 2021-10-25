@@ -259,6 +259,7 @@ namespace ts {
     /**
      * Gets the SnippetElement of a node.
      */
+    /* @internal */
     export function getSnippetElement(node: Node): SnippetElement | undefined {
         return node.emitNode?.snippetElement;
     }
@@ -266,6 +267,7 @@ namespace ts {
     /**
      * Sets the SnippetElement of a node.
      */
+    /* @internal */
     export function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.snippetElement = snippet;

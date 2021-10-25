@@ -3229,21 +3229,6 @@ declare namespace ts {
         text: string;
         skipTrivia?: (pos: number) => number;
     }
-    export type SnippetElement = TabStop | Placeholder;
-    export interface TabStop {
-        kind: SnippetKind.TabStop;
-        order: number;
-    }
-    export interface Placeholder {
-        kind: SnippetKind.Placeholder;
-        order: number;
-    }
-    export enum SnippetKind {
-        TabStop = 0,
-        Placeholder = 1,
-        Choice = 2,
-        Variable = 3
-    }
     export enum EmitFlags {
         None = 0,
         SingleLine = 1,
@@ -4536,14 +4521,6 @@ declare namespace ts {
      * Moves matching emit helpers from a source node to a target node.
      */
     function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
-    /**
-     * Gets the SnippetElement of a node.
-     */
-    function getSnippetElement(node: Node): SnippetElement | undefined;
-    /**
-     * Sets the SnippetElement of a node.
-     */
-    function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
