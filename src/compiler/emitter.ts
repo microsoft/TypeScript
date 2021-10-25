@@ -879,13 +879,13 @@ namespace ts {
         let writeProperty = noEscapeWriteProperty;
 
         if (hasSnippet) {
-            writeLiteral = escapeWriteLiteral;
-            writeStringLiteral = escapeWriteStringLiteral;
-            writeBase = escapeWriteBase;
-            writeSymbol = escapeWriteSymbol;
-            writeParameter = escapeWriteParameter;
-            writeComment = escapeWriteComment;
-            writeProperty = escapeWriteProperty;
+            writeLiteral = snippetEscapingWriteLiteral;
+            writeStringLiteral = snippetEscapingWriteStringLiteral;
+            writeBase = snippetEscapingWriteBase;
+            writeSymbol = snippetEscapingWriteSymbol;
+            writeParameter = snippetEscapingWriteParameter;
+            writeComment = snippetEscapingWriteComment;
+            writeProperty = snippetEscapingWriteProperty;
         }
 
 
@@ -4466,7 +4466,7 @@ namespace ts {
             writer.writeLiteral(s);
         }
 
-        function escapeWriteLiteral(s: string) {
+        function snippetEscapingWriteLiteral(s: string) {
             writer.writeLiteral(escapeSnippetText(s));
         }
 
@@ -4474,7 +4474,7 @@ namespace ts {
             writer.writeStringLiteral(s);
         }
 
-        function escapeWriteStringLiteral(s: string) {
+        function snippetEscapingWriteStringLiteral(s: string) {
             writer.writeStringLiteral(escapeSnippetText(s));
         }
 
@@ -4482,7 +4482,7 @@ namespace ts {
             writer.write(s);
         }
 
-        function escapeWriteBase(s: string) {
+        function snippetEscapingWriteBase(s: string) {
             writer.write(escapeSnippetText(s));
         }
 
@@ -4490,7 +4490,7 @@ namespace ts {
             writer.writeSymbol(s, sym);
         }
 
-        function escapeWriteSymbol(s: string, sym: Symbol) {
+        function snippetEscapingWriteSymbol(s: string, sym: Symbol) {
             writer.writeSymbol(escapeSnippetText(s), sym);
         }
 
@@ -4514,7 +4514,7 @@ namespace ts {
             writer.writeParameter(s);
         }
 
-        function escapeWriteParameter(s: string) {
+        function snippetEscapingWriteParameter(s: string) {
             writer.writeParameter(escapeSnippetText(s));
         }
 
@@ -4522,7 +4522,7 @@ namespace ts {
             writer.writeComment(s);
         }
 
-        function escapeWriteComment(s: string) {
+        function snippetEscapingWriteComment(s: string) {
             writer.writeComment(escapeSnippetText(s));
         }
 
@@ -4534,7 +4534,7 @@ namespace ts {
             writer.writeProperty(s);
         }
 
-        function escapeWriteProperty(s: string) {
+        function snippetEscapingWriteProperty(s: string) {
             writer.writeProperty(escapeSnippetText(s));
         }
 
