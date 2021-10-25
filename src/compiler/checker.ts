@@ -3295,15 +3295,17 @@ namespace ts {
                             return undefined;
                         }
 
-                        const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
-                        if (meaning & SymbolFlags.Namespace && exportedTypeSymbol && isQualifiedName(name.parent)) {
-                            error(
-                                name.parent.right,
-                                Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1,
-                                symbolToString(exportedTypeSymbol),
-                                unescapeLeadingUnderscores(name.parent.right.escapedText)
-                            );
-                            return undefined;
+                        if (meaning & SymbolFlags.Namespace && isQualifiedName(name.parent)) {
+                            const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
+                            if (exportedTypeSymbol) {
+                                error(
+                                    name.parent.right,
+                                    Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1,
+                                    symbolToString(exportedTypeSymbol),
+                                    unescapeLeadingUnderscores(name.parent.right.escapedText)
+                                );
+                                return undefined;
+                            }
                         }
 
                         error(right, Diagnostics.Namespace_0_has_no_exported_member_1, namespaceName, declarationName);
