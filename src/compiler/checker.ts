@@ -18714,13 +18714,13 @@ namespace ts {
                 if (recursionFlags & RecursionFlags.Source) {
                     (sourceStack || (sourceStack = []))[sourceDepth] = source;
                     sourceDepth++;
+                    if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
                 }
                 if (recursionFlags & RecursionFlags.Target) {
                     (targetStack || (targetStack = []))[targetDepth] = target;
                     targetDepth++;
+                    if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
                 }
-                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
-                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
                 if (expandingFlags !== ExpandingFlags.Both) {
                     tracing?.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
                     result = structuredTypeRelatedTo(source, target, reportErrors, intersectionState);
