@@ -3341,11 +3341,11 @@
         "category": "Error",
         "code": 2833
     },
-    "Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher.": {
+    "Relative import paths need explicit file extensions in ES modules when '--moduleResolution' is 'node12' or 'nodenext'.": {
         "category": "Error",
         "code": 2834
     },
-    "Cannot use a relative import path without an extension in an ES module when '--moduleResolution' is 'node12' or higher. Did you mean '{0}'?": {
+    "Relative import paths need explicit file extensions in ES modules when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
         "category": "Error",
         "code": 2835
     },

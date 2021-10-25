@@ -8,7 +8,7 @@ export function foo() {
 
 // @filename: /src/bar.mts
 // Extensionless relative path ES import in an ES module
-import { foo } from "./foo"; // should error
-import { baz } from "./baz"; // should also error
+import { foo } from "./foo"; // should error, suggest adding ".mjs"
+import { baz } from "./baz"; // should also error, no extension suggestion
 foo;
 baz;

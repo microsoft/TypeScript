@@ -1025,7 +1025,11 @@ namespace ts {
             [".cts", ".cjs"],
             [".mjs", ".mjs"],
             [".js", ".js"],
-            [".cjs", ".cjs"]];
+            [".cjs", ".cjs"],
+            [".tsx", compilerOptions.jsx === JsxEmit.Preserve ? ".jsx" : ".js"],
+            [".jsx", ".jsx"],
+            [".json", ".json"],
+        ];
 
         initializeTypeChecker();
 
@@ -3472,10 +3476,10 @@ namespace ts {
             if (resolvedModule && !resolutionExtensionIsTSOrJson(resolvedModule.extension) && resolutionDiagnostic === undefined || resolutionDiagnostic === Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type) {
                 if (isForAugmentation) {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
-                    error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName); // TODO: GH#18217
+                    error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName);
                 }
                 else {
-                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference); // TODO: GH#18217
+                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference);
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
@@ -3497,7 +3501,9 @@ namespace ts {
                 else {
                     const tsExtension = tryExtractTSExtension(moduleReference);
                     const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
-                    const resolutionIsNode12OrHigher = getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node12;
+                    const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
+                    const resolutionIsNode12OrNext = moduleResolutionKind === ModuleResolutionKind.Node12 ||
+                        moduleResolutionKind === ModuleResolutionKind.NodeNext;
                     if (tsExtension) {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
                         const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
@@ -3517,16 +3523,16 @@ namespace ts {
                         hasJsonModuleEmitEnabled(compilerOptions)) {
                         error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
                     }
-                    else if (mode === ModuleKind.ESNext && resolutionIsNode12OrHigher && isExtensionlessRelativePathImport) {
-                        const absoluteRef =  getNormalizedAbsolutePath(moduleReference, getDirectoryPath(currentSourceFile.path));
+                    else if (mode === ModuleKind.ESNext && resolutionIsNode12OrNext && isExtensionlessRelativePathImport) {
+                        const absoluteRef = getNormalizedAbsolutePath(moduleReference, getDirectoryPath(currentSourceFile.path));
                         const suggestedExt = suggestedExtensions.find(([actualExt, _importExt]) => host.fileExists(absoluteRef + actualExt))?.[1];
                         if (suggestedExt) {
                             error(errorNode,
-                                Diagnostics.Cannot_use_a_relative_import_path_without_an_extension_in_an_ES_module_when_moduleResolution_is_node12_or_higher_Did_you_mean_0,
+                                Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_ES_modules_when_moduleResolution_is_node12_or_nodenext_Did_you_mean_0,
                                 moduleReference + suggestedExt);
                         }
                         else {
-                            error(errorNode, Diagnostics.Cannot_use_a_relative_import_path_without_an_extension_in_an_ES_module_when_moduleResolution_is_node12_or_higher);
+                            error(errorNode, Diagnostics.Relative_import_paths_need_explicit_file_extensions_in_ES_modules_when_moduleResolution_is_node12_or_nodenext);
                         }
                     }
                     else {
