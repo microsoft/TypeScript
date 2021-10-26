@@ -102,3 +102,93 @@ new BigUint64Array().at(0);
 >at : any
 >0 : 0
 
+[0].at();
+>[0].at() : any
+>[0].at : any
+>[0] : number[]
+>0 : 0
+>at : any
+
+"foo".at();
+>"foo".at() : any
+>"foo".at : any
+>"foo" : "foo"
+>at : any
+
+new Int8Array().at();
+>new Int8Array().at() : any
+>new Int8Array().at : any
+>new Int8Array() : Int8Array
+>Int8Array : Int8ArrayConstructor
+>at : any
+
+new Uint8Array().at();
+>new Uint8Array().at() : any
+>new Uint8Array().at : any
+>new Uint8Array() : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>at : any
+
+new Uint8ClampedArray().at();
+>new Uint8ClampedArray().at() : any
+>new Uint8ClampedArray().at : any
+>new Uint8ClampedArray() : Uint8ClampedArray
+>Uint8ClampedArray : Uint8ClampedArrayConstructor
+>at : any
+
+new Int16Array().at();
+>new Int16Array().at() : any
+>new Int16Array().at : any
+>new Int16Array() : Int16Array
+>Int16Array : Int16ArrayConstructor
+>at : any
+
+new Uint16Array().at();
+>new Uint16Array().at() : any
+>new Uint16Array().at : any
+>new Uint16Array() : Uint16Array
+>Uint16Array : Uint16ArrayConstructor
+>at : any
+
+new Int32Array().at();
+>new Int32Array().at() : any
+>new Int32Array().at : any
+>new Int32Array() : Int32Array
+>Int32Array : Int32ArrayConstructor
+>at : any
+
+new Uint32Array().at();
+>new Uint32Array().at() : any
+>new Uint32Array().at : any
+>new Uint32Array() : Uint32Array
+>Uint32Array : Uint32ArrayConstructor
+>at : any
+
+new Float32Array().at();
+>new Float32Array().at() : any
+>new Float32Array().at : any
+>new Float32Array() : Float32Array
+>Float32Array : Float32ArrayConstructor
+>at : any
+
+new Float64Array().at();
+>new Float64Array().at() : any
+>new Float64Array().at : any
+>new Float64Array() : Float64Array
+>Float64Array : Float64ArrayConstructor
+>at : any
+
+new BigInt64Array().at();
+>new BigInt64Array().at() : any
+>new BigInt64Array().at : any
+>new BigInt64Array() : BigInt64Array
+>BigInt64Array : BigInt64ArrayConstructor
+>at : any
+
+new BigUint64Array().at();
+>new BigUint64Array().at() : any
+>new BigUint64Array().at : any
+>new BigUint64Array() : BigUint64Array
+>BigUint64Array : BigUint64ArrayConstructor
+>at : any
+

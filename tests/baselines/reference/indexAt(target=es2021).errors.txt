@@ -11,9 +11,22 @@ tests/cases/compiler/indexAt.ts(10,20): error TS2550: Property 'at' does not exi
 tests/cases/compiler/indexAt.ts(11,20): error TS2550: Property 'at' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
 tests/cases/compiler/indexAt.ts(12,21): error TS2550: Property 'at' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
 tests/cases/compiler/indexAt.ts(13,22): error TS2550: Property 'at' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(15,5): error TS2550: Property 'at' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(16,7): error TS2550: Property 'at' does not exist on type '"foo"'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(17,17): error TS2550: Property 'at' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(18,18): error TS2550: Property 'at' does not exist on type 'Uint8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(19,25): error TS2550: Property 'at' does not exist on type 'Uint8ClampedArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(20,18): error TS2550: Property 'at' does not exist on type 'Int16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(21,19): error TS2550: Property 'at' does not exist on type 'Uint16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(22,18): error TS2550: Property 'at' does not exist on type 'Int32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(23,19): error TS2550: Property 'at' does not exist on type 'Uint32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(24,20): error TS2550: Property 'at' does not exist on type 'Float32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(25,20): error TS2550: Property 'at' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(26,21): error TS2550: Property 'at' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/indexAt.ts(27,22): error TS2550: Property 'at' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
 
 
-==== tests/cases/compiler/indexAt.ts (13 errors) ====
+==== tests/cases/compiler/indexAt.ts (26 errors) ====
     [0].at(0);
         ~~
 !!! error TS2550: Property 'at' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
@@ -51,6 +64,46 @@ tests/cases/compiler/indexAt.ts(13,22): error TS2550: Property 'at' does not exi
                         ~~
 !!! error TS2550: Property 'at' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
     new BigUint64Array().at(0);
+                         ~~
+!!! error TS2550: Property 'at' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    
+    [0].at();
+        ~~
+!!! error TS2550: Property 'at' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    "foo".at();
+          ~~
+!!! error TS2550: Property 'at' does not exist on type '"foo"'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Int8Array().at();
+                    ~~
+!!! error TS2550: Property 'at' does not exist on type 'Int8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Uint8Array().at();
+                     ~~
+!!! error TS2550: Property 'at' does not exist on type 'Uint8Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Uint8ClampedArray().at();
+                            ~~
+!!! error TS2550: Property 'at' does not exist on type 'Uint8ClampedArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Int16Array().at();
+                     ~~
+!!! error TS2550: Property 'at' does not exist on type 'Int16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Uint16Array().at();
+                      ~~
+!!! error TS2550: Property 'at' does not exist on type 'Uint16Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Int32Array().at();
+                     ~~
+!!! error TS2550: Property 'at' does not exist on type 'Int32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Uint32Array().at();
+                      ~~
+!!! error TS2550: Property 'at' does not exist on type 'Uint32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Float32Array().at();
+                       ~~
+!!! error TS2550: Property 'at' does not exist on type 'Float32Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new Float64Array().at();
+                       ~~
+!!! error TS2550: Property 'at' does not exist on type 'Float64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new BigInt64Array().at();
+                        ~~
+!!! error TS2550: Property 'at' does not exist on type 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    new BigUint64Array().at();
                          ~~
 !!! error TS2550: Property 'at' does not exist on type 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
     

@@ -13,3 +13,17 @@ new Float32Array().at(0);
 new Float64Array().at(0);
 new BigInt64Array().at(0);
 new BigUint64Array().at(0);
+
+[0].at();
+"foo".at();
+new Int8Array().at();
+new Uint8Array().at();
+new Uint8ClampedArray().at();
+new Int16Array().at();
+new Uint16Array().at();
+new Int32Array().at();
+new Uint32Array().at();
+new Float32Array().at();
+new Float64Array().at();
+new BigInt64Array().at();
+new BigUint64Array().at();
