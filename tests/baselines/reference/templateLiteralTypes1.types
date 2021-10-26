@@ -594,3 +594,28 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
 >'cars.1.make' : "cars.1.make"
 
+// Repro from #46480
+
+export type Spacing =
+>Spacing : Spacing
+
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+>spacing : Spacing
+>"s12" : "s12"
+
+export type SpacingShorthand =
+>SpacingShorthand : any
+
+    | `${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+
+const test1: SpacingShorthand = "0 0 0";
+>test1 : any
+>"0 0 0" : "0 0 0"
+

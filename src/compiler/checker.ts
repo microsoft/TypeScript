@@ -14203,13 +14203,13 @@ namespace ts {
         }
 
         function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-            const templates = filter(types, isPatternLiteralType);
+            const templates = filter(types, isPatternLiteralType) as TemplateLiteralType[];
             if (templates.length) {
                 let i = types.length;
                 while (i > 0) {
                     i--;
                     const t = types[i];
-                    if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeSubtypeOf(t, template))) {
+                    if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeMatchedByTemplateLiteralType(t, template))) {
                         orderedRemoveItemAt(types, i);
                     }
                 }
@@ -19090,8 +19090,7 @@ namespace ts {
                         // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
                         instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
                     }
-                    const result = inferTypesFromTemplateLiteralType(source, target as TemplateLiteralType);
-                    if (result && every(result, (r, i) => isValidTypeForTemplateLiteralPlaceholder(r, (target as TemplateLiteralType).types[i]))) {
+                    if (isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType)) {
                         return Ternary.True;
                     }
                 }
@@ -21559,6 +21558,11 @@ namespace ts {
                     arraysEqual((source as TemplateLiteralType).texts, target.texts) ? map((source as TemplateLiteralType).types, getStringLikeTypeForType) :
                     inferFromLiteralPartsToTemplateLiteral((source as TemplateLiteralType).texts, (source as TemplateLiteralType).types, target) :
                 undefined;
+        }
+
+        function isTypeMatchedByTemplateLiteralType(source: Type, target: TemplateLiteralType): boolean {
+            const inferences = inferTypesFromTemplateLiteralType(source, target);
+            return !!inferences && every(inferences, (r, i) => isValidTypeForTemplateLiteralPlaceholder(r, target.types[i]));
         }
 
         function getStringLikeTypeForType(type: Type) {
