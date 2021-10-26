@@ -376,6 +376,7 @@ namespace ts.codefix {
         let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
         let someSigHasRestParameter = false;
+        let maxTypeArgsSignature = signatures[0];
         for (const sig of signatures) {
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
             if (signatureHasRestParameter(sig)) {
@@ -383,6 +384,9 @@ namespace ts.codefix {
             }
             if (sig.parameters.length >= maxArgsSignature.parameters.length && (!signatureHasRestParameter(sig) || signatureHasRestParameter(maxArgsSignature))) {
                 maxArgsSignature = sig;
+            }
+            if (sig.typeParameters && (!maxTypeArgsSignature.typeParameters ||  sig.typeParameters.length > maxTypeArgsSignature.typeParameters.length)) {
+                maxTypeArgsSignature = sig;
             }
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
@@ -402,11 +406,14 @@ namespace ts.codefix {
             parameters.push(restParameter);
         }
 
+        const typeParameters = maxTypeArgsSignature.typeParameters?.map(typeParam =>
+            factory.createTypeParameterDeclaration(typeParam.symbol.getName()));
+
         return createStubbedMethod(
             modifiers,
             name,
             optional,
-            /*typeParameters*/ undefined,
+            typeParameters,
             parameters,
             getReturnTypeFromSignatures(signatures, checker, context, enclosingDeclaration),
             quotePreference,
