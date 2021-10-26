@@ -46,7 +46,8 @@ namespace ts.codefix {
             mappedTypeParameter,
             /*nameType*/ undefined,
             indexSignature.questionToken,
-            indexSignature.type);
+            indexSignature.type,
+            /*members*/ undefined);
         const intersectionType = factory.createIntersectionTypeNode([
             ...getAllSuperTypeNodes(container),
             mappedIntersectionType,

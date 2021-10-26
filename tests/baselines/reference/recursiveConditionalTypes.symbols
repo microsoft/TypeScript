@@ -531,3 +531,100 @@ type TP2 = ParseManyWhitespace2<" foo">;
 >TP2 : Symbol(TP2, Decl(recursiveConditionalTypes.ts, 135, 73))
 >ParseManyWhitespace2 : Symbol(ParseManyWhitespace2, Decl(recursiveConditionalTypes.ts, 128, 39))
 
+// Repro from #46183
+
+type NTuple<N extends number, Tup extends unknown[] = []> =
+>NTuple : Symbol(NTuple, Decl(recursiveConditionalTypes.ts, 137, 40))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 141, 12))
+>Tup : Symbol(Tup, Decl(recursiveConditionalTypes.ts, 141, 29))
+
+    Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
+>Tup : Symbol(Tup, Decl(recursiveConditionalTypes.ts, 141, 29))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 141, 12))
+>Tup : Symbol(Tup, Decl(recursiveConditionalTypes.ts, 141, 29))
+>NTuple : Symbol(NTuple, Decl(recursiveConditionalTypes.ts, 137, 40))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 141, 12))
+>Tup : Symbol(Tup, Decl(recursiveConditionalTypes.ts, 141, 29))
+
+type Add<A extends number, B extends number> =
+>Add : Symbol(Add, Decl(recursiveConditionalTypes.ts, 142, 65))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 144, 9))
+>B : Symbol(B, Decl(recursiveConditionalTypes.ts, 144, 26))
+
+    [...NTuple<A>, ...NTuple<B>]['length'];
+>NTuple : Symbol(NTuple, Decl(recursiveConditionalTypes.ts, 137, 40))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 144, 9))
+>NTuple : Symbol(NTuple, Decl(recursiveConditionalTypes.ts, 137, 40))
+>B : Symbol(B, Decl(recursiveConditionalTypes.ts, 144, 26))
+
+let five: Add<2, 3>;
+>five : Symbol(five, Decl(recursiveConditionalTypes.ts, 147, 3))
+>Add : Symbol(Add, Decl(recursiveConditionalTypes.ts, 142, 65))
+
+// Repro from #46316
+
+type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
+>_PrependNextNum : Symbol(_PrependNextNum, Decl(recursiveConditionalTypes.ts, 147, 20))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 151, 74))
+
+    ? [T, ...A] extends [...infer X] 
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 151, 74))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
+>X : Symbol(X, Decl(recursiveConditionalTypes.ts, 152, 33))
+
+        ? X
+>X : Symbol(X, Decl(recursiveConditionalTypes.ts, 152, 33))
+
+        : never
+    : never;
+
+type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
+>_Enumerate : Symbol(_Enumerate, Decl(recursiveConditionalTypes.ts, 155, 12))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
+
+    ? A
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
+
+    : _Enumerate<_PrependNextNum<A>, N> & number;
+>_Enumerate : Symbol(_Enumerate, Decl(recursiveConditionalTypes.ts, 155, 12))
+>_PrependNextNum : Symbol(_PrependNextNum, Decl(recursiveConditionalTypes.ts, 147, 20))
+>A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
+
+type Enumerate<N extends number> = number extends N
+>Enumerate : Symbol(Enumerate, Decl(recursiveConditionalTypes.ts, 159, 49))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 15))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 15))
+
+    ? number
+    : _Enumerate<[], N> extends (infer E)[]
+>_Enumerate : Symbol(_Enumerate, Decl(recursiveConditionalTypes.ts, 155, 12))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 15))
+>E : Symbol(E, Decl(recursiveConditionalTypes.ts, 163, 38))
+
+    ? E
+>E : Symbol(E, Decl(recursiveConditionalTypes.ts, 163, 38))
+
+    : never;
+
+function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
+>foo2 : Symbol(foo2, Decl(recursiveConditionalTypes.ts, 165, 12))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 167, 14))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 167, 35))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 167, 14))
+>Enumerate : Symbol(Enumerate, Decl(recursiveConditionalTypes.ts, 159, 49))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 167, 14))
+
+    return value.length;  // Error
+>value.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 167, 35))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}
+

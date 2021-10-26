@@ -113,7 +113,7 @@ namespace ts {
     }
 
     /* @internal */
-    export namespace NativeCollections {
+    namespace NativeCollections {
         declare const Map: MapConstructor | undefined;
         declare const Set: SetConstructor | undefined;
 
@@ -134,5 +134,29 @@ namespace ts {
             // eslint-disable-next-line no-in-operator
             return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
         }
+    }
+
+    /* @internal */
+    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
+    /* @internal */
+    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
+
+    /* @internal */
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
+        I extends ReadonlySet<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
+
+    /* @internal */
+    function getCollectionImplementation<
+        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
+        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
+    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
+        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
+        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
+        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
     }
 }

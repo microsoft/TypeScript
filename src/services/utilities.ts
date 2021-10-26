@@ -1897,10 +1897,10 @@ namespace ts {
     export function programContainsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
     }
-    export function programContainsEs6Modules(program: Program): boolean {
+    export function programContainsEsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
-    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
+    export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
         return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
@@ -2290,9 +2290,9 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.linkText);
     }
 
-    export function linkNamePart(name: EntityName | JSDocMemberName, target: Declaration): JSDocLinkDisplayPart {
+    export function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
         return {
-            text: getTextOfNode(name),
+            text,
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
             target: {
                 fileName: getSourceFileOfNode(target).fileName,
@@ -2315,17 +2315,34 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
+            const suffix = findLinkNameEnd(link.text);
+            const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
+            const text = link.text.slice(suffix);
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
-                parts.push(linkNamePart(link.name, decl));
-                if (link.text) parts.push(linkTextPart(link.text));
+                parts.push(linkNamePart(name, decl));
+                if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
+                parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function findLinkNameEnd(text: string) {
+        if (text.indexOf("()") === 0) return 2;
+        if (text[0] !== "<") return 0;
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
+        return 0;
     }
 
     const carriageReturnLineFeed = "\r\n";

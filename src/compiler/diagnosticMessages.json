@@ -1164,6 +1164,10 @@
         "category": "Error",
         "code": 1389
     },
+    "'{0}' is not allowed as a parameter name.": {
+        "category": "Error",
+        "code": 1390
+    },
     "An import alias cannot use 'import type'": {
         "category": "Error",
         "code": 1392
@@ -5993,7 +5997,10 @@
         "category": "Error",
         "code": 7060
     },
-
+    "A mapped type may not declare properties or methods.": {
+        "category": "Error",
+        "code": 7061
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -6216,7 +6223,7 @@
         "code": 18003
     },
 
-    "File is a CommonJS module; it may be converted to an ES6 module.": {
+    "File is a CommonJS module; it may be converted to an ES module.": {
         "category": "Suggestion",
         "code": 80001
     },
@@ -6465,7 +6472,7 @@
         "category": "Message",
         "code": 95016
     },
-    "Convert to ES6 module": {
+    "Convert to ES module": {
         "category": "Message",
         "code": 95017
     },

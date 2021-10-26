@@ -53,7 +53,8 @@ namespace ts.codefix {
                 insertBefore = findChildOfKind(containingFunction, SyntaxKind.FunctionKeyword, sourceFile);
                 break;
             case SyntaxKind.ArrowFunction:
-                insertBefore = findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile) || first(containingFunction.parameters);
+                const kind = containingFunction.typeParameters ? SyntaxKind.LessThanToken : SyntaxKind.OpenParenToken;
+                insertBefore = findChildOfKind(containingFunction, kind, sourceFile) || first(containingFunction.parameters);
                 break;
             default:
                 return;
