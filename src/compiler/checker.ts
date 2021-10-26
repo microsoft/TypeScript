@@ -3276,21 +3276,40 @@ namespace ts {
                         const namespaceName = getFullyQualifiedName(namespace);
                         const declarationName = declarationNameToString(right);
                         const suggestionForNonexistentModule = getSuggestedSymbolForNonexistentModule(right, namespace);
-                        const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
-                        const containingQualifiedName = isQualifiedName(name) && getContainingQualifiedNameNode(name);
-                        const canSuggestTypeof = containingQualifiedName && !isTypeOfExpression(containingQualifiedName.parent) && tryGetQualifiedNameAsValue(containingQualifiedName);
                         if (suggestionForNonexistentModule) {
                             error(right, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestionForNonexistentModule));
+                            return undefined;
                         }
-                        else if (canSuggestTypeof) {
-                            error(containingQualifiedName, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0, entityNameToString(containingQualifiedName));
+
+                        const containingQualifiedName = isQualifiedName(name) && getContainingQualifiedNameNode(name);
+                        const canSuggestTypeof = globalObjectType // <-- can't pull on types if global types aren't initialized yet
+                            && (meaning & SymbolFlags.Type)
+                            && containingQualifiedName
+                            && !isTypeOfExpression(containingQualifiedName.parent)
+                            && tryGetQualifiedNameAsValue(containingQualifiedName);
+                        if (canSuggestTypeof) {
+                            error(
+                                containingQualifiedName,
+                                Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0,
+                                entityNameToString(containingQualifiedName)
+                            );
+                            return undefined;
                         }
-                        else if (meaning & SymbolFlags.Namespace && exportedTypeSymbol && isQualifiedName(name.parent)) {
-                            error(name.parent.right, Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1, symbolToString(exportedTypeSymbol), unescapeLeadingUnderscores(name.parent.right.escapedText));
+
+                        if (meaning & SymbolFlags.Namespace && isQualifiedName(name.parent)) {
+                            const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
+                            if (exportedTypeSymbol) {
+                                error(
+                                    name.parent.right,
+                                    Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1,
+                                    symbolToString(exportedTypeSymbol),
+                                    unescapeLeadingUnderscores(name.parent.right.escapedText)
+                                );
+                                return undefined;
+                            }
                         }
-                        else {
-                            error(right, Diagnostics.Namespace_0_has_no_exported_member_1, namespaceName, declarationName);
-                        }
+
+                        error(right, Diagnostics.Namespace_0_has_no_exported_member_1, namespaceName, declarationName);
                     }
                     return undefined;
                 }
@@ -3657,8 +3676,8 @@ namespace ts {
             if (exportEquals !== moduleSymbol) {
                 const type = getTypeOfSymbol(exportEquals);
                 if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
-                    getPropertiesOfType(type).forEach(symbol => {
-                        cb(symbol, symbol.escapedName);
+                    forEachPropertyOfType(type, (symbol, escapedName) => {
+                        cb(symbol, escapedName);
                     });
                 }
             }
@@ -4034,11 +4053,15 @@ namespace ts {
         function getNamedMembers(members: SymbolTable): Symbol[] {
             let result: Symbol[] | undefined;
             members.forEach((symbol, id) => {
-                if (!isReservedMemberName(id) && symbolIsValue(symbol)) {
+                if (isNamedMember(symbol, id)) {
                     (result || (result = [])).push(symbol);
                 }
             });
             return result || emptyArray;
+        }
+
+        function isNamedMember(member: Symbol, escapedName: __String) {
+            return !isReservedMemberName(escapedName) && symbolIsValue(member);
         }
 
         function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
@@ -11572,6 +11595,17 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
+        function forEachPropertyOfType(type: Type, action: (symbol: Symbol, escapedName: __String) => void): void {
+            type = getReducedApparentType(type);
+            if (type.flags & TypeFlags.StructuredType) {
+                resolveStructuredTypeMembers(type as StructuredType).members.forEach((symbol, escapedName) => {
+                    if (isNamedMember(symbol, escapedName)) {
+                        action(symbol, escapedName);
+                    }
+                });
+            }
+        }
+
         function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
             const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
             return list.some(property => {
@@ -15316,13 +15350,6 @@ namespace ts {
             return type[cache] = type;
         }
 
-        function isConditionalTypeAlwaysTrueDisregardingInferTypes(type: ConditionalType) {
-            const extendsInferParamMapper = type.root.inferTypeParameters && createTypeMapper(type.root.inferTypeParameters, map(type.root.inferTypeParameters, () => wildcardType));
-            const checkType = type.checkType;
-            const extendsType = type.extendsType;
-            return isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(instantiateType(extendsType, extendsInferParamMapper)));
-        }
-
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
             const checkType = type.checkType;
             const extendsType = type.extendsType;
@@ -15644,6 +15671,12 @@ namespace ts {
                 });
             }
             return result;
+        }
+
+        function isDistributionDependent(root: ConditionalRoot) {
+            return root.isDistributive && (
+                isTypeParameterPossiblyReferenced(root.checkType as TypeParameter, root.node.trueType) ||
+                isTypeParameterPossiblyReferenced(root.checkType as TypeParameter, root.node.falseType));
         }
 
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
@@ -19032,33 +19065,21 @@ namespace ts {
                         return Ternary.Maybe;
                     }
                     const c = target as ConditionalType;
-                    // Check if the conditional is always true or always false but still deferred for distribution purposes
-                    const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
-                    const skipFalse = !skipTrue && isConditionalTypeAlwaysTrueDisregardingInferTypes(c);
-
-                    // Instantiate with a replacement mapper if the conditional is distributive, replacing the check type with a clone of itself,
-                    // this way {x: string | number, y: string | number} -> (T extends T ? { x: T, y: T } : never) appropriately _fails_ when
-                    // T = string | number (since that will end up distributing and producing `{x: string, y: string} | {x: number, y: number}`,
-                    // to which `{x: string | number, y: string | number}` isn't assignable)
-                    let distributionMapper: TypeMapper | undefined;
-                    const checkVar = getActualTypeVariable(c.root.checkType);
-                    if (c.root.isDistributive && checkVar.flags & TypeFlags.TypeParameter) {
-                        const newParam = cloneTypeParameter(checkVar);
-                        distributionMapper = prependTypeMapping(checkVar, newParam, c.mapper);
-                        newParam.mapper = distributionMapper;
-                    }
-
-                    // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
-                    const expanding = isDeeplyNestedType(target, targetStack, targetDepth);
-                    let localResult: Ternary | undefined = expanding ? Ternary.Maybe : undefined;
-                    if (skipTrue || expanding || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false))) {
-                        if (!skipFalse && !expanding) {
-                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
+                    // We check for a relationship to a conditional type target only when the conditional type has no
+                    // 'infer' positions and is not distributive or is distributive but doesn't reference the check type
+                    // parameter in either of the result types.
+                    if (!c.root.inferTypeParameters && !isDistributionDependent(c.root)) {
+                        // Check if the conditional is always true or always false but still deferred for distribution purposes.
+                        const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
+                        const skipFalse = !skipTrue && isTypeAssignableTo(getRestrictiveInstantiation(c.checkType), getRestrictiveInstantiation(c.extendsType));
+                        // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
+                        if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false)) {
+                            result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
+                            if (result) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
                         }
-                    }
-                    if (localResult) {
-                        resetErrorInfo(saveErrorInfo);
-                        return localResult;
                     }
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral) {
