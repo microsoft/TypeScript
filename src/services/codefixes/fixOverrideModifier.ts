@@ -103,7 +103,7 @@ namespace ts.codefix {
     function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const classElement = findContainerClassElementLike(sourceFile, pos);
         if (isSourceFileJS(sourceFile)) {
-            changeTracker.addJSDocTags(sourceFile, classElement, [ factory.createJSDocOverrideTag(/*tagName*/ undefined)]);
+            changeTracker.addJSDocTags(sourceFile, classElement, [factory.createJSDocOverrideTag(factory.createIdentifier("override"))]);
             return;
         }
         const modifiers = classElement.modifiers || emptyArray;

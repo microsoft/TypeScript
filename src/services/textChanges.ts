@@ -503,16 +503,16 @@ namespace ts.textChanges {
                 return !!merged;
             }));
             const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
-            const jsDocNode = getJsDocNode(parent);
-            this.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
+            const host = updateJSDocHost(parent);
+            this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
 
         public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
             const comments = mapDefined(parent.jsDoc, j => j.comment);
             const oldTags = filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate);
             const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray)]));
-            const jsDocNode = getJsDocNode(parent);
-            this.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
+            const host = updateJSDocHost(parent);
+            this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
@@ -940,7 +940,7 @@ namespace ts.textChanges {
         }
     }
 
-    function getJsDocNode(parent: HasJSDoc): HasJSDoc {
+    function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ?
             parent.parent.kind === SyntaxKind.PropertyDeclaration ?
                 parent.parent as HasJSDoc :
