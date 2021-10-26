@@ -50,6 +50,7 @@ namespace ts.codefix {
         importAdder: ImportAdder | undefined,
         addClassElement: (node: AddNode) => void,
         body: Block | undefined,
+        isAmbient = false,
     ): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
@@ -63,7 +64,7 @@ namespace ts.codefix {
         const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
-        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient);
+        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
         const quotePreference = getQuotePreference(sourceFile, preferences);
 
         switch (declaration.kind) {

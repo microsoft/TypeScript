@@ -860,6 +860,12 @@ namespace ts.Completions {
         }
 
         let modifiers = ModifierFlags.None;
+        // Whether the suggested member should be abstract.
+        // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
+        // Note: We are relying on checking if the context token is `abstract`,
+        // since other visibility modifiers (e.g. `protected`) should come *before* `abstract`.
+        // However, that is not true for the e.g. `override` modifier, so this check has its limitations.
+        const isAbstract = contextToken && isModifierLike(contextToken) === SyntaxKind.AbstractKeyword;
         const completionNodes: Node[] = [];
         codefix.addNewNodeForMemberSymbol(
             symbol,
@@ -877,29 +883,8 @@ namespace ts.Completions {
             //  - More than one node if the member is overloaded (e.g. a method with overload signatures).
             node => {
                 let requiredModifiers = ModifierFlags.None;
-                // Check if the suggested method should be abstract.
-                // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-                // Note: We are relying on checking if the context token is `abstract`,
-                // since other visibility modifiers (e.g. `protected`) should come *before* `abstract`.
-                // However, that is not true for the e.g. `override` modifier, so this check has its limitations.
-                const isAbstract = contextToken && isModifierLike(contextToken) === SyntaxKind.AbstractKeyword;
                 if (isAbstract) {
-                    requiredModifiers |= ModifierFlags.Abstract;
-                    if (isMethodDeclaration(node)) {
-                        // Remove method body.
-                        node = factory.updateMethodDeclaration(
-                            node,
-                            node.decorators,
-                            node.modifiers,
-                            node.asteriskToken,
-                            node.name,
-                            node.questionToken,
-                            node.typeParameters,
-                            node.parameters,
-                            node.type,
-                            /* body */ undefined,
-                        );
-                    }
+                        requiredModifiers |= ModifierFlags.Abstract;
                 }
                 if (isClassElement(node)
                     && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node) === MemberOverrideStatus.NeedsOverride) {
@@ -922,7 +907,8 @@ namespace ts.Completions {
 
                 completionNodes.push(node);
             },
-            body);
+            body,
+            isAbstract);
 
         if (completionNodes.length) {
             if (preferences.includeCompletionsWithSnippetText) {
