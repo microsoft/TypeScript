@@ -1,7 +1,8 @@
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(23,16): error TS2339: Property 'notAValue' does not exist on type 'Data'.
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(45,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(46,5): error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: Type '{ [x: string]: string; }' is not assignable to type '[any, any]'.
+tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: Type 'string[]' is not assignable to type '[any, any]'.
+  Target requires 2 element(s) but source may have fewer.
 
 
 ==== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts (4 errors) ====
@@ -65,4 +66,5 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: T
     declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
     let def: [any, any] = stringifyPair(void 0 as any);
         ~~~
-!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type '[any, any]'.
+!!! error TS2322: Type 'string[]' is not assignable to type '[any, any]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
