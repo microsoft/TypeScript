@@ -56,3 +56,72 @@ for (let id in z) {
 >notAValue : any
 }
 
+// Issue #46169.
+// We want mapped types whose constraint is `keyof T` to
+// map over `any` differently, depending on whether `T`
+// is constrained to array and tuple types.
+type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
+>Arrayish : Arrayish<T>
+
+type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
+>Objectish : Objectish<T>
+
+// When a mapped type whose constraint is `keyof T` is instantiated,
+// `T` may be instantiated with a `U` which is constrained to
+// array and tuple types. *Ideally*, when `U` is later instantiated with `any`,
+// the result should also be some sort of array; however, at the moment we don't seem
+// to have an easy way to preserve that information. More than just that, it would be
+// inconsistent for two instantiations of `Objectish<any>` to produce different outputs
+// depending on the usage-site. As a result, `IndirectArrayish` does not act like `Arrayish`.
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+>IndirectArrayish : Objectish<U>
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
+>bar : (arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) => void
+>arrayish : any[]
+>objectish : Objectish<any>
+>indirectArrayish : Objectish<any>
+
+    let arr: any[];
+>arr : any[]
+
+    arr = arrayish;
+>arr = arrayish : any[]
+>arr : any[]
+>arrayish : any[]
+
+    arr = objectish;
+>arr = objectish : Objectish<any>
+>arr : any[]
+>objectish : Objectish<any>
+
+    arr = indirectArrayish;
+>arr = indirectArrayish : Objectish<any>
+>arr : any[]
+>indirectArrayish : Objectish<any>
+}
+
+declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
+>stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
+>arr : T
+
+let abc: any[] = stringifyArray(void 0 as any);
+>abc : any[]
+>stringifyArray(void 0 as any) : string[]
+>stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
+>void 0 as any : any
+>void 0 : undefined
+>0 : 0
+
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
+>stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
+>arr : T
+
+let def: [any, any] = stringifyPair(void 0 as any);
+>def : [any, any]
+>stringifyPair(void 0 as any) : string[]
+>stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
+>void 0 as any : any
+>void 0 : undefined
+>0 : 0
+

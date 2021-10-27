@@ -25,3 +25,32 @@ for (let id in z) {
   let data = z[id];
   let x = data.notAValue;  // Error
 }
+
+// Issue #46169.
+// We want mapped types whose constraint is `keyof T` to
+// map over `any` differently, depending on whether `T`
+// is constrained to array and tuple types.
+type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
+type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
+
+// When a mapped type whose constraint is `keyof T` is instantiated,
+// `T` may be instantiated with a `U` which is constrained to
+// array and tuple types. *Ideally*, when `U` is later instantiated with `any`,
+// the result should also be some sort of array; however, at the moment we don't seem
+// to have an easy way to preserve that information. More than just that, it would be
+// inconsistent for two instantiations of `Objectish<any>` to produce different outputs
+// depending on the usage-site. As a result, `IndirectArrayish` does not act like `Arrayish`.
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
+    let arr: any[];
+    arr = arrayish;
+    arr = objectish;
+    arr = indirectArrayish;
+}
+
+declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
+let abc: any[] = stringifyArray(void 0 as any);
+
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
+let def: [any, any] = stringifyPair(void 0 as any);
