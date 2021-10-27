@@ -3333,7 +3333,9 @@ namespace ts {
             }
 
             if (options.resolveJsonModule) {
-                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
+                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
+                    getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node12 &&
+                    getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
                 // Any emit other than common js, amd, es2015 or esnext is error
