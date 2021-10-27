@@ -3160,6 +3160,21 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            const isNightly = stringContains(version, "-dev");
+            if (!isNightly) {
+                if (getEmitModuleKind(options) === ModuleKind.Node12) {
+                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "module", "node12");
+                }
+                else if (getEmitModuleKind(options) === ModuleKind.NodeNext) {
+                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "module", "nodenext");
+                }
+                else if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12) {
+                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "moduleResolution", "node12");
+                }
+                else if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
+                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "moduleResolution", "nodenext");
+                }
+            }
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
@@ -3696,8 +3711,8 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
-        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0?: string) {
-            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
+        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0?: string, arg1?: string) {
+            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
         }
 
         function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {

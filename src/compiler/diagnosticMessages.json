@@ -3770,6 +3770,11 @@
         "category": "Error",
         "code": 4123
     },
+    "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error.": {
+        "category": "Error",
+        "code": 4124
+    },
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
