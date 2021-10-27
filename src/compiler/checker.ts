@@ -2639,10 +2639,7 @@ namespace ts {
 
         function isOnlyImportedAsDefault(usage: Expression) {
             const usageMode = getUsageModeForExpression(usage);
-            if (usageMode === ModuleKind.ESNext && endsWith((usage as StringLiteralLike).text, Extension.Json)) {
-                return true;
-            }
-            return false;
+            return usageMode === ModuleKind.ESNext && endsWith((usage as StringLiteralLike).text, Extension.Json);
         }
 
         function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
@@ -3631,8 +3628,10 @@ namespace ts {
             return symbol;
         }
 
+        /**
+         * Create a new symbol which has the module's type less the call and construct signatures
+         */
         function cloneTypeAsModuleType(symbol: Symbol, moduleType: Type, referenceParent: ImportDeclaration | ImportCall) {
-            // Create a new symbol which has the module's type less the call and construct signatures
             const result = createSymbol(symbol.flags, symbol.escapedName);
             result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
             result.parent = symbol.parent;
@@ -31002,7 +31001,10 @@ namespace ts {
             if (moduleSymbol) {
                 const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true, /*suppressUsageError*/ false);
                 if (esModuleSymbol) {
-                    return createPromiseReturnType(node, getTypeWithSyntheticDefaultOnly(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier) || getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier));
+                    return createPromiseReturnType(node,
+                        getTypeWithSyntheticDefaultOnly(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier) ||
+                            getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier)
+                    );
                 }
             }
             return createPromiseReturnType(node, anyType);
