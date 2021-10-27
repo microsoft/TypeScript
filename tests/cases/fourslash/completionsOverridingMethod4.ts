@@ -33,6 +33,7 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
     },
     excludes: [
         "tell",

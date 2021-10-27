@@ -17,6 +17,7 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: true,
+        includeCompletionsWithClassMemberSnippets: true,
     },
     includes: [
         {

@@ -698,7 +698,10 @@ namespace ts.Completions {
             }
         }
 
-        if (preferences.includeCompletionsWithInsertText && completionKind === CompletionKind.MemberLike && isClassLikeMemberCompletion(symbol, location)) {
+        if (preferences.includeCompletionsWithClassMemberSnippets &&
+            preferences.includeCompletionsWithInsertText &&
+            completionKind === CompletionKind.MemberLike &&
+            isClassLikeMemberCompletion(symbol, location)) {
             ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken));
         }
 

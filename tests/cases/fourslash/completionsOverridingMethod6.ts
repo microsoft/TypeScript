@@ -32,6 +32,7 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
     },
     includes: [
         {
@@ -53,6 +54,7 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
     },
     includes: [
         {
@@ -74,6 +76,7 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithClassMemberSnippets: true,
     },
     includes: [
         {
