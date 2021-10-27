@@ -6001,6 +6001,10 @@
         "category": "Error",
         "code": 7061
     },
+    "JSON imports are experimental in ES module mode imports.": {
+        "category": "Error",
+        "code": 7062
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
