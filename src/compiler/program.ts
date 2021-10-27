@@ -3163,16 +3163,16 @@ namespace ts {
             const isNightly = stringContains(version, "-dev");
             if (!isNightly) {
                 if (getEmitModuleKind(options) === ModuleKind.Node12) {
-                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "module", "node12");
+                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "node12");
                 }
                 else if (getEmitModuleKind(options) === ModuleKind.NodeNext) {
-                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "module", "nodenext");
+                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "nodenext");
                 }
                 else if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12) {
-                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "moduleResolution", "node12");
+                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "moduleResolution", "node12");
                 }
                 else if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
-                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error, "moduleResolution", "nodenext");
+                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "moduleResolution", "nodenext");
                 }
             }
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {

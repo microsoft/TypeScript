@@ -3770,7 +3770,7 @@
         "category": "Error",
         "code": 4123
     },
-    "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error.": {
+    "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4124
     },
