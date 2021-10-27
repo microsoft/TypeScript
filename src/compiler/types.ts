@@ -8205,7 +8205,6 @@ namespace ts {
         /*@internal*/ preserveSourceNewlines?: boolean;
         /*@internal*/ terminateUnterminatedLiterals?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
-        /*@internal*/ hasSnippet?: boolean;
     }
 
     /* @internal */
@@ -8297,6 +8296,7 @@ namespace ts {
         hasTrailingComment(): boolean;
         hasTrailingWhitespace(): boolean;
         getTextPosWithWriteLine?(): number;
+        nonEscapingWrite?(text: string): void;
     }
 
     export interface GetEffectiveTypeRootsHost {

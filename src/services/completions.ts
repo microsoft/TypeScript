@@ -836,12 +836,11 @@ namespace ts.Completions {
 
         const checker = program.getTypeChecker();
         const sourceFile = location.getSourceFile();
-        const printer = createPrinter({
+        const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
             target: options.target,
             omitTrailingSemicolon: true,
-            hasSnippet: true,
             newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
@@ -914,7 +913,7 @@ namespace ts.Completions {
             if (preferences.includeCompletionsWithSnippetText) {
                 addSnippets(completionNodes);
             }
-            insertText = printer.printList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
+            insertText = printer.printSnippetList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
 
         return { insertText, isSnippet };
@@ -987,6 +986,40 @@ namespace ts.Completions {
             }
 
             forEachChild(node, child => addSnippetsWorker(child, node));
+        }
+    }
+
+    function createSnippetPrinter(
+        printerOptions: PrinterOptions,
+    ) {
+        const printer = createPrinter(printerOptions);
+        const baseWriter = createTextWriter(getNewLineCharacter(printerOptions));
+        const writer: EmitTextWriter = {
+            ...baseWriter,
+            write: s => baseWriter.write(escapeSnippetText(s)),
+            nonEscapingWrite: baseWriter.write,
+            writeLiteral: s => baseWriter.writeLiteral(escapeSnippetText(s)),
+            writeStringLiteral: s => baseWriter.writeStringLiteral(escapeSnippetText(s)),
+            writeSymbol: (s, symbol) => baseWriter.writeSymbol(escapeSnippetText(s), symbol),
+            writeParameter: s => baseWriter.writeParameter(escapeSnippetText(s)),
+            writeComment: s => baseWriter.writeComment(escapeSnippetText(s)),
+            writeProperty: s => baseWriter.writeProperty(escapeSnippetText(s)),
+        };
+
+        return {
+            printSnippetList,
+        };
+
+
+        /* Snippet-escaping version of `printer.printList`. */
+        function printSnippetList(
+            format: ListFormat,
+            list: NodeArray<Node>,
+            sourceFile: SourceFile | undefined,
+        ): string {
+            writer.clear();
+            printer.writeList(format, list, sourceFile, writer);
+            return writer.getText();
         }
     }
 

@@ -867,27 +867,6 @@ namespace ts {
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = new Map<string, boolean>();
-        const hasSnippet = !!printerOptions.hasSnippet;
-
-        // Writers that must handle snippet text escaping, if enabled
-        let writeLiteral = noEscapeWriteLiteral;
-        let writeStringLiteral = noEscapeWriteStringLiteral;
-        let writeBase = noEscapeWriteBase;
-        let writeSymbol = noEscapeWriteSymbol;
-        let writeParameter = noEscapeWriteParameter;
-        let writeComment = noEscapeWriteComment;
-        let writeProperty = noEscapeWriteProperty;
-
-        if (hasSnippet) {
-            writeLiteral = snippetEscapingWriteLiteral;
-            writeStringLiteral = snippetEscapingWriteStringLiteral;
-            writeBase = snippetEscapingWriteBase;
-            writeSymbol = snippetEscapingWriteSymbol;
-            writeParameter = snippetEscapingWriteParameter;
-            writeComment = snippetEscapingWriteComment;
-            writeProperty = snippetEscapingWriteProperty;
-        }
-
 
         let currentSourceFile: SourceFile | undefined;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
@@ -1967,14 +1946,14 @@ namespace ts {
         }
 
         function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
-            noEscapeWrite(`\$\{${snippet.order}:`); // `${2:`
+            nonEscapingWrite(`\$\{${snippet.order}:`); // `${2:`
             pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
-            noEscapeWrite(`\}`); // `}`
+            nonEscapingWrite(`\}`); // `}`
             // `${2:...}`
         }
 
         function emitTabStop(snippet: TabStop) {
-            noEscapeWrite(`\$${snippet.order}`);
+            nonEscapingWrite(`\$${snippet.order}`);
         }
 
         //
@@ -4462,36 +4441,20 @@ namespace ts {
 
         // Writers
 
-        function noEscapeWriteLiteral(s: string) {
+        function writeLiteral(s: string) {
             writer.writeLiteral(s);
         }
 
-        function snippetEscapingWriteLiteral(s: string) {
-            writer.writeLiteral(escapeSnippetText(s));
-        }
-
-        function noEscapeWriteStringLiteral(s: string) {
+        function writeStringLiteral(s: string) {
             writer.writeStringLiteral(s);
         }
 
-        function snippetEscapingWriteStringLiteral(s: string) {
-            writer.writeStringLiteral(escapeSnippetText(s));
-        }
-
-        function noEscapeWriteBase(s: string) {
+        function writeBase(s: string) {
             writer.write(s);
         }
 
-        function snippetEscapingWriteBase(s: string) {
-            writer.write(escapeSnippetText(s));
-        }
-
-        function noEscapeWriteSymbol(s: string, sym: Symbol) {
+        function writeSymbol(s: string, sym: Symbol) {
             writer.writeSymbol(s, sym);
-        }
-
-        function snippetEscapingWriteSymbol(s: string, sym: Symbol) {
-            writer.writeSymbol(escapeSnippetText(s), sym);
         }
 
         function writePunctuation(s: string) {
@@ -4510,42 +4473,36 @@ namespace ts {
             writer.writeOperator(s);
         }
 
-        function noEscapeWriteParameter(s: string) {
+        function writeParameter(s: string) {
             writer.writeParameter(s);
         }
 
-        function snippetEscapingWriteParameter(s: string) {
-            writer.writeParameter(escapeSnippetText(s));
-        }
-
-        function noEscapeWriteComment(s: string) {
+        function writeComment(s: string) {
             writer.writeComment(s);
-        }
-
-        function snippetEscapingWriteComment(s: string) {
-            writer.writeComment(escapeSnippetText(s));
         }
 
         function writeSpace() {
             writer.writeSpace(" ");
         }
 
-        function noEscapeWriteProperty(s: string) {
+        function writeProperty(s: string) {
             writer.writeProperty(s);
         }
 
-        function snippetEscapingWriteProperty(s: string) {
-            writer.writeProperty(escapeSnippetText(s));
+        function nonEscapingWrite(s: string) {
+            // This should be defined in a snippet-escaping text writer.
+            if (writer.nonEscapingWrite) {
+                writer.nonEscapingWrite(s);
+            }
+            else {
+                writer.write(s);
+            }
         }
 
         function writeLine(count = 1) {
             for (let i = 0; i < count; i++) {
                 writer.writeLine(i > 0);
             }
-        }
-
-        function noEscapeWrite(s: string) {
-            writer.write(s);
         }
 
         function increaseIndent() {
