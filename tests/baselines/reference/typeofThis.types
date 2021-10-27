@@ -377,3 +377,48 @@ class Test11 {
         }
     }
 }
+
+class Tests12 {
+>Tests12 : Tests12
+
+    test1() { // OK
+>test1 : () => void
+
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+
+    test2() { // OK
+>test2 : () => void
+
+        for (;;) {}
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+
+    test3() { // expected no compile errors
+>test3 : () => void
+
+        for (const dummy in []) {}
+>dummy : string
+>[] : never[]
+
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+
+    test4() { // expected no compile errors
+>test4 : () => void
+
+        for (const dummy of []) {}
+>dummy : never
+>[] : never[]
+
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+}
