@@ -26049,12 +26049,12 @@ namespace ts {
             return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
         }
 
-        function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
+        function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
             return mapType(type, t => {
                 if (isGenericMappedType(t)) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
-                    const propertyNameType = getStringLiteralType(unescapeLeadingUnderscores(name));
+                    const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
                     if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
                         return substituteIndexedMappedType(t, propertyNameType);
                     }
@@ -26070,7 +26070,7 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
+                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
                 }
                 return undefined;
             }, /*noReductions*/ true);
@@ -26100,7 +26100,8 @@ namespace ts {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
-                    return getTypeOfPropertyOfContextualType(type, getSymbolOfNode(element).escapedName);
+                    const symbol = getSymbolOfNode(element);
+                    return getTypeOfPropertyOfContextualType(type, symbol.escapedName, getSymbolLinks(symbol).nameType);
                 }
                 if (element.name) {
                     const nameType = getLiteralTypeFromPropertyName(element.name);
