@@ -2235,7 +2235,7 @@ namespace ts {
                         error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(errorLocation as Identifier));
                     }
                 }
-                if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
+                if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation) && (compilerOptions.isolatedModules || !isConstEnumOrConstEnumOnlyModule(resolveAlias(result)))) {
                     const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
                     if (typeOnlyDeclaration) {
                         const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
