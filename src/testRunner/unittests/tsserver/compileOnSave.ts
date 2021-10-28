@@ -2,8 +2,8 @@ import { ServerHost, Session, protocol } from "../../ts.server";
 import { TestTypingsInstaller, File, makeSessionRequest, createServerHost, libFile, createSession, openFilesForSession, checkNumberOfProjects, checkProjectRootFiles, toExternalFiles, protocolTextSpanFromSubstring, TestSession, checkProjectActualFiles } from "../../ts.projectSystem";
 import { compareStringsCaseSensitive, map, arrayIsEqualTo, CompilerOptions, projectSystem, Extension, stringContains, emptyArray, formatStringFromArgs, Diagnostics, diagnosticCategoryName, changeExtension } from "../../ts";
 import { projectRoot } from "../../ts.tscWatch";
-import * as ts from "../../ts";
-import CommandNames = ts.server.CommandNames;
+import { CommandNames } from "../../ts.server";
+
 function createTestTypingsInstaller(host: ServerHost) {
     return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
 }

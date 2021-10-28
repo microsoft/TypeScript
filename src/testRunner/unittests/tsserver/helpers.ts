@@ -1,11 +1,15 @@
-import { TestFSWithWatch, convertToObject, parseJsonText, Path, server, noop, returnFalse, returnUndefined, Debug, returnTrue, version, MapLike, notImplemented, TypeAcquisition, SortedReadonlyArray, isString, ESMap, map, filterMutate, sys, clear, mapDefined, isArray, HostCancellationToken, arrayFrom, mapDefinedIterator, normalizePath, forEachAncestorDirectory, combinePaths, directorySeparator, computeLineStarts, computeLineAndCharacterOfPosition, textSpanEnd, TextSpan, createTextSpan } from "../../ts";
+import { TestFSWithWatch, convertToObject, parseJsonText, Path, noop, returnFalse, returnUndefined, Debug, returnTrue, version, MapLike, notImplemented, TypeAcquisition, SortedReadonlyArray, isString, ESMap, map, filterMutate, sys, clear, mapDefined, isArray, HostCancellationToken, arrayFrom, mapDefinedIterator, normalizePath, forEachAncestorDirectory, combinePaths, directorySeparator, computeLineStarts, computeLineAndCharacterOfPosition, textSpanEnd, TextSpan, createTextSpan } from "../../ts";
 import { Baseline } from "../../Harness";
 import { ProjectService, Project, ITypingsInstaller, ServerHost, SetTypings, InvalidateCachedTypings, createInstallTypingsRequest, FileStats, ProjectServiceEvent, ProjectInfoTelemetryEventData, ProjectInfoTelemetryEvent, OpenFileInfo, OpenFileInfoTelemetryEventData, OpenFileInfoTelemetryEvent, SessionOptions, Session, LogLevel, toEvent, nullCancellationToken, ProjectServiceOptions, nullTypingsInstaller, ProjectKind, ServerCancellationToken } from "../../ts.server";
 import { byteLength } from "../../Utils";
 import * as ts from "../../ts";
-export import TI = ts.server.typingsInstaller;
-export import protocol = ts.server.protocol;
-export import CommandNames = ts.server.CommandNames;
+import { commonFile1, commonFile2 } from "../tscWatch/helpers";
+import * as TI from "../../../typingsInstallerCore/typingsInstaller";
+export { TI };
+import * as protocol from "../../../server/ts.server.protocol";
+export { protocol };
+import * as server from "../../../server/ts.server";
+export import CommandNames = server.CommandNames;
 export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
 export type File = TestFSWithWatch.File;
 export type SymLink = TestFSWithWatch.SymLink;
@@ -17,8 +21,7 @@ export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
 export import checkWatchedFilesDetailed = ts.TestFSWithWatch.checkWatchedFilesDetailed;
 export import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
 export import checkWatchedDirectoriesDetailed = ts.TestFSWithWatch.checkWatchedDirectoriesDetailed;
-export import commonFile1 = ts.tscWatch.commonFile1;
-export import commonFile2 = ts.tscWatch.commonFile2;
+export { commonFile1, commonFile2 };
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {

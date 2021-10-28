@@ -18,6 +18,7 @@ const { buildProject, cleanProject, watchProject } = require("./scripts/build/pr
 const cmdLineOptions = require("./scripts/build/options");
 
 const copyright = "CopyrightNotice.txt";
+const testRoot = "built/local/testRunner/Harness.js";
 const cleanTasks = [];
 
 const buildScripts = () => buildProject("scripts");
@@ -442,7 +443,7 @@ preTest.displayName = "preTest";
 
 const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
 
-const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
+const runTests = () => runConsoleTests(testRoot, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
 task("runtests", series(preBuild, preTest, runTests, postTest));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
@@ -462,7 +463,7 @@ task("runtests").flags = {
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
-const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
+const runTestsParallel = () => runConsoleTests(testRoot, "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
 task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
@@ -611,10 +612,10 @@ task("publish-nightly").description = "Runs `npm publish --tag next` to create a
 // write some kind of trigger file that indicates build completion that we could listen for instead.
 const watchRuntests = () => watch(["built/local/*.js", "tests/cases/**/*.ts", "tests/cases/**/tsconfig.json"], { delay: 5000 }, async () => {
     if (cmdLineOptions.tests || cmdLineOptions.failed) {
-        await runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true);
+        await runConsoleTests(testRoot, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true);
     }
     else {
-        await runConsoleTests("built/local/run.js", "min", /*runInParallel*/ true, /*watchMode*/ true);
+        await runConsoleTests(testRoot, "min", /*runInParallel*/ true, /*watchMode*/ true);
     }
 });
 task("watch", series(preBuild, preTest, parallel(watchLib, watchDiagnostics, watchServices, watchLssl, watchTests, watchRuntests)));

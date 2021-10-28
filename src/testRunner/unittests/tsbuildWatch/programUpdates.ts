@@ -1,7 +1,7 @@
 import { TestFSWithWatch, isString, emptyArray, createSolutionBuilderWithWatchHost, createSolutionBuilderWithWatch, noop } from "../../ts";
 import { createWatchedSystem, File, TscWatchCompileChange, checkSingleTimeoutQueueLengthAndRun, libFile, verifyTscWatch, checkWatchedFiles, checkWatchedDirectories, checkOutputErrorsInitial, checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout, WatchedSystem, projectRoot, runQueuedTimeoutCallbacks, noopChange, commonFile1, commonFile2 } from "../../ts.tscWatch";
-import * as ts from "../../ts";
-import projectsLocation = ts.TestFSWithWatch.tsbuildProjectsLocation;
+import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
+
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     type TsBuildWatchSystem = TestFSWithWatch.TestServerHostTrackingWrittenFiles;
 

@@ -4,8 +4,8 @@ import { mockHash } from "../../Harness";
 import { byteLength } from "../../Utils";
 import { nullLogger, createHasErrorMessageLogger } from "../../ts.projectSystem";
 import * as ts from "../../ts";
-const _chai: typeof import("chai") = require("chai");
-const expect: typeof _chai.expect = _chai.expect;
+import { expect } from "chai";
+
 let lastWrittenToHost: string;
 const noopFileWatcher: FileWatcher = { close: noop };
 const mockHost: ServerHost = {

@@ -1,6 +1,8 @@
-import { CompilerOptions, emptyArray, verifyTsc, loadProjectFromFiles } from "../../ts";
+import { CompilerOptions, emptyArray, loadProjectFromFiles } from "../../ts";
+import { verifyTsc } from "../tsc/helpers";
 import { createWatchedSystem, projectRoot, libFile, verifyTscWatch, replaceFileText, runQueuedTimeoutCallbacks } from "../../ts.tscWatch";
 import { dedent } from "../../Utils";
+
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: CompilerOptions) {
         return createWatchedSystem([

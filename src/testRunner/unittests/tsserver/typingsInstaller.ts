@@ -5,6 +5,7 @@ import { projects } from "../../ts.tscWatch";
 import * as ts from "../../ts";
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
+import { typingsName } from "../../../typingsInstallerCore/typingsInstaller";
 
 interface InstallerParams {
     globalTypingsCacheLocation?: string;
@@ -46,8 +47,6 @@ function trackingLogger(): {
         }
     };
 }
-
-import typingsName = ts.projectSystem.TI.typingsName;
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {

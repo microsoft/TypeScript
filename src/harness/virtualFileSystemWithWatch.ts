@@ -1,7 +1,7 @@
-import { Path, combinePaths, getDirectoryPath, ESMap, patchWriteFileEnsuringDirectory, isString, SortedArray, isArray, MultiMap, FileWatcher, forEach, arrayFrom, ReadonlyESMap, arrayToMap, isNumber, identity, PollingInterval, WatchOptions, FileWatcherCallback, FsWatchCallback, FormatDiagnosticsHost, ModuleResolutionHost, createMultiMap, RequireResult, WatchFileKind, HostWatchFile, HostWatchDirectory, createGetCanonicalFileName, toPath, createSystemWatchFunctions, createSingleFileWatcherPerName, getNormalizedAbsolutePath, directorySeparator, Debug, clone, returnFalse, FileWatcherEventKind, getBaseFileName, insertSorted, compareStringsCaseSensitive, filterMutate, FileSystemEntryKind, createFileWatcherCallback, getRelativePathToDirectoryOrUrl, mapDefined, matchFiles, generateDjb2Hash, sys, clear, WatchDirectoryKind, PollingWatchKind } from "./ts";
+import { Path, combinePaths, getDirectoryPath, Set, Map, ESMap, patchWriteFileEnsuringDirectory, isString, SortedArray, isArray, MultiMap, FileWatcher, forEach, arrayFrom, ReadonlyESMap, arrayToMap, isNumber, identity, PollingInterval, WatchOptions, FileWatcherCallback, FsWatchCallback, FormatDiagnosticsHost, ModuleResolutionHost, createMultiMap, RequireResult, WatchFileKind, HostWatchFile, HostWatchDirectory, createGetCanonicalFileName, toPath, createSystemWatchFunctions, createSingleFileWatcherPerName, getNormalizedAbsolutePath, directorySeparator, Debug, clone, returnFalse, FileWatcherEventKind, getBaseFileName, insertSorted, compareStringsCaseSensitive, filterMutate, FileSystemEntryKind, createFileWatcherCallback, getRelativePathToDirectoryOrUrl, mapDefined, matchFiles, generateDjb2Hash, sys, clear, WatchDirectoryKind, PollingWatchKind } from "./ts";
 import { ServerHost } from "./ts.server";
 import { IO } from "./Harness";
-import * as ts from "./ts";
+
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
@@ -136,7 +136,7 @@ export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly s
     }
     const notInActual: string[] = [];
     const duplicates: string[] = [];
-    const seen = new ts.Map<string, true>();
+    const seen = new Map<string, true>();
     forEach(expectedKeys, expectedKey => {
         if (seen.has(expectedKey)) {
             duplicates.push(expectedKey);
@@ -237,8 +237,8 @@ export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDi
 }
 
 export function checkOutputContains(host: TestServerHost, expected: readonly string[]) {
-    const mapExpected = new ts.Set(expected);
-    const mapSeen = new ts.Set<string>();
+    const mapExpected = new Set(expected);
+    const mapSeen = new Set<string>();
     for (const f of host.getOutput()) {
         assert.isFalse(mapSeen.has(f), `Already found ${f} in ${JSON.stringify(host.getOutput())}`);
         if (mapExpected.has(f)) {
@@ -250,7 +250,7 @@ export function checkOutputContains(host: TestServerHost, expected: readonly str
 }
 
 export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | readonly string[]) {
-    const mapExpectedToBeAbsent = new ts.Set(expectedToBeAbsent);
+    const mapExpectedToBeAbsent = new Set(expectedToBeAbsent);
     for (const f of host.getOutput()) {
         assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);
     }
@@ -353,7 +353,7 @@ export class TestServerHost implements ServerHost, FormatDiagnosticsHost, Module
 
     private readonly output: string[] = [];
 
-    private fs: ESMap<Path, FSEntry> = new ts.Map();
+    private fs: ESMap<Path, FSEntry> = new Map();
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
     private toPath: (f: string) => Path;
@@ -1003,7 +1003,7 @@ export class TestServerHost implements ServerHost, FormatDiagnosticsHost, Module
     }
 
     snap(): ESMap<Path, FSEntry> {
-        const result = new ts.Map<Path, FSEntry>();
+        const result = new Map<Path, FSEntry>();
         this.fs.forEach((value, key) => {
             const cloneValue = clone(value);
             if (isFsFolder(cloneValue)) {
@@ -1016,7 +1016,7 @@ export class TestServerHost implements ServerHost, FormatDiagnosticsHost, Module
     }
 
     writtenFiles?: ESMap<Path, number>;
-    diff(baseline: string[], base: ESMap<string, FSEntry> = new ts.Map()) {
+    diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
         this.fs.forEach(newFsEntry => {
             diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
         });
@@ -1180,7 +1180,7 @@ export type TestServerHostTrackingWrittenFiles = TestServerHost & {
 export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
     const host = inputHost as TestServerHostTrackingWrittenFiles;
     const originalWriteFile = host.writeFile;
-    host.writtenFiles = new ts.Map<Path, number>();
+    host.writtenFiles = new Map<Path, number>();
     host.writeFile = (fileName, content) => {
         originalWriteFile.call(host, fileName, content);
         const path = host.toFullPath(fileName);

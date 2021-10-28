@@ -1,13 +1,13 @@
 import { RunnerBase, TypeWriterWalker, TypeWriterResult } from "./Harness";
-import { FileSystemEntries, sys, compareStringsCaseSensitive, compareStringsCaseInsensitive, combinePaths, ScriptTarget, createSourceFile, ESMap, SourceFile, getEntries, CompilerOptions, getEmitScriptTarget, CommandLineOption, Diagnostic, parseListTypeOption, parseCustomTypeOption, CommandLineOptionOfCustomType, cloneCompilerOptions, NewLineKind, map, getNormalizedAbsolutePath, fileExtensionIs, Extension, forEach, getAllowJSCompilerOption, removeFileExtension, getDeclarationEmitExtensionForPath, formatDiagnosticsWithColorAndContext, formatDiagnostics, getErrorSummaryText, getErrorCountForSummary, getFilesInErrorForSummary, sort, compareDiagnostics, createGetCanonicalFileName, flattenDiagnosticMessageText, diagnosticCategoryName, formatLocation, identity, DiagnosticWithLocation, comparePaths, Comparison, computeLineStarts, TextSpan, textSpanEnd, countWhere, Program, endsWith, flatMap, getAreDeclarationMapsEnabled, contains, convertToBase64, getBaseFileName, CharacterCodes, ScriptKind, length, normalizeSlashes, toPath, startsWith, findIndex, arrayFrom, orderedRemoveItemAt, ReadonlyESMap, optionDeclarations, equateStringsCaseInsensitive, hasProperty, ParsedCommandLine, ParseConfigHost, parseJsonText, normalizePath, getDirectoryPath, parseJsonSourceFileConfigFileContent, ForegroundColorEscapeSequences, find } from "./ts";
+import { FileSystemEntries, sys, compareStringsCaseSensitive, compareStringsCaseInsensitive, combinePaths, ScriptTarget, createSourceFile, Map, ESMap, SourceFile, getEntries, CompilerOptions, getEmitScriptTarget, CommandLineOption, Diagnostic, parseListTypeOption, parseCustomTypeOption, CommandLineOptionOfCustomType, cloneCompilerOptions, NewLineKind, map, getNormalizedAbsolutePath, fileExtensionIs, Extension, forEach, getAllowJSCompilerOption, removeFileExtension, getDeclarationEmitExtensionForPath, formatDiagnosticsWithColorAndContext, formatDiagnostics, getErrorSummaryText, getErrorCountForSummary, getFilesInErrorForSummary, sort, compareDiagnostics, createGetCanonicalFileName, flattenDiagnosticMessageText, diagnosticCategoryName, formatLocation, identity, DiagnosticWithLocation, comparePaths, Comparison, computeLineStarts, TextSpan, textSpanEnd, countWhere, Program, endsWith, flatMap, getAreDeclarationMapsEnabled, contains, convertToBase64, getBaseFileName, CharacterCodes, ScriptKind, length, normalizeSlashes, toPath, startsWith, findIndex, arrayFrom, orderedRemoveItemAt, ReadonlyESMap, optionDeclarations, equateStringsCaseInsensitive, hasProperty, ParsedCommandLine, ParseConfigHost, parseJsonText, normalizePath, getDirectoryPath, parseJsonSourceFileConfigFileContent, ForegroundColorEscapeSequences, find } from "./ts";
 import { findUpRoot, assertInvariants, removeByteOrderMark, removeTestPathPrefixes, canonicalizeForHarness, splitContentByNewlines, encodeString } from "./Utils";
 import { combine, dirname, isDeclaration, isJson, isTypeScript, isJavaScript, addTrailingSeparator } from "./vpath";
 import { FileSet, srcFolder, builtFolder, testLibFolder, createFromFileSystem, Symlink } from "./vfs";
 import { CompilationResult } from "./compiler";
 import { TextDocument } from "./documents";
 import { CompilerHost } from "./fakes";
-import * as ts from "./ts";
 import * as compiler from "./compiler";
+
 export interface IO {
     newLine(): string;
     getCurrentDirectory(): string;
@@ -264,7 +264,7 @@ export namespace Compiler {
         }
 
         if (!libFileNameSourceFileMap) {
-            libFileNameSourceFileMap = new ts.Map(getEntries({
+            libFileNameSourceFileMap = new Map(getEntries({
                 [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ScriptTarget.Latest)
             }));
         }
@@ -307,7 +307,7 @@ export namespace Compiler {
         noTypesAndSymbols?: boolean;
     }
 
-    // Additional options not already in ts.optionDeclarations
+    // Additional options not already in optionDeclarations
     const harnessOptionDeclarations: CommandLineOption[] = [
         { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false },
         { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false },
@@ -329,9 +329,9 @@ export namespace Compiler {
     let optionsIndex: ESMap<string, CommandLineOption>;
     function getCommandLineOption(name: string): CommandLineOption | undefined {
         if (!optionsIndex) {
-            optionsIndex = new ts.Map<string, CommandLineOption>();
-            const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
-            for (const option of optionDeclarations) {
+            optionsIndex = new Map<string, CommandLineOption>();
+            const optionDecls = harnessOptionDeclarations.concat(optionDeclarations);
+            for (const option of optionDecls) {
                 optionsIndex.set(option.name.toLowerCase(), option);
             }
         }
@@ -605,7 +605,7 @@ export namespace Compiler {
         errorsReported = 0;
 
         // 'merge' the lines of each input file with any errors associated with it
-        const dupeCase = new ts.Map<string, number>();
+        const dupeCase = new Map<string, number>();
         for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
             // Filter down to the errors in the file
             const fileErrors = diagnostics.filter((e): e is DiagnosticWithLocation => {
@@ -790,7 +790,7 @@ export namespace Compiler {
             if (skipBaseline) {
                 return;
             }
-            const dupeCase = new ts.Map<string, number>();
+            const dupeCase = new Map<string, number>();
 
             for (const file of allFiles) {
                 const { unitName } = file;
@@ -963,7 +963,7 @@ export namespace Compiler {
         // Collect, test, and sort the fileNames
         const files = Array.from(outputFiles);
         files.slice().sort((a, b) => compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
-        const dupeCase = new ts.Map<string, number>();
+        const dupeCase = new Map<string, number>();
         // Yield them
         for (const outputFile of files) {
             yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + removeByteOrderMark(outputFile.text)];
@@ -1099,7 +1099,7 @@ function getVaryByStarSettingValues(varyBy: string): ReadonlyESMap<string, strin
             return option.type;
         }
         if (option.type === "boolean") {
-            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new ts.Map(getEntries({
+            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(getEntries({
                 true: 1,
                 false: 0
             })));
@@ -1449,7 +1449,7 @@ export namespace Baseline {
         string
     ]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {
         const gen = generateContent();
-        const writtenFiles = new ts.Map<string, true>();
+        const writtenFiles = new Map<string, true>();
         const errors: Error[] = [];
 
         // eslint-disable-next-line no-null/no-null

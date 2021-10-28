@@ -1,8 +1,8 @@
 import { findUpFile } from "../Utils";
 import { configOption, IO, TestRunnerKind, runners, workerCount, noColors, TestConfig, lightMode, runUnitTests, stackTraceLimit, globalTimeout, taskConfigsFolder, keepFailed } from "../Harness";
 import { Task, ErrorInfo, TestInfo, TaskTimeout, ParallelClientMessage, ParallelHostMessage, shimNoopTestInterface } from "../Harness.Parallel";
-import { combinePaths, Debug } from "../ts";
-import * as ts from "../ts";
+import { Map, combinePaths, Debug } from "../ts";
+
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");
     const Base = Mocha.reporters.Base;
@@ -28,7 +28,7 @@ export function start() {
     let totalCost = 0;
 
     class RemoteSuite extends Mocha.Suite {
-        suiteMap = new ts.Map<string, RemoteSuite>();
+        suiteMap = new Map<string, RemoteSuite>();
         constructor(title: string) {
             super(title);
             this.pending = false;
