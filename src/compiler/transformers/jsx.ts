@@ -206,7 +206,7 @@ namespace ts {
 
         function convertJsxChildrenToChildrenPropAssignment(children: readonly JsxChild[]) {
             const nonWhitespaceChildren = getSemanticJsxChildren(children);
-            if (length(nonWhitespaceChildren) === 1) {
+            if (length(nonWhitespaceChildren) === 1 && !(nonWhitespaceChildren[0] as JsxExpression).dotDotDotToken) {
                 const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createPropertyAssignment("children", result);
             }
@@ -221,7 +221,15 @@ namespace ts {
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
             const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
                 factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(getSemanticJsxChildren(children || emptyArray)), isChild, location);
+            const nonWhitespaceChildren = getSemanticJsxChildren(children || emptyArray);
+            return visitJsxOpeningLikeElementOrFragmentJSX(
+                tagName,
+                objectProperties,
+                keyAttr,
+                (nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken ? 2 : length(nonWhitespaceChildren),
+                isChild,
+                location
+            );
         }
 
         function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
@@ -290,11 +298,12 @@ namespace ts {
                     childrenProps = result;
                 }
             }
+            const nonWhitespaceChildren = getSemanticJsxChildren(children);
             return visitJsxOpeningLikeElementOrFragmentJSX(
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                length(getSemanticJsxChildren(children)),
+                (nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken ? 2 : length(nonWhitespaceChildren),
                 isChild,
                 location
             );
