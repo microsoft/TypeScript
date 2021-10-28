@@ -7,11 +7,18 @@ namespace ts.codefix {
      * @param importAdder If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], sourceFile: SourceFile, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(
+        classDeclaration: ClassLikeDeclaration,
+        possiblyMissingSymbols: readonly Symbol[],
+        sourceFile: SourceFile,
+        context: TypeConstructionContext,
+        preferences: UserPreferences,
+        importAdder: ImportAdder | undefined,
+        addClassElement: (node: AddNode) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined);
             }
         }
     }
@@ -28,10 +35,23 @@ namespace ts.codefix {
         host: LanguageServiceHost;
     }
 
+    type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
+
     /**
-     * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
+     * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
+     * @param body If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: Node) => void): void {
+    export function addNewNodeForMemberSymbol(
+        symbol: Symbol,
+        enclosingDeclaration: ClassLikeDeclaration,
+        sourceFile: SourceFile,
+        context: TypeConstructionContext,
+        preferences: UserPreferences,
+        importAdder: ImportAdder | undefined,
+        addClassElement: (node: AddNode) => void,
+        body: Block | undefined,
+        isAmbient = false,
+    ): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
@@ -44,7 +64,7 @@ namespace ts.codefix {
         const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
-        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient);
+        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
         const quotePreference = getQuotePreference(sourceFile, preferences);
 
         switch (declaration.kind) {
@@ -89,7 +109,7 @@ namespace ts.codefix {
                             name,
                             emptyArray,
                             typeNode,
-                            ambient ? undefined : createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
@@ -100,7 +120,7 @@ namespace ts.codefix {
                             modifiers,
                             name,
                             createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
-                            ambient ? undefined : createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }
                 }
                 break;
@@ -122,7 +142,7 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
-                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : createStubbedMethodBody(quotePreference));
+                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : body || createStubbedMethodBody(quotePreference));
                     break;
                 }
 
@@ -134,11 +154,11 @@ namespace ts.codefix {
                 if (!ambient) {
                     if (declarations.length > signatures.length) {
                         const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                        outputMethod(quotePreference, signature, modifiers, name, createStubbedMethodBody(quotePreference));
+                        outputMethod(quotePreference, signature, modifiers, name, body || createStubbedMethodBody(quotePreference));
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional, modifiers, quotePreference));
+                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional, modifiers, quotePreference, body));
                     }
                 }
                 break;
@@ -348,6 +368,7 @@ namespace ts.codefix {
         optional: boolean,
         modifiers: readonly Modifier[] | undefined,
         quotePreference: QuotePreference,
+        body: Block | undefined,
     ): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
@@ -389,7 +410,8 @@ namespace ts.codefix {
             /*typeParameters*/ undefined,
             parameters,
             getReturnTypeFromSignatures(signatures, checker, context, enclosingDeclaration),
-            quotePreference);
+            quotePreference,
+            body);
     }
 
     function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
@@ -406,7 +428,8 @@ namespace ts.codefix {
         typeParameters: readonly TypeParameterDeclaration[] | undefined,
         parameters: readonly ParameterDeclaration[],
         returnType: TypeNode | undefined,
-        quotePreference: QuotePreference
+        quotePreference: QuotePreference,
+        body: Block | undefined
     ): MethodDeclaration {
         return factory.createMethodDeclaration(
             /*decorators*/ undefined,
@@ -417,7 +440,7 @@ namespace ts.codefix {
             typeParameters,
             parameters,
             returnType,
-            createStubbedMethodBody(quotePreference));
+            body || createStubbedMethodBody(quotePreference));
     }
 
     function createStubbedMethodBody(quotePreference: QuotePreference) {
