@@ -1248,7 +1248,7 @@ export let sys: System = (() => {
                 }
             },
             getExecutingFilePath() {
-                return __filename;
+                return __filename; //!!!
             },
             getCurrentDirectory,
             getDirectories,

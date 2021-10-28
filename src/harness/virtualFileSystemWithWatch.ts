@@ -29,7 +29,7 @@ export const safeList = {
     })
 };
 
-function getExecutingFilePathFromLibFile(): string {
+function getExecutingFilePathFromLibFile(): string { //!!!
     return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
 }
 

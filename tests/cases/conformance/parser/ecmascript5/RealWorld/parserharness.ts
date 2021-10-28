@@ -37,7 +37,7 @@ function filePath(fullPath: string) {
     return path.join("/") + "/";
 }
 
-var typescriptServiceFileName = filePath(IO.getExecutingFilePath()) + "typescriptServices.js";
+var typescriptServiceFileName = filePath(IO.getExecutingFilePath()) + "typescriptServices.js"; //!!!
 var typescriptServiceFile = IO.readFile(typescriptServiceFileName);
 if (typeof ActiveXObject === "function") {
     eval(typescriptServiceFile);

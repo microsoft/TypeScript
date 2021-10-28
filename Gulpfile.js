@@ -19,6 +19,7 @@ const cmdLineOptions = require("./scripts/build/options");
 
 const copyright = "CopyrightNotice.txt";
 const testRoot = "built/local/testRunner/Harness.js";
+//!!! const testRoot = "built/local/run.js";
 const cleanTasks = [];
 
 const buildScripts = () => buildProject("scripts");
@@ -126,6 +127,7 @@ const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagno
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
 const buildServices = (() => {
+    return cb => { console.log("!!!TODO!!! buildServices"); cb(); };
     // build typescriptServices.out.js
     const buildTypescriptServicesOut = () => buildProject("src/typescriptServices/tsconfig.json", cmdLineOptions);
 
@@ -250,6 +252,7 @@ task("watch-min").flags = {
 };
 
 const buildLssl = (() => {
+    return cb => { console.log("!!!TODO!!! buildLssl"); cb(); };
     // build tsserverlibrary.out.js
     const buildServerLibraryOut = () => buildProject("src/tsserverlibrary/tsconfig.json", cmdLineOptions);
 

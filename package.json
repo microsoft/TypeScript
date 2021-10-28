@@ -66,6 +66,7 @@
         "convert-source-map": "latest",
         "del": "5.1.0",
         "diff": "^4.0.2",
+        "esbuild": "^0.13.8",
         "eslint": "7.12.1",
         "eslint-formatter-autolinkable-stylish": "1.1.4",
         "eslint-plugin-import": "2.22.1",

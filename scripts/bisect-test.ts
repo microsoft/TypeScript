@@ -1,3 +1,5 @@
+//!!! should this be updated or removed?
+
 /**
  * You should have ts-node installed globally before executing this, probably!
  * Otherwise you'll need to compile this script before you start bisecting!

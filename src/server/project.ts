@@ -1493,8 +1493,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // Search any globally-specified probe paths, then our peer node_modules
         const searchPaths = [
           ...this.projectService.pluginProbeLocations,
-          // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-          combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
+          // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/ //!!!
+          combinePaths(this.projectService.getExecutingFilePath(), "../../.."), //!!!
         ];
 
         if (this.projectService.globalPlugins) {
@@ -2171,8 +2171,8 @@ export class ConfiguredProject extends Project {
         }
 
         // Search our peer node_modules, then any globally-specified probe paths
-        // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-        const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+        // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/ //!!!
+        const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations]; //!!!
 
         if (this.projectService.allowLocalPluginLoads) {
             const local = getDirectoryPath(this.canonicalConfigFilePath);
