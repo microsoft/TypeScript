@@ -90,6 +90,7 @@ verify.completions({
     ],
     preferences: {
         jsxAttributeCompletionStyle: "braces",
-        includeCompletionsWithSnippetText: true
+        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithInsertText: true,
     }
 });
