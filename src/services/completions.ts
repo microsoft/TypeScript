@@ -849,13 +849,15 @@ namespace ts.Completions {
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
         let body;
+        let tabstopStart = 1;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
             // We are adding a final tabstop (i.e. $0) in the body of the suggested member, if it has one.
             // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
-            const emptyStatement = factory.createExpressionStatement(factory.createIdentifier(""));
-            setSnippetElement(emptyStatement, { kind: SnippetKind.TabStop, order: 0 });
-            body = factory.createBlock([emptyStatement], /* multiline */ true);
+            const emptyStatement1 = factory.createExpressionStatement(factory.createIdentifier(""));
+            setSnippetElement(emptyStatement1, { kind: SnippetKind.TabStop, order: 1 });
+            tabstopStart = 2;
+            body = factory.createBlock([emptyStatement1], /* multiline */ true);
         }
         else {
             body = factory.createBlock([], /* multiline */ true);
@@ -914,7 +916,7 @@ namespace ts.Completions {
 
         if (completionNodes.length) {
             if (preferences.includeCompletionsWithSnippetText) {
-                addSnippets(completionNodes);
+                addSnippets(completionNodes, tabstopStart);
             }
             insertText = printer.printSnippetList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
@@ -963,8 +965,8 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function addSnippets(nodes: Node[]): void {
-        let order = 1;
+    function addSnippets(nodes: Node[], orderStart: number): void {
+        let order = orderStart;
         for (const node of nodes) {
             addSnippetsWorker(node, /*parent*/ undefined);
         }
