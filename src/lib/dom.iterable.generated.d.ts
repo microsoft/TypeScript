@@ -135,6 +135,7 @@ interface NamedNodeMap {
 }
 
 interface Navigator {
+    /** Available only in secure contexts. */
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
     vibrate(pattern: Iterable<number>): boolean;
 }
@@ -168,13 +169,6 @@ interface PluginArray {
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
-}
-
-interface ReadableStream<R = any> {
-    [Symbol.iterator](): IterableIterator<any>;
-    entries(): IterableIterator<[number, any]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<any>;
 }
 
 interface SVGLengthList {
