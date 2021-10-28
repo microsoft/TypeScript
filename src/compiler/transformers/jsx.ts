@@ -26,12 +26,12 @@ namespace ts {
             return currentFileState.filenameDeclaration.name;
         }
 
-        function getJsxFactoryCalleePrimitive(childrenLength: number): "jsx" | "jsxs" | "jsxDEV" {
-            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : childrenLength > 1 ? "jsxs" : "jsx";
+        function getJsxFactoryCalleePrimitive(isStaticChildren: boolean): "jsx" | "jsxs" | "jsxDEV" {
+            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : isStaticChildren ? "jsxs" : "jsx";
         }
 
-        function getJsxFactoryCallee(childrenLength: number) {
-            const type = getJsxFactoryCalleePrimitive(childrenLength);
+        function getJsxFactoryCallee(isStaticChildren: boolean) {
+            const type = getJsxFactoryCalleePrimitive(isStaticChildren);
             return getImplicitImportForName(type);
         }
 
@@ -221,24 +221,33 @@ namespace ts {
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
             const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
                 factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
-            const nonWhitespaceChildren = getSemanticJsxChildren(children || emptyArray);
             return visitJsxOpeningLikeElementOrFragmentJSX(
                 tagName,
                 objectProperties,
                 keyAttr,
-                (nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken ? 2 : length(nonWhitespaceChildren),
+                children || emptyArray,
                 isChild,
                 location
             );
         }
 
-        function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElementOrFragmentJSX(
+            tagName: Expression,
+            objectProperties: Expression,
+            keyAttr: JsxAttribute | undefined,
+            children: readonly JsxChild[],
+            isChild: boolean,
+            location: TextRange
+        ) {
+            const nonWhitespaceChildren = getSemanticJsxChildren(children);
+            const isStaticChildren =
+                length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
             const args: Expression[] = [tagName, objectProperties, !keyAttr ? factory.createVoidZero() : transformJsxAttributeInitializer(keyAttr.initializer)];
             if (compilerOptions.jsx === JsxEmit.ReactJSXDev) {
                 const originalFile = getOriginalNode(currentSourceFile);
                 if (originalFile && isSourceFile(originalFile)) {
                     // isStaticChildren development flag
-                    args.push(childrenLength > 1 ? factory.createTrue() : factory.createFalse());
+                    args.push(isStaticChildren ? factory.createTrue() : factory.createFalse());
                     // __source development flag
                     const lineCol = getLineAndCharacterOfPosition(originalFile, location.pos);
                     args.push(factory.createObjectLiteralExpression([
@@ -250,7 +259,10 @@ namespace ts {
                     args.push(factory.createThis());
                 }
             }
-            const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(childrenLength), /*typeArguments*/ undefined, args), location);
+            const element = setTextRange(
+                factory.createCallExpression(getJsxFactoryCallee(isStaticChildren), /*typeArguments*/ undefined, args),
+                location
+            );
 
             if (isChild) {
                 startOnNewLine(element);
@@ -298,12 +310,11 @@ namespace ts {
                     childrenProps = result;
                 }
             }
-            const nonWhitespaceChildren = getSemanticJsxChildren(children);
             return visitJsxOpeningLikeElementOrFragmentJSX(
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                (nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken ? 2 : length(nonWhitespaceChildren),
+                children,
                 isChild,
                 location
             );
