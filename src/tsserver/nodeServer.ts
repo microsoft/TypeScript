@@ -1,6 +1,8 @@
 import { LogLevel, getLogLevel, findArgument, StartInput, ServerHost, BaseLogger, Msg, stringifyIndented, RequireResult, ServerCancellationToken, nullCancellationToken, StartSessionOptions, Logger, ITypingsInstaller, ProjectService, Event, InstallPackageOptionsWithProject, InstallPackageRequest, Arguments, Project, TypingInstallerRequestUnion, createInstallTypingsRequest, TypesRegistryResponse, PackageInstalledResponse, SetTypings, InvalidateCachedTypings, BeginInstallTypes, EndInstallTypes, InitializationFailedResponse, EventTypesRegistry, ActionPackageInstalled, EventInitializationFailed, protocol, EventBeginInstallTypes, EventEndInstallTypes, ActionInvalidate, ActionSet, Session, nullTypingsInstaller, formatMessage, toEvent, indent, hasArgument } from "./ts.server";
 import { CharacterCodes, stripQuotes, LanguageServiceMode, Debug, MapLike, noop, getNodeMajorVersion, combinePaths, noopFileWatcher, WatchFileKind, resolveJSModule, validateLocaleAndSetLanguage, normalizeSlashes, directorySeparator, toFileNameLowerCase, getRootLength, DirectoryWatcherCallback, WatchOptions, FileWatcher, ESMap, ApplyCodeActionCommandResult, JsTyping, getDirectoryPath, TypeAcquisition, SortedReadonlyArray, getEntries, assertType, sys, tracing, startTracing, versionMajorMinor } from "./ts";
 import * as ts from "./ts";
+import { execFileSync } from "child_process";
+
 /*@internal*/
 interface LogOptions {
     file?: string;
@@ -100,12 +102,6 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
 /* @internal */
 export function initializeNodeSystem(): StartInput {
     const sys = Debug.checkDefined(ts.sys) as ServerHost;
-    const childProcess: {
-        execFileSync(file: string, args: string[], options: {
-            stdio: "ignore";
-            env: MapLike<string>;
-        }): string | Buffer;
-    } = require("child_process");
 
     interface Stats {
         isFile(): boolean;
@@ -207,7 +203,7 @@ export function initializeNodeSystem(): StartInput {
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
                     }
-                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
+                    execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
                     status = true;
                     if (logger.hasLevel(LogLevel.verbose)) {
                         logger.info(`WatchGuard for path ${path} returned: OK`);

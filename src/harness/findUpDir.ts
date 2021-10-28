@@ -1,5 +1,5 @@
-const { join, resolve, dirname } = require("path") as typeof import("path");
-const { existsSync } = require("fs") as typeof import("fs");
+import { join, resolve, dirname } from "path";
+import { existsSync } from "fs";
 
 // search directories upward to avoid hard-wired paths based on the
 // build tree (same as scripts/build/findUpDir.js)

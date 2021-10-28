@@ -2,8 +2,8 @@ import { ScriptSnapshot, getDefaultLibFilePath, emptyArray, LanguageServiceHost,
 import { libFile, createServerHost } from "../../ts.projectSystem";
 import { projectRoot } from "../../ts.tscWatch";
 import * as ts from "../../ts";
-const _chai: typeof import("chai") = require("chai");
-const expect: typeof _chai.expect = _chai.expect;
+import { expect } from "chai";
+
 describe("unittests:: services:: languageService", () => {
     const files: {
         [index: string]: string;

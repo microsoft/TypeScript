@@ -1,8 +1,8 @@
 import { RunnerBase, IO, isWorker, Baseline, TestRunnerKind } from "./Harness";
 import { Debug, Version, flatten, comparePathsCaseSensitive, compareValues, compareStringsCaseSensitive, stringContains } from "./ts";
-const fs: typeof import("fs") = require("fs");
-const path: typeof import("path") = require("path");
-const del: typeof import("del") = require("del");
+import * as fs from "fs";
+import * as path from "path";
+import * as del from "del";
 
 interface ExecResult {
     stdout: Buffer;

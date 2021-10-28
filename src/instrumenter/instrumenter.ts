@@ -1,5 +1,5 @@
-import fs = require("fs");
-import path = require("path");
+import * as fs from "fs";
+import * as path from "path";
 
 function instrumentForRecording(fn: string, tscPath: string) {
     instrument(tscPath, `

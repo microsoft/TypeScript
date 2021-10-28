@@ -1,16 +1,8 @@
 import { Log, TypingsInstaller, RequestCompletedAction, installNpmPackages } from "./ts.server.typingsInstaller";
 import { nowString, InstallTypingHost, InitializationFailedResponse, Arguments, TypingInstallerRequestUnion, TypesRegistryResponse, EventTypesRegistry, PackageInstalledResponse, ActionPackageInstalled, TypingInstallerResponseUnion, findArgument, hasArgument } from "./ts.server";
-import { sys, MapLike, ESMap, getEntries, combinePaths, normalizeSlashes, toPath, createGetCanonicalFileName, stringContains, Debug, version, forEachAncestorDirectory, getDirectoryPath } from "./ts";
-import * as ts from "./ts";
-const fs: {
-    appendFileSync(file: string, content: string): void;
-} = require("fs");
-
-const path: {
-    join(...parts: string[]): string;
-    dirname(path: string): string;
-    basename(path: string, extension?: string): string;
-} = require("path");
+import { sys, MapLike, Map, ESMap, getEntries, combinePaths, normalizeSlashes, toPath, createGetCanonicalFileName, stringContains, Debug, version, forEachAncestorDirectory, getDirectoryPath } from "./ts";
+import { appendFileSync } from "fs";
+import * as path from "path";
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {
@@ -24,7 +16,7 @@ class FileLog implements Log {
             return;
 
         try {
-            fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
+            appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
         }
         catch (e) {
             this.logFile = undefined;
@@ -55,17 +47,17 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
         if (log.isEnabled()) {
             log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
         }
-        return new ts.Map<string, MapLike<string>>();
+        return new Map<string, MapLike<string>>();
     }
     try {
         const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
-        return new ts.Map(getEntries(content.entries));
+        return new Map(getEntries(content.entries));
     }
     catch (e) {
         if (log.isEnabled()) {
             log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
         }
-        return new ts.Map<string, MapLike<string>>();
+        return new Map<string, MapLike<string>>();
     }
 }
 
