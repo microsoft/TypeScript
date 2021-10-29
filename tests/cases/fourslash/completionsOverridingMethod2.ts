@@ -30,7 +30,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"\"\\$usd\"(${2:a}: ${3:number}): ${4:number} {\n    $1\n}\n",
+"\"\\$usd\"(a: number): number {\n    $0\n}\n",
         }
     ],
 });
