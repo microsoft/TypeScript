@@ -500,6 +500,9 @@ namespace ts {
         isClass(): this is InterfaceType {
             return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
+        isIndexType(): this is IndexType {
+            return !!(this.flags & TypeFlags.Index);
+        }
         /**
          * This polyfills `referenceType.typeArguments` for API consumers
          */
@@ -544,6 +547,16 @@ namespace ts {
         }
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
+        }
+        getTypeParameterAtPosition(pos: number): Type {
+            const type = this.checker.getParameterType(this, pos);
+            if (type.isIndexType() && isThisTypeParameter(type.type)) {
+                const constraint = type.type.getConstraint();
+                if (constraint) {
+                    return this.checker.getIndexType(constraint);
+                }
+            }
+            return type;
         }
 
         getDocumentationComment(): SymbolDisplayPart[] {
