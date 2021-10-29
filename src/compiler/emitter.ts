@@ -1942,6 +1942,11 @@ namespace ts {
                 case SnippetKind.TabStop:
                     emitTabStop(snippet);
                     break;
+                case SnippetKind.Sequence:
+                    emitSequence(snippet);
+                    break;
+                default:
+                    return Debug.fail("Unsupported SnippetKind.");
             }
         }
 
@@ -1954,6 +1959,12 @@ namespace ts {
 
         function emitTabStop(snippet: TabStop) {
             nonEscapingWrite(`\$${snippet.order}`);
+        }
+
+        function emitSequence(snippet: SnippetSequence) {
+            for (const s of snippet.snippets) {
+                emitTabStop(s);
+            }
         }
 
         //

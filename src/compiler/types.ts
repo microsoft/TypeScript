@@ -6828,7 +6828,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type SnippetElement = TabStop | Placeholder;
+    export type SnippetElement = TabStop | Placeholder | SnippetSequence;
 
     /* @internal */
     export interface TabStop {
@@ -6842,6 +6842,12 @@ namespace ts {
         order: number;
     }
 
+    /* @internal */
+    export interface SnippetSequence {
+        kind: SnippetKind.Sequence;
+        snippets: TabStop[];
+    }
+
     // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
     /* @internal */
     export const enum SnippetKind {
@@ -6849,6 +6855,7 @@ namespace ts {
         Placeholder,                            // `${1:foo}`
         Choice,                                 // `${1|one,two,three|}`
         Variable,                               // `$name`, `${name:default}`
+        Sequence,                               // A sequence of tabstops, e.g. `$1$0`
     }
 
     export const enum EmitFlags {
