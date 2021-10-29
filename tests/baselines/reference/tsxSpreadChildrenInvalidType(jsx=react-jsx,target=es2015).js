@@ -1,5 +1,4 @@
-// @jsx: react,react-jsx
-// @target: es2015,es5
+//// [tsxSpreadChildrenInvalidType.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -31,3 +30,18 @@ function TodoListNoError({ todos }: TodoListProps) {
 }
 let x: TodoListProps;
     <TodoList {...x}/>
+
+
+//// [tsxSpreadChildrenInvalidType.js]
+function Todo(prop) {
+    return _jsx("div", { children: prop.key.toString() + prop.todo }, void 0);
+}
+function TodoList({ todos }) {
+    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] }, void 0);
+}
+function TodoListNoError({ todos }) {
+    // any is not checked
+    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] }, void 0);
+}
+let x;
+_jsx(TodoList, Object.assign({}, x), void 0);
