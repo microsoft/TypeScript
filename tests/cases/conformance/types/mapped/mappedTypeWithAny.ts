@@ -57,9 +57,9 @@ let def: [any, any] = stringifyPair(void 0 as any);
 
 // Repro from #46582
 
-export type Evolvable<E extends Evolver> = {
+type Evolvable<E extends Evolver> = {
   [P in keyof E]: never;
 };
-export type Evolver<T extends Evolvable<any> = any> = {
+type Evolver<T extends Evolvable<any> = any> = {
   [key in keyof Partial<T>]: never;
 };

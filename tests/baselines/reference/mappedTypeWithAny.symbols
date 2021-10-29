@@ -153,25 +153,25 @@ let def: [any, any] = stringifyPair(void 0 as any);
 
 // Repro from #46582
 
-export type Evolvable<E extends Evolver> = {
+type Evolvable<E extends Evolver> = {
 >Evolvable : Symbol(Evolvable, Decl(mappedTypeWithAny.ts, 52, 51))
->E : Symbol(E, Decl(mappedTypeWithAny.ts, 56, 22))
+>E : Symbol(E, Decl(mappedTypeWithAny.ts, 56, 15))
 >Evolver : Symbol(Evolver, Decl(mappedTypeWithAny.ts, 58, 2))
 
   [P in keyof E]: never;
 >P : Symbol(P, Decl(mappedTypeWithAny.ts, 57, 3))
->E : Symbol(E, Decl(mappedTypeWithAny.ts, 56, 22))
+>E : Symbol(E, Decl(mappedTypeWithAny.ts, 56, 15))
 
 };
-export type Evolver<T extends Evolvable<any> = any> = {
+type Evolver<T extends Evolvable<any> = any> = {
 >Evolver : Symbol(Evolver, Decl(mappedTypeWithAny.ts, 58, 2))
->T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 20))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 13))
 >Evolvable : Symbol(Evolvable, Decl(mappedTypeWithAny.ts, 52, 51))
 
   [key in keyof Partial<T>]: never;
 >key : Symbol(key, Decl(mappedTypeWithAny.ts, 60, 3))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 20))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 13))
 
 };
 

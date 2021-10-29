@@ -55,17 +55,16 @@ let def: [any, any] = stringifyPair(void 0 as any);
 
 // Repro from #46582
 
-export type Evolvable<E extends Evolver> = {
+type Evolvable<E extends Evolver> = {
   [P in keyof E]: never;
 };
-export type Evolver<T extends Evolvable<any> = any> = {
+type Evolver<T extends Evolvable<any> = any> = {
   [key in keyof Partial<T>]: never;
 };
 
 
 //// [mappedTypeWithAny.js]
 "use strict";
-exports.__esModule = true;
 for (var id in z) {
     var data = z[id];
     var x = data.notAValue; // Error
@@ -81,9 +80,49 @@ var def = stringifyPair(void 0);
 
 
 //// [mappedTypeWithAny.d.ts]
-export declare type Evolvable<E extends Evolver> = {
+declare type Item = {
+    value: string;
+};
+declare type ItemMap<T> = {
+    [P in keyof T]: Item;
+};
+declare let x0: keyof any;
+declare let x1: {
+    [P in any]: Item;
+};
+declare let x2: {
+    [P in string]: Item;
+};
+declare let x3: {
+    [P in keyof any]: Item;
+};
+declare let x4: ItemMap<any>;
+declare type Data = {
+    value: string;
+};
+declare type StrictDataMap<T> = {
+    [P in keyof T]: Data;
+};
+declare let z: StrictDataMap<any>;
+declare type Arrayish<T extends unknown[]> = {
+    [K in keyof T]: T[K];
+};
+declare type Objectish<T extends unknown> = {
+    [K in keyof T]: T[K];
+};
+declare type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+declare function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>): void;
+declare function stringifyArray<T extends readonly any[]>(arr: T): {
+    -readonly [K in keyof T]: string;
+};
+declare let abc: any[];
+declare function stringifyPair<T extends readonly [any, any]>(arr: T): {
+    -readonly [K in keyof T]: string;
+};
+declare let def: [any, any];
+declare type Evolvable<E extends Evolver> = {
     [P in keyof E]: never;
 };
-export declare type Evolver<T extends Evolvable<any> = any> = {
+declare type Evolver<T extends Evolvable<any> = any> = {
     [key in keyof Partial<T>]: never;
 };

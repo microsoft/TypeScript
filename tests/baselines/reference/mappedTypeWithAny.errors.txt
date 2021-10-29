@@ -71,10 +71,10 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: T
     
     // Repro from #46582
     
-    export type Evolvable<E extends Evolver> = {
+    type Evolvable<E extends Evolver> = {
       [P in keyof E]: never;
     };
-    export type Evolver<T extends Evolvable<any> = any> = {
+    type Evolver<T extends Evolvable<any> = any> = {
       [key in keyof Partial<T>]: never;
     };
     
