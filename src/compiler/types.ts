@@ -2870,7 +2870,7 @@ namespace ts {
     //       for the same reasons we treat NewExpression as a PrimaryExpression.
     export interface MetaProperty extends PrimaryExpression {
         readonly kind: SyntaxKind.MetaProperty;
-        readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
+        readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword | SyntaxKind.ClassKeyword;
         readonly name: Identifier;
     }
 

@@ -1363,7 +1363,7 @@ declare namespace ts {
     }
     export interface MetaProperty extends PrimaryExpression {
         readonly kind: SyntaxKind.MetaProperty;
-        readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
+        readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword | SyntaxKind.ClassKeyword;
         readonly name: Identifier;
     }
     export interface JsxElement extends PrimaryExpression {
@@ -11252,7 +11252,7 @@ declare namespace ts {
     /** @deprecated Use `factory.updateNonNullChain` or the factory supplied by your transformation context instead. */
     const updateNonNullChain: (node: NonNullChain, expression: Expression) => NonNullChain;
     /** @deprecated Use `factory.createMetaProperty` or the factory supplied by your transformation context instead. */
-    const createMetaProperty: (keywordToken: SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword, name: Identifier) => MetaProperty;
+    const createMetaProperty: (keywordToken: SyntaxKind.ClassKeyword | SyntaxKind.ImportKeyword | SyntaxKind.NewKeyword, name: Identifier) => MetaProperty;
     /** @deprecated Use `factory.updateMetaProperty` or the factory supplied by your transformation context instead. */
     const updateMetaProperty: (node: MetaProperty, name: Identifier) => MetaProperty;
     /** @deprecated Use `factory.createTemplateSpan` or the factory supplied by your transformation context instead. */

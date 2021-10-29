@@ -3239,6 +3239,7 @@ namespace ts {
                     node.transformFlags |= TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ImportKeyword:
+                case SyntaxKind.ClassKeyword:
                     node.transformFlags |= TransformFlags.ContainsESNext;
                     break;
                 default:

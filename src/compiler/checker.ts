@@ -32632,6 +32632,12 @@ namespace ts {
                 return checkImportMetaProperty(node);
             }
 
+            if (node.keywordToken === SyntaxKind.ClassKeyword) {
+                const prop = getPropertyOfType(checkClassHasInstanceProperty(node), node.name.escapedText);
+                if (!prop) return errorType;
+                return getTypeOfSymbol(prop);
+            }
+
             return Debug.assertNever(node.keywordToken);
         }
 
@@ -32642,6 +32648,8 @@ namespace ts {
                 case SyntaxKind.NewKeyword:
                     const type = checkNewTargetMetaProperty(node);
                     return isErrorType(type) ? errorType : createNewTargetExpressionType(type);
+                case SyntaxKind.ClassKeyword:
+                    return checkClassHasInstanceProperty(node);
                 default:
                     Debug.assertNever(node.keywordToken);
             }
@@ -32675,6 +32683,19 @@ namespace ts {
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
             return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
+        }
+
+
+        function checkClassHasInstanceProperty(node: MetaProperty) {
+            const container = getContainingClass(node);
+            if (!container) {
+                error(node, Diagnostics.Meta_property_0_is_only_allowed_in_the_body_of_a_class, "class." + node.name.escapedText);
+                return errorType;
+            }
+            else {
+                const symbol = getSymbolOfNode(container)!;
+                return createClassMetaPropertyExpressionType(getTypeOfSymbol(symbol));
+            }
         }
 
         function getTypeOfParameter(symbol: Symbol) {
@@ -33047,6 +33068,39 @@ namespace ts {
             targetPropertySymbol.type = targetType;
 
             const members = createSymbolTable([targetPropertySymbol]);
+            symbol.members = members;
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
+        }
+
+        // cache this type on the class symbol?
+        function createClassMetaPropertyExpressionType(targetClass: Type): Type {
+            // Create a synthetic type `ClassMetaProperty { hasInstance(value: unknown): unknown is TargetClass }`
+            const symbol = createSymbol(SymbolFlags.None, "ClassMetaProperty" as __String);
+
+            // class.hasInstance
+            const hasInstanceSymbol = createSymbol(SymbolFlags.Property, "hasInstance" as __String, CheckFlags.Readonly);
+            {
+                hasInstanceSymbol.parent = symbol;
+
+                const arg0 = createSymbol(SymbolFlags.None, "value" as __String);
+                arg0.type = unknownType;
+                const classConstructor = getSingleSignature(targetClass, SignatureKind.Construct, /** allow members */ true);
+                const classInstance = classConstructor ? getReturnTypeOfSignature(classConstructor) : errorType;
+                const hasInstanceReturnType = createTypePredicate(TypePredicateKind.Identifier, "value", 0, classInstance);
+                const signature = createSignature(
+                    /** declaration */ undefined,
+                    /** generics */ undefined,
+                    /** this */ undefined,
+                    [arg0],
+                    booleanType,
+                    hasInstanceReturnType,
+                    /** minArgCount */ 1,
+                    SignatureFlags.None,
+                );
+                hasInstanceSymbol.type = createAnonymousType(/** symbol */ undefined, emptySymbols, [signature], emptyArray, emptyArray);
+            }
+
+            const members = createSymbolTable([hasInstanceSymbol]);
             symbol.members = members;
             return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
@@ -42927,6 +42981,11 @@ namespace ts {
                     if (parent.keywordToken === SyntaxKind.ImportKeyword && idText(node as Identifier) === "meta") {
                         return getGlobalImportMetaExpressionType().members!.get("meta" as __String);
                     }
+                    if (parent.keywordToken === SyntaxKind.ClassKeyword && idText(node as Identifier) === "hasInstance") {
+                        const meta = checkClassHasInstanceProperty(parent).symbol;
+                        const prop = meta.members?.get(parent.name.escapedText);
+                        return prop;
+                    }
                     // no other meta properties are valid syntax, thus no others should have symbols
                     return undefined;
                 }
@@ -42999,8 +43058,9 @@ namespace ts {
                 case SyntaxKind.DefaultKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.EqualsGreaterThanToken:
-                case SyntaxKind.ClassKeyword:
                     return getSymbolOfNode(node.parent);
+                case SyntaxKind.ClassKeyword:
+                    return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : getSymbolOfNode(node.parent);
                 case SyntaxKind.ImportType:
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal, ignoreErrors) : undefined;
 
@@ -45663,6 +45723,16 @@ namespace ts {
                 case SyntaxKind.ImportKeyword:
                     if (escapedText !== "meta") {
                         return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "meta");
+                    }
+                    break;
+                case SyntaxKind.ClassKeyword:
+                    if (escapedText !== "hasInstance") {
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, node.name.escapedText, tokenToString(node.keywordToken), "hasInstance");
+                    }
+                    else {
+                        if (node.parent.kind !== SyntaxKind.CallExpression) {
+                            return grammarErrorOnNode(node, Diagnostics._0_expected, "class.hasInstance()");
+                        }
                     }
                     break;
             }

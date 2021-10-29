@@ -4508,10 +4508,9 @@ namespace ts {
         }
 
         function isStartOfExpressionStatement(): boolean {
-            // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
+            // As per the grammar, none of '{' or 'function' can start an expression statement.
             return token() !== SyntaxKind.OpenBraceToken &&
                 token() !== SyntaxKind.FunctionKeyword &&
-                token() !== SyntaxKind.ClassKeyword &&
                 token() !== SyntaxKind.AtToken &&
                 isStartOfExpression();
         }
@@ -6053,6 +6052,9 @@ namespace ts {
 
                     return parseFunctionExpression();
                 case SyntaxKind.ClassKeyword:
+                    if (lookAhead(nextTokenIsDot)) {
+                        return parseClassMetaProperty();
+                    }
                     return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
@@ -6583,9 +6585,10 @@ namespace ts {
                     case SyntaxKind.LetKeyword:
                     case SyntaxKind.ConstKeyword:
                     case SyntaxKind.FunctionKeyword:
-                    case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
                         return true;
+                    case SyntaxKind.ClassKeyword:
+                        return !lookAhead(nextTokenIsDot);
 
                     // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
                     // however, an identifier cannot be followed by another identifier on the same line. This is what we
@@ -6750,6 +6753,9 @@ namespace ts {
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
                 case SyntaxKind.ClassKeyword:
+                    if (lookAhead(nextTokenIsDot)) {
+                        return parseExpressionOrLabeledStatement();
+                    }
                     return parseClassDeclaration(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined);
                 case SyntaxKind.IfKeyword:
                     return parseIfStatement();
@@ -7435,6 +7441,13 @@ namespace ts {
 
             // 'isClassMemberStart' should have hinted not to attempt parsing.
             return Debug.fail("Should not have attempted to parse class member declaration.");
+        }
+
+        function parseClassMetaProperty(): MetaProperty {
+            const pos = getNodePos();
+            nextToken(); // advance past the 'class'
+            nextToken(); // advance past the dot
+            return finishNode(factory.createMetaProperty(SyntaxKind.ClassKeyword, parseIdentifierName()), pos);
         }
 
         function parseClassExpression(): ClassExpression {

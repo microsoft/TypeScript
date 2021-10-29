@@ -6473,6 +6473,10 @@
         "category": "Error",
         "code": 17018
     },
+    "Meta-property '{0}' is only allowed in the body of a class.": {
+        "category": "Error",
+        "code": 17019
+    },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000

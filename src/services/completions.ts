@@ -2079,7 +2079,7 @@ namespace ts.Completions {
                         break;
                     case SyntaxKind.MetaProperty:
                         node = parent.getFirstToken(sourceFile)!;
-                        Debug.assert(node.kind === SyntaxKind.ImportKeyword || node.kind === SyntaxKind.NewKeyword);
+                        Debug.assert(node.kind === SyntaxKind.ImportKeyword || node.kind === SyntaxKind.NewKeyword || node.kind === SyntaxKind.ClassKeyword);
                         break;
                     default:
                         // There is nothing that precedes the dot, so this likely just a stray character
@@ -4464,4 +4464,3 @@ namespace ts.Completions {
     }
 
 }
-
