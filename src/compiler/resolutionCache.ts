@@ -66,7 +66,7 @@ namespace ts {
         getCurrentProgram(): Program | undefined;
         fileIsOpen(filePath: Path): boolean;
         getCompilerHost?(): CompilerHost | undefined;
-        onDiscoveredSymlink(): void;
+        onDiscoveredSymlink?(): void;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -432,7 +432,7 @@ namespace ts {
                     else {
                         resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference, containingSourceFile);
                         perDirectoryResolution.set(name, mode, resolution);
-                        if (resolutionIsSymlink(resolution)) {
+                        if (resolutionHost.onDiscoveredSymlink && resolutionIsSymlink(resolution)) {
                             resolutionHost.onDiscoveredSymlink();
                         }
                     }

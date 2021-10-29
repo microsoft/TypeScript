@@ -1666,7 +1666,6 @@ namespace ts {
                 if (resolutionsChanged) {
                     structureIsReused = StructureIsReused.SafeModules;
                     newSourceFile.resolvedModules = zipToModeAwareCache(newSourceFile, moduleNames, resolutions);
-                    symlinks
                 }
                 else {
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
