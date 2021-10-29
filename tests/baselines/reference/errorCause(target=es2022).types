@@ -1,0 +1,11 @@
+=== tests/cases/compiler/errorCause.ts ===
+new Error("foo", { cause: new Error("bar") });
+>new Error("foo", { cause: new Error("bar") }) : Error
+>Error : ErrorConstructor
+>"foo" : "foo"
+>{ cause: new Error("bar") } : { cause: Error; }
+>cause : Error
+>new Error("bar") : Error
+>Error : ErrorConstructor
+>"bar" : "bar"
+
