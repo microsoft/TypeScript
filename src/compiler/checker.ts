@@ -974,7 +974,7 @@ namespace ts {
         const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
-        const nodeLinks: NodeLinks[] = [];
+        const nodeLinks: ESMap<Node, NodeLinks> = new Map();
         const flowLoopCaches: ESMap<string, Type>[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
@@ -1463,8 +1463,11 @@ namespace ts {
         }
 
         function getNodeLinks(node: Node): NodeLinks {
-            const nodeId = getNodeId(node);
-            return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
+            let result = nodeLinks.get(node);
+            if (!result) {
+                nodeLinks.set(node, result = new (NodeLinks as any)() as NodeLinks);
+            }
+            return result;
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -40316,9 +40319,8 @@ namespace ts {
             const enclosingFile = getSourceFileOfNode(node);
             const links = getNodeLinks(enclosingFile);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                links.deferredNodes = links.deferredNodes || new Map();
-                const id = getNodeId(node);
-                links.deferredNodes.set(id, node);
+                links.deferredNodes = links.deferredNodes || new Set();
+                links.deferredNodes.add(node);
             }
         }
 
@@ -41599,9 +41601,7 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            const nodeId = node.id || 0;
-            if (nodeId < 0 || nodeId >= nodeLinks.length) return 0;
-            return nodeLinks[nodeId]?.flags || 0;
+            return nodeLinks.get(node)?.flags || 0;
         }
 
         function getEnumMemberValue(node: EnumMember): string | number | undefined {

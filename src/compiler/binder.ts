@@ -15,7 +15,7 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration, visited?: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: ESMap<Node, ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
             setParent(node.body, node);
@@ -24,18 +24,17 @@ namespace ts {
         return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateCached(node: Node, visited = new Map<number, ModuleInstanceState | undefined>()) {
-        const nodeId = getNodeId(node);
-        if (visited.has(nodeId)) {
-            return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
+    function getModuleInstanceStateCached(node: Node, visited = new Map<Node, ModuleInstanceState | undefined>()) {
+        if (visited.has(node)) {
+            return visited.get(node) || ModuleInstanceState.NonInstantiated;
         }
-        visited.set(nodeId, undefined);
+        visited.set(node, undefined);
         const result = getModuleInstanceStateWorker(node, visited);
-        visited.set(nodeId, result);
+        visited.set(node, result);
         return result;
     }
 
-    function getModuleInstanceStateWorker(node: Node, visited: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited: ESMap<Node, ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -107,7 +106,7 @@ namespace ts {
         return ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: ESMap<number, ModuleInstanceState | undefined>) {
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: ESMap<Node, ModuleInstanceState | undefined>) {
         const name = specifier.propertyName || specifier.name;
         let p: Node | undefined = specifier.parent;
         while (p) {
@@ -2984,7 +2983,7 @@ namespace ts {
 
         function addLateBoundAssignmentDeclarationToSymbol(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol | undefined) {
             if (symbol) {
-                (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(getNodeId(node), node);
+                (symbol.assignmentDeclarationMembers ||= new Set()).add(node);
             }
         }
 
