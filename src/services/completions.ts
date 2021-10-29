@@ -888,7 +888,7 @@ namespace ts.Completions {
             node => {
                 let requiredModifiers = ModifierFlags.None;
                 if (isAbstract) {
-                        requiredModifiers |= ModifierFlags.Abstract;
+                    requiredModifiers |= ModifierFlags.Abstract;
                 }
                 if (isClassElement(node)
                     && checker.getMemberOverrideModifierStatus(classLikeDeclaration, node) === MemberOverrideStatus.NeedsOverride) {
@@ -912,6 +912,7 @@ namespace ts.Completions {
                 completionNodes.push(node);
             },
             body,
+            codefix.PreserveOptionalFlags.Property,
             isAbstract);
 
         if (completionNodes.length) {
@@ -3882,5 +3883,6 @@ namespace ts.Completions {
         }
         return charCode;
     }
+
 }
 
