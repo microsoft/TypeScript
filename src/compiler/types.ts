@@ -5992,7 +5992,7 @@ namespace ts {
     export enum ModuleResolutionKind {
         Classic  = 1,
         NodeJs   = 2,
-        // Starting with node12, node's module resolver has significant departures from tranditional cjs resolution
+        // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
         // to better support ecmascript modules and their use within node - more features are still being added, so
         // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
         // version-anchored resolution target
