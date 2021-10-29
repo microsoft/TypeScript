@@ -66,6 +66,7 @@ namespace ts {
         getCurrentProgram(): Program | undefined;
         fileIsOpen(filePath: Path): boolean;
         getCompilerHost?(): CompilerHost | undefined;
+        onDiscoveredSymlink?(): void;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -431,6 +432,9 @@ namespace ts {
                     else {
                         resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference, containingSourceFile);
                         perDirectoryResolution.set(name, mode, resolution);
+                        if (resolutionHost.onDiscoveredSymlink && resolutionIsSymlink(resolution)) {
+                            resolutionHost.onDiscoveredSymlink();
+                        }
                     }
                     resolutionsInFile.set(name, mode, resolution);
                     watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName);
@@ -964,5 +968,12 @@ namespace ts {
             const dirPath = resolutionHost.toPath(dir);
             return dirPath === rootPath || canWatchDirectory(dirPath);
         }
+    }
+
+    function resolutionIsSymlink(resolution: ResolutionWithFailedLookupLocations) {
+        return !!(
+            (resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule?.originalPath ||
+            (resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective?.originalPath
+        );
     }
 }
