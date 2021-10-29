@@ -54,3 +54,12 @@ let abc: any[] = stringifyArray(void 0 as any);
 
 declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
 let def: [any, any] = stringifyPair(void 0 as any);
+
+// Repro from #46582
+
+type Evolvable<E extends Evolver> = {
+  [P in keyof E]: never;
+};
+type Evolver<T extends Evolvable<any> = any> = {
+  [key in keyof Partial<T>]: never;
+};

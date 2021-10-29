@@ -125,3 +125,16 @@ let def: [any, any] = stringifyPair(void 0 as any);
 >void 0 : undefined
 >0 : 0
 
+// Repro from #46582
+
+type Evolvable<E extends Evolver> = {
+>Evolvable : Evolvable<E>
+
+  [P in keyof E]: never;
+};
+type Evolver<T extends Evolvable<any> = any> = {
+>Evolver : Evolver<T>
+
+  [key in keyof Partial<T>]: never;
+};
+

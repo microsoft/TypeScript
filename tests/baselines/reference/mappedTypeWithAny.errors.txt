@@ -68,3 +68,13 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: T
         ~~~
 !!! error TS2322: Type 'string[]' is not assignable to type '[any, any]'.
 !!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+    
+    // Repro from #46582
+    
+    type Evolvable<E extends Evolver> = {
+      [P in keyof E]: never;
+    };
+    type Evolver<T extends Evolvable<any> = any> = {
+      [key in keyof Partial<T>]: never;
+    };
+    
