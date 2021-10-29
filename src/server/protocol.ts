@@ -3199,14 +3199,13 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-    /*
-     * __GDPR__
-     * "typingsinstalled" : {
-     *     "${include}": ["${TypeScriptCommonProperties}"],
-     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    /* __GDPR__
+        "typingsinstalled" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+            "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
