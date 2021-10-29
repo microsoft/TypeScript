@@ -850,7 +850,8 @@ declare namespace completion {
         DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
-        ThisProperty = "ThisProperty/"
+        ThisProperty = "ThisProperty/",
+        ClassMemberSnippet = "ClassMemberSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

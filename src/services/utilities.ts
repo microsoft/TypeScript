@@ -3283,5 +3283,12 @@ namespace ts {
         return newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
     }
 
+    export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+    export function diagnosticToString(diag: DiagnosticAndArguments): string {
+        return isArray(diag)
+            ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+            : getLocaleSpecificMessage(diag);
+    }
+
     // #endregion
 }
