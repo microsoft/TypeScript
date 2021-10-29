@@ -11,12 +11,6 @@ export function foo() {
 import { foo } from "./foo"; // should error, suggest adding ".mjs"
 >foo : any
 
-import { baz } from "./baz"; // should also error, no extension suggestion
->baz : any
-
-foo;
->foo : any
-
-baz;
+import { baz } from "./baz"; // should error, ask for extension, no extension suggestion
 >baz : any
 

@@ -8,7 +8,6 @@ export function foo() {
 //// [bar.mts]
 // Extensionless relative path ES import in an ES module
 import { foo } from "./foo"; // should error, suggest adding ".jsx"
-foo;
 
 
 //// [foo.jsx]
@@ -20,6 +19,4 @@ function foo() {
 }
 exports.foo = foo;
 //// [bar.mjs]
-// Extensionless relative path ES import in an ES module
-import { foo } from "./foo"; // should error, suggest adding ".jsx"
-foo;
+export {};

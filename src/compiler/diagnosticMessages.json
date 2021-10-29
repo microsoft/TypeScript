@@ -3341,11 +3341,11 @@
         "category": "Error",
         "code": 2833
     },
-    "Relative import paths need explicit file extensions in ES modules when '--moduleResolution' is 'node12' or 'nodenext'.": {
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.": {
         "category": "Error",
         "code": 2834
     },
-    "Relative import paths need explicit file extensions in ES modules when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
         "category": "Error",
         "code": 2835
     },

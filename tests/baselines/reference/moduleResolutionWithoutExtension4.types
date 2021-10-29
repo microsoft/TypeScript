@@ -11,6 +11,3 @@ export function foo() {
 import { foo } from "./foo"; // should error, suggest adding ".js"
 >foo : any
 
-foo;
->foo : any
-
