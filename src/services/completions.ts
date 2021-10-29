@@ -849,15 +849,14 @@ namespace ts.Completions {
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
         let body;
-        let tabstopStart = 1;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
-            // We are adding a final tabstop (i.e. $0) in the body of the suggested member, if it has one.
+            // We are adding a tabstop (i.e. `$0`) in the body of the suggested member,
+            // if it has one, so that the cursor ends up in the body once the completion is inserted.
             // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
-            const emptyStatement1 = factory.createExpressionStatement(factory.createIdentifier(""));
-            setSnippetElement(emptyStatement1, { kind: SnippetKind.TabStop, order: 1 });
-            tabstopStart = 2;
-            body = factory.createBlock([emptyStatement1], /* multiline */ true);
+            const emptyStatement = factory.createExpressionStatement(factory.createIdentifier(""));
+            setSnippetElement(emptyStatement, { kind: SnippetKind.TabStop, order: 0 });
+            body = factory.createBlock([emptyStatement], /* multiline */ true);
         }
         else {
             body = factory.createBlock([], /* multiline */ true);
@@ -915,9 +914,6 @@ namespace ts.Completions {
             isAbstract);
 
         if (completionNodes.length) {
-            if (preferences.includeCompletionsWithSnippetText) {
-                addSnippets(completionNodes, tabstopStart);
-            }
             insertText = printer.printSnippetList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
 
@@ -963,35 +959,6 @@ namespace ts.Completions {
             return node.originalKeywordKind;
         }
         return undefined;
-    }
-
-    function addSnippets(nodes: Node[], orderStart: number): void {
-        let order = orderStart;
-        for (const node of nodes) {
-            addSnippetsWorker(node, /*parent*/ undefined);
-        }
-
-        function addSnippetsWorker(node: Node, parent: Node | undefined) {
-            if (isVariableLike(node) && node.kind === SyntaxKind.Parameter) {
-                // Placeholder
-                setSnippetElement(node.name, { kind: SnippetKind.Placeholder, order });
-                order += 1;
-                if (node.type) {
-                    setSnippetElement(node.type, { kind: SnippetKind.Placeholder, order });
-                    order += 1;
-                }
-            }
-            else if (isTypeNode(node) && parent && isFunctionLikeDeclaration(parent)) {
-                setSnippetElement(node, { kind: SnippetKind.Placeholder, order });
-                order += 1;
-            }
-            else if (isTypeParameterDeclaration(node) && parent && isFunctionLikeDeclaration(parent)) {
-                setSnippetElement(node, { kind: SnippetKind.Placeholder, order });
-                order += 1;
-            }
-
-            forEachChild(node, child => addSnippetsWorker(child, node));
-        }
     }
 
     function createSnippetPrinter(
