@@ -20366,12 +20366,14 @@ namespace ts {
                 let lastTypeId = 0;
                 for (let i = 0; i < depth; i++) {
                     const t = stack[i];
-                    // We only count occurrences with higher type ids than the previous occurrences, since higher
-                    // type ids are an indicator of newer instantiations caused by recursion.
-                    if (getRecursionIdentity(t) === identity && t.id >= lastTypeId) {
-                        count++;
-                        if (count >= maxDepth) {
-                            return true;
+                    if (getRecursionIdentity(t) === identity) {
+                        // We only count occurrences with a higher type id than the previous occurrence, since higher
+                        // type ids are an indicator of newer instantiations caused by recursion.
+                        if (t.id >= lastTypeId) {
+                            count++;
+                            if (count >= maxDepth) {
+                                return true;
+                            }
                         }
                         lastTypeId = t.id;
                     }
