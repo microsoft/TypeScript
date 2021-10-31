@@ -20359,6 +20359,13 @@ namespace ts {
         // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
         // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least maxDepth
         // levels, but unequal at some level beyond that.
+        // In addition, this will also detect when an indexed access has been chained off of maxDepth more times (which is
+        // essentially the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding
+        // false positives for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
+        // It also detects when a recursive type reference has expanded maxDepth or more times, e.g. if the true branch of
+        // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
+        // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`. In such cases we need
+        // to terminate the expansion, and we do so here.
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
             if (depth >= maxDepth) {
                 const identity = getRecursionIdentity(type);
@@ -20409,6 +20416,13 @@ namespace ts {
             }
             if (type.flags & TypeFlags.TypeParameter) {
                 return type.symbol;
+            }
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
+                do {
+                    type = (type as IndexedAccessType).objectType;
+                } while (type.flags & TypeFlags.IndexedAccess);
+                return type;
             }
             if (type.flags & TypeFlags.Conditional) {
                 // The root object represents the origin of the conditional type
