@@ -17770,7 +17770,7 @@ namespace ts {
                 if (source.flags & TypeFlags.Singleton) return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
+                const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation, /*ignoreConstraints*/ false));
                 if (related !== undefined) {
                     return !!(related & RelationComparisonResult.Succeeded);
                 }
@@ -18670,7 +18670,8 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0), relation);
+                const keyIntersectionState = intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0);
+                const id = getRelationKey(source, target, keyIntersectionState, relation, /*ingnoreConstraints*/ false);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -18697,16 +18698,13 @@ namespace ts {
                     targetStack = [];
                 }
                 else {
-                    // generate a key where all type parameter id positions are replaced with unconstrained type parameter ids
-                    // this isn't perfect - nested type references passed as type arguments will muck up the indexes and thus
-                    // prevent finding matches- but it should hit up the common cases
-                    const broadestEquivalentId = id.split(",").map(i => i.replace(/-\d+/g, (_match, offset: number) => {
-                        const index = length(id.slice(0, offset).match(/[-=]/g) || undefined);
-                        return `=${index}`;
-                    })).join(",");
+                    // A key that starts with "*" is an indication that we have type references that reference constrained
+                    // type parameters. For such keys we also check against the key we would have gotten if all type parameters
+                    // were unconstrained.
+                    const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, keyIntersectionState, relation, /*ignoreConstraints*/ true) : undefined;
                     for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (id === maybeKeys[i] || broadestEquivalentId === maybeKeys[i]) {
+                        if (id === maybeKeys[i] || broadestEquivalentId && broadestEquivalentId === maybeKeys[i]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -20261,47 +20259,55 @@ namespace ts {
             return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => !!(t.flags & TypeFlags.TypeParameter) || isTypeReferenceWithGenericArguments(t));
         }
 
-        /**
-         * getTypeReferenceId(A<T, number, U>) returns "111=0-12=1"
-         *   where A.id=111 and number.id=12
-         */
-        function getTypeReferenceId(type: TypeReference, typeParameters: Type[], depth = 0) {
-            let result = "" + type.target.id;
-            for (const t of getTypeArguments(type)) {
-                if (isUnconstrainedTypeParameter(t)) {
-                    let index = typeParameters.indexOf(t);
-                    if (index < 0) {
-                        index = typeParameters.length;
-                        typeParameters.push(t);
+        function getGenericTypeReferenceRelationKey(source: TypeReference, target: TypeReference, postFix: string, ignoreConstraints: boolean) {
+            const typeParameters: Type[] = [];
+            let constraintMarker = "";
+            const sourceId = getTypeReferenceId(source, 0);
+            const targetId = getTypeReferenceId(target, 0);
+            return `${constraintMarker}${sourceId},${targetId}${postFix}`;
+            // getTypeReferenceId(A<T, number, U>) returns "111=0-12=1"
+            // where A.id=111 and number.id=12
+            function getTypeReferenceId(type: TypeReference, depth = 0) {
+                let result = "" + type.target.id;
+                for (const t of getTypeArguments(type)) {
+                    if (t.flags & TypeFlags.TypeParameter) {
+                        if (ignoreConstraints || isUnconstrainedTypeParameter(t)) {
+                            let index = typeParameters.indexOf(t);
+                            if (index < 0) {
+                                index = typeParameters.length;
+                                typeParameters.push(t);
+                            }
+                            result += "=" + index;
+                            continue;
+                        }
+                        // We mark type references that reference constrained type parameters such that we know to obtain
+                        // and look for a "broadest equivalent key" in the cache.
+                        constraintMarker = "*";
                     }
-                    result += "=" + index;
-                }
-                else if (depth < 4 && isTypeReferenceWithGenericArguments(t)) {
-                    result += "<" + getTypeReferenceId(t as TypeReference, typeParameters, depth + 1) + ">";
-                }
-                else {
+                    else if (depth < 4 && isTypeReferenceWithGenericArguments(t)) {
+                        result += "<" + getTypeReferenceId(t as TypeReference, depth + 1) + ">";
+                        continue;
+                    }
                     result += "-" + t.id;
                 }
+                return result;
             }
-            return result;
         }
 
         /**
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
          */
-        function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: ESMap<string, RelationComparisonResult>) {
+        function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: ESMap<string, RelationComparisonResult>, ignoreConstraints: boolean) {
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
                 source = target;
                 target = temp;
             }
             const postFix = intersectionState ? ":" + intersectionState : "";
-            if (isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target)) {
-                const typeParameters: Type[] = [];
-                return getTypeReferenceId(source as TypeReference, typeParameters) + "," + getTypeReferenceId(target as TypeReference, typeParameters) + postFix;
-            }
-            return source.id + "," + target.id + postFix;
+            return isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) ?
+                getGenericTypeReferenceRelationKey(source as TypeReference, target as TypeReference, postFix, ignoreConstraints) :
+                `${source.id},${target.id}${postFix}`;
         }
 
         // Invoke the callback for each underlying property symbol of the given symbol and return the first
