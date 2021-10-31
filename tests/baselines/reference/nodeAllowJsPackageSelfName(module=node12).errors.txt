@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/allowJs/index.cjs(2,23): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
     // esm format file
     import * as self from "package";

@@ -1,0 +1,15 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/compiler/node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": "./entrypoint.js"
+    }
+==== tests/cases/compiler/node_modules/pkg/entrypoint.d.ts (0 errors) ====
+    export declare function thing(): void;
+==== tests/cases/compiler/index.ts (0 errors) ====
+    import * as p from "pkg";
+    p.thing();

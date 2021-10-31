@@ -1,8 +1,10 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.ts(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/subfolder/index.ts(2,17): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/subfolder/index.ts(3,22): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/subfolder/index.ts (2 errors) ====
     // cjs format file
     import {h} from "../index.js";

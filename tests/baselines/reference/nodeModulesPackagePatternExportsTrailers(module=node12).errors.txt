@@ -1,3 +1,4 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.cts(2,23): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
 tests/cases/conformance/node/index.cts(3,23): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
 tests/cases/conformance/node/index.cts(4,24): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
@@ -18,6 +19,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS2307: 
 tests/cases/conformance/node/node_modules/inner/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/index.ts (3 errors) ====
     // esm format file
     import * as cjsi from "inner/cjs/index.cjs";

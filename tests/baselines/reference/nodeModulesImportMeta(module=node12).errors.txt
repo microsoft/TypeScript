@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/subfolder/index.ts(2,11): error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/subfolder/index.ts (1 errors) ====
     // cjs format file
     const x = import.meta.url;

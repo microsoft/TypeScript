@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/subfolder/index.ts(2,9): error TS2343: This syntax requires an imported helper named '__importDefault' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 
 
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/subfolder/index.ts (1 errors) ====
     // cjs format file
     export {default} from "fs";

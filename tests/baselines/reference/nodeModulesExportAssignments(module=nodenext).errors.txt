@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.ts(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/subfolder/index.ts (0 errors) ====
     // cjs format file
     const a = {};

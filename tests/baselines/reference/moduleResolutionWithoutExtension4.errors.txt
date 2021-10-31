@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /src/bar.mts(2,21): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean './foo.js'?
 
 
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== /src/foo.tsx (0 errors) ====
     export function foo() {
         return "";

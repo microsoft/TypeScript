@@ -1,0 +1,26 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/conformance/node/allowJs/subfolder/index.js (0 errors) ====
+    // cjs format file
+    export async function main() {
+        const { readFile } = await import("fs");
+    }
+==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+    // esm format file
+    export async function main() {
+        const { readFile } = await import("fs");
+    }
+==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+    {
+        "type": "commonjs"
+    }
+==== tests/cases/conformance/node/allowJs/types.d.ts (0 errors) ====
+    declare module "fs";

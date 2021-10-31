@@ -1,0 +1,73 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/conformance/node/index.ts (0 errors) ====
+    // esm format file
+    export {};
+==== tests/cases/conformance/node/index.mts (0 errors) ====
+    // esm format file
+    export {};
+==== tests/cases/conformance/node/index.cts (0 errors) ====
+    // cjs format file
+    export {};
+==== tests/cases/conformance/node/other.ts (0 errors) ====
+    // esm format file
+    export const a = await import("package/cjs");
+    export const b = await import("package/mjs");
+    export const c = await import("package");
+    export const f = await import("inner");
+==== tests/cases/conformance/node/other2.ts (0 errors) ====
+    // esm format file
+    export const d = await import("inner/cjs");
+    export const e = await import("inner/mjs");
+==== tests/cases/conformance/node/other.mts (0 errors) ====
+    // esm format file
+    export const a = await import("package/cjs");
+    export const b = await import("package/mjs");
+    export const c = await import("package");
+    export const f = await import("inner");
+==== tests/cases/conformance/node/other2.mts (0 errors) ====
+    // esm format file
+    export const d = await import("inner/cjs");
+    export const e = await import("inner/mjs");
+==== tests/cases/conformance/node/other.cts (0 errors) ====
+    // cjs format file, no TLA
+    export const a = import("package/cjs");
+    export const b = import("package/mjs");
+    export const c = import("package");
+    export const f = import("inner");
+==== tests/cases/conformance/node/other2.cts (0 errors) ====
+    // cjs format file, no TLA
+    export const d = import("inner/cjs");
+    export const e = import("inner/mjs");
+==== tests/cases/conformance/node/node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    export const cjsMain = true;
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    export const esm = true;
+==== tests/cases/conformance/node/node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsNonmain = true;
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }
+==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }

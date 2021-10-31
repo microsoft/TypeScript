@@ -1,9 +1,11 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.cts(3,23): error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: Module 'inner/mjs/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/index.ts (0 errors) ====
     // esm format file
     import * as cjsi from "inner/cjs/index";
