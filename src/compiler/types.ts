@@ -1707,6 +1707,8 @@ namespace ts {
         readonly nameType?: TypeNode;
         readonly questionToken?: QuestionToken | PlusToken | MinusToken;
         readonly type?: TypeNode;
+        /** Used only to produce grammar errors */
+        readonly members?: NodeArray<TypeElement>;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -4412,6 +4414,14 @@ namespace ts {
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
         /* @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
+        /* @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus;
+    }
+
+    /* @internal */
+    export const enum MemberOverrideStatus {
+        Ok,
+        NeedsOverride,
+        HasInvalidOverride
     }
 
     /* @internal */
@@ -5577,6 +5587,7 @@ namespace ts {
     /* @internal */
     export interface SyntheticDefaultModuleType extends Type {
         syntheticType?: Type;
+        defaultOnlyType?: Type;
     }
 
     export interface InstantiableType extends Type {
@@ -5981,7 +5992,7 @@ namespace ts {
     export enum ModuleResolutionKind {
         Classic  = 1,
         NodeJs   = 2,
-        // Starting with node12, node's module resolver has significant departures from tranditional cjs resolution
+        // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
         // to better support ecmascript modules and their use within node - more features are still being added, so
         // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
         // version-anchored resolution target
@@ -6338,8 +6349,20 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
-        type: "string" | "number" | "boolean";
+    export interface CommandLineOptionOfStringType extends CommandLineOptionBase {
+        type: "string";
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfNumberType extends CommandLineOptionBase {
+        type: "number";
+        defaultValueDescription: `${number | undefined}` | DiagnosticMessage;
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
+        type: "boolean";
+        defaultValueDescription: `${boolean | undefined}` | DiagnosticMessage;
     }
 
     /* @internal */
@@ -6371,11 +6394,11 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
-        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -6801,6 +6824,31 @@ namespace ts {
         externalHelpers?: boolean;
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
+        snippetElement?: SnippetElement;         // Snippet element of the node
+    }
+
+    /* @internal */
+    export type SnippetElement = TabStop | Placeholder;
+
+    /* @internal */
+    export interface TabStop {
+        kind: SnippetKind.TabStop;
+        order: number;
+    }
+
+    /* @internal */
+    export interface Placeholder {
+        kind: SnippetKind.Placeholder;
+        order: number;
+    }
+
+    // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
+    /* @internal */
+    export const enum SnippetKind {
+        TabStop,                                // `$1`, `$2`
+        Placeholder,                            // `${1:foo}`
+        Choice,                                 // `${1|one,two,three|}`
+        Variable,                               // `$name`, `${name:default}`
     }
 
     export const enum EmitFlags {
@@ -7212,8 +7260,8 @@ namespace ts {
         updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
         createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
         updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: NodeArray<TypeElement> | undefined): MappedTypeNode;
+        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: NodeArray<TypeElement> | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
@@ -8263,6 +8311,7 @@ namespace ts {
         hasTrailingComment(): boolean;
         hasTrailingWhitespace(): boolean;
         getTextPosWithWriteLine?(): number;
+        nonEscapingWrite?(text: string): void;
     }
 
     export interface GetEffectiveTypeRootsHost {
@@ -8608,6 +8657,7 @@ namespace ts {
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

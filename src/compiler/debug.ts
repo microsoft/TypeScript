@@ -351,6 +351,10 @@ namespace ts {
             return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
         }
 
+        export function formatSnippetKind(kind: SnippetKind | undefined): string {
+            return formatEnum(kind, (ts as any).SnippetKind, /*isFlags*/ false);
+        }
+
         export function formatNodeFlags(flags: NodeFlags | undefined): string {
             return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
         }

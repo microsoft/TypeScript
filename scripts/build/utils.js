@@ -9,11 +9,10 @@ const del = require("del");
 const File = require("vinyl");
 const ts = require("../../lib/typescript");
 const chalk = require("chalk");
+const which = require("which");
 const { spawn } = require("child_process");
 const { CancellationToken, CancelError, Deferred } = require("prex");
 const { Readable, Duplex } = require("stream");
-
-const isWindows = /^win/.test(process.platform);
 
 /**
  * Executes the provided command once with the supplied arguments.
@@ -32,12 +31,8 @@ function exec(cmd, args, options = {}) {
         const { ignoreExitCode, cancelToken = CancellationToken.none, waitForExit = true } = options;
         cancelToken.throwIfCancellationRequested();
 
-        // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
-        const subshellFlag = isWindows ? "/c" : "-c";
-        const command = isWindows ? [possiblyQuote(cmd), ...args] : [`${cmd} ${args.join(" ")}`];
-
         if (!options.hidePrompt) log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(isWindows ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: waitForExit ? "inherit" : "ignore", windowsVerbatimArguments: true });
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
         const registration = cancelToken.register(() => {
             log(`${chalk.red("killing")} '${chalk.green(cmd)} ${args.join(" ")}'...`);
             proc.kill("SIGINT");
@@ -67,13 +62,6 @@ function exec(cmd, args, options = {}) {
     }));
 }
 exports.exec = exec;
-
-/**
- * @param {string} cmd
- */
-function possiblyQuote(cmd) {
-    return cmd.indexOf(" ") >= 0 ? `"${cmd}"` : cmd;
-}
 
 /**
  * @param {ts.Diagnostic[]} diagnostics

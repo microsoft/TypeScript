@@ -3161,7 +3161,7 @@ namespace ts {
         return undefined;
     }
 
-    export function isKeyword(token: SyntaxKind): boolean {
+    export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
@@ -3346,7 +3346,7 @@ namespace ts {
         return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
-    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+    export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }
@@ -6168,6 +6168,8 @@ namespace ts {
             case ModuleKind.ES2020:
             case ModuleKind.ES2022:
             case ModuleKind.ESNext:
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
                 return true;
             default:
                 return false;
@@ -6613,7 +6615,7 @@ namespace ts {
             includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
             includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
             excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
-            basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames)
+            basePaths: getBasePaths(absolutePath, includes, useCaseSensitiveFileNames)
         };
     }
 
@@ -6637,22 +6639,22 @@ namespace ts {
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
         const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        for (const basePath of patterns.basePaths) {
-            if (directoryExists(basePath)) {
-                visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+        for (const absoluteBasePath of patterns.basePaths) {
+            if (directoryExists(absoluteBasePath)) {
+                visitDirectory(absoluteBasePath, depth);
             }
         }
 
         return flatten(results);
 
-        function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
+        function visitDirectory(absolutePath: string, depth: number | undefined) {
             const canonicalPath = toCanonical(realpath(absolutePath));
             if (visited.has(canonicalPath)) return;
             visited.set(canonicalPath, true);
-            const { files, directories } = getFileSystemEntries(path);
+            const { files, directories } = getFileSystemEntries(absolutePath);
 
             for (const current of sort<string>(files, compareStringsCaseSensitive)) {
-                const name = combinePaths(path, current);
+                const name = combinePaths(absolutePath, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
@@ -6675,11 +6677,10 @@ namespace ts {
             }
 
             for (const current of sort<string>(directories, compareStringsCaseSensitive)) {
-                const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
                     (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    visitDirectory(name, absoluteName, depth);
+                    visitDirectory(absoluteName, depth);
                 }
             }
         }
@@ -6687,10 +6688,11 @@ namespace ts {
 
     /**
      * Computes the unique non-wildcard base paths amongst the provided include patterns.
+     * @returns Absolute directory paths
      */
-    function getBasePaths(path: string, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean): string[] {
+    function getBasePaths(absoluteTsconfigPath: string, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean): string[] {
         // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
-        const basePaths: string[] = [path];
+        const basePaths: string[] = [absoluteTsconfigPath];
 
         if (includes) {
             // Storage for literal base paths amongst the include patterns.
@@ -6698,9 +6700,9 @@ namespace ts {
             for (const include of includes) {
                 // We also need to check the relative paths by converting them to absolute and normalizing
                 // in case they escape the base path (e.g "..\somedirectory")
-                const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
+                const absoluteIncludePath: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(absoluteTsconfigPath, include));
                 // Append the literal and canonical candidate base paths.
-                includeBasePaths.push(getIncludeBasePath(absolute));
+                includeBasePaths.push(getIncludeBasePath(absoluteIncludePath));
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
@@ -6709,7 +6711,7 @@ namespace ts {
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
             for (const includeBasePath of includeBasePaths) {
-                if (every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
+                if (every(basePaths, basePath => !containsPath(basePath, includeBasePath, absoluteTsconfigPath, !useCaseSensitiveFileNames))) {
                     basePaths.push(includeBasePath);
                 }
             }
@@ -6743,10 +6745,14 @@ namespace ts {
         const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
             case Extension.Js:
+            case Extension.Cjs:
+            case Extension.Mjs:
                 return ScriptKind.JS;
             case Extension.Jsx:
                 return ScriptKind.JSX;
             case Extension.Ts:
+            case Extension.Cts:
+            case Extension.Mts:
                 return ScriptKind.TS;
             case Extension.Tsx:
                 return ScriptKind.TSX;
@@ -7418,5 +7424,9 @@ namespace ts {
 
     export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
+    }
+
+    export function escapeSnippetText(text: string): string {
+        return text.replace(/\$/gm, "\\$");
     }
 }

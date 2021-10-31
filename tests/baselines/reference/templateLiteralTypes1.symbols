@@ -952,3 +952,39 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >getProp2 : Symbol(getProp2, Decl(templateLiteralTypes1.ts, 222, 89))
 >obj2 : Symbol(obj2, Decl(templateLiteralTypes1.ts, 226, 5))
 
+// Repro from #46480
+
+export type Spacing =
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+>spacing : Symbol(spacing, Decl(templateLiteralTypes1.ts, 245, 5))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+export type SpacingShorthand =
+>SpacingShorthand : Symbol(SpacingShorthand, Decl(templateLiteralTypes1.ts, 245, 30))
+
+    | `${Spacing} ${Spacing}`
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `${Spacing} ${Spacing} ${Spacing}`
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+const test1: SpacingShorthand = "0 0 0";
+>test1 : Symbol(test1, Decl(templateLiteralTypes1.ts, 252, 5))
+>SpacingShorthand : Symbol(SpacingShorthand, Decl(templateLiteralTypes1.ts, 245, 30))
+

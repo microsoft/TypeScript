@@ -78,7 +78,7 @@ namespace ts.server {
         };
         // Do this after sys has been set as findArguments is going to work only then
         const sys = server.createWebSystem(webHost, args, () => findArgument("--executingFilePath") || location + "");
-        ts.sys = sys;
+        setSys(sys);
         const localeStr = findArgument("--locale");
         if (localeStr) {
             validateLocaleAndSetLanguage(localeStr, sys);
