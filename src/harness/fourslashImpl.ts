@@ -942,7 +942,7 @@ namespace FourSlash {
             expected = typeof expected === "string" ? { name: expected } : expected;
 
             if (actual.insertText !== expected.insertText) {
-                this.raiseError(`Expected completion insert text to be ${expected.insertText}, got ${actual.insertText}`);
+                this.raiseError(`Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
             }
             const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
             if (convertedReplacementSpan?.length) {

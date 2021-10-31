@@ -646,6 +646,7 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
@@ -849,7 +850,8 @@ declare namespace completion {
         DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
-        ThisProperty = "ThisProperty/"
+        ThisProperty = "ThisProperty/",
+        ClassMemberSnippet = "ClassMemberSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

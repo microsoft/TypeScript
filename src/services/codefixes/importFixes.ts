@@ -33,6 +33,7 @@ namespace ts.codefix {
     });
 
     export interface ImportAdder {
+        hasFixes(): boolean;
         addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
         addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
         writeFixes: (changeTracker: textChanges.ChangeTracker) => void;
@@ -59,7 +60,7 @@ namespace ts.codefix {
         type NewImportsKey = `${0 | 1}|${string}`;
         /** Use `getNewImportEntry` for access */
         const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean }>>();
-        return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes };
+        return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes };
 
         function addImportFromDiagnostic(diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) {
             const info = getFixesInfo(context, diagnostic.code, diagnostic.start, useAutoImportProvider);
@@ -216,6 +217,10 @@ namespace ts.codefix {
             if (newDeclarations) {
                 insertImports(changeTracker, sourceFile, newDeclarations, /*blankLineBetween*/ true);
             }
+        }
+
+        function hasFixes() {
+            return addToNamespace.length > 0 || importType.length > 0 || addToExisting.size > 0 || newImports.size > 0;
         }
     }
 
