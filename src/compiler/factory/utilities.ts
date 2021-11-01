@@ -162,7 +162,7 @@ namespace ts {
             const left = createExpressionFromEntityName(factory, node.left);
             // TODO(rbuckton): Does this need to be parented?
             const right = setParent(setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
-            return setTextRange(factory.createPropertyAccessExpression(left, right), node);
+            return setOriginalNode(setTextRange(factory.createPropertyAccessExpression(left, right), node), node);
         }
         else {
             // TODO(rbuckton): Does this need to be parented?
