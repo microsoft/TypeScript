@@ -453,6 +453,7 @@ namespace ts {
                 target: compilerOptions.target,
                 sourceMap: compilerOptions.sourceMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
+                isolatedModules: compilerOptions.isolatedModules,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
                 writeBundleFileInfo: !!bundleBuildInfo,
@@ -3261,7 +3262,17 @@ namespace ts {
         }
 
         function emitEnumDeclaration(node: EnumDeclaration) {
-            emitModifiers(node, node.modifiers);
+            // Elide const modifiers if isolatedModules is true
+            emitModifiers(
+                node,
+                factory.createNodeArray(
+                    filter(
+                        node.modifiers,
+                        modifier => !printerOptions.isolatedModules || modifier.kind !== SyntaxKind.ConstKeyword
+                    ),
+                    node.modifiers?.hasTrailingComma
+                )
+            );
             writeKeyword("enum");
             writeSpace();
             emit(node.name);
