@@ -3199,6 +3199,14 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
+    // VS Code adds this on our behalf, but the tooling won't pick up the __GDPR__FRAGMENT__ from another codebase.
+    // Keep in sync with https://github.com/microsoft/vscode/blob/main/extensions/typescript-language-features/src/utils/telemetry.ts
+    /* __GDPR__FRAGMENT__
+        "TypeScriptCommonProperties" : {
+            "version" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
+    */
+
     /* __GDPR__
         "typingsinstalled" : {
             "${include}": ["${TypeScriptCommonProperties}"],
