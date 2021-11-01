@@ -2021,7 +2021,8 @@ namespace ts.FindAllReferences {
                             }
                         }
                         else {
-                            return nodeEntry(ref, EntryKind.StringLiteral);
+                            return isNoSubstitutionTemplateLiteral(ref) && !rangeIsOnSingleLine(ref, sourceFile) ? undefined :
+                                nodeEntry(ref, EntryKind.StringLiteral);
                         }
                     }
                 });
