@@ -34729,7 +34729,8 @@ namespace ts {
         function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
             const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
             if (!typeReferenceNode) return undefined;
-            const typeParameters = getTypeParametersForTypeReference(typeReferenceNode)!; // TODO: GH#18217
+            const typeParameters = getTypeParametersForTypeReference(typeReferenceNode);
+            if (!typeParameters) return undefined;
             const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments!.indexOf(node)]);
             return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReferenceNode, typeParameters)));
         }
