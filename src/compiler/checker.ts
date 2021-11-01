@@ -39680,8 +39680,12 @@ namespace ts {
 
         function checkAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
             if (declaration.assertClause) {
-                if (moduleKind !== ModuleKind.ESNext) {
-                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+                const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getUsageModeForExpression(declaration.moduleSpecifier);
+                if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext) {
+                    return grammarErrorOnNode(declaration.assertClause,
+                        moduleKind === ModuleKind.NodeNext
+                            ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls
+                            : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
                 }
 
                 if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
@@ -43891,7 +43895,7 @@ namespace ts {
             }
 
             const nodeArguments = node.arguments;
-            if (moduleKind !== ModuleKind.ESNext) {
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
                 // We are allowed trailing comma after proposal-import-assertions.
                 checkGrammarForDisallowedTrailingComma(nodeArguments);
 

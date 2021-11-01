@@ -3353,6 +3353,10 @@
         "category": "Error",
         "code": 2835
     },
+    "Import assertions are not allowed on statements that transpile to commonjs require calls.": {
+        "category": "Error",
+        "code": 2836
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
