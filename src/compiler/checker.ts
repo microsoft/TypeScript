@@ -39685,7 +39685,7 @@ namespace ts {
                     return grammarErrorOnNode(declaration.assertClause,
                         moduleKind === ModuleKind.NodeNext
                             ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls
-                            : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+                            : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext);
                 }
 
                 if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
@@ -43901,7 +43901,7 @@ namespace ts {
 
                 if (nodeArguments.length > 1) {
                     const assertionArgument = nodeArguments[1];
-                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext);
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext);
                 }
             }
 

@@ -924,7 +924,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.": {
         "category": "Error",
         "code": 1324
     },
@@ -3333,7 +3333,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3353,7 +3353,7 @@
         "category": "Error",
         "code": 2835
     },
-    "Import assertions are not allowed on statements that transpile to commonjs require calls.": {
+    "Import assertions are not allowed on statements that transpile to commonjs 'require' calls.": {
         "category": "Error",
         "code": 2836
     },
