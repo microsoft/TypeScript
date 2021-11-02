@@ -14153,6 +14153,7 @@ namespace ts {
             // We ignore 'never' types in unions
             if (!(flags & TypeFlags.Never)) {
                 includes |= flags & TypeFlags.IncludesMask;
+                if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
