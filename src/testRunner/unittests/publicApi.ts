@@ -182,3 +182,34 @@ describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSD
     assert.equal(endOfFileToken.getChildCount(), 1);
     assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
 });
+
+describe("unittests:: Public APIs:: sys", () => {
+    it("readDirectory", () => {
+        // #45990, testing passing a non-absolute path
+        // `sys.readDirectory` is just `matchFiles` plugged into the real FS
+        const read = ts.matchFiles(
+            /*path*/ "",
+            /*extensions*/ [".ts", ".tsx"],
+            /*excludes*/ ["node_modules", "dist"],
+            /*includes*/ ["**/*"],
+            /*useCaseSensitiveFileNames*/ true,
+            /*currentDirectory*/ "/",
+            /*depth*/ undefined,
+            /*getFileSystemEntries*/ path => {
+                switch (path) {
+                    case "/": return { directories: [], files: ["file.ts"] };
+                    default: return { directories: [], files: [] };
+                }
+            },
+            /*realpath*/ ts.identity,
+            /*directoryExists*/ path => {
+                switch (path) {
+                    case "/": return true;
+                    default: return false;
+                }
+            }
+        );
+
+        assert.deepEqual(read, ["/file.ts"]);
+    });
+});

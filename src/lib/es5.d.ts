@@ -96,7 +96,7 @@ interface PropertyDescriptor {
 }
 
 interface PropertyDescriptorMap {
-    [s: string]: PropertyDescriptor;
+    [key: PropertyKey]: PropertyDescriptor;
 }
 
 interface Object {
@@ -196,13 +196,13 @@ interface ObjectConstructor {
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
-     * @param o Object on which to lock the attributes.
+     * @param a Object on which to lock the attributes.
      */
     freeze<T>(a: T[]): readonly T[];
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
-     * @param o Object on which to lock the attributes.
+     * @param f Object on which to lock the attributes.
      */
     freeze<T extends Function>(f: T): T;
 

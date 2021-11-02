@@ -42,7 +42,7 @@ namespace ts.codefix {
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
         const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, sourceFile, context, preferences, importAdder, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, sourceFile, context, preferences, importAdder, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member as ClassElement));
         importAdder.writeFixes(changeTracker);
     }
 

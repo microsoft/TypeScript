@@ -237,7 +237,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
+                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic', 'node12', 'nodenext'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -526,7 +526,7 @@ namespace ts {
                     nonNullValue,
                     diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line,
                     workerDiagnostic: () => {
-                        const optionDeclarations = [
+                        const optionDeclarations: CommandLineOption[] = [
                             ...compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
                             {
                                 name: "optionName",
@@ -534,6 +534,7 @@ namespace ts {
                                 isTSConfigOnly: true,
                                 category: Diagnostics.Backwards_Compatibility,
                                 description: Diagnostics.Enable_project_compilation,
+                                defaultValueDescription: "undefined",
                             }
                         ];
                         return {

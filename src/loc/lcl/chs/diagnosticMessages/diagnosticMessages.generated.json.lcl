@@ -468,6 +468,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_mapped_type_may_not_declare_properties_or_methods_7061" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A mapped type may not declare properties or methods.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[映射的类型可能不声明属性或方法。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_memb_2651" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
@@ -3003,6 +3012,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_find_namespace_0_Did_you_mean_1_2833" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find namespace '{0}'. Did you mean '{1}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到命名空间“{0}”。你是否指的是“{1}”?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_find_parameter_0_1225" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find parameter '{0}'.]]></Val>
@@ -4056,11 +4074,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Convert_to_ES6_module_95017" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Convert_to_ES_module_95017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Convert to ES6 module]]></Val>
+          <Val><![CDATA[Convert to ES module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[转换为 ES6 模块]]></Val>
+            <Val><![CDATA[转换为 ES 模块]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5205,15 +5223,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system__1323" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 '--module' 标志设置为 'es2020'、'esnext'、 'commonjs'、'amd'、'system'、'umd'、'node12' 或 'nodenext' 时，才支持动态导入。]]></Val>
+            <Val><![CDATA[仅当 '--module' 标志设置为 'es2020'、'es2022'、'esnext'、 'commonjs'、'amd'、'system'、'umd'、'node12' 或 'nodenext' 时，才支持动态导入。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6288,11 +6303,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module_80001" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[File is a CommonJS module; it may be converted to an ES6 module.]]></Val>
+          <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[文件是 CommonJS 模块；它可能会转换为 ES6 模块。]]></Val>
+            <Val><![CDATA[文件是 CommonJS 模块; 它可能会转换为 ES 模块。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7745,6 +7760,15 @@
           <Val><![CDATA[JSDoc types may be moved to TypeScript types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[JSDoc 类型可能会移到 TypeScript 类型。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";JSON_imports_are_experimental_in_ES_module_mode_imports_7062" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[JSON imports are experimental in ES module mode imports.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSON 导入在 ES 模块模式导入中是实验性的。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12534,11 +12558,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_system_node12__1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 '--module' 选项为 'es2020'、'esnext'、 'system'、'node12' 或 'nodenext' 时，才允许 'import.meta' 元属性。]]></Val>
+            <Val><![CDATA[仅当 '--module' 选项为 'es2020'、'es2022'、'esnext'、 'system'、'node12' 或 'nodenext' 时，才允许 'import.meta' 元属性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13437,11 +13461,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_noden_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 'module' 选项设置为 'esnext'、'system' 或 'nodenext'，且 'target' 选项设置为 'es2017' 或更高版本时，才允许顶级 'await' 表达式。]]></Val>
+            <Val><![CDATA[仅当 'module' 选项设置为 'es2022'、'esnext'、'system' 或 'nodenext'，且 'target' 选项设置为 'es2017' 或更高版本时，才允许顶级 'await' 表达式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13455,11 +13479,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenex_1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or__1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 'module' 选项设置为 'esnext'、'system' 或 'nodenext'，且 'target' 选项设置为 'es2017' 或更高版本时，才允许顶级 'for await' 循环。]]></Val>
+            <Val><![CDATA[仅当 'module' 选项设置为 'es2022'、'esnext'、'system' 或 'nodenext'，且 'target' 选项设置为 'es2017' 或更高版本时，才允许顶级 'for await' 循环。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15248,6 +15272,15 @@
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[“{0}”不是关键字“{1}”的有效元属性。是否是指“{2}”?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_not_allowed_as_a_parameter_name_1390" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not allowed as a parameter name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不允许将 '{0}' 作为参数名。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

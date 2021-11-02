@@ -212,7 +212,8 @@ namespace ts {
                     visitNode(cbNode, (node as MappedTypeNode).typeParameter) ||
                     visitNode(cbNode, (node as MappedTypeNode).nameType) ||
                     visitNode(cbNode, (node as MappedTypeNode).questionToken) ||
-                    visitNode(cbNode, (node as MappedTypeNode).type);
+                    visitNode(cbNode, (node as MappedTypeNode).type) ||
+                    visitNodes(cbNode, cbNodes, (node as MappedTypeNode).members);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (node as LiteralTypeNode).literal);
             case SyntaxKind.NamedTupleMember:
@@ -2610,7 +2611,10 @@ namespace ts {
                 case ParsingContext.ObjectLiteralMembers: return parseErrorAtCurrentToken(Diagnostics.Property_assignment_expected);
                 case ParsingContext.ArrayLiteralMembers: return parseErrorAtCurrentToken(Diagnostics.Expression_or_comma_expected);
                 case ParsingContext.JSDocParameters: return parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
-                case ParsingContext.Parameters: return parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
+                case ParsingContext.Parameters:
+                    return isKeyword(token())
+                        ? parseErrorAtCurrentToken(Diagnostics._0_is_not_allowed_as_a_parameter_name, tokenToString(token()))
+                        : parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
                 case ParsingContext.TypeParameters: return parseErrorAtCurrentToken(Diagnostics.Type_parameter_declaration_expected);
                 case ParsingContext.TypeArguments: return parseErrorAtCurrentToken(Diagnostics.Type_argument_expected);
                 case ParsingContext.TupleElementTypes: return parseErrorAtCurrentToken(Diagnostics.Type_expected);
@@ -3534,8 +3538,9 @@ namespace ts {
             }
             const type = parseTypeAnnotation();
             parseSemicolon();
+            const members = parseList(ParsingContext.TypeMembers, parseTypeMember);
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), pos);
+            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), pos);
         }
 
         function parseTupleElementType() {
@@ -7277,19 +7282,24 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.AssertKeyword);
             const openBracePosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenBraceToken);
-            const multiLine = scanner.hasPrecedingLineBreak();
-            const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
-            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                    );
+            if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                const multiLine = scanner.hasPrecedingLineBreak();
+                const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
+                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                    const lastError = lastOrUndefined(parseDiagnostics);
+                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                        addRelatedInfo(
+                            lastError,
+                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        );
+                    }
                 }
+                return finishNode(factory.createAssertClause(elements, multiLine), pos);
             }
-            return finishNode(factory.createAssertClause(elements, multiLine), pos);
+            else {
+                const elements = createNodeArray([], getNodePos(), /*end*/ undefined, /*hasTrailingComma*/ false);
+                return finishNode(factory.createAssertClause(elements, /*multiLine*/ false), pos);
+            }
         }
 
         function tokenAfterImportDefinitelyProducesImportDeclaration() {
@@ -8256,8 +8266,9 @@ namespace ts {
                 }
 
                 function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
-                    const isLink = lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link");
-                    const nameExpression = isLink ? undefined : parseJSDocNameReference();
+                    const isMarkdownOrJSDocLink = token() === SyntaxKind.OpenBracketToken
+                        || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link");
+                    const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
                 }

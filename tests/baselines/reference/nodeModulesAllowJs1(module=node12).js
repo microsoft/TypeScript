@@ -661,32 +661,24 @@ export { x };
 //// [index.d.ts]
 export const x: 1;
 //// [index.d.cts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.mts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.ts]
 export const x: 1;
 //// [index.d.cts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.mts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.ts]
 export const x: 1;
 //// [index.d.cts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.mts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.cts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.mts]
-declare const x = 1;
-export { x };
+export const x: 1;
 //// [index.d.ts]
 export const x: 1;

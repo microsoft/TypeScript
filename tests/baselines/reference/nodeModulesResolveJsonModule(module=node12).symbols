@@ -1,0 +1,89 @@
+=== tests/cases/conformance/node/index.ts ===
+import pkg from "./package.json"
+>pkg : Symbol(pkg, Decl(index.ts, 0, 6))
+
+export const name = pkg.name;
+>name : Symbol(name, Decl(index.ts, 1, 12))
+>pkg.name : Symbol("name", Decl(package.json, 0, 1))
+>pkg : Symbol(pkg, Decl(index.ts, 0, 6))
+>name : Symbol("name", Decl(package.json, 0, 1))
+
+import * as ns from "./package.json";
+>ns : Symbol(ns, Decl(index.ts, 2, 6))
+
+export const thing = ns;
+>thing : Symbol(thing, Decl(index.ts, 3, 12))
+>ns : Symbol(ns, Decl(index.ts, 2, 6))
+
+export const name2 = ns.default.name;
+>name2 : Symbol(name2, Decl(index.ts, 4, 12))
+>ns.default.name : Symbol("name", Decl(package.json, 0, 1))
+>ns.default : Symbol("tests/cases/conformance/node/package")
+>ns : Symbol(ns, Decl(index.ts, 2, 6))
+>default : Symbol("tests/cases/conformance/node/package")
+>name : Symbol("name", Decl(package.json, 0, 1))
+
+=== tests/cases/conformance/node/index.cts ===
+import pkg from "./package.json"
+>pkg : Symbol(pkg, Decl(index.cts, 0, 6))
+
+export const name = pkg.name;
+>name : Symbol(name, Decl(index.cts, 1, 12))
+>pkg.name : Symbol("name", Decl(package.json, 0, 1))
+>pkg : Symbol(pkg, Decl(index.cts, 0, 6))
+>name : Symbol("name", Decl(package.json, 0, 1))
+
+import * as ns from "./package.json";
+>ns : Symbol(ns, Decl(index.cts, 2, 6))
+
+export const thing = ns;
+>thing : Symbol(thing, Decl(index.cts, 3, 12))
+>ns : Symbol(ns, Decl(index.cts, 2, 6))
+
+export const name2 = ns.default.name;
+>name2 : Symbol(name2, Decl(index.cts, 4, 12))
+>ns.default.name : Symbol("name", Decl(package.json, 0, 1))
+>ns.default : Symbol("tests/cases/conformance/node/package")
+>ns : Symbol(ns, Decl(index.cts, 2, 6))
+>default : Symbol("tests/cases/conformance/node/package")
+>name : Symbol("name", Decl(package.json, 0, 1))
+
+=== tests/cases/conformance/node/index.mts ===
+import pkg from "./package.json"
+>pkg : Symbol(pkg, Decl(index.mts, 0, 6))
+
+export const name = pkg.name;
+>name : Symbol(name, Decl(index.mts, 1, 12))
+>pkg.name : Symbol("name", Decl(package.json, 0, 1))
+>pkg : Symbol(pkg, Decl(index.mts, 0, 6))
+>name : Symbol("name", Decl(package.json, 0, 1))
+
+import * as ns from "./package.json";
+>ns : Symbol(ns, Decl(index.mts, 2, 6))
+
+export const thing = ns;
+>thing : Symbol(thing, Decl(index.mts, 3, 12))
+>ns : Symbol(ns, Decl(index.mts, 2, 6))
+
+export const name2 = ns.default.name;
+>name2 : Symbol(name2, Decl(index.mts, 4, 12))
+>ns.default.name : Symbol("name", Decl(package.json, 0, 1))
+>ns.default : Symbol("tests/cases/conformance/node/package")
+>ns : Symbol(ns, Decl(index.mts, 2, 6))
+>default : Symbol("tests/cases/conformance/node/package")
+>name : Symbol("name", Decl(package.json, 0, 1))
+
+=== tests/cases/conformance/node/package.json ===
+{
+    "name": "pkg",
+>"name" : Symbol("name", Decl(package.json, 0, 1))
+
+    "version": "0.0.1",
+>"version" : Symbol("version", Decl(package.json, 1, 18))
+
+    "type": "module",
+>"type" : Symbol("type", Decl(package.json, 2, 23))
+
+    "default": "misedirection"
+>"default" : Symbol("default", Decl(package.json, 3, 21))
+}

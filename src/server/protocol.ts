@@ -2289,7 +2289,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source`.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
         /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
@@ -3199,14 +3199,13 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-    /*
-     * __GDPR__
-     * "typingsinstalled" : {
-     *     "${include}": ["${TypeScriptCommonProperties}"],
-     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    /* __GDPR__
+        "typingsinstalled" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+            "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
@@ -3381,6 +3380,13 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
+        /**
+         * If enabled, completions for class members (e.g. methods and properties) will include
+         * a whole declaration for the member.
+         * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
+         * `class A { foo }`.
+         */
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

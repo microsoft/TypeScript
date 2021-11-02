@@ -117,6 +117,7 @@ namespace Harness {
     class CompilerTest {
         private static varyBy: readonly string[] = [
             "module",
+            "moduleResolution",
             "target",
             "jsx",
             "removeComments",

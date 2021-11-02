@@ -23,9 +23,10 @@ tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument
           Type '[string]' is not assignable to type 'Grow1<[number], T>'.
             Type '[string]' is not assignable to type '[number]'.
               Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
 
 
-==== tests/cases/compiler/recursiveConditionalTypes.ts (9 errors) ====
+==== tests/cases/compiler/recursiveConditionalTypes.ts (10 errors) ====
     // Awaiting promises
     
     type __Awaited<T> =
@@ -198,4 +199,38 @@ tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument
     type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
     
     type TP2 = ParseManyWhitespace2<" foo">;
+    
+    // Repro from #46183
+    
+    type NTuple<N extends number, Tup extends unknown[] = []> =
+        Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
+    
+    type Add<A extends number, B extends number> =
+        [...NTuple<A>, ...NTuple<B>]['length'];
+    
+    let five: Add<2, 3>;
+    
+    // Repro from #46316
+    
+    type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
+        ? [T, ...A] extends [...infer X] 
+            ? X
+            : never
+        : never;
+    
+    type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
+        ? A
+        : _Enumerate<_PrependNextNum<A>, N> & number;
+    
+    type Enumerate<N extends number> = number extends N
+        ? number
+        : _Enumerate<[], N> extends (infer E)[]
+        ? E
+        : never;
+    
+    function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
+        return value.length;  // Error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
+    }
     

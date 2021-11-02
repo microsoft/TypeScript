@@ -1,8 +1,8 @@
-tests/cases/conformance/importAssertion/1.ts(1,14): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/1.ts(2,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/1.ts(3,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/2.ts(1,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/2.ts(2,38): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/1.ts(1,14): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+tests/cases/conformance/importAssertion/1.ts(2,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+tests/cases/conformance/importAssertion/1.ts(3,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+tests/cases/conformance/importAssertion/2.ts(1,28): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+tests/cases/conformance/importAssertion/2.ts(2,38): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 tests/cases/conformance/importAssertion/3.ts(1,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
 tests/cases/conformance/importAssertion/3.ts(2,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
 tests/cases/conformance/importAssertion/3.ts(3,11): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
@@ -21,13 +21,13 @@ tests/cases/conformance/importAssertion/3.ts(10,11): error TS1323: Dynamic impor
 ==== tests/cases/conformance/importAssertion/1.ts (3 errors) ====
     import './0' assert { type: "json" }
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     import { a, b } from './0' assert { "type": "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     import * as foo from './0' assert { type: "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     a;
     b;
     foo.a;
@@ -36,10 +36,10 @@ tests/cases/conformance/importAssertion/3.ts(10,11): error TS1323: Dynamic impor
 ==== tests/cases/conformance/importAssertion/2.ts (2 errors) ====
     import { a, b } from './0' assert {}
                                ~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
     a;
     b;
     c;

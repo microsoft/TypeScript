@@ -1,0 +1,20 @@
+=== tests/cases/compiler/primitiveUnionDetection.ts ===
+// Repro from #46624
+
+type Kind = "one" | "two" | "three";
+>Kind : Kind
+
+declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
+>getInterfaceFromString : <T extends Kind>(options?: ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined) => T
+>options : ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined
+>type : T | undefined
+>type : Kind | undefined
+
+const result = getInterfaceFromString({ type: 'two' });
+>result : "two"
+>getInterfaceFromString({ type: 'two' }) : "two"
+>getInterfaceFromString : <T extends Kind>(options?: ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined) => T
+>{ type: 'two' } : { type: "two"; }
+>type : "two"
+>'two' : "two"
+

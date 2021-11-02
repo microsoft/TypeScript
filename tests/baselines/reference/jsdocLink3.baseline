@@ -107,7 +107,7 @@
               "kind": "link"
             },
             {
-              "text": "C",
+              "text": "C()",
               "kind": "linkName",
               "target": {
                 "fileName": "/jsdocLink3.ts",
@@ -116,10 +116,6 @@
                   "length": 18
                 }
               }
-            },
-            {
-              "text": "()",
-              "kind": "linkText"
             },
             {
               "text": "}",
