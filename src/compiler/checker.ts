@@ -10375,12 +10375,6 @@ namespace ts {
             return false;
         }
 
-        /** A type parameter is thisless if its constraint is thisless, or if it has no constraint. */
-        function isThislessTypeParameter(node: TypeParameterDeclaration) {
-            const constraint = getEffectiveConstraintOfTypeParameter(node);
-            return !constraint || isThislessType(constraint);
-        }
-
         /**
          * A variable-like declaration is free of this references if it has a type annotation
          * that is thisless, or if it has no type annotation and no initializer (and is thus of type any).
@@ -10388,19 +10382,6 @@ namespace ts {
         function isThislessVariableLikeDeclaration(node: VariableLikeDeclaration): boolean {
             const typeNode = getEffectiveTypeAnnotationNode(node);
             return typeNode ? isThislessType(typeNode) : !hasInitializer(node);
-        }
-
-        /**
-         * A function-like declaration is considered free of `this` references if it has a return type
-         * annotation that is free of this references and if each parameter is thisless and if
-         * each type parameter (if present) is thisless.
-         */
-        function isThislessFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            const returnType = getEffectiveReturnTypeNode(node);
-            const typeParameters = getEffectiveTypeParameterDeclarations(node);
-            return (node.kind === SyntaxKind.Constructor || (!!returnType && isThislessType(returnType))) &&
-                node.parameters.every(isThislessVariableLikeDeclaration) &&
-                typeParameters.every(isThislessTypeParameter);
         }
 
         /**
@@ -10420,10 +10401,10 @@ namespace ts {
                             return isThislessVariableLikeDeclaration(declaration as VariableLikeDeclaration);
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
-                        case SyntaxKind.Constructor:
                         case SyntaxKind.GetAccessor:
                         case SyntaxKind.SetAccessor:
-                            return isThislessFunctionLikeDeclaration(declaration as FunctionLikeDeclaration | AccessorDeclaration);
+                        case SyntaxKind.Constructor:
+                            return false;
                     }
                 }
             }
@@ -12723,6 +12704,16 @@ namespace ts {
         function getThisTypeOfSignature(signature: Signature): Type | undefined {
             if (signature.thisParameter) {
                 return getTypeOfSymbol(signature.thisParameter);
+            }
+            if (signature.declaration && isClassLike(signature.declaration.parent)) {
+                const symbol = getSymbolOfNode(signature.declaration.parent);
+                if (isStatic(signature.declaration)) {
+                    return getTypeOfSymbol(symbol)
+                }
+                else {
+                    // TODO: should provide this=the 'this' argument of the call (if it's a call)
+                    return (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType;
+                }
             }
         }
 
