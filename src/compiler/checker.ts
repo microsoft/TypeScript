@@ -14153,6 +14153,7 @@ namespace ts {
             // We ignore 'never' types in unions
             if (!(flags & TypeFlags.Never)) {
                 includes |= flags & TypeFlags.IncludesMask;
+                if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
@@ -19046,7 +19047,7 @@ namespace ts {
                         originalErrorInfo = undefined;
                     }
                 }
-                else if (isGenericMappedType(target)) {
+                else if (isGenericMappedType(target) && relation !== identityRelation) {
                     // Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
                     const keysRemapped = !!target.declaration.nameType;
                     const templateType = getTemplateTypeFromMappedType(target);
