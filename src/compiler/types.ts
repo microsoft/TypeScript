@@ -5083,6 +5083,7 @@ namespace ts {
         ConstructorReferenceInClass              = 0x02000000,  // Binding to a class constructor inside of the class's body.
         ContainsClassWithPrivateIdentifiers      = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
         ContainsSuperPropertyInStaticInitializer = 0x08000000,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
+        InCheckIdentifier                        = 0x10000000,
     }
 
     /* @internal */

@@ -888,12 +888,12 @@ function foo({ kind, payload }: Data) {
 
         let t: string = payload;
 >t : string
->payload : string | number
+>payload : string
     }
     else {
         let t: number = payload;
 >t : number
->payload : string | number
+>payload : number
     }
 }
 

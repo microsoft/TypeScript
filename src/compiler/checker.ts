@@ -8544,12 +8544,16 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-            const pattern = declaration.parent;
-            let parentType = getTypeForBindingElementParent(pattern.parent);
-            // If no type or an any type was inferred for parent, infer that for the binding element
-            if (!parentType || isTypeAny(parentType)) {
+            const parentType = getTypeForBindingElementParent(declaration.parent.parent);
+            return parentType && getBindingElementTypeFromParentType(declaration, parentType);
+        }
+
+        function getBindingElementTypeFromParentType(declaration: BindingElement, parentType: Type): Type {
+            // If an any type was inferred for parent, infer that for the binding element
+            if (isTypeAny(parentType)) {
                 return parentType;
             }
+            const pattern = declaration.parent;
             // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
             if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                 parentType = getNonNullableType(parentType);
@@ -22633,30 +22637,6 @@ namespace ts {
             return false;
         }
 
-        function getPropertyAccess(expr: Expression) {
-            if (isAccessExpression(expr)) {
-                return expr;
-            }
-            if (isIdentifier(expr)) {
-                const symbol = getResolvedSymbol(expr);
-                if (isConstVariable(symbol)) {
-                    const declaration = symbol.valueDeclaration!;
-                    // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
-                    if (isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer)) {
-                        return declaration.initializer;
-                    }
-                    // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
-                    if (isBindingElement(declaration) && !declaration.initializer) {
-                        const parent = declaration.parent.parent;
-                        if (isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer))) {
-                            return declaration;
-                        }
-                    }
-                }
-            }
-            return undefined;
-        }
-
         function getAccessedPropertyName(access: AccessExpression | BindingElement): __String | undefined {
             let propertyName;
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
@@ -23626,19 +23606,19 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = reference.flowNode) {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
-            if (!reference.flowNode) {
+            if (!flowNode) {
                 return declaredType;
             }
             flowInvocationCount++;
             const sharedFlowStart = sharedFlowCount;
-            const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
+            const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
             sharedFlowCount = sharedFlowStart;
             // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
@@ -24082,13 +24062,58 @@ namespace ts {
                 return result;
             }
 
+            function getCandidateDiscriminantPropertyAccess(expr: Expression) {
+                if (isBindingPattern(reference)) {
+                    // When the reference is a binding pattern, we are narrowing a pesudo-reference in getNarrowedTypeOfSymbol.
+                    // An identifier for a destructuring variable declared in the same binding pattern is a candidate.
+                    if (isIdentifier(expr)) {
+                        const symbol = getResolvedSymbol(expr);
+                        const declaration = symbol.valueDeclaration;
+                        if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && reference === declaration.parent) {
+                            return declaration;
+                        }
+                    }
+                }
+                else if (isAccessExpression(expr)) {
+                    // An access expression is a candidate if the reference matches the left hand expression.
+                    if (isMatchingReference(reference, expr.expression)) {
+                        return expr;
+                    }
+                }
+                else if (isIdentifier(expr)) {
+                    const symbol = getResolvedSymbol(expr);
+                    if (isConstVariable(symbol)) {
+                        const declaration = symbol.valueDeclaration!;
+                        // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
+                        if (isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer) &&
+                            isMatchingReference(reference, declaration.initializer.expression)) {
+                            return declaration.initializer;
+                        }
+                        // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
+                        if (isBindingElement(declaration) && !declaration.initializer) {
+                            const parent = declaration.parent.parent;
+                            if (isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer)) &&
+                                isMatchingReference(reference, parent.initializer)) {
+                                return declaration;
+                            }
+                        }
+                    }
+                }
+                return undefined;
+            }
+
             function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-                let access, name;
                 const type = declaredType.flags & TypeFlags.Union ? declaredType : computedType;
-                return type.flags & TypeFlags.Union && (access = getPropertyAccess(expr)) && (name = getAccessedPropertyName(access)) &&
-                    isMatchingReference(reference, isAccessExpression(access) ? access.expression : access.parent.parent.initializer!) &&
-                    isDiscriminantProperty(type, name) ?
-                    access : undefined;
+                if (type.flags & TypeFlags.Union) {
+                    const access = getCandidateDiscriminantPropertyAccess(expr);
+                    if (access) {
+                        const name = getAccessedPropertyName(access);
+                        if (name && isDiscriminantProperty(type, name)) {
+                            return access;
+                        }
+                    }
+                }
+                return undefined;
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement, narrowType: (t: Type) => Type): Type {
@@ -24901,6 +24926,50 @@ namespace ts {
             }
         }
 
+        function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
+            // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+            // parameter (a parameter for which there are no assignments in the function body), and if the parent type
+            // for the destructuring is a union type, one or more of the binding elements may represent discriminant
+            // properties, and we want the effects of conditional checks on such discriminants to affect the types of
+            // other binding elements from the same destructuring. Consider:
+            //
+            //   type Action =
+            //       | { kind: 'A', payload: number }
+            //       | { kind: 'B', payload: string };
+            //
+            //   function f1({ kind, payload }: Action) {
+            //       if (kind === 'A') {
+            //           payload.toFixed();
+            //       }
+            //       if (kind === 'B') {
+            //           payload.toUpperCase();
+            //       }
+            //   }
+            //
+            // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+            // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
+            // as if it occurred in the specified location. We then recompute the narrowed binding element type by
+            // destructuring from the narrowed parent type.
+            const declaration = symbol.valueDeclaration;
+            if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+                const parent = declaration.parent.parent;
+                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
+                    const links = getNodeLinks(location);
+                    if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
+                        links.flags |= NodeCheckFlags.InCheckIdentifier;
+                        const parentType = getTypeForBindingElementParent(parent);
+                        links.flags &= ~NodeCheckFlags.InCheckIdentifier;
+                        if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                            const pattern = declaration.parent;
+                            const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                            return getBindingElementTypeFromParentType(declaration, narrowedType);
+                        }
+                    }
+                }
+            }
+            return getTypeOfSymbol(symbol);
+        }
+
         function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -24984,7 +25053,7 @@ namespace ts {
 
             checkNestedBlockScopedBinding(node, symbol);
 
-            let type = getTypeOfSymbol(localOrExportSymbol);
+            let type = getNarrowedTypeOfSymbol(localOrExportSymbol, node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
