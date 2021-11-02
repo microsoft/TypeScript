@@ -19046,7 +19046,7 @@ namespace ts {
                         originalErrorInfo = undefined;
                     }
                 }
-                else if (isGenericMappedType(target)) {
+                else if (isGenericMappedType(target) && relation !== identityRelation) {
                     // Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
                     const keysRemapped = !!target.declaration.nameType;
                     const templateType = getTemplateTypeFromMappedType(target);
