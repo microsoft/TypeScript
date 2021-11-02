@@ -30414,7 +30414,7 @@ namespace ts {
                 : min < max ? min + "-" + max
                 : min;
             const error = hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1
-                : parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
+                : parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_TypeScript_may_need_a_JSDoc_hint_that_the_call_to_new_Promise_produces_a_Promise_void
                 : Diagnostics.Expected_0_arguments_but_got_1;
             if (min < args.length && args.length < max) {
                 // between min and max, but with no matching overload
