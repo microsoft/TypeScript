@@ -3,7 +3,7 @@
 
 // Repro from #46624
 
-export type Kind = "one" | "two" | "three";
+type Kind = "one" | "two" | "three";
 
 declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
 
