@@ -21221,9 +21221,10 @@ namespace ts {
                         (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
                         param.parent.parameters.indexOf(param) > -1 &&
                         (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
-                         param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
+                        param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
                         const newName = "arg" + param.parent.parameters.indexOf(param);
-                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, declarationNameToString(param.name));
+                        const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
+                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
                         return;
                     }
                     diagnostic = (declaration as ParameterDeclaration).dotDotDotToken ?
