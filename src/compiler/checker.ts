@@ -41621,7 +41621,7 @@ namespace ts {
             }
 
             const symbol = isEntityName(node)
-                ? resolveEntityName(node, SymbolFlags.EnumMember)
+                ? resolveEntityName(node, SymbolFlags.EnumMember, /*ignoreErrors*/ true)
                 : getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 // inline property\index accesses only for const enums
