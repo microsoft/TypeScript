@@ -37,6 +37,12 @@ namespace ts.codefix {
 
     type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
 
+    export const enum PreserveOptionalFlags {
+        Method  = 1 << 0,
+        Property = 1 << 1,
+        All     = Method | Property
+    }
+
     /**
      * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      * @param body If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
@@ -50,6 +56,7 @@ namespace ts.codefix {
         importAdder: ImportAdder | undefined,
         addClassElement: (node: AddNode) => void,
         body: Block | undefined,
+        preserveOptional = PreserveOptionalFlags.All,
         isAmbient = false,
     ): void {
         const declarations = symbol.getDeclarations();
@@ -83,7 +90,7 @@ namespace ts.codefix {
                     /*decorators*/ undefined,
                     modifiers,
                     name,
-                    optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                    optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
                 break;
@@ -158,14 +165,14 @@ namespace ts.codefix {
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional, modifiers, quotePreference, body));
+                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body));
                     }
                 }
                 break;
         }
 
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional, enclosingDeclaration, importAdder);
+            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder);
             if (method) addClassElement(method);
         }
     }
