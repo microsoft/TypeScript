@@ -8544,12 +8544,16 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-            const pattern = declaration.parent;
-            let parentType = getTypeForBindingElementParent(pattern.parent);
-            // If no type or an any type was inferred for parent, infer that for the binding element
-            if (!parentType || isTypeAny(parentType)) {
+            const parentType = getTypeForBindingElementParent(declaration.parent.parent);
+            return parentType && getBindingElementTypeFromParentType(declaration, parentType);
+        }
+
+        function getBindingElementTypeFromParentType(declaration: BindingElement, parentType: Type): Type {
+            // If an any type was inferred for parent, infer that for the binding element
+            if (isTypeAny(parentType)) {
                 return parentType;
             }
+            const pattern = declaration.parent;
             // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
             if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
                 parentType = getNonNullableType(parentType);
@@ -14153,6 +14157,7 @@ namespace ts {
             // We ignore 'never' types in unions
             if (!(flags & TypeFlags.Never)) {
                 includes |= flags & TypeFlags.IncludesMask;
+                if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
@@ -17803,7 +17808,7 @@ namespace ts {
                 if (source.flags & TypeFlags.Singleton) return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
+                const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation, /*ignoreConstraints*/ false));
                 if (related !== undefined) {
                     return !!(related & RelationComparisonResult.Succeeded);
                 }
@@ -18703,7 +18708,8 @@ namespace ts {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = getRelationKey(source, target, intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0), relation);
+                const keyIntersectionState = intersectionState | (inPropertyCheck ? IntersectionState.InPropertyCheck : 0);
+                const id = getRelationKey(source, target, keyIntersectionState, relation, /*ingnoreConstraints*/ false);
                 const entry = relation.get(id);
                 if (entry !== undefined) {
                     if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
@@ -18730,16 +18736,13 @@ namespace ts {
                     targetStack = [];
                 }
                 else {
-                    // generate a key where all type parameter id positions are replaced with unconstrained type parameter ids
-                    // this isn't perfect - nested type references passed as type arguments will muck up the indexes and thus
-                    // prevent finding matches- but it should hit up the common cases
-                    const broadestEquivalentId = id.split(",").map(i => i.replace(/-\d+/g, (_match, offset: number) => {
-                        const index = length(id.slice(0, offset).match(/[-=]/g) || undefined);
-                        return `=${index}`;
-                    })).join(",");
+                    // A key that starts with "*" is an indication that we have type references that reference constrained
+                    // type parameters. For such keys we also check against the key we would have gotten if all type parameters
+                    // were unconstrained.
+                    const broadestEquivalentId = id.startsWith("*") ? getRelationKey(source, target, keyIntersectionState, relation, /*ignoreConstraints*/ true) : undefined;
                     for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (id === maybeKeys[i] || broadestEquivalentId === maybeKeys[i]) {
+                        if (id === maybeKeys[i] || broadestEquivalentId && broadestEquivalentId === maybeKeys[i]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -19046,7 +19049,7 @@ namespace ts {
                         originalErrorInfo = undefined;
                     }
                 }
-                else if (isGenericMappedType(target)) {
+                else if (isGenericMappedType(target) && relation !== identityRelation) {
                     // Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
                     const keysRemapped = !!target.declaration.nameType;
                     const templateType = getTemplateTypeFromMappedType(target);
@@ -20294,47 +20297,55 @@ namespace ts {
             return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => !!(t.flags & TypeFlags.TypeParameter) || isTypeReferenceWithGenericArguments(t));
         }
 
-        /**
-         * getTypeReferenceId(A<T, number, U>) returns "111=0-12=1"
-         *   where A.id=111 and number.id=12
-         */
-        function getTypeReferenceId(type: TypeReference, typeParameters: Type[], depth = 0) {
-            let result = "" + type.target.id;
-            for (const t of getTypeArguments(type)) {
-                if (isUnconstrainedTypeParameter(t)) {
-                    let index = typeParameters.indexOf(t);
-                    if (index < 0) {
-                        index = typeParameters.length;
-                        typeParameters.push(t);
+        function getGenericTypeReferenceRelationKey(source: TypeReference, target: TypeReference, postFix: string, ignoreConstraints: boolean) {
+            const typeParameters: Type[] = [];
+            let constraintMarker = "";
+            const sourceId = getTypeReferenceId(source, 0);
+            const targetId = getTypeReferenceId(target, 0);
+            return `${constraintMarker}${sourceId},${targetId}${postFix}`;
+            // getTypeReferenceId(A<T, number, U>) returns "111=0-12=1"
+            // where A.id=111 and number.id=12
+            function getTypeReferenceId(type: TypeReference, depth = 0) {
+                let result = "" + type.target.id;
+                for (const t of getTypeArguments(type)) {
+                    if (t.flags & TypeFlags.TypeParameter) {
+                        if (ignoreConstraints || isUnconstrainedTypeParameter(t)) {
+                            let index = typeParameters.indexOf(t);
+                            if (index < 0) {
+                                index = typeParameters.length;
+                                typeParameters.push(t);
+                            }
+                            result += "=" + index;
+                            continue;
+                        }
+                        // We mark type references that reference constrained type parameters such that we know to obtain
+                        // and look for a "broadest equivalent key" in the cache.
+                        constraintMarker = "*";
                     }
-                    result += "=" + index;
-                }
-                else if (depth < 4 && isTypeReferenceWithGenericArguments(t)) {
-                    result += "<" + getTypeReferenceId(t as TypeReference, typeParameters, depth + 1) + ">";
-                }
-                else {
+                    else if (depth < 4 && isTypeReferenceWithGenericArguments(t)) {
+                        result += "<" + getTypeReferenceId(t as TypeReference, depth + 1) + ">";
+                        continue;
+                    }
                     result += "-" + t.id;
                 }
+                return result;
             }
-            return result;
         }
 
         /**
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
          */
-        function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: ESMap<string, RelationComparisonResult>) {
+        function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: ESMap<string, RelationComparisonResult>, ignoreConstraints: boolean) {
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
                 source = target;
                 target = temp;
             }
             const postFix = intersectionState ? ":" + intersectionState : "";
-            if (isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target)) {
-                const typeParameters: Type[] = [];
-                return getTypeReferenceId(source as TypeReference, typeParameters) + "," + getTypeReferenceId(target as TypeReference, typeParameters) + postFix;
-            }
-            return source.id + "," + target.id + postFix;
+            return isTypeReferenceWithGenericArguments(source) && isTypeReferenceWithGenericArguments(target) ?
+                getGenericTypeReferenceRelationKey(source as TypeReference, target as TypeReference, postFix, ignoreConstraints) :
+                `${source.id},${target.id}${postFix}`;
         }
 
         // Invoke the callback for each underlying property symbol of the given symbol and return the first
@@ -20388,27 +20399,34 @@ namespace ts {
         }
 
         // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
-        // for 5 or more occurrences or instantiations of the type have been recorded on the given stack. It is possible,
+        // for maxDepth or more occurrences or instantiations of the type have been recorded on the given stack. It is possible,
         // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
-        // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least 5
+        // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least maxDepth
         // levels, but unequal at some level beyond that.
-        // In addition, this will also detect when an indexed access has been chained off of 5 or more times (which is essentially
-        // the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding false positives
-        // for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
-        // It also detects when a recursive type reference has expanded 5 or more times, eg, if the true branch of
+        // In addition, this will also detect when an indexed access has been chained off of maxDepth more times (which is
+        // essentially the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding
+        // false positives for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
+        // It also detects when a recursive type reference has expanded maxDepth or more times, e.g. if the true branch of
         // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
-        // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`
-        // in such cases we need to terminate the expansion, and we do so here.
-        function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 5): boolean {
+        // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`. In such cases we need
+        // to terminate the expansion, and we do so here.
+        function isDeeplyNestedType(type: Type, stack: Type[], depth: number, maxDepth = 3): boolean {
             if (depth >= maxDepth) {
                 const identity = getRecursionIdentity(type);
                 let count = 0;
+                let lastTypeId = 0;
                 for (let i = 0; i < depth; i++) {
-                    if (getRecursionIdentity(stack[i]) === identity) {
-                        count++;
-                        if (count >= maxDepth) {
-                            return true;
+                    const t = stack[i];
+                    if (getRecursionIdentity(t) === identity) {
+                        // We only count occurrences with a higher type id than the previous occurrence, since higher
+                        // type ids are an indicator of newer instantiations caused by recursion.
+                        if (t.id >= lastTypeId) {
+                            count++;
+                            if (count >= maxDepth) {
+                                return true;
+                            }
                         }
+                        lastTypeId = t.id;
                     }
                 }
             }
@@ -22619,30 +22637,6 @@ namespace ts {
             return false;
         }
 
-        function getPropertyAccess(expr: Expression) {
-            if (isAccessExpression(expr)) {
-                return expr;
-            }
-            if (isIdentifier(expr)) {
-                const symbol = getResolvedSymbol(expr);
-                if (isConstVariable(symbol)) {
-                    const declaration = symbol.valueDeclaration!;
-                    // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
-                    if (isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer)) {
-                        return declaration.initializer;
-                    }
-                    // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
-                    if (isBindingElement(declaration) && !declaration.initializer) {
-                        const parent = declaration.parent.parent;
-                        if (isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer))) {
-                            return declaration;
-                        }
-                    }
-                }
-            }
-            return undefined;
-        }
-
         function getAccessedPropertyName(access: AccessExpression | BindingElement): __String | undefined {
             let propertyName;
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
@@ -23612,19 +23606,19 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, flowNode = reference.flowNode) {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
-            if (!reference.flowNode) {
+            if (!flowNode) {
                 return declaredType;
             }
             flowInvocationCount++;
             const sharedFlowStart = sharedFlowCount;
-            const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(reference.flowNode));
+            const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
             sharedFlowCount = sharedFlowStart;
             // When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
@@ -24068,13 +24062,58 @@ namespace ts {
                 return result;
             }
 
+            function getCandidateDiscriminantPropertyAccess(expr: Expression) {
+                if (isBindingPattern(reference)) {
+                    // When the reference is a binding pattern, we are narrowing a pesudo-reference in getNarrowedTypeOfSymbol.
+                    // An identifier for a destructuring variable declared in the same binding pattern is a candidate.
+                    if (isIdentifier(expr)) {
+                        const symbol = getResolvedSymbol(expr);
+                        const declaration = symbol.valueDeclaration;
+                        if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && reference === declaration.parent) {
+                            return declaration;
+                        }
+                    }
+                }
+                else if (isAccessExpression(expr)) {
+                    // An access expression is a candidate if the reference matches the left hand expression.
+                    if (isMatchingReference(reference, expr.expression)) {
+                        return expr;
+                    }
+                }
+                else if (isIdentifier(expr)) {
+                    const symbol = getResolvedSymbol(expr);
+                    if (isConstVariable(symbol)) {
+                        const declaration = symbol.valueDeclaration!;
+                        // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
+                        if (isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer) &&
+                            isMatchingReference(reference, declaration.initializer.expression)) {
+                            return declaration.initializer;
+                        }
+                        // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
+                        if (isBindingElement(declaration) && !declaration.initializer) {
+                            const parent = declaration.parent.parent;
+                            if (isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer)) &&
+                                isMatchingReference(reference, parent.initializer)) {
+                                return declaration;
+                            }
+                        }
+                    }
+                }
+                return undefined;
+            }
+
             function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-                let access, name;
                 const type = declaredType.flags & TypeFlags.Union ? declaredType : computedType;
-                return type.flags & TypeFlags.Union && (access = getPropertyAccess(expr)) && (name = getAccessedPropertyName(access)) &&
-                    isMatchingReference(reference, isAccessExpression(access) ? access.expression : access.parent.parent.initializer!) &&
-                    isDiscriminantProperty(type, name) ?
-                    access : undefined;
+                if (type.flags & TypeFlags.Union) {
+                    const access = getCandidateDiscriminantPropertyAccess(expr);
+                    if (access) {
+                        const name = getAccessedPropertyName(access);
+                        if (name && isDiscriminantProperty(type, name)) {
+                            return access;
+                        }
+                    }
+                }
+                return undefined;
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement, narrowType: (t: Type) => Type): Type {
@@ -24887,6 +24926,50 @@ namespace ts {
             }
         }
 
+        function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
+            // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+            // parameter (a parameter for which there are no assignments in the function body), and if the parent type
+            // for the destructuring is a union type, one or more of the binding elements may represent discriminant
+            // properties, and we want the effects of conditional checks on such discriminants to affect the types of
+            // other binding elements from the same destructuring. Consider:
+            //
+            //   type Action =
+            //       | { kind: 'A', payload: number }
+            //       | { kind: 'B', payload: string };
+            //
+            //   function f1({ kind, payload }: Action) {
+            //       if (kind === 'A') {
+            //           payload.toFixed();
+            //       }
+            //       if (kind === 'B') {
+            //           payload.toUpperCase();
+            //       }
+            //   }
+            //
+            // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+            // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
+            // as if it occurred in the specified location. We then recompute the narrowed binding element type by
+            // destructuring from the narrowed parent type.
+            const declaration = symbol.valueDeclaration;
+            if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+                const parent = declaration.parent.parent;
+                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
+                    const links = getNodeLinks(location);
+                    if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
+                        links.flags |= NodeCheckFlags.InCheckIdentifier;
+                        const parentType = getTypeForBindingElementParent(parent);
+                        links.flags &= ~NodeCheckFlags.InCheckIdentifier;
+                        if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                            const pattern = declaration.parent;
+                            const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                            return getBindingElementTypeFromParentType(declaration, narrowedType);
+                        }
+                    }
+                }
+            }
+            return getTypeOfSymbol(symbol);
+        }
+
         function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -24970,7 +25053,7 @@ namespace ts {
 
             checkNestedBlockScopedBinding(node, symbol);
 
-            let type = getTypeOfSymbol(localOrExportSymbol);
+            let type = getNarrowedTypeOfSymbol(localOrExportSymbol, node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -26108,12 +26191,12 @@ namespace ts {
             return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
         }
 
-        function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
+        function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
             return mapType(type, t => {
                 if (isGenericMappedType(t)) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
-                    const propertyNameType = getStringLiteralType(unescapeLeadingUnderscores(name));
+                    const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
                     if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
                         return substituteIndexedMappedType(t, propertyNameType);
                     }
@@ -26129,7 +26212,7 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
+                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
                 }
                 return undefined;
             }, /*noReductions*/ true);
@@ -26159,7 +26242,8 @@ namespace ts {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
-                    return getTypeOfPropertyOfContextualType(type, getSymbolOfNode(element).escapedName);
+                    const symbol = getSymbolOfNode(element);
+                    return getTypeOfPropertyOfContextualType(type, symbol.escapedName, getSymbolLinks(symbol).nameType);
                 }
                 if (element.name) {
                     const nameType = getLiteralTypeFromPropertyName(element.name);
@@ -34729,7 +34813,8 @@ namespace ts {
         function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
             const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
             if (!typeReferenceNode) return undefined;
-            const typeParameters = getTypeParametersForTypeReference(typeReferenceNode)!; // TODO: GH#18217
+            const typeParameters = getTypeParametersForTypeReference(typeReferenceNode);
+            if (!typeParameters) return undefined;
             const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments!.indexOf(node)]);
             return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReferenceNode, typeParameters)));
         }
@@ -39679,8 +39764,12 @@ namespace ts {
 
         function checkAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
             if (declaration.assertClause) {
-                if (moduleKind !== ModuleKind.ESNext) {
-                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+                const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getUsageModeForExpression(declaration.moduleSpecifier);
+                if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext) {
+                    return grammarErrorOnNode(declaration.assertClause,
+                        moduleKind === ModuleKind.NodeNext
+                            ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls
+                            : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext);
                 }
 
                 if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
@@ -43890,13 +43979,13 @@ namespace ts {
             }
 
             const nodeArguments = node.arguments;
-            if (moduleKind !== ModuleKind.ESNext) {
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
                 // We are allowed trailing comma after proposal-import-assertions.
                 checkGrammarForDisallowedTrailingComma(nodeArguments);
 
                 if (nodeArguments.length > 1) {
                     const assertionArgument = nodeArguments[1];
-                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext);
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext);
                 }
             }
 

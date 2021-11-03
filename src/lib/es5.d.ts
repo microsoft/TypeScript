@@ -96,7 +96,7 @@ interface PropertyDescriptor {
 }
 
 interface PropertyDescriptorMap {
-    [s: string]: PropertyDescriptor;
+    [key: PropertyKey]: PropertyDescriptor;
 }
 
 interface Object {
