@@ -21,8 +21,8 @@
 //// func({ [|foo|], bar, [|callback|] });
 //// func({ bar, [|callback|]() {} });
 
-//// // Skip if there is a type incompatibility error.
-//// func({ foo: "foo", boo: "boo" });
+//// // Do not skip if there is a type incompatibility error.
+//// func({ [|foo|]: "foo", boo: "boo" });
 
 //// // Skip for union types.
 //// function test(_args: { foo: { /** @deprecated */ bar: string } | { bar: string, baz: string } }) {}
@@ -37,22 +37,52 @@ verify.getSuggestionDiagnostics([
         range: ranges[0],
         reportsDeprecated: true,
     },
-    ...ranges.slice(1, ranges.length - 2).map(range => ({
+    {
         message: "'foo' is deprecated.",
         code: 6385,
-        range,
+        range: ranges[1],
         reportsDeprecated: true as const,
-    })),
+    },
+    {
+        message: "'foo' is deprecated.",
+        code: 6385,
+        range: ranges[2],
+        reportsDeprecated: true as const,
+    },
+    {
+        message: "'foo' is deprecated.",
+        code: 6385,
+        range: ranges[3],
+        reportsDeprecated: true as const,
+    },
+    {
+        message: "'foo' is deprecated.",
+        code: 6385,
+        range: ranges[4],
+        reportsDeprecated: true as const,
+    },
+    {
+        message: "'foo' is deprecated.",
+        code: 6385,
+        range: ranges[5],
+        reportsDeprecated: true as const,
+    },
     {
         message: "'callback' is deprecated.",
         code: 6385,
-        range: ranges[ranges.length - 2],
+        range: ranges[6],
         reportsDeprecated: true,
     },
     {
         message: "'callback' is deprecated.",
         code: 6385,
-        range: ranges[ranges.length - 1],
+        range: ranges[7],
+        reportsDeprecated: true,
+    },
+    {
+        message: "'foo' is deprecated.",
+        code: 6385,
+        range: ranges[8],
         reportsDeprecated: true,
     },
 ])
