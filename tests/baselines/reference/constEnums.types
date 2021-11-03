@@ -1,0 +1,593 @@
+=== tests/cases/compiler/constEnums.ts ===
+const enum Enum1 {
+>Enum1 : Enum1
+
+   A0 = 100,
+>A0 : Enum1
+>100 : 100
+}
+
+const enum Enum1 {
+>Enum1 : Enum1
+
+    // correct cases
+    A,
+>A : Enum1
+
+    B,
+>B : Enum1
+
+    C = 10,
+>C : Enum1
+>10 : 10
+
+    D = A | B,
+>D : Enum1
+>A | B : number
+>A : Enum1
+>B : Enum1
+
+    E = A | 1,
+>E : Enum1
+>A | 1 : number
+>A : Enum1
+>1 : 1
+
+    F = 1 | A,
+>F : Enum1
+>1 | A : number
+>1 : 1
+>A : Enum1
+
+    G = (1 & 1),
+>G : Enum1
+>(1 & 1) : number
+>1 & 1 : number
+>1 : 1
+>1 : 1
+
+    H = ~(A | B),
+>H : Enum1
+>~(A | B) : number
+>(A | B) : number
+>A | B : number
+>A : Enum1
+>B : Enum1
+
+    I = A >>> 1,
+>I : Enum1
+>A >>> 1 : number
+>A : Enum1
+>1 : 1
+
+    J = 1 & A,
+>J : Enum1
+>1 & A : number
+>1 : 1
+>A : Enum1
+
+    K = ~(1 | 5),
+>K : Enum1
+>~(1 | 5) : number
+>(1 | 5) : number
+>1 | 5 : number
+>1 : 1
+>5 : 5
+
+    L = ~D,
+>L : Enum1
+>~D : number
+>D : Enum1
+
+    M = E << B,
+>M : Enum1
+>E << B : number
+>E : Enum1
+>B : Enum1
+
+    N = E << 1,
+>N : Enum1
+>E << 1 : number
+>E : Enum1
+>1 : 1
+
+    O = E >> B,
+>O : Enum1
+>E >> B : number
+>E : Enum1
+>B : Enum1
+
+    P = E >> 1,
+>P : Enum1
+>E >> 1 : number
+>E : Enum1
+>1 : 1
+
+    PQ = E ** 2,
+>PQ : Enum1
+>E ** 2 : number
+>E : Enum1
+>2 : 2
+
+    Q = -D,
+>Q : Enum1
+>-D : number
+>D : Enum1
+
+    R = C & 5,
+>R : Enum1
+>C & 5 : number
+>C : Enum1
+>5 : 5
+
+    S = 5 & C,
+>S : Enum1
+>5 & C : number
+>5 : 5
+>C : Enum1
+
+    T = C | D,
+>T : Enum1
+>C | D : number
+>C : Enum1
+>D : Enum1
+
+    U = C | 1,
+>U : Enum1
+>C | 1 : number
+>C : Enum1
+>1 : 1
+
+    V = 10 | D,
+>V : Enum1
+>10 | D : number
+>10 : 10
+>D : Enum1
+
+    W = Enum1.V,
+>W : Enum1
+>Enum1.V : Enum1
+>Enum1 : typeof Enum1
+>V : Enum1
+
+    // correct cases: reference to the enum member from different enum declaration
+    W1 = A0,
+>W1 : Enum1
+>A0 : Enum1
+
+    W2 = Enum1.A0,
+>W2 : Enum1
+>Enum1.A0 : Enum1
+>Enum1 : typeof Enum1
+>A0 : Enum1
+
+    W3 = Enum1["A0"],
+>W3 : Enum1
+>Enum1["A0"] : Enum1
+>Enum1 : typeof Enum1
+>"A0" : "A0"
+
+    W4 = Enum1["W"],
+>W4 : Enum1
+>Enum1["W"] : Enum1
+>Enum1 : typeof Enum1
+>"W" : "W"
+
+    W5 = Enum1[`V`],
+>W5 : Enum1
+>Enum1[`V`] : Enum1
+>Enum1 : typeof Enum1
+>`V` : "V"
+}
+
+
+module A {
+    export module B {
+        export module C {
+            export const enum E {
+>E : E
+
+                V1 = 1,
+>V1 : E
+>1 : 1
+
+                V2 = A.B.C.E.V1 | 100
+>V2 : E
+>A.B.C.E.V1 | 100 : number
+>A.B.C.E.V1 : E
+>A.B.C.E : typeof E
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+>E : typeof E
+>V1 : E
+>100 : 100
+            }
+        }
+    }
+}
+
+module A {
+    export module B {
+        export module C {
+            export const enum E {
+>E : E
+
+                V3 = A.B.C.E["V2"] & 200,
+>V3 : E
+>A.B.C.E["V2"] & 200 : number
+>A.B.C.E["V2"] : E
+>A.B.C.E : typeof E
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+>E : typeof E
+>"V2" : "V2"
+>200 : 200
+
+                V4 = A.B.C.E[`V1`] << 1,
+>V4 : E
+>A.B.C.E[`V1`] << 1 : number
+>A.B.C.E[`V1`] : E
+>A.B.C.E : typeof E
+>A.B.C : typeof C
+>A.B : typeof B
+>A : typeof A
+>B : typeof B
+>C : typeof C
+>E : typeof E
+>`V1` : "V1"
+>1 : 1
+            }
+        }
+    }
+}
+
+module A1 {
+    export module B {
+        export module C {
+            export const enum E {
+>E : E
+
+                V1 = 10,
+>V1 : E.V1
+>10 : 10
+
+                V2 = 110,
+>V2 : E.V2
+>110 : 110
+            }
+        }
+    }
+}
+
+module A2 {
+>A2 : typeof A2
+
+    export module B {
+>B : typeof B
+
+        export module C {
+            export const enum E {
+>E : E
+
+                V1 = 10,
+>V1 : E.V1
+>10 : 10
+
+                V2 = 110,
+>V2 : E.V2
+>110 : 110
+            }
+        }
+        // module C will be classified as value
+        export module C {
+>C : typeof C
+
+            var x = 1
+>x : number
+>1 : 1
+        }
+    }
+}
+
+import I = A.B.C.E;
+>I : typeof I
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : I
+
+import I1 = A1.B;
+>I1 : typeof I1
+>A1 : typeof A1
+>B : typeof I1
+
+import I2 = A2.B;
+>I2 : typeof I2
+>A2 : typeof A2
+>B : typeof I2
+
+function foo0(e: I): void {
+>foo0 : (e: I) => void
+>e : I
+
+    if (e === I.V1) {
+>e === I.V1 : boolean
+>e : I
+>I.V1 : I
+>I : typeof I
+>V1 : I
+    }
+    else if (e === I.V2) {
+>e === I.V2 : boolean
+>e : I
+>I.V2 : I
+>I : typeof I
+>V2 : I
+    }
+}
+
+function foo1(e: I1.C.E): void {
+>foo1 : (e: I1.C.E) => void
+>e : I1.C.E
+>I1 : any
+>C : any
+
+    if (e === I1.C.E.V1) {
+>e === I1.C.E.V1 : boolean
+>e : I1.C.E
+>I1.C.E.V1 : I1.C.E.V1
+>I1.C.E : typeof I1.C.E
+>I1.C : typeof I1.C
+>I1 : typeof I1
+>C : typeof I1.C
+>E : typeof I1.C.E
+>V1 : I1.C.E.V1
+    }
+    else if (e === I1.C.E.V2) {
+>e === I1.C.E.V2 : boolean
+>e : I1.C.E.V2
+>I1.C.E.V2 : I1.C.E.V2
+>I1.C.E : typeof I1.C.E
+>I1.C : typeof I1.C
+>I1 : typeof I1
+>C : typeof I1.C
+>E : typeof I1.C.E
+>V2 : I1.C.E.V2
+    }
+}
+
+function foo2(e: I2.C.E): void {
+>foo2 : (e: I2.C.E) => void
+>e : I2.C.E
+>I2 : any
+>C : any
+
+    if (e === I2.C.E.V1) {
+>e === I2.C.E.V1 : boolean
+>e : I2.C.E
+>I2.C.E.V1 : I2.C.E.V1
+>I2.C.E : typeof I2.C.E
+>I2.C : typeof I2.C
+>I2 : typeof I2
+>C : typeof I2.C
+>E : typeof I2.C.E
+>V1 : I2.C.E.V1
+    }
+    else if (e === I2.C.E.V2) {
+>e === I2.C.E.V2 : boolean
+>e : I2.C.E.V2
+>I2.C.E.V2 : I2.C.E.V2
+>I2.C.E : typeof I2.C.E
+>I2.C : typeof I2.C
+>I2 : typeof I2
+>C : typeof I2.C
+>E : typeof I2.C.E
+>V2 : I2.C.E.V2
+    }
+}
+
+
+function foo(x: Enum1) {
+>foo : (x: Enum1) => void
+>x : Enum1
+
+    switch (x) {
+>x : Enum1
+
+        case Enum1.A:
+>Enum1.A : Enum1
+>Enum1 : typeof Enum1
+>A : Enum1
+
+        case Enum1.B:
+>Enum1.B : Enum1
+>Enum1 : typeof Enum1
+>B : Enum1
+
+        case Enum1.C:
+>Enum1.C : Enum1
+>Enum1 : typeof Enum1
+>C : Enum1
+
+        case Enum1.D:
+>Enum1.D : Enum1
+>Enum1 : typeof Enum1
+>D : Enum1
+
+        case Enum1.E:
+>Enum1.E : Enum1
+>Enum1 : typeof Enum1
+>E : Enum1
+
+        case Enum1.F:
+>Enum1.F : Enum1
+>Enum1 : typeof Enum1
+>F : Enum1
+
+        case Enum1.G:
+>Enum1.G : Enum1
+>Enum1 : typeof Enum1
+>G : Enum1
+
+        case Enum1.H:
+>Enum1.H : Enum1
+>Enum1 : typeof Enum1
+>H : Enum1
+
+        case Enum1.I:
+>Enum1.I : Enum1
+>Enum1 : typeof Enum1
+>I : Enum1
+
+        case Enum1.J:
+>Enum1.J : Enum1
+>Enum1 : typeof Enum1
+>J : Enum1
+
+        case Enum1.K:
+>Enum1.K : Enum1
+>Enum1 : typeof Enum1
+>K : Enum1
+
+        case Enum1.L:
+>Enum1.L : Enum1
+>Enum1 : typeof Enum1
+>L : Enum1
+
+        case Enum1.M:
+>Enum1.M : Enum1
+>Enum1 : typeof Enum1
+>M : Enum1
+
+        case Enum1.N:
+>Enum1.N : Enum1
+>Enum1 : typeof Enum1
+>N : Enum1
+
+        case Enum1.O:
+>Enum1.O : Enum1
+>Enum1 : typeof Enum1
+>O : Enum1
+
+        case Enum1.P:
+>Enum1.P : Enum1
+>Enum1 : typeof Enum1
+>P : Enum1
+
+        case Enum1.PQ:
+>Enum1.PQ : Enum1
+>Enum1 : typeof Enum1
+>PQ : Enum1
+
+        case Enum1.Q:
+>Enum1.Q : Enum1
+>Enum1 : typeof Enum1
+>Q : Enum1
+
+        case Enum1.R:
+>Enum1.R : Enum1
+>Enum1 : typeof Enum1
+>R : Enum1
+
+        case Enum1.S:
+>Enum1.S : Enum1
+>Enum1 : typeof Enum1
+>S : Enum1
+
+        case Enum1["T"]:
+>Enum1["T"] : Enum1
+>Enum1 : typeof Enum1
+>"T" : "T"
+
+        case Enum1[`U`]:
+>Enum1[`U`] : Enum1
+>Enum1 : typeof Enum1
+>`U` : "U"
+
+        case Enum1.V:
+>Enum1.V : Enum1
+>Enum1 : typeof Enum1
+>V : Enum1
+
+        case Enum1.W:
+>Enum1.W : Enum1
+>Enum1 : typeof Enum1
+>W : Enum1
+
+        case Enum1.W1:
+>Enum1.W1 : Enum1
+>Enum1 : typeof Enum1
+>W1 : Enum1
+
+        case Enum1.W2:
+>Enum1.W2 : Enum1
+>Enum1 : typeof Enum1
+>W2 : Enum1
+
+        case Enum1.W3:
+>Enum1.W3 : Enum1
+>Enum1 : typeof Enum1
+>W3 : Enum1
+
+        case Enum1.W4:
+>Enum1.W4 : Enum1
+>Enum1 : typeof Enum1
+>W4 : Enum1
+
+            break;
+    }
+}
+
+function bar(e: A.B.C.E): number {
+>bar : (e: A.B.C.E) => number
+>e : I
+>A : any
+>B : any
+>C : any
+
+    switch (e) {
+>e : I
+
+        case A.B.C.E.V1: return 1;
+>A.B.C.E.V1 : I
+>A.B.C.E : typeof I
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : typeof I
+>V1 : I
+>1 : 1
+
+        case A.B.C.E.V2: return 1;
+>A.B.C.E.V2 : I
+>A.B.C.E : typeof I
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : typeof I
+>V2 : I
+>1 : 1
+
+        case A.B.C.E.V3: return 1;
+>A.B.C.E.V3 : I
+>A.B.C.E : typeof I
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
+>A : typeof A
+>B : typeof A.B
+>C : typeof A.B.C
+>E : typeof I
+>V3 : I
+>1 : 1
+    }
+}

@@ -1,4 +1,3 @@
-error TS-1: Pre-emit (7) and post-emit (9) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/aliasErrors.ts(11,12): error TS2503: Cannot find namespace 'no'.
 tests/cases/compiler/aliasErrors.ts(12,13): error TS2503: Cannot find namespace 'no'.
 tests/cases/compiler/aliasErrors.ts(13,12): error TS1003: Identifier expected.
@@ -8,10 +7,6 @@ tests/cases/compiler/aliasErrors.ts(16,12): error TS2503: Cannot find namespace 
 tests/cases/compiler/aliasErrors.ts(26,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
-!!! error TS-1: Pre-emit (7) and post-emit (9) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2749 tests/cases/compiler/aliasErrors.ts:8:15: 'foo.bar.baz' refers to a value, but is being used as a type here. Did you mean 'typeof foo.bar.baz'?
-!!! related TS2749 tests/cases/compiler/aliasErrors.ts:9:15: 'foo.bar' refers to a value, but is being used as a type here. Did you mean 'typeof foo.bar'?
 ==== tests/cases/compiler/aliasErrors.ts (7 errors) ====
     module foo {    
         export class Provide {

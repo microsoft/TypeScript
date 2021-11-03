@@ -35,8 +35,8 @@ var s = test[0];
 var n = test[1];
 var s1 = test[0 /* zero */];
 var n1 = test[1 /* one */];
-var s2 = test[0 /* "zero" */];
-var n2 = test[1 /* "one" */];
+var s2 = test[0 /* zero */];
+var n2 = test[1 /* one */];
 var numbersNotConst;
 (function (numbersNotConst) {
     numbersNotConst[numbersNotConst["zero"] = 0] = "zero";

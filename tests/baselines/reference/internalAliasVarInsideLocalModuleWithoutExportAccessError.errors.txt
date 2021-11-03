@@ -1,10 +1,6 @@
-error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts(10,18): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
-!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2749 tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts:6:16: 'a.x' refers to a value, but is being used as a type here. Did you mean 'typeof a.x'?
 ==== tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
     export module a {
         export var x = 10;

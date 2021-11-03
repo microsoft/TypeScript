@@ -1,11 +1,7 @@
-error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts(4,5): error TS2511: Cannot create an instance of an abstract class.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts(9,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-!!! error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2749 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts:7:14: 'M.A' refers to a value, but is being used as a type here. Did you mean 'typeof M.A'?
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts (2 errors) ====
     module M {
         export abstract class A {}
