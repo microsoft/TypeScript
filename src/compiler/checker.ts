@@ -17814,8 +17814,7 @@ namespace ts {
                 }
             }
             if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
-                return checkTypeRelatedTo(source, target, relation,
-                    /*errorNode*/ undefined, /*headMessage*/ undefined, /*containingMessageChain*/ undefined, /*errorOutputContainer*/ undefined);
+                return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined);
             }
             return false;
         }
@@ -17924,6 +17923,7 @@ namespace ts {
             if (errorNode && errorOutputContainer && errorOutputContainer.skipLogging && result === Ternary.False) {
                 Debug.assert(!!errorOutputContainer.errors, "missed opportunity to interact with error.");
             }
+
 
             return result !== Ternary.False;
 
