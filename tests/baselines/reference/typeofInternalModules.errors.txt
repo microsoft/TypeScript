@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (5) and post-emit (6) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/typeofInternalModules.ts(15,16): error TS2708: Cannot use namespace 'importUninst' as a value.
 tests/cases/compiler/typeofInternalModules.ts(17,9): error TS2709: Cannot use namespace 'Outer' as a type.
 tests/cases/compiler/typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
@@ -5,6 +6,9 @@ tests/cases/compiler/typeofInternalModules.ts(21,16): error TS2708: Cannot use n
 tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
 
 
+!!! error TS-1: Pre-emit (5) and post-emit (6) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2724 tests/cases/compiler/typeofInternalModules.ts:10:27: 'Outer' has no exported member named 'instantiated'. Did you mean 'uninstantiated'?
 ==== tests/cases/compiler/typeofInternalModules.ts (5 errors) ====
     module Outer {
         export module instantiated {

@@ -1,7 +1,11 @@
+error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/moduleImport.ts(2,17): error TS2339: Property 'Y' does not exist on type 'typeof X'.
 tests/cases/compiler/moduleImport.ts(2,17): error TS2694: Namespace 'X' has no exported member 'Y'.
 
 
+!!! error TS-1: Pre-emit (2) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/moduleImport.ts:9:15: 'A.B.C' refers to a value, but is being used as a type here. Did you mean 'typeof A.B.C'?
 ==== tests/cases/compiler/moduleImport.ts (2 errors) ====
     module A.B.C {
     	import XYZ = X.Y.Z;

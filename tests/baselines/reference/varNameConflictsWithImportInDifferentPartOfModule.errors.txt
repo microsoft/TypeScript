@@ -1,6 +1,10 @@
+error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts(6,5): error TS2440: Import declaration conflicts with local declaration of 'q'.
 
 
+!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts:6:23: 'M1.s' refers to a value, but is being used as a type here. Did you mean 'typeof M1.s'?
 ==== tests/cases/compiler/varNameConflictsWithImportInDifferentPartOfModule.ts (1 errors) ====
     module M1 {
         export var q = 5;

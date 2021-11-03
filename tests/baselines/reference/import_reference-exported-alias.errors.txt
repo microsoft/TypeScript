@@ -1,0 +1,27 @@
+error TS-1: Pre-emit (0) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/file2.ts:2:19: 'appJs.Services' refers to a value, but is being used as a type here. Did you mean 'typeof appJs.Services'?
+!!! related TS2749 tests/cases/compiler/file2.ts:3:23: 'Services.UserServices' refers to a value, but is being used as a type here. Did you mean 'typeof Services.UserServices'?
+==== tests/cases/compiler/file2.ts (0 errors) ====
+    import appJs = require("file1");
+    import Services = appJs.Services;
+    import UserServices = Services.UserServices;
+    var x = new UserServices().getUserName();
+    
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    module App {
+        export module Services {
+            export class UserServices {
+                public getUserName(): string {
+                    return "Bill Gates";
+                }
+            }
+        }
+    }
+    
+    import Mod = App;
+    export = Mod;
+    

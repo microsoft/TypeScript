@@ -1,9 +1,13 @@
+error TS-1: Pre-emit (4) and post-emit (5) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/conformance/externalModules/typeOnly/b.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 tests/cases/conformance/externalModules/typeOnly/b.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 tests/cases/conformance/externalModules/typeOnly/c.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 tests/cases/conformance/externalModules/typeOnly/c.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 
 
+!!! error TS-1: Pre-emit (4) and post-emit (5) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/conformance/externalModules/typeOnly/c.ts:5:12: 'b.x' refers to a value, but is being used as a type here. Did you mean 'typeof b.x'?
 ==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
     export class A {}
     

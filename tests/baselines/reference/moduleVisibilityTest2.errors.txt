@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (6) and post-emit (7) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/moduleVisibilityTest2.ts(55,17): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/moduleVisibilityTest2.ts(56,21): error TS2339: Property 'E' does not exist on type 'typeof M'.
 tests/cases/compiler/moduleVisibilityTest2.ts(59,16): error TS2694: Namespace 'M' has no exported member 'I'.
@@ -6,6 +7,9 @@ tests/cases/compiler/moduleVisibilityTest2.ts(62,11): error TS2339: Property 'x'
 tests/cases/compiler/moduleVisibilityTest2.ts(63,15): error TS2339: Property 'E' does not exist on type 'typeof M'.
 
 
+!!! error TS-1: Pre-emit (6) and post-emit (7) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/moduleVisibilityTest2.ts:9:26: 'OuterMod.OuterInnerMod' refers to a value, but is being used as a type here. Did you mean 'typeof OuterMod.OuterInnerMod'?
 ==== tests/cases/compiler/moduleVisibilityTest2.ts (6 errors) ====
     module OuterMod {
     	export function someExportedOuterFunc() { return -1; }

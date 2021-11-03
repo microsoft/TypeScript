@@ -12,8 +12,8 @@ import Route = ReactRouter.Route;
 >Route : any
 
 var routes1 = <Route />;
->routes1 : error
-><Route /> : error
+>routes1 : any
+><Route /> : any
 >Route : any
 
 module M {
@@ -27,8 +27,8 @@ module M {
 
 	// Should emit 'M.X' in both opening and closing tags
 	var y = <X></X>;
->y : error
-><X></X> : error
+>y : any
+><X></X> : any
 >X : any
 >X : any
 }

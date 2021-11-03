@@ -1,0 +1,20 @@
+error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/internalAliasEnumInsideLocalModuleWithExport.ts:10:23: 'a.weekend' refers to a value, but is being used as a type here. Did you mean 'typeof a.weekend'?
+==== tests/cases/compiler/internalAliasEnumInsideLocalModuleWithExport.ts (0 errors) ====
+    export module a {
+        export enum weekend {
+            Friday,
+            Saturday,
+            Sunday
+        }
+    }
+    
+    export module c {
+        export import b = a.weekend;
+        export var bVal: b = b.Sunday;
+    }
+    

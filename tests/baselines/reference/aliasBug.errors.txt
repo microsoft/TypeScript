@@ -1,6 +1,10 @@
+error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/aliasBug.ts(16,15): error TS2694: Namespace 'foo.bar.baz' has no exported member 'bar'.
 
 
+!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/aliasBug.ts:9:15: 'foo.bar.baz' refers to a value, but is being used as a type here. Did you mean 'typeof foo.bar.baz'?
 ==== tests/cases/compiler/aliasBug.ts (1 errors) ====
     module foo {    
         export class Provide {

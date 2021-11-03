@@ -1,7 +1,16 @@
+error TS-1: Pre-emit (2) and post-emit (8) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(5,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 
 
+!!! error TS-1: Pre-emit (2) and post-emit (8) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts:5:18: 'm.c' refers to a value, but is being used as a type here. Did you mean 'typeof m.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts:6:18: 'm.c' refers to a value, but is being used as a type here. Did you mean 'typeof m.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts:11:22: 'm.c' refers to a value, but is being used as a type here. Did you mean 'typeof m.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts:12:22: 'm.c' refers to a value, but is being used as a type here. Did you mean 'typeof m.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts:18:29: 'm.c' refers to a value, but is being used as a type here. Did you mean 'typeof m.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts:19:29: 'm.c' refers to a value, but is being used as a type here. Did you mean 'typeof m.c'?
 ==== tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts (2 errors) ====
     export module m {
         export class c {

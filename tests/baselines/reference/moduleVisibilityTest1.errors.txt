@@ -1,0 +1,72 @@
+error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/moduleVisibilityTest1.ts:9:26: 'OuterMod.OuterInnerMod' refers to a value, but is being used as a type here. Did you mean 'typeof OuterMod.OuterInnerMod'?
+==== tests/cases/compiler/moduleVisibilityTest1.ts (0 errors) ====
+    module OuterMod {
+    	export function someExportedOuterFunc() { return -1; }
+    
+    	export module OuterInnerMod {
+    		export function someExportedOuterInnerFunc() { return "foo"; }
+    	}
+    }
+    
+    import OuterInnerAlias = OuterMod.OuterInnerMod;
+    
+    module M {
+    
+    	export module InnerMod {
+    		export function someExportedInnerFunc() { return -2; }
+    	}
+    
+    	export enum E {
+    		A,
+    		B,
+    		C,
+    	}
+    
+    	export var x = 5;
+    	export declare var exported_var;
+    
+    	var y = x + x;
+    
+    
+    	export interface I {
+    		someMethod():number;
+    	}
+    
+    	 class B {public b = 0;}
+    
+    	 export class C implements I {
+    		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
+    		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
+    		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
+    		public someMethod() { return 0; }
+    		public someProp = 1;
+    
+    		constructor() {
+    		    function someInnerFunc() { return 2; }
+                var someInnerVar = 3;
+    		}
+    	}
+    
+    	var someModuleVar = 4;
+    
+    	function someModuleFunction() { return 5;}
+    }
+    
+    module M {
+    	export var c = x;
+    	export var meb = M.E.B;
+    }
+    
+    var cprime : M.I = <M.I>null;
+    
+    var c = new M.C();
+    var z = M.x;
+    var alpha = M.E.A;
+    var omega = M.exported_var;
+    c.someMethodThatCallsAnOuterMethod();
+    

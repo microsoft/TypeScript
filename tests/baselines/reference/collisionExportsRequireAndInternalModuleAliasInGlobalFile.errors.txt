@@ -1,0 +1,34 @@
+error TS-1: Pre-emit (0) and post-emit (6) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (6) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts:5:18: 'mOfGloalFile.c' refers to a value, but is being used as a type here. Did you mean 'typeof mOfGloalFile.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts:6:18: 'mOfGloalFile.c' refers to a value, but is being used as a type here. Did you mean 'typeof mOfGloalFile.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts:11:22: 'mOfGloalFile.c' refers to a value, but is being used as a type here. Did you mean 'typeof mOfGloalFile.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts:12:22: 'mOfGloalFile.c' refers to a value, but is being used as a type here. Did you mean 'typeof mOfGloalFile.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts:18:29: 'mOfGloalFile.c' refers to a value, but is being used as a type here. Did you mean 'typeof mOfGloalFile.c'?
+!!! related TS2749 tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts:19:29: 'mOfGloalFile.c' refers to a value, but is being used as a type here. Did you mean 'typeof mOfGloalFile.c'?
+==== tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts (0 errors) ====
+    module mOfGloalFile {
+        export class c {
+        }
+    }
+    import exports = mOfGloalFile.c;
+    import require = mOfGloalFile.c;
+    new exports();
+    new require();
+    
+    module m1 {
+        import exports = mOfGloalFile.c;
+        import require = mOfGloalFile.c;
+        new exports();
+        new require();
+    }
+    
+    module m2 {
+        export import exports = mOfGloalFile.c;
+        export import require = mOfGloalFile.c;
+        new exports();
+        new require();
+    }

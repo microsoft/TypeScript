@@ -1,0 +1,19 @@
+error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2749 tests/cases/compiler/internalAliasFunction.ts:8:16: 'a.foo' refers to a value, but is being used as a type here. Did you mean 'typeof a.foo'?
+==== tests/cases/compiler/internalAliasFunction.ts (0 errors) ====
+    module a {
+        export function foo(x: number) {
+            return x;
+        }
+    }
+    
+    module c {
+        import b = a.foo;
+        export var bVal = b(10);
+        export var bVal2 = b;
+    }
+    
