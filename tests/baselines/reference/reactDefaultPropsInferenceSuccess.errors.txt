@@ -1,3 +1,14 @@
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(18,3): error TS2416: Property 'render' in type 'FieldFeedback<P>' is not assignable to the same property in base type 'Component<P, {}, any>'.
+  Type '() => Element' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'FieldFeedback<P>'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'FieldFeedback<P>' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,36): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedback<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
@@ -5,6 +16,17 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(27,36): error TS2769:
         Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: Props, context?: any): FieldFeedback<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(34,3): error TS2416: Property 'render' in type 'FieldFeedbackBeta<P>' is not assignable to the same property in base type 'Component<P, {}, any>'.
+  Type '() => Element' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'FieldFeedbackBeta<P>'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'FieldFeedbackBeta<P>' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,41): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<Props>): FieldFeedbackBeta<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
@@ -12,6 +34,17 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(43,41): error TS2769:
         Type 'void' is not assignable to type 'boolean'.
   Overload 2 of 2, '(props: Props, context?: any): FieldFeedbackBeta<Props>', gave the following error.
     Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(54,3): error TS2416: Property 'render' in type 'FieldFeedback2<P>' is not assignable to the same property in base type 'FieldFeedback<P>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'FieldFeedback<P>' is not assignable to type 'FieldFeedback2<P>'.
+        Types of property 'render' are incompatible.
+          Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'FieldFeedback2<P>' is not assignable to type 'FieldFeedback<P>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769: No overload matches this call.
   Overload 1 of 2, '(props: Readonly<MyPropsProps>): FieldFeedback2<MyPropsProps>', gave the following error.
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
@@ -20,7 +53,7 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
     Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 
 
-==== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx (3 errors) ====
+==== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx (6 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import React from 'react';
@@ -39,6 +72,18 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
       };
     
       render() {
+      ~~~~~~
+!!! error TS2416: Property 'render' in type 'FieldFeedback<P>' is not assignable to the same property in base type 'Component<P, {}, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'FieldFeedback<P>'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'FieldFeedback<P>' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
         return <div>Hello</div>;
       }
     }
@@ -65,6 +110,18 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
       };
     
       render() {
+      ~~~~~~
+!!! error TS2416: Property 'render' in type 'FieldFeedbackBeta<P>' is not assignable to the same property in base type 'Component<P, {}, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'FieldFeedbackBeta<P>'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'FieldFeedbackBeta<P>' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
         return <div>Hello</div>;
       }
     }
@@ -95,6 +152,18 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2769:
       };
     
       render() {
+      ~~~~~~
+!!! error TS2416: Property 'render' in type 'FieldFeedback2<P>' is not assignable to the same property in base type 'FieldFeedback<P>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'FieldFeedback<P>' is not assignable to type 'FieldFeedback2<P>'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'FieldFeedback2<P>' is not assignable to type 'FieldFeedback<P>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
         this.props.when("now"); // OK, always defined
         return <div>Hello</div>;
       }

@@ -1,0 +1,27 @@
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts(17,1): error TS2684: The 'this' context of type '(Anonymous class)<number>' is not assignable to method's 'this' of type '(Anonymous class)<T>'.
+  Type 'number' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+
+
+==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts (1 errors) ====
+    function foo () {
+        return class<T> {
+            static [s: string]: number
+            static [s: number]: 42
+    
+            foo(v: T) { return v }
+        }
+    }
+    
+    const C = foo()
+    C.a;
+    C.a = 1;
+    C[2];
+    C[2] = 42;
+    
+    const c = new C<number>();
+    c.foo(1);
+    ~
+!!! error TS2684: The 'this' context of type '(Anonymous class)<number>' is not assignable to method's 'this' of type '(Anonymous class)<T>'.
+!!! error TS2684:   Type 'number' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.

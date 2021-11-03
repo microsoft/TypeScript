@@ -30,7 +30,7 @@ class InitClass {
         var y = this.x;
 >y : any
 >this.x : any
->this : this
+>this : InitClass
 >x : any
 
         var y: any;
@@ -285,7 +285,7 @@ class C {
 >(this.fn1()) : any
 >this.fn1() : any
 >this.fn1 : () => any
->this : this
+>this : C
 >fn1 : () => any
     }
     fn2() {
@@ -296,7 +296,7 @@ class C {
 >(this.fn2()) : any
 >this.fn2() : any
 >this.fn2 : () => any
->this : this
+>this : C
 >fn2 : () => any
     }
     fn3() {
@@ -310,7 +310,7 @@ class C {
 >new a(this.fn3) : number
 >a : new (x: any) => number
 >this.fn3 : () => number
->this : this
+>this : C
 >fn3 : () => number
     }
 }

@@ -11,7 +11,7 @@ class Foo {
             return this._store.length;   // shouldn't be an error
 >this._store.length : any
 >this._store : any
->this : this
+>this : Foo
 >_store : any
 >length : any
       }
@@ -23,7 +23,7 @@ class Foo {
       public bar() { return this.store; } // should be an error
 >bar : () => any
 >this.store : any
->this : this
+>this : Foo
 >store : any
 
 }
@@ -37,7 +37,7 @@ class Bar {
             return this._store.length;   // shouldn't be an error
 >this._store.length : any
 >this._store : any
->this : this
+>this : Bar
 >_store : any
 >length : any
 
@@ -48,7 +48,7 @@ class Bar {
         this._store = store;
 >this._store = store : string
 >this._store : any
->this : this
+>this : Bar
 >_store : any
 >store : string
     }

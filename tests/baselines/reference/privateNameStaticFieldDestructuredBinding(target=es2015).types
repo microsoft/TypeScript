@@ -42,7 +42,7 @@ class A {
 >y : number
 >this.testObject() : { x: number; y: number; }
 >this.testObject : () => { x: number; y: number; }
->this : this
+>this : A
 >testObject : () => { x: number; y: number; }
 
         ([A.#field, y] = this.testArray());
@@ -54,7 +54,7 @@ class A {
 >y : number
 >this.testArray() : number[]
 >this.testArray : () => number[]
->this : this
+>this : A
 >testArray : () => number[]
 
         ({ a: A.#field, b: [A.#field] } = { a: 1, b: [2] });
@@ -122,7 +122,7 @@ class A {
 >this.otherClass.#field = 2 : 2
 >this.otherClass.#field : number
 >this.otherClass : typeof A
->this : this
+>this : A
 >otherClass : typeof A
 >2 : 2
 >[] : []

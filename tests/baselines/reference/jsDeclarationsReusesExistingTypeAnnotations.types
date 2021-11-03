@@ -79,7 +79,7 @@ class С3 {
         this.p1 = value;
 >this.p1 = value : string | undefined
 >this.p1 : string | undefined
->this : this
+>this : С3
 >p1 : string | undefined
 >value : string | undefined
     }
@@ -100,7 +100,7 @@ class С3 {
         this.p2 = value;
 >this.p2 = value : string | undefined
 >this.p2 : string | undefined
->this : this
+>this : С3
 >p2 : string | undefined
 >value : string | undefined
     }
@@ -121,7 +121,7 @@ class С3 {
         this.p3 = value;
 >this.p3 = value : string | null
 >this.p3 : string | null
->this : this
+>this : С3
 >p3 : string | null
 >value : string | null
     }
@@ -142,7 +142,7 @@ class С3 {
         this.p4 = value;
 >this.p4 = value : string | null
 >this.p4 : string | null
->this : this
+>this : С3
 >p4 : string | null
 >value : string | null
     }
@@ -160,7 +160,7 @@ class С4 {
         this.p1 = value;
 >this.p1 = value : string | undefined
 >this.p1 : string | undefined
->this : this
+>this : С4
 >p1 : string | undefined
 >value : string | undefined
     }
@@ -173,7 +173,7 @@ class С4 {
         this.p2 = value;
 >this.p2 = value : string | undefined
 >this.p2 : string | undefined
->this : this
+>this : С4
 >p2 : string | undefined
 >value : string | undefined
     }
@@ -186,7 +186,7 @@ class С4 {
         this.p3 = value;
 >this.p3 = value : string | null
 >this.p3 : string | null
->this : this
+>this : С4
 >p3 : string | null
 >value : string | null
     }
@@ -199,7 +199,7 @@ class С4 {
         this.p4 = value;
 >this.p4 = value : string | null
 >this.p4 : string | null
->this : this
+>this : С4
 >p4 : string | null
 >value : string | null
     }

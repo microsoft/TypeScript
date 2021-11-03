@@ -12,8 +12,8 @@ class Super extends Base {
 
     constructor() {
         var that = this;
->that : this
->this : this
+>that : Super
+>this : Super
 
         super();
 >super() : void

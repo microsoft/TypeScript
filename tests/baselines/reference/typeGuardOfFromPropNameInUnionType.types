@@ -247,14 +247,14 @@ class InMemberOfClass {
 >"a" in this.prop : boolean
 >"a" : "a"
 >this.prop : A | B
->this : this
+>this : InMemberOfClass
 >prop : A | B
 
             let y: string = this.prop.a;
 >y : string
 >this.prop.a : string
 >this.prop : A
->this : this
+>this : InMemberOfClass
 >prop : A
 >a : string
 
@@ -263,7 +263,7 @@ class InMemberOfClass {
 >z : number
 >this.prop.b : number
 >this.prop : B
->this : this
+>this : InMemberOfClass
 >prop : B
 >b : number
         }
@@ -283,12 +283,12 @@ class SelfAssert {
         if ("a" in this) {
 >"a" in this : boolean
 >"a" : "a"
->this : this
+>this : SelfAssert
 
             let y: string = this.a;
 >y : string
 >this.a : string
->this : this
+>this : SelfAssert
 >a : string
 
         } else {

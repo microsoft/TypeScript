@@ -39,7 +39,7 @@ class C {
 
         this.foo // ok
 >this.foo : string
->this : this
+>this : C
 >foo : string
     }
     m3 = function() { }
@@ -72,7 +72,7 @@ class C {
 
         this.foo // ok
 >this.foo : string
->this : this
+>this : C
 >foo : string
     }
 }

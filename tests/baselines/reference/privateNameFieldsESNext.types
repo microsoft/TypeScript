@@ -26,12 +26,12 @@ class C {
 >console : Console
 >log : (...data: any[]) => void
 >this.#a : number
->this : this
+>this : C
 
         this.#a = "hello";
 >this.#a = "hello" : "hello"
 >this.#a : number
->this : this
+>this : C
 >"hello" : "hello"
 
         console.log(this.#b);
@@ -40,7 +40,7 @@ class C {
 >console : Console
 >log : (...data: any[]) => void
 >this.#b : any
->this : this
+>this : C
     }
     static #m = "test";
 >#m : string

@@ -1,7 +1,8 @@
 tests/cases/compiler/es6ClassTest.ts(25,44): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/es6ClassTest.ts(26,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Bar'.
 
 
-==== tests/cases/compiler/es6ClassTest.ts (1 errors) ====
+==== tests/cases/compiler/es6ClassTest.ts (2 errors) ====
     class Bar {
         public goo: number;
         public prop1(x) {
@@ -30,6 +31,8 @@ tests/cases/compiler/es6ClassTest.ts(25,44): error TS1015: Parameter cannot have
     	                                          ~
 !!! error TS1015: Parameter cannot have question mark and initializer.
             super(x);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Bar'.
     		this.x = x;
             this.gar = 5;
     	 }

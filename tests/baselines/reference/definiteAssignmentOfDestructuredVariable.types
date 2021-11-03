@@ -21,7 +21,7 @@ class C<T extends Options> {
 >a : T["a"] | undefined
 >b : T["b"]
 >this.foo : { [P in keyof T]: T[P]; }
->this : this
+>this : C<T>
 >foo : { [P in keyof T]: T[P]; }
 
         !(a && b);

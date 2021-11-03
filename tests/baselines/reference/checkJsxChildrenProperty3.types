@@ -26,19 +26,19 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
         return this.state
 >this.state            ? this.props.children(this.state.result)            : null : JSX.Element
 >this.state : any
->this : this
+>this : FetchUser
 >state : any
 
             ? this.props.children(this.state.result)
 >this.props.children(this.state.result) : JSX.Element
 >this.props.children : ((user: IUser) => JSX.Element) & React.ReactNode
 >this.props : IFetchUserProps & { children?: React.ReactNode; }
->this : this
+>this : FetchUser
 >props : IFetchUserProps & { children?: React.ReactNode; }
 >children : ((user: IUser) => JSX.Element) & React.ReactNode
 >this.state.result : any
 >this.state : any
->this : this
+>this : FetchUser
 >state : any
 >result : any
 

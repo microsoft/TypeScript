@@ -67,14 +67,14 @@ class Foo  extends Bar {
 		this.x = x;
 >this.x = x : any
 >this.x : any
->this : this
+>this : Foo
 >x : any
 >x : any
 
         this.gar = 5;
 >this.gar = 5 : 5
 >this.gar : number
->this : this
+>this : Foo
 >gar : number
 >5 : 5
 	 }

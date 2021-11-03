@@ -1,8 +1,12 @@
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,64): error TS2741: Property 'z' is missing in type 'B' but required in type 'C'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,81): error TS2739: Type 'A' is missing the following properties from type 'C': z, y
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,1): error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
+  Type 'A' is not assignable to type 'T'.
+    'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,1): error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,1): error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,1): error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
 
 
-==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts (2 errors) ====
+==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts (4 errors) ====
     class Chain<T extends A> {
         constructor(public value: T) { }
         then<S extends T>(cb: (x: T) => S): Chain<S> {
@@ -22,10 +26,13 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
     
     // Ok to go down the chain, but error to try to climb back up
     (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
-                                                                   ~~~~~
-!!! error TS2741: Property 'z' is missing in type 'B' but required in type 'C'.
-!!! related TS2728 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts:15:5: 'z' is declared here.
-!!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts:3:27: The expected type comes from the return type of this signature.
-                                                                                    ~~~~~
-!!! error TS2739: Type 'A' is missing the following properties from type 'C': z, y
-!!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts:3:27: The expected type comes from the return type of this signature.
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
+!!! error TS2684:   Type 'A' is not assignable to type 'T'.
+!!! error TS2684:     'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain<A>' is not assignable to method's 'this' of type 'Chain<T>'.

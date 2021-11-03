@@ -12,15 +12,15 @@ export class MyClass {
         this[_symbol] = this[_symbol].bind(this);
 >this[_symbol] = this[_symbol].bind(this) : error
 >this[_symbol] : error
->this : this
+>this : MyClass
 >_symbol : unique symbol
 >this[_symbol].bind(this) : error
 >this[_symbol].bind : error
 >this[_symbol] : any
->this : this
+>this : MyClass
 >_symbol : unique symbol
 >bind : any
->this : this
+>this : MyClass
     }
 
     async [_symbol]() { }

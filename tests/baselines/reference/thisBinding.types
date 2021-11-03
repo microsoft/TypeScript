@@ -38,7 +38,7 @@ module M {
 >10 : 10
 >f : (x: I) => void
 >this.f : (x: I) => void
->this : this
+>this : C
 >f : (x: I) => void
 >f : (x: I) => void
 ><I>({}) : I

@@ -1,0 +1,92 @@
+tests/cases/compiler/main.js(22,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C0<T>'.
+tests/cases/compiler/main.js(27,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C0<T>'.
+tests/cases/compiler/main.js(46,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C1<T, U>'.
+tests/cases/compiler/main.js(51,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C1<T, U>'.
+
+
+==== tests/cases/compiler/decls.d.ts (0 errors) ====
+    declare function f0<T>(x?: T): T;
+    declare function f1<T, U = number>(x?: T): [T, U];
+    declare class C0<T> {
+        y: T;
+        constructor(x?: T);
+    }
+    declare class C1<T, U = number> {
+        y: [T, U];
+        constructor(x?: T);
+    }
+==== tests/cases/compiler/main.js (4 errors) ====
+    const f0_v0 = f0();
+    const f0_v1 = f0(1);
+    
+    const f1_c0 = f1();
+    const f1_c1 = f1(1);
+    
+    const C0_v0 = new C0();
+    const C0_v0_y = C0_v0.y;
+    
+    const C0_v1 = new C0(1);
+    const C0_v1_y = C0_v1.y;
+    
+    const C1_v0 = new C1();
+    const C1_v0_y = C1_v0.y;
+    
+    const C1_v1 = new C1(1);
+    const C1_v1_y = C1_v1.y;
+    
+    class C0_B0 extends C0 {}
+    class C0_B1 extends C0 {
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C0<T>'.
+        }
+    }
+    class C0_B2 extends C0 {
+        constructor() {
+            super(1);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C0<T>'.
+        }
+    }
+    
+    const C0_B0_v0 = new C0_B0();
+    const C0_B0_v0_y = C0_B0_v0.y;
+    
+    const C0_B0_v1 = new C0_B0(1);
+    const C0_B0_v1_y = C0_B0_v1.y;
+    
+    const C0_B1_v0 = new C0_B1();
+    const C0_B1_v0_y = C0_B1_v0.y;
+    
+    const C0_B2_v0 = new C0_B2();
+    const C0_B2_v0_y = C0_B2_v0.y;
+    
+    class C1_B0 extends C1 {}
+    class C1_B1 extends C1 {
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C1<T, U>'.
+        }
+    }
+    class C1_B2 extends C1 {
+        constructor() {
+            super(1);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C1<T, U>'.
+        }
+    }
+    
+    const C1_B0_v0 = new C1_B0();
+    const C1_B0_v0_y = C1_B0_v0.y;
+    
+    const C1_B0_v1 = new C1_B0(1);
+    const C1_B0_v1_y = C1_B0_v1.y;
+    
+    const C1_B1_v0 = new C1_B1();
+    const C1_B1_v0_y = C1_B1_v0.y;
+    
+    const C1_B2_v0 = new C1_B2();
+    const C1_B2_v0_y = C1_B2_v0.y;
+    

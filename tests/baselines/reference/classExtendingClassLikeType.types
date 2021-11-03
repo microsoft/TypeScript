@@ -48,14 +48,14 @@ class D1 extends getBase() {
         this.x = "x";
 >this.x = "x" : "x"
 >this.x : string
->this : this
+>this : D1
 >x : string
 >"x" : "x"
 
         this.y = "y";
 >this.y = "y" : "y"
 >this.y : string
->this : this
+>this : D1
 >y : string
 >"y" : "y"
     }
@@ -81,14 +81,14 @@ class D2 extends getBase() <number> {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : number
->this : this
+>this : D2
 >x : number
 >1 : 1
 
         this.y = 2;
 >this.y = 2 : 2
 >this.y : number
->this : this
+>this : D2
 >y : number
 >2 : 2
     }
@@ -109,14 +109,14 @@ class D3 extends getBase() <string, number> {
         this.x = "x";
 >this.x = "x" : "x"
 >this.x : string
->this : this
+>this : D3
 >x : string
 >"x" : "x"
 
         this.y = 2;
 >this.y = 2 : 2
 >this.y : number
->this : this
+>this : D3
 >y : number
 >2 : 2
     }

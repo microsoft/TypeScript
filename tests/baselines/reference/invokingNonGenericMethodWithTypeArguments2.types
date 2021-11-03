@@ -9,7 +9,7 @@ class Foo {
         this.foo<string>();
 >this.foo<string>() : any
 >this.foo : any
->this : this
+>this : Foo
 >foo : any
     }
 }

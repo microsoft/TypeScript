@@ -14,7 +14,7 @@ class C<T> {
 
         return this.data;
 >this.data : A<T>
->this : this
+>this : C<T>
 >data : A<T>
     }
     set x(v: A<string>) {
@@ -24,7 +24,7 @@ class C<T> {
         this.data = v;
 >this.data = v : A<string>
 >this.data : A<T>
->this : this
+>this : C<T>
 >data : A<T>
 >v : A<string>
     }

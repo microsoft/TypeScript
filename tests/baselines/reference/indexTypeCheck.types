@@ -132,12 +132,12 @@ class Benchmark {
 >this.results[name] = this.results[name] : any
 >this.results[name] : any
 >this.results : { [x: string]: any; }
->this : this
+>this : Benchmark
 >results : { [x: string]: any; }
 >name : string
 >this.results[name] : any
 >this.results : { [x: string]: any; }
->this : this
+>this : Benchmark
 >results : { [x: string]: any; }
 >name : string
     }

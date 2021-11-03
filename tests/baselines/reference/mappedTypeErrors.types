@@ -357,7 +357,7 @@ class C<T> {
 >this.state[k] = props[k] : Pick<T, K>[Extract<K, string>]
 >this.state[k] : T[Extract<K, string>]
 >this.state : T
->this : this
+>this : C<T>
 >state : T
 >k : Extract<K, string>
 >props[k] : Pick<T, K>[Extract<K, string>]

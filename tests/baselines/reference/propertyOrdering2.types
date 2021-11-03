@@ -12,12 +12,12 @@ class Foo {
         var a = this.x;
 >a : any
 >this.x : any
->this : this
+>this : Foo
 >x : any
 
         return this.y;
 >this.y : any
->this : this
+>this : Foo
 >y : any
     }
 }

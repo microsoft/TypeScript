@@ -1,0 +1,21 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts(11,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts (1 errors) ====
+    class A {
+        #foo: number;
+        constructor () {
+            this.#foo = 3;
+        }
+    }
+    
+    class B extends A {
+        #foo: string;
+        constructor () {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+            this.#foo = "some string";
+        }
+    }
+    

@@ -9,14 +9,14 @@ class C {
         this.x = x
 >this.x = x : number
 >this.x : any
->this : this
+>this : C
 >x : any
 >x : number
 
         this.exports = [x]
 >this.exports = [x] : number[]
 >this.exports : any
->this : this
+>this : C
 >exports : any
 >[x] : number[]
 >x : number
@@ -29,7 +29,7 @@ class C {
         return this.x + y
 >this.x + y : number
 >this.x : number
->this : this
+>this : C
 >x : number
 >y : number
     }

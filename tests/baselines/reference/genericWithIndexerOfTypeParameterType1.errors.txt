@@ -1,0 +1,18 @@
+tests/cases/compiler/genericWithIndexerOfTypeParameterType1.ts(8,21): error TS2684: The 'this' context of type 'LazyArray<string>' is not assignable to method's 'this' of type 'LazyArray<T>'.
+  Type 'string' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+
+
+==== tests/cases/compiler/genericWithIndexerOfTypeParameterType1.ts (1 errors) ====
+    class LazyArray<T> {
+        private objects = <{ [objectId: string]: T; }>{};
+        array() {
+            return this.objects;
+        }
+    }
+    var lazyArray = new LazyArray<string>();
+    var value: string = lazyArray.array()["test"]; // used to be an error
+                        ~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'LazyArray<string>' is not assignable to method's 'this' of type 'LazyArray<T>'.
+!!! error TS2684:   Type 'string' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.

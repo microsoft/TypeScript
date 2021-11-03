@@ -42,7 +42,7 @@ class C {
         this.#foo = 3;       // Error (undeclared)
 >this.#foo = 3 : 3
 >this.#foo : any
->this : this
+>this : C
 >3 : 3
     }
 }

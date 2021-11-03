@@ -1,8 +1,9 @@
 error TS8022: JSDoc '@extends' is not attached to a class.
+tests/cases/conformance/jsdoc/foo.js(17,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
 
 
 !!! error TS8022: JSDoc '@extends' is not attached to a class.
-==== tests/cases/conformance/jsdoc/foo.js (0 errors) ====
+==== tests/cases/conformance/jsdoc/foo.js (1 errors) ====
     /**
      * @constructor
      */
@@ -20,6 +21,8 @@ error TS8022: JSDoc '@extends' is not attached to a class.
     class B extends A {
         constructor() {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
         }
     }
     

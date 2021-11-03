@@ -4,7 +4,7 @@ class C { constructor() { this.p = 1; } }
 >C : C
 >this.p = 1 : 1
 >this.p : any
->this : this
+>this : C
 >p : any
 >1 : 1
 

@@ -6,7 +6,7 @@ class AA {
 >#method : () => void
 >this.x = 10 : 10
 >this.x : number
->this : this
+>this : AA
 >x : number
 >10 : 10
 
@@ -25,12 +25,12 @@ class AA {
         this.#method();
 >this.#method() : void
 >this.#method : () => void
->this : this
+>this : AA
 
         const func = this.#method;
 >func : () => void
 >this.#method : () => void
->this : this
+>this : AA
 
         func();
 >func() : void
@@ -39,7 +39,7 @@ class AA {
         new this.#method();
 >new this.#method() : any
 >this.#method : () => void
->this : this
+>this : AA
 
         const arr = [ 1, 2 ];
 >arr : number[]
@@ -50,7 +50,7 @@ class AA {
         this.#method2(0, ...arr, 3);
 >this.#method2(0, ...arr, 3) : void
 >this.#method2 : (a: any, ...b: any[]) => void
->this : this
+>this : AA
 >0 : 0
 >...arr : number
 >arr : number[]
@@ -60,7 +60,7 @@ class AA {
 >b : any
 >new this.#method2(0, ...arr, 3) : any
 >this.#method2 : (a: any, ...b: any[]) => void
->this : this
+>this : AA
 >0 : 0
 >...arr : number
 >arr : number[]
@@ -70,7 +70,7 @@ class AA {
 >str : void
 >this.#method2`head${1}middle${2}tail` : void
 >this.#method2 : (a: any, ...b: any[]) => void
->this : this
+>this : AA
 >`head${1}middle${2}tail` : string
 >1 : 1
 >2 : 2
@@ -80,7 +80,7 @@ class AA {
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
 >this.getInstance() : AA
 >this.getInstance : () => AA
->this : this
+>this : AA
 >getInstance : () => AA
 >`test${1}and${2}` : string
 >1 : 1
@@ -91,7 +91,7 @@ class AA {
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
 >this.getInstance() : AA
 >this.getInstance : () => AA
->this : this
+>this : AA
 >getInstance : () => AA
 >0 : 0
 >...arr : number
@@ -105,7 +105,7 @@ class AA {
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
 >this.getInstance() : AA
 >this.getInstance : () => AA
->this : this
+>this : AA
 >getInstance : () => AA
 >0 : 0
 >...arr : number
@@ -118,7 +118,7 @@ class AA {
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
 >this.getInstance() : AA
 >this.getInstance : () => AA
->this : this
+>this : AA
 >getInstance : () => AA
 >`head${1}middle${2}tail` : string
 >1 : 1

@@ -33,7 +33,7 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
         this.greeting = "Dummy Message";
 >this.greeting = "Dummy Message" : "Dummy Message"
 >this.greeting : string
->this : this
+>this : Dummy<usedtypeparameter, unusedtypeparameter>
 >greeting : string
 >"Dummy Message" : "Dummy Message"
     }
@@ -49,7 +49,7 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
         this.usedPrivateFunction();
 >this.usedPrivateFunction() : void
 >this.usedPrivateFunction : () => void
->this : this
+>this : Dummy<usedtypeparameter, unusedtypeparameter>
 >usedPrivateFunction : () => void
     }
 

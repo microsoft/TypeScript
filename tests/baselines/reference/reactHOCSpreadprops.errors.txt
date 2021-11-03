@@ -1,0 +1,36 @@
+tests/cases/compiler/reactHOCSpreadprops.tsx(5,9): error TS2416: Property 'render' in type 'C' is not assignable to the same property in base type 'Component<P & { x: number; }, {}, any>'.
+  Type '() => Element' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'C'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'C' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>' is not assignable to type 'Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>' is not assignable to type 'Readonly<P>'.
+
+
+==== tests/cases/compiler/reactHOCSpreadprops.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import React = require("react");
+    function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
+        class C extends React.Component<P & { x: number }> {
+            render() {
+            ~~~~~~
+!!! error TS2416: Property 'render' in type 'C' is not assignable to the same property in base type 'Component<P & { x: number; }, {}, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'C'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'C' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>' is not assignable to type 'Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>' is not assignable to type 'Readonly<P>'.
+                return <App {...this.props} />;
+            }
+        }
+    }
+    

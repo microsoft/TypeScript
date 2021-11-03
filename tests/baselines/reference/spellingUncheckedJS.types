@@ -48,7 +48,7 @@ class Classe {
         // no error on 'this' references
         return this.none
 >this.none : error
->this : this
+>this : Classe
 >none : any
     }
 }

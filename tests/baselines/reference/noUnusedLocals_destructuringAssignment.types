@@ -13,11 +13,11 @@ class C {
 >x : number
 
         ({ x } = this);
->({ x } = this) : this
->{ x } = this : this
+>({ x } = this) : C
+>{ x } = this : C
 >{ x } : { x: number; }
 >x : number
->this : this
+>this : C
 
         return x;
 >x : number
@@ -30,11 +30,11 @@ class C {
 >f : Function
 
         ({ f } = this);
->({ f } = this) : this
->{ f } = this : this
+>({ f } = this) : C
+>{ f } = this : C
 >{ f } : { f: Function; }
 >f : Function
->this : this
+>this : C
 
         return f;
 >f : Function

@@ -14,7 +14,7 @@ class Bar<T> {
         this.size = x;
 >this.size = x : number
 >this.size : number
->this : this
+>this : Bar<T>
 >size : number
 >x : number
 
@@ -27,7 +27,7 @@ class Bar<T> {
 >new Bar<T>(this.size) : Bar<T>
 >Bar : typeof Bar
 >this.size : number
->this : this
+>this : Bar<T>
 >size : number
 
     }

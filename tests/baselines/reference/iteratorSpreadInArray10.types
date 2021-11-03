@@ -3,13 +3,13 @@ class SymbolIterator {
 >SymbolIterator : SymbolIterator
 
     [Symbol.iterator]() {
->[Symbol.iterator] : () => this
+>[Symbol.iterator] : () => SymbolIterator
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
         return this;
->this : this
+>this : SymbolIterator
     }
 }
 

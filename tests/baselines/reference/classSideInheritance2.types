@@ -33,7 +33,7 @@ class TextBase implements IText {
             return new SubText(this, span);
 >new SubText(this, span) : SubText
 >SubText : typeof SubText
->this : this
+>this : TextBase
 >span : TextSpan
         }
 }

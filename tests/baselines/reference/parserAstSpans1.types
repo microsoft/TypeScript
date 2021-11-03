@@ -307,7 +307,7 @@ class c2 {
         this.c2_p1 = a;
 >this.c2_p1 = a : number
 >this.c2_p1 : number
->this : this
+>this : c2
 >c2_p1 : number
 >a : number
     }
@@ -325,7 +325,7 @@ class c3 extends c2 {
         this.p1 = super.c2_p1;
 >this.p1 = super.c2_p1 : number
 >this.p1 : number
->this : this
+>this : c3
 >p1 : number
 >super.c2_p1 : number
 >super : c2
@@ -701,7 +701,7 @@ class c6 extends c5 {
         this.d = super.b;
 >this.d = super.b : number
 >this.d : any
->this : this
+>this : c6
 >d : any
 >super.b : number
 >super : c5

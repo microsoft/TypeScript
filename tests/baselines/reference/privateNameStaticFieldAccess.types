@@ -21,7 +21,7 @@ class A {
 >console : Console
 >log : (...data: any[]) => void
 >this.#myField : any
->this : this
+>this : A
     }
 }
 

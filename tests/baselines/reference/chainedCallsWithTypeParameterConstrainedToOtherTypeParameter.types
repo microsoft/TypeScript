@@ -38,13 +38,13 @@ class C extends B {
 
 // Ok to go down the chain, but error to try to climb back up
 (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
->(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A) : Chain<C>
->(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then : <S extends C>(cb: (x: C) => S) => Chain<S>
->(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B) : Chain<C>
->(new Chain(new A)).then(a => new B).then(b => new C).then : <S extends C>(cb: (x: C) => S) => Chain<S>
->(new Chain(new A)).then(a => new B).then(b => new C) : Chain<C>
->(new Chain(new A)).then(a => new B).then : <S extends B>(cb: (x: B) => S) => Chain<S>
->(new Chain(new A)).then(a => new B) : Chain<B>
+>(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A) : Chain<A>
+>(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B) : Chain<A>
+>(new Chain(new A)).then(a => new B).then(b => new C).then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>(new Chain(new A)).then(a => new B).then(b => new C) : Chain<A>
+>(new Chain(new A)).then(a => new B).then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>(new Chain(new A)).then(a => new B) : Chain<A>
 >(new Chain(new A)).then : <S extends A>(cb: (x: A) => S) => Chain<S>
 >(new Chain(new A)) : Chain<A>
 >new Chain(new A) : Chain<A>
@@ -56,19 +56,19 @@ class C extends B {
 >a : A
 >new B : B
 >B : typeof B
->then : <S extends B>(cb: (x: B) => S) => Chain<S>
->b => new C : (b: B) => C
->b : B
+>then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>b => new C : (b: A) => C
+>b : A
 >new C : C
 >C : typeof C
->then : <S extends C>(cb: (x: C) => S) => Chain<S>
->c => new B : (c: C) => B
->c : C
+>then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>c => new B : (c: A) => B
+>c : A
 >new B : B
 >B : typeof B
->then : <S extends C>(cb: (x: C) => S) => Chain<S>
->b => new A : (b: C) => A
->b : C
+>then : <S extends A>(cb: (x: A) => S) => Chain<S>
+>b => new A : (b: A) => A
+>b : A
 >new A : A
 >A : typeof A
 

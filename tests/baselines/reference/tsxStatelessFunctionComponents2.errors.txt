@@ -1,3 +1,7 @@
+tests/cases/conformance/jsx/file.tsx(8,2): error TS2416: Property 'render' in type 'BigGreeter' is not assignable to the same property in base type 'Component<{ name?: string; }, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Property 'greeting' is missing in type 'Component<P, S>' but required in type 'BigGreeter'.
 tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(25,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
@@ -5,7 +9,7 @@ tests/cases/conformance/jsx/file.tsx(27,33): error TS2339: Property 'notARealPro
 tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     import React = require('react');
     
     function Greet(x: {name?: string}) {
@@ -14,6 +18,12 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     
     class BigGreeter extends React.Component<{ name?: string }, {}> {
     	render() {
+    	~~~~~~
+!!! error TS2416: Property 'render' in type 'BigGreeter' is not assignable to the same property in base type 'Component<{ name?: string; }, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Property 'greeting' is missing in type 'Component<P, S>' but required in type 'BigGreeter'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:2: 'greeting' is declared here.
     		return <div></div>;
     	}
     	greeting: string;

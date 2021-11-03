@@ -20,7 +20,7 @@ class D extends Base {
             j: this._t,
 >j : any
 >this._t : any
->this : this
+>this : D
 >_t : any
         }
         super(undefined);

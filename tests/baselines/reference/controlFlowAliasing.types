@@ -713,7 +713,7 @@ class C10 {
 >typeof this.x === 'string' : boolean
 >typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.x : string | number
->this : this
+>this : C10
 >x : string | number
 >'string' : "string"
 
@@ -736,7 +736,7 @@ class C10 {
 >s = this.x : string | number
 >s : string
 >this.x : string | number
->this : this
+>this : C10
 >x : string | number
 
             s = x;
@@ -758,7 +758,7 @@ class C11 {
 >typeof this.x === 'string' : boolean
 >typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.x : string | number
->this : this
+>this : C11
 >x : string | number
 >'string' : "string"
 
@@ -782,7 +782,7 @@ class C11 {
 >s = this.x : string | number
 >s : string
 >this.x : string | number
->this : this
+>this : C11
 >x : string | number
 
             s = x;
@@ -794,7 +794,7 @@ class C11 {
             this.x = 10;
 >this.x = 10 : 10
 >this.x : string | number
->this : this
+>this : C11
 >x : string | number
 >10 : 10
 

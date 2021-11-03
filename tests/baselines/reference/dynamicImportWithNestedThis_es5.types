@@ -13,7 +13,7 @@ class C {
 		return import(this._path);
 >import(this._path) : Promise<any>
 >this._path : string
->this : this
+>this : C
 >_path : string
 	}
 }

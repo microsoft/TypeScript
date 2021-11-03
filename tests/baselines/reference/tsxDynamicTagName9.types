@@ -29,10 +29,10 @@ export class Text extends React.Component<{}, {}> {
       <this._tagName> Hello world </this._tagName>
 ><this._tagName> Hello world </this._tagName> : error
 >this._tagName : "div"
->this : this
+>this : Text
 >_tagName : "div"
 >this._tagName : "div"
->this : this
+>this : Text
 >_tagName : "div"
 
     );

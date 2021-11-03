@@ -9,7 +9,7 @@ class Animal {
     get sound() { return this._sound }
 >sound : string
 >this._sound : string
->this : this
+>this : Animal
 >_sound : string
 
     set sound(val) {
@@ -19,7 +19,7 @@ class Animal {
       this._sound = val;
 >this._sound = val : string
 >this._sound : string
->this : this
+>this : Animal
 >_sound : string
 >val : string
 
@@ -35,7 +35,7 @@ class Animal {
 >console : Console
 >log : (...data: any[]) => void
 >this._sound : string
->this : this
+>this : Animal
 >_sound : string
     }
 }

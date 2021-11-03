@@ -60,16 +60,16 @@ class D extends C {
 >"You win!" : "You win!"
 
             return {
->{                cProp: 1,                dProp: () => this,                foo() { return "You win!!!!!" }            } : { cProp: number; dProp: () => this; foo(): string; }
+>{                cProp: 1,                dProp: () => this,                foo() { return "You win!!!!!" }            } : { cProp: number; dProp: () => D; foo(): string; }
 
                 cProp: 1,
 >cProp : number
 >1 : 1
 
                 dProp: () => this,
->dProp : () => this
->() => this : () => this
->this : this
+>dProp : () => D
+>() => this : () => D
+>this : D
 
                 foo() { return "You win!!!!!" }
 >foo : () => string

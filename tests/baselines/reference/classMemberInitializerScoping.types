@@ -20,7 +20,7 @@ class CCC {
         this.y = ''; // was: error, cannot assign string to number
 >this.y = '' : ""
 >this.y : number
->this : this
+>this : CCC
 >y : number
 >'' : ""
     }
@@ -43,14 +43,14 @@ class CCCC {
         this.y = aaaa;
 >this.y = aaaa : any
 >this.y : any
->this : this
+>this : CCCC
 >y : any
 >aaaa : any
 
         this.y = '';
 >this.y = '' : ""
 >this.y : any
->this : this
+>this : CCCC
 >y : any
 >'' : ""
     }

@@ -17,7 +17,7 @@ class Foo {
 >classFooMethod : () => this
 
         return this;
->this : this
+>this : Foo
     }
 }
 
@@ -41,7 +41,7 @@ class Bar extends Foo {
 >classBarMethod : () => this
 
         return this;
->this : this
+>this : Bar
     }
 }
 

@@ -137,7 +137,7 @@ class Api<D = {}> {
 >post : <T = D>() => Promise<T>
 >this.request<T>() : Promise<T>
 >this.request : <D>() => Promise<D>
->this : this
+>this : Api<D>
 >request : <D>() => Promise<D>
 
 	async request<D>(): Promise<D> { throw new Error(); }

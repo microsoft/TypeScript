@@ -1,0 +1,60 @@
+tests/cases/conformance/jsx/file.tsx(4,5): error TS2416: Property 'render' in type 'B1<T>' is not assignable to the same property in base type 'Component<T, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'B1<T>'.
+        Types of property 'render' are incompatible.
+          Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'B1<T>' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: {}, props: T) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'prevState' and 'prevState' are incompatible.
+                        Type '{}' is not assignable to type 'S'.
+                          'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+tests/cases/conformance/jsx/file.tsx(10,5): error TS2416: Property 'render' in type 'B<U>' is not assignable to the same property in base type 'Component<U, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'B<U>'.
+        Types of property 'props' are incompatible.
+          Type 'P & { children?: ReactNode; }' is not assignable to type 'U'.
+            'U' could be instantiated with an arbitrary type which could be unrelated to 'P & { children?: ReactNode; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react');
+    
+    class B1<T extends { x: string }> extends React.Component<T, {}> {
+        render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'B1<T>' is not assignable to the same property in base type 'Component<T, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'B1<T>'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'B1<T>' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: {}, props: T) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'prevState' and 'prevState' are incompatible.
+!!! error TS2416:                         Type '{}' is not assignable to type 'S'.
+!!! error TS2416:                           'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+            return <div>hi</div>; 
+        }
+    }
+    class B<U> extends React.Component<U, {}> {
+        props: U;
+        render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'B<U>' is not assignable to the same property in base type 'Component<U, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'B<U>'.
+!!! error TS2416:         Types of property 'props' are incompatible.
+!!! error TS2416:           Type 'P & { children?: ReactNode; }' is not assignable to type 'U'.
+!!! error TS2416:             'U' could be instantiated with an arbitrary type which could be unrelated to 'P & { children?: ReactNode; }'.
+            return <B1 {...this.props} x="hi" />;
+        }
+    }

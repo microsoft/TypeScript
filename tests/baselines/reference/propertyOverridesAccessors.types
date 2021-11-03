@@ -24,7 +24,7 @@ class C {
     get p() { return this._secret }
 >p : number
 >this._secret : number
->this : this
+>this : C
 >_secret : number
 
     set p(value) { this._secret = value }
@@ -32,7 +32,7 @@ class C {
 >value : number
 >this._secret = value : number
 >this._secret : number
->this : this
+>this : C
 >_secret : number
 >value : number
 }

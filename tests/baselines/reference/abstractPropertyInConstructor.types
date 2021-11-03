@@ -9,7 +9,7 @@ abstract class AbstractClass {
         this.method(parseInt(str));
 >this.method(parseInt(str)) : void
 >this.method : (num: number) => void
->this : this
+>this : AbstractClass
 >method : (num: number) => void
 >parseInt(str) : number
 >parseInt : (string: string, radix?: number) => number
@@ -20,7 +20,7 @@ abstract class AbstractClass {
 >this.prop.toLowerCase() : string
 >this.prop.toLowerCase : () => string
 >this.prop : string
->this : this
+>this : AbstractClass
 >prop : string
 >toLowerCase : () => string
 
@@ -31,14 +31,14 @@ abstract class AbstractClass {
             this.prop = "Hello World";
 >this.prop = "Hello World" : "Hello World"
 >this.prop : string
->this : this
+>this : AbstractClass
 >prop : string
 >"Hello World" : "Hello World"
         }
         this.cb(str);
 >this.cb(str) : void
 >this.cb : (s: string) => void
->this : this
+>this : AbstractClass
 >cb : (s: string) => void
 >str : string
 
@@ -49,7 +49,7 @@ abstract class AbstractClass {
 
             return this.prop;
 >this.prop : string
->this : this
+>this : AbstractClass
 >prop : string
         }
 
@@ -94,11 +94,11 @@ abstract class AbstractClass {
         this.prop = this.prop + "!";
 >this.prop = this.prop + "!" : string
 >this.prop : string
->this : this
+>this : AbstractClass
 >prop : string
 >this.prop + "!" : string
 >this.prop : string
->this : this
+>this : AbstractClass
 >prop : string
 >"!" : "!"
     }
@@ -128,19 +128,19 @@ abstract class DerivedAbstractClass extends AbstractClass {
         this.cb(this.prop.toLowerCase());
 >this.cb(this.prop.toLowerCase()) : void
 >this.cb : (s: string) => void
->this : this
+>this : DerivedAbstractClass
 >cb : (s: string) => void
 >this.prop.toLowerCase() : string
 >this.prop.toLowerCase : () => string
 >this.prop : string
->this : this
+>this : DerivedAbstractClass
 >prop : string
 >toLowerCase : () => string
 
         this.method(1);
 >this.method(1) : void
 >this.method : (num: number) => void
->this : this
+>this : DerivedAbstractClass
 >method : (num: number) => void
 >1 : 1
 
@@ -193,10 +193,10 @@ class Implementation extends DerivedAbstractClass {
         this.cb(this.prop);
 >this.cb(this.prop) : void
 >this.cb : (s: string) => void
->this : this
+>this : Implementation
 >cb : (s: string) => void
 >this.prop : string
->this : this
+>this : Implementation
 >prop : string
     }
 
@@ -207,11 +207,11 @@ class Implementation extends DerivedAbstractClass {
         this.cb(this.prop + n);
 >this.cb(this.prop + n) : void
 >this.cb : (s: string) => void
->this : this
+>this : Implementation
 >cb : (s: string) => void
 >this.prop + n : string
 >this.prop : string
->this : this
+>this : Implementation
 >prop : string
 >n : number
     }
@@ -261,25 +261,25 @@ abstract class C1 {
 
     constructor() {
         let self = this;                // ok
->self : this
->this : this
+>self : C1
+>this : C1
 
         let { x, y: y1 } = this;        // error
 >x : string
 >y : any
 >y1 : string
->this : this
+>this : C1
 
         ({ x, y: y1, "y": y1 } = this); // error
->({ x, y: y1, "y": y1 } = this) : this
->{ x, y: y1, "y": y1 } = this : this
+>({ x, y: y1, "y": y1 } = this) : C1
+>{ x, y: y1, "y": y1 } = this : C1
 >{ x, y: y1, "y": y1 } : { x: string; y: string; }
 >x : string
 >y : string
 >y1 : string
 >"y" : string
 >y1 : string
->this : this
+>this : C1
     }
 }
 
@@ -294,25 +294,25 @@ class C2 {
 
     constructor() {
         let self = this;                // ok
->self : this
->this : this
+>self : C2
+>this : C2
 
         let { x, y: y1 } = this;        // ok
 >x : string
 >y : any
 >y1 : string
->this : this
+>this : C2
 
         ({ x, y: y1, "y": y1 } = this); // ok
->({ x, y: y1, "y": y1 } = this) : this
->{ x, y: y1, "y": y1 } = this : this
+>({ x, y: y1, "y": y1 } = this) : C2
+>{ x, y: y1, "y": y1 } = this : C2
 >{ x, y: y1, "y": y1 } : { x: string; y: string; }
 >x : string
 >y : string
 >y1 : string
 >"y" : string
 >y1 : string
->this : this
+>this : C2
     }
 }
 

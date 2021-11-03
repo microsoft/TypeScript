@@ -29,7 +29,7 @@ export class Test  {
                 this.aFunction((newValue, oldValue) => {
 >this.aFunction((newValue, oldValue) => {                    let x = outer + inner + newValue;                }) : void
 >this.aFunction : (func: (newValue: any, oldValue: any) => void) => void
->this : this
+>this : Test
 >aFunction : (func: (newValue: any, oldValue: any) => void) => void
 >(newValue, oldValue) => {                    let x = outer + inner + newValue;                } : (newValue: any, oldValue: any) => void
 >newValue : any

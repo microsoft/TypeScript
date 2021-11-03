@@ -28,13 +28,13 @@ class SymbolIterator {
     }
 
     [Symbol.iterator]() {
->[Symbol.iterator] : () => this
+>[Symbol.iterator] : () => SymbolIterator
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
         return this;
->this : this
+>this : SymbolIterator
     }
 }
 
@@ -59,13 +59,13 @@ class _StringIterator {
     }
 
     [Symbol.iterator]() {
->[Symbol.iterator] : () => this
+>[Symbol.iterator] : () => _StringIterator
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
         return this;
->this : this
+>this : _StringIterator
     }
 }
 

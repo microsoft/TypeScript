@@ -93,35 +93,35 @@ class C4 {
 >this : this
 
     f1() {
->f1 : () => { a: this; }
+>f1 : () => { a: C4; }
 
         return { a: this };
->{ a: this } : { a: this; }
->a : this
->this : this
+>{ a: this } : { a: C4; }
+>a : C4
+>this : C4
     }
     f2() {
->f2 : () => this[]
+>f2 : () => C4[]
 
         return [this];
->[this] : this[]
->this : this
+>[this] : C4[]
+>this : C4
     }
     f3() {
->f3 : () => { a: this; }[]
+>f3 : () => { a: C4; }[]
 
         return [{ a: this }];
->[{ a: this }] : { a: this; }[]
->{ a: this } : { a: this; }
->a : this
->this : this
+>[{ a: this }] : { a: C4; }[]
+>{ a: this } : { a: C4; }
+>a : C4
+>this : C4
     }
     f4() {
->f4 : () => () => this
+>f4 : () => () => C4
 
         return () => this;
->() => this : () => this
->this : this
+>() => this : () => C4
+>this : C4
     }
 }
 

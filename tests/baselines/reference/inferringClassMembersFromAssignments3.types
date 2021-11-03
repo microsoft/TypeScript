@@ -6,7 +6,7 @@ class Base {
         this.p = 1
 >this.p = 1 : 1
 >this.p : any
->this : this
+>this : Base
 >p : any
 >1 : 1
     }
@@ -21,7 +21,7 @@ class Derived extends Base {
         this.p = 1
 >this.p = 1 : 1
 >this.p : number
->this : this
+>this : Derived
 >p : number
 >1 : 1
     }

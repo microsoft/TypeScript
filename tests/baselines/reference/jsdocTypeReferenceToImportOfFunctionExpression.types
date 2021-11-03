@@ -43,7 +43,7 @@ class MW {
     this.compiler = compiler;
 >this.compiler = compiler : { (): MW; new (): MC; }
 >this.compiler : any
->this : this
+>this : MW
 >compiler : any
 >compiler : { (): MW; new (): MC; }
   }

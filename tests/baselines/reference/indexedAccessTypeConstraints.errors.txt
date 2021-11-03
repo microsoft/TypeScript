@@ -1,0 +1,60 @@
+tests/cases/compiler/indexedAccessTypeConstraints.ts(20,16): error TS2684: The 'this' context of type 'Foo<C>' is not assignable to method's 'this' of type 'Parent<M>'.
+  Types of property 'data' are incompatible.
+    Type 'Data<IData<C>>' is not assignable to type 'Data<M>'.
+      Type 'IData<C>' is not assignable to type 'M'.
+        'M' could be instantiated with an arbitrary type which could be unrelated to 'IData<C>'.
+tests/cases/compiler/indexedAccessTypeConstraints.ts(26,16): error TS2684: The 'this' context of type 'Bar<C, T>' is not assignable to method's 'this' of type 'Parent<M>'.
+  Types of property 'data' are incompatible.
+    Type 'Data<T>' is not assignable to type 'Data<M>'.
+      Type 'T' is not assignable to type 'M'.
+        'M' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+
+
+==== tests/cases/compiler/indexedAccessTypeConstraints.ts (2 errors) ====
+    // Repro from #14557
+    
+    interface IData<T> {
+        content: T;
+    }
+    
+    type Data<T> = {
+        get: <K extends keyof T>(prop: K) => T[K];
+    };
+    
+    class Parent<M> {
+        constructor(private data: Data<M>) {}
+        getData(): Data<M> {
+            return this.data;
+        }
+    }
+    
+    export class Foo<C> extends Parent<IData<C>> {
+        getContent(): C {
+            return this.getData().get('content');
+                   ~~~~
+!!! error TS2684: The 'this' context of type 'Foo<C>' is not assignable to method's 'this' of type 'Parent<M>'.
+!!! error TS2684:   Types of property 'data' are incompatible.
+!!! error TS2684:     Type 'Data<IData<C>>' is not assignable to type 'Data<M>'.
+!!! error TS2684:       Type 'IData<C>' is not assignable to type 'M'.
+!!! error TS2684:         'M' could be instantiated with an arbitrary type which could be unrelated to 'IData<C>'.
+        }
+    }
+    
+    export class Bar<C, T extends IData<C>> extends Parent<T> {
+        getContent(): C {
+            return this.getData().get('content');
+                   ~~~~
+!!! error TS2684: The 'this' context of type 'Bar<C, T>' is not assignable to method's 'this' of type 'Parent<M>'.
+!!! error TS2684:   Types of property 'data' are incompatible.
+!!! error TS2684:     Type 'Data<T>' is not assignable to type 'Data<M>'.
+!!! error TS2684:       Type 'T' is not assignable to type 'M'.
+!!! error TS2684:         'M' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        }
+    }
+    
+    // Repro from #14557
+    
+    function foo<C, T extends { content: C }>(x: C, y: T['content']) {
+        x = y;
+    }
+    

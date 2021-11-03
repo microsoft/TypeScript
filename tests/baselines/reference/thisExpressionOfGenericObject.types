@@ -7,8 +7,8 @@ class MyClass1<T> {
 
     constructor() {
         () => this;
->() => this : () => this
->this : this
+>() => this : () => MyClass1<T>
+>this : MyClass1<T>
     }
 }
 

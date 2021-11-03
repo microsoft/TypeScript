@@ -46,7 +46,7 @@ class Chunk {
         this.chunk = 1;
 >this.chunk = 1 : 1
 >this.chunk : any
->this : this
+>this : Chunk
 >chunk : any
 >1 : 1
     }

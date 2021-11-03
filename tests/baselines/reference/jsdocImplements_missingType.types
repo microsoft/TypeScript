@@ -3,7 +3,7 @@ class A { constructor() { this.x = 0; } }
 >A : A
 >this.x = 0 : 0
 >this.x : any
->this : this
+>this : A
 >x : any
 >0 : 0
 

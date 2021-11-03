@@ -1,7 +1,9 @@
-tests/cases/compiler/classImplementsClass5.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
-  Types have separate declarations of a private property 'x'.
+tests/cases/compiler/classImplementsClass5.ts(7,5): error TS2416: Property 'foo' in type 'C' is not assignable to the same property in base type 'A'.
+  Type '() => number' is not assignable to type '() => number'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'A' is not assignable to type 'C'.
+        Types have separate declarations of a private property 'x'.
 tests/cases/compiler/classImplementsClass5.ts(16,1): error TS2322: Type 'C2' is not assignable to type 'C'.
-  Types have separate declarations of a private property 'x'.
 tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is not assignable to type 'C2'.
   Types have separate declarations of a private property 'x'.
 
@@ -12,11 +14,14 @@ tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is n
         foo(): number { return 1; }
     }
     class C implements A {
-          ~
-!!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
-!!! error TS2720:   Types have separate declarations of a private property 'x'.
         private x = 1;
         foo() {
+        ~~~
+!!! error TS2416: Property 'foo' in type 'C' is not assignable to the same property in base type 'A'.
+!!! error TS2416:   Type '() => number' is not assignable to type '() => number'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'A' is not assignable to type 'C'.
+!!! error TS2416:         Types have separate declarations of a private property 'x'.
             return 1;
         }
     }
@@ -28,7 +33,6 @@ tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is n
     c = c2;
     ~
 !!! error TS2322: Type 'C2' is not assignable to type 'C'.
-!!! error TS2322:   Types have separate declarations of a private property 'x'.
     c2 = c;
     ~~
 !!! error TS2322: Type 'C' is not assignable to type 'C2'.

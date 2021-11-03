@@ -15,13 +15,13 @@ class C1 extends A {
 >n : number
 
         let a1 = this;  // Error
->a1 : this
->this : this
+>a1 : C1
+>this : C1
 
         let a2 = this.x;  // Error
 >a2 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
         let a3 = super.x;  // Error
@@ -31,15 +31,15 @@ class C1 extends A {
 >x : number
 
         let a4 = () => this;
->a4 : () => this
->() => this : () => this
->this : this
+>a4 : () => C1
+>() => this : () => C1
+>this : C1
 
         let a5 = () => this.x;
 >a5 : () => number
 >() => this.x : () => number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
         let a6 = () => super.x;
@@ -59,13 +59,13 @@ class C1 extends A {
 >super : typeof A
 
             let b1 = this;
->b1 : this
->this : this
+>b1 : C1
+>this : C1
 
             let b2 = this.x;
 >b2 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
             let b3 = super.x;
@@ -76,13 +76,13 @@ class C1 extends A {
         }
         else {
             let c1 = this;  // Error
->c1 : this
->this : this
+>c1 : C1
+>this : C1
 
             let c2 = this.x;  // Error
 >c2 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
             let c3 = super.x;  // Error
@@ -109,7 +109,7 @@ class C1 extends A {
                     let d1 = this.x;
 >d1 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
                 case 2:
@@ -118,7 +118,7 @@ class C1 extends A {
                     let d2 = this.x;  // Error
 >d2 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
                 default:
@@ -129,13 +129,13 @@ class C1 extends A {
                     let d3 = this.x;
 >d3 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
             }
             let d4 = this.x;
 >d4 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
         }
         if (!!true) {
@@ -158,7 +158,7 @@ class C1 extends A {
             let e2 = this.x;  // Error
 >e2 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
             let e3 = { w: !!true ? super() : super() };
@@ -177,17 +177,17 @@ class C1 extends A {
             let e4 = this.x;
 >e4 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
         }
         let f1 = this;  // Error
->f1 : this
->this : this
+>f1 : C1
+>this : C1
 
         let f2 = this.x;  // Error
 >f2 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
         let f3 = super.x;  // Error
@@ -223,7 +223,7 @@ export class BarCorrectlyFails extends Foo {
 >value : number
 >this.bar() : number
 >this.bar : () => number
->this : this
+>this : BarCorrectlyFails
 >bar : () => number
 
             super(value);
@@ -263,7 +263,7 @@ export class BarIncorrectlyWorks extends Foo {
 >value : number
 >this.bar() : number
 >this.bar : () => number
->this : this
+>this : BarIncorrectlyWorks
 >bar : () => number
 
             super(value);

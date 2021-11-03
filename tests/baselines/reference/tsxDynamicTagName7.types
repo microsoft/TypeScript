@@ -28,7 +28,7 @@ export class Text extends React.Component<{}, {}> {
 
       <this/>  // this should be an error
 ><this/> : any
->this : this
+>this : Text
 
     );
   }

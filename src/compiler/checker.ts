@@ -12712,7 +12712,7 @@ namespace ts {
                 }
                 else {
                     // TODO: should provide this=the 'this' argument of the call (if it's a call)
-                    return (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType;
+                    return (getDeclaredTypeOfSymbol(symbol) as InterfaceType) //.thisType
                 }
             }
         }

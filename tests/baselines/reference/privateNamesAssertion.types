@@ -26,7 +26,7 @@ class Foo {
         this.#p1(v);
 >this.#p1(v) : void
 >this.#p1 : (v: any) => asserts v is string
->this : this
+>this : Foo
 >v : unknown
 
         v;
@@ -59,7 +59,7 @@ class Foo2 {
         this.#p1(v);
 >this.#p1(v) : void
 >this.#p1 : (v: any) => asserts v is string
->this : this
+>this : Foo2
 >v : unknown
 
         v;

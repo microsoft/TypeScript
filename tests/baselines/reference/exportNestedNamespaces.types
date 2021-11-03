@@ -33,7 +33,7 @@ exports.Classic = class {
         this.p = 1
 >this.p = 1 : 1
 >this.p : any
->this : this
+>this : Classic
 >p : any
 >1 : 1
     }

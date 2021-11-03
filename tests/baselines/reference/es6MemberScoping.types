@@ -11,7 +11,7 @@ class Foo {
         return this._store.length; 
 >this._store.length : any
 >this._store : any
->this : this
+>this : Foo
 >_store : any
 >length : any
     }

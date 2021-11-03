@@ -180,7 +180,7 @@ class N {
 		this.p2 = 0;
 >this.p2 = 0 : 0
 >this.p2 : number
->this : this
+>this : N
 >p2 : number
 >0 : 0
 	}

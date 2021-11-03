@@ -20,7 +20,7 @@ class MyComponent extends React.Component<{dataSource: number[], onClick?: any},
 ><div {...this.props} className="ok"></div> : JSX.Element
 >div : any
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
->this : this
+>this : MyComponent
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
 >className : string
 >div : any

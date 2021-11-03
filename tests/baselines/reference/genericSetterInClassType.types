@@ -42,7 +42,7 @@ module Generic {
 
             return this.#value;
 >this.#value : T
->this : this
+>this : Box<T>
         }
     
         set value(value) {
@@ -52,7 +52,7 @@ module Generic {
             this.#value = value;
 >this.#value = value : T
 >this.#value : T
->this : this
+>this : Box<T>
 >value : T
         }
     }

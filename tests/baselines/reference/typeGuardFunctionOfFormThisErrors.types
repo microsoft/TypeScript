@@ -7,7 +7,7 @@ class RoyalGuard {
 
         return this instanceof LeadGuard;
 >this instanceof LeadGuard : boolean
->this : this
+>this : RoyalGuard
 >LeadGuard : typeof LeadGuard
     }
     isFollower(): this is FollowerGuard {
@@ -15,7 +15,7 @@ class RoyalGuard {
 
         return this instanceof FollowerGuard;
 >this instanceof FollowerGuard : boolean
->this : this
+>this : RoyalGuard
 >FollowerGuard : typeof FollowerGuard
     }
 }

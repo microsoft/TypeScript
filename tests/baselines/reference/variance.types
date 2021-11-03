@@ -53,7 +53,7 @@ class Bar<T extends string> {
 >Bar : typeof Bar
 >instance : Bar<string>[]
 >push : (...items: Bar<string>[]) => number
->this : this
+>this : Bar<T>
   }
 }
 

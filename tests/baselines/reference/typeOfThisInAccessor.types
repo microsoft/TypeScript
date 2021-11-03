@@ -6,8 +6,8 @@ class C {
 >x : number
 
         var r = this; // C
->r : this
->this : this
+>r : C
+>this : C
 
         return 1;
 >1 : 1
@@ -35,8 +35,8 @@ class D<T> {
 >x : number
 
         var r = this; // D<T>
->r : this
->this : this
+>r : D<T>
+>this : D<T>
 
         return 1;
 >1 : 1

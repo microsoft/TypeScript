@@ -21,7 +21,7 @@ class Assignment extends Base<State> {
         this.state = { version: 2 }
 >this.state = { version: 2 } : { version: 2; }
 >this.state : State
->this : this
+>this : Assignment
 >state : State
 >{ version: 2 } : { version: 2; }
 >version : 2

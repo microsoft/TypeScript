@@ -123,7 +123,7 @@ module TypeScript {
 >this.asts.map((value) => { return value; }) : TypeScript.AST[]
 >this.asts.map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
 >(value) => { return value; } : (value: TypeScript.AST) => TypeScript.AST
@@ -136,7 +136,7 @@ module TypeScript {
 >clone : AstPath
 >top : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 
             return clone;
@@ -151,32 +151,32 @@ module TypeScript {
 >head : TypeScript.AST
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 
             this.up();
 >this.up() : void
 >this.up : () => void
->this : this
+>this : AstPath
 >up : () => void
 
             while (this.asts.length > this.count()) {
 >this.asts.length > this.count() : boolean
 >this.asts.length : number
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >length : number
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 
                 this.asts.pop();
 >this.asts.pop() : TypeScript.AST
 >this.asts.pop : () => TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >pop : () => TypeScript.AST
             }
@@ -193,30 +193,30 @@ module TypeScript {
 >this.asts.length > this.count() : boolean
 >this.asts.length : number
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >length : number
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 
                 this.asts.pop();
 >this.asts.pop() : TypeScript.AST
 >this.asts.pop : () => TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >pop : () => TypeScript.AST
             }
             this.top = this.asts.length;
 >this.top = this.asts.length : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >this.asts.length : number
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >length : number
 
@@ -224,7 +224,7 @@ module TypeScript {
 >this.asts.push(ast) : number
 >this.asts.push : (...items: TypeScript.AST[]) => number
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >push : (...items: TypeScript.AST[]) => number
 >ast : TypeScript.AST
@@ -236,7 +236,7 @@ module TypeScript {
             if (this.top <= -1)
 >this.top <= -1 : boolean
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >-1 : -1
 >1 : 1
@@ -249,7 +249,7 @@ module TypeScript {
             this.top--;
 >this.top-- : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
         }
 
@@ -259,12 +259,12 @@ module TypeScript {
             if (this.top == this.ast.length - 1)
 >this.top == this.ast.length - 1 : boolean
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >this.ast.length - 1 : number
 >this.ast.length : number
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >length : number
 >1 : 1
@@ -277,7 +277,7 @@ module TypeScript {
             this.top++;
 >this.top++ : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
         }
 
@@ -289,7 +289,7 @@ module TypeScript {
 >this.ast() == null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 
@@ -304,7 +304,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
         }
@@ -320,18 +320,18 @@ module TypeScript {
 >AstPath : typeof AstPath
 >reverseIndexOf : (items: any[], index: number) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.asts.length - (this.top + 1) : number
 >this.asts.length : number
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >length : number
 >(this.top + 1) : number
 >this.top + 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
         }
@@ -347,16 +347,16 @@ module TypeScript {
 >AstPath : typeof AstPath
 >reverseIndexOf : (items: any[], index: number) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.asts.length - this.top : number
 >this.asts.length : number
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >length : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
         }
 
@@ -366,7 +366,7 @@ module TypeScript {
             return this.top + 1;
 >this.top + 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
         }
@@ -379,7 +379,7 @@ module TypeScript {
             return this.asts[index];
 >this.asts[index] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >index : number
         }
@@ -392,13 +392,13 @@ module TypeScript {
 >this.ast() === null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >null : null
 
@@ -413,7 +413,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.Name : any
@@ -428,7 +428,7 @@ module TypeScript {
 >this.parent().nodeType : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.ClassDeclaration : any
@@ -446,12 +446,12 @@ module TypeScript {
 >TypeScript : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >name : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
         }
 
@@ -463,13 +463,13 @@ module TypeScript {
 >this.ast() === null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >null : null
 
@@ -484,7 +484,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.Name : any
@@ -499,7 +499,7 @@ module TypeScript {
 >this.parent().nodeType : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.InterfaceDeclaration : any
@@ -517,12 +517,12 @@ module TypeScript {
 >TypeScript : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >name : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
         }
 
@@ -534,13 +534,13 @@ module TypeScript {
 >this.ast() === null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >null : null
 
@@ -555,7 +555,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.Name : any
@@ -570,7 +570,7 @@ module TypeScript {
 >this.parent().nodeType : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.ArgDecl : any
@@ -588,12 +588,12 @@ module TypeScript {
 >TypeScript : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >id : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
         }
 
@@ -605,13 +605,13 @@ module TypeScript {
 >this.ast() === null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >null : null
 
@@ -626,7 +626,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.Name : any
@@ -641,7 +641,7 @@ module TypeScript {
 >this.parent().nodeType : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.VarDecl : any
@@ -659,12 +659,12 @@ module TypeScript {
 >TypeScript : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >id : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
         }
 
@@ -676,13 +676,13 @@ module TypeScript {
 >this.ast() === null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >null : null
 
@@ -697,7 +697,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.Name : any
@@ -712,7 +712,7 @@ module TypeScript {
 >this.parent().nodeType : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.ModuleDeclaration : any
@@ -730,12 +730,12 @@ module TypeScript {
 >TypeScript : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >name : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
         }
 
@@ -747,13 +747,13 @@ module TypeScript {
 >this.ast() === null : boolean
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >null : null
 >this.parent() === null : boolean
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >null : null
 
@@ -768,7 +768,7 @@ module TypeScript {
 >this.ast().nodeType : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.Name : any
@@ -783,7 +783,7 @@ module TypeScript {
 >this.parent().nodeType : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >nodeType : any
 >TypeScript.NodeType.FuncDecl : any
@@ -801,12 +801,12 @@ module TypeScript {
 >TypeScript : any
 >this.parent() : TypeScript.AST
 >this.parent : () => TypeScript.AST
->this : this
+>this : AstPath
 >parent : () => TypeScript.AST
 >name : any
 >this.ast() : TypeScript.AST
 >this.ast : () => TypeScript.AST
->this : this
+>this : AstPath
 >ast : () => TypeScript.AST
         }
 
@@ -818,7 +818,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 
             return this.count() >= 3 &&
@@ -828,7 +828,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -836,10 +836,10 @@ module TypeScript {
 >this.asts[this.top] === ast : boolean
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >ast : any
 
@@ -848,11 +848,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -867,11 +867,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -890,7 +890,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 
             return this.count() >= 3 &&
@@ -900,7 +900,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -908,10 +908,10 @@ module TypeScript {
 >this.asts[this.top] === ast : boolean
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >ast : any
 
@@ -920,11 +920,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -939,11 +939,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -962,7 +962,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 
             return this.count() >= 3 &&
@@ -972,7 +972,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -980,10 +980,10 @@ module TypeScript {
 >this.asts[this.top] === ast : boolean
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >ast : any
 
@@ -992,11 +992,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1011,11 +1011,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -1034,7 +1034,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 
             return this.count() >= 5 &&
@@ -1049,7 +1049,7 @@ module TypeScript {
 >this.count() >= 5 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >5 : 5
 
@@ -1057,10 +1057,10 @@ module TypeScript {
 >this.asts[this.top] === ast : boolean
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >ast : any
 
@@ -1069,11 +1069,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1088,11 +1088,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -1107,11 +1107,11 @@ module TypeScript {
 >this.asts[this.top - 3].nodeType : any
 >this.asts[this.top - 3] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 3 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >3 : 3
 >nodeType : any
@@ -1126,11 +1126,11 @@ module TypeScript {
 >this.asts[this.top - 4].nodeType : any
 >this.asts[this.top - 4] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 4 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >4 : 4
 >nodeType : any
@@ -1148,11 +1148,11 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >isConstructor : any
@@ -1166,21 +1166,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >arguments : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 
@@ -1193,21 +1193,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 4] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 4 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >4 : 4
 >constructorDecl : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
         }
@@ -1220,7 +1220,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 
             return this.count() >= 3 &&
@@ -1230,7 +1230,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -1238,10 +1238,10 @@ module TypeScript {
 >this.asts[this.top] === ast : boolean
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >ast : any
 
@@ -1250,11 +1250,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1269,11 +1269,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -1293,7 +1293,7 @@ module TypeScript {
 >this.count() >= 1 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >1 : 1
 
@@ -1302,10 +1302,10 @@ module TypeScript {
 >this.asts[this.top].nodeType : any
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >nodeType : any
 >TypeScript.NodeType.ModuleDeclaration : any
@@ -1325,10 +1325,10 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >modFlags : any
 >TypeScript.ModuleFlags.IsWholeFile : any
@@ -1349,7 +1349,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1358,11 +1358,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -1377,11 +1377,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1399,21 +1399,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >members : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 
@@ -1428,11 +1428,11 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >modFlags : any
@@ -1452,7 +1452,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1461,11 +1461,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1483,21 +1483,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >bod : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1511,7 +1511,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1520,11 +1520,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1542,21 +1542,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >caseList : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1570,7 +1570,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1579,11 +1579,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1601,21 +1601,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >members : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1629,7 +1629,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1638,11 +1638,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1660,21 +1660,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >members : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1688,7 +1688,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1697,11 +1697,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1719,21 +1719,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >bod : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1747,7 +1747,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1756,11 +1756,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1778,21 +1778,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >members : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1806,7 +1806,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1815,11 +1815,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1837,21 +1837,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >statements : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1865,7 +1865,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1874,11 +1874,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1896,21 +1896,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1924,7 +1924,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1933,11 +1933,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -1955,21 +1955,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -1983,7 +1983,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -1992,11 +1992,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2014,21 +2014,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2042,7 +2042,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2051,11 +2051,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2073,21 +2073,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2101,7 +2101,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2110,11 +2110,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2132,21 +2132,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2160,7 +2160,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2169,11 +2169,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2191,21 +2191,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2219,7 +2219,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2228,11 +2228,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2250,21 +2250,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2278,7 +2278,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2287,11 +2287,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2309,21 +2309,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2337,7 +2337,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2346,11 +2346,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2368,21 +2368,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >body : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2397,7 +2397,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -2406,11 +2406,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -2425,11 +2425,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2447,21 +2447,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >caseList : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
         }
@@ -2477,7 +2477,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -2486,11 +2486,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -2505,11 +2505,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2527,21 +2527,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >caseList : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 
@@ -2553,21 +2553,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >defaultCase : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2582,7 +2582,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2591,11 +2591,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2610,11 +2610,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -2632,21 +2632,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >operand : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -2657,7 +2657,7 @@ module TypeScript {
             return this.isListOfObjectLit();
 >this.isListOfObjectLit() : boolean
 >this.isListOfObjectLit : () => boolean
->this : this
+>this : AstPath
 >isListOfObjectLit : () => boolean
         }
 
@@ -2672,7 +2672,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2681,11 +2681,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2700,11 +2700,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -2722,21 +2722,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >operand : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 
@@ -2749,11 +2749,11 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >members : any
@@ -2772,7 +2772,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -2781,11 +2781,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -2800,11 +2800,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2819,11 +2819,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -2841,21 +2841,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >operand : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
         }
@@ -2872,7 +2872,7 @@ module TypeScript {
 >this.count() >= 4 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >4 : 4
 
@@ -2881,11 +2881,11 @@ module TypeScript {
 >this.asts[this.top - 3].nodeType : any
 >this.asts[this.top - 3] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 3 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >3 : 3
 >nodeType : any
@@ -2900,11 +2900,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -2919,11 +2919,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -2938,11 +2938,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -2960,21 +2960,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 3] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 3 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >3 : 3
 >operand : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
         }
@@ -2989,7 +2989,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -2998,11 +2998,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3017,11 +3017,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -3039,21 +3039,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >operand : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3067,7 +3067,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3076,11 +3076,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3098,21 +3098,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >operand1 : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3126,7 +3126,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3135,11 +3135,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3157,21 +3157,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >operand2 : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3184,7 +3184,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3193,11 +3193,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3219,7 +3219,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3228,11 +3228,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3250,21 +3250,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >thenBod : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3278,7 +3278,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3287,11 +3287,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3309,21 +3309,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >elseBod : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3334,7 +3334,7 @@ module TypeScript {
             return this.isBodyOfCase();
 >this.isBodyOfCase() : boolean
 >this.isBodyOfCase : () => boolean
->this : this
+>this : AstPath
 >isBodyOfCase : () => boolean
         }
 
@@ -3347,7 +3347,7 @@ module TypeScript {
 >this.count() >= 1 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >1 : 1
 
@@ -3356,10 +3356,10 @@ module TypeScript {
 >this.asts[this.top].nodeType : any
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >nodeType : any
 >TypeScript.NodeType.List : any
@@ -3377,10 +3377,10 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >members : any
 >length : any
@@ -3397,7 +3397,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3406,11 +3406,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -3425,11 +3425,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3447,21 +3447,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >arguments : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3476,7 +3476,7 @@ module TypeScript {
 >this.count() >= 3 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >3 : 3
 
@@ -3485,11 +3485,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3504,11 +3504,11 @@ module TypeScript {
 >this.asts[this.top - 2].nodeType : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >nodeType : any
@@ -3526,21 +3526,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 2] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 2 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >2 : 2
 >arguments : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
         }
@@ -3555,7 +3555,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3564,11 +3564,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -3583,11 +3583,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3605,21 +3605,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >arguments : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3634,7 +3634,7 @@ module TypeScript {
 >this.count() >= 2 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >2 : 2
 
@@ -3643,11 +3643,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -3662,11 +3662,11 @@ module TypeScript {
 >this.asts[this.top - 1].nodeType : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >nodeType : any
@@ -3684,21 +3684,21 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 1] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 1 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >1 : 1
 >arguments : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
         }
@@ -3712,7 +3712,7 @@ module TypeScript {
 >this.count() >= 1 : boolean
 >this.count() : number
 >this.count : () => number
->this : this
+>this : AstPath
 >count : () => number
 >1 : 1
 
@@ -3721,11 +3721,11 @@ module TypeScript {
 >this.asts[this.top - 0].nodeType : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >nodeType : any
@@ -3743,11 +3743,11 @@ module TypeScript {
 >TypeScript : any
 >this.asts[this.top - 0] : TypeScript.AST
 >this.asts : TypeScript.AST[]
->this : this
+>this : AstPath
 >asts : TypeScript.AST[]
 >this.top - 0 : number
 >this.top : number
->this : this
+>this : AstPath
 >top : number
 >0 : 0
 >isStatementBlock : any

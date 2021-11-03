@@ -393,7 +393,7 @@ class Foo {
         this.required && console.log('required');
 >this.required && console.log('required') : void
 >this.required : () => boolean
->this : this
+>this : Foo
 >required : () => boolean
 >console.log('required') : void
 >console.log : (...data: any[]) => void
@@ -407,7 +407,7 @@ class Foo {
 >1 && this.required : () => boolean
 >1 : 1
 >this.required : () => boolean
->this : this
+>this : Foo
 >required : () => boolean
 >console.log('required') : void
 >console.log : (...data: any[]) => void
@@ -419,11 +419,11 @@ class Foo {
         this.required && this.required();
 >this.required && this.required() : boolean
 >this.required : () => boolean
->this : this
+>this : Foo
 >required : () => boolean
 >this.required() : boolean
 >this.required : () => boolean
->this : this
+>this : Foo
 >required : () => boolean
 
         // ok
@@ -431,12 +431,12 @@ class Foo {
 >this.required && 1 && this.required() : boolean
 >this.required && 1 : 1
 >this.required : () => boolean
->this : this
+>this : Foo
 >required : () => boolean
 >1 : 1
 >this.required() : boolean
 >this.required : () => boolean
->this : this
+>this : Foo
 >required : () => boolean
 
         // ok
@@ -445,7 +445,7 @@ class Foo {
 >1 && this.optional : (() => boolean) | undefined
 >1 : 1
 >this.optional : (() => boolean) | undefined
->this : this
+>this : Foo
 >optional : (() => boolean) | undefined
 >console.log('optional') : void
 >console.log : (...data: any[]) => void

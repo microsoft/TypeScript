@@ -1,0 +1,30 @@
+tests/cases/compiler/varArgsOnConstructorTypes.ts(10,8): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/compiler/varArgsOnConstructorTypes.ts (1 errors) ====
+    export class A {
+        constructor(ctor) { }
+    }
+    
+    export class B extends A {
+        private p1: number;
+        private p2: string;
+    
+        constructor(element: any, url: string) {
+           super(element);
+           ~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+            this.p1 = element;
+            this.p2 = url;
+        }
+    }
+    
+    export interface I1 {
+        register(inputClass: new(...params: any[]) => A);
+        register(inputClass: { new (...params: any[]): A; }[]);
+    }
+    
+    
+    var reg: I1;
+    reg.register(B);
+    

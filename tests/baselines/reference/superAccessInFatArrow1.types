@@ -23,7 +23,7 @@ module test {
             this.bar(() => {
 >this.bar(() => {                super.foo();            }) : void
 >this.bar : (callback: () => void) => void
->this : this
+>this : B
 >bar : (callback: () => void) => void
 >() => {                super.foo();            } : () => void
 

@@ -13,7 +13,7 @@ class Employee {
         this.p = 0;
 >this.p = 0 : 0
 >this.p : number
->this : this
+>this : Employee
 >p : number
 >0 : 0
     }

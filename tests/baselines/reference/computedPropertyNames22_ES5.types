@@ -13,7 +13,7 @@ class C {
 >[this.bar()] : () => void
 >this.bar() : number
 >this.bar : () => number
->this : this
+>this : C
 >bar : () => number
 
         };

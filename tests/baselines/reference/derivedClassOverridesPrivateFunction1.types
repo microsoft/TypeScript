@@ -6,7 +6,7 @@ class BaseClass {
         this._init();
 >this._init() : void
 >this._init : () => void
->this : this
+>this : BaseClass
 >_init : () => void
     }
     private _init() {

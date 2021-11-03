@@ -12,7 +12,7 @@ export class DbSet<T> {
   get entityType() { return this._entityType; }  // used to ICE without return type annotation
 >entityType : any
 >this._entityType : any
->this : this
+>this : DbSet<T>
 >_entityType : any
 }
 

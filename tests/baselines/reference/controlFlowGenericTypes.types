@@ -536,7 +536,7 @@ class SqlTable<T> {
         this.validateRow(row);
 >this.validateRow(row) : void
 >this.validateRow : (_row: Partial<SqlInsertSet<T>>) => void
->this : this
+>this : SqlTable<T>
 >validateRow : (_row: Partial<SqlInsertSet<T>>) => void
 >row : SqlInsertSet<T>
     }

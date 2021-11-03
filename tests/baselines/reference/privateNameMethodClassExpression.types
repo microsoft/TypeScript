@@ -21,7 +21,7 @@ const C = class {
     getField() { return this.#field };
 >getField : () => number
 >this.#field : number
->this : this
+>this : C
 }
 
 console.log(C.getInstance().getField());

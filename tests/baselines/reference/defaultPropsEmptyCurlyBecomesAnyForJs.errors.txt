@@ -1,0 +1,29 @@
+tests/cases/compiler/typed_component.ts(4,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo<T, U>'.
+
+
+==== tests/cases/compiler/library.d.ts (0 errors) ====
+    export class Foo<T = {}, U = {}> {
+        props: T;
+        state: U;
+        constructor(props: T, state: U);
+    }
+    
+==== tests/cases/compiler/component.js (0 errors) ====
+    import { Foo } from "./library";
+    export class MyFoo extends Foo {
+        member;
+    }
+    
+==== tests/cases/compiler/typed_component.ts (1 errors) ====
+    import { MyFoo } from "./component";
+    export class TypedFoo extends MyFoo {
+        constructor() {
+            super({x: "string", y: 42}, { value: undefined });
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo<T, U>'.
+            this.props.x;
+            this.props.y;
+            this.state.value;
+            this.member;
+        }
+    }

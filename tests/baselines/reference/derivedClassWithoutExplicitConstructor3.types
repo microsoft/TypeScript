@@ -12,7 +12,7 @@ class Base {
 >x : number
 >this.a = x : number
 >this.a : number
->this : this
+>this : Base
 >a : number
 >x : number
 }
@@ -37,7 +37,7 @@ class Derived extends Base {
         this.b = y;
 >this.b = y : string
 >this.b : string
->this : this
+>this : Derived
 >b : string
 >y : string
     }
@@ -84,7 +84,7 @@ class Base2<T> {
 >x : T
 >this.a = x : T
 >this.a : T
->this : this
+>this : Base2<T>
 >a : T
 >x : T
 }
@@ -109,7 +109,7 @@ class D<T> extends Base {
         this.b = y;
 >this.b = y : T
 >this.b : T
->this : this
+>this : D<T>
 >b : T
 >y : T
     }

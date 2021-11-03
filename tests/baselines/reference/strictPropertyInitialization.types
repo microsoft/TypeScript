@@ -127,14 +127,14 @@ class C5 {
         this.a = 0;
 >this.a = 0 : 0
 >this.a : number
->this : this
+>this : C5
 >a : number
 >0 : 0
 
         this.#b = 0;
 >this.#b = 0 : 0
 >this.#b : number
->this : this
+>this : C5
 >0 : 0
     }
 }
@@ -161,14 +161,14 @@ class C6 {
         this.a = 0;
 >this.a = 0 : 0
 >this.a : number
->this : this
+>this : C6
 >a : number
 >0 : 0
 
         this.#b = 0;
 >this.#b = 0 : 0
 >this.#b : number
->this : this
+>this : C6
 >0 : 0
     }
 }
@@ -191,14 +191,14 @@ class C7 {
             this.a = 1;
 >this.a = 1 : 1
 >this.a : number
->this : this
+>this : C7
 >a : number
 >1 : 1
 
             this.#b = 1;
 >this.#b = 1 : 1
 >this.#b : number
->this : this
+>this : C7
 >1 : 1
 
             return;
@@ -206,14 +206,14 @@ class C7 {
         this.a = 0;
 >this.a = 0 : 0
 >this.a : number
->this : this
+>this : C7
 >a : number
 >0 : 0
 
         this.#b = 1;
 >this.#b = 1 : 1
 >this.#b : number
->this : this
+>this : C7
 >1 : 1
     }
 }
@@ -274,43 +274,43 @@ class C10 {
         let x = this.a;  // Error
 >x : number
 >this.a : number
->this : this
+>this : C10
 >a : number
 
         this.a = this.b;  // Error
 >this.a = this.b : number
 >this.a : number
->this : this
+>this : C10
 >a : number
 >this.b : number
->this : this
+>this : C10
 >b : number
 
         this.b = this.#d //Error
 >this.b = this.#d : number
 >this.b : number
->this : this
+>this : C10
 >b : number
 >this.#d : number
->this : this
+>this : C10
 
         this.b = x;
 >this.b = x : number
 >this.b : number
->this : this
+>this : C10
 >b : number
 >x : number
 
         this.#d = x;
 >this.#d = x : number
 >this.#d : number
->this : this
+>this : C10
 >x : number
 
         let y = this.c;
 >y : number | undefined
 >this.c : number | undefined
->this : this
+>this : C10
 >c : number | undefined
     }
 }
@@ -333,7 +333,7 @@ class C11 {
         this.a = someValue();
 >this.a = someValue() : any
 >this.a : number
->this : this
+>this : C11
 >a : number
 >someValue() : any
 >someValue : () => any
@@ -341,7 +341,7 @@ class C11 {
         this.#b = someValue();
 >this.#b = someValue() : any
 >this.#b : number
->this : this
+>this : C11
 >someValue() : any
 >someValue : () => any
     }

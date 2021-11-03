@@ -8,12 +8,12 @@
             this._information = this.logger.information();
 >this._information = this.logger.information() : any
 >this._information : any
->this : this
+>this : LoggerAdapter
 >_information : any
 >this.logger.information() : any
 >this.logger.information : any
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >information : any
         }

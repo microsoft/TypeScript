@@ -10,7 +10,7 @@ class a {
 
         return this.__x;
 >this.__x : () => string
->this : this
+>this : a
 >__x : () => string
     }
     set x(aValue: () => string) {
@@ -20,7 +20,7 @@ class a {
         this.__x = aValue;
 >this.__x = aValue : () => string
 >this.__x : () => string
->this : this
+>this : a
 >__x : () => string
 >aValue : () => string
     }

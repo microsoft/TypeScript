@@ -1,0 +1,52 @@
+tests/cases/compiler/contravariantInferenceAndTypeGuard.ts(19,17): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(fn: FilterFn<Test | null, Test | null, { b: string; }>, context: { b: string; }): List<Test | null>', gave the following error.
+    The 'this' context of type 'List<Test | null>' is not assignable to method's 'this' of type 'List<TData>'.
+      Type 'Test | null' is not assignable to type 'TData'.
+        'TData' could be instantiated with an arbitrary type which could be unrelated to 'Test | null'.
+  Overload 2 of 4, '(fn: IteratorFn<Test | null, boolean, { b: string; }>, context: { b: string; }): List<Test | null>', gave the following error.
+    The 'this' context of type 'List<Test | null>' is not assignable to method's 'this' of type 'List<TData>'.
+tests/cases/compiler/contravariantInferenceAndTypeGuard.ts(26,7): error TS2322: Type 'List<Test | null>' is not assignable to type 'List<Test>'.
+  Type 'Test | null' is not assignable to type 'Test'.
+    Type 'null' is not assignable to type 'Test'.
+
+
+==== tests/cases/compiler/contravariantInferenceAndTypeGuard.ts (2 errors) ====
+    interface ListItem<TData> {
+        prev: ListItem<TData> | null;
+        next: ListItem<TData> | null;
+        data: TData;
+    }
+    type IteratorFn<TData, TResult, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => TResult;
+    type FilterFn<TData, TResult extends TData, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => item is TResult;
+    
+    declare class List<TData> {
+        filter<TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>;
+        filter<TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>;
+        filter<TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>;
+        filter(fn: IteratorFn<TData, boolean>): List<TData>;
+    }
+    interface Test {
+        a: string;
+    }
+    const list2 = new List<Test | null>();
+    const filter1 = list2.filter(function(item, node, list): item is Test {
+                    ~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 4, '(fn: FilterFn<Test | null, Test | null, { b: string; }>, context: { b: string; }): List<Test | null>', gave the following error.
+!!! error TS2769:     The 'this' context of type 'List<Test | null>' is not assignable to method's 'this' of type 'List<TData>'.
+!!! error TS2769:       Type 'Test | null' is not assignable to type 'TData'.
+!!! error TS2769:         'TData' could be instantiated with an arbitrary type which could be unrelated to 'Test | null'.
+!!! error TS2769:   Overload 2 of 4, '(fn: IteratorFn<Test | null, boolean, { b: string; }>, context: { b: string; }): List<Test | null>', gave the following error.
+!!! error TS2769:     The 'this' context of type 'List<Test | null>' is not assignable to method's 'this' of type 'List<TData>'.
+        this.b; // $ExpectType string
+        item; // $ExpectType Test | null
+        node; // $ExpectType ListItem<Test | null>
+        list; // $ExpectType List<Test | null>
+        return !!item;
+    }, {b: 'c'});
+    const x: List<Test> = filter1; // $ExpectType List<Test>
+          ~
+!!! error TS2322: Type 'List<Test | null>' is not assignable to type 'List<Test>'.
+!!! error TS2322:   Type 'Test | null' is not assignable to type 'Test'.
+!!! error TS2322:     Type 'null' is not assignable to type 'Test'.
+    

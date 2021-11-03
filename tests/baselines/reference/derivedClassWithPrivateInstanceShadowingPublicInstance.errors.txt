@@ -1,7 +1,10 @@
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(12,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
-  Property 'x' is private in type 'Derived' but not in type 'Base'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(14,13): error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
+  Type '() => string' is not assignable to type '() => string'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'Base' is not assignable to type 'Derived'.
+        Property 'x' is private in type 'Derived' but not in type 'Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(18,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(19,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingPublicInstance.ts(22,14): error TS2339: Property 'x' does not exist on type 'typeof Base'.
@@ -31,11 +34,14 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     
     // error, not a subtype
     class Derived extends Base {
-          ~~~~~~~
-!!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
-!!! error TS2415:   Property 'x' is private in type 'Derived' but not in type 'Base'.
         private x: string; 
         private fn(): string {
+                ~~
+!!! error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '() => string' is not assignable to type '() => string'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2416:         Property 'x' is private in type 'Derived' but not in type 'Base'.
             return '';
         }
     

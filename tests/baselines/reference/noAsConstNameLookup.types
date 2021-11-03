@@ -48,14 +48,14 @@ export class FeatureRunner<W extends Store> {
 >this.cleaners.forEach(c => c(this)) : void
 >this.cleaners.forEach : (callbackfn: (value: Cleaner, index: number, array: Cleaner[]) => void, thisArg?: any) => void
 >this.cleaners : Cleaner[]
->this : this
+>this : FeatureRunner<W>
 >cleaners : Cleaner[]
 >forEach : (callbackfn: (value: Cleaner, index: number, array: Cleaner[]) => void, thisArg?: any) => void
 >c => c(this) : (c: Cleaner) => Promise<any>
 >c : Cleaner
 >c(this) : Promise<any>
 >c : Cleaner
->this : this
+>this : FeatureRunner<W>
 
         return result
 >result : {}

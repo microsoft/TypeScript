@@ -110,7 +110,7 @@ module TypeScript {
             return this.scopeGetter();
 >this.scopeGetter() : SymbolScope
 >this.scopeGetter : () => SymbolScope
->this : this
+>this : EnclosingScopeContext
 >scopeGetter : () => SymbolScope
         }
 
@@ -120,7 +120,7 @@ module TypeScript {
             return this.objectLiteralScopeGetter();
 >this.objectLiteralScopeGetter() : SymbolScope
 >this.objectLiteralScopeGetter : () => SymbolScope
->this : this
+>this : EnclosingScopeContext
 >objectLiteralScopeGetter : () => SymbolScope
         }
 
@@ -129,7 +129,7 @@ module TypeScript {
 
             return this.scopeStartAST;
 >this.scopeStartAST : AST
->this : this
+>this : EnclosingScopeContext
 >scopeStartAST : AST
         }
 
@@ -139,7 +139,7 @@ module TypeScript {
             return this.scopeStartAST.minChar;
 >this.scopeStartAST.minChar : any
 >this.scopeStartAST : AST
->this : this
+>this : EnclosingScopeContext
 >scopeStartAST : AST
 >minChar : any
         }
@@ -149,7 +149,7 @@ module TypeScript {
 
             return this.scopeStartAST;
 >this.scopeStartAST : AST
->this : this
+>this : EnclosingScopeContext
 >scopeStartAST : AST
         }
 
@@ -160,7 +160,7 @@ module TypeScript {
 >this.getScriptFragmentStartAST().minChar : any
 >this.getScriptFragmentStartAST() : AST
 >this.getScriptFragmentStartAST : () => AST
->this : this
+>this : EnclosingScopeContext
 >getScriptFragmentStartAST : () => AST
 >minChar : any
         }
@@ -171,7 +171,7 @@ module TypeScript {
             if (this.scriptFragment == null) {
 >this.scriptFragment == null : boolean
 >this.scriptFragment : Script
->this : this
+>this : EnclosingScopeContext
 >scriptFragment : Script
 >null : null
 
@@ -179,7 +179,7 @@ module TypeScript {
 >ast : AST
 >this.getScriptFragmentStartAST() : AST
 >this.getScriptFragmentStartAST : () => AST
->this : this
+>this : EnclosingScopeContext
 >getScriptFragmentStartAST : () => AST
 
                 var minChar = ast.minChar;
@@ -193,21 +193,21 @@ module TypeScript {
 >(this.isMemberCompletion ? this.pos : this.pos + 1) : number
 >this.isMemberCompletion ? this.pos : this.pos + 1 : number
 >this.isMemberCompletion : boolean
->this : this
+>this : EnclosingScopeContext
 >isMemberCompletion : boolean
 >this.pos : number
->this : this
+>this : EnclosingScopeContext
 >pos : number
 >this.pos + 1 : number
 >this.pos : number
->this : this
+>this : EnclosingScopeContext
 >pos : number
 >1 : 1
 
                 this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script;
 >this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script : any
 >this.scriptFragment : Script
->this : this
+>this : EnclosingScopeContext
 >scriptFragment : Script
 >TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script : any
 >TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/) : any
@@ -215,11 +215,11 @@ module TypeScript {
 >TypeScript : typeof TypeScript
 >quickParse : any
 >this.logger : ILogger
->this : this
+>this : EnclosingScopeContext
 >logger : ILogger
 >ast : AST
 >this.text : ISourceText
->this : this
+>this : EnclosingScopeContext
 >text : ISourceText
 >minChar : any
 >limChar : number
@@ -228,7 +228,7 @@ module TypeScript {
             }
             return this.scriptFragment;
 >this.scriptFragment : Script
->this : this
+>this : EnclosingScopeContext
 >scriptFragment : Script
         }
     }

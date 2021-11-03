@@ -15,19 +15,19 @@ class Chain<T> {
 >cb(this.value) : S
 >cb : (x: T) => S
 >this.value : T
->this : this
+>this : Chain<T>
 >value : T
 
         // should get a fresh type parameter which each then call
         var z = this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length)/*number*/; // No error
->z : Chain<number>
->this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length) : Chain<number>
->this.then(x => result)/*S*/.then(x => "abc")/*string*/.then : <S>(cb: (x: string) => S) => Chain<S>
->this.then(x => result)/*S*/.then(x => "abc") : Chain<string>
+>z : Chain<unknown>
+>this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length) : Chain<unknown>
+>this.then(x => result)/*S*/.then(x => "abc")/*string*/.then : <S>(cb: (x: unknown) => S) => Chain<S>
+>this.then(x => result)/*S*/.then(x => "abc") : Chain<unknown>
 >this.then(x => result)/*S*/.then : <S>(cb: (x: S) => S) => Chain<S>
 >this.then(x => result) : Chain<S>
 >this.then : <S>(cb: (x: T) => S) => Chain<S>
->this : this
+>this : Chain<T>
 >then : <S>(cb: (x: T) => S) => Chain<S>
 >x => result : (x: T) => S
 >x : T
@@ -36,12 +36,12 @@ class Chain<T> {
 >x => "abc" : (x: S) => string
 >x : S
 >"abc" : "abc"
->then : <S>(cb: (x: string) => S) => Chain<S>
->x => x.length : (x: string) => number
->x : string
->x.length : number
->x : string
->length : number
+>then : <S>(cb: (x: unknown) => S) => Chain<S>
+>x => x.length : (x: unknown) => any
+>x : unknown
+>x.length : any
+>x : unknown
+>length : any
 
         return new Chain(result);
 >new Chain(result) : Chain<S>

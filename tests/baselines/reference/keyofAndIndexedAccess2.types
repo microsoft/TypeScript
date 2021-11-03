@@ -511,14 +511,14 @@ export class c {
     this.a = "b";
 >this.a = "b" : "b"
 >this.a : string
->this : this
+>this : c
 >a : string
 >"b" : "b"
 
     this["a"] = "b";
 >this["a"] = "b" : "b"
 >this["a"] : string
->this : this
+>this : c
 >"a" : "a"
 >"b" : "b"
   }

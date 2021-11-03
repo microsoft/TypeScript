@@ -39,7 +39,7 @@ class Wrap {
         this.connItem = c.item;
 >this.connItem = c.item : number
 >this.connItem : any
->this : this
+>this : Wrap
 >connItem : any
 >c.item : number
 >c : import("tests/cases/conformance/jsdoc/declarations/conn")
@@ -49,7 +49,7 @@ class Wrap {
         this.another = "";
 >this.another = "" : ""
 >this.another : import("tests/cases/conformance/jsdoc/declarations/conn").Whatever
->this : this
+>this : Wrap
 >another : import("tests/cases/conformance/jsdoc/declarations/conn").Whatever
 >"" : ""
     }

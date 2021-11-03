@@ -19,7 +19,7 @@ class Identity<V> implements Settable<Identity<V>, V> {
         this.item = value;
 >this.item = value : V
 >this.item : V
->this : this
+>this : Identity<V>
 >item : V
 >value : V
     }

@@ -20,7 +20,7 @@ export module M1 {
 			this.m1 = new foo1.M1.C1();
 >this.m1 = new foo1.M1.C1() : foo1.M1.C1
 >this.m1 : foo1.M1.C1
->this : this
+>this : C1
 >m1 : foo1.M1.C1
 >new foo1.M1.C1() : foo1.M1.C1
 >foo1.M1.C1 : typeof foo1.M1.C1
@@ -33,7 +33,7 @@ export module M1 {
 >this.m1.y = 10 : 10
 >this.m1.y : any
 >this.m1 : foo1.M1.C1
->this : this
+>this : C1
 >m1 : foo1.M1.C1
 >y : any
 >10 : 10
@@ -42,7 +42,7 @@ export module M1 {
 >this.m1.x = 20 : 20
 >this.m1.x : number
 >this.m1 : foo1.M1.C1
->this : this
+>this : C1
 >m1 : foo1.M1.C1
 >x : number
 >20 : 20
@@ -93,7 +93,7 @@ export module M1 {
 			this.m1 = new foo2.M1.C1();
 >this.m1 = new foo2.M1.C1() : foo2.M1.C1
 >this.m1 : foo2.M1.C1
->this : this
+>this : C1
 >m1 : foo2.M1.C1
 >new foo2.M1.C1() : foo2.M1.C1
 >foo2.M1.C1 : typeof foo2.M1.C1
@@ -106,7 +106,7 @@ export module M1 {
 >this.m1.y = 10 : 10
 >this.m1.y : number
 >this.m1 : foo2.M1.C1
->this : this
+>this : C1
 >m1 : foo2.M1.C1
 >y : number
 >10 : 10
@@ -115,7 +115,7 @@ export module M1 {
 >this.m1.x = 20 : 20
 >this.m1.x : any
 >this.m1 : foo2.M1.C1
->this : this
+>this : C1
 >m1 : foo2.M1.C1
 >x : any
 >20 : 20

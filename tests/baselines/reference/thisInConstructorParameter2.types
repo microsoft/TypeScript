@@ -15,19 +15,19 @@ class P {
 >this : this
 >zz : this
 >this : this
->zzz : (p?: this) => this
->(p = this) => this : (p?: this) => this
+>zzz : (p?: this) => P
+>(p = this) => this : (p?: this) => P
 >p : this
 >this : this
->this : this
+>this : P
 
         zzz = (p = this) => this;
->zzz = (p = this) => this : (p?: this) => this
->zzz : (p?: this) => this
->(p = this) => this : (p?: this) => this
+>zzz = (p = this) => this : (p?: this) => P
+>zzz : (p?: this) => P
+>(p = this) => this : (p?: this) => P
 >p : this
 >this : this
->this : this
+>this : P
     }
 
     foo(zz = this) { zz.x; }

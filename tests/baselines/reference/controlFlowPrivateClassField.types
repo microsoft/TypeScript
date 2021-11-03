@@ -11,7 +11,7 @@ class Example {
         this.#test = test;
 >this.#test = test : number
 >this.#test : number
->this : this
+>this : Example
 >test : number
     }
 
@@ -20,7 +20,7 @@ class Example {
 
         return this.#test
 >this.#test : number
->this : this
+>this : Example
     }
 }
 
@@ -36,7 +36,7 @@ class Example2 {
         this.#test = test;
 >this.#test = test : number | undefined
 >this.#test : number | undefined
->this : this
+>this : Example2
 >test : number | undefined
     }
 
@@ -45,11 +45,11 @@ class Example2 {
 
         if (this.#test) {
 >this.#test : number | undefined
->this : this
+>this : Example2
 
             return this.#test
 >this.#test : number
->this : this
+>this : Example2
         }
         return 0;
 >0 : 0

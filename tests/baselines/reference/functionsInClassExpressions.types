@@ -7,7 +7,7 @@ let Foo = class {
         this.bar++;
 >this.bar++ : number
 >this.bar : number
->this : this
+>this : Foo
 >bar : number
     }
     bar = 0;
@@ -27,6 +27,6 @@ let Foo = class {
     m() { return this.bar; }
 >m : () => number
 >this.bar : number
->this : this
+>this : Foo
 >bar : number
 }

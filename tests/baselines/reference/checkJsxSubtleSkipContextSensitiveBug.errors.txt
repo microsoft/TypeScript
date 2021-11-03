@@ -1,0 +1,50 @@
+tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx(13,5): error TS2416: Property 'render' in type 'AsyncLoader<TResult>' is not assignable to the same property in base type 'Component<AsyncLoaderProps<TResult>, {}, any>'.
+  Type '() => null' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'AsyncLoader<TResult>'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => null'.
+            The 'this' types of each signature are incompatible.
+              Type 'AsyncLoader<TResult>' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: ReactNode; }> & Readonly<AsyncLoaderProps<TResult>>' is not assignable to type 'Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<AsyncLoaderProps<TResult>>' is not assignable to type 'Readonly<P>'.
+
+
+==== tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    interface ErrorResult { error: true }
+    
+    interface AsyncLoaderProps<TResult> {
+        readonly prop1: () => Promise<TResult>;
+    
+        readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
+    }
+    
+    class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
+        render() { return null; }
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'AsyncLoader<TResult>' is not assignable to the same property in base type 'Component<AsyncLoaderProps<TResult>, {}, any>'.
+!!! error TS2416:   Type '() => null' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'AsyncLoader<TResult>'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => null'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'AsyncLoader<TResult>' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: ReactNode; }> & Readonly<AsyncLoaderProps<TResult>>' is not assignable to type 'Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<AsyncLoaderProps<TResult>>' is not assignable to type 'Readonly<P>'.
+    }
+    
+    async function load(): Promise<{ success: true } | ErrorResult> {
+        return { success: true };
+    }
+    
+    const loader = <AsyncLoader
+        prop1={load}
+        prop2={result => result}
+    />;
+    

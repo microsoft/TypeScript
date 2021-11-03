@@ -1,0 +1,21 @@
+tests/cases/compiler/constructorArgs.ts(12,3): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Super'.
+
+
+==== tests/cases/compiler/constructorArgs.ts (1 errors) ====
+    interface Options {
+     value: number;
+    }
+    
+    class Super {
+     constructor(value:number) {
+     }
+    }
+    
+    class Sub extends Super {
+     constructor(public options:Options) {
+      super(options.value);
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Super'.
+     } 
+    }
+    

@@ -1,0 +1,39 @@
+tests/cases/compiler/constructorOverloads2.ts(14,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(s: string): FooBase', gave the following error.
+    The 'this' context of type 'void' is not assignable to method's 'this' of type 'FooBase'.
+  Overload 2 of 2, '(n: number): FooBase', gave the following error.
+    The 'this' context of type 'void' is not assignable to method's 'this' of type 'FooBase'.
+
+
+==== tests/cases/compiler/constructorOverloads2.ts (1 errors) ====
+    class FooBase {
+        constructor(s: string);
+        constructor(n: number);
+        constructor(x: any) {
+        }
+        bar1() {  /*WScript.Echo("base bar1");*/ }
+    }
+    
+    class Foo extends FooBase {
+        constructor(s: string);
+        constructor(n: number);
+        constructor(a:any);
+        constructor(x: any, y?: any) {
+            super(x);
+            ~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(s: string): FooBase', gave the following error.
+!!! error TS2769:     The 'this' context of type 'void' is not assignable to method's 'this' of type 'FooBase'.
+!!! error TS2769:   Overload 2 of 2, '(n: number): FooBase', gave the following error.
+!!! error TS2769:     The 'this' context of type 'void' is not assignable to method's 'this' of type 'FooBase'.
+        }
+        bar1() {  /*WScript.Echo("bar1");*/ }
+    }
+    
+    var f1 = new Foo("hey");
+    var f2 = new Foo(0);
+    var f3 = new Foo(f1);
+    var f4 = new Foo([f1,f2,f3]);
+    
+    f1.bar1();
+    

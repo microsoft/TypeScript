@@ -1,12 +1,14 @@
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(13,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(30,9): error TS18033: Only numeric enums can have computed members, but this expression has type '() => number'. If you do not need exhaustiveness checks, consider using an object literal instead.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(54,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(71,13): error TS18033: Only numeric enums can have computed members, but this expression has type '() => number'. If you do not need exhaustiveness checks, consider using an object literal instead.
 tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (6 errors) ====
+==== tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts (8 errors) ====
     // Arrow function used in with statement
     with (window) {
     ~~~~~~~~~~~~~
@@ -22,6 +24,8 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
     class Derived extends Base {
         constructor() {
             super(() => this);
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
         }
     }
     
@@ -69,6 +73,8 @@ tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts(72,20): e
         class Derived extends Base {
             constructor() {
                 super(() => this);
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
             }
         }
     

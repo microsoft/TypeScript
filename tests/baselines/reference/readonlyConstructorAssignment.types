@@ -10,7 +10,7 @@ class A {
         this.x = 0;
 >this.x = 0 : 0
 >this.x : number
->this : this
+>this : A
 >x : number
 >0 : 0
     }
@@ -32,7 +32,7 @@ class B extends A {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : this
+>this : B
 >x : any
 >1 : 1
     }
@@ -55,7 +55,7 @@ class C extends A {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : number
->this : this
+>this : C
 >x : number
 >1 : 1
     }
@@ -70,7 +70,7 @@ class D {
         this.x = 0;
 >this.x = 0 : 0
 >this.x : number
->this : this
+>this : D
 >x : number
 >0 : 0
     }
@@ -92,7 +92,7 @@ class E extends D {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : number
->this : this
+>this : E
 >x : number
 >1 : 1
     }

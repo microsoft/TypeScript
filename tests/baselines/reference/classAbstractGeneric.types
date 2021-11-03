@@ -32,7 +32,7 @@ class E<T> extends A<T> { // error -- doesn't implement bar
     foo() { return this.t; }
 >foo : () => T
 >this.t : T
->this : this
+>this : E<T>
 >t : T
 }
 
@@ -52,7 +52,7 @@ class G<T> extends A<T> {
     foo() { return this.t; }
 >foo : () => T
 >this.t : T
->this : this
+>this : G<T>
 >t : T
 
     bar(t: T) { }

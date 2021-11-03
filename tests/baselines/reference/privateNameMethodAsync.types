@@ -20,7 +20,7 @@ const C = class {
 >await this.#bar() : number
 >this.#bar() : Promise<number>
 >this.#bar : () => Promise<number>
->this : this
+>this : C
 
         return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);
 >b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0) : number
@@ -33,7 +33,7 @@ const C = class {
 >this.#baz().next : (...args: [] | [unknown]) => IteratorResult<number, void>
 >this.#baz() : Generator<number, void, unknown>
 >this.#baz : () => Generator<number, void, unknown>
->this : this
+>this : C
 >next : (...args: [] | [unknown]) => IteratorResult<number, void>
 >value : number | void
 >0 : 0
@@ -46,7 +46,7 @@ const C = class {
 >this.#qux().next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
 >this.#qux() : AsyncGenerator<number, void, unknown>
 >this.#qux : () => AsyncGenerator<number, void, unknown>
->this : this
+>this : C
 >next : (...args: [] | [unknown]) => Promise<IteratorResult<number, void>>
 >value : number | void
 >0 : 0

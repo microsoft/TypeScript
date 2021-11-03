@@ -3,10 +3,10 @@ class A {
 >A : A
 
     foo() {
->foo : () => this
+>foo : () => A
 
         return this;
->this : this
+>this : A
     }
 }
 class B extends A {
@@ -14,10 +14,10 @@ class B extends A {
 >A : A
 
     bar() {
->bar : () => this
+>bar : () => B
 
         return this;
->this : this
+>this : B
     }
 }
 class C extends B {
@@ -25,25 +25,25 @@ class C extends B {
 >B : B
 
     baz() {
->baz : () => this
+>baz : () => C
 
         return this;
->this : this
+>this : C
     }
 }
 var c: C;
 >c : C
 
 var z = c.foo().bar().baz();  // Fluent pattern
->z : C
->c.foo().bar().baz() : C
->c.foo().bar().baz : () => C
->c.foo().bar() : C
->c.foo().bar : () => C
->c.foo() : C
->c.foo : () => C
+>z : any
+>c.foo().bar().baz() : any
+>c.foo().bar().baz : any
+>c.foo().bar() : any
+>c.foo().bar : any
+>c.foo() : A
+>c.foo : () => A
 >c : C
->foo : () => C
->bar : () => C
->baz : () => C
+>foo : () => A
+>bar : any
+>baz : any
 

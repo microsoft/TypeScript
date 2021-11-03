@@ -1,20 +1,30 @@
-tests/cases/compiler/genericWithOpenTypeParameters1.ts(7,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(6,1): error TS2684: The 'this' context of type 'B<number>' is not assignable to method's 'this' of type 'B<T>'.
+  Type 'number' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(7,34): error TS2684: The 'this' context of type 'B<T>' is not assignable to method's 'this' of type 'B<T>'.
+  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/compiler/genericWithOpenTypeParameters1.ts(8,41): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,41): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(10,37): error TS2684: The 'this' context of type 'B<number>' is not assignable to method's 'this' of type 'B<T>'.
 
 
-==== tests/cases/compiler/genericWithOpenTypeParameters1.ts (3 errors) ====
+==== tests/cases/compiler/genericWithOpenTypeParameters1.ts (5 errors) ====
     class B<T> {
        foo(x: T): T { return null; }
     }
     
     var x: B<number>;
     x.foo(1); // no error
+    ~
+!!! error TS2684: The 'this' context of type 'B<number>' is not assignable to method's 'this' of type 'B<T>'.
+!!! error TS2684:   Type 'number' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
     var f = <T>(x: B<T>) => { return x.foo(1); } // error
-                                           ~
-!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
-!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
+                                     ~
+!!! error TS2684: The 'this' context of type 'B<T>' is not assignable to method's 'this' of type 'B<T>'.
+!!! error TS2684:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
                                             ~
 !!! error TS2558: Expected 0 type arguments, but got 1.
@@ -22,4 +32,6 @@ tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,41): error TS2558: Expe
                                             ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     var f4 = (x: B<number>) => { return x.foo(1); } // no error
+                                        ~
+!!! error TS2684: The 'this' context of type 'B<number>' is not assignable to method's 'this' of type 'B<T>'.
     

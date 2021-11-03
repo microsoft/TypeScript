@@ -13,7 +13,7 @@ class Event {
 		 this._listeners = [];
 >this._listeners = [] : undefined[]
 >this._listeners : any[]
->this : this
+>this : Event
 >_listeners : any[]
 >[] : undefined[]
 
@@ -31,7 +31,7 @@ class Event {
 >this._listeners.push(listener) : number
 >this._listeners.push : (...items: any[]) => number
 >this._listeners : any[]
->this : this
+>this : Event
 >_listeners : any[]
 >push : (...items: any[]) => number
 >listener : () => any

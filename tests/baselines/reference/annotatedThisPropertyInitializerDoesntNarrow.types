@@ -13,7 +13,7 @@ export class C {
         this.assets = {};
 >this.assets = {} : {}
 >this.assets : { [assetName: string]: number; }
->this : this
+>this : C
 >assets : { [assetName: string]: number; }
 >{} : {}
     }
@@ -24,7 +24,7 @@ export class C {
 >mappy(this.assets) : void
 >mappy : (map: { [s: string]: number; }) => void
 >this.assets : { [assetName: string]: number; }
->this : this
+>this : C
 >assets : { [assetName: string]: number; }
     }
 }

@@ -1,3 +1,14 @@
+tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(10,9): error TS2416: Property 'render' in type 'MyComponent' is not assignable to the same property in base type 'Component<P, {}, any>'.
+  Type '() => Element' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'MyComponent'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'MyComponent' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
   'P' could be instantiated with an arbitrary type which could be unrelated to '{}'.
 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No overload matches this call.
@@ -7,7 +18,7 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No o
     Type '{}' is not assignable to type 'Readonly<P>'.
 
 
-==== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx (2 errors) ====
+==== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx (3 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import React from 'react';
@@ -18,6 +29,18 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No o
         };
         class MyComponent extends React.Component<P> {
             render() {
+            ~~~~~~
+!!! error TS2416: Property 'render' in type 'MyComponent' is not assignable to the same property in base type 'Component<P, {}, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'MyComponent'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'MyComponent' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
                 return <>hello</>;
             }
         }

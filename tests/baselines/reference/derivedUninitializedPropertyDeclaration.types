@@ -110,7 +110,7 @@ class G extends E {
         this.p1 = 'z'
 >this.p1 = 'z' : "z"
 >this.p1 : "z"
->this : this
+>this : G
 >p1 : "z"
 >'z' : "z"
     }
@@ -163,7 +163,7 @@ class L {
         this.a = arg;
 >this.a = arg : any
 >this.a : any
->this : this
+>this : L
 >a : any
 >arg : any
     }
@@ -189,7 +189,7 @@ class M extends L {
 >console : Console
 >log : (...data: any[]) => void
 >this.a : number
->this : this
+>this : M
 >a : number
     }
 }

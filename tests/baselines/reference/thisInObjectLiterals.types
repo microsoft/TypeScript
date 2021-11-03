@@ -13,17 +13,17 @@ class MyClass {
 
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
->t : { x: this; y: number; }
->{ x: this, y: this.t } : { x: this; y: number; }
->x : this
->this : this
+>t : { x: MyClass; y: number; }
+>{ x: this, y: this.t } : { x: MyClass; y: number; }
+>x : MyClass
+>this : MyClass
 >y : number
 >this.t : number
->this : this
+>this : MyClass
 >t : number
 
         var t: { x: ContainingThis; y: number };
->t : { x: this; y: number; }
+>t : { x: MyClass; y: number; }
 >x : this
 >y : number
     }

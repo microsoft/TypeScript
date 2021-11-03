@@ -8,7 +8,7 @@ class C {
         this.m();
 >this.m() : void
 >this.m : () => void
->this : this
+>this : C
 >m : () => void
 
         function f() {

@@ -67,7 +67,7 @@ class C {
                 return this.f + 6
 >this.f + 6 : any
 >this.f : any
->this : this
+>this : CC
 >f : any
 >6 : 6
             }

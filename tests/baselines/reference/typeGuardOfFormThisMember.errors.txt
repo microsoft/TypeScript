@@ -2,6 +2,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(4,10
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(19,55): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'FileSystemObject'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(34,8): error TS2339: Property 'content' does not exist on type 'FileSystemObject'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(36,9): error TS2339: Property 'host' does not exist on type 'FileSystemObject'.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(37,9): error TS2339: Property 'content' does not exist on type 'FileSystemObject'.
@@ -15,7 +16,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(70,1
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(79,11): error TS2339: Property 'do' does not exist on type 'SpecificGuard'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts (15 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts (16 errors) ====
     // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
     namespace Test {
     	export class FileSystemObject {
@@ -43,6 +44,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(79,1
     
     	export class File extends FileSystemObject {
     		constructor(path: string, public content: string) { super(path); }
+    		                                                    ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'FileSystemObject'.
     	}
     	export class Directory extends FileSystemObject {
     		children: FileSystemObject[];

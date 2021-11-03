@@ -1,0 +1,16 @@
+tests/cases/compiler/superCallWithCommentEmit01.ts(8,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/compiler/superCallWithCommentEmit01.ts (1 errors) ====
+    class A {
+        constructor(public text: string) { }
+    }
+    
+    class B extends A {
+        constructor(text: string) {
+            // this is subclass constructor
+            super(text)
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+         }
+    }

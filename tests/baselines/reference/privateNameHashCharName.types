@@ -12,7 +12,7 @@ class C {
 
         this.#
 >this.# : any
->this : this
+>this : C
     }
 }
 

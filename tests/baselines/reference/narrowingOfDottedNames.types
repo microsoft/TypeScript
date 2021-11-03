@@ -116,7 +116,7 @@ class Foo1
     constructor() {
         if (this instanceof Boolean) {
 >this instanceof Boolean : boolean
->this : this
+>this : Foo1
 >Boolean : BooleanConstructor
         }
     }

@@ -21,7 +21,7 @@ class C {
         this.member = {};
 >this.member = {} : {}
 >this.member : any
->this : this
+>this : C
 >member : any
 >{} : {}
 
@@ -29,7 +29,7 @@ class C {
 >this.member.a = 0 : 0
 >this.member.a : error
 >this.member : {}
->this : this
+>this : C
 >member : {}
 >a : any
 >0 : 0

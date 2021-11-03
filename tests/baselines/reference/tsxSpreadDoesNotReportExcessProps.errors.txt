@@ -1,0 +1,36 @@
+tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx(6,5): error TS2416: Property 'render' in type 'MyComponent' is not assignable to the same property in base type 'Component<{ dataSource: number[]; onClick?: any; }, {}, any>'.
+  Type '() => Element' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'MyComponent'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'MyComponent' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>' is not assignable to type 'Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>' is not assignable to type 'Readonly<P>'.
+
+
+==== tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    import React from "react";
+    
+    class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
+        render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'MyComponent' is not assignable to the same property in base type 'Component<{ dataSource: number[]; onClick?: any; }, {}, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'MyComponent'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'MyComponent' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>' is not assignable to type 'Readonly<{ children?: ReactNode; }> & Readonly<P>'.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>' is not assignable to type 'Readonly<P>'.
+            return (<div {...this.props} className="ok"></div>);
+        }
+    }
+    

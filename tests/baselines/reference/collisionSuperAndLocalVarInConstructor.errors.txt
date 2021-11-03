@@ -1,0 +1,29 @@
+tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
+tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts(15,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
+
+
+==== tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts (2 errors) ====
+    var _super = 10; // No Error
+    class Foo {
+        constructor() {
+            var _super = 10; // No error
+        }
+    }
+    class b extends Foo {
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
+            var _super = 10; // Should be error 
+        }
+    }
+    class c extends Foo {
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
+            var x = () => {
+                var _super = 10; // Should be error
+            }
+        }
+    }

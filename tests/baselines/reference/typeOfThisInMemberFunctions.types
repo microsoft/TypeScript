@@ -6,8 +6,8 @@ class C {
 >foo : () => void
 
         var r = this;
->r : this
->this : this
+>r : C
+>this : C
     }
 
     static bar() {
@@ -29,8 +29,8 @@ class D<T> {
 >foo : () => void
 
         var r = this;
->r : this
->this : this
+>r : D<T>
+>this : D<T>
     }
 
     static bar() {
@@ -52,8 +52,8 @@ class E<T extends Date> {
 >foo : () => void
 
         var r = this;
->r : this
->this : this
+>r : E<T>
+>this : E<T>
     }
 
     static bar() {

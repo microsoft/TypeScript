@@ -1,0 +1,38 @@
+tests/cases/compiler/typeInferenceReturnTypeCallback.ts(13,45): error TS2345: Argument of type '(t: T, acc: Nil<U>) => Cons<U>' is not assignable to parameter of type '(t: T, acc: Nil<U>) => Nil<U>'.
+  Call signature return types 'Cons<U>' and 'Nil<U>' are incompatible.
+    The types of 'map' are incompatible between these types.
+      Type '<U>(f: (t: U) => U) => IList<U>' is not assignable to type '<D>(f: (t: U) => D) => IList<D>'.
+        The 'this' types of each signature are incompatible.
+          Property 'foldRight' is missing in type 'Nil<C>' but required in type 'Cons<T>'.
+
+
+==== tests/cases/compiler/typeInferenceReturnTypeCallback.ts (1 errors) ====
+    interface IList<A> {
+        map<B>(f: (t: A) => B): IList<B>;
+    }
+    
+    class Nil<C> implements IList<C>{
+        map<D>(f: (t: C) => D): IList<D> {
+            return null;
+        }
+    }
+    
+    class Cons<T> implements IList<T>{
+        map<U>(f: (t: T) => U): IList<U> {
+            return this.foldRight(new Nil<U>(), (t, acc) => {
+                                                ~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(t: T, acc: Nil<U>) => Cons<U>' is not assignable to parameter of type '(t: T, acc: Nil<U>) => Nil<U>'.
+!!! error TS2345:   Call signature return types 'Cons<U>' and 'Nil<U>' are incompatible.
+!!! error TS2345:     The types of 'map' are incompatible between these types.
+!!! error TS2345:       Type '<U>(f: (t: U) => U) => IList<U>' is not assignable to type '<D>(f: (t: U) => D) => IList<D>'.
+!!! error TS2345:         The 'this' types of each signature are incompatible.
+!!! error TS2345:           Property 'foldRight' is missing in type 'Nil<C>' but required in type 'Cons<T>'.
+!!! related TS2728 tests/cases/compiler/typeInferenceReturnTypeCallback.ts:18:5: 'foldRight' is declared here.
+                return new Cons<U>();
+            });
+        }
+    
+        foldRight<E>(z: E, f: (t: T, acc: E) => E): E {
+            return null;
+        }
+    }

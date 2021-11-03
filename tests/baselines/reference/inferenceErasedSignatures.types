@@ -51,13 +51,13 @@ type RType<T> = T extends SomeAbstractClass<any, any, infer R> ? R : never;
 >RType : RType<T>
 
 type SomeClassC = CType<SomeClass>; // number
->SomeClassC : number
+>SomeClassC : never
 
 type SomeClassM = MType<SomeClass>; // string
->SomeClassM : string
+>SomeClassM : never
 
 type SomeClassR = RType<SomeClass>; // boolean
->SomeClassR : boolean
+>SomeClassR : never
 
 // Repro from #37163
 

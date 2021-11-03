@@ -8,11 +8,11 @@ class C {
     constructor () {
         this?.#foo;
 >this?.#foo : any
->this : this
+>this : C
 
         this?.#bar;
 >this?.#bar : any
->this : this
+>this : C
     }
 }
 

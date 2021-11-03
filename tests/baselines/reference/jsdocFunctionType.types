@@ -45,7 +45,7 @@ class C {
         this.length = n;
 >this.length = n : number
 >this.length : any
->this : this
+>this : C
 >length : any
 >n : number
     }

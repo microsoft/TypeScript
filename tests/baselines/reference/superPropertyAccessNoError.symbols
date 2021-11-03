@@ -153,9 +153,7 @@ let instance = new SomeDerivedClass();
 >SomeDerivedClass : Symbol(SomeDerivedClass, Decl(superPropertyAccessNoError.ts, 20, 1))
 
 instance.returnThis().fn();
->instance.returnThis().fn : Symbol(SomeDerivedClass.fn, Decl(superPropertyAccessNoError.ts, 27, 5))
 >instance.returnThis : Symbol(SomeDerivedClass.returnThis, Decl(superPropertyAccessNoError.ts, 60, 5))
 >instance : Symbol(instance, Decl(superPropertyAccessNoError.ts, 67, 3))
 >returnThis : Symbol(SomeDerivedClass.returnThis, Decl(superPropertyAccessNoError.ts, 60, 5))
->fn : Symbol(SomeDerivedClass.fn, Decl(superPropertyAccessNoError.ts, 27, 5))
 

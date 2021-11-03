@@ -9,7 +9,7 @@ class D extends null {
     constructor() {
         this._t;
 >this._t : any
->this : this
+>this : D
 >_t : any
 
         super();
@@ -32,7 +32,7 @@ class E extends null {
 
         this._t;
 >this._t : any
->this : this
+>this : E
 >_t : any
     }
 }

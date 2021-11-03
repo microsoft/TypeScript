@@ -19,7 +19,7 @@ class A {
     this.#x = v;
 >this.#x = v : number
 >this.#x : number
->this : this
+>this : A
 >v : number
   }
 
@@ -28,7 +28,7 @@ class A {
 
     return this.#x;
 >this.#x : number
->this : this
+>this : A
   }
 
   static {

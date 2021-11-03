@@ -4,9 +4,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(78,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'L'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (6 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (7 errors) ====
     class A {
         property = 'x';
         m() { return 1 }
@@ -97,6 +98,8 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
         declare a: number;
         constructor(arg: number) {
             super(arg);
+            ~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'L'.
             console.log(this.a);  // should be OK, M.a is ambient
         }
     }

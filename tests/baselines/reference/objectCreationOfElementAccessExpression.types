@@ -11,7 +11,7 @@ class Food {
         this.amount = 100;
 >this.amount = 100 : 100
 >this.amount : number
->this : this
+>this : Food
 >amount : number
 >100 : 100
     }
@@ -22,21 +22,21 @@ class Food {
         this.amount -= amountToEat;
 >this.amount -= amountToEat : number
 >this.amount : number
->this : this
+>this : Food
 >amount : number
 >amountToEat : number
 
         if (this.amount <= 0) {
 >this.amount <= 0 : boolean
 >this.amount : number
->this : this
+>this : Food
 >amount : number
 >0 : 0
 
             this.amount = 0;
 >this.amount = 0 : 0
 >this.amount : number
->this : this
+>this : Food
 >amount : number
 >0 : 0
 

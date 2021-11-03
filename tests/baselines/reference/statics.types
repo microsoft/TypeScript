@@ -16,7 +16,7 @@ module M {
             this.x = C.y+this.c1+this.c2+c3;
 >this.x = C.y+this.c1+this.c2+c3 : number
 >this.x : number
->this : this
+>this : C
 >x : number
 >C.y+this.c1+this.c2+c3 : number
 >C.y+this.c1+this.c2 : number
@@ -25,17 +25,17 @@ module M {
 >C : typeof C
 >y : number
 >this.c1 : number
->this : this
+>this : C
 >c1 : number
 >this.c2 : number
->this : this
+>this : C
 >c2 : number
 >c3 : number
 
             this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub);
 >this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
 >this.g : any
->this : this
+>this : C
 >g : any
 >(v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
 >v : number
@@ -49,17 +49,17 @@ module M {
 >this.x+C.y+v : number
 >this.x+C.y : number
 >this.x : number
->this : this
+>this : C
 >x : number
 >C.y : number
 >C : typeof C
 >y : number
 >v : number
 >this.c1 : number
->this : this
+>this : C
 >c1 : number
 >this.c2 : number
->this : this
+>this : C
 >c2 : number
 >C.pub : number
 >C : typeof C

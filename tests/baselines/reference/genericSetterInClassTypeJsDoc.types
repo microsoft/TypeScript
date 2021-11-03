@@ -15,7 +15,7 @@
         this.#value = initialValue;
 >this.#value = initialValue : T
 >this.#value : T
->this : this
+>this : Box<T>
 >initialValue : T
     }
     
@@ -25,7 +25,7 @@
 
         return this.#value;
 >this.#value : T
->this : this
+>this : Box<T>
     }
 
     set value(value) {
@@ -35,7 +35,7 @@
         this.#value = value;
 >this.#value = value : T
 >this.#value : T
->this : this
+>this : Box<T>
 >value : T
     }
 }

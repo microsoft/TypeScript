@@ -1,8 +1,12 @@
-tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts(8,7): error TS2415: Class 'DerivedClass' incorrectly extends base class 'BaseClass'.
-  Types have separate declarations of a private property '_init'.
+tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts(10,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BaseClass'.
+tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts(12,13): error TS2416: Property '_init' in type 'DerivedClass' is not assignable to the same property in base type 'BaseClass'.
+  Type '() => void' is not assignable to type '() => void'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'BaseClass' is not assignable to type 'DerivedClass'.
+        Types have separate declarations of a private property '_init'.
 
 
-==== tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts (1 errors) ====
+==== tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts (2 errors) ====
     class BaseClass {
         constructor() {
             this._init();
@@ -11,13 +15,18 @@ tests/cases/compiler/derivedClassOverridesPrivateFunction1.ts(8,7): error TS2415
         }
     }
     class DerivedClass extends BaseClass {
-          ~~~~~~~~~~~~
-!!! error TS2415: Class 'DerivedClass' incorrectly extends base class 'BaseClass'.
-!!! error TS2415:   Types have separate declarations of a private property '_init'.
         constructor() {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BaseClass'.
         }
         private _init() {
+                ~~~~~
+!!! error TS2416: Property '_init' in type 'DerivedClass' is not assignable to the same property in base type 'BaseClass'.
+!!! error TS2416:   Type '() => void' is not assignable to type '() => void'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'BaseClass' is not assignable to type 'DerivedClass'.
+!!! error TS2416:         Types have separate declarations of a private property '_init'.
         }
     }
     new DerivedClass();

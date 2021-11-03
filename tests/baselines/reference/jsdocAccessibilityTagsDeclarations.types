@@ -10,7 +10,7 @@ class Protected {
         this.c = c
 >this.c = c : any
 >this.c : any
->this : this
+>this : Protected
 >c : any
 >c : any
     }
@@ -20,14 +20,14 @@ class Protected {
 
         return this.c
 >this.c : any
->this : this
+>this : Protected
 >c : any
     }
     /** @protected */
     get p() { return this.c }
 >p : any
 >this.c : any
->this : this
+>this : Protected
 >c : any
 
     /** @protected */
@@ -36,7 +36,7 @@ class Protected {
 >value : any
 >this.c = value : any
 >this.c : any
->this : this
+>this : Protected
 >c : any
 >value : any
 }
@@ -52,7 +52,7 @@ class Private {
         this.c = c
 >this.c = c : any
 >this.c : any
->this : this
+>this : Private
 >c : any
 >c : any
     }
@@ -62,14 +62,14 @@ class Private {
 
         return this.c
 >this.c : any
->this : this
+>this : Private
 >c : any
     }
     /** @private */
     get p() { return this.c }
 >p : any
 >this.c : any
->this : this
+>this : Private
 >c : any
 
     /** @private */
@@ -78,7 +78,7 @@ class Private {
 >value : any
 >this.c = value : any
 >this.c : any
->this : this
+>this : Private
 >c : any
 >value : any
 }

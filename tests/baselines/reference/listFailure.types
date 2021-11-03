@@ -24,7 +24,7 @@ module Editor {
 >this.lines.add(line) : List<Line>
 >this.lines.add : (data: Line) => List<Line>
 >this.lines : List<Line>
->this : this
+>this : Buffer
 >lines : List<Line>
 >add : (data: Line) => List<Line>
 >line : Line
@@ -70,7 +70,7 @@ module Editor {
             this.next = ListMakeEntry(data);
 >this.next = ListMakeEntry(data) : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 >ListMakeEntry(data) : List<T>
 >ListMakeEntry : <U>(data: U) => List<U>
@@ -78,7 +78,7 @@ module Editor {
 
             return this.next;
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
         }
 
@@ -91,7 +91,7 @@ module Editor {
 >ListRemoveEntry(this.next) : List<T>
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
         }      
     }

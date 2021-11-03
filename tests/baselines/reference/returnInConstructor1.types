@@ -30,7 +30,7 @@ class C {
 
     constructor() {
         return this;
->this : this
+>this : C
     }
 }
 
@@ -90,7 +90,7 @@ class G {
         this.test = 2;
 >this.test = 2 : 2
 >this.test : number
->this : this
+>this : G
 >test : number
 >2 : 2
     }

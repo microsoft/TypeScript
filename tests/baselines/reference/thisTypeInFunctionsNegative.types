@@ -24,7 +24,7 @@ class C {
         return this.n + m;
 >this.n + m : number
 >this.n : number
->this : this
+>this : C
 >n : number
 >m : number
     }

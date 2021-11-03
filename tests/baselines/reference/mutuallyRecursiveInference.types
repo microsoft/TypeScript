@@ -17,7 +17,7 @@ class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {
     m() { this.a }
 >m : () => void
 >this.a : RT[RT["a"]]
->this : this
+>this : L<RT>
 >a : RT[RT["a"]]
 }
 class X extends L<X> {
@@ -35,7 +35,7 @@ class X extends L<X> {
 
         this.a
 >this.a : "a" | "b"
->this : this
+>this : X
 >a : "a" | "b"
     }
 }

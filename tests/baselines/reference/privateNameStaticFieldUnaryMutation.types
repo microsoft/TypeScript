@@ -85,7 +85,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         this.getClass().#test--;
@@ -93,7 +93,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         ++this.getClass().#test;
@@ -101,7 +101,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         --this.getClass().#test;
@@ -109,7 +109,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         const a = this.getClass().#test++;
@@ -118,7 +118,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         const b = this.getClass().#test--;
@@ -127,7 +127,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         const c = ++this.getClass().#test;
@@ -136,7 +136,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         const d = --this.getClass().#test;
@@ -145,7 +145,7 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         for (this.getClass().#test = 0; this.getClass().#test < 10; ++this.getClass().#test) {}
@@ -153,21 +153,21 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 >0 : 0
 >this.getClass().#test < 10 : boolean
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 >10 : 10
 >++this.getClass().#test : number
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 
         for (this.getClass().#test = 0; this.getClass().#test < 10; this.getClass().#test++) {}
@@ -175,21 +175,21 @@ class C {
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 >0 : 0
 >this.getClass().#test < 10 : boolean
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
 >10 : 10
 >this.getClass().#test++ : number
 >this.getClass().#test : number
 >this.getClass() : typeof C
 >this.getClass : () => typeof C
->this : this
+>this : C
 >getClass : () => typeof C
     }
     getClass() { return C; }

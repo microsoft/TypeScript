@@ -295,17 +295,17 @@ class C2 extends Mixed1 {
 
         this.a;
 >this.a : number
->this : this
+>this : C2
 >a : number
 
         this.b;
 >this.b : number
->this : this
+>this : C2
 >b : number
 
         this.p;
 >this.p : number
->this : this
+>this : C2
 >p : number
     }
 }
@@ -322,23 +322,23 @@ class C3 extends Mixed3 {
 
         this.a;
 >this.a : number
->this : this
+>this : C3
 >a : number
 
         this.b;
 >this.b : number
->this : this
+>this : C3
 >b : number
 
         this.p;
 >this.p : number
->this : this
+>this : C3
 >p : number
 
         this.f();
 >this.f() : number
 >this.f : () => number
->this : this
+>this : C3
 >f : () => number
     }
     f() { return super.f(); }

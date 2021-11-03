@@ -1,0 +1,21 @@
+tests/cases/compiler/accessOverriddenBaseClassMember1.ts(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Point'.
+
+
+==== tests/cases/compiler/accessOverriddenBaseClassMember1.ts (1 errors) ====
+    class Point {
+        constructor(public x: number, public y: number) { }
+        public toString() {
+            return "x=" + this.x + " y=" + this.y;
+        }
+    }
+    class ColoredPoint extends Point {
+        constructor(x: number, y: number, public color: string) {
+            super(x, y);
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Point'.
+        }
+        public toString() {
+            return super.toString() + " color=" + this.color;
+        }
+    }
+    

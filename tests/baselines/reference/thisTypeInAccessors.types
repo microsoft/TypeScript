@@ -140,7 +140,7 @@ class Contextual {
     get x() { return this.n } // inside a class, so already correct
 >x : number
 >this.n : number
->this : this
+>this : Contextual
 >n : number
 }
 

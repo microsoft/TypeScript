@@ -19,7 +19,7 @@ class Base {
 >x : number
 >this.a = x : number
 >this.a : number
->this : this
+>this : Base
 >a : number
 >x : number
 }
@@ -82,7 +82,7 @@ class Base2<T> {
 >x : T
 >this.a = x : T
 >this.a : T
->this : this
+>this : Base2<T>
 >a : T
 >x : T
 }

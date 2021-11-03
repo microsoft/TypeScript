@@ -27,7 +27,7 @@ export default class B<T: BaseA> {
         this._AClass = AClass;
 >this._AClass = AClass : Class<T>
 >this._AClass : Class<T>
->this : this
+>this : B<T, BaseA>
 >_AClass : Class<T>
 >AClass : Class<T>
     }

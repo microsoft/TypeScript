@@ -17,7 +17,7 @@ export class A {
 >console : Console
 >log : (...data: any[]) => void
 >this.#used : string
->this : this
+>this : A
     }
 }
 
@@ -38,7 +38,7 @@ export class A2 {
 >log : (...data: any[]) => void
 >this.#used() : void
 >this.#used : () => void
->this : this
+>this : A2
     }
 }
 
@@ -68,6 +68,6 @@ export class A3 {
 >console : Console
 >log : (...data: any[]) => void
 >this.#used : number
->this : this
+>this : A3
     }
 }

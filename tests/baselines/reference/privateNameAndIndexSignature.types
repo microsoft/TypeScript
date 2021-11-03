@@ -22,13 +22,13 @@ class A {
         this.#f = 3           // Error (index signatures do not implicitly declare private names)
 >this.#f = 3 : 3
 >this.#f : any
->this : this
+>this : A
 >3 : 3
 
         this["#foo"] = 3;     // Okay (type has index signature and "#foo" does not collide with private identifier #foo)
 >this["#foo"] = 3 : 3
 >this["#foo"] : any
->this : this
+>this : A
 >"#foo" : "#foo"
 >3 : 3
 

@@ -1,9 +1,11 @@
 tests/cases/conformance/override/override8.ts(6,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
 tests/cases/conformance/override/override8.ts(18,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'BB'.
+tests/cases/conformance/override/override8.ts(19,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BB'.
 tests/cases/conformance/override/override8.ts(24,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'BB'.
+tests/cases/conformance/override/override8.ts(27,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BB'.
 
 
-==== tests/cases/conformance/override/override8.ts (3 errors) ====
+==== tests/cases/conformance/override/override8.ts (5 errors) ====
     class B {
         a: string
     }
@@ -27,6 +29,8 @@ tests/cases/conformance/override/override8.ts(24,12): error TS4114: This member 
                     ~~~~~~~~~~~~~~~~
 !!! error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'BB'.
             super(a)
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BB'.
         }
     }
     
@@ -37,6 +41,8 @@ tests/cases/conformance/override/override8.ts(24,12): error TS4114: This member 
     
         constructor(a: string) {
             super(a)
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BB'.
             this.a = a
         }
     }

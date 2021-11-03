@@ -4,7 +4,7 @@ class George extends class { reset() { return this.y; } } {
 >class { reset() { return this.y; } } : (Anonymous class)
 >reset : () => any
 >this.y : any
->this : this
+>this : (Anonymous class)
 >y : any
 
     constructor() {

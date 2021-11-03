@@ -43,7 +43,7 @@ class C extends B {
 >x : any
 >z : any
 >this.y : number
->this : this
+>this : C
 >y : number
 
     public liftxylocllz () { return x+z+this.y+this.ll; }
@@ -54,10 +54,10 @@ class C extends B {
 >x : any
 >z : any
 >this.y : number
->this : this
+>this : C
 >y : number
 >this.ll : number
->this : this
+>this : C
 >ll : number
 }
 

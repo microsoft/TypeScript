@@ -6,7 +6,7 @@ class Entry {
         this.c = 1
 >this.c = 1 : 1
 >this.c : any
->this : this
+>this : Entry
 >c : any
 >1 : 1
     }
@@ -29,7 +29,7 @@ class Group {
         this.d = 'no'
 >this.d = 'no' : "no"
 >this.d : any
->this : this
+>this : Group
 >d : any
 >'no' : "no"
     }

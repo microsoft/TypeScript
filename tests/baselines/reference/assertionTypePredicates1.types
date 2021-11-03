@@ -372,7 +372,7 @@ class Test {
 
         return this instanceof Test2;
 >this instanceof Test2 : boolean
->this : this
+>this : Test
 >Test2 : typeof Test2
     }
     assertIsTest2(): asserts this is Test2 {
@@ -380,7 +380,7 @@ class Test {
 
         if (this instanceof Test2) return;
 >this instanceof Test2 : boolean
->this : this
+>this : Test
 >Test2 : typeof Test2
 
         throw new Error();
@@ -392,7 +392,7 @@ class Test {
 
         if (!this) return;
 >!this : false
->this : this
+>this : Test
 
         throw new Error();
 >new Error() : Error
@@ -404,11 +404,11 @@ class Test {
         this.assertThis();
 >this.assertThis() : void
 >this.assertThis : () => asserts this
->this : this
+>this : Test
 >assertThis : () => asserts this
 
         this;
->this : this
+>this : Test
     }
     foo(x: unknown) {
 >foo : (x: unknown) => void
@@ -417,7 +417,7 @@ class Test {
         this.assert(typeof x === "string");
 >this.assert(typeof x === "string") : void
 >this.assert : (value: unknown) => asserts value
->this : this
+>this : Test
 >assert : (value: unknown) => asserts value
 >typeof x === "string" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -432,23 +432,23 @@ class Test {
         if (this.isTest2()) {
 >this.isTest2() : boolean
 >this.isTest2 : () => this is Test2
->this : this
+>this : Test
 >isTest2 : () => this is Test2
 
             this.z;
 >this.z : number
->this : this & Test2
+>this : Test2
 >z : number
         }
         this.assertIsTest2();
 >this.assertIsTest2() : void
 >this.assertIsTest2 : () => asserts this is Test2
->this : this
+>this : Test
 >assertIsTest2 : () => asserts this is Test2
 
         this.z;
 >this.z : number
->this : this & Test2
+>this : Test2
 >z : number
     }
     baz(x: number) {
@@ -458,7 +458,7 @@ class Test {
         this.assert(false);
 >this.assert(false) : void
 >this.assert : (value: unknown) => asserts value
->this : this
+>this : Test
 >assert : (value: unknown) => asserts value
 >false : false
 

@@ -1,0 +1,21 @@
+tests/cases/compiler/promiseTypeInference.ts(10,11): error TS2684: The 'this' context of type 'CPromise<string>' is not assignable to method's 'this' of type 'CPromise<T>'.
+  Type 'string' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+
+
+==== tests/cases/compiler/promiseTypeInference.ts (1 errors) ====
+    declare class CPromise<T> {
+        then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
+    }
+    interface IPromise<T> {
+        then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
+    }
+    declare function load(name: string): CPromise<string>;
+    declare function convert(s: string): IPromise<number>;
+    
+    var $$x = load("something").then(s => convert(s));
+              ~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'CPromise<string>' is not assignable to method's 'this' of type 'CPromise<T>'.
+!!! error TS2684:   Type 'string' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+    

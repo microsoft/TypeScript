@@ -36,7 +36,7 @@ class A extends Err {
         return this.payload + "!";
 >this.payload + "!" : string
 >this.payload : string
->this : this
+>this : A
 >payload : string
 >"!" : "!"
     }
@@ -68,7 +68,7 @@ class B extends Err {
         this.wat = 12
 >this.wat = 12 : 12
 >this.wat : any
->this : this
+>this : B
 >wat : any
 >12 : 12
     }
@@ -77,17 +77,17 @@ class B extends Err {
 
         this.wat
 >this.wat : number
->this : this
+>this : B
 >wat : number
 
         this.wit
 >this.wit : any
->this : this
+>this : B
 >wit : any
 
         this['wot']
 >this['wot'] : any
->this : this
+>this : B
 >'wot' : "wot"
 
         super.alsoBad

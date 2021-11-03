@@ -20,7 +20,7 @@ class class1 {
                 return callback(this);
 >callback(this) : any
 >callback : any
->this : this
+>this : class1
             }
         }
     }
@@ -47,7 +47,7 @@ class class2 {
                 return callback(this);
 >callback(this) : any
 >callback : any
->this : this
+>this : class2
             }
         }
     }

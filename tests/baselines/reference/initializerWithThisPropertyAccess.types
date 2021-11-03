@@ -30,7 +30,7 @@ class A {
         this.a = 1;
 >this.a = 1 : 1
 >this.a : number
->this : this
+>this : A
 >a : number
 >1 : 1
     }
@@ -80,7 +80,7 @@ class Foo {
         this.bar = new Bar();
 >this.bar = new Bar() : Bar
 >this.bar : Bar
->this : this
+>this : Foo
 >bar : Bar
 >new Bar() : Bar
 >Bar : typeof Bar

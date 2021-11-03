@@ -15,7 +15,7 @@ class bar extends foo {
 
         this.
 >this. : any
->this : this
+>this : bar
     }
 > : any
 }

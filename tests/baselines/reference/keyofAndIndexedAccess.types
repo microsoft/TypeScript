@@ -353,7 +353,7 @@ class Component<PropType> {
         return this.props[key];
 >this.props[key] : PropType[K]
 >this.props : PropType
->this : this
+>this : Component<PropType>
 >props : PropType
 >key : K
     }
@@ -366,7 +366,7 @@ class Component<PropType> {
 >this.props[key] = value : PropType[K]
 >this.props[key] : PropType[K]
 >this.props : PropType
->this : this
+>this : Component<PropType>
 >props : PropType
 >key : K
 >value : PropType[K]
@@ -1114,12 +1114,12 @@ class C1 {
 >x : number
 
     get<K extends keyof this>(key: K) {
->get : <K extends keyof this>(key: K) => this[K]
+>get : <K extends keyof this>(key: K) => any
 >key : K
 
         return this[key];
->this[key] : this[K]
->this : this
+>this[key] : any
+>this : C1
 >key : K
     }
     set<K extends keyof this>(key: K, value: this[K]) {
@@ -1129,8 +1129,8 @@ class C1 {
 
         this[key] = value;
 >this[key] = value : this[K]
->this[key] : this[K]
->this : this
+>this[key] : any
+>this : C1
 >key : K
 >value : this[K]
     }
@@ -1140,56 +1140,56 @@ class C1 {
         let x1 = this.x;  // number
 >x1 : number
 >this.x : number
->this : this
+>this : C1
 >x : number
 
         let x2 = this["x"];  // number
 >x2 : number
 >this["x"] : number
->this : this
+>this : C1
 >"x" : "x"
 
         let x3 = this.get("x");  // this["x"]
->x3 : this["x"]
->this.get("x") : this["x"]
->this.get : <K extends keyof this>(key: K) => this[K]
->this : this
->get : <K extends keyof this>(key: K) => this[K]
+>x3 : any
+>this.get("x") : any
+>this.get : <K extends keyof C1>(key: K) => any
+>this : C1
+>get : <K extends keyof C1>(key: K) => any
 >"x" : "x"
 
         let x4 = getProperty(this, "x"); // this["x"]
->x4 : this["x"]
->getProperty(this, "x") : this["x"]
+>x4 : number
+>getProperty(this, "x") : number
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->this : this
+>this : C1
 >"x" : "x"
 
         this.x = 42;
 >this.x = 42 : 42
 >this.x : number
->this : this
+>this : C1
 >x : number
 >42 : 42
 
         this["x"] = 42;
 >this["x"] = 42 : 42
 >this["x"] : number
->this : this
+>this : C1
 >"x" : "x"
 >42 : 42
 
         this.set("x", 42);
 >this.set("x", 42) : void
->this.set : <K extends keyof this>(key: K, value: this[K]) => void
->this : this
->set : <K extends keyof this>(key: K, value: this[K]) => void
+>this.set : <K extends keyof C1>(key: K, value: C1[K]) => void
+>this : C1
+>set : <K extends keyof C1>(key: K, value: C1[K]) => void
 >"x" : "x"
 >42 : 42
 
         setProperty(this, "x", 42);
 >setProperty(this, "x", 42) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->this : this
+>this : C1
 >"x" : "x"
 >42 : 42
     }
@@ -1315,12 +1315,12 @@ class Base {
 >Base : Base
 
     get<K extends keyof this>(prop: K) {
->get : <K extends keyof this>(prop: K) => this[K]
+>get : <K extends keyof this>(prop: K) => any
 >prop : K
 
         return this[prop];
->this[prop] : this[K]
->this : this
+>this[prop] : any
+>this : Base
 >prop : K
     }
     set<K extends keyof this>(prop: K, value: this[K]) {
@@ -1330,8 +1330,8 @@ class Base {
 
         this[prop] = value;
 >this[prop] = value : this[K]
->this[prop] : this[K]
->this : this
+>this[prop] : any
+>this : Base
 >prop : K
 >value : this[K]
     }
@@ -1353,20 +1353,20 @@ class Person extends Base {
 
         this.set("parts", parts);
 >this.set("parts", parts) : void
->this.set : <K extends keyof this>(prop: K, value: this[K]) => void
->this : this
->set : <K extends keyof this>(prop: K, value: this[K]) => void
+>this.set : <K extends keyof Person>(prop: K, value: Person[K]) => void
+>this : Person
+>set : <K extends keyof Person>(prop: K, value: Person[K]) => void
 >"parts" : "parts"
 >parts : number
     }
     getParts() {
->getParts : () => this["parts"]
+>getParts : () => any
 
         return this.get("parts")
->this.get("parts") : this["parts"]
->this.get : <K extends keyof this>(prop: K) => this[K]
->this : this
->get : <K extends keyof this>(prop: K) => this[K]
+>this.get("parts") : any
+>this.get : <K extends keyof Person>(prop: K) => any
+>this : Person
+>get : <K extends keyof Person>(prop: K) => any
 >"parts" : "parts"
     }
 }
@@ -1383,17 +1383,17 @@ class OtherPerson {
         setProperty(this, "parts", parts);
 >setProperty(this, "parts", parts) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->this : this
+>this : OtherPerson
 >"parts" : "parts"
 >parts : number
     }
     getParts() {
->getParts : () => this["parts"]
+>getParts : () => number
 
         return getProperty(this, "parts")
->getProperty(this, "parts") : this["parts"]
+>getProperty(this, "parts") : number
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->this : this
+>this : OtherPerson
 >"parts" : "parts"
     }
 }
@@ -1852,7 +1852,7 @@ class Form<T> {
 >this.childFormFactories[prop](value) : Form<T[K]>
 >this.childFormFactories[prop] : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }[K]
 >this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
->this : this
+>this : Form<T>
 >childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
 >prop : K
 >value : T[K]
@@ -1873,7 +1873,7 @@ class SampleClass<P> {
         this.props = Object.freeze(props);
 >this.props = Object.freeze(props) : Readonly<P>
 >this.props : Readonly<P>
->this : this
+>this : SampleClass<P>
 >props : Readonly<P>
 >Object.freeze(props) : Readonly<P>
 >Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
@@ -1922,7 +1922,7 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 >this.props.foo.concat : (...strings: string[]) => string
 >this.props.foo : (T & Foo)["foo"]
 >this.props : Readonly<T & Foo>
->this : this
+>this : AnotherSampleClass<T>
 >props : Readonly<T & Foo>
 >foo : (T & Foo)["foo"]
 >concat : (...strings: string[]) => string

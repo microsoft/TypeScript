@@ -1,12 +1,86 @@
 tests/cases/compiler/genericClassesRedeclaration.ts(3,9): error TS2374: Duplicate index signature for type 'string'.
 tests/cases/compiler/genericClassesRedeclaration.ts(16,11): error TS2300: Duplicate identifier 'StringHashTable'.
 tests/cases/compiler/genericClassesRedeclaration.ts(29,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(30,16): error TS2416: Property 'getAllKeys' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+        Types of property 'getAllKeys' are incompatible.
+          Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'IdentifierNameHashTable<T>' is not assignable to type 'StringHashTable<T>'.
+                Types of property 'add' are incompatible.
+                  Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+                    Types of parameters 'data' and 'data' are incompatible.
+                      Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                        'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/compiler/genericClassesRedeclaration.ts(31,16): error TS2416: Property 'add' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(32,16): error TS2416: Property 'addOrUpdate' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(33,16): error TS2416: Property 'map' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(fn: (k: string, value: T, context: any) => void, context: any) => void' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => void'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(34,16): error TS2416: Property 'every' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(35,16): error TS2416: Property 'some' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(fn: (k: string, value: any, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(36,16): error TS2416: Property 'lookup' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(key: string) => T' is not assignable to type '(key: string) => T'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
 tests/cases/compiler/genericClassesRedeclaration.ts(42,9): error TS2374: Duplicate index signature for type 'string'.
 tests/cases/compiler/genericClassesRedeclaration.ts(55,11): error TS2300: Duplicate identifier 'StringHashTable'.
 tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
+tests/cases/compiler/genericClassesRedeclaration.ts(69,16): error TS2416: Property 'getAllKeys' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+        Types of property 'getAllKeys' are incompatible.
+          Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'IdentifierNameHashTable<T>' is not assignable to type 'StringHashTable<T>'.
+                Types of property 'add' are incompatible.
+                  Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+                    Types of parameters 'data' and 'data' are incompatible.
+                      Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                        'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/compiler/genericClassesRedeclaration.ts(70,16): error TS2416: Property 'add' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(71,16): error TS2416: Property 'addOrUpdate' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(72,16): error TS2416: Property 'map' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(fn: (k: string, value: T, context: any) => void, context: any) => void' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => void'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(73,16): error TS2416: Property 'every' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(74,16): error TS2416: Property 'some' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(fn: (k: string, value: any, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+tests/cases/compiler/genericClassesRedeclaration.ts(75,16): error TS2416: Property 'lookup' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+  Type '(key: string) => T' is not assignable to type '(key: string) => T'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
 
 
-==== tests/cases/compiler/genericClassesRedeclaration.ts (6 errors) ====
+==== tests/cases/compiler/genericClassesRedeclaration.ts (20 errors) ====
     declare module TypeScript {
         interface IIndexable<T> {
             [s: string]: T;
@@ -43,12 +117,56 @@ tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplic
               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
             public getAllKeys(): string[];
+                   ~~~~~~~~~~
+!!! error TS2416: Property 'getAllKeys' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+!!! error TS2416:         Types of property 'getAllKeys' are incompatible.
+!!! error TS2416:           Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'IdentifierNameHashTable<T>' is not assignable to type 'StringHashTable<T>'.
+!!! error TS2416:                 Types of property 'add' are incompatible.
+!!! error TS2416:                   Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Types of parameters 'data' and 'data' are incompatible.
+!!! error TS2416:                       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                         'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             public add(key: string, data: T): boolean;
+                   ~~~
+!!! error TS2416: Property 'add' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public addOrUpdate(key: string, data: T): boolean;
+                   ~~~~~~~~~~~
+!!! error TS2416: Property 'addOrUpdate' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+                   ~~~
+!!! error TS2416: Property 'map' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(fn: (k: string, value: T, context: any) => void, context: any) => void' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => void'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+                   ~~~~~
+!!! error TS2416: Property 'every' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
+                   ~~~~
+!!! error TS2416: Property 'some' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(fn: (k: string, value: any, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public lookup(key: string): T;
+                   ~~~~~~
+!!! error TS2416: Property 'lookup' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(key: string) => T' is not assignable to type '(key: string) => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
         }
     }
     
@@ -88,11 +206,55 @@ tests/cases/compiler/genericClassesRedeclaration.ts(68,11): error TS2300: Duplic
               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'IdentifierNameHashTable'.
             public getAllKeys(): string[];
+                   ~~~~~~~~~~
+!!! error TS2416: Property 'getAllKeys' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
+!!! error TS2416:         Types of property 'getAllKeys' are incompatible.
+!!! error TS2416:           Type '() => string[]' is not assignable to type '() => string[]'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'IdentifierNameHashTable<T>' is not assignable to type 'StringHashTable<T>'.
+!!! error TS2416:                 Types of property 'add' are incompatible.
+!!! error TS2416:                   Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Types of parameters 'data' and 'data' are incompatible.
+!!! error TS2416:                       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                         'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             public add(key: string, data: T): boolean;
+                   ~~~
+!!! error TS2416: Property 'add' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public addOrUpdate(key: string, data: T): boolean;
+                   ~~~~~~~~~~~
+!!! error TS2416: Property 'addOrUpdate' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(key: string, data: T) => boolean' is not assignable to type '(key: string, data: T) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public map(fn: (k: string, value: T, context: any) => void, context: any): void;
+                   ~~~
+!!! error TS2416: Property 'map' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(fn: (k: string, value: T, context: any) => void, context: any) => void' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => void'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
+                   ~~~~~
+!!! error TS2416: Property 'every' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
+                   ~~~~
+!!! error TS2416: Property 'some' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(fn: (k: string, value: any, context: any) => void, context: any) => boolean' is not assignable to type '(fn: (k: string, value: T, context: any) => void, context: any) => boolean'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
             public lookup(key: string): T;
+                   ~~~~~~
+!!! error TS2416: Property 'lookup' in type 'IdentifierNameHashTable<T>' is not assignable to the same property in base type 'StringHashTable<T>'.
+!!! error TS2416:   Type '(key: string) => T' is not assignable to type '(key: string) => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'StringHashTable<T>' is not assignable to type 'IdentifierNameHashTable<T>'.
         }
     }

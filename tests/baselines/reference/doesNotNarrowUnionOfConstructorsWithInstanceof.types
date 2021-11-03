@@ -9,7 +9,7 @@ class A {
       this.length = 1
 >this.length = 1 : 1
 >this.length : 1
->this : this
+>this : A
 >length : 1
 >1 : 1
     }
@@ -25,7 +25,7 @@ class B {
       this.length = 2
 >this.length = 2 : 2
 >this.length : 2
->this : this
+>this : B
 >length : 2
 >2 : 2
     }

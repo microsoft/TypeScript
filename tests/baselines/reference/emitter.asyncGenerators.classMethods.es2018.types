@@ -99,7 +99,7 @@ class C8 {
         this.g();
 >this.g() : void
 >this.g : () => void
->this : this
+>this : C8
 >g : () => void
     }
 }

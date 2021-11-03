@@ -10,7 +10,7 @@ class NumClass<T extends number> {
 
         return this.value;
 >this.value : T
->this : this
+>this : NumClass<T>
 >value : T
     }
     public numExclusive() { }
@@ -28,7 +28,7 @@ class StrClass<T extends string> {
 
         return this.value;
 >this.value : T
->this : this
+>this : StrClass<T>
 >value : T
     }
     public strExclusive() { }
@@ -71,7 +71,7 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
 >entry : Entries[EntryId]
 >this.entries[entryId] : Entries[EntryId]
 >this.entries : Entries
->this : this
+>this : SimpleStore<Entries>
 >entries : Entries
 >entryId : EntryId
 
@@ -137,7 +137,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >this.slices[sliceId][sliceKey] : Slices[SliceId][SliceKey]
 >this.slices[sliceId] : Slices[SliceId]
 >this.slices : Slices
->this : this
+>this : ComplexStore<Slices>
 >slices : Slices
 >sliceId : SliceId
 >sliceKey : SliceKey
@@ -180,7 +180,7 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >this.slices[sliceId][sliceKey] : Slices[SliceId][SliceKey]
 >this.slices[sliceId] : Slices[SliceId]
 >this.slices : Slices
->this : this
+>this : ComplexStore<Slices>
 >slices : Slices
 >sliceId : SliceId
 >sliceKey : SliceKey

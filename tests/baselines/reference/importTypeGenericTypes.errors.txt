@@ -1,0 +1,63 @@
+tests/cases/conformance/types/import/usage.ts(10,5): error TS2322: Type 'typeof Bar2' is not assignable to type 'typeof Bar'.
+  Types of construct signatures are incompatible.
+    Type 'new <T>(input?: any) => Bar2<T>' is not assignable to type 'new <T>(input: J<T>) => Bar<T>'.
+      The 'this' types of each signature are incompatible.
+        Type 'Bar<T>' is not assignable to type 'Bar2<T>'.
+          Types of property 'item' are incompatible.
+            Property 'c' is missing in type 'I<T>' but required in type '{ a: string; b: number; c: object; data: T; }'.
+
+
+==== tests/cases/conformance/types/import/foo.ts (0 errors) ====
+    interface Point<T> {
+        x: number;
+        y: number;
+        data: T;
+    }
+    export = Point;
+    
+==== tests/cases/conformance/types/import/foo2.ts (0 errors) ====
+    namespace Bar {
+        export interface I<T> {
+            a: string;
+            b: number;
+            data: T;
+        }
+    }
+    
+    export namespace Baz {
+        export interface J<T> {
+            a: number;
+            b: string;
+            data: T;
+        }
+    }
+    
+    class Bar<T> {
+        item: Bar.I<T>;
+        constructor(input: Baz.J<T>) {}
+    }
+    export { Bar }
+    
+==== tests/cases/conformance/types/import/usage.ts (1 errors) ====
+    export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
+    export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
+    
+    export class Bar2<T> {
+        item: {a: string, b: number, c: object, data: T};
+        constructor(input?: any) {}
+    }
+    
+    export let shim: typeof import("./foo2") = {
+        Bar: Bar2
+        ~~~
+!!! error TS2322: Type 'typeof Bar2' is not assignable to type 'typeof Bar'.
+!!! error TS2322:   Types of construct signatures are incompatible.
+!!! error TS2322:     Type 'new <T>(input?: any) => Bar2<T>' is not assignable to type 'new <T>(input: J<T>) => Bar<T>'.
+!!! error TS2322:       The 'this' types of each signature are incompatible.
+!!! error TS2322:         Type 'Bar<T>' is not assignable to type 'Bar2<T>'.
+!!! error TS2322:           Types of property 'item' are incompatible.
+!!! error TS2322:             Property 'c' is missing in type 'I<T>' but required in type '{ a: string; b: number; c: object; data: T; }'.
+!!! related TS2728 tests/cases/conformance/types/import/usage.ts:5:34: 'c' is declared here.
+!!! related TS6500 tests/cases/conformance/types/import/foo2.ts:21:10: The expected type comes from property 'Bar' which is declared here on type 'typeof import("tests/cases/conformance/types/import/foo2")'
+    };
+    

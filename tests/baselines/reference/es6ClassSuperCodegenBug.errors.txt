@@ -1,0 +1,22 @@
+tests/cases/compiler/es6ClassSuperCodegenBug.ts(7,10): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+tests/cases/compiler/es6ClassSuperCodegenBug.ts(9,10): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/compiler/es6ClassSuperCodegenBug.ts (2 errors) ====
+    class A {
+    	constructor(str1:string, str2:string) {}
+    }
+    class B extends A {
+        constructor() {
+    	    if (true) {
+    	        super('a1', 'b1');
+    	        ~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+    	    } else {
+    	        super('a2', 'b2');
+    	        ~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+    	    }
+        }
+    }
+    

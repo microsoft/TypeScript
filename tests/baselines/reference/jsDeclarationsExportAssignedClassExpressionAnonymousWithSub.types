@@ -15,7 +15,7 @@ module.exports = class {
         this.t = 12 + p;
 >this.t = 12 + p : number
 >this.t : any
->this : this
+>this : import("tests/cases/conformance/jsdoc/declarations/index")
 >t : any
 >12 + p : number
 >12 : 12
@@ -35,7 +35,7 @@ module.exports.Sub = class {
         this.instance = new module.exports(10);
 >this.instance = new module.exports(10) : import("tests/cases/conformance/jsdoc/declarations/index")
 >this.instance : any
->this : this
+>this : Sub
 >instance : any
 >new module.exports(10) : import("tests/cases/conformance/jsdoc/declarations/index")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")

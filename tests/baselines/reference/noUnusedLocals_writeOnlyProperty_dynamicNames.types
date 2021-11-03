@@ -28,13 +28,13 @@ class C {
         this[x] = 0; // write-only
 >this[x] = 0 : 0
 >this[x] : number
->this : this
+>this : C
 >x : unique symbol
 >0 : 0
 
         this[y];
 >this[y] : number
->this : this
+>this : C
 >y : unique symbol
     }
 }

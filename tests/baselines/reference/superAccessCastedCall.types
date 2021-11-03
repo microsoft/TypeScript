@@ -21,7 +21,7 @@ class Bar extends Foo {
         this.x = 2;
 >this.x = 2 : 2
 >this.x : Number
->this : this
+>this : Bar
 >x : Number
 >2 : 2
     }

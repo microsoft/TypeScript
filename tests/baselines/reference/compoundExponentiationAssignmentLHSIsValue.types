@@ -10,7 +10,7 @@ class C {
     constructor() {
         this **= value;
 >this **= value : number
->this : this
+>this : C
 >value : any
     }
     foo() {
@@ -18,7 +18,7 @@ class C {
 
         this **= value;
 >this **= value : number
->this : this
+>this : C
 >value : any
     }
     static sfoo() {

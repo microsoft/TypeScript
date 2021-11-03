@@ -51,7 +51,7 @@ exports.B = class {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : this
+>this : B
 >x : any
 >1 : 1
     }
@@ -136,7 +136,7 @@ export class E {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : this
+>this : E
 >x : any
 >1 : 1
     }
@@ -207,7 +207,7 @@ class H {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : this
+>this : H
 >x : any
 >1 : 1
     }

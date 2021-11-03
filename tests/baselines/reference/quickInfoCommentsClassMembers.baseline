@@ -5680,8 +5680,8 @@
           "kind": "space"
         },
         {
-          "text": "this",
-          "kind": "keyword"
+          "text": "cWithConstructorProperty",
+          "kind": "className"
         }
       ],
       "documentation": []

@@ -1,0 +1,22 @@
+tests/cases/compiler/genericOfACloduleType1.ts(10,5): error TS2684: The 'this' context of type 'G<C>' is not assignable to method's 'this' of type 'G<T>'.
+  Type 'C' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
+
+
+==== tests/cases/compiler/genericOfACloduleType1.ts (1 errors) ====
+    class G<T>{ bar(x: T) { return x; } }
+    module M {
+        export class C { foo() { } }
+        export module C {
+            export class X {
+            }
+        }
+     
+        var g1 = new G<C>();
+        g1.bar(null).foo();
+        ~~
+!!! error TS2684: The 'this' context of type 'G<C>' is not assignable to method's 'this' of type 'G<T>'.
+!!! error TS2684:   Type 'C' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
+    }
+    var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.

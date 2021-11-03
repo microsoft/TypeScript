@@ -1,13 +1,23 @@
+tests/cases/conformance/jsx/file.tsx(4,5): error TS2416: Property 'render' in type 'BigGreeter' is not assignable to the same property in base type 'Component<{}, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Property 'greeting' is missing in type 'Component<P, S>' but required in type 'BigGreeter'.
 tests/cases/conformance/jsx/file.tsx(11,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
 tests/cases/conformance/jsx/file.tsx(14,39): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     import React = require('react');
     
     class BigGreeter extends React.Component<{ }, {}> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'BigGreeter' is not assignable to the same property in base type 'Component<{}, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Property 'greeting' is missing in type 'Component<P, S>' but required in type 'BigGreeter'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:7:5: 'greeting' is declared here.
             return <div>Default hi</div>;
         }
         greeting: string;

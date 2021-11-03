@@ -1,0 +1,30 @@
+tests/cases/compiler/thisConditionalOnMethodReturnOfGenericInstance.ts(17,11): error TS2684: The 'this' context of type 'C<{}>' is not assignable to method's 'this' of type 'B<T>'.
+  The types returned by 'method()' are incompatible between these types.
+    Type 'string | undefined' is not assignable to type 'string | null'.
+      Type 'undefined' is not assignable to type 'string | null'.
+
+
+==== tests/cases/compiler/thisConditionalOnMethodReturnOfGenericInstance.ts (1 errors) ====
+    class A<T> {
+        unmeasurableUsage!: {[K in keyof T]-?: T[K]};
+    }
+    
+    class B<T> extends A<T> {
+        method(): string | (this extends C ? undefined : null) {
+            return "";
+        }
+    }
+    
+    class C<T = any> extends B<T> {
+        marker!: string;
+    }
+    
+    const x = new C<{}>();
+    
+    const y = x.method(); // usage flags `method` in `B` as circular and marks `y` as the error-any type
+              ~
+!!! error TS2684: The 'this' context of type 'C<{}>' is not assignable to method's 'this' of type 'B<T>'.
+!!! error TS2684:   The types returned by 'method()' are incompatible between these types.
+!!! error TS2684:     Type 'string | undefined' is not assignable to type 'string | null'.
+!!! error TS2684:       Type 'undefined' is not assignable to type 'string | null'.
+    

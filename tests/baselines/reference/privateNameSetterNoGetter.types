@@ -13,7 +13,7 @@ const C = class {
         this.#x += 2; // Error
 >this.#x += 2 : any
 >this.#x : any
->this : this
+>this : C
 >2 : 2
     }
 }

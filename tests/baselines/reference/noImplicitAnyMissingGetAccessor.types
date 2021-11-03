@@ -21,7 +21,7 @@ class Child extends Parent {
         this._x = str;
 >this._x = str : any
 >this._x : any
->this : this
+>this : Child
 >_x : any
 >str : any
     }

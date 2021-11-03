@@ -84,40 +84,40 @@ class C5 {
 >f1 : (x: this) => this
 >(x: this): this => this : (x: this) => this
 >x : this
->this : this
+>this : C5
 
         let f2 = (x: this) => this;
->f2 : (x: this) => this
->(x: this) => this : (x: this) => this
+>f2 : (x: this) => C5
+>(x: this) => this : (x: this) => C5
 >x : this
->this : this
+>this : C5
 
         let f3 = (x: this) => (y: this) => this;
->f3 : (x: this) => (y: this) => this
->(x: this) => (y: this) => this : (x: this) => (y: this) => this
+>f3 : (x: this) => (y: this) => C5
+>(x: this) => (y: this) => this : (x: this) => (y: this) => C5
 >x : this
->(y: this) => this : (y: this) => this
+>(y: this) => this : (y: this) => C5
 >y : this
->this : this
+>this : C5
 
         let f4 = (x: this) => {
->f4 : (x: this) => () => this
->(x: this) => {            let g = (y: this) => {                return () => this;            }            return g(this);        } : (x: this) => () => this
+>f4 : (x: this) => () => C5
+>(x: this) => {            let g = (y: this) => {                return () => this;            }            return g(this);        } : (x: this) => () => C5
 >x : this
 
             let g = (y: this) => {
->g : (y: this) => () => this
->(y: this) => {                return () => this;            } : (y: this) => () => this
+>g : (y: this) => () => C5
+>(y: this) => {                return () => this;            } : (y: this) => () => C5
 >y : this
 
                 return () => this;
->() => this : () => this
->this : this
+>() => this : () => C5
+>this : C5
             }
             return g(this);
->g(this) : () => this
->g : (y: this) => () => this
->this : this
+>g(this) : () => C5
+>g : (y: this) => () => C5
+>this : C5
         }
     }
     bar() {

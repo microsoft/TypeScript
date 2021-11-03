@@ -10,7 +10,7 @@ class Employee {
 
         return this._fullName;
 >this._fullName : string
->this : this
+>this : Employee
 >_fullName : string
     }
     // Will not also error on the setter

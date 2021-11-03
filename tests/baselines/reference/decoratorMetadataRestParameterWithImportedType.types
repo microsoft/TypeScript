@@ -60,7 +60,7 @@ export class ClassA {
         this.array = init;
 >this.array = init : SomeClass[]
 >this.array : SomeClass[]
->this : this
+>this : ClassA
 >array : SomeClass[]
 >init : SomeClass[]
     }

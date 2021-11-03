@@ -248,7 +248,7 @@ class Foo {
         this.isUser ? console.log('this.isUser') : undefined;
 >this.isUser ? console.log('this.isUser') : undefined : void
 >this.isUser : () => boolean
->this : this
+>this : Foo
 >isUser : () => boolean
 >console.log('this.isUser') : void
 >console.log : (...data: any[]) => void
@@ -261,7 +261,7 @@ class Foo {
         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
 >this.maybeIsUser ? console.log('this.maybeIsUser') : undefined : void
 >this.maybeIsUser : (() => boolean) | undefined
->this : this
+>this : Foo
 >maybeIsUser : (() => boolean) | undefined
 >console.log('this.maybeIsUser') : void
 >console.log : (...data: any[]) => void
@@ -273,13 +273,13 @@ class Foo {
         // ok
         if (this.isUser) {
 >this.isUser : () => boolean
->this : this
+>this : Foo
 >isUser : () => boolean
 
             this.isUser();
 >this.isUser() : boolean
 >this.isUser : () => boolean
->this : this
+>this : Foo
 >isUser : () => boolean
         }
     }

@@ -20,7 +20,7 @@ class arrTest {
         this.test([1, 2, 3, 5]);
 >this.test([1, 2, 3, 5]) : any
 >this.test : { (arg1: number[]): any; (arg1: string[]): any; }
->this : this
+>this : arrTest
 >test : { (arg1: number[]): any; (arg1: string[]): any; }
 >[1, 2, 3, 5] : number[]
 >1 : 1
@@ -31,7 +31,7 @@ class arrTest {
         this.test(["hi"]);
 >this.test(["hi"]) : any
 >this.test : { (arg1: number[]): any; (arg1: string[]): any; }
->this : this
+>this : arrTest
 >test : { (arg1: number[]): any; (arg1: string[]): any; }
 >["hi"] : string[]
 >"hi" : "hi"
@@ -39,14 +39,14 @@ class arrTest {
         this.test([]);
 >this.test([]) : any
 >this.test : { (arg1: number[]): any; (arg1: string[]): any; }
->this : this
+>this : arrTest
 >test : { (arg1: number[]): any; (arg1: string[]): any; }
 >[] : undefined[]
 
         this.test([1, 2, "hi", 5]); // Error
 >this.test([1, 2, "hi", 5]) : any
 >this.test : { (arg1: number[]): any; (arg1: string[]): any; }
->this : this
+>this : arrTest
 >test : { (arg1: number[]): any; (arg1: string[]): any; }
 >[1, 2, "hi", 5] : (string | number)[]
 >1 : 1

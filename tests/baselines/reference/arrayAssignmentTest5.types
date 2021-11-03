@@ -47,7 +47,7 @@ module Test {
 >lineTokens : ILineTokens
 >this.tokenize(line, state, true) : ILineTokens
 >this.tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->this : this
+>this : Bug
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
 >line : string
 >state : IState
@@ -69,7 +69,7 @@ module Test {
                 return this.onEnter(line, tokens, offset);        // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
 >this.onEnter(line, tokens, offset) : IAction
 >this.onEnter : (line: string, state: IState, offset: number) => IAction
->this : this
+>this : Bug
 >onEnter : (line: string, state: IState, offset: number) => IAction
 >line : string
 >tokens : IStateToken[]

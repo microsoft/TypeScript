@@ -1,0 +1,38 @@
+tests/cases/conformance/es6/newTarget/newTarget.es6.ts(12,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/conformance/es6/newTarget/newTarget.es6.ts (1 errors) ====
+    class A {
+        constructor() {
+            const a = new.target;
+            const b = () => new.target;
+        }
+        static c = function () { return new.target; }
+        d = function () { return new.target; }
+    }
+    
+    class B extends A {
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+            const e = new.target;
+            const f = () => new.target;
+        }
+    }
+    
+    function f1() {
+        const g = new.target;
+        const h = () => new.target;
+    }
+    
+    const f2 = function () {
+        const i = new.target;
+        const j = () => new.target;
+    }
+    
+    const O = {
+        k: function () { return new.target; }
+    };
+    
+    

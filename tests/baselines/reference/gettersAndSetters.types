@@ -18,7 +18,7 @@ class C {
     public get Foo() { return this.fooBack;} // ok
 >Foo : string
 >this.fooBack : string
->this : this
+>this : C
 >fooBack : string
 
     public set Foo(foo:string) {this.fooBack = foo;} // ok
@@ -26,7 +26,7 @@ class C {
 >foo : string
 >this.fooBack = foo : string
 >this.fooBack : string
->this : this
+>this : C
 >fooBack : string
 >foo : string
 

@@ -9,7 +9,7 @@ class A {
         this.#foo = 3;
 >this.#foo = 3 : 3
 >this.#foo : number
->this : this
+>this : A
 >3 : 3
     }
 }
@@ -29,7 +29,7 @@ class B extends A {
         this.#foo = "some string";
 >this.#foo = "some string" : "some string"
 >this.#foo : string
->this : this
+>this : B
 >"some string" : "some string"
     }
 }

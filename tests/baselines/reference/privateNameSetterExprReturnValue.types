@@ -14,7 +14,7 @@ class C {
 >(this.#foo = 42 * 2) : number
 >this.#foo = 42 * 2 : number
 >this.#foo : number
->this : this
+>this : C
 >42 * 2 : number
 >42 : 42
 >2 : 2

@@ -1,0 +1,56 @@
+tests/cases/conformance/jsx/file.tsx(19,10): error TS2416: Property 'render' in type 'AddressComp' is not assignable to the same property in base type 'Component<Properties, void>'.
+  Type '() => any' is not assignable to type '() => Element'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'AddressComp'.
+        Types of property 'render' are incompatible.
+          Type '() => Element' is not assignable to type '() => any'.
+            The 'this' types of each signature are incompatible.
+              Type 'AddressComp' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: void, props: Properties) => void, callback?: () => any): void; (state: void, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'prevState' and 'prevState' are incompatible.
+                        Type 'void' is not assignable to type 'S'.
+                          'S' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    interface Address {
+      street: string;
+      country: string;
+    }
+    
+    interface CanadianAddress extends Address {
+        postalCode: string;
+    }
+    
+    interface AmericanAddress extends Address {
+        zipCode: string;
+    }
+    
+    type Properties = CanadianAddress | AmericanAddress;
+    
+    export class AddressComp extends React.Component<Properties, void> {
+      public render() {
+             ~~~~~~
+!!! error TS2416: Property 'render' in type 'AddressComp' is not assignable to the same property in base type 'Component<Properties, void>'.
+!!! error TS2416:   Type '() => any' is not assignable to type '() => Element'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'AddressComp'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => Element' is not assignable to type '() => any'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'AddressComp' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: void, props: Properties) => void, callback?: () => any): void; (state: void, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'prevState' and 'prevState' are incompatible.
+!!! error TS2416:                         Type 'void' is not assignable to type 'S'.
+!!! error TS2416:                           'S' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+        return null;
+      }
+    }
+    
+    let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />

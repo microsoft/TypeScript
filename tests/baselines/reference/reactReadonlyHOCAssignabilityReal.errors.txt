@@ -1,0 +1,53 @@
+tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx(5,5): error TS2322: Type 'typeof OuterComponent' is not assignable to type 'ComponentClass<P, any>'.
+  Construct signature return types 'OuterComponent' and 'Component<P, any, any>' are incompatible.
+    The types of 'render' are incompatible between these types.
+      Type '() => Element' is not assignable to type '() => ReactNode'.
+        The 'this' types of each signature are incompatible.
+          Type 'Component<P, S, SS>' is not assignable to type 'OuterComponent'.
+tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx(6,9): error TS2416: Property 'render' in type 'OuterComponent' is not assignable to the same property in base type 'Component<P, {}, any>'.
+  Type '() => Element' is not assignable to type '() => ReactNode'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S, SS>' is not assignable to type 'OuterComponent'.
+        Types of property 'render' are incompatible.
+          Type '() => ReactNode' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'OuterComponent' is not assignable to type 'Component<P, S, SS>'.
+                Types of property 'props' are incompatible.
+                  Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+                    Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
+
+
+==== tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
+        return class OuterComponent extends React.Component<P> {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            render() {
+    ~~~~~~~~~~~~~~~~~~
+            ~~~~~~
+!!! error TS2416: Property 'render' in type 'OuterComponent' is not assignable to the same property in base type 'Component<P, {}, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S, SS>' is not assignable to type 'OuterComponent'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => ReactNode' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'OuterComponent' is not assignable to type 'Component<P, S, SS>'.
+!!! error TS2416:                 Types of property 'props' are incompatible.
+!!! error TS2416:                   Type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<{ children?: import("react").ReactNode; }> & Readonly<P>'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     Type 'Readonly<{ children?: ReactNode; }> & Readonly<P>' is not assignable to type 'Readonly<P>'.
+                return <Inner {...this.props} name="Matt"/>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+    ~~~~~~~~~
+        };
+    ~~~~~~
+!!! error TS2322: Type 'typeof OuterComponent' is not assignable to type 'ComponentClass<P, any>'.
+!!! error TS2322:   Construct signature return types 'OuterComponent' and 'Component<P, any, any>' are incompatible.
+!!! error TS2322:     The types of 'render' are incompatible between these types.
+!!! error TS2322:       Type '() => Element' is not assignable to type '() => ReactNode'.
+!!! error TS2322:         The 'this' types of each signature are incompatible.
+!!! error TS2322:           Type 'Component<P, S, SS>' is not assignable to type 'OuterComponent'.
+    }

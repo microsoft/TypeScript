@@ -1,3 +1,5 @@
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(10,21): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Class'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(21,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'D'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(47,6): error TS2741: Property 'foo' is missing in type 'Class' but required in type 'D'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(48,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ y: D; }'.
   Property 'y' is missing in type '{}' but required in type '{ y: D; }'.
@@ -5,7 +7,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(50,6): error TS2322: Type 'string' is not assignable to type 'D'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts (4 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts (6 errors) ====
     // Parameter Declaration with generic
     
     interface F { }
@@ -16,6 +18,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
     class SubClass extends Class {
         foo: boolean;
         constructor() { super(); }
+                        ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Class'.
     }
     
     class D implements F {
@@ -27,6 +31,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
         bar: number
         constructor() {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'D'.
         }
     }
     

@@ -13,7 +13,7 @@ class arrTest {
         this.test([1, 2, "hi", 5, ]);
 >this.test([1, 2, "hi", 5, ]) : void
 >this.test : (arg1: number[]) => void
->this : this
+>this : arrTest
 >test : (arg1: number[]) => void
 >[1, 2, "hi", 5, ] : (string | number)[]
 >1 : 1
@@ -24,7 +24,7 @@ class arrTest {
         this.test([1, 2, "hi", 5]); 
 >this.test([1, 2, "hi", 5]) : void
 >this.test : (arg1: number[]) => void
->this : this
+>this : arrTest
 >test : (arg1: number[]) => void
 >[1, 2, "hi", 5] : (string | number)[]
 >1 : 1

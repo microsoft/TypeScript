@@ -1,7 +1,8 @@
+tests/cases/compiler/autolift4.ts(15,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Point'.
 tests/cases/compiler/autolift4.ts(19,70): error TS2339: Property 'm' does not exist on type 'Point3D'.
 
 
-==== tests/cases/compiler/autolift4.ts (1 errors) ====
+==== tests/cases/compiler/autolift4.ts (2 errors) ====
     class Point {
     
         constructor(public x: number, public y: number) {
@@ -17,6 +18,8 @@ tests/cases/compiler/autolift4.ts(19,70): error TS2339: Property 'm' does not ex
     
         constructor(x: number, y: number, public z: number, m:number) {
             super(x, y);
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Point'.
         }
         
         getDist() {

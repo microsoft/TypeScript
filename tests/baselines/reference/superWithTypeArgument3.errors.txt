@@ -1,7 +1,16 @@
 tests/cases/compiler/superWithTypeArgument3.ts(8,14): error TS2754: 'super' may not use type arguments.
+tests/cases/compiler/superWithTypeArgument3.ts(10,5): error TS2416: Property 'bar' in type 'D<T>' is not assignable to the same property in base type 'C<T>'.
+  Type '() => void' is not assignable to type '<U>(x: U) => void'.
+    The 'this' types of each signature are incompatible.
+      Type 'C<T>' is not assignable to type 'D<T>'.
+        Types of property 'bar' are incompatible.
+          Type '<U>(x: U) => void' is not assignable to type '() => void'.
+tests/cases/compiler/superWithTypeArgument3.ts(11,9): error TS2684: The 'this' context of type 'C<T>' is not assignable to method's 'this' of type 'C<T>'.
+  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
-==== tests/cases/compiler/superWithTypeArgument3.ts (1 errors) ====
+==== tests/cases/compiler/superWithTypeArgument3.ts (3 errors) ====
     class C<T> {
         foo: T;
         bar<U>(x: U) { }
@@ -14,6 +23,17 @@ tests/cases/compiler/superWithTypeArgument3.ts(8,14): error TS2754: 'super' may 
 !!! error TS2754: 'super' may not use type arguments.
         }
         bar() {
+        ~~~
+!!! error TS2416: Property 'bar' in type 'D<T>' is not assignable to the same property in base type 'C<T>'.
+!!! error TS2416:   Type '() => void' is not assignable to type '<U>(x: U) => void'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'C<T>' is not assignable to type 'D<T>'.
+!!! error TS2416:         Types of property 'bar' are incompatible.
+!!! error TS2416:           Type '<U>(x: U) => void' is not assignable to type '() => void'.
             super.bar<T>(null);
+            ~~~~~
+!!! error TS2684: The 'this' context of type 'C<T>' is not assignable to method's 'this' of type 'C<T>'.
+!!! error TS2684:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
         }
     }

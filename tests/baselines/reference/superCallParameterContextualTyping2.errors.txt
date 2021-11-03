@@ -1,8 +1,9 @@
+tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts(9,21): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A<T1, T2>'.
 tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts(9,43): error TS2349: This expression is not callable.
   Type 'Number' has no call signatures.
 
 
-==== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts (1 errors) ====
+==== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts (2 errors) ====
     class A<T1, T2> {
         constructor(private map: (value: T1) => T2) {
     
@@ -12,6 +13,8 @@ tests/cases/conformance/expressions/contextualTyping/superCallParameterContextua
     class C extends A<number, string> {
         // Ensure 'value' is not of type 'any' by invoking it with type arguments.
         constructor() { super(value => String(value<string>())); }
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A<T1, T2>'.
                                               ~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'Number' has no call signatures.

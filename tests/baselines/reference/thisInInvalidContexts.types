@@ -18,7 +18,7 @@ class ClassWithNoInitializer extends BaseErrClass {
         super(this); // Error
 >super(this) : void
 >super : typeof BaseErrClass
->this : this
+>this : ClassWithNoInitializer
     }
 }
 
@@ -35,7 +35,7 @@ class ClassWithInitializer extends BaseErrClass {
         super(this); // Error
 >super(this) : void
 >super : typeof BaseErrClass
->this : this
+>this : ClassWithInitializer
     }
 }
 

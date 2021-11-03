@@ -25,10 +25,10 @@ class SomeBaseClass {
     }
 
     returnThis() {
->returnThis : () => this
+>returnThis : () => SomeBaseClass
 
         return this;
->this : this
+>this : SomeBaseClass
     }
 }
 
@@ -153,13 +153,13 @@ class SomeDerivedClass extends SomeBaseClass {
     }
 
     returnThis() {
->returnThis : () => this
+>returnThis : () => SomeBaseClass
 
         return super.returnThis();
->super.returnThis() : this
->super.returnThis : () => this
+>super.returnThis() : SomeBaseClass
+>super.returnThis : () => SomeBaseClass
 >super : SomeBaseClass
->returnThis : () => this
+>returnThis : () => SomeBaseClass
     }
 }
 
@@ -169,11 +169,11 @@ let instance = new SomeDerivedClass();
 >SomeDerivedClass : typeof SomeDerivedClass
 
 instance.returnThis().fn();
->instance.returnThis().fn() : void
->instance.returnThis().fn : () => void
->instance.returnThis() : SomeDerivedClass
->instance.returnThis : () => SomeDerivedClass
+>instance.returnThis().fn() : any
+>instance.returnThis().fn : any
+>instance.returnThis() : SomeBaseClass
+>instance.returnThis : () => SomeBaseClass
 >instance : SomeDerivedClass
->returnThis : () => SomeDerivedClass
->fn : () => void
+>returnThis : () => SomeBaseClass
+>fn : any
 

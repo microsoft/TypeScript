@@ -14,7 +14,7 @@ class Test {
         return <this.#prop />;
 ><this.#prop /> : any
 >this.#prop : any
->this : this
+>this : Test
 > : any
     }
 }

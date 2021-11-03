@@ -12,7 +12,7 @@ class C {
             this.inConstructor = 0;
 >this.inConstructor = 0 : 0
 >this.inConstructor : any
->this : this
+>this : C
 >inConstructor : any
 >0 : 0
         }
@@ -20,14 +20,14 @@ class C {
             this.inConstructor = "string"
 >this.inConstructor = "string" : "string"
 >this.inConstructor : any
->this : this
+>this : C
 >inConstructor : any
 >"string" : "string"
         }
         this.inMultiple = 0;
 >this.inMultiple = 0 : 0
 >this.inMultiple : any
->this : this
+>this : C
 >inMultiple : any
 >0 : 0
     }
@@ -43,14 +43,14 @@ class C {
             this.inMethod = 0;
 >this.inMethod = 0 : 0
 >this.inMethod : string | number | undefined
->this : this
+>this : C
 >inMethod : string | number | undefined
 >0 : 0
 
             this.inMethodNullable = null;
 >this.inMethodNullable = null : null
 >this.inMethodNullable : any
->this : this
+>this : C
 >inMethodNullable : any
 >null : null
         }
@@ -58,28 +58,28 @@ class C {
             this.inMethod = "string"
 >this.inMethod = "string" : "string"
 >this.inMethod : string | number | undefined
->this : this
+>this : C
 >inMethod : string | number | undefined
 >"string" : "string"
 
             this.inMethodNullable = undefined;
 >this.inMethodNullable = undefined : undefined
 >this.inMethodNullable : any
->this : this
+>this : C
 >inMethodNullable : any
 >undefined : undefined
         }
         this.inMultiple = "string";
 >this.inMultiple = "string" : "string"
 >this.inMultiple : number
->this : this
+>this : C
 >inMultiple : number
 >"string" : "string"
 
         this.inMultipleMethods = "string";
 >this.inMultipleMethods = "string" : "string"
 >this.inMultipleMethods : string | boolean | undefined
->this : this
+>this : C
 >inMultipleMethods : string | boolean | undefined
 >"string" : "string"
 
@@ -96,7 +96,7 @@ class C {
                 this.inNestedArrowFunction = 0;
 >this.inNestedArrowFunction = 0 : 0
 >this.inNestedArrowFunction : string | number | undefined
->this : this
+>this : C
 >inNestedArrowFunction : string | number | undefined
 >0 : 0
             }
@@ -104,7 +104,7 @@ class C {
                 this.inNestedArrowFunction = "string"
 >this.inNestedArrowFunction = "string" : "string"
 >this.inNestedArrowFunction : string | number | undefined
->this : this
+>this : C
 >inNestedArrowFunction : string | number | undefined
 >"string" : "string"
             }
@@ -122,7 +122,7 @@ class C {
             this.inGetter = 0;
 >this.inGetter = 0 : 0
 >this.inGetter : string | number | undefined
->this : this
+>this : C
 >inGetter : string | number | undefined
 >0 : 0
         }
@@ -130,21 +130,21 @@ class C {
             this.inGetter = "string"
 >this.inGetter = "string" : "string"
 >this.inGetter : string | number | undefined
->this : this
+>this : C
 >inGetter : string | number | undefined
 >"string" : "string"
         }
         this.inMultiple = false;
 >this.inMultiple = false : false
 >this.inMultiple : number
->this : this
+>this : C
 >inMultiple : number
 >false : false
 
         this.inMultipleMethods = false;
 >this.inMultipleMethods = false : false
 >this.inMultipleMethods : string | boolean | undefined
->this : this
+>this : C
 >inMultipleMethods : string | boolean | undefined
 >false : false
     }
@@ -160,7 +160,7 @@ class C {
             this.inSetter = 0;
 >this.inSetter = 0 : 0
 >this.inSetter : string | number | undefined
->this : this
+>this : C
 >inSetter : string | number | undefined
 >0 : 0
         }
@@ -168,7 +168,7 @@ class C {
             this.inSetter = "string"
 >this.inSetter = "string" : "string"
 >this.inSetter : string | number | undefined
->this : this
+>this : C
 >inSetter : string | number | undefined
 >"string" : "string"
         }

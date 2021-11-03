@@ -8,19 +8,19 @@ class C<T> {
     #method(): T { return this.#foo; }
 >#method : () => T
 >this.#foo : T
->this : this
+>this : C<T>
 
     get #prop(): T { return this.#foo; }
 >#prop : T
 >this.#foo : T
->this : this
+>this : C<T>
 
     set #prop(value : T) { this.#foo = value; }
 >#prop : T
 >value : T
 >this.#foo = value : T
 >this.#foo : T
->this : this
+>this : C<T>
 >value : T
     
     bar(x: C<T>) { return x.#foo; }          // OK

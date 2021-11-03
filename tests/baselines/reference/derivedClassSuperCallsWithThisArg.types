@@ -17,7 +17,7 @@ class Derived extends Base {
         super(this); // ok
 >super(this) : void
 >super : typeof Base
->this : this
+>this : Derived
     }
 }
 
@@ -31,7 +31,7 @@ class Derived2 extends Base {
         super(this); // error
 >super(this) : void
 >super : typeof Base
->this : this
+>this : Derived2
     }
 }
 
@@ -45,8 +45,8 @@ class Derived3 extends Base {
         super(() => this); // error
 >super(() => this) : void
 >super : typeof Base
->() => this : () => this
->this : this
+>() => this : () => Derived3
+>this : Derived3
     }
 }
 

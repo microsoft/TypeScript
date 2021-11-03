@@ -11,14 +11,14 @@ class Foo {
 
         this.x; // 'this' is type 'Foo'
 >this.x : string
->this : this
+>this : Foo
 >x : string
 
         var f = () => this.x; // 'this' should be type 'Foo' as well
 >f : () => string
 >() => this.x : () => string
 >this.x : string
->this : this
+>this : Foo
 >x : string
     }
 }
@@ -42,8 +42,8 @@ class myCls {
 >() => {                var x = this;            } : () => void
 
                 var x = this;
->x : this
->this : this
+>x : myCls
+>this : myCls
 
             });
         });

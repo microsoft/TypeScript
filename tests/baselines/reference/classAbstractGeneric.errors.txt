@@ -3,10 +3,47 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(12,7): error TS2515: Non-abstract class 'D' does not implement inherited abstract member 'bar' from class 'A<number>'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(12,7): error TS2515: Non-abstract class 'D' does not implement inherited abstract member 'foo' from class 'A<number>'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(14,7): error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member 'bar' from class 'A<T>'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(15,5): error TS2416: Property 'foo' in type 'E<T>' is not assignable to the same property in base type 'A<T>'.
+  Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'A<T>' is not assignable to type 'E<T>'.
+        Types of property 'foo' are incompatible.
+          Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'E<T>' is not assignable to type 'A<T>'.
+                Types of property 't' are incompatible.
+                  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                    'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(18,7): error TS2515: Non-abstract class 'F<T>' does not implement inherited abstract member 'foo' from class 'A<T>'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(19,5): error TS2416: Property 'bar' in type 'F<T>' is not assignable to the same property in base type 'A<T>'.
+  Type '(t: T) => void' is not assignable to type '(t: T) => any'.
+    The 'this' types of each signature are incompatible.
+      Type 'A<T>' is not assignable to type 'F<T>'.
+        Types of property 'bar' are incompatible.
+          Type '(t: T) => any' is not assignable to type '(t: T) => void'.
+            The 'this' types of each signature are incompatible.
+              Type 'F<T>' is not assignable to type 'A<T>'.
+                Types of property 't' are incompatible.
+                  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                    'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(23,5): error TS2416: Property 'foo' in type 'G<T>' is not assignable to the same property in base type 'A<T>'.
+  Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'A<T>' is not assignable to type 'G<T>'.
+        Types of property 'foo' are incompatible.
+          Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'G<T>' is not assignable to type 'A<T>'.
+                Types of property 't' are incompatible.
+                  Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                    'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts(24,5): error TS2416: Property 'bar' in type 'G<T>' is not assignable to the same property in base type 'A<T>'.
+  Type '(t: T) => void' is not assignable to type '(t: T) => any'.
+    The 'this' types of each signature are incompatible.
+      Type 'A<T>' is not assignable to type 'G<T>'.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts (6 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts (10 errors) ====
     abstract class A<T> {
         t: T;
         
@@ -32,15 +69,56 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
           ~
 !!! error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member 'bar' from class 'A<T>'.
         foo() { return this.t; }
+        ~~~
+!!! error TS2416: Property 'foo' in type 'E<T>' is not assignable to the same property in base type 'A<T>'.
+!!! error TS2416:   Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'A<T>' is not assignable to type 'E<T>'.
+!!! error TS2416:         Types of property 'foo' are incompatible.
+!!! error TS2416:           Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'E<T>' is not assignable to type 'A<T>'.
+!!! error TS2416:                 Types of property 't' are incompatible.
+!!! error TS2416:                   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     }
     
     class F<T> extends A<T> { // error -- doesn't implement foo
           ~
 !!! error TS2515: Non-abstract class 'F<T>' does not implement inherited abstract member 'foo' from class 'A<T>'.
         bar(t : T) {}
+        ~~~
+!!! error TS2416: Property 'bar' in type 'F<T>' is not assignable to the same property in base type 'A<T>'.
+!!! error TS2416:   Type '(t: T) => void' is not assignable to type '(t: T) => any'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'A<T>' is not assignable to type 'F<T>'.
+!!! error TS2416:         Types of property 'bar' are incompatible.
+!!! error TS2416:           Type '(t: T) => any' is not assignable to type '(t: T) => void'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'F<T>' is not assignable to type 'A<T>'.
+!!! error TS2416:                 Types of property 't' are incompatible.
+!!! error TS2416:                   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     }
     
     class G<T> extends A<T> {
         foo() { return this.t; }
+        ~~~
+!!! error TS2416: Property 'foo' in type 'G<T>' is not assignable to the same property in base type 'A<T>'.
+!!! error TS2416:   Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'A<T>' is not assignable to type 'G<T>'.
+!!! error TS2416:         Types of property 'foo' are incompatible.
+!!! error TS2416:           Type '() => T' is not assignable to type '() => T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'G<T>' is not assignable to type 'A<T>'.
+!!! error TS2416:                 Types of property 't' are incompatible.
+!!! error TS2416:                   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
         bar(t: T) { }
+        ~~~
+!!! error TS2416: Property 'bar' in type 'G<T>' is not assignable to the same property in base type 'A<T>'.
+!!! error TS2416:   Type '(t: T) => void' is not assignable to type '(t: T) => any'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'A<T>' is not assignable to type 'G<T>'.
     }

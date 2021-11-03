@@ -1,5 +1,9 @@
-tests/cases/compiler/promiseChaining1.ts(7,55): error TS2322: Type 'string' is not assignable to type 'Function'.
-tests/cases/compiler/promiseChaining1.ts(7,84): error TS2322: Type 'number' is not assignable to type 'Function'.
+tests/cases/compiler/promiseChaining1.ts(7,17): error TS2684: The 'this' context of type 'Chain2<S>' is not assignable to method's 'this' of type 'Chain2<T>'.
+  Type 'S' is not assignable to type 'T'.
+    'S' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ length: number; }'.
+tests/cases/compiler/promiseChaining1.ts(7,17): error TS2684: The 'this' context of type 'Chain2<Function>' is not assignable to method's 'this' of type 'Chain2<T>'.
+  Type 'Function' is not assignable to type 'T'.
+    'Function' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ length: number; }'.
 
 
 ==== tests/cases/compiler/promiseChaining1.ts (2 errors) ====
@@ -10,12 +14,14 @@ tests/cases/compiler/promiseChaining1.ts(7,84): error TS2322: Type 'number' is n
             var result = cb(this.value);
             // should get a fresh type parameter which each then call
             var z = this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length)/*number*/; // Should error on "abc" because it is not a Function
-                                                          ~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'Function'.
-!!! related TS6502 tests/cases/compiler/promiseChaining1.ts:4:34: The expected type comes from the return type of this signature.
-                                                                                       ~~~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'Function'.
-!!! related TS6502 tests/cases/compiler/promiseChaining1.ts:4:34: The expected type comes from the return type of this signature.
+                    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain2<S>' is not assignable to method's 'this' of type 'Chain2<T>'.
+!!! error TS2684:   Type 'S' is not assignable to type 'T'.
+!!! error TS2684:     'S' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ length: number; }'.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain2<Function>' is not assignable to method's 'this' of type 'Chain2<T>'.
+!!! error TS2684:   Type 'Function' is not assignable to type 'T'.
+!!! error TS2684:     'Function' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ length: number; }'.
             return new Chain2(result);
         }
     }

@@ -47,7 +47,7 @@ class Test extends Base {
         this.prop = 1;
 >this.prop = 1 : 1
 >this.prop : number
->this : this
+>this : Test
 >prop : number
 >1 : 1
     }

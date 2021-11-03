@@ -6,8 +6,8 @@ module NonGeneric {
 >C : C
 
         fn() { return this; }
->fn : () => this
->this : this
+>fn : () => C
+>this : C
 
         static get x() { return 1; }
 >x : number
@@ -73,8 +73,8 @@ module Generic {
 >C : C<T, U>
 
         fn() { return this; }
->fn : () => this
->this : this
+>fn : () => C<T, U>
+>this : C<T, U>
 
         static get x() { return 1; }
 >x : number

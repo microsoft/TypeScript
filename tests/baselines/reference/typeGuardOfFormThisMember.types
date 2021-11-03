@@ -14,7 +14,7 @@ namespace Test {
 
 			return this instanceof File;
 >this instanceof File : boolean
->this : this
+>this : FileSystemObject
 >File : typeof File
 		}
 		set isFile(param) {
@@ -28,7 +28,7 @@ namespace Test {
 
 			return this instanceof Directory;
 >this instanceof Directory : boolean
->this : this
+>this : FileSystemObject
 >Directory : typeof Directory
 		}
 		isNetworked: this is (Networked & this);

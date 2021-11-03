@@ -1,0 +1,40 @@
+tests/cases/compiler/emitClassExpressionInDeclarationFile.ts(28,1): error TS2684: The 'this' context of type 'typeof Test' is not assignable to method's 'this' of type '{ new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T'.
+  Type 'typeof Test' is not assignable to type 'T'.
+    'typeof Test' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Constructor<FooItem>'.
+
+
+==== tests/cases/compiler/emitClassExpressionInDeclarationFile.ts (1 errors) ====
+    export var simpleExample = class {
+        static getTags() { }
+        tags() { }
+    }
+    export var circularReference = class C {
+        static getTags(c: C): C { return c }
+        tags(c: C): C { return c }
+    }
+    
+    // repro from #15066
+    export class FooItem {
+        foo(): void { }
+        name?: string;
+    }
+    
+    export type Constructor<T> = new(...args: any[]) => T;
+    export function WithTags<T extends Constructor<FooItem>>(Base: T) {
+        return class extends Base {
+            static getTags(): void { }
+            tags(): void { }
+        }
+    }
+    
+    export class Test extends WithTags(FooItem) {}
+    
+    const test = new Test();
+    
+    Test.getTags()
+    ~~~~
+!!! error TS2684: The 'this' context of type 'typeof Test' is not assignable to method's 'this' of type '{ new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T'.
+!!! error TS2684:   Type 'typeof Test' is not assignable to type 'T'.
+!!! error TS2684:     'typeof Test' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Constructor<FooItem>'.
+    test.tags();
+    

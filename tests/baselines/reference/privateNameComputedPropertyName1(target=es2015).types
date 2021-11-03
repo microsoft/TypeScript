@@ -24,13 +24,13 @@ class A {
         this.#b = 'b';
 >this.#b = 'b' : "b"
 >this.#b : string
->this : this
+>this : A
 >'b' : "b"
 
         this.#d = 'd';
 >this.#d = 'd' : "d"
 >this.#d : string
->this : this
+>this : A
 >'d' : "d"
     }
 
@@ -54,28 +54,28 @@ class A {
         const {
             [this.#a]: a,
 >this.#a : string
->this : this
+>this : A
 >a : string
 
             [this.#b]: b,
 >this.#b : string
->this : this
+>this : A
 >b : string
 
             [this.#c]: c,
 >this.#c : "c"
->this : this
+>this : A
 >c : string
 
             [this.#d]: d,
 >this.#d : string
->this : this
+>this : A
 >d : string
 
             [this.#e = 'e']: e,
 >this.#e = 'e' : "e"
 >this.#e : string
->this : this
+>this : A
 >'e' : "e"
 >e : string
 
@@ -98,35 +98,35 @@ class A {
 >data[this.#a] : string
 >data : Record<string, string>
 >this.#a : string
->this : this
+>this : A
 
         const b1 = data[this.#b];
 >b1 : string
 >data[this.#b] : string
 >data : Record<string, string>
 >this.#b : string
->this : this
+>this : A
 
         const c1 = data[this.#c];
 >c1 : string
 >data[this.#c] : string
 >data : Record<string, string>
 >this.#c : "c"
->this : this
+>this : A
 
         const d1 = data[this.#d];
 >d1 : string
 >data[this.#d] : string
 >data : Record<string, string>
 >this.#d : string
->this : this
+>this : A
 
         const e1 = data[this.#e];
 >e1 : string
 >data[this.#e] : string
 >data : Record<string, string>
 >this.#e : string
->this : this
+>this : A
 
         console.log(a1, b1, c1, d1);
 >console.log(a1, b1, c1, d1) : void

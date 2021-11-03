@@ -1,0 +1,39 @@
+tests/cases/conformance/expressions/superCalls/superCalls.ts(13,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+tests/cases/conformance/expressions/superCalls/superCalls.ts(15,17): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+
+
+==== tests/cases/conformance/expressions/superCalls/superCalls.ts (2 errors) ====
+    class Base {
+        x = 43;
+        constructor(n: string) {
+    
+        }
+    }
+    
+    function v(): void { }
+    
+    class Derived extends Base {
+        //super call in class constructor of derived type
+        constructor(public q: number) {
+            super('');
+            ~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+            //type of super call expression is void
+            var p = super('');
+                    ~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+            var p = v();
+        }
+    }
+    
+    class OtherBase {
+    
+    }
+    
+    class OtherDerived extends OtherBase {
+        constructor() {
+            var p = '';
+            super();
+        }
+    }
+    

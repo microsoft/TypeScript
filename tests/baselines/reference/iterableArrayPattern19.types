@@ -31,13 +31,13 @@ class FooArrayIterator {
     }
 
     [Symbol.iterator]() {
->[Symbol.iterator] : () => this
+>[Symbol.iterator] : () => FooArrayIterator
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
         return this;
->this : this
+>this : FooArrayIterator
     }
 }
 

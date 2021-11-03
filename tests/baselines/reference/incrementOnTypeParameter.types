@@ -11,7 +11,7 @@ class C<T> {
         this.a++; 
 >this.a++ : number
 >this.a : T
->this : this
+>this : C<T>
 >a : T
 
         for (var i: T, j = 0; j < 10; i++) { 

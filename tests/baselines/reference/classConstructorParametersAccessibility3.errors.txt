@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility3.ts(7,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility3.ts (1 errors) ====
+    class Base {
+        constructor(protected p: number) { }
+    }
+    
+    class Derived extends Base {
+        constructor(public p: number) {
+            super(p);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+            this.p; // OK
+        }
+    }
+    
+    var d: Derived;
+    d.p;  // public, OK

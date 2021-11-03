@@ -32,17 +32,17 @@ module Shapes {
 >this.x * this.x + this.y * this.y : number
 >this.x * this.x : number
 >this.x : number
->this : this
+>this : Point
 >x : number
 >this.x : number
->this : this
+>this : Point
 >x : number
 >this.y * this.y : number
 >this.y : number
->this : this
+>this : Point
 >y : number
 >this.y : number
->this : this
+>this : Point
 >y : number
 
         // Static member

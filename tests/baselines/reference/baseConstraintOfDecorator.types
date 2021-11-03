@@ -23,7 +23,7 @@ export function classExtender<TFunction>(superClass: TFunction, _instanceModifie
             _instanceModifier(this, args);
 >_instanceModifier(this, args) : void
 >_instanceModifier : (instance: any, args: any[]) => void
->this : this
+>this : decoratorFunc
 >args : any[]
         }
     };
@@ -58,7 +58,7 @@ export function classExtender2<TFunction extends new (...args: string[]) => MyCl
             _instanceModifier(this, args);
 >_instanceModifier(this, args) : void
 >_instanceModifier : (instance: any, args: any[]) => void
->this : this
+>this : decoratorFunc
 >args : any[]
         }
     };

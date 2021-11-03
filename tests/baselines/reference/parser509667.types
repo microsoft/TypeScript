@@ -7,7 +7,7 @@ class Foo {
 
       if (this.
 >this. : any
->this : this
+>this : Foo
    }
 > : any
 > : any

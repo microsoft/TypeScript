@@ -79,13 +79,13 @@ module TypeScript {
 >this.isStatementOrExpression() && (!this.isCompoundStatement()) : boolean
 >this.isStatementOrExpression() : boolean
 >this.isStatementOrExpression : () => boolean
->this : this
+>this : AST
 >isStatementOrExpression : () => boolean
 >(!this.isCompoundStatement()) : boolean
 >!this.isCompoundStatement() : boolean
 >this.isCompoundStatement() : boolean
 >this.isCompoundStatement : () => boolean
->this : this
+>this : AST
 >isCompoundStatement : () => boolean
 
         public typeCheck(typeFlow: TypeFlow) {
@@ -94,7 +94,7 @@ module TypeScript {
 
             switch (this.nodeType) {
 >this.nodeType : NodeType
->this : this
+>this : AST
 >nodeType : NodeType
 
                 case NodeType.Error:
@@ -110,7 +110,7 @@ module TypeScript {
                     this.type = typeFlow.anyType;
 >this.type = typeFlow.anyType : any
 >this.type : Type
->this : this
+>this : AST
 >type : Type
 >typeFlow.anyType : any
 >typeFlow : TypeFlow
@@ -127,7 +127,7 @@ module TypeScript {
 >typeFlow.typeCheckThis : any
 >typeFlow : TypeFlow
 >typeCheckThis : any
->this : this
+>this : AST
 
                 case NodeType.Null:
 >NodeType.Null : any
@@ -137,7 +137,7 @@ module TypeScript {
                     this.type = typeFlow.nullType;
 >this.type = typeFlow.nullType : any
 >this.type : Type
->this : this
+>this : AST
 >type : Type
 >typeFlow.nullType : any
 >typeFlow : TypeFlow
@@ -157,7 +157,7 @@ module TypeScript {
                     this.type = typeFlow.booleanType;
 >this.type = typeFlow.booleanType : any
 >this.type : Type
->this : this
+>this : AST
 >type : Type
 >typeFlow.booleanType : any
 >typeFlow : TypeFlow
@@ -174,7 +174,7 @@ module TypeScript {
 >typeFlow.typeCheckSuper : any
 >typeFlow : TypeFlow
 >typeCheckSuper : any
->this : this
+>this : AST
 
                 case NodeType.EndCode:
 >NodeType.EndCode : any
@@ -194,7 +194,7 @@ module TypeScript {
                     this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : AST
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
@@ -208,7 +208,7 @@ module TypeScript {
 >"please implement in derived class" : "please implement in derived class"
             }
             return this;
->this : this
+>this : AST
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -222,12 +222,12 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : AST
 >true : true
 
             switch (this.nodeType) {
 >this.nodeType : NodeType
->this : this
+>this : AST
 >nodeType : NodeType
 
                 case NodeType.This:
@@ -240,7 +240,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     if (emitter.thisFnc && (hasFlag(emitter.thisFnc.fncFlags, FncFlags.IsFatArrowFunction))) {
 >emitter.thisFnc && (hasFlag(emitter.thisFnc.fncFlags, FncFlags.IsFatArrowFunction)) : any
@@ -279,7 +279,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 case NodeType.Null:
@@ -292,7 +292,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     emitter.writeToOutput("null");
 >emitter.writeToOutput("null") : any
@@ -306,7 +306,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 case NodeType.False:
@@ -319,7 +319,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     emitter.writeToOutput("false");
 >emitter.writeToOutput("false") : any
@@ -333,7 +333,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 case NodeType.True:
@@ -346,7 +346,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     emitter.writeToOutput("true");
 >emitter.writeToOutput("true") : any
@@ -360,7 +360,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 case NodeType.Super:
@@ -373,7 +373,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     emitter.emitSuperReference();
 >emitter.emitSuperReference() : any
@@ -386,7 +386,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 case NodeType.EndCode:
@@ -417,7 +417,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     emitter.writeToOutput("; ");
 >emitter.writeToOutput("; ") : any
@@ -431,7 +431,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 case NodeType.Void:
@@ -444,7 +444,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : AST
 
                     emitter.writeToOutput("void ");
 >emitter.writeToOutput("void ") : any
@@ -458,7 +458,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : AST
 
                     break;
                 default:
@@ -472,7 +472,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : AST
 >false : false
         }
 
@@ -522,7 +522,7 @@ module TypeScript {
 >getSourceLineCol : any
 >lineCol : { line: number; col: number; }
 >this.minChar : number
->this : this
+>this : AST
 >minChar : number
 
                 context.parser.getSourceLineCol(limLineCol, this.limChar);
@@ -534,7 +534,7 @@ module TypeScript {
 >getSourceLineCol : any
 >limLineCol : { line: number; col: number; }
 >this.limChar : number
->this : this
+>this : AST
 >limChar : number
 
                 context.write("(" + lineCol.line + "," + lineCol.col + ")--" +
@@ -576,14 +576,14 @@ module TypeScript {
 >lab : any
 >this.printLabel() : any
 >this.printLabel : () => any
->this : this
+>this : AST
 >printLabel : () => any
 
             if (hasFlag(this.flags, ASTFlags.Error)) {
 >hasFlag(this.flags, ASTFlags.Error) : any
 >hasFlag : any
 >this.flags : any
->this : this
+>this : AST
 >flags : any
 >ASTFlags.Error : any
 >ASTFlags : any
@@ -610,7 +610,7 @@ module TypeScript {
 >nodeTypeTable[this.nodeType] : any
 >nodeTypeTable : any
 >this.nodeType : NodeType
->this : this
+>this : AST
 >nodeType : NodeType
 >undefined : undefined
 
@@ -618,7 +618,7 @@ module TypeScript {
 >nodeTypeTable[this.nodeType] : any
 >nodeTypeTable : any
 >this.nodeType : NodeType
->this : this
+>this : AST
 >nodeType : NodeType
             }
             else {
@@ -630,7 +630,7 @@ module TypeScript {
 >NodeType : any
 >_map : any
 >this.nodeType : NodeType
->this : this
+>this : AST
 >nodeType : NodeType
             }
         }
@@ -656,7 +656,7 @@ module TypeScript {
 >context.addContent : any
 >context : ControlFlowContext
 >addContent : any
->this : this
+>this : AST
         }
 
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
@@ -676,7 +676,7 @@ module TypeScript {
 >NodeType : any
 >_map : any
 >this.nodeType : NodeType
->this : this
+>this : AST
 >nodeType : NodeType
         }
 
@@ -814,14 +814,14 @@ module TypeScript {
             this.minChar = min;
 >this.minChar = min : number
 >this.minChar : number
->this : this
+>this : IncompleteAST
 >minChar : number
 >min : number
 
             this.limChar = lim;
 >this.limChar = lim : number
 >this.limChar : number
->this : this
+>this : IncompleteAST
 >limChar : number
 >lim : number
         }
@@ -859,7 +859,7 @@ module TypeScript {
 >len : number
 >this.members.length : number
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >length : number
 
@@ -884,7 +884,7 @@ module TypeScript {
 >addUnreachable : any
 >this.members[i] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >i : number
 
@@ -895,7 +895,7 @@ module TypeScript {
 >this.members[i] = context.walk(this.members[i], this) : any
 >this.members[i] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >i : number
 >context.walk(this.members[i], this) : any
@@ -904,10 +904,10 @@ module TypeScript {
 >walk : any
 >this.members[i] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >i : number
->this : this
+>this : ASTList
                 }
             }
             context.walker.options.goChildren = false;
@@ -923,28 +923,28 @@ module TypeScript {
         }
 
         public append(ast: AST) {
->append : (ast: AST) => this
+>append : (ast: AST) => ASTList
 >ast : AST
 
             this.members[this.members.length] = ast;
 >this.members[this.members.length] = ast : AST
 >this.members[this.members.length] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >this.members.length : number
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >length : number
 >ast : AST
 
             return this;
->this : this
+>this : ASTList
         }
 
         public appendAll(ast: AST) {
->appendAll : (ast: AST) => this
+>appendAll : (ast: AST) => ASTList
 >ast : AST
 
             if (ast.nodeType == NodeType.List) {
@@ -977,10 +977,10 @@ module TypeScript {
 >i : number
 
                     this.append(list.members[i]);
->this.append(list.members[i]) : this
->this.append : (ast: AST) => this
->this : this
->append : (ast: AST) => this
+>this.append(list.members[i]) : ASTList
+>this.append : (ast: AST) => ASTList
+>this : ASTList
+>append : (ast: AST) => ASTList
 >list.members[i] : AST
 >list.members : AST[]
 >list : ASTList
@@ -990,14 +990,14 @@ module TypeScript {
             }
             else {
                 this.append(ast);
->this.append(ast) : this
->this.append : (ast: AST) => this
->this : this
->append : (ast: AST) => this
+>this.append(ast) : ASTList
+>this.append : (ast: AST) => ASTList
+>this : ASTList
+>append : (ast: AST) => ASTList
 >ast : AST
             }
             return this;
->this : this
+>this : ASTList
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -1011,14 +1011,14 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ASTList
 
             emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false);
 >emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false) : any
 >emitter.emitJavascriptList : any
 >emitter : Emitter
 >emitJavascriptList : any
->this : this
+>this : ASTList
 >null : null
 >TokenID.Semicolon : any
 >TokenID : any
@@ -1032,18 +1032,18 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ASTList
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => ASTList
 >typeFlow : TypeFlow
 
             var len = this.members.length;
 >len : number
 >this.members.length : number
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >length : number
 
@@ -1065,7 +1065,7 @@ module TypeScript {
                 if (this.members[i]) {
 >this.members[i] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >i : number
 
@@ -1073,14 +1073,14 @@ module TypeScript {
 >this.members[i] = this.members[i].typeCheck(typeFlow) : any
 >this.members[i] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >i : number
 >this.members[i].typeCheck(typeFlow) : any
 >this.members[i].typeCheck : (typeFlow: TypeFlow) => any
 >this.members[i] : AST
 >this.members : AST[]
->this : this
+>this : ASTList
 >members : AST[]
 >i : number
 >typeCheck : (typeFlow: TypeFlow) => any
@@ -1094,7 +1094,7 @@ module TypeScript {
 >nestingLevel : any
 
             return this;
->this : this
+>this : ASTList
         }
     }
 
@@ -1140,7 +1140,7 @@ module TypeScript {
             this.setText(actualText, hasEscapeSequence);
 >this.setText(actualText, hasEscapeSequence) : void
 >this.setText : (actualText: string, hasEscapeSequence?: boolean) => void
->this : this
+>this : Identifier
 >setText : (actualText: string, hasEscapeSequence?: boolean) => void
 >actualText : string
 >hasEscapeSequence : boolean
@@ -1154,7 +1154,7 @@ module TypeScript {
             this.actualText = actualText;
 >this.actualText = actualText : string
 >this.actualText : string
->this : this
+>this : Identifier
 >actualText : string
 >actualText : string
 
@@ -1164,7 +1164,7 @@ module TypeScript {
                 this.text = AST.getResolvedIdentifierName(actualText);
 >this.text = AST.getResolvedIdentifierName(actualText) : string
 >this.text : string
->this : this
+>this : Identifier
 >text : string
 >AST.getResolvedIdentifierName(actualText) : string
 >AST.getResolvedIdentifierName : (name: string) => string
@@ -1176,7 +1176,7 @@ module TypeScript {
                 this.text = actualText;
 >this.text = actualText : string
 >this.text : string
->this : this
+>this : Identifier
 >text : string
 >actualText : string
             }
@@ -1197,7 +1197,7 @@ module TypeScript {
 >"id: " + this.actualText : string
 >"id: " : "id: "
 >this.actualText : string
->this : this
+>this : Identifier
 >actualText : string
         }
 
@@ -1206,14 +1206,14 @@ module TypeScript {
 
             if (this.actualText) {
 >this.actualText : string
->this : this
+>this : Identifier
 >actualText : string
 
                 return "id: " + this.actualText;
 >"id: " + this.actualText : string
 >"id: " : "id: "
 >this.actualText : string
->this : this
+>this : Identifier
 >actualText : string
             }
             else {
@@ -1231,7 +1231,7 @@ module TypeScript {
 >typeFlow.typeCheckName : any
 >typeFlow : TypeFlow
 >typeCheckName : any
->this : this
+>this : Identifier
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -1245,7 +1245,7 @@ module TypeScript {
 >emitter.emitJavascriptName : any
 >emitter : Emitter
 >emitJavascriptName : any
->this : this
+>this : Identifier
 >true : true
         }
 
@@ -1316,26 +1316,26 @@ module TypeScript {
 >this.id.actualText + ":" : string
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : Label
 >id : Identifier
 >actualText : string
 >":" : ":"
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => Label
 >typeFlow : TypeFlow
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : Label
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
             return this;
->this : this
+>this : Label
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -1349,7 +1349,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Label
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -1357,7 +1357,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Label
 
             emitter.recordSourceMappingStart(this.id);
 >emitter.recordSourceMappingStart(this.id) : any
@@ -1365,7 +1365,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingStart : any
 >this.id : Identifier
->this : this
+>this : Label
 >id : Identifier
 
             emitter.writeToOutput(this.id.actualText);
@@ -1375,7 +1375,7 @@ module TypeScript {
 >writeToOutput : any
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : Label
 >id : Identifier
 >actualText : string
 
@@ -1385,7 +1385,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingEnd : any
 >this.id : Identifier
->this : this
+>this : Label
 >id : Identifier
 
             emitter.writeLineToOutput(":");
@@ -1400,14 +1400,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Label
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Label
 >false : false
         }
     }
@@ -1471,7 +1471,7 @@ module TypeScript {
             if (this.nodeType == NodeType.Throw) {
 >this.nodeType == NodeType.Throw : boolean
 >this.nodeType : NodeType
->this : this
+>this : UnaryExpression
 >nodeType : NodeType
 >NodeType.Throw : any
 >NodeType : any
@@ -1491,7 +1491,7 @@ module TypeScript {
 
             switch (this.nodeType) {
 >this.nodeType : NodeType
->this : this
+>this : UnaryExpression
 >nodeType : NodeType
 
                 case NodeType.Not:
@@ -1504,7 +1504,7 @@ module TypeScript {
 >typeFlow.typeCheckBitNot : any
 >typeFlow : TypeFlow
 >typeCheckBitNot : any
->this : this
+>this : UnaryExpression
 
                 case NodeType.LogNot:
 >NodeType.LogNot : any
@@ -1516,7 +1516,7 @@ module TypeScript {
 >typeFlow.typeCheckLogNot : any
 >typeFlow : TypeFlow
 >typeCheckLogNot : any
->this : this
+>this : UnaryExpression
 
                 case NodeType.Pos:
 >NodeType.Pos : any
@@ -1533,7 +1533,7 @@ module TypeScript {
 >typeFlow.typeCheckUnaryNumberOperator : any
 >typeFlow : TypeFlow
 >typeCheckUnaryNumberOperator : any
->this : this
+>this : UnaryExpression
 
                 case NodeType.IncPost:
 >NodeType.IncPost : any
@@ -1560,7 +1560,7 @@ module TypeScript {
 >typeFlow.typeCheckIncOrDec : any
 >typeFlow : TypeFlow
 >typeCheckIncOrDec : any
->this : this
+>this : UnaryExpression
 
                 case NodeType.ArrayLit:
 >NodeType.ArrayLit : any
@@ -1572,10 +1572,10 @@ module TypeScript {
 >typeFlow.typeCheckArrayLit : any
 >typeFlow : TypeFlow
 >typeCheckArrayLit : any
->this : this
+>this : UnaryExpression
 
                     return this;
->this : this
+>this : UnaryExpression
 
                 case NodeType.ObjectLit:
 >NodeType.ObjectLit : any
@@ -1587,10 +1587,10 @@ module TypeScript {
 >typeFlow.typeCheckObjectLit : any
 >typeFlow : TypeFlow
 >typeCheckObjectLit : any
->this : this
+>this : UnaryExpression
 
                     return this;
->this : this
+>this : UnaryExpression
 
                 case NodeType.Throw:
 >NodeType.Throw : any
@@ -1600,27 +1600,27 @@ module TypeScript {
                     this.operand = typeFlow.typeCheck(this.operand);
 >this.operand = typeFlow.typeCheck(this.operand) : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >typeFlow.typeCheck(this.operand) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : UnaryExpression
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
                     return this;
->this : this
+>this : UnaryExpression
 
                 case NodeType.Typeof:
 >NodeType.Typeof : any
@@ -1630,27 +1630,27 @@ module TypeScript {
                     this.operand = typeFlow.typeCheck(this.operand);
 >this.operand = typeFlow.typeCheck(this.operand) : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >typeFlow.typeCheck(this.operand) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     this.type = typeFlow.stringType;
 >this.type = typeFlow.stringType : any
 >this.type : Type
->this : this
+>this : UnaryExpression
 >type : Type
 >typeFlow.stringType : any
 >typeFlow : TypeFlow
 >stringType : any
 
                     return this;
->this : this
+>this : UnaryExpression
 
                 case NodeType.Delete:
 >NodeType.Delete : any
@@ -1660,20 +1660,20 @@ module TypeScript {
                     this.operand = typeFlow.typeCheck(this.operand);
 >this.operand = typeFlow.typeCheck(this.operand) : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >typeFlow.typeCheck(this.operand) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     this.type = typeFlow.booleanType;
 >this.type = typeFlow.booleanType : any
 >this.type : Type
->this : this
+>this : UnaryExpression
 >type : Type
 >typeFlow.booleanType : any
 >typeFlow : TypeFlow
@@ -1689,14 +1689,14 @@ module TypeScript {
                     this.castTerm = typeFlow.typeCheck(this.castTerm);
 >this.castTerm = typeFlow.typeCheck(this.castTerm) : any
 >this.castTerm : AST
->this : this
+>this : UnaryExpression
 >castTerm : AST
 >typeFlow.typeCheck(this.castTerm) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.castTerm : AST
->this : this
+>this : UnaryExpression
 >castTerm : AST
 
                     var applyTargetType = !this.operand.isParenthesized;
@@ -1704,7 +1704,7 @@ module TypeScript {
 >!this.operand.isParenthesized : boolean
 >this.operand.isParenthesized : boolean
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >isParenthesized : boolean
 
@@ -1714,7 +1714,7 @@ module TypeScript {
 >applyTargetType : boolean
 >this.castTerm.type : Type
 >this.castTerm : AST
->this : this
+>this : UnaryExpression
 >castTerm : AST
 >type : Type
 >null : null
@@ -1735,7 +1735,7 @@ module TypeScript {
 >inProvisionalTypecheckMode : any
 >true : true
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     typeFlow.castWithCoercion(this.operand, this.castTerm.type, false, true);
@@ -1744,11 +1744,11 @@ module TypeScript {
 >typeFlow : TypeFlow
 >castWithCoercion : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >this.castTerm.type : Type
 >this.castTerm : AST
->this : this
+>this : UnaryExpression
 >castTerm : AST
 >type : Type
 >false : false
@@ -1757,16 +1757,16 @@ module TypeScript {
                     this.type = this.castTerm.type;
 >this.type = this.castTerm.type : Type
 >this.type : Type
->this : this
+>this : UnaryExpression
 >type : Type
 >this.castTerm.type : Type
 >this.castTerm : AST
->this : this
+>this : UnaryExpression
 >castTerm : AST
 >type : Type
 
                     return this;
->this : this
+>this : UnaryExpression
 
                 case NodeType.Void:
 >NodeType.Void : any
@@ -1779,20 +1779,20 @@ module TypeScript {
                     this.operand = typeFlow.typeCheck(this.operand);
 >this.operand = typeFlow.typeCheck(this.operand) : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >typeFlow.typeCheck(this.operand) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     this.type = typeFlow.checker.undefinedType;
 >this.type = typeFlow.checker.undefinedType : any
 >this.type : Type
->this : this
+>this : UnaryExpression
 >type : Type
 >typeFlow.checker.undefinedType : any
 >typeFlow.checker : any
@@ -1809,7 +1809,7 @@ module TypeScript {
 >"please implement in derived class" : "please implement in derived class"
             }
             return this;
->this : this
+>this : UnaryExpression
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -1823,7 +1823,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : UnaryExpression
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -1831,11 +1831,11 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : UnaryExpression
 
             switch (this.nodeType) {
 >this.nodeType : NodeType
->this : this
+>this : UnaryExpression
 >nodeType : NodeType
 
                 case NodeType.IncPost:
@@ -1849,7 +1849,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.PlusPlus : any
 >TokenID : any
@@ -1882,7 +1882,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Exclamation : any
 >TokenID : any
@@ -1901,7 +1901,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.MinusMinus : any
 >TokenID : any
@@ -1928,7 +1928,7 @@ module TypeScript {
 >emitObjectLiteral : any
 ><ASTList>this.operand : ASTList
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     break;
@@ -1944,7 +1944,7 @@ module TypeScript {
 >emitArrayLiteral : any
 ><ASTList>this.operand : ASTList
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 
                     break;
@@ -1966,7 +1966,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -1990,7 +1990,7 @@ module TypeScript {
 >this.operand.nodeType == NodeType.Neg : boolean
 >this.operand.nodeType : NodeType
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >nodeType : NodeType
 >NodeType.Neg : any
@@ -2001,7 +2001,7 @@ module TypeScript {
 >this.operand.isParenthesized = true : true
 >this.operand.isParenthesized : boolean
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >isParenthesized : boolean
 >true : true
@@ -2012,7 +2012,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Minus : any
 >TokenID : any
@@ -2036,7 +2036,7 @@ module TypeScript {
 >this.operand.nodeType == NodeType.Pos : boolean
 >this.operand.nodeType : NodeType
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >nodeType : NodeType
 >NodeType.Pos : any
@@ -2047,7 +2047,7 @@ module TypeScript {
 >this.operand.isParenthesized = true : true
 >this.operand.isParenthesized : boolean
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >isParenthesized : boolean
 >true : true
@@ -2058,7 +2058,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Plus : any
 >TokenID : any
@@ -2084,7 +2084,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.PlusPlus : any
 >TokenID : any
@@ -2110,7 +2110,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.MinusMinus : any
 >TokenID : any
@@ -2136,7 +2136,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -2169,7 +2169,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -2195,7 +2195,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -2221,7 +2221,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -2240,7 +2240,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand : AST
->this : this
+>this : UnaryExpression
 >operand : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -2259,14 +2259,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : UnaryExpression
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : UnaryExpression
 >false : false
         }
     }
@@ -2292,11 +2292,11 @@ module TypeScript {
             this.minChar = this.target.minChar;
 >this.minChar = this.target.minChar : number
 >this.minChar : number
->this : this
+>this : CallExpression
 >minChar : number
 >this.target.minChar : number
 >this.target : AST
->this : this
+>this : CallExpression
 >target : AST
 >minChar : number
         }
@@ -2312,7 +2312,7 @@ module TypeScript {
             if (this.nodeType == NodeType.New) {
 >this.nodeType == NodeType.New : boolean
 >this.nodeType : NodeType
->this : this
+>this : CallExpression
 >nodeType : NodeType
 >NodeType.New : any
 >NodeType : any
@@ -2323,7 +2323,7 @@ module TypeScript {
 >typeFlow.typeCheckNew : any
 >typeFlow : TypeFlow
 >typeCheckNew : any
->this : this
+>this : CallExpression
             }
             else {
                 return typeFlow.typeCheckCall(this);
@@ -2331,7 +2331,7 @@ module TypeScript {
 >typeFlow.typeCheckCall : any
 >typeFlow : TypeFlow
 >typeCheckCall : any
->this : this
+>this : CallExpression
             }
         }
 
@@ -2346,7 +2346,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : CallExpression
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -2354,12 +2354,12 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : CallExpression
 
             if (this.nodeType == NodeType.New) {
 >this.nodeType == NodeType.New : boolean
 >this.nodeType : NodeType
->this : this
+>this : CallExpression
 >nodeType : NodeType
 >NodeType.New : any
 >NodeType : any
@@ -2371,10 +2371,10 @@ module TypeScript {
 >emitter : Emitter
 >emitNew : any
 >this.target : AST
->this : this
+>this : CallExpression
 >target : AST
 >this.arguments : ASTList
->this : this
+>this : CallExpression
 >arguments : ASTList
             }
             else {
@@ -2383,12 +2383,12 @@ module TypeScript {
 >emitter.emitCall : any
 >emitter : Emitter
 >emitCall : any
->this : this
+>this : CallExpression
 >this.target : AST
->this : this
+>this : CallExpression
 >target : AST
 >this.arguments : ASTList
->this : this
+>this : CallExpression
 >arguments : ASTList
             }
 
@@ -2397,14 +2397,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : CallExpression
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : CallExpression
 >false : false
         }
     }
@@ -2430,7 +2430,7 @@ module TypeScript {
 
             switch (this.nodeType) {
 >this.nodeType : NodeType
->this : this
+>this : BinaryExpression
 >nodeType : NodeType
 
                 case NodeType.Dot:
@@ -2443,7 +2443,7 @@ module TypeScript {
 >typeFlow.typeCheckDotOperator : any
 >typeFlow : TypeFlow
 >typeCheckDotOperator : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.Asg:
 >NodeType.Asg : any
@@ -2455,7 +2455,7 @@ module TypeScript {
 >typeFlow.typeCheckAsgOperator : any
 >typeFlow : TypeFlow
 >typeCheckAsgOperator : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.Add:
 >NodeType.Add : any
@@ -2497,7 +2497,7 @@ module TypeScript {
 >typeFlow.typeCheckArithmeticOperator : any
 >typeFlow : TypeFlow
 >typeCheckArithmeticOperator : any
->this : this
+>this : BinaryExpression
 >false : false
 
                 case NodeType.Xor:
@@ -2510,7 +2510,7 @@ module TypeScript {
 >typeFlow.typeCheckBitwiseOperator : any
 >typeFlow : TypeFlow
 >typeCheckBitwiseOperator : any
->this : this
+>this : BinaryExpression
 >false : false
 
                 case NodeType.Ne:
@@ -2541,7 +2541,7 @@ module TypeScript {
 >nodeTypeTable[this.nodeType] : any
 >nodeTypeTable : any
 >this.nodeType : NodeType
->this : this
+>this : BinaryExpression
 >nodeType : NodeType
 
                         typeFlow.checker.errorReporter.styleError(this, "use of " + text);
@@ -2553,7 +2553,7 @@ module TypeScript {
 >checker : any
 >errorReporter : any
 >styleError : any
->this : this
+>this : BinaryExpression
 >"use of " + text : string
 >"use of " : "use of "
 >text : string
@@ -2573,7 +2573,7 @@ module TypeScript {
 >nodeTypeTable[this.nodeType] : any
 >nodeTypeTable : any
 >this.nodeType : NodeType
->this : this
+>this : BinaryExpression
 >nodeType : NodeType
 
                         if ((this.operand2 !== null) && (this.operand2.nodeType == NodeType.Null)) {
@@ -2581,14 +2581,14 @@ module TypeScript {
 >(this.operand2 !== null) : boolean
 >this.operand2 !== null : boolean
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >null : null
 >(this.operand2.nodeType == NodeType.Null) : boolean
 >this.operand2.nodeType == NodeType.Null : boolean
 >this.operand2.nodeType : NodeType
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >nodeType : NodeType
 >NodeType.Null : any
@@ -2604,7 +2604,7 @@ module TypeScript {
 >checker : any
 >errorReporter : any
 >styleError : any
->this : this
+>this : BinaryExpression
 >"use of " + text + " to compare with null" : string
 >"use of " + text : string
 >"use of " : "use of "
@@ -2647,7 +2647,7 @@ module TypeScript {
 >typeFlow.typeCheckBooleanOperator : any
 >typeFlow : TypeFlow
 >typeCheckBooleanOperator : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.Index:
 >NodeType.Index : any
@@ -2659,7 +2659,7 @@ module TypeScript {
 >typeFlow.typeCheckIndex : any
 >typeFlow : TypeFlow
 >typeCheckIndex : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.Member:
 >NodeType.Member : any
@@ -2669,14 +2669,14 @@ module TypeScript {
                     this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : BinaryExpression
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
                     return this;
->this : this
+>this : BinaryExpression
 
                 case NodeType.LogOr:
 >NodeType.LogOr : any
@@ -2688,7 +2688,7 @@ module TypeScript {
 >typeFlow.typeCheckLogOr : any
 >typeFlow : TypeFlow
 >typeCheckLogOr : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.LogAnd:
 >NodeType.LogAnd : any
@@ -2700,7 +2700,7 @@ module TypeScript {
 >typeFlow.typeCheckLogAnd : any
 >typeFlow : TypeFlow
 >typeCheckLogAnd : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.AsgAdd:
 >NodeType.AsgAdd : any
@@ -2742,7 +2742,7 @@ module TypeScript {
 >typeFlow.typeCheckArithmeticOperator : any
 >typeFlow : TypeFlow
 >typeCheckArithmeticOperator : any
->this : this
+>this : BinaryExpression
 >true : true
 
                 case NodeType.AsgXor:
@@ -2755,7 +2755,7 @@ module TypeScript {
 >typeFlow.typeCheckBitwiseOperator : any
 >typeFlow : TypeFlow
 >typeCheckBitwiseOperator : any
->this : this
+>this : BinaryExpression
 >true : true
 
                 case NodeType.Lsh:
@@ -2778,7 +2778,7 @@ module TypeScript {
 >typeFlow.typeCheckShift : any
 >typeFlow : TypeFlow
 >typeCheckShift : any
->this : this
+>this : BinaryExpression
 >false : false
 
                 case NodeType.AsgLsh:
@@ -2801,7 +2801,7 @@ module TypeScript {
 >typeFlow.typeCheckShift : any
 >typeFlow : TypeFlow
 >typeCheckShift : any
->this : this
+>this : BinaryExpression
 >true : true
 
                 case NodeType.Comma:
@@ -2814,7 +2814,7 @@ module TypeScript {
 >typeFlow.typeCheckCommaOperator : any
 >typeFlow : TypeFlow
 >typeCheckCommaOperator : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.InstOf:
 >NodeType.InstOf : any
@@ -2826,7 +2826,7 @@ module TypeScript {
 >typeFlow.typeCheckInstOf : any
 >typeFlow : TypeFlow
 >typeCheckInstOf : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.In:
 >NodeType.In : any
@@ -2838,7 +2838,7 @@ module TypeScript {
 >typeFlow.typeCheckInOperator : any
 >typeFlow : TypeFlow
 >typeCheckInOperator : any
->this : this
+>this : BinaryExpression
 
                 case NodeType.From:
 >NodeType.From : any
@@ -2854,7 +2854,7 @@ module TypeScript {
 >checker : any
 >errorReporter : any
 >simpleError : any
->this : this
+>this : BinaryExpression
 >"Illegal use of 'from' keyword in binary expression" : "Illegal use of 'from' keyword in binary expression"
 
                     break;
@@ -2865,7 +2865,7 @@ module TypeScript {
 >"please implement in derived class" : "please implement in derived class"
             }
             return this;
->this : this
+>this : BinaryExpression
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -2879,7 +2879,7 @@ module TypeScript {
 >nodeTypeToTokTable[this.nodeType] : any
 >nodeTypeToTokTable : any
 >this.nodeType : NodeType
->this : this
+>this : BinaryExpression
 >nodeType : NodeType
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -2887,7 +2887,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : BinaryExpression
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -2895,7 +2895,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : BinaryExpression
 
             if (binTokenId != undefined) {
 >binTokenId != undefined : boolean
@@ -2908,7 +2908,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand1 : AST
->this : this
+>this : BinaryExpression
 >operand1 : AST
 >binTokenId : any
 >false : false
@@ -2968,7 +2968,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >binTokenId : any
 >false : false
@@ -2976,7 +2976,7 @@ module TypeScript {
             else {
                 switch (this.nodeType) {
 >this.nodeType : NodeType
->this : this
+>this : BinaryExpression
 >nodeType : NodeType
 
                     case NodeType.Dot:
@@ -2990,7 +2990,7 @@ module TypeScript {
 >emitter.tryEmitConstant : any
 >emitter : Emitter
 >tryEmitConstant : any
->this : this
+>this : BinaryExpression
 
                             emitter.emitJavascript(this.operand1, TokenID.Dot, false);
 >emitter.emitJavascript(this.operand1, TokenID.Dot, false) : any
@@ -2998,7 +2998,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand1 : AST
->this : this
+>this : BinaryExpression
 >operand1 : AST
 >TokenID.Dot : any
 >TokenID : any
@@ -3019,7 +3019,7 @@ module TypeScript {
 >emitJavascriptName : any
 ><Identifier>this.operand2 : Identifier
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >false : false
                         }
@@ -3035,10 +3035,10 @@ module TypeScript {
 >emitter : Emitter
 >emitIndex : any
 >this.operand1 : AST
->this : this
+>this : BinaryExpression
 >operand1 : AST
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 
                         break;
@@ -3053,7 +3053,7 @@ module TypeScript {
 >this.operand2.nodeType == NodeType.FuncDecl : boolean
 >this.operand2.nodeType : NodeType
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >nodeType : NodeType
 >NodeType.FuncDecl : any
@@ -3064,7 +3064,7 @@ module TypeScript {
 >(<FuncDecl>this.operand2) : FuncDecl
 ><FuncDecl>this.operand2 : FuncDecl
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >isAccessor : () => any
 
@@ -3072,7 +3072,7 @@ module TypeScript {
 >funcDecl : FuncDecl
 ><FuncDecl>this.operand2 : FuncDecl
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 
                             if (hasFlag(funcDecl.fncFlags, FncFlags.GetAccessor)) {
@@ -3106,7 +3106,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand1 : AST
->this : this
+>this : BinaryExpression
 >operand1 : AST
 >TokenID.Colon : any
 >TokenID : any
@@ -3120,7 +3120,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand1 : AST
->this : this
+>this : BinaryExpression
 >operand1 : AST
 >TokenID.Colon : any
 >TokenID : any
@@ -3140,7 +3140,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >TokenID.Comma : any
 >TokenID : any
@@ -3159,7 +3159,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand1 : AST
->this : this
+>this : BinaryExpression
 >operand1 : AST
 >TokenID.Comma : any
 >TokenID : any
@@ -3194,7 +3194,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand2 : AST
->this : this
+>this : BinaryExpression
 >operand2 : AST
 >TokenID.Comma : any
 >TokenID : any
@@ -3224,14 +3224,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : BinaryExpression
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : BinaryExpression
 >false : false
         }
     }
@@ -3266,7 +3266,7 @@ module TypeScript {
 >typeFlow.typeCheckQMark : any
 >typeFlow : TypeFlow
 >typeCheckQMark : any
->this : this
+>this : ConditionalExpression
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -3280,7 +3280,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ConditionalExpression
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -3288,7 +3288,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ConditionalExpression
 
             emitter.emitJavascript(this.operand1, TokenID.Question, false);
 >emitter.emitJavascript(this.operand1, TokenID.Question, false) : any
@@ -3296,7 +3296,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand1 : AST
->this : this
+>this : ConditionalExpression
 >operand1 : AST
 >TokenID.Question : any
 >TokenID : any
@@ -3316,7 +3316,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand2 : AST
->this : this
+>this : ConditionalExpression
 >operand2 : AST
 >TokenID.Question : any
 >TokenID : any
@@ -3336,7 +3336,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.operand3 : AST
->this : this
+>this : ConditionalExpression
 >operand3 : AST
 >TokenID.Question : any
 >TokenID : any
@@ -3348,14 +3348,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ConditionalExpression
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ConditionalExpression
 >false : false
         }
     }
@@ -3381,20 +3381,20 @@ module TypeScript {
 >false : false
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => NumberLiteral
 >typeFlow : TypeFlow
 
             this.type = typeFlow.doubleType;
 >this.type = typeFlow.doubleType : any
 >this.type : Type
->this : this
+>this : NumberLiteral
 >type : Type
 >typeFlow.doubleType : any
 >typeFlow : TypeFlow
 >doubleType : any
 
             return this;
->this : this
+>this : NumberLiteral
         }
 
         public treeViewLabel() {
@@ -3405,7 +3405,7 @@ module TypeScript {
 >"num: " : "num: "
 >this.printLabel() : string
 >this.printLabel : () => string
->this : this
+>this : NumberLiteral
 >printLabel : () => string
         }
 
@@ -3420,7 +3420,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : NumberLiteral
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -3428,11 +3428,11 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : NumberLiteral
 
             if (this.isNegativeZero) {
 >this.isNegativeZero : boolean
->this : this
+>this : NumberLiteral
 >isNegativeZero : boolean
 
                 emitter.writeToOutput("-");
@@ -3451,13 +3451,13 @@ module TypeScript {
 >this.value.toString() : string
 >this.value.toString : (radix?: number) => string
 >this.value : number
->this : this
+>this : NumberLiteral
 >value : number
 >toString : (radix?: number) => string
 
             if (this.hasEmptyFraction)
 >this.hasEmptyFraction : boolean
->this : this
+>this : NumberLiteral
 >hasEmptyFraction : boolean
 
                 emitter.writeToOutput(".0");
@@ -3472,14 +3472,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : NumberLiteral
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : NumberLiteral
 >false : false
         }
 
@@ -3493,10 +3493,10 @@ module TypeScript {
 >Math : Math
 >floor : (x: number) => number
 >this.value : number
->this : this
+>this : NumberLiteral
 >value : number
 >this.value : number
->this : this
+>this : NumberLiteral
 >value : number
 
                 return this.value.toFixed(2).toString();
@@ -3505,7 +3505,7 @@ module TypeScript {
 >this.value.toFixed(2) : string
 >this.value.toFixed : (fractionDigits?: number) => string
 >this.value : number
->this : this
+>this : NumberLiteral
 >value : number
 >toFixed : (fractionDigits?: number) => string
 >2 : 2
@@ -3513,7 +3513,7 @@ module TypeScript {
             }
             else if (this.hasEmptyFraction) {
 >this.hasEmptyFraction : boolean
->this : this
+>this : NumberLiteral
 >hasEmptyFraction : boolean
 
                 return this.value.toString() + ".0";
@@ -3521,7 +3521,7 @@ module TypeScript {
 >this.value.toString() : string
 >this.value.toString : (radix?: number) => string
 >this.value : number
->this : this
+>this : NumberLiteral
 >value : number
 >toString : (radix?: number) => string
 >".0" : ".0"
@@ -3531,7 +3531,7 @@ module TypeScript {
 >this.value.toString() : string
 >this.value.toString : (radix?: number) => string
 >this.value : number
->this : this
+>this : NumberLiteral
 >value : number
 >toString : (radix?: number) => string
             }
@@ -3554,20 +3554,20 @@ module TypeScript {
         }
         
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => RegexLiteral
 >typeFlow : TypeFlow
 
             this.type = typeFlow.regexType;
 >this.type = typeFlow.regexType : any
 >this.type : Type
->this : this
+>this : RegexLiteral
 >type : Type
 >typeFlow.regexType : any
 >typeFlow : TypeFlow
 >regexType : any
 
             return this;
->this : this
+>this : RegexLiteral
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -3581,7 +3581,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : RegexLiteral
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -3589,7 +3589,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : RegexLiteral
 
             emitter.writeToOutput(this.regex.toString());
 >emitter.writeToOutput(this.regex.toString()) : any
@@ -3599,7 +3599,7 @@ module TypeScript {
 >this.regex.toString() : any
 >this.regex.toString : any
 >this.regex : any
->this : this
+>this : RegexLiteral
 >regex : any
 >toString : any
 
@@ -3608,14 +3608,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : RegexLiteral
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : RegexLiteral
 >false : false
         }
     }
@@ -3646,7 +3646,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : StringLiteral
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -3654,7 +3654,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : StringLiteral
 
             emitter.emitStringLiteral(this.text);
 >emitter.emitStringLiteral(this.text) : any
@@ -3662,7 +3662,7 @@ module TypeScript {
 >emitter : Emitter
 >emitStringLiteral : any
 >this.text : string
->this : this
+>this : StringLiteral
 >text : string
 
             emitter.recordSourceMappingEnd(this);
@@ -3670,32 +3670,32 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : StringLiteral
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : StringLiteral
 >false : false
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => StringLiteral
 >typeFlow : TypeFlow
 
             this.type = typeFlow.stringType;
 >this.type = typeFlow.stringType : any
 >this.type : Type
->this : this
+>this : StringLiteral
 >type : Type
 >typeFlow.stringType : any
 >typeFlow : TypeFlow
 >stringType : any
 
             return this;
->this : this
+>this : StringLiteral
         }
 
         public treeViewLabel() {
@@ -3705,7 +3705,7 @@ module TypeScript {
 >"st: " + this.text : string
 >"st: " : "st: "
 >this.text : string
->this : this
+>this : StringLiteral
 >text : string
         }
 
@@ -3714,7 +3714,7 @@ module TypeScript {
 
             return this.text;
 >this.text : string
->this : this
+>this : StringLiteral
 >text : string
         }
     }
@@ -3774,7 +3774,7 @@ module TypeScript {
 ><ModuleType>this.alias.type : ModuleType
 >this.alias.type : Type
 >this.alias : AST
->this : this
+>this : ImportDeclaration
 >alias : AST
 >type : Type
 
@@ -3784,13 +3784,13 @@ module TypeScript {
 >!this.isDynamicImport || (this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef) : boolean
 >!this.isDynamicImport : boolean
 >this.isDynamicImport : boolean
->this : this
+>this : ImportDeclaration
 >isDynamicImport : boolean
 >(this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef) : boolean
 >this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : boolean
 >this.id.sym : Symbol
 >this.id : Identifier
->this : this
+>this : ImportDeclaration
 >id : Identifier
 >sym : Symbol
 >!(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : boolean
@@ -3799,7 +3799,7 @@ module TypeScript {
 ><TypeSymbol>this.id.sym : TypeSymbol
 >this.id.sym : Symbol
 >this.id : Identifier
->this : this
+>this : ImportDeclaration
 >id : Identifier
 >sym : Symbol
 >onlyReferencedAsTypeRef : any
@@ -3821,14 +3821,14 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ImportDeclaration
 
                 emitter.emitParensAndCommentsInPlace(this, true);
 >emitter.emitParensAndCommentsInPlace(this, true) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ImportDeclaration
 >true : true
 
                 emitter.writeToOutput("var " + this.id.actualText + " = ");
@@ -3841,7 +3841,7 @@ module TypeScript {
 >"var " : "var "
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : ImportDeclaration
 >id : Identifier
 >actualText : string
 >" = " : " = "
@@ -3853,7 +3853,7 @@ module TypeScript {
 >modAliasId : any
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : ImportDeclaration
 >id : Identifier
 >actualText : string
 
@@ -3864,7 +3864,7 @@ module TypeScript {
 >firstModAlias : any
 >this.firstAliasedModToString() : string
 >this.firstAliasedModToString : () => string
->this : this
+>this : ImportDeclaration
 >firstAliasedModToString : () => string
 
                 emitter.emitJavascript(this.alias, TokenID.Tilde, false);
@@ -3873,7 +3873,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.alias : AST
->this : this
+>this : ImportDeclaration
 >alias : AST
 >TokenID.Tilde : any
 >TokenID : any
@@ -3884,7 +3884,7 @@ module TypeScript {
                 if (!this.isDynamicImport) {
 >!this.isDynamicImport : boolean
 >this.isDynamicImport : boolean
->this : this
+>this : ImportDeclaration
 >isDynamicImport : boolean
 
                     emitter.writeToOutput(";");
@@ -3899,7 +3899,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ImportDeclaration
 >false : false
 
                 emitter.recordSourceMappingEnd(this);
@@ -3907,7 +3907,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ImportDeclaration
 
                 emitter.modAliasId = prevModAliasId;
 >emitter.modAliasId = prevModAliasId : any
@@ -3934,7 +3934,7 @@ module TypeScript {
 >typeFlow.typeCheckImportDecl : any
 >typeFlow : TypeFlow
 >typeCheckImportDecl : any
->this : this
+>this : ImportDeclaration
         }
 
         public getAliasName(aliasAST?: AST = this.alias) : string {
@@ -3971,7 +3971,7 @@ module TypeScript {
 >this.getAliasName(dotExpr.operand1) + "." : string
 >this.getAliasName(dotExpr.operand1) : string
 >this.getAliasName : (aliasAST?: AST) => string
->this : this
+>this : ImportDeclaration
 >getAliasName : (aliasAST?: AST) => string
 >dotExpr.operand1 : AST
 >dotExpr : BinaryExpression
@@ -3979,7 +3979,7 @@ module TypeScript {
 >"." : "."
 >this.getAliasName(dotExpr.operand2) : string
 >this.getAliasName : (aliasAST?: AST) => string
->this : this
+>this : ImportDeclaration
 >getAliasName : (aliasAST?: AST) => string
 >dotExpr.operand2 : AST
 >dotExpr : BinaryExpression
@@ -3994,7 +3994,7 @@ module TypeScript {
 >this.alias.nodeType == NodeType.Name : boolean
 >this.alias.nodeType : NodeType
 >this.alias : AST
->this : this
+>this : ImportDeclaration
 >alias : AST
 >nodeType : NodeType
 >NodeType.Name : any
@@ -4006,7 +4006,7 @@ module TypeScript {
 >(<Identifier>this.alias) : Identifier
 ><Identifier>this.alias : Identifier
 >this.alias : AST
->this : this
+>this : ImportDeclaration
 >alias : AST
 >actualText : string
             }
@@ -4015,7 +4015,7 @@ module TypeScript {
 >dotExpr : BinaryExpression
 ><BinaryExpression>this.alias : BinaryExpression
 >this.alias : AST
->this : this
+>this : ImportDeclaration
 >alias : AST
 
                 var firstMod = <Identifier>dotExpr.operand1;
@@ -4075,7 +4075,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Private) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : BoundDecl
 >varFlags : any
 >VarFlags.Private : any
 >VarFlags : any
@@ -4086,7 +4086,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Public) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : BoundDecl
 >varFlags : any
 >VarFlags.Public : any
 >VarFlags : any
@@ -4097,7 +4097,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Property) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : BoundDecl
 >varFlags : any
 >VarFlags.Property : any
 >VarFlags : any
@@ -4112,7 +4112,7 @@ module TypeScript {
 >typeFlow.typeCheckBoundDecl : any
 >typeFlow : TypeFlow
 >typeCheckBoundDecl : any
->this : this
+>this : BoundDecl
         }
 
         public printLabel() {
@@ -4121,7 +4121,7 @@ module TypeScript {
             return this.treeViewLabel();
 >this.treeViewLabel() : any
 >this.treeViewLabel : () => any
->this : this
+>this : BoundDecl
 >treeViewLabel : () => any
         }
     }
@@ -4149,7 +4149,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Ambient) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : VarDecl
 >varFlags : any
 >VarFlags.Ambient : any
 >VarFlags : any
@@ -4160,7 +4160,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Exported) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : VarDecl
 >varFlags : any
 >VarFlags.Exported : any
 >VarFlags : any
@@ -4171,7 +4171,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Static) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : VarDecl
 >varFlags : any
 >VarFlags.Static : any
 >VarFlags : any
@@ -4188,7 +4188,7 @@ module TypeScript {
 >emitter.emitJavascriptVarDecl : any
 >emitter : Emitter
 >emitJavascriptVarDecl : any
->this : this
+>this : VarDecl
 >tokenId : TokenID
         }
 
@@ -4200,7 +4200,7 @@ module TypeScript {
 >"var " : "var "
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : VarDecl
 >id : Identifier
 >actualText : string
         }
@@ -4231,10 +4231,10 @@ module TypeScript {
 >isOptionalArg : () => true | AST
 >this.isOptional || this.init : true | AST
 >this.isOptional : boolean
->this : this
+>this : ArgDecl
 >isOptional : boolean
 >this.init : AST
->this : this
+>this : ArgDecl
 >init : AST
 
         public treeViewLabel() {
@@ -4245,7 +4245,7 @@ module TypeScript {
 >"arg: " : "arg: "
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : ArgDecl
 >id : Identifier
 >actualText : string
         }
@@ -4265,7 +4265,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ArgDecl
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -4273,7 +4273,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ArgDecl
 
             emitter.writeToOutput(this.id.actualText);
 >emitter.writeToOutput(this.id.actualText) : any
@@ -4282,7 +4282,7 @@ module TypeScript {
 >writeToOutput : any
 >this.id.actualText : string
 >this.id : Identifier
->this : this
+>this : ArgDecl
 >id : Identifier
 >actualText : string
 
@@ -4291,14 +4291,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ArgDecl
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ArgDecl
 >false : false
         }
     }
@@ -4437,7 +4437,7 @@ module TypeScript {
             if (this.internalNameCache == null) {
 >this.internalNameCache == null : boolean
 >this.internalNameCache : string
->this : this
+>this : FuncDecl
 >internalNameCache : string
 >null : null
 
@@ -4445,7 +4445,7 @@ module TypeScript {
 >extName : string
 >this.getNameText() : string
 >this.getNameText : () => string
->this : this
+>this : FuncDecl
 >getNameText : () => string
 
                 if (extName) {
@@ -4454,7 +4454,7 @@ module TypeScript {
                     this.internalNameCache = "_internal_" + extName;
 >this.internalNameCache = "_internal_" + extName : string
 >this.internalNameCache : string
->this : this
+>this : FuncDecl
 >internalNameCache : string
 >"_internal_" + extName : string
 >"_internal_" : "_internal_"
@@ -4464,7 +4464,7 @@ module TypeScript {
                     this.internalNameCache = "_internal_" + internalId++;
 >this.internalNameCache = "_internal_" + internalId++ : string
 >this.internalNameCache : string
->this : this
+>this : FuncDecl
 >internalNameCache : string
 >"_internal_" + internalId++ : string
 >"_internal_" : "_internal_"
@@ -4474,7 +4474,7 @@ module TypeScript {
             }
             return this.internalNameCache;
 >this.internalNameCache : string
->this : this
+>this : FuncDecl
 >internalNameCache : string
         }
 
@@ -4483,7 +4483,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.HasSelfReference) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.HasSelfReference : any
 >FncFlags : any
@@ -4493,7 +4493,7 @@ module TypeScript {
 >setHasSelfReference : () => void
 >this.fncFlags |= FncFlags.HasSelfReference : number
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.HasSelfReference : any
 >FncFlags : any
@@ -4507,14 +4507,14 @@ module TypeScript {
             if (this.envids == null) {
 >this.envids == null : boolean
 >this.envids : Identifier[]
->this : this
+>this : FuncDecl
 >envids : Identifier[]
 >null : null
 
                 this.envids = new Identifier[];
 >this.envids = new Identifier[] : any
 >this.envids : Identifier[]
->this : this
+>this : FuncDecl
 >envids : Identifier[]
 >new Identifier[] : any
 >Identifier[] : any
@@ -4525,11 +4525,11 @@ module TypeScript {
 >this.envids[this.envids.length] = id : Identifier
 >this.envids[this.envids.length] : Identifier
 >this.envids : Identifier[]
->this : this
+>this : FuncDecl
 >envids : Identifier[]
 >this.envids.length : number
 >this.envids : Identifier[]
->this : this
+>this : FuncDecl
 >envids : Identifier[]
 >length : number
 >id : Identifier
@@ -4537,7 +4537,7 @@ module TypeScript {
             var outerFnc = this.enclosingFnc;
 >outerFnc : FuncDecl
 >this.enclosingFnc : FuncDecl
->this : this
+>this : FuncDecl
 >enclosingFnc : FuncDecl
 
             if (sym) {
@@ -4576,7 +4576,7 @@ module TypeScript {
 >this.envids.length - 1 : number
 >this.envids.length : number
 >this.envids : Identifier[]
->this : this
+>this : FuncDecl
 >envids : Identifier[]
 >length : number
 >1 : 1
@@ -4589,14 +4589,14 @@ module TypeScript {
             if (this.jumpRefs == null) {
 >this.jumpRefs == null : boolean
 >this.jumpRefs : Identifier[]
->this : this
+>this : FuncDecl
 >jumpRefs : Identifier[]
 >null : null
 
                 this.jumpRefs = new Identifier[];
 >this.jumpRefs = new Identifier[] : any
 >this.jumpRefs : Identifier[]
->this : this
+>this : FuncDecl
 >jumpRefs : Identifier[]
 >new Identifier[] : any
 >Identifier[] : any
@@ -4615,11 +4615,11 @@ module TypeScript {
 >this.jumpRefs[this.jumpRefs.length] = id : Identifier
 >this.jumpRefs[this.jumpRefs.length] : Identifier
 >this.jumpRefs : Identifier[]
->this : this
+>this : FuncDecl
 >jumpRefs : Identifier[]
 >this.jumpRefs.length : number
 >this.jumpRefs : Identifier[]
->this : this
+>this : FuncDecl
 >jumpRefs : Identifier[]
 >length : number
 >id : Identifier
@@ -4638,7 +4638,7 @@ module TypeScript {
 >cloId : number
 >this.addCloRef(id, null) : number
 >this.addCloRef : (id: Identifier, sym: Symbol) => number
->this : this
+>this : FuncDecl
 >addCloRef : (id: Identifier, sym: Symbol) => number
 >id : Identifier
 >null : null
@@ -4709,9 +4709,9 @@ module TypeScript {
 >walker : any
 >walk : any
 >this.bod : ASTList
->this : this
+>this : FuncDecl
 >bod : ASTList
->this : this
+>this : FuncDecl
 
             return context;
 >context : any
@@ -4726,7 +4726,7 @@ module TypeScript {
 >typeFlow.typeCheckFunction : any
 >typeFlow : TypeFlow
 >typeCheckFunction : any
->this : this
+>this : FuncDecl
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -4740,7 +4740,7 @@ module TypeScript {
 >emitter.emitJavascriptFunction : any
 >emitter : Emitter
 >emitJavascriptFunction : any
->this : this
+>this : FuncDecl
         }
 
         public getNameText() {
@@ -4748,20 +4748,20 @@ module TypeScript {
 
             if (this.name) {
 >this.name : Identifier
->this : this
+>this : FuncDecl
 >name : Identifier
 
                 return this.name.actualText;
 >this.name.actualText : string
 >this.name : Identifier
->this : this
+>this : FuncDecl
 >name : Identifier
 >actualText : string
             }
             else {
                 return this.hint;
 >this.hint : string
->this : this
+>this : FuncDecl
 >hint : string
             }
         }
@@ -4774,7 +4774,7 @@ module TypeScript {
 >(this.fncFlags & FncFlags.Method) : number
 >this.fncFlags & FncFlags.Method : number
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Method : any
 >FncFlags : any
@@ -4789,7 +4789,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.CallMember) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.CallMember : any
 >FncFlags : any
@@ -4800,7 +4800,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.ConstructMember) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.ConstructMember : any
 >FncFlags : any
@@ -4811,7 +4811,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.IndexerMember) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.IndexerMember : any
 >FncFlags : any
@@ -4823,22 +4823,22 @@ module TypeScript {
 >this.isCallMember() || this.isIndexerMember() : any
 >this.isCallMember() : any
 >this.isCallMember : () => any
->this : this
+>this : FuncDecl
 >isCallMember : () => any
 >this.isIndexerMember() : any
 >this.isIndexerMember : () => any
->this : this
+>this : FuncDecl
 >isIndexerMember : () => any
 >this.isConstructMember() : any
 >this.isConstructMember : () => any
->this : this
+>this : FuncDecl
 >isConstructMember : () => any
 
         public isAnonymousFn() { return this.name === null; }
 >isAnonymousFn : () => boolean
 >this.name === null : boolean
 >this.name : Identifier
->this : this
+>this : FuncDecl
 >name : Identifier
 >null : null
 
@@ -4848,7 +4848,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.GetAccessor) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.GetAccessor : any
 >FncFlags : any
@@ -4856,7 +4856,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.SetAccessor) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.SetAccessor : any
 >FncFlags : any
@@ -4867,7 +4867,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.GetAccessor) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.GetAccessor : any
 >FncFlags : any
@@ -4878,7 +4878,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.SetAccessor) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.SetAccessor : any
 >FncFlags : any
@@ -4889,7 +4889,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.Ambient) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Ambient : any
 >FncFlags : any
@@ -4900,7 +4900,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.Exported) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Exported : any
 >FncFlags : any
@@ -4911,7 +4911,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.Private) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Private : any
 >FncFlags : any
@@ -4922,7 +4922,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.Public) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Public : any
 >FncFlags : any
@@ -4933,7 +4933,7 @@ module TypeScript {
 >hasFlag(this.fncFlags, FncFlags.Static) : any
 >hasFlag : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Static : any
 >FncFlags : any
@@ -4945,7 +4945,7 @@ module TypeScript {
             if (this.name == null) {
 >this.name == null : boolean
 >this.name : Identifier
->this : this
+>this : FuncDecl
 >name : Identifier
 >null : null
 
@@ -4958,7 +4958,7 @@ module TypeScript {
 >"func: " : "func: "
 >this.name.actualText : string
 >this.name : Identifier
->this : this
+>this : FuncDecl
 >name : Identifier
 >actualText : string
             }
@@ -4970,7 +4970,7 @@ module TypeScript {
             this.fncFlags = FncFlags.None;
 >this.fncFlags = FncFlags.None : any
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.None : any
 >FncFlags : any
@@ -4983,7 +4983,7 @@ module TypeScript {
 >(this.fncFlags & FncFlags.Signature) : number
 >this.fncFlags & FncFlags.Signature : number
 >this.fncFlags : any
->this : this
+>this : FuncDecl
 >fncFlags : any
 >FncFlags.Signature : any
 >FncFlags : any
@@ -4998,7 +4998,7 @@ module TypeScript {
 >!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0) : boolean
 >!this.isConstructor : boolean
 >this.isConstructor : boolean
->this : this
+>this : FuncDecl
 >isConstructor : boolean
 >(this.statics.members.length > 0 || this.innerStaticFuncs.length > 0) : boolean
 >this.statics.members.length > 0 || this.innerStaticFuncs.length > 0 : boolean
@@ -5006,7 +5006,7 @@ module TypeScript {
 >this.statics.members.length : number
 >this.statics.members : AST[]
 >this.statics : ASTList
->this : this
+>this : FuncDecl
 >statics : ASTList
 >members : AST[]
 >length : number
@@ -5014,7 +5014,7 @@ module TypeScript {
 >this.innerStaticFuncs.length > 0 : boolean
 >this.innerStaticFuncs.length : number
 >this.innerStaticFuncs : FuncDecl[]
->this : this
+>this : FuncDecl
 >innerStaticFuncs : FuncDecl[]
 >length : number
 >0 : 0
@@ -5120,14 +5120,14 @@ module TypeScript {
             this.vars = vars;
 >this.vars = vars : ASTList
 >this.vars : ASTList
->this : this
+>this : Script
 >vars : ASTList
 >vars : ASTList
 
             this.scopes = scopes;
 >this.scopes = scopes : ASTList
 >this.scopes : ASTList
->this : this
+>this : Script
 >scopes : ASTList
 >scopes : ASTList
         }
@@ -5141,7 +5141,7 @@ module TypeScript {
 >typeFlow.typeCheckScript : any
 >typeFlow : TypeFlow
 >typeCheckScript : any
->this : this
+>this : Script
         }
 
         public treeViewLabel() {
@@ -5159,14 +5159,14 @@ module TypeScript {
 >!this.isDeclareFile && !this.isResident : boolean
 >!this.isDeclareFile : boolean
 >this.isDeclareFile : boolean
->this : this
+>this : Script
 >isDeclareFile : boolean
 >!this.isResident : boolean
 >this.isResident : boolean
->this : this
+>this : Script
 >isResident : boolean
 >this.bod : ASTList
->this : this
+>this : Script
 >bod : ASTList
 
                 for (var i = 0, len = this.bod.members.length; i < len; i++) {
@@ -5176,7 +5176,7 @@ module TypeScript {
 >this.bod.members.length : number
 >this.bod.members : AST[]
 >this.bod : ASTList
->this : this
+>this : Script
 >bod : ASTList
 >members : AST[]
 >length : number
@@ -5191,7 +5191,7 @@ module TypeScript {
 >this.bod.members[i] : AST
 >this.bod.members : AST[]
 >this.bod : ASTList
->this : this
+>this : Script
 >bod : ASTList
 >members : AST[]
 >i : number
@@ -5335,7 +5335,7 @@ module TypeScript {
             if (this.emitRequired()) {
 >this.emitRequired() : boolean
 >this.emitRequired : () => boolean
->this : this
+>this : Script
 >emitRequired : () => boolean
 
                 emitter.emitParensAndCommentsInPlace(this, true);
@@ -5343,7 +5343,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Script
 >true : true
 
                 emitter.recordSourceMappingStart(this);
@@ -5351,7 +5351,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Script
 
                 emitter.emitJavascriptList(this.bod, null, TokenID.Semicolon, true, false, false, true, this.requiresInherits);
 >emitter.emitJavascriptList(this.bod, null, TokenID.Semicolon, true, false, false, true, this.requiresInherits) : any
@@ -5359,7 +5359,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptList : any
 >this.bod : ASTList
->this : this
+>this : Script
 >bod : ASTList
 >null : null
 >TokenID.Semicolon : any
@@ -5370,7 +5370,7 @@ module TypeScript {
 >false : false
 >true : true
 >this.requiresInherits : boolean
->this : this
+>this : Script
 >requiresInherits : boolean
 
                 emitter.recordSourceMappingEnd(this);
@@ -5378,14 +5378,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Script
 
                 emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Script
 >false : false
             }
         }
@@ -5473,25 +5473,25 @@ module TypeScript {
             this.vars = vars;
 >this.vars = vars : ASTList
 >this.vars : ASTList
->this : this
+>this : ModuleDeclaration
 >vars : ASTList
 >vars : ASTList
 
             this.scopes = scopes;
 >this.scopes = scopes : ASTList
 >this.scopes : ASTList
->this : this
+>this : ModuleDeclaration
 >scopes : ASTList
 >scopes : ASTList
 
             this.prettyName = this.name.actualText;
 >this.prettyName = this.name.actualText : string
 >this.prettyName : string
->this : this
+>this : ModuleDeclaration
 >prettyName : string
 >this.name.actualText : string
 >this.name : Identifier
->this : this
+>this : ModuleDeclaration
 >name : Identifier
 >actualText : string
         }
@@ -5501,7 +5501,7 @@ module TypeScript {
 >hasFlag(this.modFlags, ModuleFlags.Exported) : any
 >hasFlag : any
 >this.modFlags : any
->this : this
+>this : ModuleDeclaration
 >modFlags : any
 >ModuleFlags.Exported : any
 >ModuleFlags : any
@@ -5512,7 +5512,7 @@ module TypeScript {
 >hasFlag(this.modFlags, ModuleFlags.Ambient) : any
 >hasFlag : any
 >this.modFlags : any
->this : this
+>this : ModuleDeclaration
 >modFlags : any
 >ModuleFlags.Ambient : any
 >ModuleFlags : any
@@ -5523,7 +5523,7 @@ module TypeScript {
 >hasFlag(this.modFlags, ModuleFlags.IsEnum) : any
 >hasFlag : any
 >this.modFlags : any
->this : this
+>this : ModuleDeclaration
 >modFlags : any
 >ModuleFlags.IsEnum : any
 >ModuleFlags : any
@@ -5535,7 +5535,7 @@ module TypeScript {
             this.modFlags &= ~ModuleFlags.ShouldEmitModuleDecl;
 >this.modFlags &= ~ModuleFlags.ShouldEmitModuleDecl : number
 >this.modFlags : any
->this : this
+>this : ModuleDeclaration
 >modFlags : any
 >~ModuleFlags.ShouldEmitModuleDecl : number
 >ModuleFlags.ShouldEmitModuleDecl : any
@@ -5552,7 +5552,7 @@ module TypeScript {
 >typeFlow.typeCheckModule : any
 >typeFlow : TypeFlow
 >typeCheckModule : any
->this : this
+>this : ModuleDeclaration
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -5566,7 +5566,7 @@ module TypeScript {
 >hasFlag(this.modFlags, ModuleFlags.ShouldEmitModuleDecl) : any
 >hasFlag : any
 >this.modFlags : any
->this : this
+>this : ModuleDeclaration
 >modFlags : any
 >ModuleFlags.ShouldEmitModuleDecl : any
 >ModuleFlags : any
@@ -5577,7 +5577,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ModuleDeclaration
 >true : true
 
                 emitter.recordSourceMappingStart(this);
@@ -5585,28 +5585,28 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ModuleDeclaration
 
                 emitter.emitJavascriptModule(this);
 >emitter.emitJavascriptModule(this) : any
 >emitter.emitJavascriptModule : any
 >emitter : Emitter
 >emitJavascriptModule : any
->this : this
+>this : ModuleDeclaration
 
                 emitter.recordSourceMappingEnd(this);
 >emitter.recordSourceMappingEnd(this) : any
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ModuleDeclaration
 
                 emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ModuleDeclaration
 >false : false
             }
         }
@@ -5652,7 +5652,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Exported) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : TypeDeclaration
 >varFlags : any
 >VarFlags.Exported : any
 >VarFlags : any
@@ -5666,7 +5666,7 @@ module TypeScript {
 >hasFlag(this.varFlags, VarFlags.Ambient) : any
 >hasFlag : any
 >this.varFlags : any
->this : this
+>this : TypeDeclaration
 >varFlags : any
 >VarFlags.Ambient : any
 >VarFlags : any
@@ -5727,7 +5727,7 @@ module TypeScript {
 >typeFlow.typeCheckClass : any
 >typeFlow : TypeFlow
 >typeCheckClass : any
->this : this
+>this : ClassDeclaration
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -5741,7 +5741,7 @@ module TypeScript {
 >emitter.emitJavascriptClass : any
 >emitter : Emitter
 >emitJavascriptClass : any
->this : this
+>this : ClassDeclaration
         }
     }
 
@@ -5782,7 +5782,7 @@ module TypeScript {
 >typeFlow.typeCheckInterface : any
 >typeFlow : TypeFlow
 >typeCheckInterface : any
->this : this
+>this : InterfaceDeclaration
         }
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
@@ -5808,7 +5808,7 @@ module TypeScript {
             this.flags |= ASTFlags.IsStatement;
 >this.flags |= ASTFlags.IsStatement : number
 >this.flags : any
->this : this
+>this : Statement
 >flags : any
 >ASTFlags.IsStatement : any
 >ASTFlags : any
@@ -5827,24 +5827,24 @@ module TypeScript {
 >isCompoundStatement : () => boolean
 >this.isLoop() : boolean
 >this.isLoop : () => boolean
->this : this
+>this : Statement
 >isLoop : () => boolean
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => Statement
 >typeFlow : TypeFlow
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : Statement
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
             return this;
->this : this
+>this : Statement
         }
     }
 
@@ -5875,7 +5875,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : LabeledStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -5883,11 +5883,11 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : LabeledStatement
 
             if (this.labels) {
 >this.labels : ASTList
->this : this
+>this : LabeledStatement
 >labels : ASTList
 
                 var labelsLen = this.labels.members.length;
@@ -5895,7 +5895,7 @@ module TypeScript {
 >this.labels.members.length : number
 >this.labels.members : AST[]
 >this.labels : ASTList
->this : this
+>this : LabeledStatement
 >labels : ASTList
 >members : AST[]
 >length : number
@@ -5915,7 +5915,7 @@ module TypeScript {
 >this.labels.members[i] : AST
 >this.labels.members : AST[]
 >this.labels : ASTList
->this : this
+>this : LabeledStatement
 >labels : ASTList
 >members : AST[]
 >i : number
@@ -5929,7 +5929,7 @@ module TypeScript {
 >this.stmt.emit(emitter, tokenId, true) : void
 >this.stmt.emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >this.stmt : AST
->this : this
+>this : LabeledStatement
 >stmt : AST
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
 >emitter : Emitter
@@ -5941,19 +5941,19 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : LabeledStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : LabeledStatement
 >false : false
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => LabeledStatement
 >typeFlow : TypeFlow
 
             typeFlow.typeCheck(this.labels);
@@ -5962,24 +5962,24 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.labels : ASTList
->this : this
+>this : LabeledStatement
 >labels : ASTList
 
             this.stmt = this.stmt.typeCheck(typeFlow);
 >this.stmt = this.stmt.typeCheck(typeFlow) : any
 >this.stmt : AST
->this : this
+>this : LabeledStatement
 >stmt : AST
 >this.stmt.typeCheck(typeFlow) : any
 >this.stmt.typeCheck : (typeFlow: TypeFlow) => any
 >this.stmt : AST
->this : this
+>this : LabeledStatement
 >stmt : AST
 >typeCheck : (typeFlow: TypeFlow) => any
 >typeFlow : TypeFlow
 
             return this;
->this : this
+>this : LabeledStatement
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
@@ -6042,7 +6042,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Block
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -6050,11 +6050,11 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Block
 
             if (this.isStatementBlock) {
 >this.isStatementBlock : boolean
->this : this
+>this : Block
 >isStatementBlock : boolean
 
                 emitter.writeLineToOutput(" {");
@@ -6081,7 +6081,7 @@ module TypeScript {
 >this.statements.members.length : number
 >this.statements.members : AST[]
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 >members : AST[]
 >length : number
@@ -6096,7 +6096,7 @@ module TypeScript {
 
             if (this.statements) {
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 
                 emitter.emitJavascriptList(this.statements, null, TokenID.Semicolon, true, false, false);
@@ -6105,7 +6105,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptList : any
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 >null : null
 >TokenID.Semicolon : any
@@ -6117,7 +6117,7 @@ module TypeScript {
             }
             if (this.isStatementBlock) {
 >this.isStatementBlock : boolean
->this : this
+>this : Block
 >isStatementBlock : boolean
 
                 emitter.indenter.decreaseIndent();
@@ -6153,14 +6153,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Block
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Block
 >false : false
         }
 
@@ -6178,7 +6178,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : Block
 >context.current : any
 >context : ControlFlowContext
 >current : any
@@ -6186,7 +6186,7 @@ module TypeScript {
 
             if (this.statements) {
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 
                 context.walk(this.statements, this);
@@ -6195,9 +6195,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
->this : this
+>this : Block
             }
             context.walker.options.goChildren = false;
 >context.walker.options.goChildren = false : false
@@ -6244,7 +6244,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => Block
 >typeFlow : TypeFlow
 
             if (!typeFlow.checker.styleSettings.emptyBlocks) {
@@ -6262,7 +6262,7 @@ module TypeScript {
 >(this.statements === null) : boolean
 >this.statements === null : boolean
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 >null : null
 >(this.statements.members.length == 0) : boolean
@@ -6270,7 +6270,7 @@ module TypeScript {
 >this.statements.members.length : number
 >this.statements.members : AST[]
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 >members : AST[]
 >length : number
@@ -6285,7 +6285,7 @@ module TypeScript {
 >checker : any
 >errorReporter : any
 >styleError : any
->this : this
+>this : Block
 >"empty block" : "empty block"
                 }
             }
@@ -6296,11 +6296,11 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.statements : ASTList
->this : this
+>this : Block
 >statements : ASTList
 
             return this;
->this : this
+>this : Block
         }
     }
 
@@ -6316,7 +6316,7 @@ module TypeScript {
 >hasExplicitTarget : () => string
 >(this.target) : string
 >this.target : string
->this : this
+>this : Jump
 >target : string
 
         public resolvedTarget: Statement = null;
@@ -6346,7 +6346,7 @@ module TypeScript {
                 this.resolvedTarget = stmt;
 >this.resolvedTarget = stmt : Statement
 >this.resolvedTarget : Statement
->this : this
+>this : Jump
 >resolvedTarget : Statement
 >stmt : Statement
 
@@ -6356,7 +6356,7 @@ module TypeScript {
             if (this.nodeType === NodeType.Continue) {
 >this.nodeType === NodeType.Continue : boolean
 >this.nodeType : NodeType
->this : this
+>this : Jump
 >nodeType : NodeType
 >NodeType.Continue : any
 >NodeType : any
@@ -6385,13 +6385,13 @@ module TypeScript {
 >Switch : any
 >this.hasExplicitTarget() : string
 >this.hasExplicitTarget : () => string
->this : this
+>this : Jump
 >hasExplicitTarget : () => string
 
                     this.resolvedTarget = stmt;
 >this.resolvedTarget = stmt : Statement
 >this.resolvedTarget : Statement
->this : this
+>this : Jump
 >resolvedTarget : Statement
 >stmt : Statement
 
@@ -6429,12 +6429,12 @@ module TypeScript {
 >context : ControlFlowContext
 >unconditionalBranch : any
 >this.resolvedTarget : Statement
->this : this
+>this : Jump
 >resolvedTarget : Statement
 >(this.nodeType == NodeType.Continue) : boolean
 >this.nodeType == NodeType.Continue : boolean
 >this.nodeType : NodeType
->this : this
+>this : Jump
 >nodeType : NodeType
 >NodeType.Continue : any
 >NodeType : any
@@ -6452,7 +6452,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Jump
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -6460,12 +6460,12 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Jump
 
             if (this.nodeType == NodeType.Break) {
 >this.nodeType == NodeType.Break : boolean
 >this.nodeType : NodeType
->this : this
+>this : Jump
 >nodeType : NodeType
 >NodeType.Break : any
 >NodeType : any
@@ -6489,7 +6489,7 @@ module TypeScript {
             if (this.hasExplicitTarget()) {
 >this.hasExplicitTarget() : string
 >this.hasExplicitTarget : () => string
->this : this
+>this : Jump
 >hasExplicitTarget : () => string
 
                 emitter.writeToOutput(" " + this.target);
@@ -6500,7 +6500,7 @@ module TypeScript {
 >" " + this.target : string
 >" " : " "
 >this.target : string
->this : this
+>this : Jump
 >target : string
             }
             emitter.recordSourceMappingEnd(this);
@@ -6508,7 +6508,7 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Jump
 
             emitter.writeToOutput(";");
 >emitter.writeToOutput(";") : any
@@ -6522,7 +6522,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Jump
 >false : false
         }
     }
@@ -6561,7 +6561,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : WhileStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -6569,7 +6569,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : WhileStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -6592,7 +6592,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.cond : AST
->this : this
+>this : WhileStatement
 >cond : AST
 >TokenID.While : any
 >TokenID : any
@@ -6612,7 +6612,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.body : AST
->this : this
+>this : WhileStatement
 >body : AST
 >false : false
 >false : false
@@ -6629,14 +6629,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : WhileStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : WhileStatement
 >false : false
         }
 
@@ -6649,7 +6649,7 @@ module TypeScript {
 >typeFlow.typeCheckWhile : any
 >typeFlow : TypeFlow
 >typeCheckWhile : any
->this : this
+>this : WhileStatement
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
@@ -6692,7 +6692,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.cond : AST
->this : this
+>this : WhileStatement
 >cond : AST
 
             var condBlock = context.current;
@@ -6707,7 +6707,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : WhileStatement
 >body : AST
 
                 context.current = new BasicBlock();
@@ -6732,7 +6732,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : WhileStatement
 >loopStart : any
 >afterLoop : any
 
@@ -6742,9 +6742,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : WhileStatement
 >body : AST
->this : this
+>this : WhileStatement
 
                 targetInfo = context.popStatement();
 >targetInfo = context.popStatement() : any
@@ -6849,7 +6849,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : DoWhileStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -6857,7 +6857,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : DoWhileStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -6880,7 +6880,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.body : AST
->this : this
+>this : DoWhileStatement
 >body : AST
 >true : true
 >false : false
@@ -6891,7 +6891,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingStart : any
 >this.whileAST : AST
->this : this
+>this : DoWhileStatement
 >whileAST : AST
 
             emitter.writeToOutput("while");
@@ -6907,7 +6907,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingEnd : any
 >this.whileAST : AST
->this : this
+>this : DoWhileStatement
 >whileAST : AST
 
             emitter.writeToOutput('(');
@@ -6923,7 +6923,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.cond : AST
->this : this
+>this : DoWhileStatement
 >cond : AST
 >TokenID.CloseParen : any
 >TokenID : any
@@ -6949,14 +6949,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : DoWhileStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : DoWhileStatement
 >false : false
         }
 
@@ -6969,7 +6969,7 @@ module TypeScript {
 >typeFlow.typeCheckDoWhile : any
 >typeFlow : TypeFlow
 >typeCheckDoWhile : any
->this : this
+>this : DoWhileStatement
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
@@ -7012,7 +7012,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : DoWhileStatement
 >body : AST
 
                 context.pushStatement(this, loopStart, afterLoop);
@@ -7020,7 +7020,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : DoWhileStatement
 >loopStart : any
 >afterLoop : any
 
@@ -7030,9 +7030,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : DoWhileStatement
 >body : AST
->this : this
+>this : DoWhileStatement
 
                 targetInfo = context.popStatement();
 >targetInfo = context.popStatement() : any
@@ -7068,7 +7068,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.cond : AST
->this : this
+>this : DoWhileStatement
 >cond : AST
 
                 // TODO: check for while (true) 
@@ -7093,7 +7093,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addUnreachable : any
 >this.cond : AST
->this : this
+>this : DoWhileStatement
 >cond : AST
             }
             context.walker.options.goChildren = false;
@@ -7151,7 +7151,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : IfStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -7159,7 +7159,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : IfStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -7175,7 +7175,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingStart : any
 >this.statement : ASTSpan
->this : this
+>this : IfStatement
 >statement : ASTSpan
 
             emitter.writeToOutput("if(");
@@ -7191,7 +7191,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.cond : AST
->this : this
+>this : IfStatement
 >cond : AST
 >TokenID.If : any
 >TokenID : any
@@ -7211,7 +7211,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingEnd : any
 >this.statement : ASTSpan
->this : this
+>this : IfStatement
 >statement : ASTSpan
 
             emitter.emitJavascriptStatements(this.thenBod, true, false);
@@ -7220,14 +7220,14 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.thenBod : AST
->this : this
+>this : IfStatement
 >thenBod : AST
 >true : true
 >false : false
 
             if (this.elseBod) {
 >this.elseBod : AST
->this : this
+>this : IfStatement
 >elseBod : AST
 
                 emitter.writeToOutput(" else");
@@ -7243,7 +7243,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.elseBod : AST
->this : this
+>this : IfStatement
 >elseBod : AST
 >true : true
 >true : true
@@ -7260,14 +7260,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : IfStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : IfStatement
 >false : false
         }
 
@@ -7280,7 +7280,7 @@ module TypeScript {
 >typeFlow.typeCheckIf : any
 >typeFlow : TypeFlow
 >typeCheckIf : any
->this : this
+>this : IfStatement
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
@@ -7291,7 +7291,7 @@ module TypeScript {
 >this.cond.addToControlFlow(context) : void
 >this.cond.addToControlFlow : (context: ControlFlowContext) => void
 >this.cond : AST
->this : this
+>this : IfStatement
 >cond : AST
 >addToControlFlow : (context: ControlFlowContext) => void
 >context : ControlFlowContext
@@ -7312,7 +7312,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : IfStatement
 >beforeIf : any
 >afterIf : any
 
@@ -7343,9 +7343,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.thenBod : AST
->this : this
+>this : IfStatement
 >thenBod : AST
->this : this
+>this : IfStatement
 
             if (!context.noContinuation) {
 >!context.noContinuation : boolean
@@ -7369,7 +7369,7 @@ module TypeScript {
             }
             if (this.elseBod) {
 >this.elseBod : AST
->this : this
+>this : IfStatement
 >elseBod : AST
 
                 // current block will be thenBod
@@ -7403,9 +7403,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.elseBod : AST
->this : this
+>this : IfStatement
 >elseBod : AST
->this : this
+>this : IfStatement
 
                 if (!context.noContinuation) {
 >!context.noContinuation : boolean
@@ -7540,7 +7540,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ReturnStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -7548,7 +7548,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ReturnStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -7560,7 +7560,7 @@ module TypeScript {
 
             if (this.returnExpression) {
 >this.returnExpression : AST
->this : this
+>this : ReturnStatement
 >returnExpression : AST
 
                 emitter.writeToOutput("return ");
@@ -7576,7 +7576,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.returnExpression : AST
->this : this
+>this : ReturnStatement
 >returnExpression : AST
 >TokenID.Semicolon : any
 >TokenID : any
@@ -7603,14 +7603,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ReturnStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ReturnStatement
 >false : false
         }
 
@@ -7641,7 +7641,7 @@ module TypeScript {
 >typeFlow.typeCheckReturn : any
 >typeFlow : TypeFlow
 >typeCheckReturn : any
->this : this
+>this : ReturnStatement
         }
     }
 
@@ -7677,13 +7677,13 @@ module TypeScript {
             if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
 >this.lval && (this.lval.nodeType == NodeType.VarDecl) : boolean
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 >(this.lval.nodeType == NodeType.VarDecl) : boolean
 >this.lval.nodeType == NodeType.VarDecl : boolean
 >this.lval.nodeType : NodeType
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 >nodeType : NodeType
 >NodeType.VarDecl : any
@@ -7696,7 +7696,7 @@ module TypeScript {
 >(<BoundDecl>this.lval) : BoundDecl
 ><BoundDecl>this.lval : BoundDecl
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 >varFlags : any
 >VarFlags.AutoInit : any
@@ -7721,7 +7721,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
 
                 var singleItem: AST = null;
@@ -7732,7 +7732,7 @@ module TypeScript {
 >this.body.nodeType == NodeType.List : boolean
 >this.body.nodeType : NodeType
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
 >nodeType : NodeType
 >NodeType.List : any
@@ -7743,7 +7743,7 @@ module TypeScript {
 >stmts : ASTList
 ><ASTList>this.body : ASTList
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
 
                     if (stmts.members.length == 1) {
@@ -7770,7 +7770,7 @@ module TypeScript {
 >singleItem = this.body : AST
 >singleItem : AST
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
                 }
                 // match template for filtering 'own' properties from obj
@@ -7891,7 +7891,7 @@ module TypeScript {
 >this.obj.nodeType == NodeType.Name : boolean
 >this.obj.nodeType : NodeType
 >this.obj : AST
->this : this
+>this : ForInStatement
 >obj : AST
 >nodeType : NodeType
 >NodeType.Name : any
@@ -7912,7 +7912,7 @@ module TypeScript {
 >(<Identifier>this.obj) : Identifier
 ><Identifier>this.obj : Identifier
 >this.obj : AST
->this : this
+>this : ForInStatement
 >obj : AST
 >actualText : string
 
@@ -7977,7 +7977,7 @@ module TypeScript {
 >this.lval.nodeType == NodeType.Name : boolean
 >this.lval.nodeType : NodeType
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 >nodeType : NodeType
 >NodeType.Name : any
@@ -7991,7 +7991,7 @@ module TypeScript {
 >(<Identifier>this.lval) : Identifier
 ><Identifier>this.lval : Identifier
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 >actualText : string
 >(<Identifier>arg).actualText : string
@@ -8027,7 +8027,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ForInStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -8035,7 +8035,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ForInStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -8051,7 +8051,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingStart : any
 >this.statement : ASTSpan
->this : this
+>this : ForInStatement
 >statement : ASTSpan
 
             emitter.writeToOutput("for(");
@@ -8067,7 +8067,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 >TokenID.For : any
 >TokenID : any
@@ -8087,7 +8087,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.obj : AST
->this : this
+>this : ForInStatement
 >obj : AST
 >TokenID.For : any
 >TokenID : any
@@ -8107,7 +8107,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingEnd : any
 >this.statement : ASTSpan
->this : this
+>this : ForInStatement
 >statement : ASTSpan
 
             emitter.emitJavascriptStatements(this.body, true, false);
@@ -8116,7 +8116,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
 >true : true
 >false : false
@@ -8133,14 +8133,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ForInStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ForInStatement
 >false : false
         }
 
@@ -8161,7 +8161,7 @@ module TypeScript {
 >!this.isFiltered() : boolean
 >this.isFiltered() : boolean
 >this.isFiltered : () => boolean
->this : this
+>this : ForInStatement
 >isFiltered : () => boolean
 
                     typeFlow.checker.errorReporter.styleError(this, "no hasOwnProperty filter");
@@ -8173,7 +8173,7 @@ module TypeScript {
 >checker : any
 >errorReporter : any
 >styleError : any
->this : this
+>this : ForInStatement
 >"no hasOwnProperty filter" : "no hasOwnProperty filter"
                 }
             }
@@ -8182,7 +8182,7 @@ module TypeScript {
 >typeFlow.typeCheckForIn : any
 >typeFlow : TypeFlow
 >typeCheckForIn : any
->this : this
+>this : ForInStatement
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
@@ -8191,7 +8191,7 @@ module TypeScript {
 
             if (this.lval) {
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
 
                 context.addContent(this.lval);
@@ -8200,12 +8200,12 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.lval : AST
->this : this
+>this : ForInStatement
 >lval : AST
             }
             if (this.obj) {
 >this.obj : AST
->this : this
+>this : ForInStatement
 >obj : AST
 
                 context.addContent(this.obj);
@@ -8214,7 +8214,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.obj : AST
->this : this
+>this : ForInStatement
 >obj : AST
             }
 
@@ -8250,7 +8250,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
 
                 context.pushStatement(this, loopStart, afterLoop);
@@ -8258,7 +8258,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : ForInStatement
 >loopStart : any
 >afterLoop : any
 
@@ -8268,9 +8268,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : ForInStatement
 >body : AST
->this : this
+>this : ForInStatement
 
                 context.popStatement();
 >context.popStatement() : any
@@ -8371,7 +8371,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ForStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -8379,7 +8379,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : ForStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -8398,14 +8398,14 @@ module TypeScript {
 
             if (this.init) {
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
 
                 if (this.init.nodeType != NodeType.List) {
 >this.init.nodeType != NodeType.List : boolean
 >this.init.nodeType : NodeType
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
 >nodeType : NodeType
 >NodeType.List : any
@@ -8418,7 +8418,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
 >TokenID.For : any
 >TokenID : any
@@ -8436,7 +8436,7 @@ module TypeScript {
 >(<ASTList>this.init) : ASTList
 ><ASTList>this.init : ASTList
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
 >members : AST[]
 >length : number
@@ -8447,7 +8447,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptList : any
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
 >null : null
 >TokenID.For : any
@@ -8471,7 +8471,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.cond : AST
->this : this
+>this : ForStatement
 >cond : AST
 >TokenID.For : any
 >TokenID : any
@@ -8491,7 +8491,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.incr : AST
->this : this
+>this : ForStatement
 >incr : AST
 >TokenID.For : any
 >TokenID : any
@@ -8511,7 +8511,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.body : AST
->this : this
+>this : ForStatement
 >body : AST
 >true : true
 >false : false
@@ -8528,14 +8528,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : ForStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : ForStatement
 >false : false
         }
 
@@ -8548,7 +8548,7 @@ module TypeScript {
 >typeFlow.typeCheckFor : any
 >typeFlow : TypeFlow
 >typeCheckFor : any
->this : this
+>this : ForStatement
         }
 
         public addToControlFlow(context: ControlFlowContext): void {
@@ -8557,7 +8557,7 @@ module TypeScript {
 
             if (this.init) {
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
 
                 context.addContent(this.init);
@@ -8566,7 +8566,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.init : AST
->this : this
+>this : ForStatement
 >init : AST
             }
             var loopHeader = context.current;
@@ -8613,7 +8613,7 @@ module TypeScript {
 
             if (this.incr) {
 >this.incr : AST
->this : this
+>this : ForStatement
 >incr : AST
 
                 incrBB = new BasicBlock();
@@ -8629,7 +8629,7 @@ module TypeScript {
             }
             if (this.cond) {
 >this.cond : AST
->this : this
+>this : ForStatement
 >cond : AST
 
                 condBlock = context.current;
@@ -8645,7 +8645,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.cond : AST
->this : this
+>this : ForStatement
 >cond : AST
 
                 context.current = new BasicBlock();
@@ -8671,7 +8671,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : ForStatement
 >body : AST
 
                 context.pushStatement(this, continueTarget, afterLoop);
@@ -8679,7 +8679,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : ForStatement
 >continueTarget : any
 >afterLoop : any
 
@@ -8689,9 +8689,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : ForStatement
 >body : AST
->this : this
+>this : ForStatement
 
                 targetInfo = context.popStatement();
 >targetInfo = context.popStatement() : any
@@ -8703,7 +8703,7 @@ module TypeScript {
             }
             if (this.incr) {
 >this.incr : AST
->this : this
+>this : ForStatement
 >incr : AST
 
                 if (context.noContinuation) {
@@ -8726,7 +8726,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addUnreachable : any
 >this.incr : AST
->this : this
+>this : ForStatement
 >incr : AST
                     }
                 }
@@ -8753,7 +8753,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.incr : AST
->this : this
+>this : ForStatement
 >incr : AST
                 }
             }
@@ -8868,7 +8868,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : WithStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -8876,7 +8876,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : WithStatement
 
             emitter.writeToOutput("with (");
 >emitter.writeToOutput("with (") : any
@@ -8887,7 +8887,7 @@ module TypeScript {
 
             if (this.expr) {
 >this.expr : AST
->this : this
+>this : WithStatement
 >expr : AST
 
                 emitter.emitJavascript(this.expr, TokenID.With, false);
@@ -8896,7 +8896,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.expr : AST
->this : this
+>this : WithStatement
 >expr : AST
 >TokenID.With : any
 >TokenID : any
@@ -8917,7 +8917,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.body : AST
->this : this
+>this : WithStatement
 >body : AST
 >true : true
 >false : false
@@ -8927,14 +8927,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : WithStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : WithStatement
 >false : false
         }
 
@@ -8947,7 +8947,7 @@ module TypeScript {
 >typeFlow.typeCheckWith : any
 >typeFlow : TypeFlow
 >typeCheckWith : any
->this : this
+>this : WithStatement
         }
     }
 
@@ -8993,7 +8993,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : SwitchStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -9001,7 +9001,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : SwitchStatement
 
             var temp = emitter.setInObjectLiteral(false);
 >temp : any
@@ -9017,7 +9017,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingStart : any
 >this.statement : ASTSpan
->this : this
+>this : SwitchStatement
 >statement : ASTSpan
 
             emitter.writeToOutput("switch(");
@@ -9033,7 +9033,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.val : AST
->this : this
+>this : SwitchStatement
 >val : AST
 >TokenID.Identifier : any
 >TokenID : any
@@ -9053,7 +9053,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingEnd : any
 >this.statement : ASTSpan
->this : this
+>this : SwitchStatement
 >statement : ASTSpan
 
             emitter.writeLineToOutput(" {");
@@ -9076,7 +9076,7 @@ module TypeScript {
 >this.caseList.members.length : number
 >this.caseList.members : AST[]
 >this.caseList : ASTList
->this : this
+>this : SwitchStatement
 >caseList : ASTList
 >members : AST[]
 >length : number
@@ -9095,7 +9095,7 @@ module TypeScript {
 >this.caseList.members[i] : AST
 >this.caseList.members : AST[]
 >this.caseList : ASTList
->this : this
+>this : SwitchStatement
 >caseList : ASTList
 >members : AST[]
 >i : number
@@ -9151,19 +9151,19 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : SwitchStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : SwitchStatement
 >false : false
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => SwitchStatement
 >typeFlow : TypeFlow
 
             var len = this.caseList.members.length;
@@ -9171,7 +9171,7 @@ module TypeScript {
 >this.caseList.members.length : number
 >this.caseList.members : AST[]
 >this.caseList : ASTList
->this : this
+>this : SwitchStatement
 >caseList : ASTList
 >members : AST[]
 >length : number
@@ -9179,14 +9179,14 @@ module TypeScript {
             this.val = typeFlow.typeCheck(this.val);
 >this.val = typeFlow.typeCheck(this.val) : any
 >this.val : AST
->this : this
+>this : SwitchStatement
 >val : AST
 >typeFlow.typeCheck(this.val) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.val : AST
->this : this
+>this : SwitchStatement
 >val : AST
 
             for (var i = 0; i < len; i++) {
@@ -9203,7 +9203,7 @@ module TypeScript {
 >this.caseList.members[i] : AST
 >this.caseList.members : AST[]
 >this.caseList : ASTList
->this : this
+>this : SwitchStatement
 >caseList : ASTList
 >members : AST[]
 >i : number
@@ -9214,7 +9214,7 @@ module TypeScript {
 >this.caseList.members[i] : AST
 >this.caseList.members : AST[]
 >this.caseList : ASTList
->this : this
+>this : SwitchStatement
 >caseList : ASTList
 >members : AST[]
 >i : number
@@ -9222,7 +9222,7 @@ module TypeScript {
             this.defaultCase = <CaseStatement>typeFlow.typeCheck(this.defaultCase);
 >this.defaultCase = <CaseStatement>typeFlow.typeCheck(this.defaultCase) : CaseStatement
 >this.defaultCase : CaseStatement
->this : this
+>this : SwitchStatement
 >defaultCase : CaseStatement
 ><CaseStatement>typeFlow.typeCheck(this.defaultCase) : CaseStatement
 >typeFlow.typeCheck(this.defaultCase) : any
@@ -9230,20 +9230,20 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.defaultCase : CaseStatement
->this : this
+>this : SwitchStatement
 >defaultCase : CaseStatement
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : SwitchStatement
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
             return this;
->this : this
+>this : SwitchStatement
         }
 
         // if there are break statements that match this switch, then just link cond block with block after switch
@@ -9263,7 +9263,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.val : AST
->this : this
+>this : SwitchStatement
 >val : AST
 
             var execBlock = new BasicBlock();
@@ -9302,7 +9302,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : SwitchStatement
 >execBlock : any
 >afterSwitch : any
 
@@ -9312,9 +9312,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.caseList : ASTList
->this : this
+>this : SwitchStatement
 >caseList : ASTList
->this : this
+>this : SwitchStatement
 
             context.popSwitch();
 >context.popSwitch() : any
@@ -9334,14 +9334,14 @@ module TypeScript {
 >(this.defaultCase == null) : boolean
 >this.defaultCase == null : boolean
 >this.defaultCase : CaseStatement
->this : this
+>this : SwitchStatement
 >defaultCase : CaseStatement
 >null : null
 
             if (this.defaultCase == null) {
 >this.defaultCase == null : boolean
 >this.defaultCase : CaseStatement
->this : this
+>this : SwitchStatement
 >defaultCase : CaseStatement
 >null : null
 
@@ -9427,7 +9427,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : CaseStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -9435,11 +9435,11 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : CaseStatement
 
             if (this.expr) {
 >this.expr : AST
->this : this
+>this : CaseStatement
 >expr : AST
 
                 emitter.writeToOutput("case ");
@@ -9455,7 +9455,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.expr : AST
->this : this
+>this : CaseStatement
 >expr : AST
 >TokenID.Identifier : any
 >TokenID : any
@@ -9483,7 +9483,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascriptStatements : any
 >this.body : ASTList
->this : this
+>this : CaseStatement
 >body : ASTList
 >false : false
 >false : false
@@ -9493,32 +9493,32 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : CaseStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : CaseStatement
 >false : false
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => CaseStatement
 >typeFlow : TypeFlow
 
             this.expr = typeFlow.typeCheck(this.expr);
 >this.expr = typeFlow.typeCheck(this.expr) : any
 >this.expr : AST
->this : this
+>this : CaseStatement
 >expr : AST
 >typeFlow.typeCheck(this.expr) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.expr : AST
->this : this
+>this : CaseStatement
 >expr : AST
 
             typeFlow.typeCheck(this.body);
@@ -9527,20 +9527,20 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.body : ASTList
->this : this
+>this : CaseStatement
 >body : ASTList
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : CaseStatement
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
             return this;
->this : this
+>this : CaseStatement
         }
 
         // TODO: more reasoning about unreachable cases (such as duplicate literals as case expressions)
@@ -9571,7 +9571,7 @@ module TypeScript {
             // TODO: fall-through from previous (+ to end of switch)
             if (this.expr) {
 >this.expr : AST
->this : this
+>this : CaseStatement
 >expr : AST
 
                 var exprBlock = new BasicBlock();
@@ -9599,7 +9599,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.expr : AST
->this : this
+>this : CaseStatement
 >expr : AST
 
                 exprBlock.addSuccessor(execBlock);
@@ -9626,7 +9626,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : ASTList
->this : this
+>this : CaseStatement
 >body : ASTList
 
                 context.walk(this.body, this);
@@ -9635,9 +9635,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : ASTList
->this : this
+>this : CaseStatement
 >body : ASTList
->this : this
+>this : CaseStatement
             }
             context.noContinuation = false;
 >context.noContinuation = false : false
@@ -9688,7 +9688,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => TypeReference
 >typeFlow : TypeFlow
 
             var prevInTCTR = typeFlow.inTypeRefTypeCheck;
@@ -9708,7 +9708,7 @@ module TypeScript {
 >typeLink : any
 >getTypeLink(this, typeFlow.checker, true) : any
 >getTypeLink : any
->this : this
+>this : TypeReference
 >typeFlow.checker : any
 >typeFlow : TypeFlow
 >checker : any
@@ -9729,7 +9729,7 @@ module TypeScript {
 
             if (this.term) {
 >this.term : AST
->this : this
+>this : TypeReference
 >term : AST
 
                 typeFlow.typeCheck(this.term);
@@ -9738,7 +9738,7 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.term : AST
->this : this
+>this : TypeReference
 >term : AST
             }
 
@@ -9750,12 +9750,12 @@ module TypeScript {
 >typeLink.type : any
 >typeLink : any
 >type : any
->this : this
+>this : TypeReference
 
             this.type = typeLink.type;
 >this.type = typeLink.type : any
 >this.type : Type
->this : this
+>this : TypeReference
 >type : Type
 >typeLink.type : any
 >typeLink : any
@@ -9764,18 +9764,18 @@ module TypeScript {
             // in error recovery cases, there may not be a term
             if (this.term) {
 >this.term : AST
->this : this
+>this : TypeReference
 >term : AST
 
                 this.term.type = this.type;
 >this.term.type = this.type : Type
 >this.term.type : Type
 >this.term : AST
->this : this
+>this : TypeReference
 >term : AST
 >type : Type
 >this.type : Type
->this : this
+>this : TypeReference
 >type : Type
             }
 
@@ -9787,7 +9787,7 @@ module TypeScript {
 >prevInTCTR : any
 
             return this;
->this : this
+>this : TypeReference
         }
     }
 
@@ -9822,7 +9822,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : TryFinally
 
             emitter.emitJavascript(this.tryNode, TokenID.Try, false);
 >emitter.emitJavascript(this.tryNode, TokenID.Try, false) : any
@@ -9830,7 +9830,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.tryNode : AST
->this : this
+>this : TryFinally
 >tryNode : AST
 >TokenID.Try : any
 >TokenID : any
@@ -9843,7 +9843,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.finallyNode : Finally
->this : this
+>this : TryFinally
 >finallyNode : Finally
 >TokenID.Finally : any
 >TokenID : any
@@ -9855,30 +9855,30 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : TryFinally
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => TryFinally
 >typeFlow : TypeFlow
 
             this.tryNode = typeFlow.typeCheck(this.tryNode);
 >this.tryNode = typeFlow.typeCheck(this.tryNode) : any
 >this.tryNode : AST
->this : this
+>this : TryFinally
 >tryNode : AST
 >typeFlow.typeCheck(this.tryNode) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.tryNode : AST
->this : this
+>this : TryFinally
 >tryNode : AST
 
             this.finallyNode = <Finally>typeFlow.typeCheck(this.finallyNode);
 >this.finallyNode = <Finally>typeFlow.typeCheck(this.finallyNode) : Finally
 >this.finallyNode : Finally
->this : this
+>this : TryFinally
 >finallyNode : Finally
 ><Finally>typeFlow.typeCheck(this.finallyNode) : Finally
 >typeFlow.typeCheck(this.finallyNode) : any
@@ -9886,20 +9886,20 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.finallyNode : Finally
->this : this
+>this : TryFinally
 >finallyNode : Finally
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : TryFinally
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
             return this;
->this : this
+>this : TryFinally
         }
 
         public addToControlFlow(context: ControlFlowContext) {
@@ -9917,9 +9917,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.tryNode : AST
->this : this
+>this : TryFinally
 >tryNode : AST
->this : this
+>this : TryFinally
 
             var finBlock = new BasicBlock();
 >finBlock : any
@@ -9952,7 +9952,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : TryFinally
 >null : null
 >afterFinally : any
 
@@ -9962,9 +9962,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.finallyNode : Finally
->this : this
+>this : TryFinally
 >finallyNode : Finally
->this : this
+>this : TryFinally
 
             if (!context.noContinuation && context.current) {
 >!context.noContinuation && context.current : any
@@ -10059,7 +10059,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : TryCatch
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -10067,7 +10067,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : TryCatch
 
             emitter.emitJavascript(this.tryNode, TokenID.Try, false);
 >emitter.emitJavascript(this.tryNode, TokenID.Try, false) : any
@@ -10075,7 +10075,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.tryNode : Try
->this : this
+>this : TryCatch
 >tryNode : Try
 >TokenID.Try : any
 >TokenID : any
@@ -10088,7 +10088,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.catchNode : Catch
->this : this
+>this : TryCatch
 >catchNode : Catch
 >TokenID.Catch : any
 >TokenID : any
@@ -10100,14 +10100,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : TryCatch
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : TryCatch
 >false : false
         }
 
@@ -10150,7 +10150,7 @@ module TypeScript {
 >context.pushStatement : any
 >context : ControlFlowContext
 >pushStatement : any
->this : this
+>this : TryCatch
 >null : null
 >afterTryCatch : any
 
@@ -10160,9 +10160,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.tryNode : Try
->this : this
+>this : TryCatch
 >tryNode : Try
->this : this
+>this : TryCatch
 
             if (!context.noContinuation) {
 >!context.noContinuation : boolean
@@ -10208,9 +10208,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.catchNode : Catch
->this : this
+>this : TryCatch
 >catchNode : Catch
->this : this
+>this : TryCatch
 
             context.popStatement();
 >context.popStatement() : any
@@ -10259,13 +10259,13 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => TryCatch
 >typeFlow : TypeFlow
 
             this.tryNode = <Try>typeFlow.typeCheck(this.tryNode);
 >this.tryNode = <Try>typeFlow.typeCheck(this.tryNode) : Try
 >this.tryNode : Try
->this : this
+>this : TryCatch
 >tryNode : Try
 ><Try>typeFlow.typeCheck(this.tryNode) : Try
 >typeFlow.typeCheck(this.tryNode) : any
@@ -10273,13 +10273,13 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.tryNode : Try
->this : this
+>this : TryCatch
 >tryNode : Try
 
             this.catchNode = <Catch>typeFlow.typeCheck(this.catchNode);
 >this.catchNode = <Catch>typeFlow.typeCheck(this.catchNode) : Catch
 >this.catchNode : Catch
->this : this
+>this : TryCatch
 >catchNode : Catch
 ><Catch>typeFlow.typeCheck(this.catchNode) : Catch
 >typeFlow.typeCheck(this.catchNode) : any
@@ -10287,20 +10287,20 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.catchNode : Catch
->this : this
+>this : TryCatch
 >catchNode : Catch
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : TryCatch
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
 >voidType : any
 
             return this;
->this : this
+>this : TryCatch
         }
     }
 
@@ -10330,7 +10330,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Try
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -10338,7 +10338,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Try
 
             emitter.writeToOutput("try ");
 >emitter.writeToOutput("try ") : any
@@ -10353,7 +10353,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.body : AST
->this : this
+>this : Try
 >body : AST
 >TokenID.Try : any
 >TokenID : any
@@ -10365,36 +10365,36 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Try
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Try
 >false : false
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => Try
 >typeFlow : TypeFlow
 
             this.body = typeFlow.typeCheck(this.body);
 >this.body = typeFlow.typeCheck(this.body) : any
 >this.body : AST
->this : this
+>this : Try
 >body : AST
 >typeFlow.typeCheck(this.body) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.body : AST
->this : this
+>this : Try
 >body : AST
 
             return this;
->this : this
+>this : Try
         }
 
         public addToControlFlow(context: ControlFlowContext) {
@@ -10403,7 +10403,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : Try
 >body : AST
 
                 context.walk(this.body, this);
@@ -10412,9 +10412,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : Try
 >body : AST
->this : this
+>this : Try
             }
             context.walker.options.goChildren = false;
 >context.walker.options.goChildren = false : false
@@ -10453,14 +10453,14 @@ module TypeScript {
 
             if (this.param) {
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 
                 this.param.varFlags |= VarFlags.AutoInit;
 >this.param.varFlags |= VarFlags.AutoInit : number
 >this.param.varFlags : any
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 >varFlags : any
 >VarFlags.AutoInit : any
@@ -10488,7 +10488,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Catch
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -10496,7 +10496,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Catch
 
             emitter.writeToOutput(" ");
 >emitter.writeToOutput(" ") : any
@@ -10511,7 +10511,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingStart : any
 >this.statement : ASTSpan
->this : this
+>this : Catch
 >statement : ASTSpan
 
             emitter.writeToOutput("catch (");
@@ -10527,7 +10527,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 >TokenID.OpenParen : any
 >TokenID : any
@@ -10547,7 +10547,7 @@ module TypeScript {
 >emitter : Emitter
 >recordSourceMappingEnd : any
 >this.statement : ASTSpan
->this : this
+>this : Catch
 >statement : ASTSpan
 
             emitter.emitJavascript(this.body, TokenID.Catch, false);
@@ -10556,7 +10556,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.body : AST
->this : this
+>this : Catch
 >body : AST
 >TokenID.Catch : any
 >TokenID : any
@@ -10568,14 +10568,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Catch
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Catch
 >false : false
         }
 
@@ -10585,7 +10585,7 @@ module TypeScript {
 
             if (this.param) {
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 
                 context.addContent(this.param);
@@ -10594,7 +10594,7 @@ module TypeScript {
 >context : ControlFlowContext
 >addContent : any
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 
                 var bodBlock = new BasicBlock();
@@ -10620,7 +10620,7 @@ module TypeScript {
             }
             if (this.body) {
 >this.body : AST
->this : this
+>this : Catch
 >body : AST
 
                 context.walk(this.body, this);
@@ -10629,9 +10629,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : Catch
 >body : AST
->this : this
+>this : Catch
             }
             context.noContinuation = false;
 >context.noContinuation = false : false
@@ -10653,7 +10653,7 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => Catch
 >typeFlow : TypeFlow
 
             var prevScope = typeFlow.scope;
@@ -10668,13 +10668,13 @@ module TypeScript {
 >typeFlow : TypeFlow
 >scope : any
 >this.containedScope : SymbolScope
->this : this
+>this : Catch
 >containedScope : SymbolScope
 
             this.param = <VarDecl>typeFlow.typeCheck(this.param);
 >this.param = <VarDecl>typeFlow.typeCheck(this.param) : VarDecl
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 ><VarDecl>typeFlow.typeCheck(this.param) : VarDecl
 >typeFlow.typeCheck(this.param) : any
@@ -10682,7 +10682,7 @@ module TypeScript {
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 
             var exceptVar = new ValueLocation();
@@ -10699,7 +10699,7 @@ module TypeScript {
 >(<VarDecl>this.param) : VarDecl
 ><VarDecl>this.param : VarDecl
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 >id : Identifier
 >text : string
@@ -10707,7 +10707,7 @@ module TypeScript {
                                           this.param.minChar,
 >this.param.minChar : number
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 >minChar : number
 
@@ -10790,7 +10790,7 @@ module TypeScript {
 >this.param.sym = exceptVar.symbol : any
 >this.param.sym : Symbol
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 >sym : Symbol
 >exceptVar.symbol : any
@@ -10810,7 +10810,7 @@ module TypeScript {
 >symbol : any
 >container : any
 >this.param : VarDecl
->this : this
+>this : Catch
 >param : VarDecl
 >exceptVar.symbol : any
 >exceptVar : any
@@ -10829,14 +10829,14 @@ module TypeScript {
             this.body = typeFlow.typeCheck(this.body);
 >this.body = typeFlow.typeCheck(this.body) : any
 >this.body : AST
->this : this
+>this : Catch
 >body : AST
 >typeFlow.typeCheck(this.body) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.body : AST
->this : this
+>this : Catch
 >body : AST
 
             // if we're in provisional typecheck mode, clean up the symbol entry
@@ -10880,7 +10880,7 @@ module TypeScript {
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
 >this.type : Type
->this : this
+>this : Catch
 >type : Type
 >typeFlow.voidType : any
 >typeFlow : TypeFlow
@@ -10894,7 +10894,7 @@ module TypeScript {
 >prevScope : any
 
             return this;
->this : this
+>this : Catch
         }
     }
 
@@ -10924,7 +10924,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Finally
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -10932,7 +10932,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : Finally
 
             emitter.writeToOutput("finally");
 >emitter.writeToOutput("finally") : any
@@ -10947,7 +10947,7 @@ module TypeScript {
 >emitter : Emitter
 >emitJavascript : any
 >this.body : AST
->this : this
+>this : Finally
 >body : AST
 >TokenID.Finally : any
 >TokenID : any
@@ -10959,14 +10959,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : Finally
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : Finally
 >false : false
         }
 
@@ -10976,7 +10976,7 @@ module TypeScript {
 
             if (this.body) {
 >this.body : AST
->this : this
+>this : Finally
 >body : AST
 
                 context.walk(this.body, this);
@@ -10985,9 +10985,9 @@ module TypeScript {
 >context : ControlFlowContext
 >walk : any
 >this.body : AST
->this : this
+>this : Finally
 >body : AST
->this : this
+>this : Finally
             }
             context.walker.options.goChildren = false;
 >context.walker.options.goChildren = false : false
@@ -11009,24 +11009,24 @@ module TypeScript {
         }
 
         public typeCheck(typeFlow: TypeFlow) {
->typeCheck : (typeFlow: TypeFlow) => this
+>typeCheck : (typeFlow: TypeFlow) => Finally
 >typeFlow : TypeFlow
 
             this.body = typeFlow.typeCheck(this.body);
 >this.body = typeFlow.typeCheck(this.body) : any
 >this.body : AST
->this : this
+>this : Finally
 >body : AST
 >typeFlow.typeCheck(this.body) : any
 >typeFlow.typeCheck : any
 >typeFlow : TypeFlow
 >typeCheck : any
 >this.body : AST
->this : this
+>this : Finally
 >body : AST
 
             return this;
->this : this
+>this : Finally
         }
     }
 
@@ -11057,24 +11057,24 @@ module TypeScript {
             if (this.text == null) {
 >this.text == null : boolean
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
 >null : null
 
                 if (this.isBlockComment) {
 >this.isBlockComment : boolean
->this : this
+>this : Comment
 >isBlockComment : boolean
 
                     this.text = this.content.split("\n");
 >this.text = this.content.split("\n") : string[]
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
 >this.content.split("\n") : string[]
 >this.content.split : (separator: string | RegExp, limit?: number) => string[]
 >this.content : string
->this : this
+>this : Comment
 >content : string
 >split : (separator: string | RegExp, limit?: number) => string[]
 >"\n" : "\n"
@@ -11086,7 +11086,7 @@ module TypeScript {
 >i : number
 >this.text.length : number
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
 >length : number
 >i++ : number
@@ -11096,14 +11096,14 @@ module TypeScript {
 >this.text[i] = this.text[i].replace(/^\s+|\s+$/g, '') : string
 >this.text[i] : string
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
 >i : number
 >this.text[i].replace(/^\s+|\s+$/g, '') : string
 >this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >this.text[i] : string
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
 >i : number
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
@@ -11115,14 +11115,14 @@ module TypeScript {
                     this.text = [(this.content.replace(/^\s+|\s+$/g, ''))];
 >this.text = [(this.content.replace(/^\s+|\s+$/g, ''))] : string[]
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
 >[(this.content.replace(/^\s+|\s+$/g, ''))] : string[]
 >(this.content.replace(/^\s+|\s+$/g, '')) : string
 >this.content.replace(/^\s+|\s+$/g, '') : string
 >this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >this.content : string
->this : this
+>this : Comment
 >content : string
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/^\s+|\s+$/g : RegExp
@@ -11132,7 +11132,7 @@ module TypeScript {
 
             return this.text;
 >this.text : string[]
->this : this
+>this : Comment
 >text : string[]
         }
     }
@@ -11161,7 +11161,7 @@ module TypeScript {
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : DebuggerStatement
 >true : true
 
             emitter.recordSourceMappingStart(this);
@@ -11169,7 +11169,7 @@ module TypeScript {
 >emitter.recordSourceMappingStart : any
 >emitter : Emitter
 >recordSourceMappingStart : any
->this : this
+>this : DebuggerStatement
 
             emitter.writeLineToOutput("debugger;");
 >emitter.writeLineToOutput("debugger;") : any
@@ -11183,14 +11183,14 @@ module TypeScript {
 >emitter.recordSourceMappingEnd : any
 >emitter : Emitter
 >recordSourceMappingEnd : any
->this : this
+>this : DebuggerStatement
 
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
 >emitter.emitParensAndCommentsInPlace : any
 >emitter : Emitter
 >emitParensAndCommentsInPlace : any
->this : this
+>this : DebuggerStatement
 >false : false
         }
     }

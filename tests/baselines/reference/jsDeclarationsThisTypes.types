@@ -7,7 +7,7 @@ export class A {
 >method : () => this
 
         return this;
->this : this
+>this : A
     }
 }
 export default class Base extends A {

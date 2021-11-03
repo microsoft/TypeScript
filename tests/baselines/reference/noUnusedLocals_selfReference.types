@@ -51,7 +51,7 @@ class P { private m() { this.m; } }
 >P : P
 >m : () => void
 >this.m : () => void
->this : this
+>this : P
 >m : () => void
 
 P;

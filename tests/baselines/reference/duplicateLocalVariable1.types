@@ -57,7 +57,7 @@ export class TestRunner {
 >this.tests.push(test) : number
 >this.tests.push : (...items: TestCase[]) => number
 >this.tests : TestCase[]
->this : this
+>this : TestRunner
 >tests : TestCase[]
 >push : (...items: TestCase[]) => number
 >test : TestCase
@@ -72,7 +72,7 @@ export class TestRunner {
         for (var test in this.tests) {
 >test : string
 >this.tests : TestCase[]
->this : this
+>this : TestRunner
 >tests : TestCase[]
 
             var exception = false;
@@ -84,7 +84,7 @@ export class TestRunner {
 ><TestCase>this.tests[test] : TestCase
 >this.tests[test] : TestCase
 >this.tests : TestCase[]
->this : this
+>this : TestRunner
 >tests : TestCase[]
 >test : string
 

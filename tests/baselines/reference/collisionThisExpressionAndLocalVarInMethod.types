@@ -21,7 +21,7 @@ class a {
                 return callback(this);
 >callback(this) : any
 >callback : any
->this : this
+>this : a
             }
         }
     }
@@ -44,7 +44,7 @@ class a {
                 return callback(this);
 >callback(this) : any
 >callback : any
->this : this
+>this : a
             }
         }
     }

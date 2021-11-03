@@ -8,7 +8,7 @@ class C {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->this : this
+>this : C
     }
 }
 
@@ -21,7 +21,7 @@ class D {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->this : this
+>this : D
     }
 }
 
@@ -37,7 +37,7 @@ class E {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->this : this
+>this : E
     }
 }
 
@@ -51,7 +51,7 @@ new class {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->this : this
+>this : (Anonymous class)
     }
 };
 
@@ -69,7 +69,7 @@ class F {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->this : this
+>this : F
     }
 }
 

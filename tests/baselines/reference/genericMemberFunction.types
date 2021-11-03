@@ -60,7 +60,7 @@ export class BuildResult<A, B, C>{
       this.removeFile(each);
 >this.removeFile(each) : any
 >this.removeFile : any
->this : this
+>this : BuildResult<A, B, C>
 >removeFile : any
 >each : FileWithErrors<A, B, C>
 

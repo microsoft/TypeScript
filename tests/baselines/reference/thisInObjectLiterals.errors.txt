@@ -1,8 +1,9 @@
+tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(8,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type '{ x: MyClass; y: number; }', but here has type '{ x: this; y: number; }'.
 tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(14,5): error TS7023: 'f' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(15,21): error TS2339: Property 'spaaace' does not exist on type '{ f(): any; }'.
 
 
-==== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts (2 errors) ====
+==== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts (3 errors) ====
     class MyClass {
         t: number;
     
@@ -11,6 +12,9 @@ tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(15,21): 
             //type of 'this' in an object literal is the containing scope's this
             var t = { x: this, y: this.t };
             var t: { x: ContainingThis; y: number };
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type '{ x: MyClass; y: number; }', but here has type '{ x: this; y: number; }'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts:7:13: 't' was also declared here.
         }
     }
     

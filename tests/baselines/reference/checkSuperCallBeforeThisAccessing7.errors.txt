@@ -1,0 +1,15 @@
+tests/cases/compiler/checkSuperCallBeforeThisAccessing7.ts(7,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+
+
+==== tests/cases/compiler/checkSuperCallBeforeThisAccessing7.ts (1 errors) ====
+    class Base {
+        constructor(func: ()=>Base) {
+        }
+    }
+    class Super extends Base {
+        constructor() {
+            super((() => this)); // No error
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+        }
+    }

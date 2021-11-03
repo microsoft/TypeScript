@@ -27,12 +27,12 @@ const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Ba
 >[this.x | x, this.y | y] : [number, number]
 >this.x | x : number
 >this.x : number
->this : this
+>this : (Anonymous class)
 >x : number
 >x : number
 >this.y | y : number
 >this.y : number
->this : this
+>this : (Anonymous class)
 >y : number
 >y : number
   }
@@ -67,10 +67,10 @@ class Foo extends WithLocation(Point) {
     return this.x + this.y;
 >this.x + this.y : number
 >this.x : number
->this : this
+>this : Foo
 >x : number
 >this.y : number
->this : this
+>this : Foo
 >y : number
   }
   getLocation() {
@@ -88,7 +88,7 @@ class Foo extends WithLocation(Point) {
     return this.getLocation();
 >this.getLocation() : [number, number]
 >this.getLocation : () => [number, number]
->this : this
+>this : Foo
 >getLocation : () => [number, number]
   }
 }

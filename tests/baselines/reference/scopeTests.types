@@ -23,14 +23,14 @@ class D extends C {
    this.v = 1;
 >this.v = 1 : 1
 >this.v : number
->this : this
+>this : D
 >v : number
 >1 : 1
 
    this.p = 1;
 >this.p = 1 : 1
 >this.p : number
->this : this
+>this : D
 >p : number
 >1 : 1
 

@@ -1,0 +1,25 @@
+tests/cases/conformance/salsa/bug24703.js(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
+
+
+==== tests/cases/conformance/salsa/bug24703.js (1 errors) ====
+    var Common = {};
+    Common.I = class {
+        constructor() {
+            this.i = 1
+        }
+    }
+    Common.O = class extends Common.I {
+        constructor() {
+            super()
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
+            this.o = 2
+        }
+    }
+    var o = new Common.O()
+    var i = new Common.I()
+    o.i
+    o.o
+    i.i
+    
+    

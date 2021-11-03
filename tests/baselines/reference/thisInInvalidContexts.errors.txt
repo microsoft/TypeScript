@@ -1,4 +1,6 @@
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BaseErrClass'.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(9,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(17,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BaseErrClass'.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(17,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(23,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(31,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
@@ -7,7 +9,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(39,9): 
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(40,9): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts (7 errors) ====
+==== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts (9 errors) ====
     class BaseErrClass {
         constructor(t: any) { }
     }
@@ -17,6 +19,8 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(40,9): 
         //'this' in optional super call
         constructor() {
             super(this); // Error
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BaseErrClass'.
                   ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
@@ -27,6 +31,8 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(40,9): 
         //'this' in required super call
         constructor() {
             super(this); // Error
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BaseErrClass'.
                   ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }

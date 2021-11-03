@@ -20,12 +20,12 @@ class Derived {
 
         let self: this = this;
 >self : this
->this : this
+>this : Derived
 
         this.n = 12;
 >this.n = 12 : 12
 >this.n : number
->this : this
+>this : Derived
 >n : number
 >12 : 12
     }

@@ -29,7 +29,7 @@ export class Text extends React.Component<{}, {}> {
       <this._tagName />
 ><this._tagName /> : error
 >this._tagName : string
->this : this
+>this : Text
 >_tagName : string
 
     );

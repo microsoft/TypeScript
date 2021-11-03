@@ -2,9 +2,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.t
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(19,55): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'FileSystemObject'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (4 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (5 errors) ====
     // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
     namespace Test {
     	export class FileSystemObject {
@@ -32,6 +33,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.t
     
     	export class File extends FileSystemObject {
     		constructor(path: string, public content: string) { super(path); }
+    		                                                    ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'FileSystemObject'.
     	}
     	export class Directory extends FileSystemObject {
     		children: FileSystemObject[];

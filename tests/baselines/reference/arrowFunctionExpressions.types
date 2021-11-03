@@ -148,12 +148,12 @@ class MyClass {
 >1 : 1
 
         var p = (n) => n && this;
->p : (n: any) => this
->(n) => n && this : (n: any) => this
+>p : (n: any) => MyClass
+>(n) => n && this : (n: any) => MyClass
 >n : any
->n && this : this
+>n && this : MyClass
 >n : any
->this : this
+>this : MyClass
     }
 }
 

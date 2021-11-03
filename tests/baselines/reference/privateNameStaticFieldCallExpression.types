@@ -87,7 +87,7 @@ class A {
 >this.getClass().#fieldFunc2 : (a: any, ...b: any[]) => void
 >this.getClass() : typeof A
 >this.getClass : () => typeof A
->this : this
+>this : A
 >getClass : () => typeof A
 >`test${1}and${2}` : string
 >1 : 1

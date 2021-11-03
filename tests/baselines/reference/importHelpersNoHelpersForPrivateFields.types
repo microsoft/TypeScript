@@ -12,14 +12,14 @@ export class Foo {
         this.#field = this.#field;
 >this.#field = this.#field : boolean
 >this.#field : boolean
->this : this
+>this : Foo
 >this.#field : boolean
->this : this
+>this : Foo
 
         #field in this;
 >#field in this : boolean
 >#field : any
->this : this
+>this : Foo
     }
 }
 

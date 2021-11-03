@@ -33,6 +33,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(59,9): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(62,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(63,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(68,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(69,15): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(70,15): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(74,15): error TS1034: 'super' must be followed by an argument list or member access.
@@ -76,7 +77,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(122,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (76 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (77 errors) ====
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value: any;
     
@@ -215,6 +216,8 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     class Derived extends C {
         constructor() {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
             super *= value;
                   ~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.

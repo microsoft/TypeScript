@@ -37,16 +37,16 @@ export class ObservableValue<T> {
         notifyListeners(this, {
 >notifyListeners(this, {            type: "update",            object: this,            newValue,            oldValue        }) : void
 >notifyListeners : <T>(listenable: IListenable, change: T) => void
->this : this
->{            type: "update",            object: this,            newValue,            oldValue        } : { type: string; object: this; newValue: T; oldValue: any; }
+>this : ObservableValue<T>
+>{            type: "update",            object: this,            newValue,            oldValue        } : { type: string; object: ObservableValue<T>; newValue: T; oldValue: any; }
 
             type: "update",
 >type : string
 >"update" : "update"
 
             object: this,
->object : this
->this : this
+>object : ObservableValue<T>
+>this : ObservableValue<T>
 
             newValue,
 >newValue : T

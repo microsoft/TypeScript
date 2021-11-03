@@ -1,10 +1,16 @@
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(19,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Food'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(25,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'MonsterFood'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(30,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'MonsterFood'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(35,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Food'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(40,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'PetFood'.
+tests/cases/compiler/objectCreationOfElementAccessExpression.ts(45,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'PetFood'.
 tests/cases/compiler/objectCreationOfElementAccessExpression.ts(53,25): error TS2538: Type 'Cookie' cannot be used as an index type.
 tests/cases/compiler/objectCreationOfElementAccessExpression.ts(53,63): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
 tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,41): error TS2538: Type 'Cookie' cannot be used as an index type.
 tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,79): error TS2348: Value of type 'typeof Cookie' is not callable. Did you mean to include 'new'?
 
 
-==== tests/cases/compiler/objectCreationOfElementAccessExpression.ts (4 errors) ====
+==== tests/cases/compiler/objectCreationOfElementAccessExpression.ts (10 errors) ====
     class Food {
         private amount: number;
         constructor(public name: string) {
@@ -24,32 +30,44 @@ tests/cases/compiler/objectCreationOfElementAccessExpression.ts(54,79): error TS
     class MonsterFood extends Food {
         constructor(name: string, public flavor: string) {
             super(name);
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Food'.
         }
     }
     class IceCream extends MonsterFood {
         private isDairyFree: boolean;
         constructor(public flavor: string) {
             super("Ice Cream", flavor);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'MonsterFood'.
         }
     }
     class Cookie extends MonsterFood {
         constructor(public flavor: string, public isGlutenFree: boolean) {
             super("Cookie", flavor);
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'MonsterFood'.
         }
     }
     class PetFood extends Food {
         constructor(name: string, public whereToBuy: number) {
             super(name);
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Food'.
         }
     }
     class ExpensiveOrganicDogFood extends PetFood {
         constructor(public whereToBuy: number) {
             super("Origen", whereToBuy);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'PetFood'.
         }
     }
     class ExpensiveOrganicCatFood extends PetFood {
         constructor(public whereToBuy: number, public containsFish: boolean) {
             super("Nature's Logic", whereToBuy);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'PetFood'.
         }
     }
     class Slug {

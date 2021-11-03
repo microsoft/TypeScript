@@ -10,7 +10,7 @@ class C1 {
         /** @type {T} */
         this.p;
 >this.p : T
->this : this
+>this : C1<T, V>
 >p : T
     }
 }
@@ -34,7 +34,7 @@ class C3 {
         /** @type {T} */
         this.p;
 >this.p : T
->this : this
+>this : C3<T, V, X>
 >p : T
     }
 }

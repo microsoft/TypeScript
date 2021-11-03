@@ -39,11 +39,11 @@ class A {
 >{ x: this.#field, y } : { x: number; y: number; }
 >x : number
 >this.#field : number
->this : this
+>this : A
 >y : number
 >this.testObject() : { x: number; y: number; }
 >this.testObject : () => { x: number; y: number; }
->this : this
+>this : A
 >testObject : () => { x: number; y: number; }
 
         ([this.#field, y] = this.testArray());
@@ -51,11 +51,11 @@ class A {
 >[this.#field, y] = this.testArray() : number[]
 >[this.#field, y] : [number, number]
 >this.#field : number
->this : this
+>this : A
 >y : number
 >this.testArray() : number[]
 >this.testArray : () => number[]
->this : this
+>this : A
 >testArray : () => number[]
 
         ({ a: this.#field, b: [this.#field] } = { a: 1, b: [2] });
@@ -64,11 +64,11 @@ class A {
 >{ a: this.#field, b: [this.#field] } : { a: number; b: [number]; }
 >a : number
 >this.#field : number
->this : this
+>this : A
 >b : [number]
 >[this.#field] : [number]
 >this.#field : number
->this : this
+>this : A
 >{ a: 1, b: [2] } : { a: number; b: [number]; }
 >a : number
 >1 : 1
@@ -80,10 +80,10 @@ class A {
 >[this.#field, [this.#field]] = [1, [2]] : [number, [number]]
 >[this.#field, [this.#field]] : [number, [number]]
 >this.#field : number
->this : this
+>this : A
 >[this.#field] : [number]
 >this.#field : number
->this : this
+>this : A
 >[1, [2]] : [number, [number]]
 >1 : 1
 >[2] : [number]
@@ -96,13 +96,13 @@ class A {
 >a : number
 >this.#field = 1 : 1
 >this.#field : number
->this : this
+>this : A
 >1 : 1
 >b : [number]
 >[this.#field = 1] : [number]
 >this.#field = 1 : 1
 >this.#field : number
->this : this
+>this : A
 >1 : 1
 >{ b: [] } : { b: []; a?: number; }
 >b : []
@@ -113,7 +113,7 @@ class A {
 >[this.#field = 2] : [number]
 >this.#field = 2 : 2
 >this.#field : number
->this : this
+>this : A
 >2 : 2
 >[] : []
 
@@ -123,7 +123,7 @@ class A {
 >this.otherObject.#field = 2 : 2
 >this.otherObject.#field : number
 >this.otherObject : A
->this : this
+>this : A
 >otherObject : A
 >2 : 2
 >[] : []

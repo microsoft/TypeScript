@@ -15,7 +15,7 @@ class Derived extends Based {
 >super(this.x) : void
 >super : typeof Based
 >this.x : number
->this : this
+>this : Derived
 >x : number
     }
 }

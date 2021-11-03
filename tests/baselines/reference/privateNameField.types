@@ -11,7 +11,7 @@ class A {
         this.#name = name;
 >this.#name = name : string
 >this.#name : string
->this : this
+>this : A
 >name : string
     }
 }

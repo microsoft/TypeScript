@@ -35,7 +35,7 @@ Emu.D = class {
         this._model = 1
 >this._model = 1 : 1
 >this._model : any
->this : this
+>this : D
 >_model : any
 >1 : 1
     }

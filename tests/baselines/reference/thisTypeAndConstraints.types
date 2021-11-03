@@ -3,10 +3,10 @@ class A {
 >A : A
 
     self() {
->self : () => this
+>self : () => A
 
         return this;
->this : this
+>this : A
     }
 }
 
@@ -19,20 +19,20 @@ function f<T extends A>(x: T) {
 >x : U
 
         x = x.self();
->x = x.self() : U
+>x = x.self() : A
 >x : U
->x.self() : U
->x.self : () => U
+>x.self() : A
+>x.self : () => A
 >x : U
->self : () => U
+>self : () => A
     }
     x = x.self();
->x = x.self() : T
+>x = x.self() : A
 >x : T
->x.self() : T
->x.self : () => T
+>x.self() : A
+>x.self : () => A
 >x : T
->self : () => T
+>self : () => A
 }
 
 class B<T extends A> {
@@ -43,24 +43,24 @@ class B<T extends A> {
 >x : T
 
         x = x.self();
->x = x.self() : T
+>x = x.self() : A
 >x : T
->x.self() : T
->x.self : () => T
+>x.self() : A
+>x.self : () => A
 >x : T
->self : () => T
+>self : () => A
     }
     bar<U extends T>(x: U) {
 >bar : <U extends T>(x: U) => void
 >x : U
 
         x = x.self();
->x = x.self() : U
+>x = x.self() : A
 >x : U
->x.self() : U
->x.self : () => U
+>x.self() : A
+>x.self : () => A
 >x : U
->self : () => U
+>self : () => A
     }
 }
 

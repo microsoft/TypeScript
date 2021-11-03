@@ -15,19 +15,19 @@ class A1 {
         this.#method("")
 >this.#method("") : string
 >this.#method : (param: string) => string
->this : this
+>this : A1
 >"" : ""
 
         this.#method(1) // Error
 >this.#method(1) : string
 >this.#method : (param: string) => string
->this : this
+>this : A1
 >1 : 1
 
         this.#method()  // Error 
 >this.#method() : string
 >this.#method : (param: string) => string
->this : this
+>this : A1
 
     }
 }

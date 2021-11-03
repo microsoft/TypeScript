@@ -1,9 +1,12 @@
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(11,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(13,14): error TS2540: Cannot assign to 'x' because it is a read-only property.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(21,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(33,7): error TS2415: Class 'E' incorrectly extends base class 'D'.
   Property 'x' is private in type 'D' but not in type 'E'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts(35,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'D'.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts (2 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts (5 errors) ====
     // Tests that readonly parameter properties behave like regular readonly properties
     
     class A {
@@ -15,6 +18,8 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/re
     class B extends A {
         constructor(x: number) {
             super(x);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
             // Fails, x is readonly
             this.x = 1;
                  ~
@@ -27,6 +32,8 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/re
         // if one is redeclared in a base class, then it can be assigned to.
         constructor(readonly x: number) {
             super(x);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
             this.x = 1;
         }
     }
@@ -44,6 +51,8 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/re
 !!! error TS2415:   Property 'x' is private in type 'D' but not in type 'E'.
         constructor(readonly x: number) {
             super(x);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'D'.
             this.x = 1;
         }
     }

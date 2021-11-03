@@ -66,7 +66,7 @@ class Render {
         this.objects = [];
 >this.objects = [] : undefined[]
 >this.objects : Rectangle[]
->this : this
+>this : Render
 >objects : Rectangle[]
 >[] : undefined[]
     }
@@ -87,7 +87,7 @@ class Render {
 >this.objects.push(obj) : number
 >this.objects.push : (...items: Rectangle[]) => number
 >this.objects : Rectangle[]
->this : this
+>this : Render
 >objects : Rectangle[]
 >push : (...items: Rectangle[]) => number
 >obj : Rectangle

@@ -209,7 +209,7 @@ class SetOf<A> {
 >this._store.push(a) : number
 >this._store.push : (...items: A[]) => number
 >this._store : A[]
->this : this
+>this : SetOf<A>
 >_store : A[]
 >push : (...items: A[]) => number
 >a : A
@@ -223,7 +223,7 @@ class SetOf<A> {
     return transformer(this);
 >transformer(this) : SetOf<B>
 >transformer : (a: SetOf<A>) => SetOf<B>
->this : this
+>this : SetOf<A>
   }
 
   forEach(fn: (a: A, index: number) => void) {
@@ -236,7 +236,7 @@ class SetOf<A> {
 >this._store.forEach((a, i) => fn(a, i)) : void
 >this._store.forEach : (callbackfn: (value: A, index: number, array: A[]) => void, thisArg?: any) => void
 >this._store : A[]
->this : this
+>this : SetOf<A>
 >_store : A[]
 >forEach : (callbackfn: (value: A, index: number, array: A[]) => void, thisArg?: any) => void
 >(a, i) => fn(a, i) : (a: A, i: number) => void
@@ -395,8 +395,8 @@ testSet.add(3);
 >3 : 3
 
 const t1 = testSet.transform(
->t1 : SetOf<string>
->testSet.transform(  compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<string>
+>t1 : SetOf<unknown>
+>testSet.transform(  compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<unknown>
 >testSet.transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
 >testSet : SetOf<number>
 >transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
@@ -452,8 +452,8 @@ declare function identity<T>(x: T): T;
 >x : T
 
 const t2 = testSet.transform(
->t2 : SetOf<string>
->testSet.transform(  compose(    filter(x => x % 1 === 0),    identity,    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<string>
+>t2 : SetOf<unknown>
+>testSet.transform(  compose(    filter(x => x % 1 === 0),    identity,    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<unknown>
 >testSet.transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
 >testSet : SetOf<number>
 >transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>

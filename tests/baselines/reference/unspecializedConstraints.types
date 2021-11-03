@@ -27,7 +27,7 @@ module ts {
 
             if (this === that) return true;
 >this === that : boolean
->this : this
+>this : Type
 >that : Type
 >true : true
 
@@ -37,7 +37,7 @@ module ts {
 >this.isObjectType() && that.isObjectType() : boolean
 >this.isObjectType() : boolean
 >this.isObjectType : () => boolean
->this : this
+>this : Type
 >isObjectType : () => boolean
 >that.isObjectType() : boolean
 >that.isObjectType : () => boolean
@@ -57,7 +57,7 @@ module ts {
 >propCount : number
 >this.getPropertyCount() : number
 >this.getPropertyCount : () => number
->this : this
+>this : Type
 >getPropertyCount : () => number
 >false : false
 
@@ -73,7 +73,7 @@ module ts {
 >sigCount : number
 >this.getSignatureCount() : number
 >this.getSignatureCount : () => number
->this : this
+>this : Type
 >getSignatureCount : () => number
 >false : false
 
@@ -93,7 +93,7 @@ module ts {
 >thisProp : Property
 >this.getProperty(i) : Property
 >this.getProperty : (index: number) => Property
->this : this
+>this : Type
 >getProperty : (index: number) => Property
 >i : number
 
@@ -141,7 +141,7 @@ module ts {
 >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
 >this.getSignatures() : Signature[]
 >this.getSignatures : () => Signature[]
->this : this
+>this : Type
 >getSignatures : () => Signature[]
 >that.getSignatures() : Signature[]
 >that.getSignatures : () => Signature[]
@@ -243,7 +243,7 @@ module ts {
 >this.name === other.name &&                this.flags === other.flags : boolean
 >this.name === other.name : boolean
 >this.name : string
->this : this
+>this : Property
 >name : string
 >other.name : string
 >other : Property
@@ -252,7 +252,7 @@ module ts {
                 this.flags === other.flags &&
 >this.flags === other.flags : boolean
 >this.flags : PropertyFlags
->this : this
+>this : Property
 >flags : PropertyFlags
 >other.flags : PropertyFlags
 >other : Property
@@ -262,7 +262,7 @@ module ts {
 >this.type.equals(other.type) : boolean
 >this.type.equals : (that: Type) => boolean
 >this.type : Type
->this : this
+>this : Property
 >type : Type
 >equals : (that: Type) => boolean
 >other.type : Type
@@ -307,7 +307,7 @@ module ts {
 >this.parameters.length === other.parameters.length : boolean
 >this.parameters.length : number
 >this.parameters : Parameter[]
->this : this
+>this : Signature
 >parameters : Parameter[]
 >length : number
 >other.parameters.length : number
@@ -320,7 +320,7 @@ module ts {
 >this.typeParameters.length === other.typeParameters.length : boolean
 >this.typeParameters.length : number
 >this.typeParameters : TypeParameter[]
->this : this
+>this : Signature
 >typeParameters : TypeParameter[]
 >length : number
 >other.typeParameters.length : number
@@ -333,7 +333,7 @@ module ts {
 >arrayEquals(this.parameters, other.parameters) : boolean
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
 >this.parameters : Parameter[]
->this : this
+>this : Signature
 >parameters : Parameter[]
 >other.parameters : Parameter[]
 >other : Signature
@@ -343,7 +343,7 @@ module ts {
 >arrayEquals(this.typeParameters, other.typeParameters) : boolean
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
 >this.typeParameters : TypeParameter[]
->this : this
+>this : Signature
 >typeParameters : TypeParameter[]
 >other.typeParameters : TypeParameter[]
 >other : Signature
@@ -357,7 +357,7 @@ module ts {
 >this.equalsNoReturn(other) &&                this.returnType.equals(other.returnType) : boolean
 >this.equalsNoReturn(other) : boolean
 >this.equalsNoReturn : (other: Signature) => boolean
->this : this
+>this : Signature
 >equalsNoReturn : (other: Signature) => boolean
 >other : Signature
 
@@ -365,7 +365,7 @@ module ts {
 >this.returnType.equals(other.returnType) : boolean
 >this.returnType.equals : (that: Type) => boolean
 >this.returnType : Type
->this : this
+>this : Signature
 >returnType : Type
 >equals : (that: Type) => boolean
 >other.returnType : Type
@@ -396,7 +396,7 @@ module ts {
 >this.name === other.name &&                this.flags === other.flags : boolean
 >this.name === other.name : boolean
 >this.name : string
->this : this
+>this : Parameter
 >name : string
 >other.name : string
 >other : Parameter
@@ -405,7 +405,7 @@ module ts {
                 this.flags === other.flags &&
 >this.flags === other.flags : boolean
 >this.flags : ParameterFlags
->this : this
+>this : Parameter
 >flags : ParameterFlags
 >other.flags : ParameterFlags
 >other : Parameter
@@ -415,7 +415,7 @@ module ts {
 >this.type.equals(other.type) : boolean
 >this.type.equals : (that: Type) => boolean
 >this.type : Type
->this : this
+>this : Parameter
 >type : Type
 >equals : (that: Type) => boolean
 >other.type : Type

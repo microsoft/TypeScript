@@ -1,7 +1,8 @@
+tests/cases/compiler/superPropertyAccessInSuperCall01.ts(9,3): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
 tests/cases/compiler/superPropertyAccessInSuperCall01.ts(9,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/superPropertyAccessInSuperCall01.ts (1 errors) ====
+==== tests/cases/compiler/superPropertyAccessInSuperCall01.ts (2 errors) ====
     class A {
     	constructor(f: string) {
     	}
@@ -11,6 +12,8 @@ tests/cases/compiler/superPropertyAccessInSuperCall01.ts(9,9): error TS17011: 's
     class B extends A {
     	constructor() {
     		super(super.blah())
+    		~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
     		      ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
     	}

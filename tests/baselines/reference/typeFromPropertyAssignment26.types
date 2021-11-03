@@ -14,7 +14,7 @@ UI.TreeElement = class {
         this.treeOutline = 12
 >this.treeOutline = 12 : 12
 >this.treeOutline : any
->this : this
+>this : TreeElement
 >treeOutline : any
 >12 : 12
     }
@@ -40,14 +40,14 @@ class C extends UI.TreeElement {
 
         this.doesNotExist
 >this.doesNotExist : any
->this : this
+>this : C
 >doesNotExist : any
 
         this.treeOutline.doesntExistEither()
 >this.treeOutline.doesntExistEither() : any
 >this.treeOutline.doesntExistEither : any
 >this.treeOutline : number
->this : this
+>this : C
 >treeOutline : number
 >doesntExistEither : any
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/superCallArgsMustMatch.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/superCallArgsMustMatch.ts(17,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'T5<T>'.
 
 
 ==== tests/cases/compiler/superCallArgsMustMatch.ts (1 errors) ====
@@ -19,8 +19,8 @@ tests/cases/compiler/superCallArgsMustMatch.ts(17,15): error TS2345: Argument of
             // Should error; base constructor has type T for first arg,
             // which is instantiated with 'number' in the extends clause
             super("hi");
-                  ~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'T5<T>'.
     
             var x: number = this.foo;
     

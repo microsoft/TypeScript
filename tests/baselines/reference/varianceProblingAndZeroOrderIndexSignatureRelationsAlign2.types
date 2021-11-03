@@ -26,7 +26,7 @@ class Left<L, A> {
 
       return this as any
 >this as any : any
->this : this
+>this : Left<L, A>
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
@@ -66,7 +66,7 @@ class Right<L, A> {
 >f(this.value) : B
 >f : (a: A) => B
 >this.value : A
->this : this
+>this : Right<L, A>
 >value : A
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {

@@ -25,7 +25,7 @@ class A {
 
         return this.#_quux;
 >this.#_quux : number
->this : this
+>this : A
     }
     set #quux (val: number) {
 >#quux : number
@@ -34,41 +34,41 @@ class A {
         this.#_quux = val; 
 >this.#_quux = val : number
 >this.#_quux : number
->this : this
+>this : A
 >val : number
     }
     constructor () {
         this.#foo(30);
 >this.#foo(30) : void
 >this.#foo : (a: number) => void
->this : this
+>this : A
 >30 : 30
 
         this.#bar(30);
 >this.#bar(30) : Promise<void>
 >this.#bar : (a: number) => Promise<void>
->this : this
+>this : A
 >30 : 30
 
         this.#baz(30);
 >this.#baz(30) : AsyncGenerator<never, number, unknown>
 >this.#baz : (a: number) => AsyncGenerator<never, number, unknown>
->this : this
+>this : A
 >30 : 30
 
         this.#quux = this.#quux + 1;
 >this.#quux = this.#quux + 1 : number
 >this.#quux : number
->this : this
+>this : A
 >this.#quux + 1 : number
 >this.#quux : number
->this : this
+>this : A
 >1 : 1
 
         this.#quux++;
 >this.#quux++ : number
 >this.#quux : number
->this : this
+>this : A
  }
 }
 
@@ -88,7 +88,7 @@ class B extends A {
         this.#foo("str");
 >this.#foo("str") : void
 >this.#foo : (a: string) => void
->this : this
+>this : B
 >"str" : "str"
     }
 }

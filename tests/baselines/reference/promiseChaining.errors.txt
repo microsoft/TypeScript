@@ -1,0 +1,31 @@
+tests/cases/compiler/promiseChaining.ts(6,17): error TS2684: The 'this' context of type 'Chain<S>' is not assignable to method's 'this' of type 'Chain<T>'.
+  Type 'S' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'S'.
+tests/cases/compiler/promiseChaining.ts(6,17): error TS2684: The 'this' context of type 'Chain<unknown>' is not assignable to method's 'this' of type 'Chain<T>'.
+  Type 'unknown' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
+tests/cases/compiler/promiseChaining.ts(6,84): error TS2339: Property 'length' does not exist on type 'unknown'.
+
+
+==== tests/cases/compiler/promiseChaining.ts (3 errors) ====
+    class Chain<T> {
+        constructor(public value: T) { }
+        then<S>(cb: (x: T) => S): Chain<S> {
+            var result = cb(this.value);
+            // should get a fresh type parameter which each then call
+            var z = this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length)/*number*/; // No error
+                    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain<S>' is not assignable to method's 'this' of type 'Chain<T>'.
+!!! error TS2684:   Type 'S' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'S'.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'Chain<unknown>' is not assignable to method's 'this' of type 'Chain<T>'.
+!!! error TS2684:   Type 'unknown' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
+                                                                                       ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'unknown'.
+            return new Chain(result);
+        }
+    }
+    
+    

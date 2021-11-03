@@ -7,19 +7,19 @@ class C {
 		this.a = true;
 >this.a = true : true
 >this.a : boolean
->this : this
+>this : C
 >a : boolean
 >true : true
 
 		this.a = !!this.a;
 >this.a = !!this.a : boolean
 >this.a : boolean
->this : this
+>this : C
 >a : boolean
 >!!this.a : boolean
 >!this.a : boolean
 >this.a : true
->this : this
+>this : C
 >a : true
 	}
 }

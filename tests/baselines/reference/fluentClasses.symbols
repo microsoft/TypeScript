@@ -37,11 +37,7 @@ var c: C;
 
 var z = c.foo().bar().baz();  // Fluent pattern
 >z : Symbol(z, Decl(fluentClasses.ts, 16, 3))
->c.foo().bar().baz : Symbol(C.baz, Decl(fluentClasses.ts, 10, 19))
->c.foo().bar : Symbol(B.bar, Decl(fluentClasses.ts, 5, 19))
 >c.foo : Symbol(A.foo, Decl(fluentClasses.ts, 0, 9))
 >c : Symbol(c, Decl(fluentClasses.ts, 15, 3))
 >foo : Symbol(A.foo, Decl(fluentClasses.ts, 0, 9))
->bar : Symbol(B.bar, Decl(fluentClasses.ts, 5, 19))
->baz : Symbol(C.baz, Decl(fluentClasses.ts, 10, 19))
 

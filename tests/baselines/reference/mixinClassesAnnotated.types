@@ -55,11 +55,11 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
 >this.x + "," + this.y : string
 >this.x + "," : string
 >this.x : number
->this : this
+>this : (Anonymous class)
 >x : number
 >"," : ","
 >this.y : number
->this : this
+>this : (Anonymous class)
 >y : number
         }
     }
@@ -92,7 +92,7 @@ function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> &
             this._tag = "hello";
 >this._tag = "hello" : "hello"
 >this._tag : string
->this : this
+>this : C
 >_tag : string
 >"hello" : "hello"
         }
@@ -187,7 +187,7 @@ class Thing3 extends Thing2 {
         this._tag = tag;
 >this._tag = tag : string
 >this._tag : string
->this : this
+>this : Thing3
 >_tag : string
 >tag : string
     }
@@ -197,7 +197,7 @@ class Thing3 extends Thing2 {
         this.print();
 >this.print() : void
 >this.print : () => void
->this : this
+>this : Thing3
 >print : () => void
     }
 }

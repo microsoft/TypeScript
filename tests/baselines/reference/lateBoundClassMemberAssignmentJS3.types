@@ -10,13 +10,13 @@ export class MyClass {
 
     constructor() {
         var self = this
->self : this
->this : this
+>self : MyClass
+>this : MyClass
 
         self[_sym] = "ok";
 >self[_sym] = "ok" : "ok"
 >self[_sym] : string
->self : this
+>self : MyClass
 >_sym : unique symbol
 >"ok" : "ok"
     }
@@ -25,20 +25,20 @@ export class MyClass {
 >method : () => void
 
         var self = this
->self : this
->this : this
+>self : MyClass
+>this : MyClass
 
         self[_sym] = "yep";
 >self[_sym] = "yep" : "yep"
 >self[_sym] : string
->self : this
+>self : MyClass
 >_sym : unique symbol
 >"yep" : "yep"
 
         const x = self[_sym];
 >x : string
 >self[_sym] : string
->self : this
+>self : MyClass
 >_sym : unique symbol
     }
 }

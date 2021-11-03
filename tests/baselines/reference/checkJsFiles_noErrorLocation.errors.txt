@@ -1,0 +1,25 @@
+tests/cases/compiler/a.js(13,5): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/compiler/a.js (1 errors) ====
+    // @ts-check
+    class A {
+      constructor() {
+    
+      }
+      foo() {
+        return 4;
+      }
+    }
+    
+    class B extends A {
+      constructor() {
+        super();
+        ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+        this.foo = () => 3;
+      }
+    }
+    
+    const i = new B();
+    i.foo();

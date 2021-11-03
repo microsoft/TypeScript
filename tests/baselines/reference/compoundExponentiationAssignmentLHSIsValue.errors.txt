@@ -16,6 +16,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(40,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(43,10): error TS1128: Declaration or statement expected.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(51,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(52,15): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(56,15): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(60,15): error TS1034: 'super' must be followed by an argument list or member access.
@@ -39,7 +40,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(85,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts (39 errors) ====
+==== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts (40 errors) ====
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value: any;
     
@@ -127,6 +128,8 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     class Derived extends C {
         constructor() {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
             super **= value;
                   ~~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.

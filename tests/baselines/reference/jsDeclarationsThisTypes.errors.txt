@@ -1,0 +1,18 @@
+tests/cases/conformance/jsdoc/declarations/index.js(4,9): error TS2322: Type 'A' is not assignable to type 'this'.
+  'A' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'A'.
+
+
+==== tests/cases/conformance/jsdoc/declarations/index.js (1 errors) ====
+    export class A {
+        /** @returns {this} */
+        method() {
+            return this;
+            ~~~~~~~~~~~~
+!!! error TS2322: Type 'A' is not assignable to type 'this'.
+!!! error TS2322:   'A' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'A'.
+        }
+    }
+    export default class Base extends A {
+        // This method is required to reproduce #35932
+        verify() { }
+    }

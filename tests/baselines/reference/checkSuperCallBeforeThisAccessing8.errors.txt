@@ -1,7 +1,8 @@
 tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts(7,20): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts(8,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
 
 
-==== tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts (1 errors) ====
+==== tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts (2 errors) ====
     class Base {
         constructor(...arg) {
         }
@@ -12,5 +13,7 @@ tests/cases/compiler/checkSuperCallBeforeThisAccessing8.ts(7,20): error TS17009:
                        ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
         }
     }

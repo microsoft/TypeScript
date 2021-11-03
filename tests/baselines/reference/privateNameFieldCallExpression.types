@@ -27,17 +27,17 @@ class A {
         this.#fieldFunc();
 >this.#fieldFunc() : void
 >this.#fieldFunc : () => void
->this : this
+>this : A
 
         this.#fieldFunc?.();
 >this.#fieldFunc?.() : void
 >this.#fieldFunc : () => void
->this : this
+>this : A
 
         const func = this.#fieldFunc;
 >func : () => void
 >this.#fieldFunc : () => void
->this : this
+>this : A
 
         func();
 >func() : void
@@ -46,7 +46,7 @@ class A {
         new this.#fieldFunc();
 >new this.#fieldFunc() : any
 >this.#fieldFunc : () => void
->this : this
+>this : A
 
         const arr = [ 1, 2 ];
 >arr : number[]
@@ -57,7 +57,7 @@ class A {
         this.#fieldFunc2(0, ...arr, 3);
 >this.#fieldFunc2(0, ...arr, 3) : void
 >this.#fieldFunc2 : (a: any, ...b: any[]) => void
->this : this
+>this : A
 >0 : 0
 >...arr : number
 >arr : number[]
@@ -67,7 +67,7 @@ class A {
 >b : any
 >new this.#fieldFunc2(0, ...arr, 3) : any
 >this.#fieldFunc2 : (a: any, ...b: any[]) => void
->this : this
+>this : A
 >0 : 0
 >...arr : number
 >arr : number[]
@@ -77,7 +77,7 @@ class A {
 >str : void
 >this.#fieldFunc2`head${1}middle${2}tail` : void
 >this.#fieldFunc2 : (a: any, ...b: any[]) => void
->this : this
+>this : A
 >`head${1}middle${2}tail` : string
 >1 : 1
 >2 : 2
@@ -87,7 +87,7 @@ class A {
 >this.getInstance().#fieldFunc2 : (a: any, ...b: any[]) => void
 >this.getInstance() : A
 >this.getInstance : () => A
->this : this
+>this : A
 >getInstance : () => A
 >`test${1}and${2}` : string
 >1 : 1

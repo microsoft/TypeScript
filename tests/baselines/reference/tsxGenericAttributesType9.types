@@ -24,7 +24,7 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 ><Ctor {...this.props } /> : JSX.Element
 >Ctor : React.ComponentClass<P>
 >this.props : P & { children?: React.ReactNode; }
->this : this
+>this : (Anonymous class)
 >props : P & { children?: React.ReactNode; }
 
 			);

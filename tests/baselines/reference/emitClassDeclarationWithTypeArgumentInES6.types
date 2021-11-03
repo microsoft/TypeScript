@@ -12,7 +12,7 @@ class B<T> {
 >a : T
 >this.B = a : T
 >this.B : T
->this : this
+>this : B<T>
 >B : T
 >a : T
 
@@ -21,7 +21,7 @@ class B<T> {
 
         return this.x;
 >this.x : T
->this : this
+>this : B<T>
 >x : T
     }
     get BB(): T {
@@ -29,7 +29,7 @@ class B<T> {
 
         return this.B;
 >this.B : T
->this : this
+>this : B<T>
 >B : T
     }
     set BBWith(c: T) {
@@ -39,7 +39,7 @@ class B<T> {
         this.B = c;
 >this.B = c : T
 >this.B : T
->this : this
+>this : B<T>
 >B : T
 >c : T
     }

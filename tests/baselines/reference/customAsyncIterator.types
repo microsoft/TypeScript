@@ -24,7 +24,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >{ value: this.constant, done: false } : { value: T; done: false; }
 >value : T
 >this.constant : T
->this : this
+>this : ConstantIterator<T>
 >constant : T
 >done : false
 >false : false

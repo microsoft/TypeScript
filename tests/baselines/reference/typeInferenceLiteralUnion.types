@@ -27,7 +27,7 @@ class NumCoercible {
         this.a = a;
 >this.a = a : number
 >this.a : number
->this : this
+>this : NumCoercible
 >a : number
 >a : number
     }
@@ -36,7 +36,7 @@ class NumCoercible {
 
         return this.a;
 >this.a : number
->this : this
+>this : NumCoercible
 >a : number
     }
 }

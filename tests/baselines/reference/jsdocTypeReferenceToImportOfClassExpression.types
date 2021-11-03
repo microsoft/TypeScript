@@ -21,7 +21,7 @@ module.exports = class MC {
     return new MW(this);
 >new MW(this) : MW
 >MW : typeof MW
->this : this
+>this : import("tests/cases/conformance/jsdoc/MC")
   }
 };
 
@@ -40,7 +40,7 @@ class MW {
     this.compiler = compiler;
 >this.compiler = compiler : import("tests/cases/conformance/jsdoc/MC")
 >this.compiler : any
->this : this
+>this : MW
 >compiler : any
 >compiler : import("tests/cases/conformance/jsdoc/MC")
   }

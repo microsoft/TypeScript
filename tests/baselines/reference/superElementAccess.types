@@ -54,7 +54,7 @@ class MyDerived extends MyBase {
 >super : MyBase
 >"m1" : "m1"
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->this : this
+>this : MyDerived
 
         var x: (a: string) => string = super["m1"];            // Should be allowed, can assign to var with compatible signature
 >x : (a: string) => string
@@ -70,7 +70,7 @@ class MyDerived extends MyBase {
 >super : MyBase
 >"m2" : "m2"
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->this : this
+>this : MyDerived
 
         super["p1"]();                                         // Should error, private not public instance member function
 >super["p1"]() : void

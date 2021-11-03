@@ -43,7 +43,7 @@ module TypeScript {
             this["constructor"] = undefined;
 >this["constructor"] = undefined : undefined
 >this["constructor"] : Function
->this : this
+>this : BlockIntrinsics
 >"constructor" : "constructor"
 >undefined : undefined
         }
@@ -120,14 +120,14 @@ module TypeScript {
             for (var k in this.table) {
 >k : string
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 
                 if (this.table[k] != undefined) {
 >this.table[k] != undefined : boolean
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 >undefined : undefined
@@ -155,7 +155,7 @@ module TypeScript {
 >this.table[key] != undefined : boolean
 >this.table[key] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >key : string
 >undefined : undefined
@@ -167,7 +167,7 @@ module TypeScript {
 >this.table[key] = data : any
 >this.table[key] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >key : string
 >data : any
@@ -175,7 +175,7 @@ module TypeScript {
             this.itemCount++;
 >this.itemCount++ : number
 >this.itemCount : number
->this : this
+>this : StringHashTable
 >itemCount : number
 
             return true;
@@ -191,7 +191,7 @@ module TypeScript {
 >this.table[key] != undefined : boolean
 >this.table[key] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >key : string
 >undefined : undefined
@@ -200,7 +200,7 @@ module TypeScript {
 >this.table[key] = data : any
 >this.table[key] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >key : string
 >data : any
@@ -212,7 +212,7 @@ module TypeScript {
 >this.table[key] = data : any
 >this.table[key] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >key : string
 >data : any
@@ -220,7 +220,7 @@ module TypeScript {
             this.itemCount++;
 >this.itemCount++ : number
 >this.itemCount : number
->this : this
+>this : StringHashTable
 >itemCount : number
 
             return true;
@@ -238,14 +238,14 @@ module TypeScript {
             for (var k in this.table) {
 >k : string
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 
                 var data = this.table[k];
 >data : any
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 
@@ -260,7 +260,7 @@ module TypeScript {
 >k : string
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 >context : any
@@ -279,14 +279,14 @@ module TypeScript {
             for (var k in this.table) {
 >k : string
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 
                 var data = this.table[k];
 >data : any
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 
@@ -302,7 +302,7 @@ module TypeScript {
 >k : string
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 >context : any
@@ -327,14 +327,14 @@ module TypeScript {
             for (var k in this.table) {
 >k : string
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 
                 var data = this.table[k];
 >data : any
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 
@@ -349,7 +349,7 @@ module TypeScript {
 >k : string
 >this.table[k] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >k : string
 >context : any
@@ -366,7 +366,7 @@ module TypeScript {
         public count(): number { return this.itemCount; }
 >count : () => number
 >this.itemCount : number
->this : this
+>this : StringHashTable
 >itemCount : number
 
         public lookup(key: string) {
@@ -377,7 +377,7 @@ module TypeScript {
 >data : any
 >this.table[key] : any
 >this.table : any
->this : this
+>this : StringHashTable
 >table : any
 >key : string
 
@@ -422,14 +422,14 @@ module TypeScript {
 >this.primaryTable.getAllKeys() : string[]
 >this.primaryTable.getAllKeys : () => string[]
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >getAllKeys : () => string[]
 >concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
 >this.secondaryTable.getAllKeys() : string[]
 >this.secondaryTable.getAllKeys : () => string[]
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >getAllKeys : () => string[]
         }
@@ -441,14 +441,14 @@ module TypeScript {
 
             if (this.insertPrimary) {
 >this.insertPrimary : boolean
->this : this
+>this : DualStringHashTable
 >insertPrimary : boolean
 
                 return this.primaryTable.add(key, data);
 >this.primaryTable.add(key, data) : boolean
 >this.primaryTable.add : (key: string, data: any) => boolean
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >add : (key: string, data: any) => boolean
 >key : string
@@ -459,7 +459,7 @@ module TypeScript {
 >this.secondaryTable.add(key, data) : boolean
 >this.secondaryTable.add : (key: string, data: any) => boolean
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >add : (key: string, data: any) => boolean
 >key : string
@@ -474,14 +474,14 @@ module TypeScript {
 
             if (this.insertPrimary) {
 >this.insertPrimary : boolean
->this : this
+>this : DualStringHashTable
 >insertPrimary : boolean
 
                 return this.primaryTable.addOrUpdate(key, data);
 >this.primaryTable.addOrUpdate(key, data) : boolean
 >this.primaryTable.addOrUpdate : (key: string, data: any) => boolean
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >addOrUpdate : (key: string, data: any) => boolean
 >key : string
@@ -492,7 +492,7 @@ module TypeScript {
 >this.secondaryTable.addOrUpdate(key, data) : boolean
 >this.secondaryTable.addOrUpdate : (key: string, data: any) => boolean
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >addOrUpdate : (key: string, data: any) => boolean
 >key : string
@@ -512,7 +512,7 @@ module TypeScript {
 >this.primaryTable.map(fn, context) : void
 >this.primaryTable.map : (fn: (k: string, v: any, c: any) => void, context: any) => void
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
 >fn : (k: string, v: any, c: any) => void
@@ -522,7 +522,7 @@ module TypeScript {
 >this.secondaryTable.map(fn, context) : void
 >this.secondaryTable.map : (fn: (k: string, v: any, c: any) => void, context: any) => void
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
 >fn : (k: string, v: any, c: any) => void
@@ -542,7 +542,7 @@ module TypeScript {
 >this.primaryTable.every(fn, context) : boolean
 >this.primaryTable.every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
@@ -550,7 +550,7 @@ module TypeScript {
 >this.secondaryTable.every(fn, context) : boolean
 >this.secondaryTable.every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
@@ -570,7 +570,7 @@ module TypeScript {
 >this.primaryTable.some(fn, context) : boolean
 >this.primaryTable.some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
@@ -578,7 +578,7 @@ module TypeScript {
 >this.secondaryTable.some(fn, context) : boolean
 >this.secondaryTable.some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
 >fn : (k: string, v: any, c: any) => boolean
@@ -593,13 +593,13 @@ module TypeScript {
 >this.primaryTable.count() : number
 >this.primaryTable.count : () => number
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >count : () => number
 >this.secondaryTable.count() : number
 >this.secondaryTable.count : () => number
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >count : () => number
         }
@@ -613,7 +613,7 @@ module TypeScript {
 >this.primaryTable.lookup(key) : any
 >this.primaryTable.lookup : (key: string) => any
 >this.primaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >primaryTable : IHashTable
 >lookup : (key: string) => any
 >key : string
@@ -631,7 +631,7 @@ module TypeScript {
 >this.secondaryTable.lookup(key) : any
 >this.secondaryTable.lookup : (key: string) => any
 >this.secondaryTable : IHashTable
->this : this
+>this : DualStringHashTable
 >secondaryTable : IHashTable
 >lookup : (key: string) => any
 >key : string
@@ -759,7 +759,7 @@ module TypeScript {
 >i < this.size : boolean
 >i : number
 >this.size : number
->this : this
+>this : HashTable
 >size : number
 >i++ : number
 >i : number
@@ -768,7 +768,7 @@ module TypeScript {
 >this.table[i] = null : null
 >this.table[i] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >i : number
 >null : null
@@ -794,7 +794,7 @@ module TypeScript {
 >val : number
 >this.hashFn(key) : number
 >this.hashFn : (key: any) => number
->this : this
+>this : HashTable
 >hashFn : (key: any) => number
 >key : any
 
@@ -804,7 +804,7 @@ module TypeScript {
 >val % this.size : number
 >val : number
 >this.size : number
->this : this
+>this : HashTable
 >size : number
 
             for (current = this.table[val]; current != null ; current = current.next) {
@@ -812,7 +812,7 @@ module TypeScript {
 >current : HashEntry
 >this.table[val] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >val : number
 >current != null : boolean
@@ -827,7 +827,7 @@ module TypeScript {
                 if (this.equalsFn(key, current.key)) {
 >this.equalsFn(key, current.key) : boolean
 >this.equalsFn : (key1: any, key2: any) => boolean
->this : this
+>this : HashTable
 >equalsFn : (key1: any, key2: any) => boolean
 >key : any
 >current.key : any
@@ -845,7 +845,7 @@ module TypeScript {
 >next : HashEntry
 >this.table[val] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >val : number
 
@@ -853,7 +853,7 @@ module TypeScript {
 >this.table[val] = entry : HashEntry
 >this.table[val] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >val : number
 >entry : HashEntry
@@ -861,7 +861,7 @@ module TypeScript {
             this.itemCount++;
 >this.itemCount++ : number
 >this.itemCount : number
->this : this
+>this : HashTable
 >itemCount : number
 
             return true;
@@ -879,7 +879,7 @@ module TypeScript {
 >val : number
 >this.hashFn(key) : number
 >this.hashFn : (key: any) => number
->this : this
+>this : HashTable
 >hashFn : (key: any) => number
 >key : any
 
@@ -889,7 +889,7 @@ module TypeScript {
 >val % this.size : number
 >val : number
 >this.size : number
->this : this
+>this : HashTable
 >size : number
 
             var result = null;
@@ -905,7 +905,7 @@ module TypeScript {
 >current : HashEntry
 >this.table[val] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >val : number
 >current != null : boolean
@@ -920,7 +920,7 @@ module TypeScript {
                 if (this.equalsFn(key, current.key)) {
 >this.equalsFn(key, current.key) : boolean
 >this.equalsFn : (key1: any, key2: any) => boolean
->this : this
+>this : HashTable
 >equalsFn : (key1: any, key2: any) => boolean
 >key : any
 >current.key : any
@@ -937,7 +937,7 @@ module TypeScript {
                     this.itemCount--;
 >this.itemCount-- : number
 >this.itemCount : number
->this : this
+>this : HashTable
 >itemCount : number
 
                     if (prevEntry) {
@@ -957,7 +957,7 @@ module TypeScript {
 >this.table[val] = current.next : HashEntry
 >this.table[val] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >val : number
 >current.next : HashEntry
@@ -978,7 +978,7 @@ module TypeScript {
         public count(): number { return this.itemCount; }
 >count : () => number
 >this.itemCount : number
->this : this
+>this : HashTable
 >itemCount : number
 
         public lookup(key) {
@@ -992,7 +992,7 @@ module TypeScript {
 >val : number
 >this.hashFn(key) : number
 >this.hashFn : (key: any) => number
->this : this
+>this : HashTable
 >hashFn : (key: any) => number
 >key : any
 
@@ -1002,7 +1002,7 @@ module TypeScript {
 >val % this.size : number
 >val : number
 >this.size : number
->this : this
+>this : HashTable
 >size : number
 
             for (current = this.table[val]; current != null ; current = current.next) {
@@ -1010,7 +1010,7 @@ module TypeScript {
 >current : HashEntry
 >this.table[val] : any
 >this.table : any
->this : this
+>this : HashTable
 >table : any
 >val : number
 >current != null : boolean
@@ -1025,7 +1025,7 @@ module TypeScript {
                 if (this.equalsFn(key, current.key)) {
 >this.equalsFn(key, current.key) : boolean
 >this.equalsFn : (key1: any, key2: any) => boolean
->this : this
+>this : HashTable
 >equalsFn : (key1: any, key2: any) => boolean
 >key : any
 >current.key : any
@@ -1065,7 +1065,7 @@ module TypeScript {
             var searchArray = this.keys;
 >searchArray : any[]
 >this.keys : any[]
->this : this
+>this : SimpleHashTable
 >keys : any[]
 
             if (findValue) {
@@ -1075,7 +1075,7 @@ module TypeScript {
 >searchArray = this.values : any[]
 >searchArray : any[]
 >this.values : any[]
->this : this
+>this : SimpleHashTable
 >values : any[]
             }
 
@@ -1104,7 +1104,7 @@ module TypeScript {
 >key : any
 >this.keys[i] : any
 >this.keys : any[]
->this : this
+>this : SimpleHashTable
 >keys : any[]
 >i : number
 
@@ -1112,7 +1112,7 @@ module TypeScript {
 >data : any
 >this.values[i] : any
 >this.values : any[]
->this : this
+>this : SimpleHashTable
 >values : any[]
 >i : number
 
@@ -1132,7 +1132,7 @@ module TypeScript {
 >lookupData : { key: any; data: any; }
 >this.lookup(key) : { key: any; data: any; }
 >this.lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
->this : this
+>this : SimpleHashTable
 >lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
 >key : any
 
@@ -1147,11 +1147,11 @@ module TypeScript {
 >this.keys[this.keys.length] = key : any
 >this.keys[this.keys.length] : any
 >this.keys : any[]
->this : this
+>this : SimpleHashTable
 >keys : any[]
 >this.keys.length : number
 >this.keys : any[]
->this : this
+>this : SimpleHashTable
 >keys : any[]
 >length : number
 >key : any
@@ -1160,11 +1160,11 @@ module TypeScript {
 >this.values[this.values.length] = data : any
 >this.values[this.values.length] : any
 >this.values : any[]
->this : this
+>this : SimpleHashTable
 >values : any[]
 >this.values.length : number
 >this.values : any[]
->this : this
+>this : SimpleHashTable
 >values : any[]
 >length : number
 >data : any

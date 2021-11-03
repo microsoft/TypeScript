@@ -9,7 +9,7 @@ class A {
 		this.foo = arguments;
 >this.foo = arguments : IArguments
 >this.foo : any
->this : this
+>this : A
 >foo : any
 >arguments : IArguments
 	}

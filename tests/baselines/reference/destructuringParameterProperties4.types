@@ -22,19 +22,19 @@ class C1<T, U, V> {
 >this.b === undefined && this.c === undefined : boolean
 >this.b === undefined : boolean
 >this.b : any
->this : this
+>this : C1<T, U, V>
 >b : any
 >undefined : undefined
 >this.c === undefined : boolean
 >this.c : any
->this : this
+>this : C1<T, U, V>
 >c : any
 >undefined : undefined
 
             this.a = a || k;
 >this.a = a || k : T
 >this.a : any
->this : this
+>this : C1<T, U, V>
 >a : any
 >a || k : T
 >a : T
@@ -47,7 +47,7 @@ class C1<T, U, V> {
 
         return this.a
 >this.a : any
->this : this
+>this : C1<T, U, V>
 >a : any
     }
 
@@ -56,7 +56,7 @@ class C1<T, U, V> {
 
         return this.b
 >this.b : any
->this : this
+>this : C1<T, U, V>
 >b : any
     }
 
@@ -65,7 +65,7 @@ class C1<T, U, V> {
 
         return this.c;
 >this.c : any
->this : this
+>this : C1<T, U, V>
 >c : any
     }
 }
@@ -80,13 +80,13 @@ class C2 extends C1<number, string, boolean> {
         return `${this.a} ${this.b} ${this.c}`;
 >`${this.a} ${this.b} ${this.c}` : string
 >this.a : any
->this : this
+>this : C2
 >a : any
 >this.b : any
->this : this
+>this : C2
 >b : any
 >this.c : any
->this : this
+>this : C2
 >c : any
     }
 }

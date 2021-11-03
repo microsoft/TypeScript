@@ -44,7 +44,7 @@ class MultiplyByTwo {
 >this.args.number * 2 : number
 >this.args.number : any
 >this.args : any
->this : this
+>this : MultiplyByTwo
 >args : any
 >number : any
 >2 : 2

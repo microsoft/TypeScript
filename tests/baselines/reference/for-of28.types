@@ -6,13 +6,13 @@ class StringIterator {
 >next : any
 
     [Symbol.iterator]() {
->[Symbol.iterator] : () => this
+>[Symbol.iterator] : () => StringIterator
 >Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
 >iterator : unique symbol
 
         return this;
->this : this
+>this : StringIterator
     }
 }
 

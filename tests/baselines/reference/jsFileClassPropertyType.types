@@ -6,7 +6,7 @@ class C {
       this.p = 0;
 >this.p = 0 : 0
 >this.p : any
->this : this
+>this : C
 >p : any
 >0 : 0
   }

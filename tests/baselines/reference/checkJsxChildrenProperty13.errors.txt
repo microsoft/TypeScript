@@ -1,7 +1,35 @@
+tests/cases/conformance/jsx/file.tsx(10,5): error TS2416: Property 'render' in type 'Button' is not assignable to the same property in base type 'Component<ButtonProp, any>'.
+  Type '() => Element' is not assignable to type '() => Element | null'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'Button'.
+        Types of property 'render' are incompatible.
+          Type '() => Element | null' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'Button' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: any, props: ButtonProp) => any, callback?: (() => any) | undefined): void; (state: any, callback?: (() => any) | undefined): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'props' and 'props' are incompatible.
+                        Type 'ButtonProp' is not assignable to type 'P'.
+                          'P' could be instantiated with an arbitrary type which could be unrelated to 'ButtonProp'.
 tests/cases/conformance/jsx/file.tsx(12,30): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+tests/cases/conformance/jsx/file.tsx(23,2): error TS2416: Property 'render' in type 'InnerButton' is not assignable to the same property in base type 'Component<InnerButtonProp, any>'.
+  Type '() => Element' is not assignable to type '() => Element | null'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'InnerButton'.
+        Types of property 'render' are incompatible.
+          Type '() => Element | null' is not assignable to type '() => Element'.
+            The 'this' types of each signature are incompatible.
+              Type 'InnerButton' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: any, props: InnerButtonProp) => any, callback?: (() => any) | undefined): void; (state: any, callback?: (() => any) | undefined): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'props' and 'props' are incompatible.
+                        Type 'InnerButtonProp' is not assignable to type 'P'.
+                          'P' could be instantiated with an arbitrary type which could be unrelated to 'InnerButtonProp'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     import React = require('react');
     
     interface ButtonProp {
@@ -12,6 +40,21 @@ tests/cases/conformance/jsx/file.tsx(12,30): error TS2710: 'children' are specif
     
     class Button extends React.Component<ButtonProp, any> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'Button' is not assignable to the same property in base type 'Component<ButtonProp, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => Element | null'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'Button'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => Element | null' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'Button' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: any, props: ButtonProp) => any, callback?: (() => any) | undefined): void; (state: any, callback?: (() => any) | undefined): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'props' and 'props' are incompatible.
+!!! error TS2416:                         Type 'ButtonProp' is not assignable to type 'P'.
+!!! error TS2416:                           'P' could be instantiated with an arbitrary type which could be unrelated to 'ButtonProp'.
             // Error children are specified twice
             return (<InnerButton {...this.props} children="hi">
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,6 +70,21 @@ tests/cases/conformance/jsx/file.tsx(12,30): error TS2710: 'children' are specif
     
     class InnerButton extends React.Component<InnerButtonProp, any> {
     	render() {
+    	~~~~~~
+!!! error TS2416: Property 'render' in type 'InnerButton' is not assignable to the same property in base type 'Component<InnerButtonProp, any>'.
+!!! error TS2416:   Type '() => Element' is not assignable to type '() => Element | null'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'InnerButton'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => Element | null' is not assignable to type '() => Element'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'InnerButton' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: any, props: InnerButtonProp) => any, callback?: (() => any) | undefined): void; (state: any, callback?: (() => any) | undefined): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: (() => any) | undefined): void; (state: S, callback?: (() => any) | undefined): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'props' and 'props' are incompatible.
+!!! error TS2416:                         Type 'InnerButtonProp' is not assignable to type 'P'.
+!!! error TS2416:                           'P' could be instantiated with an arbitrary type which could be unrelated to 'InnerButtonProp'.
     		return (<button>Hello</button>);
     	}
     }

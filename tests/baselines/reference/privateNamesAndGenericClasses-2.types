@@ -10,7 +10,7 @@ class C<T> {
 
       return this.#foo;
 >this.#foo : T
->this : this
+>this : C<T>
     }
     constructor(t: T) {
 >t : T
@@ -18,7 +18,7 @@ class C<T> {
       this.#foo = t;
 >this.#foo = t : T
 >this.#foo : T
->this : this
+>this : C<T>
 >t : T
 
       t = this.#bar();
@@ -26,7 +26,7 @@ class C<T> {
 >t : T
 >this.#bar() : T
 >this.#bar : () => T
->this : this
+>this : C<T>
     }
     set baz(t: T) {
 >baz : T
@@ -35,7 +35,7 @@ class C<T> {
       this.#foo = t;
 >this.#foo = t : T
 >this.#foo : T
->this : this
+>this : C<T>
 >t : T
 
     }
@@ -44,7 +44,7 @@ class C<T> {
 
       return this.#foo;
 >this.#foo : T
->this : this
+>this : C<T>
     }
 }
 

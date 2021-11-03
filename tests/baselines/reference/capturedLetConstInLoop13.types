@@ -6,7 +6,7 @@ class Main {
         this.register("a", "b", "c");
 >this.register("a", "b", "c") : void
 >this.register : (...names: string[]) => void
->this : this
+>this : Main
 >register : (...names: string[]) => void
 >"a" : "a"
 >"b" : "b"
@@ -24,7 +24,7 @@ class Main {
             this.bar({
 >this.bar({                [name + ".a"]: () => { this.foo(name); },            }) : void
 >this.bar : (a: any) => void
->this : this
+>this : Main
 >bar : (a: any) => void
 >{                [name + ".a"]: () => { this.foo(name); },            } : { [x: string]: () => void; }
 
@@ -36,7 +36,7 @@ class Main {
 >() => { this.foo(name); } : () => void
 >this.foo(name) : void
 >this.foo : (name: string) => void
->this : this
+>this : Main
 >foo : (name: string) => void
 >name : string
 

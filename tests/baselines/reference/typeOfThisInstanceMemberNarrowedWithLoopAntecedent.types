@@ -33,7 +33,7 @@ class SomeClass {
         this.state.data;
 >this.state.data : string | number
 >this.state : State
->this : this
+>this : SomeClass
 >state : State
 >data : string | number
 
@@ -41,7 +41,7 @@ class SomeClass {
 >this.state.type === "stringVariant" : boolean
 >this.state.type : "numberVariant" | "stringVariant"
 >this.state : State
->this : this
+>this : SomeClass
 >state : State
 >type : "numberVariant" | "stringVariant"
 >"stringVariant" : "stringVariant"
@@ -50,7 +50,7 @@ class SomeClass {
 >s : string
 >this.state.data : string
 >this.state : { type: "stringVariant"; data: string; }
->this : this
+>this : SomeClass
 >state : { type: "stringVariant"; data: string; }
 >data : string
         }
@@ -77,7 +77,7 @@ class SomeClass2 {
 >this.state.type === "numberVariant" : boolean
 >this.state.type : "numberVariant" | "stringVariant"
 >this.state : State
->this : this
+>this : SomeClass2
 >state : State
 >type : "numberVariant" | "stringVariant"
 >"numberVariant" : "numberVariant"
@@ -85,7 +85,7 @@ class SomeClass2 {
             this.state.data;
 >this.state.data : number
 >this.state : { type: "numberVariant"; data: number; }
->this : this
+>this : SomeClass2
 >state : { type: "numberVariant"; data: number; }
 >data : number
         }
@@ -93,7 +93,7 @@ class SomeClass2 {
 >n : number
 >this.state?.data : string | number
 >this.state : State
->this : this
+>this : SomeClass2
 >state : State
 >data : string | number
     }

@@ -11,11 +11,12 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors
   Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
     Type 'FollowerGuard' is not assignable to type 'LeadGuard'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(29,32): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(54,5): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'RoyalGuard'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(55,7): error TS2339: Property 'follow' does not exist on type 'RoyalGuard'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(58,7): error TS2339: Property 'lead' does not exist on type 'RoyalGuard'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts (7 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts (8 errors) ====
     class RoyalGuard {
         isLeader(): this is LeadGuard {
             return this instanceof LeadGuard;
@@ -90,6 +91,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors
     let detached = a.isFollower;
     
     if (detached()) {
+        ~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'RoyalGuard'.
         a.follow();
           ~~~~~~
 !!! error TS2339: Property 'follow' does not exist on type 'RoyalGuard'.

@@ -15,17 +15,17 @@ class Derived extends Based {
 >super : typeof Based
 
         this;
->this : this
+>this : Derived
 
         this.x = 10;
 >this.x = 10 : 10
 >this.x : number
->this : this
+>this : Derived
 >x : number
 >10 : 10
 
         var that = this;
->that : this
->this : this
+>that : Derived
+>this : Derived
     }
 }

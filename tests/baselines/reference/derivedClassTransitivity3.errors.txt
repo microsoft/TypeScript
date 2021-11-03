@@ -1,11 +1,45 @@
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts(8,5): error TS2416: Property 'foo' in type 'D<T>' is not assignable to the same property in base type 'C<T>'.
+  Type '(x: T) => void' is not assignable to type '(x: T, y: T) => void'.
+    The 'this' types of each signature are incompatible.
+      Type 'C<T>' is not assignable to type 'D<T>'.
+        Types of property 'foo' are incompatible.
+          Type '(x: T, y: T) => void' is not assignable to type '(x: T) => void'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts(12,5): error TS2416: Property 'foo' in type 'E<T>' is not assignable to the same property in base type 'D<T>'.
+  Type '(x: T, y?: number) => void' is not assignable to type '(x: T) => void'.
+    The 'this' types of each signature are incompatible.
+      Type 'D<T>' is not assignable to type 'E<T>'.
+        Types of property 'foo' are incompatible.
+          Type '(x: T) => void' is not assignable to type '(x: T, y?: number) => void'.
+            The 'this' types of each signature are incompatible.
+              Type 'E<T>' is not assignable to type 'D<T>'.
+                Types of property 'foo' are incompatible.
+                  Type '(x: T, y?: number) => void' is not assignable to type '(x: T) => void'.
+                    Types of parameters 'x' and 'x' are incompatible.
+                      Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                        'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts(18,1): error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
   Types of property 'foo' are incompatible.
     Type '(x: string, y?: number) => void' is not assignable to type '(x: string, y: string) => void'.
-      Types of parameters 'y' and 'y' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+      The 'this' types of each signature are incompatible.
+        Type 'C<T>' is not assignable to type 'E<T>'.
+          Types of property 'foo' are incompatible.
+            Type '(x: T, y: T) => void' is not assignable to type '(x: T, y?: number) => void'.
+              The 'this' types of each signature are incompatible.
+                Type 'E<T>' is not assignable to type 'C<T>'.
+                  Types of property 'foo' are incompatible.
+                    Type '(x: T, y?: number) => void' is not assignable to type '(x: T, y: T) => void'.
+                      Types of parameters 'x' and 'x' are incompatible.
+                        Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+                          'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts(19,9): error TS2684: The 'this' context of type 'C<string>' is not assignable to method's 'this' of type 'C<T>'.
+  Type 'string' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts(20,10): error TS2684: The 'this' context of type 'E<string>' is not assignable to method's 'this' of type 'E<T>'.
+  Type 'string' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts (1 errors) ====
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts (5 errors) ====
     // subclassing is not transitive when you can remove required parameters and add optional parameters
     
     class C<T> {
@@ -14,10 +48,31 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTra
     
     class D<T> extends C<T> {
         foo(x: T) { } // ok to drop parameters
+        ~~~
+!!! error TS2416: Property 'foo' in type 'D<T>' is not assignable to the same property in base type 'C<T>'.
+!!! error TS2416:   Type '(x: T) => void' is not assignable to type '(x: T, y: T) => void'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'C<T>' is not assignable to type 'D<T>'.
+!!! error TS2416:         Types of property 'foo' are incompatible.
+!!! error TS2416:           Type '(x: T, y: T) => void' is not assignable to type '(x: T) => void'.
     }
     
     class E<T> extends D<T> {
         foo(x: T, y?: number) { } // ok to add optional parameters
+        ~~~
+!!! error TS2416: Property 'foo' in type 'E<T>' is not assignable to the same property in base type 'D<T>'.
+!!! error TS2416:   Type '(x: T, y?: number) => void' is not assignable to type '(x: T) => void'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'D<T>' is not assignable to type 'E<T>'.
+!!! error TS2416:         Types of property 'foo' are incompatible.
+!!! error TS2416:           Type '(x: T) => void' is not assignable to type '(x: T, y?: number) => void'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'E<T>' is not assignable to type 'D<T>'.
+!!! error TS2416:                 Types of property 'foo' are incompatible.
+!!! error TS2416:                   Type '(x: T, y?: number) => void' is not assignable to type '(x: T) => void'.
+!!! error TS2416:                     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:                       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:                         'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     }
     
     var c: C<string>;
@@ -28,7 +83,24 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTra
 !!! error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
 !!! error TS2322:     Type '(x: string, y?: number) => void' is not assignable to type '(x: string, y: string) => void'.
-!!! error TS2322:       Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! error TS2322:       The 'this' types of each signature are incompatible.
+!!! error TS2322:         Type 'C<T>' is not assignable to type 'E<T>'.
+!!! error TS2322:           Types of property 'foo' are incompatible.
+!!! error TS2322:             Type '(x: T, y: T) => void' is not assignable to type '(x: T, y?: number) => void'.
+!!! error TS2322:               The 'this' types of each signature are incompatible.
+!!! error TS2322:                 Type 'E<T>' is not assignable to type 'C<T>'.
+!!! error TS2322:                   Types of property 'foo' are incompatible.
+!!! error TS2322:                     Type '(x: T, y?: number) => void' is not assignable to type '(x: T, y: T) => void'.
+!!! error TS2322:                       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:                         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:                           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     var r = c.foo('', '');
+            ~
+!!! error TS2684: The 'this' context of type 'C<string>' is not assignable to method's 'this' of type 'C<T>'.
+!!! error TS2684:   Type 'string' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     var r2 = e.foo('', 1);
+             ~
+!!! error TS2684: The 'this' context of type 'E<string>' is not assignable to method's 'this' of type 'E<T>'.
+!!! error TS2684:   Type 'string' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.

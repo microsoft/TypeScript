@@ -20,7 +20,7 @@ class Derived extends Base {
 
         this.p; // OK
 >this.p : number
->this : this
+>this : Derived
 >p : number
     }
 }

@@ -132,10 +132,10 @@ class Chain2<T extends I> {
         (new Chain2(i)).then(ii => t).then(tt => s).value.x = "";
 >(new Chain2(i)).then(ii => t).then(tt => s).value.x = "" : ""
 >(new Chain2(i)).then(ii => t).then(tt => s).value.x : number
->(new Chain2(i)).then(ii => t).then(tt => s).value : S
->(new Chain2(i)).then(ii => t).then(tt => s) : Chain2<S>
->(new Chain2(i)).then(ii => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->(new Chain2(i)).then(ii => t) : Chain2<T>
+>(new Chain2(i)).then(ii => t).then(tt => s).value : I
+>(new Chain2(i)).then(ii => t).then(tt => s) : Chain2<I>
+>(new Chain2(i)).then(ii => t).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => t) : Chain2<I>
 >(new Chain2(i)).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
 >(new Chain2(i)) : Chain2<I>
 >new Chain2(i) : Chain2<I>
@@ -145,11 +145,11 @@ class Chain2<T extends I> {
 >ii => t : (ii: I) => T
 >ii : I
 >t : T
->then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->tt => s : (tt: T) => S
->tt : T
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>tt => s : (tt: I) => S
+>tt : I
 >s : S
->value : S
+>value : I
 >x : number
 >"" : ""
 
@@ -158,14 +158,14 @@ class Chain2<T extends I> {
         (new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x = "";
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x = "" : ""
 >(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x : number
->(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value : T
->(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t) : Chain2<T>
->(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t) : Chain2<T>
->(new Chain2(i)).then(ii => t).then(tt => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->(new Chain2(i)).then(ii => t).then(tt => t) : Chain2<T>
->(new Chain2(i)).then(ii => t).then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->(new Chain2(i)).then(ii => t) : Chain2<T>
+>(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value : I
+>(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t) : Chain2<I>
+>(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => t).then(tt => t).then(tt => t) : Chain2<I>
+>(new Chain2(i)).then(ii => t).then(tt => t).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => t).then(tt => t) : Chain2<I>
+>(new Chain2(i)).then(ii => t).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => t) : Chain2<I>
 >(new Chain2(i)).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
 >(new Chain2(i)) : Chain2<I>
 >new Chain2(i) : Chain2<I>
@@ -175,33 +175,33 @@ class Chain2<T extends I> {
 >ii => t : (ii: I) => T
 >ii : I
 >t : T
->then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->tt => t : (tt: T) => T
->tt : T
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>tt => t : (tt: I) => T
+>tt : I
 >t : T
->then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->tt => t : (tt: T) => T
->tt : T
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>tt => t : (tt: I) => T
+>tt : I
 >t : T
->then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->tt => t : (tt: T) => T
->tt : T
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>tt => t : (tt: I) => T
+>tt : I
 >t : T
->value : T
+>value : I
 >x : number
 >"" : ""
 
         (new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x = "";
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x = "" : ""
 >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x : number
->(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value : S
->(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s) : Chain2<S>
->(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then : <S extends S>(cb: (x: S) => S) => Chain2<S>
->(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s) : Chain2<S>
->(new Chain2(i)).then(ii => s).then(ss => s).then : <S extends S>(cb: (x: S) => S) => Chain2<S>
->(new Chain2(i)).then(ii => s).then(ss => s) : Chain2<S>
->(new Chain2(i)).then(ii => s).then : <S extends S>(cb: (x: S) => S) => Chain2<S>
->(new Chain2(i)).then(ii => s) : Chain2<S>
+>(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value : I
+>(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s) : Chain2<I>
+>(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s) : Chain2<I>
+>(new Chain2(i)).then(ii => s).then(ss => s).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => s).then(ss => s) : Chain2<I>
+>(new Chain2(i)).then(ii => s).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>(new Chain2(i)).then(ii => s) : Chain2<I>
 >(new Chain2(i)).then : <S extends I>(cb: (x: I) => S) => Chain2<S>
 >(new Chain2(i)) : Chain2<I>
 >new Chain2(i) : Chain2<I>
@@ -211,19 +211,19 @@ class Chain2<T extends I> {
 >ii => s : (ii: I) => S
 >ii : I
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain2<S>
->ss => s : (ss: S) => S
->ss : S
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>ss => s : (ss: I) => S
+>ss : I
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain2<S>
->ss => s : (ss: S) => S
->ss : S
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>ss => s : (ss: I) => S
+>ss : I
 >s : S
->then : <S extends S>(cb: (x: S) => S) => Chain2<S>
->ss => s : (ss: S) => S
->ss : S
+>then : <S extends I>(cb: (x: I) => S) => Chain2<S>
+>ss => s : (ss: I) => S
+>ss : I
 >s : S
->value : S
+>value : I
 >x : number
 >"" : ""
 

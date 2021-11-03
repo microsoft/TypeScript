@@ -8,7 +8,7 @@ class Base {
         this.p = 1
 >this.p = 1 : 1
 >this.p : number | undefined
->this : this
+>this : Base
 >p : number | undefined
 >1 : 1
     }
@@ -24,7 +24,7 @@ class Derived extends Base {
         this.p = 1
 >this.p = 1 : 1
 >this.p : number | undefined
->this : this
+>this : Derived
 >p : number | undefined
 >1 : 1
     }

@@ -4,20 +4,20 @@ class C {
 
     constructor() {
         var self = this
->self : this
->this : this
+>self : C
+>this : C
 
         self.x = 1
 >self.x = 1 : 1
 >self.x : any
->self : this
+>self : C
 >x : any
 >1 : 1
 
         self.m = function() {
 >self.m = function() {            console.log(self.x)        } : () => void
 >self.m : any
->self : this
+>self : C
 >m : any
 >function() {            console.log(self.x)        } : () => void
 
@@ -27,7 +27,7 @@ class C {
 >console : Console
 >log : (...data: any[]) => void
 >self.x : number
->self : this
+>self : C
 >x : number
         }
     }
@@ -35,13 +35,13 @@ class C {
 >mreal : () => void
 
         var self = this
->self : this
->this : this
+>self : C
+>this : C
 
         self.y = 2
 >self.y = 2 : 2
 >self.y : number | undefined
->self : this
+>self : C
 >y : number | undefined
 >2 : 2
     }

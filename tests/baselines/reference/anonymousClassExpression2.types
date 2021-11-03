@@ -12,7 +12,7 @@ while (0) {
 >methodA : () => void
 
             this; //note: a this reference of some kind is required to trigger the bug
->this : this
+>this : A
         }
     }
 
@@ -24,12 +24,12 @@ while (0) {
 
             this.methodA; // error
 >this.methodA : any
->this : this
+>this : B
 >methodA : any
 
             this.methodB; // ok
 >this.methodB : () => void
->this : this
+>this : B
 >methodB : () => void
         }
     }

@@ -19,8 +19,8 @@ module NonGeneric {
 >v : number
 
         fn() { return this; }
->fn : () => this
->this : this
+>fn : () => C
+>this : C
 
         constructor(public a: number, private b: number) { }
 >a : number
@@ -89,8 +89,8 @@ module Generic {
 >v : U
 
         fn() { return this; }
->fn : () => this
->this : this
+>fn : () => C<T, U>
+>this : C<T, U>
 
         constructor(public a: T, private b: U) { }
 >a : T

@@ -15,7 +15,7 @@ class Person {
         this.children = ko.observableArray(children);
 >this.children = ko.observableArray(children) : any
 >this.children : string[]
->this : this
+>this : Person
 >children : string[]
 >ko.observableArray(children) : any
 >ko.observableArray : any
@@ -44,8 +44,8 @@ class T {
 >fo : () => void
 
         var x = this;
->x : this
->this : this
+>x : T
+>this : T
     }
 }
 

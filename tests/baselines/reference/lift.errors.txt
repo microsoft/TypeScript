@@ -1,10 +1,11 @@
+tests/cases/compiler/lift.ts(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'B'.
 tests/cases/compiler/lift.ts(14,32): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/lift.ts(14,34): error TS2304: Cannot find name 'z'.
 tests/cases/compiler/lift.ts(15,37): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/lift.ts(15,39): error TS2304: Cannot find name 'z'.
 
 
-==== tests/cases/compiler/lift.ts (4 errors) ====
+==== tests/cases/compiler/lift.ts (5 errors) ====
     class B {
         constructor(public y:number) {
         }
@@ -14,6 +15,8 @@ tests/cases/compiler/lift.ts(15,39): error TS2304: Cannot find name 'z'.
     class C extends B {
         constructor(y:number,z:number,w:number) {
             super(y)
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'B'.
             var x=10+w;
             var ll=x*w;
         }

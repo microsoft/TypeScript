@@ -12,30 +12,30 @@ class C {
 >C : typeof C
 
     foo() {
->foo : () => this
+>foo : () => C
 
         return this;
->this : this
+>this : C
     }
     f1() {
 >f1 : () => void
 
         this.c = this.self;
->this.c = this.self : this
+>this.c = this.self : C
 >this.c : C
->this : this
+>this : C
 >c : C
->this.self : this
->this : this
->self : this
+>this.self : C
+>this : C
+>self : C
 
         this.self = this.c;  // Error
 >this.self = this.c : C
->this.self : this
->this : this
->self : this
+>this.self : C
+>this : C
+>self : C
 >this.c : C
->this : this
+>this : C
 >c : C
     }
     f2() {
@@ -47,9 +47,9 @@ class C {
         var a = [this, this.c];  // C[] since this is subtype of C
 >a : C[]
 >[this, this.c] : C[]
->this : this
+>this : C
 >this.c : C
->this : this
+>this : C
 >c : C
 
         var b: this[];
@@ -57,11 +57,11 @@ class C {
 
         var b = [this, this.self, null, undefined];
 >b : this[]
->[this, this.self, null, undefined] : this[]
->this : this
->this.self : this
->this : this
->self : this
+>[this, this.self, null, undefined] : C[]
+>this : C
+>this.self : C
+>this : C
+>self : C
 >null : null
 >undefined : undefined
     }
@@ -73,11 +73,11 @@ class C {
 >b ? this.c : this.self : C
 >b : boolean
 >this.c : C
->this : this
+>this : C
 >c : C
->this.self : this
->this : this
->self : this
+>this.self : C
+>this : C
+>self : C
     }
 }
 
@@ -96,11 +96,11 @@ class D extends C {
 >self : this
 
     self3 = this.foo();
->self3 : this
->this.foo() : this
->this.foo : () => this
+>self3 : C
+>this.foo() : C
+>this.foo : () => C
 >this : this
->foo : () => this
+>foo : () => C
 
     d = new D();
 >d : D
@@ -111,93 +111,93 @@ class D extends C {
 >bar : () => void
 
         this.self = this.self1;
->this.self = this.self1 : this
->this.self : this
->this : this
->self : this
->this.self1 : this
->this : this
->self1 : this
+>this.self = this.self1 : D
+>this.self : D
+>this : D
+>self : D
+>this.self1 : D
+>this : D
+>self1 : D
 
         this.self = this.self2;
->this.self = this.self2 : this
->this.self : this
->this : this
->self : this
->this.self2 : this
->this : this
->self2 : this
+>this.self = this.self2 : D
+>this.self : D
+>this : D
+>self : D
+>this.self2 : D
+>this : D
+>self2 : D
 
         this.self = this.self3;
->this.self = this.self3 : this
->this.self : this
->this : this
->self : this
->this.self3 : this
->this : this
->self3 : this
+>this.self = this.self3 : C
+>this.self : D
+>this : D
+>self : D
+>this.self3 : C
+>this : D
+>self3 : C
 
         this.self1 = this.self;
->this.self1 = this.self : this
->this.self1 : this
->this : this
->self1 : this
->this.self : this
->this : this
->self : this
+>this.self1 = this.self : D
+>this.self1 : D
+>this : D
+>self1 : D
+>this.self : D
+>this : D
+>self : D
 
         this.self2 = this.self;
->this.self2 = this.self : this
->this.self2 : this
->this : this
->self2 : this
->this.self : this
->this : this
->self : this
+>this.self2 = this.self : D
+>this.self2 : D
+>this : D
+>self2 : D
+>this.self : D
+>this : D
+>self : D
 
         this.self3 = this.self;
->this.self3 = this.self : this
->this.self3 : this
->this : this
->self3 : this
->this.self : this
->this : this
->self : this
+>this.self3 = this.self : D
+>this.self3 : C
+>this : D
+>self3 : C
+>this.self : D
+>this : D
+>self : D
 
         this.d = this.self;
->this.d = this.self : this
+>this.d = this.self : D
 >this.d : D
->this : this
+>this : D
 >d : D
->this.self : this
->this : this
->self : this
+>this.self : D
+>this : D
+>self : D
 
         this.d = this.c;  // Error
 >this.d = this.c : C
 >this.d : D
->this : this
+>this : D
 >d : D
 >this.c : C
->this : this
+>this : D
 >c : C
 
         this.self = this.d;  // Error
 >this.self = this.d : D
->this.self : this
->this : this
->self : this
+>this.self : D
+>this : D
+>self : D
 >this.d : D
->this : this
+>this : D
 >d : D
 
         this.c = this.d;
 >this.c = this.d : D
 >this.c : C
->this : this
+>this : D
 >c : C
 >this.d : D
->this : this
+>this : D
 >d : D
     }
 }

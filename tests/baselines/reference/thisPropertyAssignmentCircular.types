@@ -6,7 +6,7 @@ export class Foo {
         this.foo = "Hello";
 >this.foo = "Hello" : "Hello"
 >this.foo : any
->this : this
+>this : Foo
 >foo : any
 >"Hello" : "Hello"
     }
@@ -16,12 +16,12 @@ export class Foo {
         this.foo = this.foo.slice();
 >this.foo = this.foo.slice() : string
 >this.foo : string
->this : this
+>this : Foo
 >foo : string
 >this.foo.slice() : string
 >this.foo.slice : (start?: number, end?: number) => string
 >this.foo : string
->this : this
+>this : Foo
 >foo : string
 >slice : (start?: number, end?: number) => string
     }
@@ -30,7 +30,7 @@ export class Foo {
 
         this.foo
 >this.foo : string
->this : this
+>this : Foo
 >foo : string
     }
 }

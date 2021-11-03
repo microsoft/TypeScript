@@ -1,0 +1,45 @@
+tests/cases/conformance/jsx/file.tsx(5,10): error TS2416: Property 'render' in type '(Anonymous class)' is not assignable to the same property in base type 'PureComponent<P, void>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type '(Anonymous class)'.
+        Types of property 'render' are incompatible.
+          Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type '(Anonymous class)' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: void, props: P) => void, callback?: () => any): void; (state: void, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'prevState' and 'prevState' are incompatible.
+                        Type 'void' is not assignable to type 'S'.
+                          'S' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    export function makeP<P>(Ctor: React.ComponentClass<P>) {
+    	return class extends React.PureComponent<P, void> {
+    		public render(): JSX.Element {
+    		       ~~~~~~
+!!! error TS2416: Property 'render' in type '(Anonymous class)' is not assignable to the same property in base type 'PureComponent<P, void>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type '(Anonymous class)'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type '(Anonymous class)' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: void, props: P) => void, callback?: () => any): void; (state: void, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'prevState' and 'prevState' are incompatible.
+!!! error TS2416:                         Type 'void' is not assignable to type 'S'.
+!!! error TS2416:                           'S' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+    			return (
+    				<Ctor {...this.props } />
+    			);
+    		}
+    	};
+    }
+    
+    

@@ -19,8 +19,8 @@ module NonGeneric {
 >v : number
 
         fn() { return this; }
->fn : () => this
->this : this
+>fn : () => C
+>this : C
 
         constructor(public a: number, private b: number) { }
 >a : number
@@ -40,28 +40,28 @@ module NonGeneric {
 >2 : 2
 
     var r = d.fn();
->r : D
->d.fn() : D
->d.fn : () => D
+>r : C
+>d.fn() : C
+>d.fn : () => C
 >d : D
->fn : () => D
+>fn : () => C
 
     var r2 = r.x;
 >r2 : string
 >r.x : string
->r : D
+>r : C
 >x : string
 
     var r3 = r.y;
 >r3 : number
 >r.y : number
->r : D
+>r : C
 >y : number
 
     r.y = 4;
 >r.y = 4 : 4
 >r.y : number
->r : D
+>r : C
 >y : number
 >4 : 4
 
@@ -94,8 +94,8 @@ module Generic {
 >v : U
 
         fn() { return this; }
->fn : () => this
->this : this
+>fn : () => C<T, U>
+>this : C<T, U>
 
         constructor(public a: T, private b: U) { }
 >a : T
@@ -115,28 +115,28 @@ module Generic {
 >'' : ""
 
     var r = d.fn();
->r : D<number, string>
->d.fn() : D<number, string>
->d.fn : () => D<number, string>
+>r : C<number, string>
+>d.fn() : C<number, string>
+>d.fn : () => C<number, string>
 >d : D<number, string>
->fn : () => D<number, string>
+>fn : () => C<number, string>
 
     var r2 = r.x;
 >r2 : number
 >r.x : number
->r : D<number, string>
+>r : C<number, string>
 >x : number
 
     var r3 = r.y;
 >r3 : string
 >r.y : string
->r : D<number, string>
+>r : C<number, string>
 >y : string
 
     r.y = '';
 >r.y = '' : ""
 >r.y : string
->r : D<number, string>
+>r : C<number, string>
 >y : string
 >'' : ""
 

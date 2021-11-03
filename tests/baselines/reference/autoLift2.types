@@ -6,13 +6,13 @@ class A
     constructor() {
         this.foo: any;
 >this.foo : any
->this : this
+>this : A
 >foo : any
 >any : any
 
         this.bar: any;
 >this.bar : any
->this : this
+>this : A
 >bar : any
 >any : any
     }
@@ -24,14 +24,14 @@ class A
      this.foo = "foo";
 >this.foo = "foo" : "foo"
 >this.foo : any
->this : this
+>this : A
 >foo : any
 >"foo" : "foo"
 
      this.bar = "bar";
 >this.bar = "bar" : "bar"
 >this.bar : any
->this : this
+>this : A
 >bar : any
 >"bar" : "bar"
 
@@ -45,7 +45,7 @@ class A
 >(p) => this.foo : (p: number) => any
 >p : number
 >this.foo : any
->this : this
+>this : A
 >foo : any
 
      [1, 2].forEach((p) => this.bar);
@@ -58,7 +58,7 @@ class A
 >(p) => this.bar : (p: number) => any
 >p : number
 >this.bar : any
->this : this
+>this : A
 >bar : any
 
   }

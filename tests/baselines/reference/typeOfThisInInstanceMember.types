@@ -7,46 +7,46 @@ class C {
 >this : this
 
     foo() {
->foo : () => this
+>foo : () => C
 
         return this;
->this : this
+>this : C
     }
     constructor(x: number) {
 >x : number
 
         var t = this;
->t : this
->this : this
+>t : C
+>this : C
 
         t.x;
->t.x : this
->t : this
->x : this
+>t.x : C
+>t : C
+>x : C
 
         t.y;
->t.y : this
->t : this
->y : this
+>t.y : C
+>t : C
+>y : C
 
         t.z;
 >t.z : any
->t : this
+>t : C
 >z : any
 
         var r = t.foo();
->r : this
->t.foo() : this
->t.foo : () => this
->t : this
->foo : () => this
+>r : C
+>t.foo() : C
+>t.foo : () => C
+>t : C
+>foo : () => C
     }
 
     get y() {
->y : this
+>y : C
 
         return this;
->this : this
+>this : C
     }
 }
 

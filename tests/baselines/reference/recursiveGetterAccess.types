@@ -5,7 +5,7 @@ class MyClass {
 get testProp() { return this.testProp; }
 >testProp : any
 >this.testProp : any
->this : this
+>this : MyClass
 >testProp : any
 }
  

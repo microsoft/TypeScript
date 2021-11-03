@@ -154,60 +154,60 @@ module TypeScript {
             this._information = this.logger.information();
 >this._information = this.logger.information() : boolean
 >this._information : boolean
->this : this
+>this : LoggerAdapter
 >_information : boolean
 >this.logger.information() : boolean
 >this.logger.information : () => boolean
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >information : () => boolean
 
             this._debug = this.logger.debug();
 >this._debug = this.logger.debug() : boolean
 >this._debug : boolean
->this : this
+>this : LoggerAdapter
 >_debug : boolean
 >this.logger.debug() : boolean
 >this.logger.debug : () => boolean
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >debug : () => boolean
 
             this._warning = this.logger.warning();
 >this._warning = this.logger.warning() : boolean
 >this._warning : boolean
->this : this
+>this : LoggerAdapter
 >_warning : boolean
 >this.logger.warning() : boolean
 >this.logger.warning : () => boolean
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >warning : () => boolean
 
             this._error = this.logger.error();
 >this._error = this.logger.error() : boolean
 >this._error : boolean
->this : this
+>this : LoggerAdapter
 >_error : boolean
 >this.logger.error() : boolean
 >this.logger.error : () => boolean
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >error : () => boolean
 
             this._fatal = this.logger.fatal();
 >this._fatal = this.logger.fatal() : boolean
 >this._fatal : boolean
->this : this
+>this : LoggerAdapter
 >_fatal : boolean
 >this.logger.fatal() : boolean
 >this.logger.fatal : () => boolean
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >fatal : () => boolean
         }
@@ -216,31 +216,31 @@ module TypeScript {
         public information(): boolean { return this._information; }
 >information : () => boolean
 >this._information : boolean
->this : this
+>this : LoggerAdapter
 >_information : boolean
 
         public debug(): boolean { return this._debug; }
 >debug : () => boolean
 >this._debug : boolean
->this : this
+>this : LoggerAdapter
 >_debug : boolean
 
         public warning(): boolean { return this._warning; }
 >warning : () => boolean
 >this._warning : boolean
->this : this
+>this : LoggerAdapter
 >_warning : boolean
 
         public error(): boolean { return this._error; }
 >error : () => boolean
 >this._error : boolean
->this : this
+>this : LoggerAdapter
 >_error : boolean
 
         public fatal(): boolean { return this._fatal; }
 >fatal : () => boolean
 >this._fatal : boolean
->this : this
+>this : LoggerAdapter
 >_fatal : boolean
 
         public log(s: string): void {
@@ -251,7 +251,7 @@ module TypeScript {
 >this.logger.log(s) : void
 >this.logger.log : (s: string) => void
 >this.logger : ILogger
->this : this
+>this : LoggerAdapter
 >logger : ILogger
 >log : (s: string) => void
 >s : string
@@ -293,7 +293,7 @@ module TypeScript {
 >this.logContents.push(s) : number
 >this.logContents.push : (...items: any[]) => number
 >this.logContents : any[]
->this : this
+>this : BufferedLogger
 >logContents : any[]
 >push : (...items: any[]) => number
 >s : string

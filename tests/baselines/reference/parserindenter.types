@@ -59,18 +59,18 @@ module Formatting {
             this.indentationBag = new IndentationBag(this.snapshot);
 >this.indentationBag = new IndentationBag(this.snapshot) : any
 >this.indentationBag : IndentationBag
->this : this
+>this : Indenter
 >indentationBag : IndentationBag
 >new IndentationBag(this.snapshot) : any
 >IndentationBag : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 
             this.scriptBlockBeginLineNumber = -1;
 >this.scriptBlockBeginLineNumber = -1 : -1
 >this.scriptBlockBeginLineNumber : number
->this : this
+>this : Indenter
 >scriptBlockBeginLineNumber : number
 >-1 : -1
 >1 : 1
@@ -78,7 +78,7 @@ module Formatting {
             this.offsetIndentationDeltas = new Dictionary_int_int();     // text offset -> indentation delta
 >this.offsetIndentationDeltas = new Dictionary_int_int() : any
 >this.offsetIndentationDeltas : Dictionary_int_int
->this : this
+>this : Indenter
 >offsetIndentationDeltas : Dictionary_int_int
 >new Dictionary_int_int() : any
 >Dictionary_int_int : any
@@ -89,7 +89,7 @@ module Formatting {
 >this.tree.Root.SetIndentationOverride : any
 >this.tree.Root : any
 >this.tree : ParseTree
->this : this
+>this : Indenter
 >tree : ParseTree
 >Root : any
 >SetIndentationOverride : any
@@ -98,22 +98,22 @@ module Formatting {
             this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
 >this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree) : void
 >this.ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: ParseTree) => void
->this : this
+>this : Indenter
 >ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: ParseTree) => void
 >this.languageHostIndentation : string
->this : this
+>this : Indenter
 >languageHostIndentation : string
 >this.tree : ParseTree
->this : this
+>this : Indenter
 >tree : ParseTree
 
             this.FillInheritedIndentation(this.tree);
 >this.FillInheritedIndentation(this.tree) : void
 >this.FillInheritedIndentation : (tree: ParseTree) => void
->this : this
+>this : Indenter
 >FillInheritedIndentation : (tree: ParseTree) => void
 >this.tree : ParseTree
->this : this
+>this : Indenter
 >tree : ParseTree
 
         }
@@ -129,7 +129,7 @@ module Formatting {
 >this.logger.information() : any
 >this.logger.information : any
 >this.logger : TypeScript.ILogger
->this : this
+>this : Indenter
 >logger : TypeScript.ILogger
 >information : any
 
@@ -137,7 +137,7 @@ module Formatting {
 >this.logger.log("GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")") : any
 >this.logger.log : any
 >this.logger : TypeScript.ILogger
->this : this
+>this : Indenter
 >logger : TypeScript.ILogger
 >log : any
 >"GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")" : string
@@ -202,7 +202,7 @@ module Formatting {
 >result : List_TextEditInfo
 >this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent) : List_TextEditInfo
 >this.GetIndentationEditsWorker : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->this : this
+>this : Indenter
 >GetIndentationEditsWorker : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
 >token : TokenSpan
 >nextToken : TokenSpan
@@ -213,7 +213,7 @@ module Formatting {
 >this.logger.information() : any
 >this.logger.information : any
 >this.logger : TypeScript.ILogger
->this : this
+>this : Indenter
 >logger : TypeScript.ILogger
 >information : any
 
@@ -241,7 +241,7 @@ module Formatting {
 >this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"") : any
 >this.logger.log : any
 >this.logger : TypeScript.ILogger
->this : this
+>this : Indenter
 >logger : TypeScript.ILogger
 >log : any
 >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"" : string
@@ -309,7 +309,7 @@ module Formatting {
             this.AdjustStartOffsetIfNeeded(token, node);
 >this.AdjustStartOffsetIfNeeded(token, node) : void
 >this.AdjustStartOffsetIfNeeded : (token: TokenSpan, node: ParseNode) => void
->this : this
+>this : Indenter
 >AdjustStartOffsetIfNeeded : (token: TokenSpan, node: ParseNode) => void
 >token : TokenSpan
 >node : ParseNode
@@ -318,7 +318,7 @@ module Formatting {
             if (this.scriptBlockBeginLineNumber == token.lineNumber()) {
 >this.scriptBlockBeginLineNumber == token.lineNumber() : boolean
 >this.scriptBlockBeginLineNumber : number
->this : this
+>this : Indenter
 >scriptBlockBeginLineNumber : number
 >token.lineNumber() : any
 >token.lineNumber : any
@@ -336,7 +336,7 @@ module Formatting {
 >sameLineIndent : boolean
 >this.IsMultiLineString(token) : boolean
 >this.IsMultiLineString : (token: TokenSpan) => boolean
->this : this
+>this : Indenter
 >IsMultiLineString : (token: TokenSpan) => boolean
 >token : TokenSpan
 
@@ -350,7 +350,7 @@ module Formatting {
 >indentationInfo : IndentationInfo
 >this.GetSpecialCaseIndentation(token, node) : IndentationInfo
 >this.GetSpecialCaseIndentation : (token: TokenSpan, node: ParseNode) => IndentationInfo
->this : this
+>this : Indenter
 >GetSpecialCaseIndentation : (token: TokenSpan, node: ParseNode) => IndentationInfo
 >token : TokenSpan
 >node : ParseNode
@@ -433,7 +433,7 @@ module Formatting {
 >node.GetEffectiveIndentation : any
 >node : ParseNode
 >GetEffectiveIndentation : any
->this : this
+>this : Indenter
                 }
                 else {
                     //// Special cases for anything else that is not in the tree and should be indented
@@ -474,7 +474,7 @@ module Formatting {
 >node.GetEffectiveChildrenIndentation : any
 >node : ParseNode
 >GetEffectiveChildrenIndentation : any
->this : this
+>this : Indenter
                     }
                     else {
                         //// Move the token the same indentation-delta that moved its indentable parent
@@ -487,7 +487,7 @@ module Formatting {
 >indentationInfo : IndentationInfo
 >this.ApplyIndentationDeltaFromParent(token, node) : IndentationInfo
 >this.ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->this : this
+>this : Indenter
 >ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
 >token : TokenSpan
 >node : ParseNode
@@ -505,7 +505,7 @@ module Formatting {
 >edit : TextEditInfo
 >this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent) : TextEditInfo
 >this.GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->this : this
+>this : Indenter
 >GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
 >indentationInfo : IndentationInfo
 >token.Span.startPosition() : any
@@ -524,7 +524,7 @@ module Formatting {
                     this.RegisterIndentation(edit, sameLineIndent);
 >this.RegisterIndentation(edit, sameLineIndent) : void
 >this.RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->this : this
+>this : Indenter
 >RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
 >edit : TextEditInfo
 >sameLineIndent : boolean
@@ -550,7 +550,7 @@ module Formatting {
 >commentEdits : List_TextEditInfo
 >this.GetCommentIndentationEdits(token) : List_TextEditInfo
 >this.GetCommentIndentationEdits : (token: TokenSpan) => List_TextEditInfo
->this : this
+>this : Indenter
 >GetCommentIndentationEdits : (token: TokenSpan) => List_TextEditInfo
 >token : TokenSpan
 
@@ -604,7 +604,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >token.Span.endPosition() : any
@@ -629,7 +629,7 @@ module Formatting {
 >commentFirstLineIndentationDelta : number
 >this.GetIndentationDelta(token.Span.startPosition(), null) : number
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->this : this
+>this : Indenter
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
 >token.Span.startPosition() : any
 >token.Span.startPosition : any
@@ -665,7 +665,7 @@ module Formatting {
 >this.snapshot.GetLineFromLineNumber(line) : any
 >this.snapshot.GetLineFromLineNumber : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineFromLineNumber : any
 >line : any
@@ -675,7 +675,7 @@ module Formatting {
 >lineIndent : string
 >this.GetLineIndentationForOffset(lineStartPosition) : string
 >this.GetLineIndentationForOffset : (offset: number) => string
->this : this
+>this : Indenter
 >GetLineIndentationForOffset : (offset: number) => string
 >lineStartPosition : any
 
@@ -683,7 +683,7 @@ module Formatting {
 >commentIndentationInfo : IndentationInfo
 >this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta) : IndentationInfo
 >this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->this : this
+>this : Indenter
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
 >lineIndent : string
 >commentFirstLineIndentationDelta : number
@@ -705,7 +705,7 @@ module Formatting {
 >commentIndentationEdit : TextEditInfo
 >this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false) : TextEditInfo
 >this.GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->this : this
+>this : Indenter
 >GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
 >commentIndentationInfo : IndentationInfo
 >tokenStartPosition : any
@@ -849,7 +849,7 @@ module Formatting {
 >indentationInfo : IndentationInfo
 >this.GetSpecialCaseIndentationForLCurly(node) : IndentationInfo
 >this.GetSpecialCaseIndentationForLCurly : (node: ParseNode) => IndentationInfo
->this : this
+>this : Indenter
 >GetSpecialCaseIndentationForLCurly : (node: ParseNode) => IndentationInfo
 >node : ParseNode
 
@@ -873,7 +873,7 @@ module Formatting {
 >node.GetNodeStartLineIndentation : any
 >node : ParseNode
 >GetNodeStartLineIndentation : any
->this : this
+>this : Indenter
 
                     return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -921,7 +921,7 @@ module Formatting {
 >node.GetNodeStartLineIndentation : any
 >node : ParseNode
 >GetNodeStartLineIndentation : any
->this : this
+>this : Indenter
 
                     return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -951,7 +951,7 @@ module Formatting {
 >node.GetNodeStartLineIndentation : any
 >node : ParseNode
 >GetNodeStartLineIndentation : any
->this : this
+>this : Indenter
 
                         return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -968,7 +968,7 @@ module Formatting {
                     return this.GetSpecialCaseIndentationForSemicolon(token, node);
 >this.GetSpecialCaseIndentationForSemicolon(token, node) : IndentationInfo
 >this.GetSpecialCaseIndentationForSemicolon : (token: TokenSpan, node: ParseNode) => IndentationInfo
->this : this
+>this : Indenter
 >GetSpecialCaseIndentationForSemicolon : (token: TokenSpan, node: ParseNode) => IndentationInfo
 >token : TokenSpan
 >node : ParseNode
@@ -981,7 +981,7 @@ module Formatting {
                     return this.GetSpecialCaseIndentationForComment(token, node);
 >this.GetSpecialCaseIndentationForComment(token, node) : IndentationInfo
 >this.GetSpecialCaseIndentationForComment : (token: TokenSpan, node: ParseNode) => IndentationInfo
->this : this
+>this : Indenter
 >GetSpecialCaseIndentationForComment : (token: TokenSpan, node: ParseNode) => IndentationInfo
 >token : TokenSpan
 >node : ParseNode
@@ -1043,7 +1043,7 @@ module Formatting {
 >node.GetNodeStartLineIndentation : any
 >node : ParseNode
 >GetNodeStartLineIndentation : any
->this : this
+>this : Indenter
 
                 return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -1080,7 +1080,7 @@ module Formatting {
 >node.GetEffectiveIndentation : any
 >node : ParseNode
 >GetEffectiveIndentation : any
->this : this
+>this : Indenter
 
             return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -1097,7 +1097,7 @@ module Formatting {
 
             if (this.smartIndent) {
 >this.smartIndent : boolean
->this : this
+>this : Indenter
 >smartIndent : boolean
 
                 indentationInfo = node.GetEffectiveChildrenIndentation(this);
@@ -1107,7 +1107,7 @@ module Formatting {
 >node.GetEffectiveChildrenIndentation : any
 >node : ParseNode
 >GetEffectiveChildrenIndentation : any
->this : this
+>this : Indenter
 
                 return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -1160,7 +1160,7 @@ module Formatting {
 >node.GetEffectiveChildrenIndentation : any
 >node : ParseNode
 >GetEffectiveChildrenIndentation : any
->this : this
+>this : Indenter
 
                     return indentationInfo;
 >indentationInfo : IndentationInfo
@@ -1242,7 +1242,7 @@ module Formatting {
                 if (this.CanIndentComment(token, node)) {
 >this.CanIndentComment(token, node) : boolean
 >this.CanIndentComment : (token: TokenSpan, node: ParseNode) => boolean
->this : this
+>this : Indenter
 >CanIndentComment : (token: TokenSpan, node: ParseNode) => boolean
 >token : TokenSpan
 >node : ParseNode
@@ -1254,7 +1254,7 @@ module Formatting {
 >node.GetEffectiveChildrenIndentationForComment : any
 >node : ParseNode
 >GetEffectiveChildrenIndentationForComment : any
->this : this
+>this : Indenter
                 }
                 else {
                     indentationInfo = this.ApplyIndentationDeltaFromParent(token, node);
@@ -1262,7 +1262,7 @@ module Formatting {
 >indentationInfo : IndentationInfo
 >this.ApplyIndentationDeltaFromParent(token, node) : IndentationInfo
 >this.ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->this : this
+>this : Indenter
 >ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
 >token : TokenSpan
 >node : ParseNode
@@ -1436,7 +1436,7 @@ module Formatting {
 >scriptBlockIndentation : string
 >this.ApplyIndentationLevel(languageHostIndentation, 1) : string
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->this : this
+>this : Indenter
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
 >languageHostIndentation : string
 >1 : 1
@@ -1504,7 +1504,7 @@ module Formatting {
 >indentText : string
 >this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level) : string
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->this : this
+>this : Indenter
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
 >indentInfo.Prefix : any
 >indentInfo : IndentationInfo
@@ -1529,7 +1529,7 @@ module Formatting {
 >this.snapshot.GetLineFromPosition(tokenStartPosition) : any
 >this.snapshot.GetLineFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineFromPosition : any
 >tokenStartPosition : number
@@ -1554,7 +1554,7 @@ module Formatting {
 >this.snapshot.GetText(currentIndentSpan) : any
 >this.snapshot.GetText : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetText : any
 >currentIndentSpan : any
@@ -1568,7 +1568,7 @@ module Formatting {
 >this.logger.debug() : any
 >this.logger.debug : any
 >this.logger : TypeScript.ILogger
->this : this
+>this : Indenter
 >logger : TypeScript.ILogger
 >debug : any
 
@@ -1646,7 +1646,7 @@ module Formatting {
 >indentSize : any
 >this.editorOptions.IndentSize : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 >IndentSize : any
 
@@ -1654,7 +1654,7 @@ module Formatting {
 >tabSize : any
 >this.editorOptions.TabSize : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 >TabSize : any
 
@@ -1662,7 +1662,7 @@ module Formatting {
 >convertTabsToSpaces : any
 >this.editorOptions.ConvertTabsToSpaces : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 >ConvertTabsToSpaces : any
 
@@ -1730,7 +1730,7 @@ module Formatting {
                     return this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces);
 >this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces) : string
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->this : this
+>this : Indenter
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >null : null
 >totalIndent : number
@@ -1747,7 +1747,7 @@ module Formatting {
             return this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces);
 >this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces) : string
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->this : this
+>this : Indenter
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >existingIndentation : string
 >totalIndentSize : number
@@ -1886,7 +1886,7 @@ module Formatting {
 >parentIndentationDeltaSize : number
 >this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition()) : number
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->this : this
+>this : Indenter
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
 >indentableParent.AuthorNode.Details.StartOffset : any
 >indentableParent.AuthorNode.Details : any
@@ -1912,7 +1912,7 @@ module Formatting {
 >indentationInfo : IndentationInfo
 >this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : IndentationInfo
 >this.ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
->this : this
+>this : Indenter
 >ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
 >token.Span.startPosition() : any
 >token.Span.startPosition : any
@@ -1939,7 +1939,7 @@ module Formatting {
 >this.snapshot.GetLineFromPosition(tokenStartPosition) : any
 >this.snapshot.GetLineFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineFromPosition : any
 >tokenStartPosition : number
@@ -1964,7 +1964,7 @@ module Formatting {
 >this.snapshot.GetText(currentIndentSpan) : any
 >this.snapshot.GetText : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetText : any
 >currentIndentSpan : any
@@ -1973,7 +1973,7 @@ module Formatting {
             return this.ApplyIndentationDelta2(currentIndent, delta);
 >this.ApplyIndentationDelta2(currentIndent, delta) : IndentationInfo
 >this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->this : this
+>this : Indenter
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
 >currentIndent : any
 >delta : number
@@ -2000,7 +2000,7 @@ module Formatting {
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >currentIndent : string
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 
             var newIndentSize = currentIndentSize + delta;
@@ -2024,18 +2024,18 @@ module Formatting {
 >newIndent : string
 >this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces) : string
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->this : this
+>this : Indenter
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >null : null
 >newIndentSize : number
 >this.editorOptions.TabSize : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 >TabSize : any
 >this.editorOptions.ConvertTabsToSpaces : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 >ConvertTabsToSpaces : any
 
@@ -2075,7 +2075,7 @@ module Formatting {
 >this.offsetIndentationDeltas.GetValue(tokenStartPosition) : any
 >this.offsetIndentationDeltas.GetValue : any
 >this.offsetIndentationDeltas : Dictionary_int_int
->this : this
+>this : Indenter
 >offsetIndentationDeltas : Dictionary_int_int
 >GetValue : any
 >tokenStartPosition : number
@@ -2090,7 +2090,7 @@ module Formatting {
 >this.indentationBag.FindIndent(tokenStartPosition) : any
 >this.indentationBag.FindIndent : any
 >this.indentationBag : IndentationBag
->this : this
+>this : Indenter
 >indentationBag : IndentationBag
 >FindIndent : any
 >tokenStartPosition : number
@@ -2109,7 +2109,7 @@ module Formatting {
 >this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength())) : any
 >this.snapshot.GetText : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetText : any
 >new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()) : any
@@ -2137,7 +2137,7 @@ module Formatting {
 >GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
 >origIndentText : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 >true : true
 
@@ -2149,7 +2149,7 @@ module Formatting {
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >newIndentText : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 
                 // Check the child's position whether it's before the parent position
@@ -2178,7 +2178,7 @@ module Formatting {
 >this.snapshot.GetLineFromPosition(childTokenStartPosition) : any
 >this.snapshot.GetLineFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineFromPosition : any
 >childTokenStartPosition : number
@@ -2189,7 +2189,7 @@ module Formatting {
 >this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition)) : any
 >this.snapshot.GetText : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetText : any
 >new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition) : any
@@ -2207,7 +2207,7 @@ module Formatting {
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >childIndentText : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
 
                     if (childIndentSize < origIndentSize)
@@ -2224,7 +2224,7 @@ module Formatting {
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >origIndentText : any
 >this.editorOptions : Services.EditorOptions
->this : this
+>this : Indenter
 >editorOptions : Services.EditorOptions
                 }
 
@@ -2239,7 +2239,7 @@ module Formatting {
 >this.offsetIndentationDeltas.Add(tokenStartPosition, indentationDeltaSize) : any
 >this.offsetIndentationDeltas.Add : any
 >this.offsetIndentationDeltas : Dictionary_int_int
->this : this
+>this : Indenter
 >offsetIndentationDeltas : Dictionary_int_int
 >Add : any
 >tokenStartPosition : number
@@ -2276,7 +2276,7 @@ module Formatting {
 >!this.smartIndent && tree.StartNodePreviousSibling !== null : boolean
 >!this.smartIndent : boolean
 >this.smartIndent : boolean
->this : this
+>this : Indenter
 >smartIndent : boolean
 >tree.StartNodePreviousSibling !== null : boolean
 >tree.StartNodePreviousSibling : any
@@ -2327,7 +2327,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(offset) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >offset : number
@@ -2347,7 +2347,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >node.Parent.AuthorNode.Details.StartOffset : any
@@ -2395,7 +2395,7 @@ module Formatting {
                     // Otherwise base on parent indentation.
                     if (this.smartIndent) {
 >this.smartIndent : boolean
->this : this
+>this : Indenter
 >smartIndent : boolean
 
                         // in smartIndent the self node is the parent node since it's the closest node to the new line
@@ -2424,7 +2424,7 @@ module Formatting {
 >this.firstToken.Span.startPosition : any
 >this.firstToken.Span : any
 >this.firstToken : TokenSpan
->this : this
+>this : Indenter
 >firstToken : TokenSpan
 >Span : any
 >startPosition : any
@@ -2443,7 +2443,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(tree.StartNodeSelf.AuthorNode.Details.StartOffset) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >tree.StartNodeSelf.AuthorNode.Details.StartOffset : any
@@ -2477,7 +2477,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >parent.AuthorNode.Details.StartOffset : any
@@ -2563,7 +2563,7 @@ module Formatting {
 >indentOverride : string
 >this.GetLineIndentationForOffset(offset) : string
 >this.GetLineIndentationForOffset : (offset: number) => string
->this : this
+>this : Indenter
 >GetLineIndentationForOffset : (offset: number) => string
 >offset : number
 
@@ -2573,7 +2573,7 @@ module Formatting {
 >!this.smartIndent && tree.StartNodePreviousSibling !== null : boolean
 >!this.smartIndent : boolean
 >this.smartIndent : boolean
->this : this
+>this : Indenter
 >smartIndent : boolean
 >tree.StartNodePreviousSibling !== null : boolean
 >tree.StartNodePreviousSibling : any
@@ -2631,7 +2631,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >indentNode.AuthorNode.Details.StartOffset : any
@@ -2648,7 +2648,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >indentNode.AuthorNode.Details.StartOffset : any
@@ -2674,7 +2674,7 @@ module Formatting {
 >indentOverride : string
 >this.ApplyIndentationLevel(indentOverride, -lastDelta) : string
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->this : this
+>this : Indenter
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
 >indentOverride : string
 >-lastDelta : number
@@ -2735,7 +2735,7 @@ module Formatting {
 >this.indentationBag.FindIndent(offset) : any
 >this.indentationBag.FindIndent : any
 >this.indentationBag : IndentationBag
->this : this
+>this : Indenter
 >indentationBag : IndentationBag
 >FindIndent : any
 >offset : number
@@ -2758,7 +2758,7 @@ module Formatting {
 >this.snapshot.GetLineFromPosition(offset) : any
 >this.snapshot.GetLineFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineFromPosition : any
 >offset : number
@@ -2833,7 +2833,7 @@ module Formatting {
 >this.snapshot.GetLineFromPosition(indent.Position) : any
 >this.snapshot.GetLineFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineFromPosition : any
 >indent.Position : any
@@ -2878,7 +2878,7 @@ module Formatting {
 >this.indentationBag.AddIndent(indentationInfo) : any
 >this.indentationBag.AddIndent : any
 >this.indentationBag : IndentationBag
->this : this
+>this : Indenter
 >indentationBag : IndentationBag
 >AddIndent : any
 >indentationInfo : IndentationEditInfo
@@ -2892,7 +2892,7 @@ module Formatting {
             this.RegisterIndentation(new TextEditInfo(position, 0, indent), false);
 >this.RegisterIndentation(new TextEditInfo(position, 0, indent), false) : void
 >this.RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->this : this
+>this : Indenter
 >RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
 >new TextEditInfo(position, 0, indent) : any
 >TextEditInfo : any
@@ -3036,7 +3036,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >token.Span.endPosition() : any
@@ -3048,7 +3048,7 @@ module Formatting {
 >this.snapshot.GetLineNumberFromPosition(token.Span.startPosition()) : any
 >this.snapshot.GetLineNumberFromPosition : any
 >this.snapshot : ITextSnapshot
->this : this
+>this : Indenter
 >snapshot : ITextSnapshot
 >GetLineNumberFromPosition : any
 >token.Span.startPosition() : any

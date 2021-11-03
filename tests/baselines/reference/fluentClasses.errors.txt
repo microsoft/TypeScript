@@ -1,0 +1,24 @@
+tests/cases/conformance/types/thisType/fluentClasses.ts(17,17): error TS2339: Property 'bar' does not exist on type 'A'.
+
+
+==== tests/cases/conformance/types/thisType/fluentClasses.ts (1 errors) ====
+    class A {
+        foo() {
+            return this;
+        }
+    }
+    class B extends A {
+        bar() {
+            return this;
+        }
+    }
+    class C extends B {
+        baz() {
+            return this;
+        }
+    }
+    var c: C;
+    var z = c.foo().bar().baz();  // Fluent pattern
+                    ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'A'.
+    

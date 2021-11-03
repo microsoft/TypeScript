@@ -6,7 +6,7 @@ class Foo {
 >pubMeth : () => void
 >this.privMeth() : void
 >this.privMeth : () => void
->this : this
+>this : Foo
 >privMeth : () => void
 
 	private privMeth() {}

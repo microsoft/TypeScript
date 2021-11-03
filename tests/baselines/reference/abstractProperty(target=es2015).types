@@ -14,7 +14,7 @@ abstract class A {
 >console : Console
 >log : (...data: any[]) => void
 >this.x : string
->this : this
+>this : A
 >x : string
     }
 }

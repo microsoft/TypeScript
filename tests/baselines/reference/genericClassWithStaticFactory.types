@@ -21,7 +21,7 @@ module Editor {
             this.listFactory = new ListFactory<T>();
 >this.listFactory = new ListFactory<T>() : ListFactory<T>
 >this.listFactory : ListFactory<T>
->this : this
+>this : List<T>
 >listFactory : ListFactory<T>
 >new ListFactory<T>() : ListFactory<T>
 >ListFactory : typeof ListFactory
@@ -37,7 +37,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >this.listFactory.MakeEntry : <T>(data: T) => List<T>
 >this.listFactory : ListFactory<T>
->this : this
+>this : List<T>
 >listFactory : ListFactory<T>
 >MakeEntry : <T>(data: T) => List<T>
 >data : T
@@ -46,17 +46,17 @@ module Editor {
 >this.prev.next = entry : List<T>
 >this.prev.next : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 >next : List<T>
 >entry : List<T>
 
             entry.next = this;
->entry.next = this : this
+>entry.next = this : List<T>
 >entry.next : List<T>
 >entry : List<T>
 >next : List<T>
->this : this
+>this : List<T>
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
@@ -64,13 +64,13 @@ module Editor {
 >entry : List<T>
 >prev : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 
             this.prev = entry;
 >this.prev = entry : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 >entry : List<T>
 
@@ -91,7 +91,7 @@ module Editor {
 >entry = this.next : List<T>
 >entry : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 
             for (i = 0; !(entry.isHead); i++) {
@@ -126,9 +126,9 @@ module Editor {
 >(this.next == this) : boolean
 >this.next == this : boolean
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
->this : this
+>this : List<T>
         }
 
         public first(): T {
@@ -137,13 +137,13 @@ module Editor {
             if (this.isEmpty())
 >this.isEmpty() : boolean
 >this.isEmpty : () => boolean
->this : this
+>this : List<T>
 >isEmpty : () => boolean
             {
                 return this.next.data;
 >this.next.data : T
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 >data : T
             }
@@ -170,20 +170,20 @@ module Editor {
 >entry : List<T>
 >next : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 
             entry.prev = this;
->entry.prev = this : this
+>entry.prev = this : List<T>
 >entry.prev : List<T>
 >entry : List<T>
 >prev : List<T>
->this : this
+>this : List<T>
 
             this.next = entry;
 >this.next = entry : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 >entry : List<T>
 
@@ -206,7 +206,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >this.listFactory.MakeEntry : <T>(data: T) => List<T>
 >this.listFactory : ListFactory<T>
->this : this
+>this : List<T>
 >listFactory : ListFactory<T>
 >MakeEntry : <T>(data: T) => List<T>
 >data : T
@@ -231,20 +231,20 @@ module Editor {
 >entry : List<T>
 >next : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 
             entry.prev = this;
->entry.prev = this : this
+>entry.prev = this : List<T>
 >entry.prev : List<T>
 >entry : List<T>
 >prev : List<T>
->this : this
+>this : List<T>
 
             this.next = entry;
 >this.next = entry : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 >entry : List<T>
 
@@ -265,7 +265,7 @@ module Editor {
             if (this.next.isHead) {
 >this.next.isHead : boolean
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 >isHead : boolean
 
@@ -277,11 +277,11 @@ module Editor {
 >this.listFactory.RemoveEntry(this.next) : List<T>
 >this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>
 >this.listFactory : ListFactory<T>
->this : this
+>this : List<T>
 >listFactory : ListFactory<T>
 >RemoveEntry : <T>(entry: List<T>) => List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
             }
         }
@@ -301,17 +301,17 @@ module Editor {
 >this.prev.next = entry : List<T>
 >this.prev.next : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 >next : List<T>
 >entry : List<T>
 
             entry.next = this;
->entry.next = this : this
+>entry.next = this : List<T>
 >entry.next : List<T>
 >entry : List<T>
 >next : List<T>
->this : this
+>this : List<T>
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
@@ -319,13 +319,13 @@ module Editor {
 >entry : List<T>
 >prev : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 
             this.prev = entry;
 >this.prev = entry : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 >entry : List<T>
 
@@ -342,7 +342,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >this.listFactory.MakeEntry : <T>(data: T) => List<T>
 >this.listFactory : ListFactory<T>
->this : this
+>this : List<T>
 >listFactory : ListFactory<T>
 >MakeEntry : <T>(data: T) => List<T>
 >data : T
@@ -353,20 +353,20 @@ module Editor {
 >entry : List<T>
 >next : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 
             entry.prev = this;
->entry.prev = this : this
+>entry.prev = this : List<T>
 >entry.prev : List<T>
 >entry : List<T>
 >prev : List<T>
->this : this
+>this : List<T>
 
             this.next = entry;
 >this.next = entry : List<T>
 >this.next : List<T>
->this : this
+>this : List<T>
 >next : List<T>
 >entry : List<T>
 
@@ -391,17 +391,17 @@ module Editor {
 >this.prev.next = entry : List<T>
 >this.prev.next : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 >next : List<T>
 >entry : List<T>
 
             entry.next = this;
->entry.next = this : this
+>entry.next = this : List<T>
 >entry.next : List<T>
 >entry : List<T>
 >next : List<T>
->this : this
+>this : List<T>
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
@@ -409,13 +409,13 @@ module Editor {
 >entry : List<T>
 >prev : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 
             this.prev = entry;
 >this.prev = entry : List<T>
 >this.prev : List<T>
->this : this
+>this : List<T>
 >prev : List<T>
 >entry : List<T>
 
@@ -432,7 +432,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >this.listFactory.MakeEntry : <T>(data: T) => List<T>
 >this.listFactory : ListFactory<T>
->this : this
+>this : List<T>
 >listFactory : ListFactory<T>
 >MakeEntry : <T>(data: T) => List<T>
 >data : T
@@ -440,7 +440,7 @@ module Editor {
             return this.insertEntryBefore(entry);
 >this.insertEntryBefore(entry) : List<T>
 >this.insertEntryBefore : (entry: List<T>) => List<T>
->this : this
+>this : List<T>
 >insertEntryBefore : (entry: List<T>) => List<T>
 >entry : List<T>
         }

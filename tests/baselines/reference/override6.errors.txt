@@ -1,9 +1,10 @@
 tests/cases/conformance/override/override6.ts(9,12): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
 tests/cases/conformance/override/override6.ts(10,17): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
 tests/cases/conformance/override/override6.ts(10,37): error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
+tests/cases/conformance/override/override6.ts(11,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'B'.
 
 
-==== tests/cases/conformance/override/override6.ts (3 errors) ====
+==== tests/cases/conformance/override/override6.ts (4 errors) ====
     class B {
         public baz: number = 1;
         constructor(public foo: string, public bar: number) {
@@ -21,6 +22,8 @@ tests/cases/conformance/override/override6.ts(10,37): error TS4115: This paramet
                                         ~~~~~~~~~~~~~~~~~~
 !!! error TS4115: This parameter property must have an 'override' modifier because it overrides a member in base class 'B'.
             super(foo, 42)
+            ~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'B'.
         }
     }
     

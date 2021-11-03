@@ -6,14 +6,14 @@ class Foo {
 >a : () => void
 
         var lamda = (_super: number) => { // No Error 
->lamda : (_super: number) => (x: any) => this
->(_super: number) => { // No Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
+>lamda : (_super: number) => (x: any) => Foo
+>(_super: number) => { // No Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => Foo
 >_super : number
 
             return x => this;   // New scope.  So should inject new _this capture
->x => this : (x: any) => this
+>x => this : (x: any) => Foo
 >x : any
->this : this
+>this : Foo
         }
     }
     b(_super: number) { // No Error 
@@ -21,13 +21,13 @@ class Foo {
 >_super : number
 
         var lambda = () => {
->lambda : () => (x: any) => this
->() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+>lambda : () => (x: any) => Foo
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => Foo
 
             return x => this;   // New scope.  So should inject new _this capture
->x => this : (x: any) => this
+>x => this : (x: any) => Foo
 >x : any
->this : this
+>this : Foo
         }
     }
     set c(_super: number) { // No error
@@ -43,14 +43,14 @@ class Foo2 extends Foo {
 >x : () => void
 
         var lamda = (_super: number) => { // Error 
->lamda : (_super: number) => (x: any) => this
->(_super: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
+>lamda : (_super: number) => (x: any) => Foo2
+>(_super: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => Foo2
 >_super : number
 
             return x => this;   // New scope.  So should inject new _this capture
->x => this : (x: any) => this
+>x => this : (x: any) => Foo2
 >x : any
->this : this
+>this : Foo2
         }
     }
     y(_super: number) { // Error 
@@ -58,13 +58,13 @@ class Foo2 extends Foo {
 >_super : number
 
         var lambda = () => {
->lambda : () => (x: any) => this
->() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+>lambda : () => (x: any) => Foo2
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => Foo2
 
             return x => this;   // New scope.  So should inject new _this capture
->x => this : (x: any) => this
+>x => this : (x: any) => Foo2
 >x : any
->this : this
+>this : Foo2
         }
     }
     set z(_super: number) { // Error
@@ -152,13 +152,13 @@ class Foo4 extends Foo {
 >_super : any
 
         var lambda = () => {
->lambda : () => (x: any) => this
->() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+>lambda : () => (x: any) => Foo4
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => Foo4
 
             return x => this;   // New scope.  So should inject new _this capture
->x => this : (x: any) => this
+>x => this : (x: any) => Foo4
 >x : any
->this : this
+>this : Foo4
         }
     }
 }

@@ -32,7 +32,7 @@ export default class Operation {
 >(this as any).getParameter : any
 >(this as any) : any
 >this as any : any
->this : this
+>this : Operation
 >getParameter : any
 
             const values = (this as any).getValues();
@@ -41,7 +41,7 @@ export default class Operation {
 >(this as any).getValues : any
 >(this as any) : any
 >this as any : any
->this : this
+>this : Operation
 >getValues : any
 
             const innerResult = parameter.validate(values[parameter.oaParameter.name]);

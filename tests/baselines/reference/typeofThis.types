@@ -50,13 +50,13 @@ class Test1 {
 >'' : ""
 
         var self: typeof this = this;
->self : this
+>self : Test1
 >this : any
->this : this
+>this : Test1
 
         self.data;
 >self.data : { foo: string; }
->self : this
+>self : Test1
 >data : { foo: string; }
 
         var str: typeof this.this = '';
@@ -187,35 +187,35 @@ class Test9 {
 
         if (this instanceof Test9D1) {
 >this instanceof Test9D1 : boolean
->this : this
+>this : Test9
 >Test9D1 : typeof Test9D1
 
             const d1: typeof this = this;
->d1 : this & Test9D1
+>d1 : Test9 & Test9D1
 >this : any
->this : this & Test9D1
+>this : Test9 & Test9D1
 
             d1.f1();
 >d1.f1() : void
 >d1.f1 : () => void
->d1 : this & Test9D1
+>d1 : Test9 & Test9D1
 >f1 : () => void
         }
 
         if (this instanceof Test9D2) {
 >this instanceof Test9D2 : boolean
->this : this
+>this : Test9
 >Test9D2 : typeof Test9D2
 
             const d2: typeof this = this;
->d2 : this & Test9D2
+>d2 : Test9 & Test9D2
 >this : any
->this : this & Test9D2
+>this : Test9 & Test9D2
 
             d2.f2();
 >d2.f2() : void
 >d2.f2 : () => void
->d2 : this & Test9D2
+>d2 : Test9 & Test9D2
 >f2 : () => void
         }
     }
@@ -226,7 +226,7 @@ class Test9 {
         if (this.no === 1) {
 >this.no === 1 : boolean
 >this.no : number
->this : this
+>this : Test9
 >no : number
 >1 : 1
 
@@ -236,14 +236,14 @@ class Test9 {
 >this : any
 >no : 1
 >this.no : 1
->this : this
+>this : Test9
 >no : 1
         }
 
         if (this.this === 1) {
 >this.this === 1 : boolean
 >this.this : number
->this : this
+>this : Test9
 >this : number
 >1 : 1
 
@@ -253,7 +253,7 @@ class Test9 {
 >this : any
 >this : 1
 >this.this : 1
->this : this
+>this : Test9
 >this : 1
         }
     }
@@ -293,7 +293,7 @@ class Test10 {
 
         if (this.a) {
 >this.a : { b?: string | undefined; } | undefined
->this : this
+>this : Test10
 >a : { b?: string | undefined; } | undefined
 
             let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
@@ -317,7 +317,7 @@ class Test10 {
             if (this.a.b) {
 >this.a.b : string | undefined
 >this.a : { b?: string | undefined; }
->this : this
+>this : Test10
 >a : { b?: string | undefined; }
 >b : string | undefined
 
@@ -346,24 +346,24 @@ class Test11 {
 >foo : () => void
 
         const o = this;
->o : this
->this : this
+>o : Test11
+>this : Test11
 
         let bar: typeof o.this = {};
 >bar : { x?: string | undefined; } | undefined
 >o.this : { x?: string | undefined; } | undefined
->o : this
+>o : Test11
 >this : { x?: string | undefined; } | undefined
 >{} : {}
 
         if (o.this && o.this.x) {
 >o.this && o.this.x : string | undefined
 >o.this : { x?: string | undefined; } | undefined
->o : this
+>o : Test11
 >this : { x?: string | undefined; } | undefined
 >o.this.x : string | undefined
 >o.this : { x?: string | undefined; }
->o : this
+>o : Test11
 >this : { x?: string | undefined; }
 >x : string | undefined
 
@@ -371,7 +371,7 @@ class Test11 {
 >y : string
 >o.this.x : string
 >o.this : { x?: string | undefined; }
->o : this
+>o : Test11
 >this : { x?: string | undefined; }
 >x : string
         }
@@ -385,7 +385,7 @@ class Tests12 {
 >test1 : () => void
 
         type Test = typeof this;
->Test : this
+>Test : Tests12
 >this : any
     }
 
@@ -394,7 +394,7 @@ class Tests12 {
 
         for (;;) {}
         type Test = typeof this;
->Test : this
+>Test : Tests12
 >this : any
     }
 
@@ -406,7 +406,7 @@ class Tests12 {
 >[] : never[]
 
         type Test = typeof this;
->Test : this
+>Test : Tests12
 >this : any
     }
 
@@ -418,7 +418,7 @@ class Tests12 {
 >[] : never[]
 
         type Test = typeof this;
->Test : this
+>Test : Tests12
 >this : any
     }
 }

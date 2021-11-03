@@ -1,10 +1,28 @@
+tests/cases/conformance/jsx/file.tsx(9,5): error TS2416: Property 'render' in type 'Poisoned' is not assignable to the same property in base type 'Component<PoisonedProp, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'Poisoned'.
+        Types of property 'render' are incompatible.
+          Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'Poisoned' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: {}, props: PoisonedProp) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'prevState' and 'prevState' are incompatible.
+                        Type '{}' is not assignable to type 'S'.
+                          'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'PoisonedProp'.
   Types of property 'y' are incompatible.
     Type 'number' is not assignable to type '2'.
+tests/cases/conformance/jsx/file.tsx(23,5): error TS2416: Property 'render' in type 'EmptyProp' is not assignable to the same property in base type 'Component<{}, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Property 'greeting' is missing in type 'Component<P, S>' but required in type 'EmptyProp'.
 tests/cases/conformance/jsx/file.tsx(33,10): error TS2559: Type '{ prop1: boolean; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<EmptyProp> & { children?: ReactNode; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     import React = require('react');
     
     interface PoisonedProp {
@@ -14,6 +32,21 @@ tests/cases/conformance/jsx/file.tsx(33,10): error TS2559: Type '{ prop1: boolea
     
     class Poisoned extends React.Component<PoisonedProp, {}> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'Poisoned' is not assignable to the same property in base type 'Component<PoisonedProp, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'Poisoned'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'Poisoned' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: {}, props: PoisonedProp) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'prevState' and 'prevState' are incompatible.
+!!! error TS2416:                         Type '{}' is not assignable to type 'S'.
+!!! error TS2416:                           'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
             return <div>Hello</div>;
         }
     }
@@ -32,6 +65,12 @@ tests/cases/conformance/jsx/file.tsx(33,10): error TS2559: Type '{ prop1: boolea
     
     class EmptyProp extends React.Component<{}, {}> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'EmptyProp' is not assignable to the same property in base type 'Component<{}, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Property 'greeting' is missing in type 'Component<P, S>' but required in type 'EmptyProp'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:26:5: 'greeting' is declared here.
             return <div>Default hi</div>;
         }
         greeting: string;

@@ -64,7 +64,7 @@ class C {
         var p = this.n;
 >p : Date
 >this.n : Date
->this : this
+>this : C
 >n : Date
 
         var p: Date;

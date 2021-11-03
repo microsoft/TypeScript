@@ -24,7 +24,7 @@ module MsPortal.Util.TemplateEngine {
             this._templateStorage = templateStorage;
 >this._templateStorage = templateStorage : TemplateStorage
 >this._templateStorage : TemplateStorage
->this : this
+>this : StringTemplate
 >_templateStorage : TemplateStorage
 >templateStorage : TemplateStorage
         }
@@ -38,11 +38,11 @@ module MsPortal.Util.TemplateEngine {
 >this._templateStorage.templateSources[this._name] : string
 >this._templateStorage.templateSources : TemplateKeyValue
 >this._templateStorage : TemplateStorage
->this : this
+>this : StringTemplate
 >_templateStorage : TemplateStorage
 >templateSources : TemplateKeyValue
 >this._name : any
->this : this
+>this : StringTemplate
 >_name : any
 >value : string
         }

@@ -185,7 +185,7 @@ function foo12() {
                 this.a = x;
 >this.a = x : any
 >this.a : any
->this : this
+>this : y
 >a : any
 >x : any
             }

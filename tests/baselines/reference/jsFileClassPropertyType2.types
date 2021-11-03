@@ -7,7 +7,7 @@ class C {
       this.p = [];
 >this.p = [] : undefined[]
 >this.p : number[]
->this : this
+>this : C
 >p : number[]
 >[] : undefined[]
   }

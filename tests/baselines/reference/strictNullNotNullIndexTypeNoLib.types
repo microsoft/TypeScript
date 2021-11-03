@@ -22,7 +22,7 @@ class Test<T extends A> {
 >this.attrs.params! : T["params"]
 >this.attrs.params : T["params"] | undefined
 >this.attrs : Readonly<T>
->this : this
+>this : Test<T>
 >attrs : Readonly<T>
 >params : T["params"] | undefined
 >name : any
@@ -47,7 +47,7 @@ class FooClass<P extends Foo = Foo> {
 >foo : number
 >42 : 42
 >this.properties : Readonly<P>
->this : this
+>this : FooClass<P>
 >properties : Readonly<P>
 
         return foo;
@@ -68,7 +68,7 @@ class Test2<T extends A> {
 >this.attrs.params! : T["params"]
 >this.attrs.params : T["params"] | undefined
 >this.attrs : Readonly<T>
->this : this
+>this : Test2<T>
 >attrs : Readonly<T>
 >params : T["params"] | undefined
     }

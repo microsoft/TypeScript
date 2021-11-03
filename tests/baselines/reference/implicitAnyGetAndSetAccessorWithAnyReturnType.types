@@ -12,7 +12,7 @@ class GetAndSet {
 
         return this.getAndSet;
 >this.getAndSet : any
->this : this
+>this : GetAndSet
 >getAndSet : any
     }
     
@@ -24,7 +24,7 @@ class GetAndSet {
         this.getAndSet = value;
 >this.getAndSet = value : any
 >this.getAndSet : any
->this : this
+>this : GetAndSet
 >getAndSet : any
 >value : any
     }

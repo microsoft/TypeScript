@@ -107,18 +107,18 @@ class A {
 >x : string
 >this.biz() : number
 >this.biz : () => number
->this : this
+>this : A
 >biz : () => number
 
         for (var x in this.biz) { }
 >x : string
 >this.biz : () => number
->this : this
+>this : A
 >biz : () => number
 
         for (var x in this) { }
 >x : string
->this : this
+>this : A
 
         return null;
 >null : null
@@ -160,18 +160,18 @@ class B extends A {
 >x : string
 >this.biz() : number
 >this.biz : () => number
->this : this
+>this : B
 >biz : () => number
 
         for (var x in this.biz) { }
 >x : string
 >this.biz : () => number
->this : this
+>this : B
 >biz : () => number
 
         for (var x in this) { }
 >x : string
->this : this
+>this : B
 
         for (var x in super.biz) { }
 >x : string

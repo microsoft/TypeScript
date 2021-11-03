@@ -8,7 +8,7 @@ class C {
     this.super<T>(0);
 >this.super<T>(0) : any
 >this.super : any
->this : this
+>this : C
 >super : any
 >0 : 0
   }

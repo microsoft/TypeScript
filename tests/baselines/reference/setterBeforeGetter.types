@@ -15,7 +15,7 @@ class Foo {
         this._bar = thing;
 >this._bar = thing : { a: string; }
 >this._bar : { a: string; }
->this : this
+>this : Foo
 >_bar : { a: string; }
 >thing : { a: string; }
     }
@@ -25,7 +25,7 @@ class Foo {
 
         return this._bar;
 >this._bar : { a: string; }
->this : this
+>this : Foo
 >_bar : { a: string; }
     }
 }

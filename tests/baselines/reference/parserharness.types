@@ -1068,7 +1068,7 @@ module Harness {
 >this.children.push(child) : number
 >this.children.push : (...items: Runnable[]) => number
 >this.children : Runnable[]
->this : this
+>this : Runnable
 >children : Runnable[]
 >push : (...items: Runnable[]) => number
 >child : Runnable
@@ -1168,10 +1168,10 @@ module Harness {
             return this.call(this.block, done);
 >this.call(this.block, done) : boolean
 >this.call : (fn: (done?: IDone) => void, done: IDone) => boolean
->this : this
+>this : Runnable
 >call : (fn: (done?: IDone) => void, done: IDone) => boolean
 >this.block : any
->this : this
+>this : Runnable
 >block : any
 >done : IDone
         }
@@ -1184,7 +1184,7 @@ module Harness {
             return this.call(<any>((done) => this.children[index].run(done)), done);
 >this.call(<any>((done) => this.children[index].run(done)), done) : boolean
 >this.call : (fn: (done?: IDone) => void, done: IDone) => boolean
->this : this
+>this : Runnable
 >call : (fn: (done?: IDone) => void, done: IDone) => boolean
 ><any>((done) => this.children[index].run(done)) : any
 >((done) => this.children[index].run(done)) : (done: any) => void
@@ -1194,7 +1194,7 @@ module Harness {
 >this.children[index].run : (done: IDone) => void
 >this.children[index] : Runnable
 >this.children : Runnable[]
->this : this
+>this : Runnable
 >children : Runnable[]
 >index : number
 >run : (done: IDone) => void
@@ -1294,14 +1294,14 @@ module Harness {
             this.description = description;
 >this.description = description : string
 >this.description : string
->this : this
+>this : TestCase
 >description : string
 >description : string
 
             this.block = block;
 >this.block = block : any
 >this.block : any
->this : this
+>this : TestCase
 >block : any
 >block : any
         }
@@ -1322,8 +1322,8 @@ module Harness {
 >done : IDone
 
             var that = this;
->that : this
->this : this
+>that : TestCase
+>this : TestCase
 
             Runnable.currentStack.push(this);
 >Runnable.currentStack.push(this) : number
@@ -1332,7 +1332,7 @@ module Harness {
 >Runnable : typeof Runnable
 >currentStack : Runnable[]
 >push : (...items: Runnable[]) => number
->this : this
+>this : TestCase
 
             emitLog('testStart', { desc: this.description });
 >emitLog('testStart', { desc: this.description }) : void
@@ -1341,19 +1341,19 @@ module Harness {
 >{ desc: this.description } : { desc: string; }
 >desc : string
 >this.description : string
->this : this
+>this : TestCase
 >description : string
 
             if (this.block) {
 >this.block : any
->this : this
+>this : TestCase
 >block : any
 
                 var async = this.runBlock(<any>function (e) {
 >async : boolean
 >this.runBlock(<any>function (e) {                    if (e) {                        that.passed = false;                        that.error = e;                        emitLog('error', { desc: this.description, pass: false }, e);                    } else {                        that.passed = true;                        emitLog('pass', { desc: this.description, pass: true });                    }                    Runnable.currentStack.pop();                    done()                }) : boolean
 >this.runBlock : (done: IDone) => boolean
->this : this
+>this : TestCase
 >runBlock : (done: IDone) => boolean
 ><any>function (e) {                    if (e) {                        that.passed = false;                        that.error = e;                        emitLog('error', { desc: this.description, pass: false }, e);                    } else {                        that.passed = true;                        emitLog('pass', { desc: this.description, pass: true });                    }                    Runnable.currentStack.pop();                    done()                } : any
 >function (e) {                    if (e) {                        that.passed = false;                        that.error = e;                        emitLog('error', { desc: this.description, pass: false }, e);                    } else {                        that.passed = true;                        emitLog('pass', { desc: this.description, pass: true });                    }                    Runnable.currentStack.pop();                    done()                } : (e: any) => void
@@ -1365,14 +1365,14 @@ module Harness {
                         that.passed = false;
 >that.passed = false : false
 >that.passed : any
->that : this
+>that : TestCase
 >passed : any
 >false : false
 
                         that.error = e;
 >that.error = e : any
 >that.error : Error
->that : this
+>that : TestCase
 >error : Error
 >e : any
 
@@ -1393,7 +1393,7 @@ module Harness {
                         that.passed = true;
 >that.passed = true : true
 >that.passed : any
->that : this
+>that : TestCase
 >passed : any
 >true : true
 
@@ -1451,14 +1451,14 @@ module Harness {
             this.description = description;
 >this.description = description : string
 >this.description : string
->this : this
+>this : Scenario
 >description : string
 >description : string
 
             this.block = block;
 >this.block = block : any
 >this.block : any
->this : this
+>this : Scenario
 >block : any
 >block : any
         }
@@ -1469,8 +1469,8 @@ module Harness {
 >done : IDone
 
             var that = this;
->that : this
->this : this
+>that : Scenario
+>this : Scenario
 
             Runnable.currentStack.push(this);
 >Runnable.currentStack.push(this) : number
@@ -1479,7 +1479,7 @@ module Harness {
 >Runnable : typeof Runnable
 >currentStack : Runnable[]
 >push : (...items: Runnable[]) => number
->this : this
+>this : Scenario
 
             emitLog('scenarioStart', { desc: this.description });
 >emitLog('scenarioStart', { desc: this.description }) : void
@@ -1488,14 +1488,14 @@ module Harness {
 >{ desc: this.description } : { desc: string; }
 >desc : string
 >this.description : string
->this : this
+>this : Scenario
 >description : string
 
             var async = this.runBlock(<any>function (e) {
 >async : boolean
 >this.runBlock(<any>function (e) {                Runnable.currentStack.pop();                if (e) {                    that.passed = false;                    that.error = e;                    var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };                    // Report all bugs affecting this scenario                    assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));                    emitLog('scenarioEnd', metadata, e);                    done();                } else {                    that.passed = true; // so far so good.                    that.runChildren(done);                }            }) : boolean
 >this.runBlock : (done: IDone) => boolean
->this : this
+>this : Scenario
 >runBlock : (done: IDone) => boolean
 ><any>function (e) {                Runnable.currentStack.pop();                if (e) {                    that.passed = false;                    that.error = e;                    var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };                    // Report all bugs affecting this scenario                    assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));                    emitLog('scenarioEnd', metadata, e);                    done();                } else {                    that.passed = true; // so far so good.                    that.runChildren(done);                }            } : any
 >function (e) {                Runnable.currentStack.pop();                if (e) {                    that.passed = false;                    that.error = e;                    var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };                    // Report all bugs affecting this scenario                    assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));                    emitLog('scenarioEnd', metadata, e);                    done();                } else {                    that.passed = true; // so far so good.                    that.runChildren(done);                }            } : (e: any) => void
@@ -1515,14 +1515,14 @@ module Harness {
                     that.passed = false;
 >that.passed = false : false
 >that.passed : any
->that : this
+>that : Scenario
 >passed : any
 >false : false
 
                     that.error = e;
 >that.error = e : any
 >that.error : Error
->that : this
+>that : Scenario
 >error : Error
 >e : any
 
@@ -1573,14 +1573,14 @@ module Harness {
                     that.passed = true; // so far so good.
 >that.passed = true : true
 >that.passed : any
->that : this
+>that : Scenario
 >passed : any
 >true : true
 
                     that.runChildren(done);
 >that.runChildren(done) : void
 >that.runChildren : (done: IDone, index?: number) => void
->that : this
+>that : Scenario
 >runChildren : (done: IDone, index?: number) => void
 >done : IDone
                 }
@@ -1598,8 +1598,8 @@ module Harness {
 >0 : 0
 
             var that = this;
->that : this
->this : this
+>that : Scenario
+>this : Scenario
 
             var async = false;
 >async : boolean
@@ -1610,7 +1610,7 @@ module Harness {
 >index : number
 >this.children.length : number
 >this.children : Runnable[]
->this : this
+>this : Scenario
 >children : Runnable[]
 >length : number
 >index++ : number
@@ -1621,7 +1621,7 @@ module Harness {
 >async : boolean
 >this.runChild(index, <any>function (e) {                    that.passed = that.passed && that.children[index].passed;                    if (async)                        that.runChildren(done, index + 1);                }) : boolean
 >this.runChild : (index: number, done: IDone) => boolean
->this : this
+>this : Scenario
 >runChild : (index: number, done: IDone) => boolean
 >index : number
 ><any>function (e) {                    that.passed = that.passed && that.children[index].passed;                    if (async)                        that.runChildren(done, index + 1);                } : any
@@ -1631,16 +1631,16 @@ module Harness {
                     that.passed = that.passed && that.children[index].passed;
 >that.passed = that.passed && that.children[index].passed : any
 >that.passed : any
->that : this
+>that : Scenario
 >passed : any
 >that.passed && that.children[index].passed : any
 >that.passed : any
->that : this
+>that : Scenario
 >passed : any
 >that.children[index].passed : any
 >that.children[index] : Runnable
 >that.children : Runnable[]
->that : this
+>that : Scenario
 >children : Runnable[]
 >index : number
 >passed : any
@@ -1651,7 +1651,7 @@ module Harness {
                         that.runChildren(done, index + 1);
 >that.runChildren(done, index + 1) : void
 >that.runChildren : (done: IDone, index?: number) => void
->that : this
+>that : Scenario
 >runChildren : (done: IDone, index?: number) => void
 >done : IDone
 >index + 1 : number
@@ -1673,11 +1673,11 @@ module Harness {
 >undefined : undefined
 >desc : string
 >this.description : string
->this : this
+>this : Scenario
 >description : string
 >pass : any
 >this.passed : any
->this : this
+>this : Scenario
 >passed : any
 >bugs : any
 >assert.bugIds : any
@@ -1734,7 +1734,7 @@ module Harness {
             this.runChildren();
 >this.runChildren() : void
 >this.runChildren : (index?: number) => void
->this : this
+>this : Run
 >runChildren : (index?: number) => void
         }
 
@@ -1748,15 +1748,15 @@ module Harness {
 >false : false
 
             var that = this;
->that : this
->this : this
+>that : Run
+>this : Run
 
             for (; index < this.children.length; index++) {
 >index < this.children.length : boolean
 >index : number
 >this.children.length : number
 >this.children : Runnable[]
->this : this
+>this : Run
 >children : Runnable[]
 >length : number
 >index++ : number
@@ -1775,7 +1775,7 @@ module Harness {
 >async : boolean
 >this.runChild(index, <any>function (e) {                    if (async) {                        that.runChildren(index + 1);                    }                }) : boolean
 >this.runChild : (index: number, done: IDone) => boolean
->this : this
+>this : Run
 >runChild : (index: number, done: IDone) => boolean
 >index : number
 ><any>function (e) {                    if (async) {                        that.runChildren(index + 1);                    }                } : any
@@ -1788,7 +1788,7 @@ module Harness {
                         that.runChildren(index + 1);
 >that.runChildren(index + 1) : void
 >that.runChildren : (index?: number) => void
->that : this
+>that : Run
 >runChildren : (index?: number) => void
 >index + 1 : number
 >index : number
@@ -1926,14 +1926,14 @@ module Harness {
                 this.time = 0;
 >this.time = 0 : 0
 >this.time : number
->this : this
+>this : Timer
 >time : number
 >0 : 0
 
                 this.startTime = Clock.now();
 >this.startTime = Clock.now() : number
 >this.startTime : any
->this : this
+>this : Timer
 >startTime : any
 >Clock.now() : number
 >Clock.now : () => number
@@ -1948,7 +1948,7 @@ module Harness {
                 this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000;
 >this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000 : number
 >this.time : number
->this : this
+>this : Timer
 >time : number
 >(Clock.now() - this.startTime) / Clock.resolution * 1000 : number
 >(Clock.now() - this.startTime) / Clock.resolution : number
@@ -1959,7 +1959,7 @@ module Harness {
 >Clock : typeof Clock
 >now : () => number
 >this.startTime : any
->this : this
+>this : Timer
 >startTime : any
 >Clock.resolution : number
 >Clock : typeof Clock
@@ -1983,7 +1983,7 @@ module Harness {
 >this.data.push(value) : number
 >this.data.push : (...items: number[]) => number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >push : (...items: number[]) => number
 >value : number
@@ -2003,7 +2003,7 @@ module Harness {
 >i : number
 >this.data.length : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >length : number
 >i++ : number
@@ -2014,7 +2014,7 @@ module Harness {
 >sum : number
 >this.data[i] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >i : number
                 }
@@ -2024,7 +2024,7 @@ module Harness {
 >sum : number
 >this.data.length : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >length : number
             }
@@ -2036,7 +2036,7 @@ module Harness {
 >min : number
 >this.data[0] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >0 : 0
 
@@ -2047,7 +2047,7 @@ module Harness {
 >i : number
 >this.data.length : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >length : number
 >i++ : number
@@ -2057,7 +2057,7 @@ module Harness {
 >this.data[i] < min : boolean
 >this.data[i] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >i : number
 >min : number
@@ -2067,7 +2067,7 @@ module Harness {
 >min : number
 >this.data[i] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >i : number
                     }
@@ -2084,7 +2084,7 @@ module Harness {
 >max : number
 >this.data[0] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >0 : 0
 
@@ -2095,7 +2095,7 @@ module Harness {
 >i : number
 >this.data.length : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >length : number
 >i++ : number
@@ -2105,7 +2105,7 @@ module Harness {
 >this.data[i] > max : boolean
 >this.data[i] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >i : number
 >max : number
@@ -2115,7 +2115,7 @@ module Harness {
 >max : number
 >this.data[i] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >i : number
                     }
@@ -2132,7 +2132,7 @@ module Harness {
 >sampleMean : number
 >this.mean() : number
 >this.mean : () => number
->this : this
+>this : Dataset
 >mean : () => number
 
                 var sumOfSquares = 0;
@@ -2146,7 +2146,7 @@ module Harness {
 >i : number
 >this.data.length : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >length : number
 >i++ : number
@@ -2162,7 +2162,7 @@ module Harness {
 >this.data[i] - sampleMean : number
 >this.data[i] : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >i : number
 >sampleMean : number
@@ -2178,7 +2178,7 @@ module Harness {
 >sumOfSquares : number
 >this.data.length : number
 >this.data : number[]
->this : this
+>this : Dataset
 >data : number[]
 >length : number
             }
@@ -2228,13 +2228,13 @@ module Harness {
 >this.results[name] = this.results[name] || new Dataset() : Dataset
 >this.results[name] : Dataset
 >this.results : { [x: string]: Dataset; }
->this : this
+>this : Benchmark
 >results : { [x: string]: Dataset; }
 >name : string
 >this.results[name] || new Dataset() : Dataset
 >this.results[name] : Dataset
 >this.results : { [x: string]: Dataset; }
->this : this
+>this : Benchmark
 >results : { [x: string]: Dataset; }
 >name : string
 >new Dataset() : Dataset
@@ -2245,7 +2245,7 @@ module Harness {
 >this.results[name].add : (value: number) => void
 >this.results[name] : Dataset
 >this.results : { [x: string]: Dataset; }
->this : this
+>this : Benchmark
 >results : { [x: string]: Dataset; }
 >name : string
 >add : (value: number) => void
@@ -2563,7 +2563,7 @@ module Harness {
                 this.currentLine += str;
 >this.currentLine += str : string
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 >str : any
             }
@@ -2576,19 +2576,19 @@ module Harness {
 >this.lines.push(this.currentLine + str) : number
 >this.lines.push : (...items: string[]) => number
 >this.lines : string[]
->this : this
+>this : WriterAggregator
 >lines : string[]
 >push : (...items: string[]) => number
 >this.currentLine + str : string
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 >str : any
 
                 this.currentLine = "";
 >this.currentLine = "" : ""
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 >"" : ""
             }
@@ -2600,24 +2600,24 @@ module Harness {
 >this.currentLine.length > 0 : boolean
 >this.currentLine.length : number
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 >length : number
 >0 : 0
 >this.lines.push(this.currentLine) : number
 >this.lines.push : (...items: string[]) => number
 >this.lines : string[]
->this : this
+>this : WriterAggregator
 >lines : string[]
 >push : (...items: string[]) => number
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 
                 this.currentLine = "";
 >this.currentLine = "" : ""
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 >"" : ""
             }
@@ -2628,14 +2628,14 @@ module Harness {
                 this.lines = [];
 >this.lines = [] : undefined[]
 >this.lines : string[]
->this : this
+>this : WriterAggregator
 >lines : string[]
 >[] : undefined[]
 
                 this.currentLine = "";
 >this.currentLine = "" : ""
 >this.currentLine : string
->this : this
+>this : WriterAggregator
 >currentLine : string
 >"" : ""
             }
@@ -2659,7 +2659,7 @@ module Harness {
                 if (this.fileCollection[s]) {
 >this.fileCollection[s] : any
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >s : string
 
@@ -2667,7 +2667,7 @@ module Harness {
 ><ITextWriter>this.fileCollection[s] : ITextWriter
 >this.fileCollection[s] : any
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >s : string
                 }
@@ -2685,7 +2685,7 @@ module Harness {
 >this.fileCollection[s] = writer : WriterAggregator
 >this.fileCollection[s] : any
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >s : string
 >writer : WriterAggregator
@@ -2706,7 +2706,7 @@ module Harness {
 >typeof this.fileCollection[s] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.fileCollection[s] : any
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >s : string
 >'undefined' : "undefined"
@@ -2720,7 +2720,7 @@ module Harness {
 >reset : () => void
 >this.fileCollection = {} : {}
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >{} : {}
 
@@ -2738,14 +2738,14 @@ module Harness {
                 for (var p in this.fileCollection) {
 >p : string
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 
                     if (this.fileCollection.hasOwnProperty(p)) {
 >this.fileCollection.hasOwnProperty(p) : boolean
 >this.fileCollection.hasOwnProperty : (v: PropertyKey) => boolean
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >hasOwnProperty : (v: PropertyKey) => boolean
 >p : string
@@ -2757,7 +2757,7 @@ module Harness {
 >Compiler : any
 >this.fileCollection[p] : any
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >p : string
 
@@ -2797,7 +2797,7 @@ module Harness {
 >file : any
 >this.fileCollection[p] : any
 >this.fileCollection : {}
->this : this
+>this : EmitterIOHost
 >fileCollection : {}
 >p : string
                         }
@@ -3183,7 +3183,7 @@ module Harness {
 >'        ' + this.code : string
 >'        ' : "        "
 >this.code : any
->this : this
+>this : Type
 >code : any
 >';\n' : ";\n"
 
@@ -3211,7 +3211,7 @@ module Harness {
                 return this.compilesOk(testCode);
 >this.compilesOk(testCode) : boolean
 >this.compilesOk : (testCode: any) => boolean
->this : this
+>this : Type
 >compilesOk : (testCode: any) => boolean
 >testCode : string
             }
@@ -3244,7 +3244,7 @@ module Harness {
 >others : any
 >this.normalizeToArray(others) : any[]
 >this.normalizeToArray : (arg: any) => any[]
->this : this
+>this : Type
 >normalizeToArray : (arg: any) => any[]
 >others : any
 
@@ -3263,7 +3263,7 @@ module Harness {
 >!this.isSubtypeOf(others[i]) : boolean
 >this.isSubtypeOf(others[i]) : boolean
 >this.isSubtypeOf : (other: Type) => boolean
->this : this
+>this : Type
 >isSubtypeOf : (other: Type) => boolean
 >others[i] : any
 >others : any
@@ -3277,7 +3277,7 @@ module Harness {
 >"Expected " + this.type : string
 >"Expected " : "Expected "
 >this.type : any
->this : this
+>this : Type
 >type : any
 >" to be a subtype of " : " to be a subtype of "
 >others[i].type : any
@@ -3298,7 +3298,7 @@ module Harness {
 >others : any
 >this.normalizeToArray(others) : any[]
 >this.normalizeToArray : (arg: any) => any[]
->this : this
+>this : Type
 >normalizeToArray : (arg: any) => any[]
 >others : any
 
@@ -3316,7 +3316,7 @@ module Harness {
                     if (this.isSubtypeOf(others[i])) {
 >this.isSubtypeOf(others[i]) : boolean
 >this.isSubtypeOf : (other: Type) => boolean
->this : this
+>this : Type
 >isSubtypeOf : (other: Type) => boolean
 >others[i] : any
 >others : any
@@ -3330,7 +3330,7 @@ module Harness {
 >"Expected " + this.type : string
 >"Expected " : "Expected "
 >this.type : any
->this : this
+>this : Type
 >type : any
 >" to be a subtype of " : " to be a subtype of "
 >others[i].type : any
@@ -3369,7 +3369,7 @@ module Harness {
 >'    ' + this.code : string
 >'    ' : "    "
 >this.code : any
->this : this
+>this : Type
 >code : any
 >';\n' : ";\n"
 
@@ -3380,7 +3380,7 @@ module Harness {
 >'    export var __val__ = ' + this.identifier : string
 >'    export var __val__ = ' : "    export var __val__ = "
 >this.identifier : any
->this : this
+>this : Type
 >identifier : any
 >';\n' : ";\n"
 
@@ -3439,7 +3439,7 @@ module Harness {
                 return this.compilesOk(testCode);
 >this.compilesOk(testCode) : boolean
 >this.compilesOk : (testCode: any) => boolean
->this : this
+>this : Type
 >compilesOk : (testCode: any) => boolean
 >testCode : string
             }
@@ -3453,7 +3453,7 @@ module Harness {
 >others : any
 >this.normalizeToArray(others) : any[]
 >this.normalizeToArray : (arg: any) => any[]
->this : this
+>this : Type
 >normalizeToArray : (arg: any) => any[]
 >others : any
 
@@ -3478,7 +3478,7 @@ module Harness {
 >!this.isAssignmentCompatibleWith(other) : boolean
 >this.isAssignmentCompatibleWith(other) : boolean
 >this.isAssignmentCompatibleWith : (other: Type) => boolean
->this : this
+>this : Type
 >isAssignmentCompatibleWith : (other: Type) => boolean
 >other : any
 
@@ -3490,7 +3490,7 @@ module Harness {
 >"Expected " + this.type : string
 >"Expected " : "Expected "
 >this.type : any
->this : this
+>this : Type
 >type : any
 >" to be assignment compatible with " : " to be assignment compatible with "
 >other.type : any
@@ -3509,7 +3509,7 @@ module Harness {
 >others : any
 >this.normalizeToArray(others) : any[]
 >this.normalizeToArray : (arg: any) => any[]
->this : this
+>this : Type
 >normalizeToArray : (arg: any) => any[]
 >others : any
 
@@ -3533,7 +3533,7 @@ module Harness {
                     if (this.isAssignmentCompatibleWith(other)) {
 >this.isAssignmentCompatibleWith(other) : boolean
 >this.isAssignmentCompatibleWith : (other: Type) => boolean
->this : this
+>this : Type
 >isAssignmentCompatibleWith : (other: Type) => boolean
 >other : any
 
@@ -3545,7 +3545,7 @@ module Harness {
 >"Expected " + this.type : string
 >"Expected " : "Expected "
 >this.type : any
->this : this
+>this : Type
 >type : any
 >" to not be assignment compatible with " : " to not be assignment compatible with "
 >other.type : any
@@ -3572,7 +3572,7 @@ module Harness {
                     this.assertAssignmentCompatibleWith(these);
 >this.assertAssignmentCompatibleWith(these) : void
 >this.assertAssignmentCompatibleWith : (others: any) => void
->this : this
+>this : Type
 >assertAssignmentCompatibleWith : (others: any) => void
 >these : any[]
 
@@ -3589,7 +3589,7 @@ module Harness {
                     this.assertNotAssignmentCompatibleWith(notThese);
 >this.assertNotAssignmentCompatibleWith(notThese) : void
 >this.assertNotAssignmentCompatibleWith : (others: any) => void
->this : this
+>this : Type
 >assertNotAssignmentCompatibleWith : (others: any) => void
 >notThese : any[]
 
@@ -3617,11 +3617,11 @@ module Harness {
                 this.any = this.get('var x : any', 'x');
 >this.any = this.get('var x : any', 'x') : Type
 >this.any : Type
->this : this
+>this : TypeFactory
 >any : Type
 >this.get('var x : any', 'x') : Type
 >this.get : (code: string, target: any) => Type
->this : this
+>this : TypeFactory
 >get : (code: string, target: any) => Type
 >'var x : any' : "var x : any"
 >'x' : "x"
@@ -3629,11 +3629,11 @@ module Harness {
                 this.number = this.get('var x : number', 'x');
 >this.number = this.get('var x : number', 'x') : Type
 >this.number : Type
->this : this
+>this : TypeFactory
 >number : Type
 >this.get('var x : number', 'x') : Type
 >this.get : (code: string, target: any) => Type
->this : this
+>this : TypeFactory
 >get : (code: string, target: any) => Type
 >'var x : number' : "var x : number"
 >'x' : "x"
@@ -3641,11 +3641,11 @@ module Harness {
                 this.string = this.get('var x : string', 'x');
 >this.string = this.get('var x : string', 'x') : Type
 >this.string : Type
->this : this
+>this : TypeFactory
 >string : Type
 >this.get('var x : string', 'x') : Type
 >this.get : (code: string, target: any) => Type
->this : this
+>this : TypeFactory
 >get : (code: string, target: any) => Type
 >'var x : string' : "var x : string"
 >'x' : "x"
@@ -3653,11 +3653,11 @@ module Harness {
                 this.boolean = this.get('var x : boolean', 'x');
 >this.boolean = this.get('var x : boolean', 'x') : Type
 >this.boolean : Type
->this : this
+>this : TypeFactory
 >boolean : Type
 >this.get('var x : boolean', 'x') : Type
 >this.get : (code: string, target: any) => Type
->this : this
+>this : TypeFactory
 >get : (code: string, target: any) => Type
 >'var x : boolean' : "var x : boolean"
 >'x' : "x"
@@ -3912,7 +3912,7 @@ module Harness {
 >name : string
 >this.getTypeInfoName(tyInfo.ast) : string
 >this.getTypeInfoName : (ast: TypeScript.AST) => string
->this : this
+>this : TypeFactory
 >getTypeInfoName : (ast: TypeScript.AST) => string
 >tyInfo.ast : any
 >tyInfo : any
@@ -3996,7 +3996,7 @@ module Harness {
 >name : string
 >this.getTypeInfoName(tyInfo.ast) : string
 >this.getTypeInfoName : (ast: TypeScript.AST) => string
->this : this
+>this : TypeFactory
 >getTypeInfoName : (ast: TypeScript.AST) => string
 >tyInfo.ast : any
 >tyInfo : any
@@ -4429,7 +4429,7 @@ module Harness {
 >actualType : Type
 >this.get('var _v_a_r_ = ' + expr, '_v_a_r_') : Type
 >this.get : (code: string, target: any) => Type
->this : this
+>this : TypeFactory
 >get : (code: string, target: any) => Type
 >'var _v_a_r_ = ' + expr : string
 >'var _v_a_r_ = ' : "var _v_a_r_ = "
@@ -4787,7 +4787,7 @@ module Harness {
                 this.code = lines.join("\n")
 >this.code = lines.join("\n") : string
 >this.code : string
->this : this
+>this : CompilerResult
 >code : string
 >lines.join("\n") : string
 >lines.join : (separator?: string) => string
@@ -4798,7 +4798,7 @@ module Harness {
                 this.errors = [];
 >this.errors = [] : undefined[]
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >[] : undefined[]
 
@@ -4829,7 +4829,7 @@ module Harness {
 >this.errors.push(new CompilerError(err.filename, 0, 0, err.message)) : number
 >this.errors.push : (...items: CompilerError[]) => number
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >push : (...items: CompilerError[]) => number
 >new CompilerError(err.filename, 0, 0, err.message) : CompilerError
@@ -4861,7 +4861,7 @@ module Harness {
 >this.errors.push(new CompilerError(match[1], parseFloat(match[2]), parseFloat(match[3]), match[4])) : number
 >this.errors.push : (...items: CompilerError[]) => number
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >push : (...items: CompilerError[]) => number
 >new CompilerError(match[1], parseFloat(match[2]), parseFloat(match[3]), match[4]) : CompilerError
@@ -4912,7 +4912,7 @@ module Harness {
 >i : number
 >this.errors.length : number
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >length : number
 >i++ : number
@@ -4925,7 +4925,7 @@ module Harness {
 >this.errors[i].line : number
 >this.errors[i] : CompilerError
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >i : number
 >line : number
@@ -4934,7 +4934,7 @@ module Harness {
 >this.errors[i].column : number
 >this.errors[i] : CompilerError
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >i : number
 >column : number
@@ -4943,7 +4943,7 @@ module Harness {
 >this.errors[i].message : string
 >this.errors[i] : CompilerError
 >this.errors : CompilerError[]
->this : this
+>this : CompilerResult
 >errors : CompilerError[]
 >i : number
 >message : string
@@ -4985,19 +4985,19 @@ module Harness {
 >this.file + "(" + this.line : string
 >this.file + "(" : string
 >this.file : string
->this : this
+>this : CompilerError
 >file : string
 >"(" : "("
 >this.line : number
->this : this
+>this : CompilerError
 >line : number
 >"," : ","
 >this.column : number
->this : this
+>this : CompilerError
 >column : number
 >"): " : "): "
 >this.message : string
->this : this
+>this : CompilerError
 >message : string
             }
         }
@@ -6252,7 +6252,7 @@ module Harness {
             this.version = 1;
 >this.version = 1 : 1
 >this.version : number
->this : this
+>this : ScriptInfo
 >version : number
 >1 : 1
         }
@@ -6265,28 +6265,28 @@ module Harness {
             this.editRanges = [];
 >this.editRanges = [] : undefined[]
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >[] : undefined[]
 
             this.content = content;
 >this.content = content : string
 >this.content : string
->this : this
+>this : ScriptInfo
 >content : string
 >content : string
 
             this.isResident = isResident;
 >this.isResident = isResident : boolean
 >this.isResident : boolean
->this : this
+>this : ScriptInfo
 >isResident : boolean
 >isResident : boolean
 
             this.version++;
 >this.version++ : number
 >this.version : number
->this : this
+>this : ScriptInfo
 >version : number
         }
 
@@ -6302,7 +6302,7 @@ module Harness {
 >this.content.substring(0, minChar) : string
 >this.content.substring : (start: number, end?: number) => string
 >this.content : string
->this : this
+>this : ScriptInfo
 >content : string
 >substring : (start: number, end?: number) => string
 >0 : 0
@@ -6317,7 +6317,7 @@ module Harness {
 >this.content.substring(limChar) : string
 >this.content.substring : (start: number, end?: number) => string
 >this.content : string
->this : this
+>this : ScriptInfo
 >content : string
 >substring : (start: number, end?: number) => string
 >limChar : number
@@ -6325,7 +6325,7 @@ module Harness {
             this.content = prefix + middle + suffix;
 >this.content = prefix + middle + suffix : string
 >this.content : string
->this : this
+>this : ScriptInfo
 >content : string
 >prefix + middle + suffix : string
 >prefix + middle : string
@@ -6338,7 +6338,7 @@ module Harness {
 >this.editRanges.push({                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            }) : number
 >this.editRanges.push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
 >{                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            } : { length: number; editRange: any; }
@@ -6347,7 +6347,7 @@ module Harness {
 >length : number
 >this.content.length : number
 >this.content : string
->this : this
+>this : ScriptInfo
 >content : string
 >length : number
 
@@ -6374,28 +6374,28 @@ module Harness {
 >this.editRanges.length > this.maxScriptVersions : boolean
 >this.editRanges.length : number
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 >this.maxScriptVersions : number
->this : this
+>this : ScriptInfo
 >maxScriptVersions : number
 
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
 >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
 >0 : 0
 >this.maxScriptVersions - this.editRanges.length : number
 >this.maxScriptVersions : number
->this : this
+>this : ScriptInfo
 >maxScriptVersions : number
 >this.editRanges.length : number
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
             }
@@ -6404,7 +6404,7 @@ module Harness {
             this.version++;
 >this.version++ : number
 >this.version : number
->this : this
+>this : ScriptInfo
 >version : number
         }
 
@@ -6416,7 +6416,7 @@ module Harness {
             if (this.version == version) {
 >this.version == version : boolean
 >this.version : number
->this : this
+>this : ScriptInfo
 >version : number
 >version : number
 
@@ -6430,13 +6430,13 @@ module Harness {
 >this.editRanges.length - (this.version - version) : number
 >this.editRanges.length : number
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 >(this.version - version) : number
 >this.version - version : number
 >this.version : number
->this : this
+>this : ScriptInfo
 >version : number
 >version : number
 
@@ -6449,7 +6449,7 @@ module Harness {
 >initialEditRangeIndex : number
 >this.editRanges.length : number
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >length : number
 
@@ -6468,7 +6468,7 @@ module Harness {
 >this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->this : this
+>this : ScriptInfo
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >initialEditRangeIndex : number
@@ -6592,7 +6592,7 @@ module Harness {
             this.addScript("lib.d.ts", Harness.Compiler.libText, true);
 >this.addScript("lib.d.ts", Harness.Compiler.libText, true) : void
 >this.addScript : (name: string, content: string, isResident?: boolean) => void
->this : this
+>this : TypeScriptLS
 >addScript : (name: string, content: string, isResident?: boolean) => void
 >"lib.d.ts" : "lib.d.ts"
 >Harness.Compiler.libText : any
@@ -6618,7 +6618,7 @@ module Harness {
             this.addScript(name, code, isResident);
 >this.addScript(name, code, isResident) : void
 >this.addScript : (name: string, content: string, isResident?: boolean) => void
->this : this
+>this : TypeScriptLS
 >addScript : (name: string, content: string, isResident?: boolean) => void
 >name : string
 >code : string
@@ -6640,14 +6640,14 @@ module Harness {
 >content : string
 >isResident : boolean
 >this.maxScriptVersions : number
->this : this
+>this : TypeScriptLS
 >maxScriptVersions : number
 
             this.scripts.push(script);
 >this.scripts.push(script) : number
 >this.scripts.push : (...items: ScriptInfo[]) => number
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >push : (...items: ScriptInfo[]) => number
 >script : ScriptInfo
@@ -6667,7 +6667,7 @@ module Harness {
 >i : number
 >this.scripts.length : number
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >length : number
 >i++ : number
@@ -6678,7 +6678,7 @@ module Harness {
 >this.scripts[i].name : string
 >this.scripts[i] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >i : number
 >name : string
@@ -6689,7 +6689,7 @@ module Harness {
 >this.scripts[i].updateContent : (content: string, isResident: boolean) => void
 >this.scripts[i] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >i : number
 >updateContent : (content: string, isResident: boolean) => void
@@ -6703,7 +6703,7 @@ module Harness {
             this.addScript(name, content, isResident);
 >this.addScript(name, content, isResident) : void
 >this.addScript : (name: string, content: string, isResident?: boolean) => void
->this : this
+>this : TypeScriptLS
 >addScript : (name: string, content: string, isResident?: boolean) => void
 >name : string
 >content : string
@@ -6724,7 +6724,7 @@ module Harness {
 >i : number
 >this.scripts.length : number
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >length : number
 >i++ : number
@@ -6735,7 +6735,7 @@ module Harness {
 >this.scripts[i].name : string
 >this.scripts[i] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >i : number
 >name : string
@@ -6746,7 +6746,7 @@ module Harness {
 >this.scripts[i].editContent : (minChar: number, limChar: number, newText: string) => void
 >this.scripts[i] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >i : number
 >editContent : (minChar: number, limChar: number, newText: string) => void
@@ -6776,7 +6776,7 @@ module Harness {
 >this.scripts[scriptIndex].content : string
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >content : string
@@ -6830,7 +6830,7 @@ module Harness {
             return this.scripts.length;
 >this.scripts.length : number
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >length : number
         }
@@ -6847,7 +6847,7 @@ module Harness {
 >this.scripts[scriptIndex].content : string
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >content : string
@@ -6865,7 +6865,7 @@ module Harness {
 >this.scripts[scriptIndex].content : string
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >content : string
@@ -6880,7 +6880,7 @@ module Harness {
 >this.scripts[scriptIndex].name : string
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >name : string
@@ -6894,7 +6894,7 @@ module Harness {
 >this.scripts[scriptIndex].isResident : boolean
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >isResident : boolean
@@ -6908,7 +6908,7 @@ module Harness {
 >this.scripts[scriptIndex].version : number
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >version : number
@@ -6925,7 +6925,7 @@ module Harness {
 >this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 >this.scripts[scriptIndex] : ScriptInfo
 >this.scripts : ScriptInfo[]
->this : this
+>this : TypeScriptLS
 >scripts : ScriptInfo[]
 >scriptIndex : number
 >getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
@@ -6970,7 +6970,7 @@ module Harness {
 >Services : any
 >TypeScriptServicesFactory : any
 >createLanguageServiceShim : any
->this : this
+>this : TypeScriptLS
 
             ls.refresh(true);
 >ls.refresh(true) : any
@@ -6982,7 +6982,7 @@ module Harness {
             this.ls = ls;
 >this.ls = ls : any
 >this.ls : Services.ILanguageServiceShim
->this : this
+>this : TypeScriptLS
 >ls : Services.ILanguageServiceShim
 >ls : any
 
@@ -7057,7 +7057,7 @@ module Harness {
             return this.parseSourceText(fileName, sourceText);
 >this.parseSourceText(fileName, sourceText) : TypeScript.Script
 >this.parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->this : this
+>this : TypeScriptLS
 >parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
 >fileName : string
 >sourceText : any
@@ -7079,7 +7079,7 @@ module Harness {
 >this.ls.languageService.getScriptAST : any
 >this.ls.languageService : any
 >this.ls : Services.ILanguageServiceShim
->this : this
+>this : TypeScriptLS
 >ls : Services.ILanguageServiceShim
 >languageService : any
 >getScriptAST : any
@@ -7155,7 +7155,7 @@ module Harness {
 >this.ls.languageService.getScriptAST : any
 >this.ls.languageService : any
 >this.ls : Services.ILanguageServiceShim
->this : this
+>this : TypeScriptLS
 >ls : Services.ILanguageServiceShim
 >languageService : any
 >getScriptAST : any
@@ -7221,7 +7221,7 @@ module Harness {
 >formattedScript : string
 >this.applyEdits(script, edits) : string
 >this.applyEdits : (content: string, edits: Services.TextEdit[]) => string
->this : this
+>this : TypeScriptLS
 >applyEdits : (content: string, edits: Services.TextEdit[]) => string
 >script : any
 >edits : Services.TextEdit[]
@@ -7266,7 +7266,7 @@ module Harness {
 >edits : Services.TextEdit[]
 >this.normalizeEdits(edits) : Services.TextEdit[]
 >this.normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
->this : this
+>this : TypeScriptLS
 >normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
 >edits : Services.TextEdit[]
 

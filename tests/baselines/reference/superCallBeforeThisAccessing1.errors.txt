@@ -1,0 +1,22 @@
+tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing1.ts(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+
+
+==== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing1.ts (1 errors) ====
+    declare var Factory: any
+    
+    class Base {
+        constructor(c) { }
+    }
+    class D extends Base {
+        private _t;
+        constructor() {
+            super(i);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+            var s = {
+                t: this._t
+            }
+            var i = Factory.create(s);
+        }
+    }
+    

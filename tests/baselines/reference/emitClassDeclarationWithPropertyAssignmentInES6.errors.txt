@@ -1,0 +1,30 @@
+tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts(21,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'D'.
+
+
+==== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts (1 errors) ====
+    class C {
+        x: string = "Hello world";
+    }
+    
+    class D {
+        x: string = "Hello world";
+        y: number;
+        constructor() {
+            this.y = 10;
+        }
+    }
+    
+    class E extends D{
+        z: boolean = true;
+    }
+    
+    class F extends D{
+        z: boolean = true;
+        j: string;
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'D'.
+            this.j = "HI";
+        }
+    }

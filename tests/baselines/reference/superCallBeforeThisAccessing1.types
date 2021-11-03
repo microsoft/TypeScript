@@ -28,7 +28,7 @@ class D extends Base {
             t: this._t
 >t : any
 >this._t : any
->this : this
+>this : D
 >_t : any
         }
         var i = Factory.create(s);

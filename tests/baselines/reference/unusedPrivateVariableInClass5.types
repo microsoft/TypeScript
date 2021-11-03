@@ -14,7 +14,7 @@ class greeter {
     constructor() {
         this.x;
 >this.x : string
->this : this
+>this : greeter
 >x : string
     }
 }

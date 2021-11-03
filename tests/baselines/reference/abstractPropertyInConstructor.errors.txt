@@ -3,7 +3,9 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(7,18): error TS2715: Abstr
 tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstract property 'cb' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2729: Property 'prop' is used before its initialization.
+tests/cases/compiler/abstractPropertyInConstructor.ts(37,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AbstractClass'.
 tests/cases/compiler/abstractPropertyInConstructor.ts(39,22): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(54,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'DerivedAbstractClass'.
 tests/cases/compiler/abstractPropertyInConstructor.ts(78,15): error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(78,18): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(79,12): error TS2715: Abstract property 'x' in class 'C1' cannot be accessed in the constructor.
@@ -11,7 +13,7 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(79,15): error TS2715: Abst
 tests/cases/compiler/abstractPropertyInConstructor.ts(79,22): error TS2715: Abstract property 'y' in class 'C1' cannot be accessed in the constructor.
 
 
-==== tests/cases/compiler/abstractPropertyInConstructor.ts (11 errors) ====
+==== tests/cases/compiler/abstractPropertyInConstructor.ts (13 errors) ====
     abstract class AbstractClass {
         constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
@@ -60,6 +62,8 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(79,22): error TS2715: Abst
     
         constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
             super(str, other);
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AbstractClass'.
             // there is no implementation of 'prop' in any base class
             this.cb(this.prop.toLowerCase());
                          ~~~~
@@ -79,6 +83,8 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(79,22): error TS2715: Abst
     
         constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
             super(str, other, yetAnother);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'DerivedAbstractClass'.
             this.cb(this.prop);
         }
     

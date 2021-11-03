@@ -10,7 +10,7 @@ class B {
     constructor() {
         this.y: any;
 >this.y : any
->this : this
+>this : B
 >y : any
 >any : any
     }
@@ -23,7 +23,7 @@ class C extends B implements I {
     constructor() {
         this.x: any;
 >this.x : any
->this : this
+>this : C
 >x : any
 >any : any
     }

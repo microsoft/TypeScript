@@ -16,7 +16,7 @@ class D extends Base {
         super(this); 
 >super(this) : void
 >super : typeof Base
->this : this
+>this : D
     }
 }
 

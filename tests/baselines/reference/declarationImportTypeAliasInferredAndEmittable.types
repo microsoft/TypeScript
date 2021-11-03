@@ -34,7 +34,7 @@ export class Wrap {
         this.connItem = c.item;
 >this.connItem = c.item : number
 >this.connItem : number
->this : this
+>this : Wrap
 >connItem : number
 >c.item : number
 >c : import("tests/cases/compiler/foo")

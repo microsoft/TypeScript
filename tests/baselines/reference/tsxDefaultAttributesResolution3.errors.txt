@@ -1,7 +1,21 @@
+tests/cases/conformance/jsx/file.tsx(7,5): error TS2416: Property 'render' in type 'Poisoned' is not assignable to the same property in base type 'Component<Prop, {}>'.
+  Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'Poisoned'.
+        Types of property 'render' are incompatible.
+          Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+            The 'this' types of each signature are incompatible.
+              Type 'Poisoned' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: {}, props: Prop) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'prevState' and 'prevState' are incompatible.
+                        Type '{}' is not assignable to type 'S'.
+                          'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
 tests/cases/conformance/jsx/file.tsx(13,19): error TS2322: Type 'true' is not assignable to type 'false'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     import React = require('react');
     
     interface Prop {
@@ -9,6 +23,21 @@ tests/cases/conformance/jsx/file.tsx(13,19): error TS2322: Type 'true' is not as
     }
     class Poisoned extends React.Component<Prop, {}> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'Poisoned' is not assignable to the same property in base type 'Component<Prop, {}>'.
+!!! error TS2416:   Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'Poisoned'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => JSX.Element' is not assignable to type '() => JSX.Element'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'Poisoned' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: {}, props: Prop) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'prevState' and 'prevState' are incompatible.
+!!! error TS2416:                         Type '{}' is not assignable to type 'S'.
+!!! error TS2416:                           'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
             return <div>Hello</div>;
         }
     }

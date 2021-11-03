@@ -18,17 +18,17 @@ class Point {
 >this.x*this.x + this.y*this.y : number
 >this.x*this.x : number
 >this.x : number
->this : this
+>this : Point
 >x : number
 >this.x : number
->this : this
+>this : Point
 >x : number
 >this.y*this.y : number
 >this.y : number
->this : this
+>this : Point
 >y : number
 >this.y : number
->this : this
+>this : Point
 >y : number
     }
     static origin = new Point(0,0);
@@ -68,24 +68,24 @@ class Point3D extends Point {
 >this.x*this.x + this.y*this.y : number
 >this.x*this.x : number
 >this.x : number
->this : this
+>this : Point3D
 >x : number
 >this.x : number
->this : this
+>this : Point3D
 >x : number
 >this.y*this.y : number
 >this.y : number
->this : this
+>this : Point3D
 >y : number
 >this.y : number
->this : this
+>this : Point3D
 >y : number
 >this.z*this.m : number
 >this.z : number
->this : this
+>this : Point3D
 >z : number
 >this.m : any
->this : this
+>this : Point3D
 >m : any
     }        
 }

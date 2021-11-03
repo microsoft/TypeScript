@@ -17,7 +17,7 @@ class Vec2_T<A>
 >f(this.x) : B
 >f : (a: A) => B
 >this.x : A
->this : this
+>this : Vec2_T<A>
 >x : A
 
         var y:B = f(this.y);
@@ -25,7 +25,7 @@ class Vec2_T<A>
 >f(this.y) : B
 >f : (a: A) => B
 >this.y : A
->this : this
+>this : Vec2_T<A>
 >y : A
 
         var retval: Vec2_T<B> = new Vec2_T(x, y);
@@ -50,7 +50,7 @@ class Vec2_T<A>
 >f : Vec2_T<(a: A) => B>
 >x : (a: A) => B
 >this.x : A
->this : this
+>this : Vec2_T<A>
 >x : A
 
         var y:B = f.y(this.y);
@@ -60,7 +60,7 @@ class Vec2_T<A>
 >f : Vec2_T<(a: A) => B>
 >y : (a: A) => B
 >this.y : A
->this : this
+>this : Vec2_T<A>
 >y : A
 
         var retval: Vec2_T<B> = new Vec2_T(x, y);

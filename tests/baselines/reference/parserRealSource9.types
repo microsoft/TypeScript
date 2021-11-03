@@ -56,7 +56,7 @@ module TypeScript {
 >this.checker.resolvingBases = true : true
 >this.checker.resolvingBases : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >resolvingBases : any
 >true : true
@@ -65,7 +65,7 @@ module TypeScript {
 >this.checker.resolveTypeLink(scope, typeLink, true) : any
 >this.checker.resolveTypeLink : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >resolveTypeLink : any
 >scope : SymbolScope
@@ -76,7 +76,7 @@ module TypeScript {
 >this.checker.resolvingBases = false : false
 >this.checker.resolvingBases : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >resolvingBases : any
 >false : false
@@ -128,7 +128,7 @@ module TypeScript {
 >extendsList : any
 >this.resolveBaseTypeLinks(type.extendsTypeLinks, scope) : Type[]
 >this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->this : this
+>this : Binder
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
 >type.extendsTypeLinks : any
 >type : Type
@@ -179,7 +179,7 @@ module TypeScript {
 >i : number
 >this.checker.anyType : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >anyType : any
 
@@ -195,7 +195,7 @@ module TypeScript {
 >this.checker.errorReporter.simpleErrorFromSym : any
 >this.checker.errorReporter : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >errorReporter : any
 >simpleErrorFromSym : any
@@ -229,7 +229,7 @@ module TypeScript {
 >this.checker.errorReporter.simpleErrorFromSym : any
 >this.checker.errorReporter : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >errorReporter : any
 >simpleErrorFromSym : any
@@ -264,7 +264,7 @@ module TypeScript {
 >implementsList : any
 >this.resolveBaseTypeLinks(type.implementsTypeLinks, scope) : Type[]
 >this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->this : this
+>this : Binder
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
 >type.implementsTypeLinks : any
 >type : Type
@@ -316,7 +316,7 @@ module TypeScript {
 >this.checker.errorReporter.simpleErrorFromSym : any
 >this.checker.errorReporter : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >errorReporter : any
 >simpleErrorFromSym : any
@@ -395,7 +395,7 @@ module TypeScript {
 >this.checker.resolveTypeLink(scope, signature.returnType, supplyVar) : any
 >this.checker.resolveTypeLink : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >resolveTypeLink : any
 >scope : SymbolScope
@@ -424,7 +424,7 @@ module TypeScript {
                     this.bindSymbol(scope, signature.parameters[j]);
 >this.bindSymbol(scope, signature.parameters[j]) : void
 >this.bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->this : this
+>this : Binder
 >bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
 >scope : SymbolScope
 >signature.parameters[j] : any
@@ -474,7 +474,7 @@ module TypeScript {
 >this.checker.errorReporter.simpleErrorFromSym : any
 >this.checker.errorReporter : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >errorReporter : any
 >simpleErrorFromSym : any
@@ -495,7 +495,7 @@ module TypeScript {
 >this.checker.makeArrayType(lastParam.parameter.typeLink.type) : any
 >this.checker.makeArrayType : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >makeArrayType : any
 >lastParam.parameter.typeLink.type : any
@@ -522,7 +522,7 @@ module TypeScript {
                 this.bindType(scope, instanceType, null);
 >this.bindType(scope, instanceType, null) : void
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->this : this
+>this : Binder
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
 >scope : SymbolScope
 >instanceType : Type
@@ -584,7 +584,7 @@ module TypeScript {
 >prevCurrentModDecl : any
 >this.checker.currentModDecl : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >currentModDecl : any
 
@@ -592,7 +592,7 @@ module TypeScript {
 >prevBindStatus : any
 >this.checker.inBind : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >inBind : any
 
@@ -620,7 +620,7 @@ module TypeScript {
 >this.checker.currentModDecl = <ModuleDeclaration>type.symbol.declAST : ModuleDeclaration
 >this.checker.currentModDecl : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >currentModDecl : any
 ><ModuleDeclaration>type.symbol.declAST : ModuleDeclaration
@@ -634,7 +634,7 @@ module TypeScript {
 >this.checker.inBind = true : true
 >this.checker.inBind : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >inBind : any
 >true : true
@@ -645,7 +645,7 @@ module TypeScript {
                     this.bind(agg, type.members.allMembers); // REVIEW: Should only be getting exported types?
 >this.bind(agg, type.members.allMembers) : void
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->this : this
+>this : Binder
 >bind : (scope: SymbolScope, table: IHashTable) => void
 >agg : any
 >type.members.allMembers : any
@@ -660,7 +660,7 @@ module TypeScript {
                     this.bind(agg, typeMembers.allMembers);
 >this.bind(agg, typeMembers.allMembers) : void
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->this : this
+>this : Binder
 >bind : (scope: SymbolScope, table: IHashTable) => void
 >agg : any
 >typeMembers.allMembers : any
@@ -673,7 +673,7 @@ module TypeScript {
                     this.bind(agg, ambientMembers.allMembers);
 >this.bind(agg, ambientMembers.allMembers) : void
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->this : this
+>this : Binder
 >bind : (scope: SymbolScope, table: IHashTable) => void
 >agg : any
 >ambientMembers.allMembers : any
@@ -686,7 +686,7 @@ module TypeScript {
                     this.bind(agg, ambientTypeMembers.allMembers);
 >this.bind(agg, ambientTypeMembers.allMembers) : void
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->this : this
+>this : Binder
 >bind : (scope: SymbolScope, table: IHashTable) => void
 >agg : any
 >ambientTypeMembers.allMembers : any
@@ -697,7 +697,7 @@ module TypeScript {
 >this.checker.currentModDecl = prevCurrentModDecl : any
 >this.checker.currentModDecl : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >currentModDecl : any
 >prevCurrentModDecl : any
@@ -706,7 +706,7 @@ module TypeScript {
 >this.checker.inBind = prevBindStatus : any
 >this.checker.inBind : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >inBind : any
 >prevBindStatus : any
@@ -719,7 +719,7 @@ module TypeScript {
                 this.resolveBases(scope, type);
 >this.resolveBases(scope, type) : void
 >this.resolveBases : (scope: SymbolScope, type: Type) => void
->this : this
+>this : Binder
 >resolveBases : (scope: SymbolScope, type: Type) => void
 >scope : SymbolScope
 >type : Type
@@ -732,7 +732,7 @@ module TypeScript {
                 this.resolveSignatureGroup(type.construct, scope, instanceType);
 >this.resolveSignatureGroup(type.construct, scope, instanceType) : void
 >this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->this : this
+>this : Binder
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
 >type.construct : any
 >type : Type
@@ -748,7 +748,7 @@ module TypeScript {
                 this.resolveSignatureGroup(type.call, scope, null);
 >this.resolveSignatureGroup(type.call, scope, null) : void
 >this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->this : this
+>this : Binder
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
 >type.call : any
 >type : Type
@@ -764,7 +764,7 @@ module TypeScript {
                 this.resolveSignatureGroup(type.index, scope, null);
 >this.resolveSignatureGroup(type.index, scope, null) : void
 >this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->this : this
+>this : Binder
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
 >type.index : any
 >type : Type
@@ -780,7 +780,7 @@ module TypeScript {
                 this.bindType(scope, type.elementType, null);
 >this.bindType(scope, type.elementType, null) : void
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->this : this
+>this : Binder
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
 >scope : SymbolScope
 >type.elementType : any
@@ -805,7 +805,7 @@ module TypeScript {
 >prevLocationInfo : any
 >this.checker.locationInfo : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >locationInfo : any
 
@@ -815,7 +815,7 @@ module TypeScript {
 >(this.checker.units) : any
 >this.checker.units : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >units : any
 >(symbol.unitIndex >= 0) : boolean
@@ -832,7 +832,7 @@ module TypeScript {
 >this.checker.units.length : any
 >this.checker.units : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >units : any
 >length : any
@@ -841,13 +841,13 @@ module TypeScript {
 >this.checker.locationInfo = this.checker.units[symbol.unitIndex] : any
 >this.checker.locationInfo : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >locationInfo : any
 >this.checker.units[symbol.unitIndex] : any
 >this.checker.units : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >units : any
 >symbol.unitIndex : any
@@ -935,14 +935,14 @@ module TypeScript {
 >this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true)) : any
 >this.checker.findSymbolForDynamicModule : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >findSymbolForDynamicModule : any
 >modPath : any
 >this.checker.locationInfo.filename : any
 >this.checker.locationInfo : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >locationInfo : any
 >filename : any
@@ -982,14 +982,14 @@ module TypeScript {
 >type : any
 >this.checker.gloModType : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >gloModType : any
 
                             this.bindType(scope, typeSymbol.type, typeSymbol.instanceType);
 >this.bindType(scope, typeSymbol.type, typeSymbol.instanceType) : void
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->this : this
+>this : Binder
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
 >scope : SymbolScope
 >typeSymbol.type : any
@@ -1024,7 +1024,7 @@ module TypeScript {
                                     this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType);
 >this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType) : void
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->this : this
+>this : Binder
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
 >scope : SymbolScope
 >typeSymbol.expansions[i] : any
@@ -1048,7 +1048,7 @@ module TypeScript {
 >this.checker.resolveTypeLink(scope, (<FieldSymbol>symbol).field.typeLink,                                                false) : any
 >this.checker.resolveTypeLink : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >resolveTypeLink : any
 >scope : SymbolScope
@@ -1073,7 +1073,7 @@ module TypeScript {
 >this.checker.resolveTypeLink(scope,                                                (<ParameterSymbol>symbol).parameter.typeLink,                                                true) : any
 >this.checker.resolveTypeLink : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >resolveTypeLink : any
 >scope : SymbolScope
@@ -1096,7 +1096,7 @@ module TypeScript {
 >this.checker.locationInfo = prevLocationInfo : any
 >this.checker.locationInfo : any
 >this.checker : TypeChecker
->this : this
+>this : Binder
 >checker : TypeChecker
 >locationInfo : any
 >prevLocationInfo : any
@@ -1136,7 +1136,7 @@ module TypeScript {
 
                 },
                 this);
->this : this
+>this : Binder
         }
     }
 

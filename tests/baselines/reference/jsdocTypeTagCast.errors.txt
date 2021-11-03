@@ -1,4 +1,5 @@
 tests/cases/conformance/jsdoc/b.js(4,20): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(22,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'SomeBase'.
 tests/cases/conformance/jsdoc/b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
 tests/cases/conformance/jsdoc/b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -21,7 +22,7 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
 ==== tests/cases/conformance/jsdoc/a.ts (0 errors) ====
     var W: string;
     
-==== tests/cases/conformance/jsdoc/b.js (10 errors) ====
+==== tests/cases/conformance/jsdoc/b.js (11 errors) ====
     // @ts-check
     var W = /** @type {string} */(/** @type {*} */ (4));
     
@@ -46,6 +47,8 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     class SomeDerived extends SomeBase {
         constructor() {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'SomeBase'.
             this.x = 42;
         }
     }

@@ -8,7 +8,7 @@ class List {
     this.Foo();
 >this.Foo() : any
 >this.Foo : any
->this : this
+>this : List
 >Foo : any
   }
   public static Foo() {}

@@ -17,7 +17,7 @@ class Foo extends Base {
         super(this); // error: "super" has to be called before "this" accessing
 >super(this) : void
 >super : typeof Base
->this : this
+>this : Foo
     }
 }
 
@@ -34,7 +34,7 @@ class Foo2 extends Base {
         super(this); // error
 >super(this) : void
 >super : typeof Base
->this : this
+>this : Foo2
     }
 }
 

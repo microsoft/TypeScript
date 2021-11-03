@@ -11,7 +11,7 @@ class Foo {
         this.#name = name;
 >this.#name = name : any
 >this.#name : any
->this : this
+>this : Foo
 >name : any
     }
 
@@ -20,8 +20,8 @@ class Foo {
 >x : any
 
         const obj = this;
->obj : this
->this : this
+>obj : Foo
+>this : Foo
 
         class Bar {
 >Bar : Bar
@@ -33,13 +33,13 @@ class Foo {
             [obj.#name]() {
 >[obj.#name] : () => any
 >obj.#name : any
->obj : this
+>obj : Foo
 
                 return x + this.#y;
 >x + this.#y : any
 >x : any
 >this.#y : number
->this : this
+>this : Bar
             }
         }
 
@@ -49,7 +49,7 @@ class Foo {
 >new Bar() : Bar
 >Bar : typeof Bar
 >obj.#name : any
->obj : this
+>obj : Foo
     }
 }
 

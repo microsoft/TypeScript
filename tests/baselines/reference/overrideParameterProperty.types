@@ -19,7 +19,7 @@ class C1 extends Base {
 
     this.p1;
 >this.p1 : "hello"
->this : this
+>this : C1
 >p1 : "hello"
   }
 }
@@ -37,7 +37,7 @@ class C2 extends Base {
 
     this.p1;
 >this.p1 : "hello"
->this : this
+>this : C2
 >p1 : "hello"
   }
 }
@@ -55,7 +55,7 @@ class C3 extends Base {
 
     this.p1;
 >this.p1 : "hello"
->this : this
+>this : C3
 >p1 : "hello"
   }
 

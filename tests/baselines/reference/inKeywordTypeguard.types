@@ -251,14 +251,14 @@ class NegativeClassTest {
 >"a" in this.prop : boolean
 >"a" : "a"
 >this.prop : A | B
->this : this
+>this : NegativeClassTest
 >prop : A | B
 
             let z: number = this.prop.b;
 >z : number
 >this.prop.b : any
 >this.prop : A
->this : this
+>this : NegativeClassTest
 >prop : A
 >b : any
 
@@ -267,7 +267,7 @@ class NegativeClassTest {
 >y : string
 >this.prop.a : any
 >this.prop : B
->this : this
+>this : NegativeClassTest
 >prop : B
 >a : any
         }
@@ -286,14 +286,14 @@ class UnreachableCodeDetection {
         if ("a" in this) {
 >"a" in this : boolean
 >"a" : "a"
->this : this
+>this : UnreachableCodeDetection
 
         } else {
             let y = this.a;
->y : any
->this.a : any
->this : never
->a : any
+>y : string
+>this.a : string
+>this : UnreachableCodeDetection
+>a : string
         }
     }
 }

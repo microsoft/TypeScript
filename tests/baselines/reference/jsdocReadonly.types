@@ -28,7 +28,7 @@ class LOL {
         this.y = 2
 >this.y = 2 : 2
 >this.y : 2
->this : this
+>this : LOL
 >y : 2
 >2 : 2
 
@@ -36,7 +36,7 @@ class LOL {
         this.ka = 2
 >this.ka = 2 : 2
 >this.ka : any
->this : this
+>this : LOL
 >ka : any
 >2 : 2
     }

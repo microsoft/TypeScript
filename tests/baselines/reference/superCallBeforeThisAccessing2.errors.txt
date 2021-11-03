@@ -1,0 +1,16 @@
+tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing2.ts(7,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+
+
+==== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing2.ts (1 errors) ====
+    class Base {
+        constructor(c) { }
+    }
+    class D extends Base {
+        private _t;
+        constructor() {
+            super(() => { this._t }); // no error. only check when this is directly accessing in constructor
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+        }
+    }
+    

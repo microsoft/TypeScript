@@ -58,7 +58,7 @@ class Derived extends Base {
 >r3 : { a: number; b: number; }
 >this.foo({ a: 1, b: 2 }) : { a: number; b: number; }
 >this.foo : (x: { a: number; b: number; }) => { a: number; b: number; }
->this : this
+>this : Derived
 >foo : (x: { a: number; b: number; }) => { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number

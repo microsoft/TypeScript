@@ -61,7 +61,7 @@ class DDD extends BB {
         this.a = a
 >this.a = a : string
 >this.a : string
->this : this
+>this : DDD
 >a : string
 >a : string
     }

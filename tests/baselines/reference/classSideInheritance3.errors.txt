@@ -1,3 +1,5 @@
+tests/cases/compiler/classSideInheritance3.ts(7,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+tests/cases/compiler/classSideInheritance3.ts(12,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
 tests/cases/compiler/classSideInheritance3.ts(16,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
   Types of construct signatures are incompatible.
     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
@@ -6,7 +8,7 @@ tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2322: Type 'typeof 
     Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
 
 
-==== tests/cases/compiler/classSideInheritance3.ts (2 errors) ====
+==== tests/cases/compiler/classSideInheritance3.ts (4 errors) ====
     class A {
         constructor(public x: string) {
         }
@@ -14,11 +16,15 @@ tests/cases/compiler/classSideInheritance3.ts(17,5): error TS2322: Type 'typeof 
     class B extends A {
         constructor(x: string, public data: string) {
             super(x);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
         }
     }
     class C extends A {
         constructor(x: string) {
             super(x);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
         }
     }
     

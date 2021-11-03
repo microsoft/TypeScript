@@ -10,7 +10,7 @@ class Message {
 >clone : () => this
 
     return this;
->this : this
+>this : Message
   }
 }
 interface MessageList<T extends Message> extends Message {
@@ -47,7 +47,7 @@ class DataProvider<T extends Message, U extends MessageList<T>> {
 >fetchMsg(this.messageList) : U
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
 >this.messageList : MsgConstructor<U>
->this : this
+>this : DataProvider<T, U>
 >messageList : MsgConstructor<U>
 
     messageList.methodOnMessageList();

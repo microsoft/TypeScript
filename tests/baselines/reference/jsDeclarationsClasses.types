@@ -210,14 +210,14 @@ export class K {
         this.p1 = 12;
 >this.p1 = 12 : 12
 >this.p1 : any
->this : this
+>this : K
 >p1 : any
 >12 : 12
 
         this.p2 = "ok";
 >this.p2 = "ok" : "ok"
 >this.p2 : any
->this : this
+>this : K
 >p2 : any
 >"ok" : "ok"
     }
@@ -227,7 +227,7 @@ export class K {
 
         return this.p1;
 >this.p1 : number
->this : this
+>this : K
 >p1 : number
     }
 }
@@ -244,7 +244,7 @@ export class M extends null {
         this.prop = 12;
 >this.prop = 12 : 12
 >this.prop : any
->this : this
+>this : M
 >prop : any
 >12 : 12
     }
@@ -271,7 +271,7 @@ export class N extends L {
         this.another = param;
 >this.another = param : T
 >this.another : any
->this : this
+>this : N<T>
 >another : any
 >param : T
     }
@@ -299,7 +299,7 @@ export class O extends N {
         this.another2 = param;
 >this.another2 = param : U
 >this.another2 : any
->this : this
+>this : O<U>
 >another2 : any
 >param : U
     }

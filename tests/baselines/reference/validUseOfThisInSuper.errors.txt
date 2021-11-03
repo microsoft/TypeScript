@@ -1,0 +1,15 @@
+tests/cases/compiler/validUseOfThisInSuper.ts(7,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+
+
+==== tests/cases/compiler/validUseOfThisInSuper.ts (1 errors) ====
+    class Base {
+        constructor(public b: Base) {
+        }
+    }
+    class Super extends Base {
+        constructor() {
+            super((() => this)()); // ok since this is not the case: The constructor declares parameter properties or the containing class declares instance member variables with initializers.
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Base'.
+        }
+    }

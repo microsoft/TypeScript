@@ -1,14 +1,22 @@
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
-  Types have separate declarations of a private property 'x'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(10,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
-  Types have separate declarations of a private property 'x'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(11,12): error TS2416: Property 'foo' in type 'D' is not assignable to the same property in base type 'C'.
+  Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'C' is missing the following properties from type 'D': y, other, bar
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(11,12): error TS2416: Property 'foo' in type 'D' is not assignable to the same property in base type 'I'.
+  Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(19,12): error TS2416: Property 'foo' in type 'D2' is not assignable to the same property in base type 'C'.
+  Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'C' is missing the following properties from type 'D2': other, bar
+tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(19,12): error TS2416: Property 'foo' in type 'D2' is not assignable to the same property in base type 'I'.
+  Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'C'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'I'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (4 errors) ====
+==== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts (6 errors) ====
     class C {
         public foo(x: any) { return x; }
         private x = 1;
@@ -19,13 +27,15 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: 
     }
     
     class D extends C implements I { // error
-          ~
-!!! error TS2415: Class 'D' incorrectly extends base class 'C'.
-!!! error TS2415:   Types have separate declarations of a private property 'x'.
-          ~
-!!! error TS2420: Class 'D' incorrectly implements interface 'I'.
-!!! error TS2420:   Types have separate declarations of a private property 'x'.
         public foo(x: any) { return x; }
+               ~~~
+!!! error TS2416: Property 'foo' in type 'D' is not assignable to the same property in base type 'C'.
+!!! error TS2416:   Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'C' is missing the following properties from type 'D': y, other, bar
+               ~~~
+!!! error TS2416: Property 'foo' in type 'D' is not assignable to the same property in base type 'I'.
+!!! error TS2416:   Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
         private x = 2;
         private y = 3;
         other(x: any) { return x; }
@@ -34,6 +44,14 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: 
     
     class D2 extends C implements I { // error
         public foo(x: any) { return x; }
+               ~~~
+!!! error TS2416: Property 'foo' in type 'D2' is not assignable to the same property in base type 'C'.
+!!! error TS2416:   Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'C' is missing the following properties from type 'D2': other, bar
+               ~~~
+!!! error TS2416: Property 'foo' in type 'D2' is not assignable to the same property in base type 'I'.
+!!! error TS2416:   Type '(x: any) => any' is not assignable to type '(x: any) => any'. Two different types with this name exist, but they are unrelated.
         private x = "";
                 ~
 !!! error TS2416: Property 'x' in type 'D2' is not assignable to the same property in base type 'C'.

@@ -2,9 +2,12 @@ tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(1,12): error TS409
 tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'ps' of exported class expression may not be private or protected.
 tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(16,17): error TS4094: Property 'property' of exported class expression may not be private or protected.
 tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(23,14): error TS4094: Property 'property' of exported class expression may not be private or protected.
+tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(27,1): error TS2684: The 'this' context of type 'typeof Test' is not assignable to method's 'this' of type '{ new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T'.
+  Type 'typeof Test' is not assignable to type 'T'.
+    'typeof Test' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Constructor<FooItem>'.
 
 
-==== tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts (4 errors) ====
+==== tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts (5 errors) ====
     export var noPrivates = class {
                ~~~~~~~~~~
 !!! error TS4094: Property 'p' of exported class expression may not be private or protected.
@@ -40,5 +43,9 @@ tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(23,14): error TS40
     const test = new Test();
     
     Test.getTags()
+    ~~~~
+!!! error TS2684: The 'this' context of type 'typeof Test' is not assignable to method's 'this' of type '{ new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T'.
+!!! error TS2684:   Type 'typeof Test' is not assignable to type 'T'.
+!!! error TS2684:     'typeof Test' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Constructor<FooItem>'.
     test.tags();
     

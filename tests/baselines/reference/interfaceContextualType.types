@@ -23,7 +23,7 @@ class Bug {
         this.values = {};
 >this.values = {} : {}
 >this.values : IMap
->this : this
+>this : Bug
 >values : IMap
 >{} : {}
 
@@ -31,7 +31,7 @@ class Bug {
 >this.values['comments'] = { italic: true } : { italic: true; }
 >this.values['comments'] : IOptions
 >this.values : IMap
->this : this
+>this : Bug
 >values : IMap
 >'comments' : "comments"
 >{ italic: true } : { italic: true; }
@@ -44,7 +44,7 @@ class Bug {
         this.values = {
 >this.values = {            comments: { italic: true }        } : { comments: { italic: true; }; }
 >this.values : IMap
->this : this
+>this : Bug
 >values : IMap
 >{            comments: { italic: true }        } : { comments: { italic: true; }; }
 

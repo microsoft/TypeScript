@@ -885,7 +885,7 @@ module TypeScriptAllInOne {
             return this.method1(2);
 >this.method1(2) : any
 >this.method1 : any
->this : this
+>this : B
 >method1 : any
 >2 : 2
         }

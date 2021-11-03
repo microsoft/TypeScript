@@ -9,13 +9,13 @@ class C {
 
     constructor() { this = value; }
 >this = value : any
->this : this
+>this : C
 >value : any
 
     foo() { this = value; }
 >foo : () => void
 >this = value : any
->this : this
+>this : C
 >value : any
 
     static sfoo() { this = value; }

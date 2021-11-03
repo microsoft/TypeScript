@@ -226,7 +226,7 @@ class Test {
 >undefined : undefined
 >this.fail("undefined argument") : never
 >this.fail : (message?: string | undefined) => never
->this : this
+>this : Test
 >fail : (message?: string | undefined) => never
 >"undefined argument" : "undefined argument"
 
@@ -248,7 +248,7 @@ class Test {
         this.fail("negative number");
 >this.fail("negative number") : never
 >this.fail : (message?: string | undefined) => never
->this : this
+>this : Test
 >fail : (message?: string | undefined) => never
 >"negative number" : "negative number"
 
@@ -265,7 +265,7 @@ class Test {
         this.fail();
 >this.fail() : never
 >this.fail : (message?: string | undefined) => never
->this : this
+>this : Test
 >fail : (message?: string | undefined) => never
 
         x;  // Unreachable
@@ -701,7 +701,7 @@ class SuperThrowable extends MyThrowable {
         this.throw()
 >this.throw() : never
 >this.throw : () => never
->this : this
+>this : SuperThrowable
 >throw : () => never
     }
 }

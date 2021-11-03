@@ -11,8 +11,8 @@ class C {
 >2 : 2
 >3 : 3
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->(x) => { return this; } : (x: number) => this
+>(x) => { return this; } : (x: number) => C
 >x : number
->this : this
+>this : C
 }
 

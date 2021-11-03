@@ -16,7 +16,7 @@ class C {
 >other.apply : (this: Function, thisArg: any, argArray?: any) => any
 >other : () => void
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->this : this
+>this : C
 >arguments : IArguments
    }
 }

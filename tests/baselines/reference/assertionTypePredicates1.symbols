@@ -333,6 +333,7 @@ class Test {
 
             this.z;
 >this.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+>this : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
 >z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
         }
         this.assertIsTest2();
@@ -342,6 +343,7 @@ class Test {
 
         this.z;
 >this.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+>this : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
 >z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
     }
     baz(x: number) {

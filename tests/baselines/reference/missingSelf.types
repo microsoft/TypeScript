@@ -6,7 +6,7 @@ class CalcButton
 >a : () => void
 >this.onClick() : void
 >this.onClick : () => void
->this : this
+>this : CalcButton
 >onClick : () => void
 
     public onClick() { }
@@ -21,7 +21,7 @@ class CalcButton2
 >() => this.onClick() : () => void
 >this.onClick() : void
 >this.onClick : () => void
->this : this
+>this : CalcButton2
 >onClick : () => void
 
     public onClick() { }

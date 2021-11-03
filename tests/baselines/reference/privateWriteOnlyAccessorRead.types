@@ -35,19 +35,19 @@ class Test {
 >console : Console
 >log : (...data: any[]) => void
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 
     this.#value = { foo }; // ok
 >this.#value = { foo } : { foo: { bar: number; }; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >{ foo } : { foo: { bar: number; }; }
 >foo : { bar: number; }
 
     this.#value = { foo }; // ok
 >this.#value = { foo } : { foo: { bar: number; }; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >{ foo } : { foo: { bar: number; }; }
 >foo : { bar: number; }
 
@@ -55,7 +55,7 @@ class Test {
 >this.#value.foo = foo : { bar: number; }
 >this.#value.foo : { bar: number; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >foo : { bar: number; }
 >foo : { bar: number; }
 
@@ -65,7 +65,7 @@ class Test {
 >{ o: this.#value } : { o: { foo: { bar: number; }; }; }
 >o : { foo: { bar: number; }; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >{ o: { foo } } : { o: { foo: { bar: number; }; }; }
 >o : { foo: { bar: number; }; }
 >{ foo } : { foo: { bar: number; }; }
@@ -76,7 +76,7 @@ class Test {
 >{ ...this.#value } = { foo } : { foo: { bar: number; }; }
 >{ ...this.#value } : { foo: { bar: number; }; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >{ foo } : { foo: { bar: number; }; }
 >foo : { bar: number; }
 
@@ -87,7 +87,7 @@ class Test {
 >foo : { bar: number; }
 >this.#value.foo : { bar: number; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >foo : { bar: number; }
 >{ foo } : { foo: { bar: number; }; }
 >foo : { bar: number; }
@@ -102,7 +102,7 @@ class Test {
 >{ ...this.#value.foo } : { bar: number; }
 >this.#value.foo : { bar: number; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 >foo : { bar: number; }
 
     } = { foo }); //error
@@ -114,16 +114,16 @@ class Test {
 >{ o: this.#value } : { o: { foo: { bar: number; }; }; }
 >o : { foo: { bar: number; }; }
 >this.#value : { foo: { bar: number; }; }
->this : this
+>this : Test
 
     [this.#valueOne, ...this.#valueRest] = [1, 2, 3];
 >[this.#valueOne, ...this.#valueRest] = [1, 2, 3] : [number, number, number]
 >[this.#valueOne, ...this.#valueRest] : [number, ...number[]]
 >this.#valueOne : number
->this : this
+>this : Test
 >...this.#valueRest : number
 >this.#valueRest : number[]
->this : this
+>this : Test
 >[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
@@ -135,19 +135,19 @@ class Test {
 
         this.#valueOne,
 >this.#valueOne : number
->this : this
+>this : Test
 
         ...this.#valueRest
 >...this.#valueRest : number
 >this.#valueRest : number[]
->this : this
+>this : Test
 
     ];
 
     this.#valueCompound += 3;
 >this.#valueCompound += 3 : number
 >this.#valueCompound : number
->this : this
+>this : Test
 >3 : 3
   }
 }

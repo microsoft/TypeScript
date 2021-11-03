@@ -25,13 +25,13 @@ class B {
 >[this.test, this.test1, this.test2] = array1 : [number, number]
 >[this.test, this.test1, this.test2] : [number, any, any]
 >this.test : number
->this : this
+>this : B
 >test : number
 >this.test1 : any
->this : this
+>this : B
 >test1 : any
 >this.test2 : any
->this : this
+>this : B
 >test2 : any
 >array1 : [number, number]
     }

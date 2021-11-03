@@ -340,10 +340,16 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(312,128): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(312,149): error TS2304: Cannot find name 'ErrorRecoverySet'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(355,52): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(356,53): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(368,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(382,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(396,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(408,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(422,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(436,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error TS1011: An element access expression should take an argument.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts (343 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts (349 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -1397,6 +1403,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export class NumberLiteralToken extends Token {
             constructor (public value: number, public hasEmptyFraction?: boolean) {
                 super(TokenID.NumberLiteral);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
             }
     
             public getText(): string {
@@ -1411,6 +1419,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export class StringLiteralToken extends Token {
             constructor (public value: string) {
                 super(TokenID.StringLiteral);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
             }
     
             public getText(): string {
@@ -1425,6 +1435,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export class IdentifierToken extends Token {
             constructor (public value: string, public hasEscapeSequence : boolean) {
                 super(TokenID.Identifier);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
             }
             public getText(): string {
                 return this.value;
@@ -1437,6 +1449,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export class WhitespaceToken extends Token {
             constructor (tokenId: TokenID, public value: string) {
                 super(tokenId);
+                ~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
             }
     
             public getText(): string {
@@ -1451,6 +1465,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export class CommentToken extends Token {
             constructor (tokenID: TokenID, public value: string, public isBlock: boolean, public startPos: number, public line: number, public endsLine: boolean) {
                 super(tokenID);
+                ~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
             }
     
             public getText(): string {
@@ -1465,6 +1481,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource10.ts(449,41): error 
         export class RegularExpressionLiteralToken extends Token {
             constructor(public regex) {
                 super(TokenID.RegularExpressionLiteral);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Token'.
             }
     
             public getText(): string {

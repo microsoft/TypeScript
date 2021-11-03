@@ -35,7 +35,7 @@ class B extends A {
 		this.foo = foo;
 >this.foo = foo : any
 >this.foo : any
->this : this
+>this : B
 >foo : any
 >foo : any
 
@@ -45,7 +45,7 @@ class B extends A {
 		this.bar = super.arguments.foo;
 >this.bar = super.arguments.foo : error
 >this.bar : any
->this : this
+>this : B
 >bar : any
 >super.arguments.foo : error
 >super.arguments : { bar: {}; }

@@ -12,7 +12,7 @@ export class A {
         this.protected = val;
 >this.protected = val : any
 >this.protected : any
->this : this
+>this : A
 >protected : any
 >val : any
     }

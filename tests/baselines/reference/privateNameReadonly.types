@@ -12,7 +12,7 @@ const C = class {
         this.#bar = console.log("should log this then throw");
 >this.#bar = console.log("should log this then throw") : void
 >this.#bar : () => void
->this : this
+>this : C
 >console.log("should log this then throw") : void
 >console.log : (...data: any[]) => void
 >console : Console

@@ -12,7 +12,7 @@ export class MyClass {
         this[_sym] = "ok";
 >this[_sym] = "ok" : "ok"
 >this[_sym] : string
->this : this
+>this : MyClass
 >_sym : unique symbol
 >"ok" : "ok"
     }
@@ -23,14 +23,14 @@ export class MyClass {
         this[_sym] = "yep";
 >this[_sym] = "yep" : "yep"
 >this[_sym] : string
->this : this
+>this : MyClass
 >_sym : unique symbol
 >"yep" : "yep"
 
         const x = this[_sym];
 >x : string
 >this[_sym] : string
->this : this
+>this : MyClass
 >_sym : unique symbol
     }
 }

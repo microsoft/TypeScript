@@ -67,7 +67,7 @@ class C5 {
         this.asdf = asdf;
 >this.asdf = asdf : any
 >this.asdf : any
->this : this
+>this : C5
 >asdf : any
 >asdf : any
     }

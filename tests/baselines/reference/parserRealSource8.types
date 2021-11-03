@@ -153,7 +153,7 @@ module TypeScript {
             this.result = null;
 >this.result = null : null
 >this.result : Symbol
->this : this
+>this : ScopeSearchFilter
 >result : Symbol
 >null : null
         }
@@ -165,29 +165,29 @@ module TypeScript {
             this.result = this.select(this.result, b);
 >this.result = this.select(this.result, b) : Symbol
 >this.result : Symbol
->this : this
+>this : ScopeSearchFilter
 >result : Symbol
 >this.select(this.result, b) : Symbol
 >this.select : (a: Symbol, b: Symbol) => Symbol
->this : this
+>this : ScopeSearchFilter
 >select : (a: Symbol, b: Symbol) => Symbol
 >this.result : Symbol
->this : this
+>this : ScopeSearchFilter
 >result : Symbol
 >b : Symbol
 
             if (this.result) {
 >this.result : Symbol
->this : this
+>this : ScopeSearchFilter
 >result : Symbol
 
                 return this.stop(this.result);
 >this.stop(this.result) : boolean
 >this.stop : (s: Symbol) => boolean
->this : this
+>this : ScopeSearchFilter
 >stop : (s: Symbol) => boolean
 >this.result : Symbol
->this : this
+>this : ScopeSearchFilter
 >result : Symbol
             }
             else {

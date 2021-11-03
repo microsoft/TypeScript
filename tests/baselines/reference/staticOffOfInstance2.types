@@ -8,7 +8,7 @@ class List<T> {
         this.Foo(); // no error
 >this.Foo() : any
 >this.Foo : any
->this : this
+>this : List<T>
 >Foo : any
 
         List.Foo();

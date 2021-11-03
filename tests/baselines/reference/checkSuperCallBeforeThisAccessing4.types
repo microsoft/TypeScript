@@ -15,14 +15,14 @@ class Derived extends Based {
 >() => {            this;  // No error        } : () => void
 
             this;  // No error
->this : this
+>this : Derived
 
         });
         () => {
 >() => {            this;  // No error        } : () => void
 
             this;  // No error
->this : this
+>this : Derived
 
         };
         (() => {
@@ -31,7 +31,7 @@ class Derived extends Based {
 >() => {            this;  // No error        } : () => void
 
             this;  // No error
->this : this
+>this : Derived
 
         })();
         super();
@@ -45,12 +45,12 @@ class Derived extends Based {
         this.x = 10;
 >this.x = 10 : 10
 >this.x : number
->this : this
+>this : Derived
 >x : number
 >10 : 10
 
         var that = this;
->that : this
->this : this
+>that : Derived
+>this : Derived
     }
 }

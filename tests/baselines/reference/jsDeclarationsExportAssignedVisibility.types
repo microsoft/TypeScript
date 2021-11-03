@@ -12,7 +12,7 @@ class Container {
         this.usage = new Obj();
 >this.usage = new Obj() : Obj
 >this.usage : any
->this : this
+>this : Container
 >usage : any
 >new Obj() : Obj
 >Obj : typeof Obj
@@ -39,7 +39,7 @@ module.exports = class Obj {
         this.x = 12;
 >this.x = 12 : 12
 >this.x : any
->this : this
+>this : import("tests/cases/conformance/jsdoc/declarations/obj")
 >x : any
 >12 : 12
     }

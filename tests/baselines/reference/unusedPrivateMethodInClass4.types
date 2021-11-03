@@ -40,7 +40,7 @@ class greeter {
         this.function2();
 >this.function2() : void
 >this.function2 : () => void
->this : this
+>this : greeter
 >function2 : () => void
     }
 }

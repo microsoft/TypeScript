@@ -1,5 +1,6 @@
 tests/cases/compiler/optionalParamArgsTest.ts(31,12): error TS2393: Duplicate function implementation.
 tests/cases/compiler/optionalParamArgsTest.ts(34,12): error TS2393: Duplicate function implementation.
+tests/cases/compiler/optionalParamArgsTest.ts(39,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C1'.
 tests/cases/compiler/optionalParamArgsTest.ts(98,11): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/compiler/optionalParamArgsTest.ts(99,11): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/compiler/optionalParamArgsTest.ts(100,4): error TS2554: Expected 0 arguments, but got 1.
@@ -22,7 +23,7 @@ tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2554: Expected 1-2
 tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2 arguments, but got 0.
 
 
-==== tests/cases/compiler/optionalParamArgsTest.ts (22 errors) ====
+==== tests/cases/compiler/optionalParamArgsTest.ts (23 errors) ====
     // Optional parameter and default argument tests
     
     // Key:
@@ -66,6 +67,8 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2
     class C2 extends C1 {
         constructor(v2: number = 6) {
             super(v2);
+            ~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C1'.
         }
     }
     

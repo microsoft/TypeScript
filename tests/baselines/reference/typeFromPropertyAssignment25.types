@@ -14,7 +14,7 @@ Common.I = class {
         this.i = 1
 >this.i = 1 : 1
 >this.i : any
->this : this
+>this : I
 >i : any
 >1 : 1
     }
@@ -37,7 +37,7 @@ Common.O = class extends Common.I {
         this.o = 2
 >this.o = 2 : 2
 >this.o : any
->this : this
+>this : O
 >o : any
 >2 : 2
     }

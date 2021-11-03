@@ -17,7 +17,7 @@ class Chain2<T extends { length: number }> {
 >cb(this.value) : S
 >cb : (x: T) => S
 >this.value : T
->this : this
+>this : Chain2<T>
 >value : T
 
         // should get a fresh type parameter which each then call
@@ -29,7 +29,7 @@ class Chain2<T extends { length: number }> {
 >this.then(x => result)/*S*/.then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
 >this.then(x => result) : Chain2<S>
 >this.then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
->this : this
+>this : Chain2<T>
 >then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
 >x => result : (x: T) => S
 >x : T

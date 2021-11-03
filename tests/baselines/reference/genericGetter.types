@@ -10,7 +10,7 @@ class C<T> {
 
         return this.data;
 >this.data : T
->this : this
+>this : C<T>
 >data : T
     }
 }

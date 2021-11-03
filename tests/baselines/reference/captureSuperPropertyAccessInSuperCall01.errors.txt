@@ -1,0 +1,17 @@
+tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts(9,3): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+
+
+==== tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts (1 errors) ====
+    class A {
+    	constructor(f: () => string) {
+    	}
+    	public blah(): string { return ""; }
+    }
+    
+    class B extends A {
+    	constructor() {
+    		super(() => { return super.blah(); })
+    		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
+    	}
+    }

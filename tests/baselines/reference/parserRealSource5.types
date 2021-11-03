@@ -38,7 +38,7 @@ module TypeScript {
             this.indentAmt++;
 >this.indentAmt++ : number
 >this.indentAmt : number
->this : this
+>this : PrintContext
 >indentAmt : number
         }
 
@@ -48,7 +48,7 @@ module TypeScript {
             this.indentAmt--;
 >this.indentAmt-- : number
 >this.indentAmt : number
->this : this
+>this : PrintContext
 >indentAmt : number
         }
 
@@ -59,7 +59,7 @@ module TypeScript {
 >this.builder.length > 0 : boolean
 >this.builder.length : number
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
 >length : number
 >0 : 0
@@ -70,17 +70,17 @@ module TypeScript {
 >CompilerDiagnostics : any
 >Alert : any
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
             }
             var indentString = this.indentStrings[this.indentAmt];
 >indentString : string
 >this.indentStrings[this.indentAmt] : string
 >this.indentStrings : string[]
->this : this
+>this : PrintContext
 >indentStrings : string[]
 >this.indentAmt : number
->this : this
+>this : PrintContext
 >indentAmt : number
 
             if (indentString === undefined) {
@@ -99,7 +99,7 @@ module TypeScript {
 >i < this.indentAmt : boolean
 >i : number
 >this.indentAmt : number
->this : this
+>this : PrintContext
 >indentAmt : number
 >i++ : number
 >i : number
@@ -108,24 +108,24 @@ module TypeScript {
 >indentString += this.indent1 : string
 >indentString : string
 >this.indent1 : string
->this : this
+>this : PrintContext
 >indent1 : string
                 }
                 this.indentStrings[this.indentAmt] = indentString;
 >this.indentStrings[this.indentAmt] = indentString : string
 >this.indentStrings[this.indentAmt] : string
 >this.indentStrings : string[]
->this : this
+>this : PrintContext
 >indentStrings : string[]
 >this.indentAmt : number
->this : this
+>this : PrintContext
 >indentAmt : number
 >indentString : string
             }
             this.builder += indentString;
 >this.builder += indentString : string
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
 >indentString : string
         }
@@ -137,7 +137,7 @@ module TypeScript {
             this.builder += s;
 >this.builder += s : string
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
 >s : any
         }
@@ -149,7 +149,7 @@ module TypeScript {
             this.builder += s;
 >this.builder += s : string
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
 >s : any
 
@@ -157,17 +157,17 @@ module TypeScript {
 >this.outfile.WriteLine(this.builder) : void
 >this.outfile.WriteLine : (s: string) => void
 >this.outfile : ITextWriter
->this : this
+>this : PrintContext
 >outfile : ITextWriter
 >WriteLine : (s: string) => void
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
 
             this.builder = "";
 >this.builder = "" : ""
 >this.builder : string
->this : this
+>this : PrintContext
 >builder : string
 >"" : ""
         }

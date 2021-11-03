@@ -1,0 +1,45 @@
+tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts(9,9): error TS2322: Type 'A' is not assignable to type 'U'.
+  'A' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts(11,5): error TS2322: Type 'A' is not assignable to type 'T'.
+  'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts(16,9): error TS2322: Type 'A' is not assignable to type 'T'.
+  'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts(19,9): error TS2322: Type 'A' is not assignable to type 'U'.
+  'A' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+
+
+==== tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts (4 errors) ====
+    class A {
+        self() {
+            return this;
+        }
+    }
+    
+    function f<T extends A>(x: T) {
+        function g<U extends T>(x: U) {
+            x = x.self();
+            ~
+!!! error TS2322: Type 'A' is not assignable to type 'U'.
+!!! error TS2322:   'A' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+        }
+        x = x.self();
+        ~
+!!! error TS2322: Type 'A' is not assignable to type 'T'.
+!!! error TS2322:   'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+    }
+    
+    class B<T extends A> {
+        foo(x: T) {
+            x = x.self();
+            ~
+!!! error TS2322: Type 'A' is not assignable to type 'T'.
+!!! error TS2322:   'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+        }
+        bar<U extends T>(x: U) {
+            x = x.self();
+            ~
+!!! error TS2322: Type 'A' is not assignable to type 'U'.
+!!! error TS2322:   'A' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+        }
+    }
+    

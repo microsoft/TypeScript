@@ -26,7 +26,7 @@ module.exports = class Q {
         this.x = new A();
 >this.x = new A() : A
 >this.x : any
->this : this
+>this : import("tests/cases/conformance/jsdoc/declarations/index")
 >x : any
 >new A() : A
 >A : typeof A

@@ -7,10 +7,10 @@ export class A<T1>{
 >self : A<T1>
 
         var child = new B(this);
->child : B<this>
->new B(this) : B<this>
+>child : B<A<T1>>
+>new B(this) : B<A<T1>>
 >B : typeof B
->this : this
+>this : A<T1>
     }
 }
 

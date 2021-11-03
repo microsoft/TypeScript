@@ -19,7 +19,7 @@ module M {
             this.y = x;
 >this.y = x : number
 >this.y : any
->this : this
+>this : c
 >y : any
 >x : number
         }
@@ -46,7 +46,7 @@ module M {
             this.y = x;
 >this.y = x : number
 >this.y : any
->this : this
+>this : d
 >y : any
 >x : number
         }
@@ -69,7 +69,7 @@ module M { // Shouldnt be _M
             this.y = x;
 >this.y = x : number
 >this.y : any
->this : this
+>this : e
 >y : any
 >x : number
         }

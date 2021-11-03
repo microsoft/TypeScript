@@ -16,7 +16,7 @@ export class Example<Z extends CustomDocument> {
         this.test<Z>();
 >this.test<Z>() : void
 >this.test : <Z extends Document>() => void
->this : this
+>this : Example<Z>
 >test : <Z extends Document>() => void
     }
 

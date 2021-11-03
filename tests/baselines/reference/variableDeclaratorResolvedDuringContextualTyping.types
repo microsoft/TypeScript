@@ -272,7 +272,7 @@ class FileService {
 >this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }) : WinJS.Promise
 >this.requestService.makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
 >this.requestService : Services.IRequestService
->this : this
+>this : FileService
 >requestService : Services.IRequestService
 >makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
 >{            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        } : { url: string; type: string; headers: {}; data: string; }
@@ -282,7 +282,7 @@ class FileService {
 >this.requestService.getRequestUrl('root', path) : string
 >this.requestService.getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
 >this.requestService : Services.IRequestService
->this : this
+>this : FileService
 >requestService : Services.IRequestService
 >getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
 >'root' : "root"
@@ -313,7 +313,7 @@ class FileService {
 >stat : any
 >this.jsonToStat(newFilePath, "someString") : any
 >this.jsonToStat : any
->this : this
+>this : FileService
 >jsonToStat : any
 >newFilePath : any
 >"someString" : "someString"

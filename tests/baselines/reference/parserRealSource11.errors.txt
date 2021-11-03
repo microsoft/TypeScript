@@ -37,9 +37,11 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(141,30): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(145,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(151,57): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(155,26): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(184,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(184,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(192,32): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(193,41): error TS1011: An element access expression should take an argument.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(196,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(196,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(199,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(219,33): error TS2304: Cannot find name 'NodeType'.
@@ -47,21 +49,26 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(231,30): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(231,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(233,52): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(237,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(268,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(268,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(298,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(302,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(302,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(306,40): error TS2304: Cannot find name 'Token'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(307,54): error TS2304: Cannot find name 'IdentifierToken'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(313,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Identifier'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(320,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(320,48): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(327,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(327,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(332,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(337,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(337,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(350,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(351,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(360,28): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(363,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(364,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(367,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(370,34): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(375,36): error TS2304: Cannot find name 'TypeFlow'.
@@ -114,6 +121,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(506,22): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(507,58): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(518,32): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(520,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(521,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(525,27): error TS2304: Cannot find name 'Signature'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(527,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(528,34): error TS2304: Cannot find name 'NodeType'.
@@ -121,6 +129,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(536,30): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(536,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(540,34): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(553,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(554,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(557,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(559,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(561,22): error TS2304: Cannot find name 'NodeType'.
@@ -185,6 +194,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(686,26): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(687,63): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(694,63): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(696,26): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(711,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(711,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(714,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(718,30): error TS2304: Cannot find name 'Emitter'.
@@ -192,20 +202,25 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(718,48): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(721,51): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(723,51): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(725,51): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(733,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(733,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(738,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(747,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(747,48): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(778,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(778,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(781,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(786,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(786,48): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(797,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(797,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(800,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(800,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(808,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(823,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(824,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(830,27): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(834,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'ModuleElement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(834,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(837,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(837,48): error TS2304: Cannot find name 'TokenID'.
@@ -217,6 +232,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(868,38): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(877,40): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(891,27): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(894,55): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(895,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(900,37): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(900,60): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(901,36): error TS2304: Cannot find name 'hasFlag'.
@@ -224,6 +240,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(901,59): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(902,38): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(902,61): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(904,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(915,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BoundDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(915,23): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(918,37): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(918,60): error TS2304: Cannot find name 'VarFlags'.
@@ -233,6 +250,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(920,36): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(920,59): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(922,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(922,48): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(933,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BoundDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(933,23): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(944,38): error TS2304: Cannot find name 'FieldSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(946,30): error TS2304: Cannot find name 'Emitter'.
@@ -242,6 +260,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(961,25): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(963,27): error TS2304: Cannot find name 'Signature'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(981,27): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(985,29): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(988,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,44): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1004,67): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1005,57): error TS2304: Cannot find name 'FncFlags'.
@@ -288,6 +307,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1095,29): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1098,56): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1098,79): error TS2304: Cannot find name 'FncFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1111,33): error TS2304: Cannot find name 'IFileReference'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1127,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'FuncDecl'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1127,84): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1132,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1144,42): error TS2304: Cannot find name 'NodeType'.
@@ -307,8 +327,10 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1172,30): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1172,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1176,60): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1187,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1190,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'ModuleElement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1195,27): error TS2304: Cannot find name 'ModuleFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1196,21): error TS2304: Cannot find name 'ModuleType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1206,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'NamedDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1206,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1213,38): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1213,61): error TS2304: Cannot find name 'ModuleFlags'.
@@ -324,27 +346,33 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1226,18): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1226,41): error TS2304: Cannot find name 'ModuleFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1237,27): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1239,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1244,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'NamedDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1248,20): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1248,43): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1252,20): error TS2304: Cannot find name 'hasFlag'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1252,43): error TS2304: Cannot find name 'VarFlags'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1266,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'TypeDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1266,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1269,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1273,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1273,48): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1283,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'TypeDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1283,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1286,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1290,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1290,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1295,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1296,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'ModuleElement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1297,27): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1306,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1314,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1314,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1317,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1317,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1331,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1337,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1339,26): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1348,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1348,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1351,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1351,48): error TS2304: Cannot find name 'TokenID'.
@@ -353,6 +381,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1374,42): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1375,37): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1388,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1405,32): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1406,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1409,42): error TS2304: Cannot find name 'Parser'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1414,35): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1419,39): error TS2304: Cannot find name 'NodeType'.
@@ -361,6 +390,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1432,80): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1435,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1435,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1438,34): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1457,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1457,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1462,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1462,48): error TS2304: Cannot find name 'TokenID'.
@@ -371,6 +401,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1481,33): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1482,33): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1488,29): error TS2304: Cannot find name 'ITargetInfo'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1490,39): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1515,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1515,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1518,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1518,48): error TS2304: Cannot find name 'TokenID'.
@@ -380,6 +411,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1539,42): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1541,33): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1542,33): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1545,29): error TS2304: Cannot find name 'ITargetInfo'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1572,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1572,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1577,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1577,48): error TS2304: Cannot find name 'TokenID'.
@@ -389,13 +421,16 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1600,42): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1602,31): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1606,35): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1615,39): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1651,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1651,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1654,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1654,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1660,63): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1670,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1675,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1682,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1682,19): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1688,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1688,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1689,53): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1690,52): error TS2304: Cannot find name 'VarFlags'.
@@ -416,6 +451,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1766,36): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1775,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1784,33): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1785,33): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1811,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1811,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1816,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1816,48): error TS2304: Cannot find name 'TokenID'.
@@ -434,11 +470,13 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1859,30): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1865,39): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1868,29): error TS2304: Cannot find name 'ITargetInfo'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1908,25): error TS2304: Cannot find name 'WithSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1911,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1911,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1914,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1914,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1919,51): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1928,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1939,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1939,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1944,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1944,48): error TS2304: Cannot find name 'TokenID'.
@@ -448,6 +486,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1969,36): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1981,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1984,33): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1985,35): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2014,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2014,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2017,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2017,48): error TS2304: Cannot find name 'TokenID'.
@@ -456,11 +495,13 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2033,36): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2042,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2043,33): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2047,37): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2067,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2067,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2070,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2070,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2074,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2077,28): error TS2304: Cannot find name 'getTypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2100,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2100,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2105,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2105,48): error TS2304: Cannot find name 'TokenID'.
@@ -470,6 +511,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2112,36): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2119,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2120,36): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2122,32): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2145,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2145,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2150,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2150,48): error TS2304: Cannot find name 'TokenID'.
@@ -480,12 +522,14 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2161,32): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2164,37): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2172,35): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2185,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2195,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2195,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2198,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2198,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2202,47): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2207,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2212,42): error TS2304: Cannot find name 'ControlFlowContext'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2223,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2223,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2225,40): error TS2304: Cannot find name 'VarFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2229,32): error TS2304: Cannot find name 'SymbolScope'.
@@ -499,19 +543,22 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2259,36): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2263,33): error TS2304: Cannot find name 'ValueLocation'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2264,30): error TS2304: Cannot find name 'VariableSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2269,38): error TS2304: Cannot find name 'TypeLink'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2300,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2300,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2303,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2303,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2307,47): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2312,42): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2320,36): error TS2304: Cannot find name 'TypeFlow'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2331,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2331,19): error TS2304: Cannot find name 'NodeType'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2353,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2353,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (511 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts (558 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -774,6 +821,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class IncompleteAST extends AST {
             constructor (min: number, lim: number) {
                 super(NodeType.Error);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
     
@@ -792,6 +841,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor () {
                 super(NodeType.List);
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -878,6 +929,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             //    match 'text', always use setText.
             constructor (public actualText: string, public hasEscapeSequence?: boolean) {
                 super(NodeType.Name);
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 this.setText(actualText, hasEscapeSequence);
@@ -935,6 +988,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class MissingIdentifier extends Identifier {
             constructor () {
                 super("__missing");
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Identifier'.
             }
     
             public isMissing() {
@@ -953,6 +1008,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class Label extends AST {
             constructor (public id: Identifier) {
                 super(NodeType.Label);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -987,6 +1044,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
             }
     
             public isExpression() { return true; }
@@ -1004,6 +1063,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
             }
     
             public addToControlFlow(context: ControlFlowContext): void {
@@ -1265,6 +1326,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
                 this.minChar = this.target.minChar;
             }
     
@@ -1312,6 +1375,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
             }
     
             public typeCheck(typeFlow: TypeFlow) {
@@ -1597,6 +1662,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                          public operand2: AST,
                          public operand3: AST) {
                 super(NodeType.ConditionalExpression);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1633,6 +1700,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class NumberLiteral extends Expression {
             constructor (public value: number, public hasEmptyFraction?: boolean) {
                 super(NodeType.NumberLit);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1686,6 +1755,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class RegexLiteral extends Expression {
             constructor (public regex) {
                 super(NodeType.Regex);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1713,6 +1784,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class StringLiteral extends Expression {
             constructor (public text: string) {
                 super(NodeType.QString);
+                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Expression'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1750,6 +1823,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
             }
         }
     
@@ -1762,6 +1837,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public id: Identifier, public alias: AST) {
                 super(NodeType.ImportDeclaration);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'ModuleElement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1845,6 +1922,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                                           ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
             }
     
             public isStatementOrExpression() { return true; }
@@ -1879,6 +1958,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class VarDecl extends BoundDecl {
             constructor (id: Identifier, nest: number) {
                 super(id, NodeType.VarDecl, nest);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BoundDecl'.
                           ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1915,6 +1996,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class ArgDecl extends BoundDecl {
             constructor (id: Identifier) {
                 super(id, NodeType.ArgDecl, 0);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'BoundDecl'.
                           ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -1988,6 +2071,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                 nodeType: number) {
     
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
             }
     
             public internalName(): string {
@@ -2219,6 +2304,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (vars: ASTList, scopes: ASTList) {
                 super(new Identifier("script"), null, false, null, vars, scopes, null, NodeType.Script);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'FuncDecl'.
                                                                                        ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 this.vars = vars;
@@ -2320,6 +2407,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                          public name: Identifier,
                          public members: ASTList) {
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'ModuleElement'.
             }
         }
     
@@ -2340,6 +2429,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (name: Identifier, members: ASTList, vars: ASTList, scopes: ASTList, public endingToken: ASTSpan) {
                 super(NodeType.ModuleDeclaration, name, members);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'NamedDeclaration'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
     
@@ -2408,6 +2499,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                          public implementsList: ASTList,
                          members: ASTList) {
                 super(nodeType, name, members);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'NamedDeclaration'.
             }
     
             public isExported() { 
@@ -2438,6 +2531,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                          extendsList: ASTList,
                          implementsList: ASTList) {
                 super(NodeType.ClassDeclaration, name, extendsList, implementsList, members);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'TypeDeclaration'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2463,6 +2558,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                          extendsList: ASTList,
                          implementsList: ASTList) {
                 super(NodeType.InterfaceDeclaration, name, extendsList, implementsList, members);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'TypeDeclaration'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2486,6 +2583,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'ModuleElement'.
                 this.flags |= ASTFlags.IsStatement;
                               ~~~~~~~~
 !!! error TS2304: Cannot find name 'ASTFlags'.
@@ -2508,6 +2607,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class LabeledStatement extends Statement {
             constructor (public labels: ASTList, public stmt: AST) {
                 super(NodeType.LabeledStatement);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2554,6 +2655,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
             constructor (public statements: ASTList,
                          public isStatementBlock: boolean) {
                 super(NodeType.Block);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2628,6 +2731,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                                    ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 super(nodeType);
+                ~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
             }
     
             public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
@@ -2695,6 +2800,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public cond: AST) {
                 super(NodeType.While);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2773,6 +2880,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor () {
                 super(NodeType.DoWhile);
+                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2848,6 +2957,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public cond: AST) {
                 super(NodeType.If);
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2945,6 +3056,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor () {
                 super(NodeType.Return);
+                ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2988,6 +3101,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class EndCode extends AST {
             constructor () {
                 super(NodeType.EndCode);
+                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -2996,6 +3111,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class ForInStatement extends Statement {
             constructor (public lval: AST, public obj: AST) {
                 super(NodeType.ForIn);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 if (this.lval && (this.lval.nodeType == NodeType.VarDecl)) {
@@ -3159,6 +3276,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public init: AST) {
                 super(NodeType.For);
+                ~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3295,6 +3414,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public expr: AST) {
                 super(NodeType.With);
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3333,6 +3454,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public val: AST) {
                 super(NodeType.Switch);
+                ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3426,6 +3549,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor () {
                 super(NodeType.Case);
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3495,6 +3620,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class TypeReference extends AST {
             constructor (public term: AST, public arrayCount: number) {
                 super(NodeType.TypeRef);
+                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3538,6 +3665,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class TryFinally extends Statement {
             constructor (public tryNode: AST, public finallyNode: Finally) {
                 super(NodeType.TryFinally);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3601,6 +3730,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class TryCatch extends Statement {
             constructor (public tryNode: Try, public catchNode: Catch) {
                 super(NodeType.TryCatch);
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3671,6 +3802,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class Try extends Statement {
             constructor (public body: AST) {
                 super(NodeType.Try);
+                ~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3711,6 +3844,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class Catch extends Statement {
             constructor (public param: VarDecl, public body: AST) {
                 super(NodeType.Catch);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                 if (this.param) {
@@ -3814,6 +3949,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class Finally extends Statement {
             constructor (public body: AST) {
                 super(NodeType.Finally);
+                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3857,6 +3994,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
             constructor (public content: string, public isBlockComment: boolean, public endsLine) {
                 super(NodeType.Comment);
+                ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'AST'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }
@@ -3881,6 +4020,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
         export class DebuggerStatement extends Statement {
             constructor () {
                 super(NodeType.Debugger);
+                ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Statement'.
                       ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
             }

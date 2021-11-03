@@ -57,8 +57,8 @@ const list2 = new List<Test | null>();
 >null : null
 
 const filter1 = list2.filter(function(item, node, list): item is Test {
->filter1 : List<Test>
->list2.filter(function(item, node, list): item is Test {    this.b; // $ExpectType string    item; // $ExpectType Test | null    node; // $ExpectType ListItem<Test | null>    list; // $ExpectType List<Test | null>    return !!item;}, {b: 'c'}) : List<Test>
+>filter1 : List<Test | null>
+>list2.filter(function(item, node, list): item is Test {    this.b; // $ExpectType string    item; // $ExpectType Test | null    node; // $ExpectType ListItem<Test | null>    list; // $ExpectType List<Test | null>    return !!item;}, {b: 'c'}) : List<Test | null>
 >list2.filter : { <TContext, TResult extends Test | null>(fn: FilterFn<Test | null, TResult, TContext>, context: TContext): List<TResult>; <TResult extends Test | null>(fn: FilterFn<Test | null, TResult, List<Test | null>>): List<TResult>; <TContext>(fn: IteratorFn<Test | null, boolean, TContext>, context: TContext): List<Test | null>; (fn: IteratorFn<Test | null, boolean, List<Test | null>>): List<Test | null>; }
 >list2 : List<Test | null>
 >filter : { <TContext, TResult extends Test | null>(fn: FilterFn<Test | null, TResult, TContext>, context: TContext): List<TResult>; <TResult extends Test | null>(fn: FilterFn<Test | null, TResult, List<Test | null>>): List<TResult>; <TContext>(fn: IteratorFn<Test | null, boolean, TContext>, context: TContext): List<Test | null>; (fn: IteratorFn<Test | null, boolean, List<Test | null>>): List<Test | null>; }
@@ -93,5 +93,5 @@ const filter1 = list2.filter(function(item, node, list): item is Test {
 
 const x: List<Test> = filter1; // $ExpectType List<Test>
 >x : List<Test>
->filter1 : List<Test>
+>filter1 : List<Test | null>
 

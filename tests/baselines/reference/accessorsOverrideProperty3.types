@@ -16,7 +16,7 @@ class Lion extends Animal {
     get sound() { return this._sound } // error here
 >sound : string
 >this._sound : string
->this : this
+>this : Lion
 >_sound : string
 
     set sound(val) { this._sound = val }
@@ -24,7 +24,7 @@ class Lion extends Animal {
 >val : string
 >this._sound = val : string
 >this._sound : string
->this : this
+>this : Lion
 >_sound : string
 >val : string
 }

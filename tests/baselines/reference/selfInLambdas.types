@@ -73,7 +73,7 @@ class X {
             var x = this.value;
 >x : string
 >this.value : string
->this : this
+>this : X
 >value : string
 
             var inner = () => {
@@ -83,7 +83,7 @@ class X {
                 var y = this.value;
 >y : string
 >this.value : string
->this : this
+>this : X
 >value : string
 			}
 

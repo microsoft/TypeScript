@@ -12,7 +12,7 @@ class Employee {
         this._fullName = newName;
 >this._fullName = newName : string
 >this._fullName : string
->this : this
+>this : Employee
 >_fullName : string
 >newName : string
     }

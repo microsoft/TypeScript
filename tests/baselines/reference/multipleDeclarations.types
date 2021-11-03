@@ -31,20 +31,20 @@ class X {
         this.m = this.m.bind(this);
 >this.m = this.m.bind(this) : any
 >this.m : () => void
->this : this
+>this : X
 >m : () => void
 >this.m.bind(this) : any
 >this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this.m : () => void
->this : this
+>this : X
 >m : () => void
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->this : this
+>this : X
 
         this.mistake = 'frankly, complete nonsense';
 >this.mistake = 'frankly, complete nonsense' : "frankly, complete nonsense"
 >this.mistake : () => void
->this : this
+>this : X
 >mistake : () => void
 >'frankly, complete nonsense' : "frankly, complete nonsense"
     }
@@ -93,20 +93,20 @@ class Y {
         this.m = this.m.bind(this);
 >this.m = this.m.bind(this) : any
 >this.m : () => void
->this : this
+>this : Y
 >m : () => void
 >this.m.bind(this) : any
 >this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this.m : () => void
->this : this
+>this : Y
 >m : () => void
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->this : this
+>this : Y
 
         this.mistake = 'even more nonsense';
 >this.mistake = 'even more nonsense' : "even more nonsense"
 >this.mistake : () => void
->this : this
+>this : Y
 >mistake : () => void
 >'even more nonsense' : "even more nonsense"
     }

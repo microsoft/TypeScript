@@ -16,7 +16,7 @@ class D {
         var data = this.data;
 >data : string | string[]
 >this.data : string | string[]
->this : this
+>this : D
 >data : string | string[]
 
         return typeof data === "string" ? data : data.join(" ");
@@ -41,16 +41,16 @@ class D {
 >typeof this.data === "string" : boolean
 >typeof this.data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.data : string | string[]
->this : this
+>this : D
 >data : string | string[]
 >"string" : "string"
 >this.data : string
->this : this
+>this : D
 >data : string
 >this.data.join(" ") : string
 >this.data.join : (separator?: string) => string
 >this.data : string[]
->this : this
+>this : D
 >data : string[]
 >join : (separator?: string) => string
 >" " : " "

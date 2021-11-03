@@ -132,7 +132,7 @@ class Foo {
 >await this.bar(node) : undefined
 >this.bar(node) : Promise<undefined>
 >this.bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
->this : this
+>this : Foo
 >bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
 >node : CommitFileNode | ResultsFileNode
 	}

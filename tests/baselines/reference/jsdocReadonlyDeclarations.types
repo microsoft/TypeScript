@@ -14,7 +14,7 @@ class C {
         this.x = n
 >this.x = n : any
 >this.x : 6
->this : this
+>this : C
 >x : 6
 >n : any
 
@@ -25,7 +25,7 @@ class C {
         this.y = n
 >this.y = n : any
 >this.y : number
->this : this
+>this : C
 >y : number
 >n : any
     }

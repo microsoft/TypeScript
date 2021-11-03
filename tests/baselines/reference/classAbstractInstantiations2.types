@@ -12,7 +12,7 @@ abstract class B {
 >foo : () => number
 >this.bar() : number
 >this.bar : () => number
->this : this
+>this : B
 >bar : () => number
 
     abstract bar() : number;

@@ -201,7 +201,7 @@ class C4T5 {
         this.foo = function(i, s) {
 >this.foo = function(i, s) {            return s;        } : (i: number, s: string) => string
 >this.foo : (i: number, s: string) => string
->this : this
+>this : C4T5
 >foo : (i: number, s: string) => string
 >function(i, s) {            return s;        } : (i: number, s: string) => string
 >i : number

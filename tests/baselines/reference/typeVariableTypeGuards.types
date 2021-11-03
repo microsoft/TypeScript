@@ -19,13 +19,13 @@ class A<P extends Partial<Foo>> {
 >this.props.foo && this.props.foo() : void | undefined
 >this.props.foo : P["foo"] | undefined
 >this.props : Readonly<P>
->this : this
+>this : A<P>
 >props : Readonly<P>
 >foo : P["foo"] | undefined
 >this.props.foo() : void
 >this.props.foo : () => void
 >this.props : Readonly<P>
->this : this
+>this : A<P>
 >props : Readonly<P>
 >foo : () => void
     }
@@ -49,13 +49,13 @@ class Monkey<T extends Banana | undefined> {
 
         if (this.a) {
 >this.a : T
->this : this
+>this : Monkey<T>
 >a : T
 
             this.a.color;
 >this.a.color : "yellow"
 >this.a : Banana
->this : this
+>this : Monkey<T>
 >a : Banana
 >color : "yellow"
         }
@@ -74,13 +74,13 @@ class BigMonkey extends Monkey<BigBanana> {
 
         if (this.a) {
 >this.a : BigBanana
->this : this
+>this : BigMonkey
 >a : BigBanana
 
             this.a.color;
 >this.a.color : "yellow"
 >this.a : BigBanana
->this : this
+>this : BigMonkey
 >a : BigBanana
 >color : "yellow"
         }

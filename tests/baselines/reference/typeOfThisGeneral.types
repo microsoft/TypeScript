@@ -13,7 +13,7 @@ class MyTestClass {
         var p = this.canary;
 >p : number
 >this.canary : number
->this : this
+>this : MyTestClass
 >canary : number
 
         var p: number;
@@ -22,7 +22,7 @@ class MyTestClass {
         this.canary = 3;
 >this.canary = 3 : 3
 >this.canary : number
->this : this
+>this : MyTestClass
 >canary : number
 >3 : 3
     }
@@ -38,47 +38,47 @@ class MyTestClass {
 
         //type of 'this' in member function body is the class instance type
         var p = this;
->p : this
->this : this
+>p : MyTestClass
+>this : MyTestClass
 
         var p: MyTestClass;
->p : this
+>p : MyTestClass
     }
 
     //type of 'this' in member accessor(get and set) body is the class instance type
     get prop() {
->prop : this
+>prop : MyTestClass
 
         var p = this;
->p : this
->this : this
+>p : MyTestClass
+>this : MyTestClass
 
         var p: MyTestClass;
->p : this
+>p : MyTestClass
 
         return this;
->this : this
+>this : MyTestClass
     }
     set prop(v) {
->prop : this
->v : this
+>prop : MyTestClass
+>v : MyTestClass
 
         var p = this;
->p : this
->this : this
+>p : MyTestClass
+>this : MyTestClass
 
         var p: MyTestClass;
->p : this
+>p : MyTestClass
 
         p = v;
->p = v : this
->p : this
->v : this
+>p = v : MyTestClass
+>p : MyTestClass
+>v : MyTestClass
 
         v = p;
->v = p : this
->v : this
->p : this
+>v = p : MyTestClass
+>v : MyTestClass
+>p : MyTestClass
     }
 
     someFunc = () => {
@@ -196,7 +196,7 @@ class MyGenericTestClass<T, U> {
         var p = this.canary;
 >p : number
 >this.canary : number
->this : this
+>this : MyGenericTestClass<T, U>
 >canary : number
 
         var p: number;
@@ -205,7 +205,7 @@ class MyGenericTestClass<T, U> {
         this.canary = 3;
 >this.canary = 3 : 3
 >this.canary : number
->this : this
+>this : MyGenericTestClass<T, U>
 >canary : number
 >3 : 3
     }
@@ -221,47 +221,47 @@ class MyGenericTestClass<T, U> {
 
         //type of 'this' in member function body is the class instance type
         var p = this;
->p : this
->this : this
+>p : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
 
         var p: MyGenericTestClass<T, U>;
->p : this
+>p : MyGenericTestClass<T, U>
     }
 
     //type of 'this' in member accessor(get and set) body is the class instance type
     get prop() {
->prop : this
+>prop : MyGenericTestClass<T, U>
 
         var p = this;
->p : this
->this : this
+>p : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
 
         var p: MyGenericTestClass<T, U>;
->p : this
+>p : MyGenericTestClass<T, U>
 
         return this;
->this : this
+>this : MyGenericTestClass<T, U>
     }
     set prop(v) {
->prop : this
->v : this
+>prop : MyGenericTestClass<T, U>
+>v : MyGenericTestClass<T, U>
 
         var p = this;
->p : this
->this : this
+>p : MyGenericTestClass<T, U>
+>this : MyGenericTestClass<T, U>
 
         var p: MyGenericTestClass<T, U>;
->p : this
+>p : MyGenericTestClass<T, U>
 
         p = v;
->p = v : this
->p : this
->v : this
+>p = v : MyGenericTestClass<T, U>
+>p : MyGenericTestClass<T, U>
+>v : MyGenericTestClass<T, U>
 
         v = p;
->v = p : this
->v : this
->p : this
+>v = p : MyGenericTestClass<T, U>
+>v : MyGenericTestClass<T, U>
+>p : MyGenericTestClass<T, U>
     }
 
     someFunc = () => {

@@ -630,7 +630,7 @@ export abstract class BB {
         this.get(id!);
 >this.get(id!) : void
 >this.get : (id: `${string}-${string}`) => void
->this : this
+>this : BB
 >get : (id: `${string}-${string}`) => void
 >id! : `${string}-${string}`
 >id : `${string}-${string}`

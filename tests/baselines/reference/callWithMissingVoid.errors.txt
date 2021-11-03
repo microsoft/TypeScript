@@ -1,3 +1,10 @@
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(9,1): error TS2684: The 'this' context of type 'X<void>' is not assignable to method's 'this' of type 'X<T>'.
+  Type 'void' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(12,1): error TS2684: The 'this' context of type 'X<number | void>' is not assignable to method's 'this' of type 'X<T>'.
+  Type 'number | void' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'number | void'.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(13,1): error TS2684: The 'this' context of type 'X<number | void>' is not assignable to method's 'this' of type 'X<T>'.
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(16,6): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(19,10): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(22,8): error TS2554: Expected 1 arguments, but got 0.
@@ -11,7 +18,7 @@ tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(57,1): 
 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(75,1): error TS2554: Expected 3 arguments, but got 1.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts (11 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts (14 errors) ====
     // From #4260
     class X<T> {
         f(t: T) {
@@ -21,10 +28,20 @@ tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(75,1): 
     
     declare const x: X<void>;
     x.f() // no error because f expects void
+    ~
+!!! error TS2684: The 'this' context of type 'X<void>' is not assignable to method's 'this' of type 'X<T>'.
+!!! error TS2684:   Type 'void' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
     
     declare const xUnion: X<void | number>;
     xUnion.f(42) // no error because f accepts number
+    ~~~~~~
+!!! error TS2684: The 'this' context of type 'X<number | void>' is not assignable to method's 'this' of type 'X<T>'.
+!!! error TS2684:   Type 'number | void' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'number | void'.
     xUnion.f() // no error because f accepts void
+    ~~~~~~
+!!! error TS2684: The 'this' context of type 'X<number | void>' is not assignable to method's 'this' of type 'X<T>'.
     
     declare const xAny: X<any>;
     xAny.f() // error, any still expects an argument

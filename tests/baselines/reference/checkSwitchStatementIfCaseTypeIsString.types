@@ -25,7 +25,7 @@ class A {
 >"test" : "test"
 >use(this) : void
 >use : (a: any) => void
->this : this
+>this : A
             }
         });
     }

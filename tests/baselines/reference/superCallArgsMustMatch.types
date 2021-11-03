@@ -28,7 +28,7 @@ class T6 extends T5<number>{
         var x: number = this.foo;
 >x : number
 >this.foo : number
->this : this
+>this : T6
 >foo : number
 
     }

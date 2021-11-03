@@ -32,7 +32,7 @@ class D extends C {
     get p() { return this._secret } // error
 >p : number
 >this._secret : number
->this : this
+>this : D
 >_secret : number
 
     set p(value) { this._secret = value } // error
@@ -40,7 +40,7 @@ class D extends C {
 >value : number
 >this._secret = value : number
 >this._secret : number
->this : this
+>this : D
 >_secret : number
 >value : number
 }

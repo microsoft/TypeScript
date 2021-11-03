@@ -22,7 +22,7 @@ class MyFoo extends Foo {
 >this.prop.alpha = 12 : 12
 >this.prop.alpha : any
 >this.prop : any
->this : this
+>this : MyFoo
 >prop : any
 >alpha : any
 >12 : 12

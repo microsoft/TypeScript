@@ -16,14 +16,14 @@ class MyClass {
         this.property = `foo`; // Correctly inferred as `string`
 >this.property = `foo` : "foo"
 >this.property : string
->this : this
+>this : MyClass
 >property : string
 >`foo` : "foo"
 
         this.property2 = `foo-${variable}`; // Causes an error
 >this.property2 = `foo-${variable}` : string
 >this.property2 : string
->this : this
+>this : MyClass
 >property2 : string
 >`foo-${variable}` : string
 >variable : "something"

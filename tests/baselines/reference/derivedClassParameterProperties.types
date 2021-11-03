@@ -114,7 +114,7 @@ class Derived6 extends Base {
         this.a = 1;
 >this.a = 1 : 1
 >this.a : number
->this : this
+>this : Derived6
 >a : number
 >1 : 1
 
@@ -145,14 +145,14 @@ class Derived7 extends Base {
         this.a = 3;
 >this.a = 3 : 3
 >this.a : number
->this : this
+>this : Derived7
 >a : number
 >3 : 3
 
         this.b = 3;
 >this.b = 3 : 3
 >this.b : number
->this : this
+>this : Derived7
 >b : number
 >3 : 3
 
@@ -183,14 +183,14 @@ class Derived8 extends Base {
         this.a = 3;
 >this.a = 3 : 3
 >this.a : number
->this : this
+>this : Derived8
 >a : number
 >3 : 3
 
         this.b = 3;        
 >this.b = 3 : 3
 >this.b : number
->this : this
+>this : Derived8
 >b : number
 >3 : 3
     }
@@ -218,14 +218,14 @@ class Derived9<T> extends Base2<T> {
         this.a = 3;
 >this.a = 3 : 3
 >this.a : number
->this : this
+>this : Derived9<T>
 >a : number
 >3 : 3
 
         this.b = 3;
 >this.b = 3 : 3
 >this.b : number
->this : this
+>this : Derived9<T>
 >b : number
 >3 : 3
 
@@ -256,14 +256,14 @@ class Derived10<T> extends Base2<T> {
         this.a = 3;
 >this.a = 3 : 3
 >this.a : number
->this : this
+>this : Derived10<T>
 >a : number
 >3 : 3
 
         this.b = 3;
 >this.b = 3 : 3
 >this.b : number
->this : this
+>this : Derived10<T>
 >b : number
 >3 : 3
     }

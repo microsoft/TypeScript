@@ -49,27 +49,27 @@ export class TypedFoo extends MyFoo {
         this.props.x;
 >this.props.x : any
 >this.props : any
->this : this
+>this : TypedFoo
 >props : any
 >x : any
 
         this.props.y;
 >this.props.y : any
 >this.props : any
->this : this
+>this : TypedFoo
 >props : any
 >y : any
 
         this.state.value;
 >this.state.value : any
 >this.state : any
->this : this
+>this : TypedFoo
 >state : any
 >value : any
 
         this.member;
 >this.member : any
->this : this
+>this : TypedFoo
 >member : any
     }
 }

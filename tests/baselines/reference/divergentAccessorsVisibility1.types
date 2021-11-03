@@ -80,180 +80,180 @@ class Base {
         this.PublicPublic = 0;
 >this.PublicPublic = 0 : 0
 >this.PublicPublic : number
->this : this
+>this : Base
 >PublicPublic : number
 >0 : 0
 
         this.PublicProtected = 0;
 >this.PublicProtected = 0 : 0
 >this.PublicProtected : number
->this : this
+>this : Base
 >PublicProtected : number
 >0 : 0
 
         this.PublicPrivate = 0;
 >this.PublicPrivate = 0 : 0
 >this.PublicPrivate : number
->this : this
+>this : Base
 >PublicPrivate : number
 >0 : 0
 
         this.ProtectedPublic = 0;
 >this.ProtectedPublic = 0 : 0
 >this.ProtectedPublic : number
->this : this
+>this : Base
 >ProtectedPublic : number
 >0 : 0
 
         this.ProtectedProtected = 0;
 >this.ProtectedProtected = 0 : 0
 >this.ProtectedProtected : number
->this : this
+>this : Base
 >ProtectedProtected : number
 >0 : 0
 
         this.ProtectedPrivate = 0;
 >this.ProtectedPrivate = 0 : 0
 >this.ProtectedPrivate : number
->this : this
+>this : Base
 >ProtectedPrivate : number
 >0 : 0
 
         this.PrivatePublic = 0;
 >this.PrivatePublic = 0 : 0
 >this.PrivatePublic : number
->this : this
+>this : Base
 >PrivatePublic : number
 >0 : 0
 
         this.PrivateProtected = 0;
 >this.PrivateProtected = 0 : 0
 >this.PrivateProtected : number
->this : this
+>this : Base
 >PrivateProtected : number
 >0 : 0
 
         this.PrivatePrivate = 0;
 >this.PrivatePrivate = 0 : 0
 >this.PrivatePrivate : number
->this : this
+>this : Base
 >PrivatePrivate : number
 >0 : 0
 
         void this.PublicPublic;
 >void this.PublicPublic : undefined
 >this.PublicPublic : number
->this : this
+>this : Base
 >PublicPublic : number
 
         void this.PublicProtected;
 >void this.PublicProtected : undefined
 >this.PublicProtected : number
->this : this
+>this : Base
 >PublicProtected : number
 
         void this.PublicPrivate;
 >void this.PublicPrivate : undefined
 >this.PublicPrivate : number
->this : this
+>this : Base
 >PublicPrivate : number
 
         void this.ProtectedPublic;
 >void this.ProtectedPublic : undefined
 >this.ProtectedPublic : number
->this : this
+>this : Base
 >ProtectedPublic : number
 
         void this.ProtectedProtected;
 >void this.ProtectedProtected : undefined
 >this.ProtectedProtected : number
->this : this
+>this : Base
 >ProtectedProtected : number
 
         void this.ProtectedPrivate;
 >void this.ProtectedPrivate : undefined
 >this.ProtectedPrivate : number
->this : this
+>this : Base
 >ProtectedPrivate : number
 
         void this.PrivatePublic;
 >void this.PrivatePublic : undefined
 >this.PrivatePublic : number
->this : this
+>this : Base
 >PrivatePublic : number
 
         void this.PrivateProtected;
 >void this.PrivateProtected : undefined
 >this.PrivateProtected : number
->this : this
+>this : Base
 >PrivateProtected : number
 
         void this.PrivatePrivate;
 >void this.PrivatePrivate : undefined
 >this.PrivatePrivate : number
->this : this
+>this : Base
 >PrivatePrivate : number
 
         this.PublicPublic += 0;
 >this.PublicPublic += 0 : number
 >this.PublicPublic : number
->this : this
+>this : Base
 >PublicPublic : number
 >0 : 0
 
         this.PublicProtected += 0;
 >this.PublicProtected += 0 : number
 >this.PublicProtected : number
->this : this
+>this : Base
 >PublicProtected : number
 >0 : 0
 
         this.PublicPrivate += 0;
 >this.PublicPrivate += 0 : number
 >this.PublicPrivate : number
->this : this
+>this : Base
 >PublicPrivate : number
 >0 : 0
 
         this.ProtectedPublic += 0;
 >this.ProtectedPublic += 0 : number
 >this.ProtectedPublic : number
->this : this
+>this : Base
 >ProtectedPublic : number
 >0 : 0
 
         this.ProtectedProtected += 0;
 >this.ProtectedProtected += 0 : number
 >this.ProtectedProtected : number
->this : this
+>this : Base
 >ProtectedProtected : number
 >0 : 0
 
         this.ProtectedPrivate += 0;
 >this.ProtectedPrivate += 0 : number
 >this.ProtectedPrivate : number
->this : this
+>this : Base
 >ProtectedPrivate : number
 >0 : 0
 
         this.PrivatePublic += 0;
 >this.PrivatePublic += 0 : number
 >this.PrivatePublic : number
->this : this
+>this : Base
 >PrivatePublic : number
 >0 : 0
 
         this.PrivateProtected += 0;
 >this.PrivateProtected += 0 : number
 >this.PrivateProtected : number
->this : this
+>this : Base
 >PrivateProtected : number
 >0 : 0
 
         this.PrivatePrivate += 0;
 >this.PrivatePrivate += 0 : number
 >this.PrivatePrivate : number
->this : this
+>this : Base
 >PrivatePrivate : number
 >0 : 0
     }
@@ -269,180 +269,180 @@ class Derived extends Base {
         this.PublicPublic = 0;
 >this.PublicPublic = 0 : 0
 >this.PublicPublic : number
->this : this
+>this : Derived
 >PublicPublic : number
 >0 : 0
 
         this.PublicProtected = 0;
 >this.PublicProtected = 0 : 0
 >this.PublicProtected : number
->this : this
+>this : Derived
 >PublicProtected : number
 >0 : 0
 
         this.PublicPrivate = 0;
 >this.PublicPrivate = 0 : 0
 >this.PublicPrivate : number
->this : this
+>this : Derived
 >PublicPrivate : number
 >0 : 0
 
         this.ProtectedPublic = 0;
 >this.ProtectedPublic = 0 : 0
 >this.ProtectedPublic : number
->this : this
+>this : Derived
 >ProtectedPublic : number
 >0 : 0
 
         this.ProtectedProtected = 0;
 >this.ProtectedProtected = 0 : 0
 >this.ProtectedProtected : number
->this : this
+>this : Derived
 >ProtectedProtected : number
 >0 : 0
 
         this.ProtectedPrivate = 0;
 >this.ProtectedPrivate = 0 : 0
 >this.ProtectedPrivate : number
->this : this
+>this : Derived
 >ProtectedPrivate : number
 >0 : 0
 
         this.PrivatePublic = 0;
 >this.PrivatePublic = 0 : 0
 >this.PrivatePublic : number
->this : this
+>this : Derived
 >PrivatePublic : number
 >0 : 0
 
         this.PrivateProtected = 0;
 >this.PrivateProtected = 0 : 0
 >this.PrivateProtected : number
->this : this
+>this : Derived
 >PrivateProtected : number
 >0 : 0
 
         this.PrivatePrivate = 0;
 >this.PrivatePrivate = 0 : 0
 >this.PrivatePrivate : number
->this : this
+>this : Derived
 >PrivatePrivate : number
 >0 : 0
 
         void this.PublicPublic;
 >void this.PublicPublic : undefined
 >this.PublicPublic : number
->this : this
+>this : Derived
 >PublicPublic : number
 
         void this.PublicProtected;
 >void this.PublicProtected : undefined
 >this.PublicProtected : number
->this : this
+>this : Derived
 >PublicProtected : number
 
         void this.PublicPrivate;
 >void this.PublicPrivate : undefined
 >this.PublicPrivate : number
->this : this
+>this : Derived
 >PublicPrivate : number
 
         void this.ProtectedPublic;
 >void this.ProtectedPublic : undefined
 >this.ProtectedPublic : number
->this : this
+>this : Derived
 >ProtectedPublic : number
 
         void this.ProtectedProtected;
 >void this.ProtectedProtected : undefined
 >this.ProtectedProtected : number
->this : this
+>this : Derived
 >ProtectedProtected : number
 
         void this.ProtectedPrivate;
 >void this.ProtectedPrivate : undefined
 >this.ProtectedPrivate : number
->this : this
+>this : Derived
 >ProtectedPrivate : number
 
         void this.PrivatePublic;
 >void this.PrivatePublic : undefined
 >this.PrivatePublic : number
->this : this
+>this : Derived
 >PrivatePublic : number
 
         void this.PrivateProtected;
 >void this.PrivateProtected : undefined
 >this.PrivateProtected : number
->this : this
+>this : Derived
 >PrivateProtected : number
 
         void this.PrivatePrivate;
 >void this.PrivatePrivate : undefined
 >this.PrivatePrivate : number
->this : this
+>this : Derived
 >PrivatePrivate : number
 
         this.PublicPublic += 0;
 >this.PublicPublic += 0 : number
 >this.PublicPublic : number
->this : this
+>this : Derived
 >PublicPublic : number
 >0 : 0
 
         this.PublicProtected += 0;
 >this.PublicProtected += 0 : number
 >this.PublicProtected : number
->this : this
+>this : Derived
 >PublicProtected : number
 >0 : 0
 
         this.PublicPrivate += 0;
 >this.PublicPrivate += 0 : number
 >this.PublicPrivate : number
->this : this
+>this : Derived
 >PublicPrivate : number
 >0 : 0
 
         this.ProtectedPublic += 0;
 >this.ProtectedPublic += 0 : number
 >this.ProtectedPublic : number
->this : this
+>this : Derived
 >ProtectedPublic : number
 >0 : 0
 
         this.ProtectedProtected += 0;
 >this.ProtectedProtected += 0 : number
 >this.ProtectedProtected : number
->this : this
+>this : Derived
 >ProtectedProtected : number
 >0 : 0
 
         this.ProtectedPrivate += 0;
 >this.ProtectedPrivate += 0 : number
 >this.ProtectedPrivate : number
->this : this
+>this : Derived
 >ProtectedPrivate : number
 >0 : 0
 
         this.PrivatePublic += 0;
 >this.PrivatePublic += 0 : number
 >this.PrivatePublic : number
->this : this
+>this : Derived
 >PrivatePublic : number
 >0 : 0
 
         this.PrivateProtected += 0;
 >this.PrivateProtected += 0 : number
 >this.PrivateProtected : number
->this : this
+>this : Derived
 >PrivateProtected : number
 >0 : 0
 
         this.PrivatePrivate += 0;
 >this.PrivatePrivate += 0 : number
 >this.PrivatePrivate : number
->this : this
+>this : Derived
 >PrivatePrivate : number
 >0 : 0
     }

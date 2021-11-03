@@ -13,14 +13,14 @@ module X.Y {
             this.x = x;
 >this.x = x : number
 >this.x : number
->this : this
+>this : Point
 >x : number
 >x : number
 
             this.y = y;
 >this.y = y : number
 >this.y : number
->this : this
+>this : Point
 >y : number
 >y : number
         }

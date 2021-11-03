@@ -14,10 +14,10 @@ declare var dec: any;
 >f : () => Promise<void>
 >this.#x = await this.#x : number
 >this.#x : number
->this : this
+>this : A
 >await this.#x : number
 >this.#x : number
->this : this
+>this : A
 
     g(u) { return #x in u; }
 >g : (u: any) => boolean

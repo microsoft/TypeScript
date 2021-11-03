@@ -23,7 +23,7 @@ class C2 {
         let x = this.a;
 >x : number
 >this.a : number
->this : this
+>this : C2
 >a : number
     }
 }

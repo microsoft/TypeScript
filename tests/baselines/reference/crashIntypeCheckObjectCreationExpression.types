@@ -9,7 +9,7 @@ export class BuildWorkspaceService {
         this.injectBuildService<number>(new X(service));
 >this.injectBuildService<number>(new X(service)) : void
 >this.injectBuildService : <P0>(service: P0) => void
->this : this
+>this : BuildWorkspaceService
 >injectBuildService : <P0>(service: P0) => void
 >new X(service) : any
 >X : any

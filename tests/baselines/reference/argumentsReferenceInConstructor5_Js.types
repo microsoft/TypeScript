@@ -26,7 +26,7 @@ class A {
 		this.foo = foo;
 >this.foo = foo : any
 >this.foo : any
->this : this
+>this : A
 >foo : any
 >foo : any
 
@@ -36,7 +36,7 @@ class A {
 		this.bar = bar.arguments;
 >this.bar = bar.arguments : {}
 >this.bar : any
->this : this
+>this : A
 >bar : any
 >bar.arguments : {}
 >bar : { arguments: {}; }

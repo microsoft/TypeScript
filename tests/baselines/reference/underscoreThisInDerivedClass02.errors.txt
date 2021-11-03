@@ -1,0 +1,24 @@
+tests/cases/compiler/underscoreThisInDerivedClass02.ts(15,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
+
+
+==== tests/cases/compiler/underscoreThisInDerivedClass02.ts (1 errors) ====
+    // @target es5
+    
+    // Original test intent:
+    // Errors on '_this' should be reported in derived constructors,
+    // even if 'super()' is not called.
+    
+    class C {
+        constructor() {
+            return {};
+        }
+    }
+    
+    class D extends C {
+        constructor() {
+            super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
+            var _this = "uh-oh?";
+        }
+    }

@@ -96,7 +96,7 @@ module Sample.Thing.Widgets {
 >true : true
 >runner(this) : any
 >runner : (widget: IWidget) => any
->this : this
+>this : FindWidget
 			
 		private domNode:any = null;
 >domNode : any
@@ -114,7 +114,7 @@ module Sample.Thing.Widgets {
 >codeThing : ICodeThing
 >addWidget : (widgetId: string, widget: IWidget) => any
 >"addWidget" : "addWidget"
->this : this
+>this : FindWidget
 		}
 		
 		public getDomNode() {
@@ -165,7 +165,7 @@ module Sample.Thing.Languages.PlainText {
 >clone : () => IState
 
 			return this;
->this : this
+>this : State
 		}
 
 		public equals(other:IState):boolean {
@@ -174,7 +174,7 @@ module Sample.Thing.Languages.PlainText {
 
 			return this === other;
 >this === other : boolean
->this : this
+>this : State
 >other : IState
 		}
 		

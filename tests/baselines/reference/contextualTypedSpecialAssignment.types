@@ -56,7 +56,7 @@ class Thing {
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 >this.s : DoneStatus
->this : this
+>this : Thing
 >s : DoneStatus
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
@@ -76,7 +76,7 @@ class Thing {
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 >this.s : DoneStatus
->this : this
+>this : Thing
 >s : DoneStatus
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 

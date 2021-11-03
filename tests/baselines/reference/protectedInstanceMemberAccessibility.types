@@ -26,26 +26,26 @@ class B extends A {
         var t1 = this.x;
 >t1 : string
 >this.x : string
->this : this
+>this : B
 >x : string
 
         var t2 = this.f();
 >t2 : string
 >this.f() : string
 >this.f : () => string
->this : this
+>this : B
 >f : () => string
 
         var t3 = this.y;
 >t3 : string
 >this.y : string
->this : this
+>this : B
 >y : string
 
         var t4 = this.z;     // error
 >t4 : any
 >this.z : any
->this : this
+>this : B
 >z : any
 
         var s1 = super.x;    // error

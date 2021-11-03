@@ -13,11 +13,11 @@ class A2 {
 >console : Console
 >log : (...data: any[]) => void
 >this.#method : () => string
->this : this
+>this : A2
 
         let a: A2 = this;
 >a : A2
->this : this
+>this : A2
 
         a.#method();
 >a.#method() : string

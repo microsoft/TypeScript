@@ -86,7 +86,7 @@ class GetSetMonster {
         return this._health > 0;
 >this._health > 0 : boolean
 >this._health : number
->this : this
+>this : GetSetMonster
 >_health : number
 >0 : 0
     }
@@ -109,7 +109,7 @@ class GetSetMonster {
         this._health = value
 >this._health = value : number
 >this._health : number
->this : this
+>this : GetSetMonster
 >_health : number
 >value : number
   }
@@ -352,14 +352,14 @@ class ImplementsInterface implements IFoo {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : number
->this : this
+>this : ImplementsInterface
 >x : number
 >1 : 1
 
         this.z = "foo";
 >this.z = "foo" : "foo"
 >this.z : string
->this : this
+>this : ImplementsInterface
 >z : string
 >"foo" : "foo"
     }
@@ -387,14 +387,14 @@ class Visibility {
         this.x = 1;
 >this.x = 1 : 1
 >this.x : number
->this : this
+>this : Visibility
 >x : number
 >1 : 1
 
         this.y = 2;
 >this.y = 2 : 2
 >this.y : number
->this : this
+>this : Visibility
 >y : number
 >2 : 2
     }

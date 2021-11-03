@@ -6,15 +6,15 @@ export class StackOverflowTest {
     this.testStackOverflow = this.testStackOverflow.bind(this)
 >this.testStackOverflow = this.testStackOverflow.bind(this) : error
 >this.testStackOverflow : any
->this : this
+>this : StackOverflowTest
 >testStackOverflow : any
 >this.testStackOverflow.bind(this) : error
 >this.testStackOverflow.bind : error
 >this.testStackOverflow : undefined
->this : this
+>this : StackOverflowTest
 >testStackOverflow : undefined
 >bind : any
->this : this
+>this : StackOverflowTest
   }
 }
 

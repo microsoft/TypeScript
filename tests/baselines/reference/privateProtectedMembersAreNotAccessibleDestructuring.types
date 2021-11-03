@@ -19,7 +19,7 @@ class K {
 >a : any
 >prot : any
 >b : any
->this : this
+>this : K
 
         let { priv, prot } = new K(); // ok
 >priv : any
@@ -38,12 +38,12 @@ class C extends K {
         let { priv: a } = this; // error
 >priv : any
 >a : any
->this : this
+>this : C
 
         let { prot: b } = this; // ok
 >prot : any
 >b : any
->this : this
+>this : C
     }
 }
 let k = new K();

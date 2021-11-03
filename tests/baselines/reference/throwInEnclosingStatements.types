@@ -77,13 +77,13 @@ class C<T> {
 
         throw this.value;
 >this.value : T
->this : this
+>this : C<T>
 >value : T
     }
 
     constructor() {
         throw this;
->this : this
+>this : C<T>
     }
 }
 

@@ -16,7 +16,7 @@ class Animal {
 
         let { species } = this;
 >species : string
->this : this
+>this : Animal
 
         console.log(species);
 >console.log(species) : void

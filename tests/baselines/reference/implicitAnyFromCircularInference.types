@@ -95,7 +95,7 @@ class D {
 
         return this.x;
 >this.x : any
->this : this
+>this : D
 >x : any
     }
 }

@@ -158,7 +158,7 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 >this.props.when("now") : boolean
 >this.props.when : P["when"]
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
->this : this
+>this : FieldFeedback2<P>
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
 >when : P["when"]
 >"now" : "now"

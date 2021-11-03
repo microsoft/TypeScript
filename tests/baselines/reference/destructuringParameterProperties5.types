@@ -37,19 +37,19 @@ class C1 {
 >this.x1 || this.x2 || this.x3 : any
 >this.x1 || this.x2 : any
 >this.x1 : any
->this : this
+>this : C1
 >x1 : any
 >this.x2 : any
->this : this
+>this : C1
 >x2 : any
 >this.x3 : any
->this : this
+>this : C1
 >x3 : any
 >this.y : any
->this : this
+>this : C1
 >y : any
 >this.z : any
->this : this
+>this : C1
 >z : any
     }
 }

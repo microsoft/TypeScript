@@ -10,7 +10,7 @@ class Base {
 
         this.x;            // OK, accessed within their declaring class
 >this.x : string
->this : this
+>this : Base
 >x : string
     }
 }
@@ -24,7 +24,7 @@ class Derived extends Base {
 
         this.x;            // OK, accessed within a subclass of the declaring class
 >this.x : string
->this : this
+>this : Derived
 >x : string
 
         super.x;           // Error, x is not public

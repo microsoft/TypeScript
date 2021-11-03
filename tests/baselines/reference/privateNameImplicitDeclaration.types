@@ -6,7 +6,7 @@ class C {
         /** @type {string} */
         this.#x;
 >this.#x : any
->this : this
+>this : C
     }
 }
 

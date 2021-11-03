@@ -20,7 +20,7 @@ class A {
 		this.foo = foo;
 >this.foo = foo : any
 >this.foo : any
->this : this
+>this : A
 >foo : any
 >foo : any
 
@@ -30,7 +30,7 @@ class A {
 		const arguments = this.arguments;
 >arguments : any
 >this.arguments : { bar: {}; }
->this : this
+>this : A
 >arguments : { bar: {}; }
 
 		/**
@@ -39,7 +39,7 @@ class A {
 		this.bar = arguments.bar;
 >this.bar = arguments.bar : any
 >this.bar : any
->this : this
+>this : A
 >bar : any
 >arguments.bar : any
 >arguments : any
@@ -51,7 +51,7 @@ class A {
 		this.baz = arguments[key];
 >this.baz = arguments[key] : any
 >this.baz : any
->this : this
+>this : A
 >baz : any
 >arguments[key] : any
 >arguments : any
@@ -63,7 +63,7 @@ class A {
 		this.options = arguments;
 >this.options = arguments : any
 >this.options : any
->this : this
+>this : A
 >options : any
 >arguments : any
 	}

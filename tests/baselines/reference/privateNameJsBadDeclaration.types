@@ -48,7 +48,7 @@ class C {
     this.#z = 3;
 >this.#z = 3 : 3
 >this.#z : any
->this : this
+>this : C
 >3 : 3
   }
 }

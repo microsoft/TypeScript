@@ -1,8 +1,9 @@
 tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts(12,4): error TS2341: Property 'p' is private and only accessible within class 'C2'.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts(19,4): error TS2445: Property 'p' is protected and only accessible within class 'C3' and its subclasses.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts(22,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C3'.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts (2 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts (3 errors) ====
     class C1 {
         constructor(public x?: number) { }
     }
@@ -29,6 +30,8 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorParamete
     class Derived extends C3 {
         constructor(p: number) {
             super(p);
+            ~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C3'.
             this.p; // OK
         }
     }

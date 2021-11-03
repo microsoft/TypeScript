@@ -21,7 +21,7 @@ Outer.Inner = class I {
         this.x = 1
 >this.x = 1 : 1
 >this.x : any
->this : this
+>this : I
 >x : any
 >1 : 1
     }

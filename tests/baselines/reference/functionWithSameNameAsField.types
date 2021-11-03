@@ -6,18 +6,18 @@ class TestProgressBar {
 >total : number
 
     public total(total: number) {
->total : (total: number) => this
+>total : (total: number) => TestProgressBar
 >total : number
 
         this.total = total;
 >this.total = total : number
 >this.total : number
->this : this
+>this : TestProgressBar
 >total : number
 >total : number
 
         return this;
->this : this
+>this : TestProgressBar
     }
 }
 

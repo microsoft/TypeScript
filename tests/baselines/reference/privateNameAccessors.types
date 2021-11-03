@@ -20,13 +20,13 @@ class A1 {
         this.#prop = "";
 >this.#prop = "" : ""
 >this.#prop : string
->this : this
+>this : A1
 >"" : ""
 
         this.#roProp = ""; // Error
 >this.#roProp = "" : ""
 >this.#roProp : any
->this : this
+>this : A1
 >"" : ""
 
         console.log(this.#prop);
@@ -35,7 +35,7 @@ class A1 {
 >console : Console
 >log : (...data: any[]) => void
 >this.#prop : string
->this : this
+>this : A1
 
         console.log(this.#roProp);
 >console.log(this.#roProp) : void
@@ -43,7 +43,7 @@ class A1 {
 >console : Console
 >log : (...data: any[]) => void
 >this.#roProp : string
->this : this
+>this : A1
     }
 }
 

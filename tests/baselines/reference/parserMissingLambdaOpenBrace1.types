@@ -19,7 +19,7 @@ class C {
             return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);
 >this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true) : any
 >this.doWhile : any
->this : this
+>this : C
 >doWhile : any
 >(item, i) => filter(item, i) ? test(item, index++) : true : (item: any, i: any) => any
 >item : any

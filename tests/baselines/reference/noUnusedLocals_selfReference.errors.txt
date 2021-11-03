@@ -5,10 +5,9 @@ tests/cases/compiler/noUnusedLocals_selfReference.ts(12,6): error TS6196: 'E' is
 tests/cases/compiler/noUnusedLocals_selfReference.ts(13,11): error TS6196: 'I' is declared but never used.
 tests/cases/compiler/noUnusedLocals_selfReference.ts(14,6): error TS6196: 'T' is declared but never used.
 tests/cases/compiler/noUnusedLocals_selfReference.ts(15,11): error TS6133: 'N' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' is declared but its value is never read.
 
 
-==== tests/cases/compiler/noUnusedLocals_selfReference.ts (8 errors) ====
+==== tests/cases/compiler/noUnusedLocals_selfReference.ts (7 errors) ====
     export {}; // Make this a module scope, so these are local variables.
     
     function f() {
@@ -45,8 +44,6 @@ tests/cases/compiler/noUnusedLocals_selfReference.ts(22,19): error TS6133: 'm' i
     export interface A<T> { T: T }
     
     class P { private m() { this.m; } }
-                      ~
-!!! error TS6133: 'm' is declared but its value is never read.
     P;
     
     // Does not detect mutual recursion.

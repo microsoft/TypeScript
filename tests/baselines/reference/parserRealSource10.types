@@ -3585,12 +3585,12 @@ module TypeScript {
 >"token: " + this.tokenId : string
 >"token: " : "token: "
 >this.tokenId : TokenID
->this : this
+>this : Token
 >tokenId : TokenID
 >" " : " "
 >this.getText() : string
 >this.getText : () => string
->this : this
+>this : Token
 >getText : () => string
 >" (" : " ("
 >(<any>TokenID)._map[this.tokenId] : any
@@ -3600,7 +3600,7 @@ module TypeScript {
 >TokenID : typeof TokenID
 >_map : any
 >this.tokenId : TokenID
->this : this
+>this : Token
 >tokenId : TokenID
 >")" : ")"
         }
@@ -3619,7 +3619,7 @@ module TypeScript {
 >this.toString() + ",on line" : string
 >this.toString() : string
 >this.toString : () => string
->this : this
+>this : Token
 >toString : () => string
 >",on line" : ",on line"
 >line : number
@@ -3633,7 +3633,7 @@ module TypeScript {
 >tokenTable[this.tokenId] : any
 >tokenTable : any
 >this.tokenId : TokenID
->this : this
+>this : Token
 >tokenId : TokenID
 >text : any
         }
@@ -3644,7 +3644,7 @@ module TypeScript {
             if (this.tokenId <= TokenID.LimKeyword) {
 >this.tokenId <= TokenID.LimKeyword : boolean
 >this.tokenId : TokenID
->this : this
+>this : Token
 >tokenId : TokenID
 >TokenID.LimKeyword : TokenID.Yield
 >TokenID : typeof TokenID
@@ -3661,7 +3661,7 @@ module TypeScript {
 >lookupToken(this.tokenId) : TokenInfo
 >lookupToken : (tokenId: TokenID) => TokenInfo
 >this.tokenId : TokenID
->this : this
+>this : Token
 >tokenId : TokenID
 
                 if (tokenInfo != undefined) {
@@ -3727,20 +3727,20 @@ module TypeScript {
             return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
 >this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString() : string
 >this.hasEmptyFraction : boolean
->this : this
+>this : NumberLiteralToken
 >hasEmptyFraction : boolean
 >this.value.toString() + ".0" : string
 >this.value.toString() : string
 >this.value.toString : (radix?: number) => string
 >this.value : number
->this : this
+>this : NumberLiteralToken
 >value : number
 >toString : (radix?: number) => string
 >".0" : ".0"
 >this.value.toString() : string
 >this.value.toString : (radix?: number) => string
 >this.value : number
->this : this
+>this : NumberLiteralToken
 >value : number
 >toString : (radix?: number) => string
         }
@@ -3775,7 +3775,7 @@ module TypeScript {
 
             return this.value;
 >this.value : string
->this : this
+>this : StringLiteralToken
 >value : string
         }
 
@@ -3809,7 +3809,7 @@ module TypeScript {
 
             return this.value;
 >this.value : string
->this : this
+>this : IdentifierToken
 >value : string
         }
         public classification(): TokenClass {
@@ -3841,7 +3841,7 @@ module TypeScript {
 
             return this.value;
 >this.value : string
->this : this
+>this : WhitespaceToken
 >value : string
         }
 
@@ -3878,7 +3878,7 @@ module TypeScript {
 
             return this.value;
 >this.value : string
->this : this
+>this : CommentToken
 >value : string
         }
 
@@ -3914,7 +3914,7 @@ module TypeScript {
 >this.regex.toString() : any
 >this.regex.toString : any
 >this.regex : any
->this : this
+>this : RegularExpressionLiteralToken
 >regex : any
 >toString : any
         }

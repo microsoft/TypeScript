@@ -16,7 +16,7 @@ Outer.Inner = class {
         this.y = 12
 >this.y = 12 : 12
 >this.y : number
->this : this
+>this : Inner
 >y : number
 >12 : 12
     }

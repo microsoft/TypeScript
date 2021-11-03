@@ -37,7 +37,7 @@ class C<T1> extends CBase<T1> {
         new CBaseBase<Wrapper<T1>>(this);
 >new CBaseBase<Wrapper<T1>>(this) : CBaseBase<Wrapper<T1>>
 >CBaseBase : typeof CBaseBase
->this : this
+>this : C<T1>
     }
     public alsoWorks() {
 >alsoWorks : () => void
@@ -45,7 +45,7 @@ class C<T1> extends CBase<T1> {
         new CBase<T1>(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
 >new CBase<T1>(this) : CBase<T1>
 >CBase : typeof CBase
->this : this
+>this : C<T1>
     }
 
     public method(t: Wrapper<T1>) { }

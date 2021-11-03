@@ -9,9 +9,12 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(42,9): error TS2684: The 'this' context of type 'C<number>' is not assignable to method's 'this' of type 'C<T>'.
+  Type 'number' is not assignable to type 'T'.
+    'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'number'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (7 errors) ====
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts (8 errors) ====
     class C<T extends number> {
         x: T;
         get X(): T { return null; }
@@ -72,3 +75,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var r = c.foo(); // e.foo would return string
+            ~
+!!! error TS2684: The 'this' context of type 'C<number>' is not assignable to method's 'this' of type 'C<T>'.
+!!! error TS2684:   Type 'number' is not assignable to type 'T'.
+!!! error TS2684:     'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'number'.

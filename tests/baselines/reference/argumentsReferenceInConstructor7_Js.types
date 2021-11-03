@@ -9,7 +9,7 @@ class A {
 		this.callee = arguments.callee;
 >this.callee = arguments.callee : Function
 >this.callee : Function
->this : this
+>this : A
 >callee : Function
 >arguments.callee : Function
 >arguments : IArguments

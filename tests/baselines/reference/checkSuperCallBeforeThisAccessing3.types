@@ -20,7 +20,7 @@ class Derived extends Based {
                 this.y = true;
 >this.y = true : true
 >this.y : boolean
->this : this
+>this : innver
 >y : boolean
 >true : true
             }
@@ -32,12 +32,12 @@ class Derived extends Based {
         this.x = 10;
 >this.x = 10 : 10
 >this.x : number
->this : this
+>this : Derived
 >x : number
 >10 : 10
 
         var that = this;
->that : this
->this : this
+>that : Derived
+>this : Derived
     }
 }

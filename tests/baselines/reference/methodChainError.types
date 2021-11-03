@@ -10,7 +10,7 @@ class Builder {
 >param : string
 
         return this;
->this : this
+>this : Builder
     }
 }
 

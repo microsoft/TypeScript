@@ -22,14 +22,14 @@ class DatasourceCommandWidgetElement {
             this._commandBased = true;
 >this._commandBased = true : true
 >this._commandBased : boolean
->this : this
+>this : DatasourceCommandWidgetElement
 >_commandBased : boolean
 >true : true
 
             this._commandElement = target.commandElement;
 >this._commandElement = target.commandElement : unknown
 >this._commandElement : unknown
->this : this
+>this : DatasourceCommandWidgetElement
 >_commandElement : unknown
 >target.commandElement : unknown
 >target : DatasourceCommandWidgetElement
@@ -39,7 +39,7 @@ class DatasourceCommandWidgetElement {
             this._commandBased = false;
 >this._commandBased = false : false
 >this._commandBased : boolean
->this : this
+>this : DatasourceCommandWidgetElement
 >_commandBased : boolean
 >false : false
         }
@@ -47,7 +47,7 @@ class DatasourceCommandWidgetElement {
         if (this._commandBased = (target instanceof DatasourceCommandWidgetElement)) {
 >this._commandBased = (target instanceof DatasourceCommandWidgetElement) : boolean
 >this._commandBased : boolean
->this : this
+>this : DatasourceCommandWidgetElement
 >_commandBased : boolean
 >(target instanceof DatasourceCommandWidgetElement) : boolean
 >target instanceof DatasourceCommandWidgetElement : boolean
@@ -57,7 +57,7 @@ class DatasourceCommandWidgetElement {
             this._commandElement = target.commandElement;
 >this._commandElement = target.commandElement : unknown
 >this._commandElement : unknown
->this : this
+>this : DatasourceCommandWidgetElement
 >_commandElement : unknown
 >target.commandElement : unknown
 >target : DatasourceCommandWidgetElement

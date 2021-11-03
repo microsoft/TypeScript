@@ -17,7 +17,7 @@ class A {
 		this.arguments = foo;
 >this.arguments = foo : any
 >this.arguments : any
->this : this
+>this : A
 >arguments : any
 >foo : any
 	}

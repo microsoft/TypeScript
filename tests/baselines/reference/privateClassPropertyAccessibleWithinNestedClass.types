@@ -10,7 +10,7 @@ class C {
     private get y() { return this.x; }
 >y : string
 >this.x : string
->this : this
+>this : C
 >x : string
 
     private set y(x) { this.y = this.x; }
@@ -18,16 +18,16 @@ class C {
 >x : string
 >this.y = this.x : string
 >this.y : string
->this : this
+>this : C
 >y : string
 >this.x : string
->this : this
+>this : C
 >x : string
 
     private foo() { return this.foo; }
->foo : () => any
+>foo : () => () => any
 >this.foo : () => any
->this : this
+>this : C
 >foo : () => any
 
     private static x: string;

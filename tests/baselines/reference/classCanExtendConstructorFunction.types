@@ -92,7 +92,7 @@ class Sql extends Wagon {
         this.foonly = 12
 >this.foonly = 12 : 12
 >this.foonly : any
->this : this
+>this : Sql
 >foonly : any
 >12 : 12
     }
@@ -252,7 +252,7 @@ class Chowder extends Soup {
 
         return this.flavour
 >this.flavour : { claim: "ignorant" | "malicious"; }
->this : this
+>this : Chowder
 >flavour : { claim: "ignorant" | "malicious"; }
     }
 }

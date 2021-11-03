@@ -1,3 +1,21 @@
+tests/cases/conformance/jsx/file.tsx(4,5): error TS2416: Property 'render' in type 'RC1' is not assignable to the same property in base type 'Component<{ x: number; }, {}>'.
+  Type '() => any' is not assignable to type '() => Element'.
+    The 'this' types of each signature are incompatible.
+      Type 'Component<P, S>' is not assignable to type 'RC1'.
+        Types of property 'render' are incompatible.
+          Type '() => Element' is not assignable to type '() => any'.
+            The 'this' types of each signature are incompatible.
+              Type 'RC1' is not assignable to type 'Component<P, S>'.
+                Types of property 'setState' are incompatible.
+                  Type '{ (f: (prevState: {}, props: { x: number; }) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+                    Types of parameters 'f' and 'f' are incompatible.
+                      Types of parameters 'prevState' and 'prevState' are incompatible.
+                        Type '{}' is not assignable to type 'S'.
+                          'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
+tests/cases/conformance/jsx/file.tsx(10,5): error TS2416: Property 'render' in type 'RC2' is not assignable to the same property in base type 'Component<{ x: string; }, {}>'.
+  Type '() => any' is not assignable to type '() => Element'.
+    The 'this' types of each signature are incompatible.
+      Property 'method' is missing in type 'Component<P, S>' but required in type 'RC2'.
 tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'boolean' is not assignable to type 'never'.
 tests/cases/conformance/jsx/file.tsx(33,21): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
   Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
@@ -5,17 +23,38 @@ tests/cases/conformance/jsx/file.tsx(34,22): error TS2322: Type '{ prop: true; }
   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     import React = require('react');
     
     class RC1 extends React.Component<{x : number}, {}> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'RC1' is not assignable to the same property in base type 'Component<{ x: number; }, {}>'.
+!!! error TS2416:   Type '() => any' is not assignable to type '() => Element'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'Component<P, S>' is not assignable to type 'RC1'.
+!!! error TS2416:         Types of property 'render' are incompatible.
+!!! error TS2416:           Type '() => Element' is not assignable to type '() => any'.
+!!! error TS2416:             The 'this' types of each signature are incompatible.
+!!! error TS2416:               Type 'RC1' is not assignable to type 'Component<P, S>'.
+!!! error TS2416:                 Types of property 'setState' are incompatible.
+!!! error TS2416:                   Type '{ (f: (prevState: {}, props: { x: number; }) => {}, callback?: () => any): void; (state: {}, callback?: () => any): void; }' is not assignable to type '{ (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }'.
+!!! error TS2416:                     Types of parameters 'f' and 'f' are incompatible.
+!!! error TS2416:                       Types of parameters 'prevState' and 'prevState' are incompatible.
+!!! error TS2416:                         Type '{}' is not assignable to type 'S'.
+!!! error TS2416:                           'S' could be instantiated with an arbitrary type which could be unrelated to '{}'.
             return null;
         }
     }
     
     class RC2 extends React.Component<{ x: string }, {}> {
         render() {
+        ~~~~~~
+!!! error TS2416: Property 'render' in type 'RC2' is not assignable to the same property in base type 'Component<{ x: string; }, {}>'.
+!!! error TS2416:   Type '() => any' is not assignable to type '() => Element'.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Property 'method' is missing in type 'Component<P, S>' but required in type 'RC2'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:13:13: 'method' is declared here.
             return null;
         }
         private method() { }

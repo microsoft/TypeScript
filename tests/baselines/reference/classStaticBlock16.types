@@ -16,7 +16,7 @@ class C {
     this.#x = x;
 >this.#x = x : number
 >this.#x : number
->this : this
+>this : C
 >x : number
   }
 

@@ -23,7 +23,7 @@ class C {
 >typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(this.foo) : () => void
 >this.foo : () => void
->this : this
+>this : C
 >foo : () => void
     }
 }
@@ -64,7 +64,7 @@ class C2 {
 >typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(this.foo) : () => void
 >this.foo : () => void
->this : this
+>this : C2
 >foo : () => void
     }
 }
@@ -106,7 +106,7 @@ class C3 {
 >typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(this.foo) : () => void
 >this.foo : () => void
->this : this
+>this : C3
 >foo : () => void
     }
 }

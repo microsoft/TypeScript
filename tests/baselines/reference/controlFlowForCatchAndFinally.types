@@ -91,7 +91,7 @@ class Foo {
         if (this.abortController !== undefined) {
 >this.abortController !== undefined : boolean
 >this.abortController : Aborter | undefined
->this : this
+>this : Foo
 >abortController : Aborter | undefined
 >undefined : undefined
 
@@ -99,14 +99,14 @@ class Foo {
 >this.abortController.abort() : void
 >this.abortController.abort : () => void
 >this.abortController : Aborter
->this : this
+>this : Foo
 >abortController : Aborter
 >abort : () => void
 
             this.abortController = undefined;
 >this.abortController = undefined : undefined
 >this.abortController : Aborter | undefined
->this : this
+>this : Foo
 >abortController : Aborter | undefined
 >undefined : undefined
         }
@@ -114,7 +114,7 @@ class Foo {
             this.abortController = new Aborter();
 >this.abortController = new Aborter() : Aborter
 >this.abortController : Aborter | undefined
->this : this
+>this : Foo
 >abortController : Aborter | undefined
 >new Aborter() : Aborter
 >Aborter : typeof Aborter
@@ -125,7 +125,7 @@ class Foo {
             if (this.abortController !== undefined) {
 >this.abortController !== undefined : boolean
 >this.abortController : Aborter | undefined
->this : this
+>this : Foo
 >abortController : Aborter | undefined
 >undefined : undefined
 
@@ -133,7 +133,7 @@ class Foo {
 >this.abortController.abort() : void
 >this.abortController.abort : () => void
 >this.abortController : Aborter
->this : this
+>this : Foo
 >abortController : Aborter
 >abort : () => void
             }

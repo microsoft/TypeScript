@@ -22,8 +22,8 @@ class C {
 >temp : () => void
 
         for (var x in this) {
->x : Extract<keyof this, string>
->this : this
+>x : string
+>this : C
         }
     }
 }

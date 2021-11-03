@@ -1,24 +1,31 @@
+tests/cases/compiler/baseCheck.ts(4,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
+tests/cases/compiler/baseCheck.ts(9,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
 tests/cases/compiler/baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. Did you mean 'ELoc'?
 tests/cases/compiler/baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
 tests/cases/compiler/baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/baseCheck.ts(18,53): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
 tests/cases/compiler/baseCheck.ts(18,62): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/baseCheck.ts(19,59): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/baseCheck.ts(19,53): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
 tests/cases/compiler/baseCheck.ts(19,68): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/baseCheck.ts(22,9): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/baseCheck.ts(23,7): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
 
 
-==== tests/cases/compiler/baseCheck.ts (9 errors) ====
+==== tests/cases/compiler/baseCheck.ts (12 errors) ====
     class C { constructor(x: number, y: number) { } }
     class ELoc extends C {
         constructor(x: number) {
             super(0, x);
+            ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
         }
     }
     class ELocVar extends C {  
         constructor(x: number) {
             super(0, loc);
+            ~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
                      ~~~
 !!! error TS2552: Cannot find name 'loc'. Did you mean 'ELoc'?
 !!! related TS2728 tests/cases/compiler/baseCheck.ts:2:7: 'ELoc' is declared here.
@@ -36,11 +43,13 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
                                                               ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     class E extends C { constructor(public z: number) { super(0, this.z) } }
+                                                        ~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
                                                                  ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     class F extends C { constructor(public z: number) { super("hello", this.z) } } // first param type
-                                                              ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+                                                        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'C'.
                                                                        ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     

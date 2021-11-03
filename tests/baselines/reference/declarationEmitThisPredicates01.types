@@ -7,7 +7,7 @@ export class C {
 
         return this instanceof D;
 >this instanceof D : boolean
->this : this
+>this : C
 >D : typeof D
     }
 }

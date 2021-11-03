@@ -165,13 +165,13 @@ class Foo {
 
         if (this.isUser) { // error
 >this.isUser : () => boolean
->this : this
+>this : Foo
 >isUser : () => boolean
         }
 
         if (this.maybeIsUser) { // ok
 >this.maybeIsUser : (() => boolean) | undefined
->this : this
+>this : Foo
 >maybeIsUser : (() => boolean) | undefined
         }
     }

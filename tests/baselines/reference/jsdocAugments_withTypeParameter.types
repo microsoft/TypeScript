@@ -14,7 +14,7 @@ class B extends A {
 
         return this.x;
 >this.x : number
->this : this
+>this : B
 >x : number
     }
 }

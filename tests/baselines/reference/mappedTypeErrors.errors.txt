@@ -30,9 +30,15 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(83,58): error TS2345: A
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(106,17): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(123,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,14): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
-  Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(118,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+  Type 'Foo' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(119,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(120,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(121,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(122,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(123,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,1): error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(128,16): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,25): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,39): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
@@ -43,7 +49,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(148,17): error TS2339: 
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (27 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (32 errors) ====
     interface Shape {
         name: string;
         width: number;
@@ -218,18 +224,28 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     
     let c = new C<Foo>();
     c.setState({ a: "test", b: 43 });
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
+!!! error TS2684:   Type 'Foo' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
     c.setState({ a: "hi" });
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
     c.setState({ b: undefined });
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
     c.setState({ });
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
     c.setState(foo);
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
     c.setState({ a: undefined });  // Error
-                 ~
-!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
     c.setState({ c: true });  // Error
-                 ~~~~~~~
-!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
-!!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
+    ~
+!!! error TS2684: The 'this' context of type 'C<Foo>' is not assignable to method's 'this' of type 'C<T>'.
     
     type T2 = { a?: number, [key: string]: any };
     

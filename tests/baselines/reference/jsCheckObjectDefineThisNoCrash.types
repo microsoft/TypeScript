@@ -5,11 +5,11 @@ class C {
     constructor() {
         // Neither of the following should be recognized as declarations yet
         Object.defineProperty(this, "_prop", { value: {} });
->Object.defineProperty(this, "_prop", { value: {} }) : this
+>Object.defineProperty(this, "_prop", { value: {} }) : C
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->this : this
+>this : C
 >"_prop" : "_prop"
 >{ value: {} } : { value: {}; }
 >value : {}
@@ -21,7 +21,7 @@ class C {
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >this._prop : any
->this : this
+>this : C
 >_prop : any
 >"num" : "num"
 >{ value: 12 } : { value: number; }

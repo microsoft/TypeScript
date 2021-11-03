@@ -1,0 +1,48 @@
+tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts(17,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'CBase<T>'.
+tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts(25,9): error TS2684: The 'this' context of type 'CBase<string>' is not assignable to method's 'this' of type 'CBase<T>'.
+  Type 'string' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts (2 errors) ====
+    interface ContextualType<T> {
+        method(parameter: T): void;
+    }
+    
+    class CBase<T>  {
+        constructor(param: ContextualType<T>) {
+        }
+    
+        foo(param: ContextualType<T>) {
+        }
+    }
+    
+    class C extends CBase<string> {
+        constructor() {
+            // Should be okay.
+            // 'p' should have type 'string'.
+            super({
+            ~~~~~~~
+                method(p) {
+    ~~~~~~~~~~~~~~~~~~~~~~~
+                    p.length;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+    ~~~~~~~~~~~~~
+            });
+    ~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'CBase<T>'.
+    
+            // Should be okay.
+            // 'p' should have type 'string'.
+            super.foo({
+            ~~~~~
+!!! error TS2684: The 'this' context of type 'CBase<string>' is not assignable to method's 'this' of type 'CBase<T>'.
+!!! error TS2684:   Type 'string' is not assignable to type 'T'.
+!!! error TS2684:     'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+                method(p) {
+                    p.length;
+                }
+            });
+        }
+    }

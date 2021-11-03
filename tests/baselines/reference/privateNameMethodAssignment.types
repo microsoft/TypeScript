@@ -12,7 +12,7 @@ class A3 {
         this.#method = () => {} // Error, not writable 
 >this.#method = () => {} : () => void
 >this.#method : () => void
->this : this
+>this : A3
 >() => {} : () => void
 
         a.#method = () => { }; // Error, not writable 
@@ -33,7 +33,7 @@ class A3 {
 >{ x: this.#method } : { x: () => void; }
 >x : () => void
 >this.#method : () => void
->this : this
+>this : A3
 >{ x: () => {}} : { x: () => void; }
 >x : () => void
 >() => {} : () => void
@@ -41,7 +41,7 @@ class A3 {
         let x = this.#method;
 >x : () => void
 >this.#method : () => void
->this : this
+>this : A3
 
         b.#method++ //Error, not writable 
 >b.#method++ : number

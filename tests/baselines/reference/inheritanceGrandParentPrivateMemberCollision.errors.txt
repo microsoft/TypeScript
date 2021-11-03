@@ -1,5 +1,8 @@
-tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error TS2415: Class 'C' incorrectly extends base class 'B'.
-  Types have separate declarations of a private property 'myMethod'.
+tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(8,13): error TS2416: Property 'myMethod' in type 'C' is not assignable to the same property in base type 'B'.
+  Type '() => void' is not assignable to type '() => void'. Two different types with this name exist, but they are unrelated.
+    The 'this' types of each signature are incompatible.
+      Type 'A' is not assignable to type 'C'.
+        Types have separate declarations of a private property 'myMethod'.
 
 
 ==== tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts (1 errors) ====
@@ -10,9 +13,12 @@ tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error
     class B extends A { }
     
     class C extends B {
-          ~
-!!! error TS2415: Class 'C' incorrectly extends base class 'B'.
-!!! error TS2415:   Types have separate declarations of a private property 'myMethod'.
         private myMethod() { }
+                ~~~~~~~~
+!!! error TS2416: Property 'myMethod' in type 'C' is not assignable to the same property in base type 'B'.
+!!! error TS2416:   Type '() => void' is not assignable to type '() => void'. Two different types with this name exist, but they are unrelated.
+!!! error TS2416:     The 'this' types of each signature are incompatible.
+!!! error TS2416:       Type 'A' is not assignable to type 'C'.
+!!! error TS2416:         Types have separate declarations of a private property 'myMethod'.
     }
     

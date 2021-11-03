@@ -1,8 +1,9 @@
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type 'typeof B'.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(14,9): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts (2 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts (3 errors) ====
     class A {
         static #foo: number;
         static #bar: number;
@@ -21,6 +22,8 @@ tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields
         static #foo: string;
         constructor () {
             super();
+            ~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A'.
             B.#foo = "some string";
         }
     }

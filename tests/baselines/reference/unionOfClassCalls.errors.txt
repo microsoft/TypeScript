@@ -1,8 +1,12 @@
+tests/cases/compiler/unionOfClassCalls.ts(12,9): error TS2684: The 'this' context of type 'Test<A> | Test<B>' is not assignable to method's 'this' of type 'Test<T>'.
+  Type 'Test<A>' is not assignable to type 'Test<T>'.
+    Type 'A' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'A'.
 tests/cases/compiler/unionOfClassCalls.ts(28,5): error TS2349: This expression is not callable.
   Each member of the union type '{ (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }' has signatures, but none of those signatures are compatible with each other.
 
 
-==== tests/cases/compiler/unionOfClassCalls.ts (1 errors) ====
+==== tests/cases/compiler/unionOfClassCalls.ts (2 errors) ====
     // from https://github.com/microsoft/TypeScript/issues/30717
     declare class Test<T> {
         obj: T;
@@ -15,6 +19,11 @@ tests/cases/compiler/unionOfClassCalls.ts(28,5): error TS2349: This expression i
     declare const tmp: Test<A> | Test<B>;
     
     switch (tmp.get('t')) {
+            ~~~
+!!! error TS2684: The 'this' context of type 'Test<A> | Test<B>' is not assignable to method's 'this' of type 'Test<T>'.
+!!! error TS2684:   Type 'Test<A>' is not assignable to type 'Test<T>'.
+!!! error TS2684:     Type 'A' is not assignable to type 'T'.
+!!! error TS2684:       'T' could be instantiated with an arbitrary type which could be unrelated to 'A'.
         case 'A': break;
         case 'B': break;
     }

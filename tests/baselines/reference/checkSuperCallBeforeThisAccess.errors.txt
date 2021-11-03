@@ -10,10 +10,14 @@ tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(43,18): error TS17009: 's
 tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(44,18): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(45,18): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(59,27): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(60,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
+tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(63,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
+tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(72,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
 tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(75,27): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(76,13): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
 
 
-==== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts (13 errors) ====
+==== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts (17 errors) ====
     class A {
         x = 1;
     }
@@ -98,9 +102,13 @@ tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(75,27): error TS17009: 's
                               ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                 super(value);
+                ~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
             }
             else {
                 super(1337);
+                ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
             }
         }
         bar(): number { return 4; }
@@ -110,12 +118,16 @@ tests/cases/compiler/checkSuperCallBeforeThisAccess.ts(75,27): error TS17009: 's
         constructor(something: boolean) {
             if (something) {
                 super(1337);
+                ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
             }
             else {
                 const value = this.bar();  // Error
                               ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                 super(value);
+                ~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'Foo'.
             }
         }
         bar(): number { return 4; }

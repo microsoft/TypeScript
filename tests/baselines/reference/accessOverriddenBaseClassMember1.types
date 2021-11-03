@@ -15,11 +15,11 @@ class Point {
 >"x=" + this.x : string
 >"x=" : "x="
 >this.x : number
->this : this
+>this : Point
 >x : number
 >" y=" : " y="
 >this.y : number
->this : this
+>this : Point
 >y : number
     }
 }
@@ -50,7 +50,7 @@ class ColoredPoint extends Point {
 >toString : () => string
 >" color=" : " color="
 >this.color : string
->this : this
+>this : ColoredPoint
 >color : string
     }
 }

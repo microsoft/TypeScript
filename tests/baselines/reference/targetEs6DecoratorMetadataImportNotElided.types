@@ -23,7 +23,7 @@ export class MyComponent {
     get ref() { return this._ref; }
 >ref : TemplateRef
 >this._ref : TemplateRef
->this : this
+>this : MyComponent
 >_ref : TemplateRef
 
     set ref(value: TemplateRef) { this._ref = value; }
@@ -31,7 +31,7 @@ export class MyComponent {
 >value : TemplateRef
 >this._ref = value : TemplateRef
 >this._ref : TemplateRef
->this : this
+>this : MyComponent
 >_ref : TemplateRef
 >value : TemplateRef
 }

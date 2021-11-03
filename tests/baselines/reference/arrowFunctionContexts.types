@@ -25,8 +25,8 @@ class Derived extends Base {
         super(() => this);
 >super(() => this) : void
 >super : typeof Base
->() => this : () => this
->this : this
+>() => this : () => Derived
+>this : Derived
     }
 }
 
@@ -128,8 +128,8 @@ module M2 {
             super(() => this);
 >super(() => this) : void
 >super : typeof Base
->() => this : () => this
->this : this
+>() => this : () => Derived
+>this : Derived
         }
     }
 

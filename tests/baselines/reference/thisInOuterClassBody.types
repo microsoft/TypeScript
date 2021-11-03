@@ -11,28 +11,28 @@ class Foo {
 >this : typeof Foo
 
     bar() {
->bar : () => this
+>bar : () => Foo
  
         this.x; // 'this' is type 'Foo'
->this.x : this
->this : this
->x : this
+>this.x : Foo
+>this : Foo
+>x : Foo
  
         var f = () => this.x; // 'this' should be type 'Foo' as well
->f : () => this
->() => this.x : () => this
->this.x : this
->this : this
->x : this
+>f : () => Foo
+>() => this.x : () => Foo
+>this.x : Foo
+>this : Foo
+>x : Foo
 
         var p = this.y;
 >p : any
 >this.y : any
->this : this
+>this : Foo
 >y : any
 
         return this;
->this : this
+>this : Foo
     }
 
     static bar2() {

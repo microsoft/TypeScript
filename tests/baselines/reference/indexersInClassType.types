@@ -15,10 +15,10 @@ class C {
 >'a' : {}
 
     fn() {
->fn : () => this
+>fn : () => C
 
         return this;
->this : this
+>this : C
     }
 }
 

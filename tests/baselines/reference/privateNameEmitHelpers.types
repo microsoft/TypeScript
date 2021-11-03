@@ -10,7 +10,7 @@ export class C {
 >#b : () => void
 >this.#c = 42 : 42
 >this.#c : number
->this : this
+>this : C
 >42 : 42
 
     set #c(v: number) { this.#a += v; }
@@ -18,7 +18,7 @@ export class C {
 >v : number
 >this.#a += v : number
 >this.#a : number
->this : this
+>this : C
 >v : number
 }
 

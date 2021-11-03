@@ -1229,7 +1229,7 @@ declare function f83<T extends {
 declare function f84(): void;
 declare class C1 {
     x: number;
-    get<K extends keyof this>(key: K): this[K];
+    get<K extends keyof this>(key: K): any;
     set<K extends keyof this>(key: K, value: this[K]): void;
     foo(): void;
 }
@@ -1241,18 +1241,18 @@ declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[k
 declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare class Base {
-    get<K extends keyof this>(prop: K): this[K];
+    get<K extends keyof this>(prop: K): any;
     set<K extends keyof this>(prop: K, value: this[K]): void;
 }
 declare class Person extends Base {
     parts: number;
     constructor(parts: number);
-    getParts(): this["parts"];
+    getParts(): any;
 }
 declare class OtherPerson {
     parts: number;
     constructor(parts: number);
-    getParts(): this["parts"];
+    getParts(): number;
 }
 declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];

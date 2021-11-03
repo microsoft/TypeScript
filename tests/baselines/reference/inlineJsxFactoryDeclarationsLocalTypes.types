@@ -131,30 +131,30 @@ export class MyClass implements predom.JSX.Element {
             {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
 >this.props.x : number
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->this : this
+>this : MyClass
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >x : number
 >this.props.y : number
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->this : this
+>this : MyClass
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >y : number
 >this.props.x + this.props.y : number
 >this.props.x : number
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->this : this
+>this : MyClass
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >x : number
 >this.props.y : number
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->this : this
+>this : MyClass
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >y : number
 
             {...this.props.children}
 >this.props.children : predom.JSX.Element[]
 >this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
->this : this
+>this : MyClass
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >children : predom.JSX.Element[]
 
@@ -265,28 +265,28 @@ class DOMClass implements dom.JSX.Element {
 >p : any
 >this.props.x : number
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->this : this
+>this : DOMClass
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >x : number
 >this.props.y : number
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->this : this
+>this : DOMClass
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >y : number
 >this.props.x + this.props.y : number
 >this.props.x : number
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->this : this
+>this : DOMClass
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >x : number
 >this.props.y : number
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->this : this
+>this : DOMClass
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >y : number
 >this.props.children : dom.JSX.Element[]
 >this.props : { x: number; y: number; children?: dom.JSX.Element[]; }
->this : this
+>this : DOMClass
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >children : dom.JSX.Element[]
 >p : any
