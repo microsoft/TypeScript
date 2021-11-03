@@ -19,40 +19,26 @@ interface FontFaceSet extends Set<FontFace> {
 
 interface FormData {
     [Symbol.iterator](): IterableIterator<[string, FormDataEntryValue]>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[string, FormDataEntryValue]>;
-    /**
-     * Returns a list of keys in the list.
-     */
+    /** Returns a list of keys in the list. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the list.
-     */
+    /** Returns a list of values in the list. */
     values(): IterableIterator<FormDataEntryValue>;
 }
 
 interface Headers {
     [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all key/value pairs contained in this object. */
     entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all keys of the key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. */
     values(): IterableIterator<string>;
 }
 
 interface IDBDatabase {
-    /**
-     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
-     */
+    /** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. */
     transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
 }
 
@@ -70,13 +56,6 @@ interface MessageEvent<T = any> {
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
 }
 
-interface ReadableStream<R = any> {
-    [Symbol.iterator](): IterableIterator<any>;
-    entries(): IterableIterator<[number, any]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<any>;
-}
-
 interface SubtleCrypto {
     deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
     generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair>;
@@ -89,17 +68,11 @@ interface SubtleCrypto {
 
 interface URLSearchParams {
     [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an array of key, value pairs for every entry in the search params.
-     */
+    /** Returns an array of key, value pairs for every entry in the search params. */
     entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns a list of keys in the search params.
-     */
+    /** Returns a list of keys in the search params. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the search params.
-     */
+    /** Returns a list of values in the search params. */
     values(): IterableIterator<string>;
 }
 

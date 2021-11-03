@@ -1072,7 +1072,12 @@ namespace ts.textChanges {
                 delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const file: SourceFileLike = {
+                text,
+                getLineAndCharacterOfPosition(pos) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                }
+            };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }
@@ -1080,7 +1085,7 @@ namespace ts.textChanges {
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
-            const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+            const newLine = getNewLineKind(newLineCharacter);
             createPrinter({
                 newLine,
                 neverAsciiEscape: true,

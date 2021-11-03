@@ -313,12 +313,13 @@ namespace FourSlash {
                     this.addMatchedInputFile(referenceFilePath, /* extensions */ undefined);
                 });
 
+                const exts = ts.flatten(ts.getSupportedExtensions(compilationOptions));
                 // Add import files into language-service host
                 ts.forEach(importedFiles, importedFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
                     // so convert them before making appropriate comparison
                     const importedFilePath = this.basePath + "/" + importedFile.fileName;
-                    this.addMatchedInputFile(importedFilePath, ts.getSupportedExtensions(compilationOptions));
+                    this.addMatchedInputFile(importedFilePath, exts);
                 });
 
                 // Check if no-default-lib flag is false and if so add default library
@@ -636,7 +637,8 @@ namespace FourSlash {
             ts.forEachKey(this.inputFiles, fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)
                     || Harness.getConfigNameFromFileName(fileName)
-                    || !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))) return;
+                    || !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))
+                    || ts.getBaseFileName(fileName) === "package.json") return;
                 const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
@@ -940,7 +942,7 @@ namespace FourSlash {
             expected = typeof expected === "string" ? { name: expected } : expected;
 
             if (actual.insertText !== expected.insertText) {
-                this.raiseError(`Expected completion insert text to be ${expected.insertText}, got ${actual.insertText}`);
+                this.raiseError(`Completion insert text did not match: ${showTextDiff(expected.insertText || "", actual.insertText || "")}`);
             }
             const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
             if (convertedReplacementSpan?.length) {
@@ -1244,20 +1246,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyNoReferences(markerNameOrRange?: string | Range) {
-            if (markerNameOrRange !== undefined) this.goToMarkerOrRange(markerNameOrRange);
-            const refs = this.getReferencesAtCaret();
-            if (refs && refs.length) {
-                this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
-            }
-        }
-
-        /** @deprecated - use `verify.baselineFindAllReferences()` instead. */
-        public verifyGetReferencesForServerTest(expected: readonly ts.ReferenceEntry[]): void {
-            const refs = this.getReferencesAtCaret();
-            assert.deepEqual<readonly ts.ReferenceEntry[] | undefined>(refs, expected);
-        }
-
         public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
             ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
@@ -1336,10 +1324,6 @@ namespace FourSlash {
                 this.configure(preferences);
             }
             return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences, data);
-        }
-
-        private getReferencesAtCaret() {
-            return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private findReferencesAtCaret() {
@@ -1927,7 +1911,7 @@ namespace FourSlash {
         }
 
         public baselineSyntacticAndSemanticDiagnostics() {
-            const files = this.getCompilerTestFiles();
+            const files = ts.filter(this.getCompilerTestFiles(), f => !ts.endsWith(f.unitName, ".json"));
             const result = this.getSyntacticDiagnosticBaselineText(files)
                 + Harness.IO.newLine()
                 + Harness.IO.newLine()
@@ -1976,8 +1960,8 @@ namespace FourSlash {
         public baselineCompletions(preferences?: ts.UserPreferences) {
             const baselineFile = this.getBaselineFileNameForContainingTestFile();
             const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
-                const completions = this.getCompletionListAtCaret(preferences);
                 this.goToMarker(marker);
+                const completions = this.getCompletionListAtCaret(preferences);
                 return {
                     marker: { ...marker, name },
                     completionList: {
@@ -2100,7 +2084,7 @@ namespace FourSlash {
         }
 
         private printMembersOrCompletions(info: ts.CompletionInfo | undefined) {
-            if (info === undefined) { return "No completion info."; }
+            if (info === undefined) return "No completion info.";
             const { entries } = info;
 
             function pad(s: string, length: number) {
@@ -2836,7 +2820,7 @@ namespace FourSlash {
 
         public verifyTodoComments(descriptors: string[], spans: Range[]) {
             const actual = this.languageService.getTodoComments(this.activeFile.fileName,
-                descriptors.map(d => { return { text: d, priority: 0 }; }));
+                descriptors.map(d => ({ text: d, priority: 0 })));
 
             if (actual.length !== spans.length) {
                 this.raiseError(`verifyTodoComments failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
@@ -3935,6 +3919,11 @@ namespace FourSlash {
             (this.languageService as ts.server.SessionClient).configurePlugin(pluginName, configuration);
         }
 
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions) {
+            ts.Debug.assert(this.testType === FourSlashTestType.Server);
+            (this.languageService as ts.server.SessionClient).setCompilerOptionsForInferredProjects(options);
+        }
+
         public toggleLineComment(newFileContent: string): void {
             const changes: ts.TextChange[] = [];
             for (const range of this.getRanges()) {
@@ -4077,7 +4066,7 @@ namespace FourSlash {
         try {
             const test = new FourSlashInterface.Test(state);
             const goTo = new FourSlashInterface.GoTo(state);
-            const plugins = new FourSlashInterface.Plugins(state);
+            const config = new FourSlashInterface.Config(state);
             const verify = new FourSlashInterface.Verify(state);
             const edit = new FourSlashInterface.Edit(state);
             const debug = new FourSlashInterface.Debug(state);
@@ -4085,7 +4074,7 @@ namespace FourSlash {
             const cancellation = new FourSlashInterface.Cancellation(state);
             // eslint-disable-next-line no-eval
             const f = eval(wrappedCode);
-            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
+            f(test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
         catch (err) {
             // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.
@@ -4498,7 +4487,7 @@ namespace FourSlash {
 
         // put ranges in the correct order
         localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
-        localRanges.forEach((r) => { ranges.push(r); });
+        localRanges.forEach(r => ranges.push(r));
 
         return {
             content: output,

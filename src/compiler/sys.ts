@@ -366,7 +366,7 @@ namespace ts {
                 FileSystemEntryKind.Directory,
                 (_eventName: string, relativeFileName) => {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    if (!isString(relativeFileName)) { return; }
+                    if (!isString(relativeFileName)) return;
                     const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                     // Some applications save a working file via rename operations
                     const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
@@ -1279,7 +1279,7 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-            const realpathSync = useCaseSensitiveFileNames ? (_fs.realpathSync.native ?? _fs.realpathSync) : _fs.realpathSync;
+            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
 
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
@@ -1899,6 +1899,11 @@ namespace ts {
         }
         return sys!;
     })();
+
+    /*@internal*/
+    export function setSys(s: System) {
+        sys = s;
+    }
 
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);

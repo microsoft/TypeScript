@@ -1,25 +1,5 @@
 /* @internal */
 namespace ts {
-    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
-        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
-        I extends ReadonlySet<infer T> ? T :
-        I extends readonly (infer T)[] ? T :
-        I extends undefined ? undefined :
-        never>;
-
-    function getCollectionImplementation<
-        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
-        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
-    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
-        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
-        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
-        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
-    }
-
-    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
-    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
-
     export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
         I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
         I extends ReadonlySet<infer T> ? T :
@@ -1568,19 +1548,29 @@ namespace ts {
     export function noop(_?: {} | null | undefined): void { }
 
     /** Do nothing and return false */
-    export function returnFalse(): false { return false; }
+    export function returnFalse(): false {
+        return false;
+    }
 
     /** Do nothing and return true */
-    export function returnTrue(): true { return true; }
+    export function returnTrue(): true {
+        return true;
+    }
 
     /** Do nothing and return undefined */
-    export function returnUndefined(): undefined { return undefined; }
+    export function returnUndefined(): undefined {
+        return undefined;
+    }
 
     /** Returns its argument. */
-    export function identity<T>(x: T) { return x; }
+    export function identity<T>(x: T) {
+        return x;
+    }
 
     /** Returns lower case string */
-    export function toLowerCase(x: string) { return x.toLowerCase(); }
+    export function toLowerCase(x: string) {
+        return x.toLowerCase();
+    }
 
     // We convert the file names to lower case as key for file name on case insensitive file system
     // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert

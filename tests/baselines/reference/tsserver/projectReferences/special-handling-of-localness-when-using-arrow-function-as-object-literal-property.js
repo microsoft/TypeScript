@@ -56,7 +56,7 @@ Project '/user/username/projects/solution/api/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../shared/src/index.ts
 	  Imported via "../../shared/dist" from file 'src/server.ts'
 	src/server.ts
@@ -99,7 +99,7 @@ Project '/user/username/projects/solution/shared/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 

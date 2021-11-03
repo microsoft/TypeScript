@@ -1722,7 +1722,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if first argument is less than second argument, zero if they're equal and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11,2,22,1].sort((a, b) => a - b)\r\n```",
+                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11,2,22,1].sort((a, b) => a - b)\r\n```",
                   "kind": "text"
                 }
               ]

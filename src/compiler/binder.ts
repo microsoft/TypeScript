@@ -163,7 +163,7 @@ namespace ts {
         IsFunctionExpression = 1 << 4,
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
-        IsObjectLiteralOrClassExpressionMethod = 1 << 7,
+        IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
     }
 
     function initFlowNode<T extends FlowNode>(node: T) {
@@ -663,8 +663,8 @@ namespace ts {
                 // similarly to break statements that exit to a label just past the statement body.
                 if (!isIIFE) {
                     currentFlow = initFlowNode({ flags: FlowFlags.Start });
-                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
-                        currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration;
+                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
+                        currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
@@ -1815,16 +1815,16 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                 case SyntaxKind.MethodDeclaration:
-                    if (isObjectLiteralOrClassExpressionMethod(node)) {
-                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
+                    if (isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
+                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor;
                     }
                     // falls through
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.JSDocSignature:
                 case SyntaxKind.JSDocFunctionType:
@@ -2374,7 +2374,7 @@ namespace ts {
 
         function checkStrictModeLabeledStatement(node: LabeledStatement) {
             // Grammar checking for labeledStatement
-            if (inStrictMode && options.target! >= ScriptTarget.ES2015) {
+            if (inStrictMode && getEmitScriptTarget(options) >= ScriptTarget.ES2015) {
                 if (isDeclarationStatement(node.statement) || isVariableStatement(node.statement)) {
                     errorOnFirstToken(node.label, Diagnostics.A_label_is_not_allowed_here);
                 }
@@ -2947,6 +2947,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
@@ -3372,7 +3373,7 @@ namespace ts {
                 emitFlags |= NodeFlags.HasAsyncFunctions;
             }
 
-            if (currentFlow && isObjectLiteralOrClassExpressionMethod(node)) {
+            if (currentFlow && isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
                 node.flowNode = currentFlow;
             }
 
@@ -3388,7 +3389,7 @@ namespace ts {
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
             if (isJSDocTemplateTag(node.parent)) {
-                const container = find((node.parent.parent as JSDoc).tags!, isJSDocTypeAlias) || getHostSignatureFromJSDoc(node.parent); // TODO: GH#18217
+                const container = getEffectiveContainerForJSDocTemplateTag(node.parent);
                 if (container) {
                     if (!container.locals) {
                         container.locals = createSymbolTable();

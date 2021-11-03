@@ -4,6 +4,7 @@ return this.edit(role)
 
     .then((role: Role) =>
 >role : Symbol(role, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 1, 11))
+>Role : Symbol(Role)
 
         this.roleService.add(role)
 >this : Symbol(globalThis)
@@ -11,5 +12,8 @@ return this.edit(role)
 
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >data : Symbol(data, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 3, 19))
+>ng : Symbol(ng)
+>IHttpPromiseCallbackArg : Symbol(ng.IHttpPromiseCallbackArg)
+>Role : Symbol(Role)
 >data : Symbol(data, Decl(multiLinePropertyAccessAndArrowFunctionIndent1.ts, 3, 19))
 

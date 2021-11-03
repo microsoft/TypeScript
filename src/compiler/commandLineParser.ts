@@ -1,6 +1,6 @@
 namespace ts {
     /* @internal */
-    export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
+    export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean", defaultValueDescription: "false" };
 
     const jsxOptionMap = new Map(getEntries({
         "preserve": JsxEmit.Preserve,
@@ -71,6 +71,7 @@ namespace ts {
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
+        ["es2021.intl", "lib.es2021.intl.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -139,6 +140,7 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Watch_and_Build_Modes,
             description: Diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
+            defaultValueDescription: "false",
         },
         {
             name: "excludeDirectories",
@@ -175,11 +177,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_this_message,
+            defaultValueDescription: "false",
         },
         {
             name: "help",
             shortName: "?",
-            type: "boolean"
+            type: "boolean",
+            defaultValueDescription: "false",
         },
         {
             name: "watch",
@@ -189,6 +193,7 @@ namespace ts {
             isCommandLineOnly: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Watch_input_files,
+            defaultValueDescription: "false",
         },
         {
             name: "preserveWatchOutput",
@@ -196,7 +201,7 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Output_Formatting,
             description: Diagnostics.Disable_wiping_the_console_in_watch_mode,
-            defaultValueDescription: "n/a"
+            defaultValueDescription: "false",
         },
         {
             name: "listFiles",
@@ -209,7 +214,8 @@ namespace ts {
             name: "explainFiles",
             type: "boolean",
             category: Diagnostics.Compiler_Diagnostics,
-            description: Diagnostics.Print_files_read_during_the_compilation_including_why_it_was_included
+            description: Diagnostics.Print_files_read_during_the_compilation_including_why_it_was_included,
+            defaultValueDescription: "false",
         },
         {
             name: "listEmittedFiles",
@@ -280,7 +286,8 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             affectsEmit: true,
             category: Diagnostics.Watch_and_Build_Modes,
-            description: Diagnostics.Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it
+            description: Diagnostics.Have_recompiles_in_projects_that_use_incremental_and_watch_mode_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it,
+            defaultValueDescription: "false",
         },
         {
             name: "locale",
@@ -327,6 +334,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Show_all_compiler_options,
+            defaultValueDescription: "false",
         },
         {
             name: "version",
@@ -335,6 +343,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_the_compiler_s_version,
+            defaultValueDescription: "false",
         },
         {
             name: "init",
@@ -342,6 +351,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
+            defaultValueDescription: "false",
         },
         {
             name: "project",
@@ -359,7 +369,8 @@ namespace ts {
             shortName: "b",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date
+            description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date,
+            defaultValueDescription: "false",
         },
         {
             name: "showConfig",
@@ -367,7 +378,8 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             isCommandLineOnly: true,
-            description: Diagnostics.Print_the_final_configuration_instead_of_building
+            description: Diagnostics.Print_the_final_configuration_instead_of_building,
+            defaultValueDescription: "false",
         },
         {
             name: "listFilesOnly",
@@ -376,7 +388,8 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             affectsEmit: true,
             isCommandLineOnly: true,
-            description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing
+            description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
+            defaultValueDescription: "false",
         },
 
         // Basic
@@ -393,7 +406,10 @@ namespace ts {
                 es6: ModuleKind.ES2015,
                 es2015: ModuleKind.ES2015,
                 es2020: ModuleKind.ES2020,
-                esnext: ModuleKind.ESNext
+                es2022: ModuleKind.ES2022,
+                esnext: ModuleKind.ESNext,
+                node12: ModuleKind.Node12,
+                nodenext: ModuleKind.NodeNext,
             })),
             affectsModuleResolution: true,
             affectsEmit: true,
@@ -495,7 +511,6 @@ namespace ts {
             category: Diagnostics.Emit,
             description: Diagnostics.Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designates_a_file_that_bundles_all_d_ts_output,
             transpileOptionValue: undefined,
-            defaultValueDescription: "n/a"
         },
         {
             name: "outDir",
@@ -506,7 +521,6 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Specify_an_output_folder_for_all_emitted_files,
-            defaultValueDescription: "n/a"
         },
         {
             name: "rootDir",
@@ -570,7 +584,7 @@ namespace ts {
             type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
-                error: ImportsNotUsedAsValues.Error
+                error: ImportsNotUsedAsValues.Error,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -664,6 +678,7 @@ namespace ts {
             strictFlag: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
+            defaultValueDescription: "false",
         },
         {
             name: "alwaysStrict",
@@ -697,7 +712,8 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Interpret_optional_property_types_as_written_rather_than_adding_undefined
+            description: Diagnostics.Interpret_optional_property_types_as_written_rather_than_adding_undefined,
+            defaultValueDescription: "false",
         },
         {
             name: "noImplicitReturns",
@@ -713,21 +729,24 @@ namespace ts {
             affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Enable_error_reporting_for_fallthrough_cases_in_switch_statements
+            description: Diagnostics.Enable_error_reporting_for_fallthrough_cases_in_switch_statements,
+            defaultValueDescription: "false",
         },
         {
             name: "noUncheckedIndexedAccess",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Include_undefined_in_index_signature_results
+            description: Diagnostics.Include_undefined_in_index_signature_results,
+            defaultValueDescription: "false",
         },
         {
             name: "noImplicitOverride",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier,
+            defaultValueDescription: "false",
         },
         {
             name: "noPropertyAccessFromIndexSignature",
@@ -744,6 +763,8 @@ namespace ts {
             type: new Map(getEntries({
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
+                node12: ModuleResolutionKind.Node12,
+                nodenext: ModuleResolutionKind.NodeNext,
             })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
@@ -835,7 +856,7 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Interop_Constraints,
             description: Diagnostics.Disable_resolving_symlinks_to_their_realpath_This_correlates_to_the_same_flag_in_node,
-            defaultValueDescription: "n/a"
+            defaultValueDescription: "false",
         },
         {
             name: "allowUmdGlobalAccess",
@@ -886,7 +907,8 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators
+            description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators,
+            defaultValueDescription: "false",
         },
         {
             name: "emitDecoratorMetadata",
@@ -894,7 +916,8 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             affectsEmit: true,
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Emit_design_type_metadata_for_decorated_declarations_in_source_files
+            description: Diagnostics.Emit_design_type_metadata_for_decorated_declarations_in_source_files,
+            defaultValueDescription: "false",
         },
 
         // Advanced
@@ -939,7 +962,6 @@ namespace ts {
             category: Diagnostics.Backwards_Compatibility,
             paramType: Diagnostics.FILE,
             transpileOptionValue: undefined,
-            defaultValueDescription: "n/a",
             description: Diagnostics.Deprecated_setting_Use_outFile_instead,
         },
         {
@@ -1020,6 +1042,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_emitting_declarations_that_have_internal_in_their_JSDoc_comments,
+            defaultValueDescription: "false",
         },
         {
             name: "disableSizeLimit",
@@ -1034,21 +1057,24 @@ namespace ts {
             type: "boolean",
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
-            description: Diagnostics.Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects
+            description: Diagnostics.Disable_preferring_source_files_instead_of_declaration_files_when_referencing_composite_projects,
+            defaultValueDescription: "false",
         },
         {
             name: "disableSolutionSearching",
             type: "boolean",
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
-            description: Diagnostics.Opt_a_project_out_of_multi_project_reference_checking_when_editing
+            description: Diagnostics.Opt_a_project_out_of_multi_project_reference_checking_when_editing,
+            defaultValueDescription: "false",
         },
         {
             name: "disableReferencedProjectLoad",
             type: "boolean",
             isTSConfigOnly: true,
             category: Diagnostics.Projects,
-            description: Diagnostics.Reduce_the_number_of_projects_loaded_automatically_by_TypeScript
+            description: Diagnostics.Reduce_the_number_of_projects_loaded_automatically_by_TypeScript,
+            defaultValueDescription: "false",
         },
         {
             name: "noImplicitUseStrict",
@@ -1081,7 +1107,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_erasing_const_enum_declarations_in_generated_code,
-            defaultValueDescription: "n/a"
+            defaultValueDescription: "false",
         },
         {
             name: "declarationDir",
@@ -1092,7 +1118,6 @@ namespace ts {
             category: Diagnostics.Emit,
             transpileOptionValue: undefined,
             description: Diagnostics.Specify_the_output_directory_for_generated_declaration_files,
-            defaultValueDescription: "n/a"
         },
         {
             name: "skipLibCheck",
@@ -1166,8 +1191,17 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
-            defaultValueDescription: "false"
+            defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
         },
+        {
+            name: "preserveValueImports",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Emit,
+            description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
+            defaultValueDescription: "false",
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",
@@ -1228,27 +1262,31 @@ namespace ts {
             shortName: "v",
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Enable_verbose_logging,
-            type: "boolean"
+            type: "boolean",
+            defaultValueDescription: "false",
         },
         {
             name: "dry",
             shortName: "d",
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
-            type: "boolean"
+            type: "boolean",
+            defaultValueDescription: "false",
         },
         {
             name: "force",
             shortName: "f",
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
-            type: "boolean"
+            type: "boolean",
+            defaultValueDescription: "false",
         },
         {
             name: "clean",
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Delete_the_outputs_of_all_projects,
-            type: "boolean"
+            type: "boolean",
+            defaultValueDescription: "false",
         }
     ];
 
@@ -1266,10 +1304,12 @@ namespace ts {
              */
             name: "enableAutoDiscovery",
             type: "boolean",
+            defaultValueDescription: "false",
         },
         {
             name: "enable",
             type: "boolean",
+            defaultValueDescription: "false",
         },
         {
             name: "include",
@@ -1290,6 +1330,7 @@ namespace ts {
         {
             name: "disableFilenameBasedTypeAcquisition",
             type: "boolean",
+            defaultValueDescription: "false",
         },
     ];
 
@@ -1328,7 +1369,7 @@ namespace ts {
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.ES2016,
         strict: true,
         esModuleInterop: true,
         forceConsistentCasingInFileNames: true,
@@ -2271,7 +2312,7 @@ namespace ts {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
-            return (optionDefinition as CommandLineOptionOfCustomType).type;
+            return optionDefinition.type;
         }
     }
 
@@ -2340,34 +2381,55 @@ namespace ts {
     }
 
     /**
+     * Generate a list of the compiler options whose value is not the default.
+     * @param options compilerOptions to be evaluated.
+    /** @internal */
+    export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: string): string {
+        const compilerOptionsMap = getSerializedCompilerOption(options);
+        return getOverwrittenDefaultOptions();
+
+        function makePadding(paddingLength: number): string {
+            return Array(paddingLength + 1).join(" ");
+        }
+
+        function getOverwrittenDefaultOptions() {
+            const result: string[] = [];
+             const tab = makePadding(2);
+            commandOptionsWithoutBuild.forEach(cmd => {
+                if (!compilerOptionsMap.has(cmd.name)) {
+                    return;
+                }
+
+                const newValue = compilerOptionsMap.get(cmd.name);
+                const defaultValue = getDefaultValueForOption(cmd);
+                if (newValue !== defaultValue) {
+                    result.push(`${tab}${cmd.name}: ${newValue}`);
+                }
+                else if (hasProperty(defaultInitCompilerOptions, cmd.name)) {
+                    result.push(`${tab}${cmd.name}: ${defaultValue}`);
+                }
+            });
+            return result.join(newLine) + newLine;
+        }
+    }
+
+    /**
+     * Get the compiler options to be written into the tsconfig.json.
+     * @param options commandlineOptions to be included in the compileOptions.
+     */
+    function getSerializedCompilerOption(options: CompilerOptions): ESMap<string, CompilerOptionsValue> {
+        const compilerOptions = extend(options, defaultInitCompilerOptions);
+        return serializeCompilerOptions(compilerOptions);
+    }
+    /**
      * Generate tsconfig configuration when running command line "--init"
      * @param options commandlineOptions to be generated into tsconfig.json
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
     export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
-        const compilerOptions = extend(options, defaultInitCompilerOptions);
-        const compilerOptionsMap = serializeCompilerOptions(compilerOptions);
+        const compilerOptionsMap = getSerializedCompilerOption(options);
         return writeConfigurations();
-
-        function getDefaultValueForOption(option: CommandLineOption) {
-            switch (option.type) {
-                case "number":
-                    return 1;
-                case "boolean":
-                    return true;
-                case "string":
-                    return option.isFilePath ? "./" : "";
-                case "list":
-                    return [];
-                case "object":
-                    return {};
-                default:
-                    const iterResult = option.type.keys().next();
-                    if (!iterResult.done) return iterResult.value;
-                    return Debug.fail("Expected 'option.type' to have entries.");
-            }
-        }
 
         function makePadding(paddingLength: number): string {
             return Array(paddingLength + 1).join(" ");
@@ -2852,6 +2914,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
+        let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2894,6 +2957,9 @@ namespace ts {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
+                }
             }
         };
         const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
@@ -2911,6 +2977,10 @@ namespace ts {
             else {
                 typeAcquisition = getDefaultTypeAcquisition(configFileName);
             }
+        }
+
+        if (rootCompilerOptions && json && json.compilerOptions === undefined) {
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
@@ -3199,7 +3269,7 @@ namespace ts {
         // Rather than re-query this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
-        const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
+        const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -3212,7 +3282,7 @@ namespace ts {
 
         let jsonOnlyIncludeRegexes: readonly RegExp[] | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+            for (const file of host.readDirectory(basePath, flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
                 if (fileExtensionIs(file, Extension.Json)) {
                     // Valid only if *.json specified
                     if (!jsonOnlyIncludeRegexes) {
@@ -3437,16 +3507,24 @@ namespace ts {
      * extension priority.
      *
      * @param file The path to the file.
-     * @param extensionPriority The priority of the extension.
-     * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
-        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
-            const higherPriorityExtension = extensions[i];
-            const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+        const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
+        if (!extensionGroup) {
+            return false;
+        }
+        for (const ext of extensionGroup) {
+            if (fileExtensionIs(file, ext)) {
+                return false;
+            }
+            const higherPriorityPath = keyMapper(changeExtension(file, ext));
             if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
+                if (ext === Extension.Dts && (fileExtensionIs(file, Extension.Js) || fileExtensionIs(file, Extension.Jsx))) {
+                    // LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
+                    // files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
+                    // prevent breakage.
+                    continue;
+                }
                 return true;
             }
         }
@@ -3459,15 +3537,18 @@ namespace ts {
      * already been included.
      *
      * @param file The path to the file.
-     * @param extensionPriority The priority of the extension.
-     * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
-        for (let i = nextExtensionPriority; i < extensions.length; i++) {
-            const lowerPriorityExtension = extensions[i];
-            const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+        const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
+        if (!extensionGroup) {
+            return;
+        }
+        for (let i = extensionGroup.length - 1; i >= 0; i--) {
+            const ext = extensionGroup[i];
+            if (fileExtensionIs(file, ext)) {
+                return;
+            }
+            const lowerPriorityPath = keyMapper(changeExtension(file, ext));
             wildcardFiles.delete(lowerPriorityPath);
         }
     }
@@ -3509,6 +3590,26 @@ namespace ts {
                         return optionStringValue;
                     }
                 })!; // TODO: GH#18217
+        }
+    }
+
+
+    function getDefaultValueForOption(option: CommandLineOption) {
+        switch (option.type) {
+            case "number":
+                return 1;
+            case "boolean":
+                return true;
+            case "string":
+                return option.isFilePath ? "./" : "";
+            case "list":
+                return [];
+            case "object":
+                return {};
+            default:
+                const iterResult = option.type.keys().next();
+                if (!iterResult.done) return iterResult.value;
+                return Debug.fail("Expected 'option.type' to have entries.");
         }
     }
 }

@@ -111,6 +111,20 @@ declare module ts {
         exportName: string;
     }
 
+    interface CompilerOptions {
+        module?: string;
+        target?: string;
+        jsx?: string;
+        allowJs?: boolean;
+        maxNodeModulesJsDepth?: number;
+        strictNullChecks?: boolean;
+        sourceMap?: boolean;
+        allowSyntheticDefaultImports?: boolean;
+        allowNonTsExtensions?: boolean;
+        resolveJsonModule?: boolean;
+        [key: string]: string | number | boolean | undefined;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -200,8 +214,9 @@ declare namespace FourSlashInterface {
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
     }
-    class plugins {
+    class config {
         configurePlugin(pluginName: string, configuration: any): void;
+        setCompilerOptionsForInferredProjects(options: ts.CompilerOptions)
     }
     class goTo {
         marker(name?: string | Marker): void;
@@ -308,15 +323,9 @@ declare namespace FourSlashInterface {
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineFindAllReferences(...markerNames: string[]): void;
         baselineGetFileReferences(fileName: string): void;
-        noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
-        /**
-         * @deprecated Use baselineFindAllReferences instead
-         * For each of starts, asserts the ranges that are referenced from there.
-         * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
-         */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
+        /** @deprecated Use baselineFindAllReferences instead */
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(...texts: string[]): void;
@@ -637,12 +646,14 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
@@ -810,7 +821,7 @@ declare namespace FourSlashInterface {
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
-declare var plugins: FourSlashInterface.plugins;
+declare var config: FourSlashInterface.config;
 declare var goTo: FourSlashInterface.goTo;
 declare var verify: FourSlashInterface.verify;
 declare var edit: FourSlashInterface.edit;
@@ -839,7 +850,8 @@ declare namespace completion {
         DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
-        ThisProperty = "ThisProperty/"
+        ThisProperty = "ThisProperty/",
+        ClassMemberSnippet = "ClassMemberSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

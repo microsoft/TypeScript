@@ -330,3 +330,26 @@ tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'st
 !!! error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
 !!! error TS2322:   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
     
+    // Repro from #46004
+    
+    interface PropsFromReact {
+        onClick?: () => void;
+    }
+    
+    interface PropsFromMaterialUI {
+        onClick?: (() => void) | undefined;
+    }
+    
+    type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+    
+    interface NavBottomListItem extends TheTypeFromMaterialUI {
+        value: string;
+    }
+    
+    // Repro from #46004
+    
+    type UA = undefined;  // Explicit undefined type
+    type UB = { x?: never }['x'];  // undefined from missing property
+    
+    type UC = UA & UB;  // undefined
+    

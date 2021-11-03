@@ -58,17 +58,11 @@ interface FontFaceSet extends Set<FontFace> {
 
 interface FormData {
     [Symbol.iterator](): IterableIterator<[string, FormDataEntryValue]>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[string, FormDataEntryValue]>;
-    /**
-     * Returns a list of keys in the list.
-     */
+    /** Returns a list of keys in the list. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the list.
-     */
+    /** Returns a list of values in the list. */
     values(): IterableIterator<FormDataEntryValue>;
 }
 
@@ -94,24 +88,16 @@ interface HTMLSelectElement {
 
 interface Headers {
     [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all key/value pairs contained in this object. */
     entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all keys of the key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. */
     values(): IterableIterator<string>;
 }
 
 interface IDBDatabase {
-    /**
-     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
-     */
+    /** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. */
     transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
 }
 
@@ -149,39 +135,28 @@ interface NamedNodeMap {
 }
 
 interface Navigator {
+    /** Available only in secure contexts. */
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
     vibrate(pattern: Iterable<number>): boolean;
 }
 
 interface NodeList {
     [Symbol.iterator](): IterableIterator<Node>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[number, Node]>;
-    /**
-     * Returns an list of keys in the list.
-     */
+    /** Returns an list of keys in the list. */
     keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list.
-     */
+    /** Returns an list of values in the list. */
     values(): IterableIterator<Node>;
 }
 
 interface NodeListOf<TNode extends Node> {
     [Symbol.iterator](): IterableIterator<TNode>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[number, TNode]>;
-    /**
-     * Returns an list of keys in the list.
-     */
+    /** Returns an list of keys in the list. */
     keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list.
-     */
+    /** Returns an list of values in the list. */
     values(): IterableIterator<TNode>;
 }
 
@@ -194,13 +169,6 @@ interface PluginArray {
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
-}
-
-interface ReadableStream<R = any> {
-    [Symbol.iterator](): IterableIterator<any>;
-    entries(): IterableIterator<[number, any]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<any>;
 }
 
 interface SVGLengthList {
@@ -263,17 +231,11 @@ interface TouchList {
 
 interface URLSearchParams {
     [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an array of key, value pairs for every entry in the search params.
-     */
+    /** Returns an array of key, value pairs for every entry in the search params. */
     entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns a list of keys in the search params.
-     */
+    /** Returns a list of keys in the search params. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the search params.
-     */
+    /** Returns a list of values in the search params. */
     values(): IterableIterator<string>;
 }
 

@@ -31,7 +31,7 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            if (!ambientModule.body) { continue; }
+            if (!ambientModule.body) continue;
 
             const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
@@ -146,7 +146,8 @@ namespace ts.OrganizeImports {
                         importDecl.decorators,
                         importDecl.modifiers,
                         /*importClause*/ undefined,
-                        moduleSpecifier));
+                        moduleSpecifier,
+                        /*assertClause*/ undefined));
                 }
                 // If we’re not in a declaration file, we can’t remove the import clause even though
                 // the imported symbols are unused, because removing them makes it look like the import
@@ -231,7 +232,7 @@ namespace ts.OrganizeImports {
             else {
                 for (const defaultImport of defaultImports) {
                     newImportSpecifiers.push(
-                        factory.createImportSpecifier(factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
                 }
             }
 
@@ -358,7 +359,8 @@ namespace ts.OrganizeImports {
                             factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
                             factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                     ),
-                    exportDecl.moduleSpecifier));
+                    exportDecl.moduleSpecifier,
+                    exportDecl.assertClause));
         }
 
         return coalescedExports;
@@ -405,7 +407,8 @@ namespace ts.OrganizeImports {
             importDeclaration.decorators,
             importDeclaration.modifiers,
             factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
-            importDeclaration.moduleSpecifier);
+            importDeclaration.moduleSpecifier,
+            importDeclaration.assertClause);
     }
 
     function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[]) {
@@ -413,7 +416,8 @@ namespace ts.OrganizeImports {
     }
 
     export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
-        return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
+        return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
+            || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
             || compareIdentifiers(s1.name, s2.name);
     }
 

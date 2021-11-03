@@ -14,6 +14,7 @@ class Derived extends Base {
 
     a: super();
 >a : Symbol(Derived.a, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 6, 28))
+>super : Symbol(super)
 
     b() {
 >b : Symbol(Derived.b, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 7, 15))
@@ -35,6 +36,7 @@ class Derived extends Base {
 
     static a: super();
 >a : Symbol(Derived.a, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 17, 5))
+>super : Symbol(super)
 
     static b() {
 >b : Symbol(Derived.b, Decl(derivedClassSuperCallsInNonConstructorMembers.ts, 19, 22))

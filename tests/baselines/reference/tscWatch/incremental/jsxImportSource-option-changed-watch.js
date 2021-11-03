@@ -61,7 +61,7 @@ Output::
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -198,7 +198,7 @@ Output::
 [7m [0m [91m                              ~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -225,10 +225,6 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (computed .d.ts)
 
 WatchedFiles::
-/users/username/projects/project/node_modules/react/jsx-runtime/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
-/users/username/projects/project/node_modules/react/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/index.tsx:

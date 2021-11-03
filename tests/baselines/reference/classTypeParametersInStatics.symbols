@@ -27,11 +27,14 @@ module Editor {
         public static MakeHead(): List<T> { // should error
 >MakeHead : Symbol(List.MakeHead, Decl(classTypeParametersInStatics.ts, 9, 9))
 >List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T)
 
             var entry: List<T> = new List<T>(true, null);
 >entry : Symbol(entry, Decl(classTypeParametersInStatics.ts, 12, 15))
 >List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T)
 >List : Symbol(List, Decl(classTypeParametersInStatics.ts, 0, 15))
+>T : Symbol(T)
 
             entry.prev = entry;
 >entry.prev : Symbol(List.prev, Decl(classTypeParametersInStatics.ts, 4, 29))

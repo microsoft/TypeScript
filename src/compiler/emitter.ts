@@ -89,7 +89,7 @@ namespace ts {
             return getOutputPathsForBundle(options, forceDtsPaths);
         }
         else {
-            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
+            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile.fileName, options));
             const isJsonFile = isJsonSourceFile(sourceFile);
             // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
             const isJsonEmittedToSameLocation = isJsonFile &&
@@ -106,27 +106,13 @@ namespace ts {
         return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
 
-    // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
-    // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
-    // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
     /* @internal */
-    export function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
-        if (isJsonSourceFile(sourceFile)) {
-            return Extension.Json;
-        }
-
-        if (options.jsx === JsxEmit.Preserve) {
-            if (isSourceFileJS(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
-                    return Extension.Jsx;
-                }
-            }
-            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                // TypeScript source file preserving JSX syntax
-                return Extension.Jsx;
-            }
-        }
-        return Extension.Js;
+    export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
+        return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
+        options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
+        fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
+        fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
+        Extension.Js;
     }
 
     function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
@@ -140,10 +126,9 @@ namespace ts {
 
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
-        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && !fileExtensionIs(inputFileName, Extension.Json));
         return changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
-            Extension.Dts
+            getDeclarationEmitExtensionForPath(inputFileName)
         );
     }
 
@@ -152,11 +137,7 @@ namespace ts {
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
-            isJsonFile ?
-                Extension.Json :
-                configFile.options.jsx === JsxEmit.Preserve && (fileExtensionIs(inputFileName, Extension.Tsx) || fileExtensionIs(inputFileName, Extension.Jsx)) ?
-                    Extension.Jsx :
-                    Extension.Js
+            getOutputExtension(inputFileName, configFile.options)
         );
         return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
             outputFileName :
@@ -238,7 +219,7 @@ namespace ts {
     export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
         return getCommonSourceDirectory(
             options,
-            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensions)) && !fileExtensionIs(file, Extension.Dts)),
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !fileExtensionIs(file, Extension.Dts)),
             getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
             createGetCanonicalFileName(!ignoreCase)
         );
@@ -1302,7 +1283,13 @@ namespace ts {
             currentParenthesizerRule = undefined;
         }
 
-        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node): void {
+        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, allowSnippets = true): void {
+            if (allowSnippets) {
+                const snippet = getSnippetElement(node);
+                if (snippet) {
+                    return emitSnippetNode(hint, node, snippet);
+                }
+            }
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
@@ -1515,6 +1502,10 @@ namespace ts {
                         return emitNamedExports(node as NamedExports);
                     case SyntaxKind.ExportSpecifier:
                         return emitExportSpecifier(node as ExportSpecifier);
+                    case SyntaxKind.AssertClause:
+                        return emitAssertClause(node as AssertClause);
+                    case SyntaxKind.AssertEntry:
+                        return emitAssertEntry(node as AssertEntry);
                     case SyntaxKind.MissingDeclaration:
                         return;
 
@@ -1680,6 +1671,8 @@ namespace ts {
                     // Identifiers
                     case SyntaxKind.Identifier:
                         return emitIdentifier(node as Identifier);
+                    case SyntaxKind.PrivateIdentifier:
+                        return emitPrivateIdentifier(node as PrivateIdentifier);
 
                     // Expressions
                     case SyntaxKind.ArrayLiteralExpression:
@@ -1935,6 +1928,32 @@ namespace ts {
                 section.end = writer.getTextPos();
                 bundleFileInfo.sections.push(section);
             }
+        }
+
+        //
+        // Snippet Elements
+        //
+
+        function emitSnippetNode(hint: EmitHint, node: Node, snippet: SnippetElement) {
+            switch (snippet.kind) {
+                case SnippetKind.Placeholder:
+                    emitPlaceholder(hint, node, snippet);
+                    break;
+                case SnippetKind.TabStop:
+                    emitTabStop(snippet);
+                    break;
+            }
+        }
+
+        function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
+            nonEscapingWrite(`\$\{${snippet.order}:`); // `${2:`
+            pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
+            nonEscapingWrite(`\}`); // `}`
+            // `${2:...}`
+        }
+
+        function emitTabStop(snippet: TabStop) {
+            nonEscapingWrite(`\$${snippet.order}`);
         }
 
         //
@@ -3322,6 +3341,9 @@ namespace ts {
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
+            if (node.assertClause) {
+                emitWithLeadingSpace(node.assertClause);
+            }
             writeTrailingSemicolon();
         }
 
@@ -3390,7 +3412,31 @@ namespace ts {
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
+            if (node.assertClause) {
+                emitWithLeadingSpace(node.assertClause);
+            }
             writeTrailingSemicolon();
+        }
+
+        function emitAssertClause(node: AssertClause) {
+            emitTokenWithComment(SyntaxKind.AssertKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            const elements = node.elements;
+            emitList(node, elements, ListFormat.ImportClauseEntries);
+        }
+
+        function emitAssertEntry(node: AssertEntry) {
+            emit(node.name);
+            writePunctuation(":");
+            writeSpace();
+
+            const value = node.value;
+            /** @see {emitPropertyAssignment} */
+            if ((getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
+                const commentRange = getCommentRange(value);
+                emitTrailingCommentsOfPosition(commentRange.pos);
+            }
+            emit(value);
         }
 
         function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
@@ -3427,6 +3473,10 @@ namespace ts {
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
+            if (node.isTypeOnly) {
+                writeKeyword("type");
+                writeSpace();
+            }
             if (node.propertyName) {
                 emit(node.propertyName);
                 writeSpace();
@@ -4437,6 +4487,16 @@ namespace ts {
 
         function writeProperty(s: string) {
             writer.writeProperty(s);
+        }
+
+        function nonEscapingWrite(s: string) {
+            // This should be defined in a snippet-escaping text writer.
+            if (writer.nonEscapingWrite) {
+                writer.nonEscapingWrite(s);
+            }
+            else {
+                writer.write(s);
+            }
         }
 
         function writeLine(count = 1) {

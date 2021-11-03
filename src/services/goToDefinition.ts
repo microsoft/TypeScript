@@ -170,10 +170,10 @@ namespace ts.GoToDefinition {
             return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
-        if (sourceFile.resolvedModules?.size) {
+        if (sourceFile.resolvedModules?.size()) {
             const node = getTokenAtPosition(sourceFile, position);
-            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
-                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedFileName;
                 const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
                 return {
                     file: program.getSourceFile(fileName),

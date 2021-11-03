@@ -57,6 +57,11 @@ namespace ts.projectSystem {
                 { real: "/packages/dep/", realPath: "/packages/dep/" as Path }
             );
         });
+
+        it("works for paths close to the root", () => {
+            const cache = createSymlinkCache("/", createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+            cache.setSymlinkedDirectoryFromSymlinkedFile("/foo", "/one/two/foo"); // Used to crash, #44953
+        });
     });
 
     function setup() {

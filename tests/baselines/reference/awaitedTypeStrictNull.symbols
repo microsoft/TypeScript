@@ -1,0 +1,220 @@
+=== tests/cases/compiler/awaitedTypeStrictNull.ts ===
+type T1 = Awaited<number>;
+>T1 : Symbol(T1, Decl(awaitedTypeStrictNull.ts, 0, 0))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T2 = Awaited<Promise<number>>;
+>T2 : Symbol(T2, Decl(awaitedTypeStrictNull.ts, 0, 26))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T3 = Awaited<number | Promise<number>>;
+>T3 : Symbol(T3, Decl(awaitedTypeStrictNull.ts, 1, 35))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T4 = Awaited<number | Promise<string>>;
+>T4 : Symbol(T4, Decl(awaitedTypeStrictNull.ts, 2, 44))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T5 = Awaited<{ then: number }>;
+>T5 : Symbol(T5, Decl(awaitedTypeStrictNull.ts, 3, 44))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 4, 19))
+
+type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
+>T6 : Symbol(T6, Decl(awaitedTypeStrictNull.ts, 4, 36))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 5, 19))
+
+type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
+>T7 : Symbol(T7, Decl(awaitedTypeStrictNull.ts, 5, 36))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 6, 19))
+>x : Symbol(x, Decl(awaitedTypeStrictNull.ts, 6, 25))
+
+type T8 = Awaited<{ then(x: () => void): void }>; // unknown
+>T8 : Symbol(T8, Decl(awaitedTypeStrictNull.ts, 6, 45))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedTypeStrictNull.ts, 7, 19))
+>x : Symbol(x, Decl(awaitedTypeStrictNull.ts, 7, 25))
+
+type T9 = Awaited<any>;
+>T9 : Symbol(T9, Decl(awaitedTypeStrictNull.ts, 7, 49))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T10 = Awaited<never>;
+>T10 : Symbol(T10, Decl(awaitedTypeStrictNull.ts, 8, 23))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T11 = Awaited<unknown>;
+>T11 : Symbol(T11, Decl(awaitedTypeStrictNull.ts, 9, 26))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T12 = Awaited<Promise<Promise<number>>>;
+>T12 : Symbol(T12, Decl(awaitedTypeStrictNull.ts, 10, 28))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
+>T13 : Symbol(T13, Decl(awaitedTypeStrictNull.ts, 11, 45))
+>_Expect : Symbol(_Expect, Decl(awaitedTypeStrictNull.ts, 54, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
+>T14 : Symbol(T14, Decl(awaitedTypeStrictNull.ts, 12, 107))
+>_Expect : Symbol(_Expect, Decl(awaitedTypeStrictNull.ts, 54, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
+>T15 : Symbol(T15, Decl(awaitedTypeStrictNull.ts, 13, 117))
+>_Expect : Symbol(_Expect, Decl(awaitedTypeStrictNull.ts, 54, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+interface BadPromise { then(cb: (value: BadPromise) => void): void; }
+>BadPromise : Symbol(BadPromise, Decl(awaitedTypeStrictNull.ts, 14, 131))
+>then : Symbol(BadPromise.then, Decl(awaitedTypeStrictNull.ts, 16, 22))
+>cb : Symbol(cb, Decl(awaitedTypeStrictNull.ts, 16, 28))
+>value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 16, 33))
+>BadPromise : Symbol(BadPromise, Decl(awaitedTypeStrictNull.ts, 14, 131))
+
+type T16 = Awaited<BadPromise>; // error
+>T16 : Symbol(T16, Decl(awaitedTypeStrictNull.ts, 16, 69))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>BadPromise : Symbol(BadPromise, Decl(awaitedTypeStrictNull.ts, 14, 131))
+
+interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
+>BadPromise1 : Symbol(BadPromise1, Decl(awaitedTypeStrictNull.ts, 17, 31))
+>then : Symbol(BadPromise1.then, Decl(awaitedTypeStrictNull.ts, 19, 23))
+>cb : Symbol(cb, Decl(awaitedTypeStrictNull.ts, 19, 29))
+>value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 19, 34))
+>BadPromise2 : Symbol(BadPromise2, Decl(awaitedTypeStrictNull.ts, 19, 71))
+
+interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
+>BadPromise2 : Symbol(BadPromise2, Decl(awaitedTypeStrictNull.ts, 19, 71))
+>then : Symbol(BadPromise2.then, Decl(awaitedTypeStrictNull.ts, 20, 23))
+>cb : Symbol(cb, Decl(awaitedTypeStrictNull.ts, 20, 29))
+>value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 20, 34))
+>BadPromise1 : Symbol(BadPromise1, Decl(awaitedTypeStrictNull.ts, 17, 31))
+
+type T17 = Awaited<BadPromise1>; // error
+>T17 : Symbol(T17, Decl(awaitedTypeStrictNull.ts, 20, 71))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>BadPromise1 : Symbol(BadPromise1, Decl(awaitedTypeStrictNull.ts, 17, 31))
+
+// https://github.com/microsoft/TypeScript/issues/33562
+type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 24, 54), Decl(awaitedTypeStrictNull.ts, 21, 32))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 24, 18))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 24, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 24, 18))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 24, 18))
+
+declare function MaybePromise<T>(value: T): MaybePromise<T>;
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 24, 54), Decl(awaitedTypeStrictNull.ts, 21, 32))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 25, 30))
+>value : Symbol(value, Decl(awaitedTypeStrictNull.ts, 25, 33))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 25, 30))
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 24, 54), Decl(awaitedTypeStrictNull.ts, 21, 32))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 25, 30))
+
+async function main() {
+>main : Symbol(main, Decl(awaitedTypeStrictNull.ts, 25, 60))
+
+    let aaa: number;
+>aaa : Symbol(aaa, Decl(awaitedTypeStrictNull.ts, 28, 7))
+
+    let bbb: string;
+>bbb : Symbol(bbb, Decl(awaitedTypeStrictNull.ts, 29, 7))
+
+    [
+        aaa,
+>aaa : Symbol(aaa, Decl(awaitedTypeStrictNull.ts, 28, 7))
+
+        bbb,
+>bbb : Symbol(bbb, Decl(awaitedTypeStrictNull.ts, 29, 7))
+
+    ] = await Promise.all([
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+        MaybePromise(1),
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 24, 54), Decl(awaitedTypeStrictNull.ts, 21, 32))
+
+        MaybePromise('2'),
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 24, 54), Decl(awaitedTypeStrictNull.ts, 21, 32))
+
+        MaybePromise(true),
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedTypeStrictNull.ts, 24, 54), Decl(awaitedTypeStrictNull.ts, 21, 32))
+
+    ])
+}
+
+// https://github.com/microsoft/TypeScript/issues/45924
+class Api<D = {}> {
+>Api : Symbol(Api, Decl(awaitedTypeStrictNull.ts, 38, 1))
+>D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 41, 10))
+
+	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
+	async post<T = D>() { return this.request<T>(); }
+>post : Symbol(Api.post, Decl(awaitedTypeStrictNull.ts, 41, 19))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 43, 12))
+>D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 41, 10))
+>this.request : Symbol(Api.request, Decl(awaitedTypeStrictNull.ts, 43, 50))
+>this : Symbol(Api, Decl(awaitedTypeStrictNull.ts, 38, 1))
+>request : Symbol(Api.request, Decl(awaitedTypeStrictNull.ts, 43, 50))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 43, 12))
+
+	async request<D>(): Promise<D> { throw new Error(); }
+>request : Symbol(Api.request, Decl(awaitedTypeStrictNull.ts, 43, 50))
+>D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 44, 15))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 44, 15))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+declare const api: Api;
+>api : Symbol(api, Decl(awaitedTypeStrictNull.ts, 47, 13))
+>Api : Symbol(Api, Decl(awaitedTypeStrictNull.ts, 38, 1))
+
+interface Obj { x: number }
+>Obj : Symbol(Obj, Decl(awaitedTypeStrictNull.ts, 47, 23))
+>x : Symbol(Obj.x, Decl(awaitedTypeStrictNull.ts, 48, 15))
+
+async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
+>fn : Symbol(fn, Decl(awaitedTypeStrictNull.ts, 48, 27))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 50, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 50, 18))
+>K : Symbol(K, Decl(awaitedTypeStrictNull.ts, 50, 54))
+>T : Symbol(T, Decl(awaitedTypeStrictNull.ts, 50, 18))
+>Obj : Symbol(Obj, Decl(awaitedTypeStrictNull.ts, 47, 23))
+>Obj : Symbol(Obj, Decl(awaitedTypeStrictNull.ts, 47, 23))
+
+	// Per #45924, this was failing due to incorrect inference both above and here.
+	// Should not error.
+	return api.post();
+>api.post : Symbol(Api.post, Decl(awaitedTypeStrictNull.ts, 41, 19))
+>api : Symbol(api, Decl(awaitedTypeStrictNull.ts, 47, 13))
+>post : Symbol(Api.post, Decl(awaitedTypeStrictNull.ts, 41, 19))
+}
+
+// helps with tests where '.types' just prints out the type alias name
+type _Expect<TActual extends TExpected, TExpected> = TActual;
+>_Expect : Symbol(_Expect, Decl(awaitedTypeStrictNull.ts, 54, 1))
+>TActual : Symbol(TActual, Decl(awaitedTypeStrictNull.ts, 57, 13))
+>TExpected : Symbol(TExpected, Decl(awaitedTypeStrictNull.ts, 57, 39))
+>TExpected : Symbol(TExpected, Decl(awaitedTypeStrictNull.ts, 57, 39))
+>TActual : Symbol(TActual, Decl(awaitedTypeStrictNull.ts, 57, 13))
+

@@ -272,6 +272,16 @@ function foo({ kind, payload }: Data) {
     }
 }
 
+// Repro from #45830
+
+const obj = {
+    fn: () => true
+};
+
+if (a) { }
+
+const a = obj.fn();
+
 
 //// [controlFlowAliasing.js]
 "use strict";
@@ -522,6 +532,12 @@ function foo(_a) {
         var t = payload;
     }
 }
+// Repro from #45830
+var obj = {
+    fn: function () { return true; }
+};
+if (a) { }
+var a = obj.fn();
 
 
 //// [controlFlowAliasing.d.ts]
@@ -657,3 +673,7 @@ declare type Data = {
 };
 declare function gg2(obj: Data): void;
 declare function foo({ kind, payload }: Data): void;
+declare const obj: {
+    fn: () => boolean;
+};
+declare const a: boolean;
