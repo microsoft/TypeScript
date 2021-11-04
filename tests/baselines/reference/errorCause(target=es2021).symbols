@@ -1,0 +1,6 @@
+=== tests/cases/compiler/errorCause.ts ===
+new Error("foo", { cause: new Error("bar") });
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>cause : Symbol(cause, Decl(errorCause.ts, 0, 18))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
