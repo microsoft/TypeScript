@@ -5839,10 +5839,9 @@ namespace ts {
         this.parent = undefined!;
     }
 
-    function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    function Identifier(this: Mutable<Node>, _kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
-        this.kind = kind;
         this.id = 0;
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
@@ -5850,6 +5849,7 @@ namespace ts {
         this.original = undefined;
         this.flowNode = undefined;
     }
+    (Identifier.prototype as Mutable<Identifier>).kind = SyntaxKind.Identifier;
 
     function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
         this.fileName = fileName;
