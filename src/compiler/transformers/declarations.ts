@@ -1577,6 +1577,10 @@ namespace ts {
                 mask ^= ModifierFlags.Ambient;
                 additions = ModifierFlags.None;
             }
+            // Transform non-ambient const enums -> ambient non-const enums if isolatedModules is true
+            if (isEnumDeclaration(node) && options.isolatedModules) {
+                mask ^= ModifierFlags.Const;
+            }
             return maskModifierFlags(node, mask, additions);
         }
 
