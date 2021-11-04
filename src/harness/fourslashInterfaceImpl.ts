@@ -259,6 +259,16 @@ namespace FourSlashInterface {
             this.state.verifyInlayHints(expected, span, preference);
         }
 
+        public getInlineCompletions(
+            expected: readonly VerifyInlineCompletionsOptions[],
+            position: number,
+            triggerKind: ts.InlineCompletionTriggerKind,
+            inlineCompletionSelectedCompletionInfo: ts.InlineCompletionSelectedCompletionInfo | undefined,
+            preference?: ts.UserPreferences
+        ): void {
+            this.state.verifyInlineCompletions(expected, position, triggerKind, inlineCompletionSelectedCompletionInfo, preference);
+        }
+
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
@@ -1689,6 +1699,11 @@ namespace FourSlashInterface {
         kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+    }
+
+    export interface VerifyInlineCompletionsOptions {
+        text: string;
+        span?: ts.TextSpan
     }
 
     export type ArrayOrSingle<T> = T | readonly T[];

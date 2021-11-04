@@ -72,6 +72,21 @@ declare module ts {
         Enum = "Enum",
     }
 
+    const enum InlineCompletionTriggerKind {
+        Automatic = 0,
+		Explicit = 1,
+    }
+
+    interface TextSpan {
+        start: number;
+        length: number;
+    }
+
+    interface InlineCompletionSelectedCompletionInfo {
+        span?: TextSpan;
+		text: string;
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -411,10 +426,14 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
-        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
-            start: number;
-            length: number;
-        }, preference?: InlayHintsOptions);
+        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: ts.TextSpan, preference?: InlayHintsOptions): void;
+        getInlineCompletions(
+            expected: readonly VerifyInlineCompletionsOptions[],
+            position: number,
+            triggerKind: ts.InlineCompletionTriggerKind,
+            inlineCompletionSelectedCompletionInfo: ts.InlineCompletionSelectedCompletionInfo | undefined,
+            preference?: UserPreferences
+        ): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -769,9 +788,14 @@ declare namespace FourSlashInterface {
     export interface VerifyInlayHintsOptions {
         text: string;
         position: number;
-        kind?: VerifyInlayHintKind;
+        kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+    }
+
+    export interface VerifyInlineCompletionsOptions {
+        text: string;
+        span?: ts.TextSpan
     }
 
     interface VerifyNavigateToOptions {

@@ -856,6 +856,28 @@ namespace FourSlash {
             });
         }
 
+        public verifyInlineCompletions(
+            expected: readonly FourSlashInterface.VerifyInlineCompletionsOptions[],
+            position: number,
+            triggerKind: ts.InlineCompletionTriggerKind,
+            selectedCompletionInfo: ts.InlineCompletionSelectedCompletionInfo | undefined,
+            preference: ts.UserPreferences = {}
+        ) {
+            const items = this.languageService.provideInlineCompletions(
+                this.activeFile.fileName,
+                position,
+                triggerKind,
+                selectedCompletionInfo,
+                preference
+            );
+
+            assert.equal(items.length, expected.length, "Number of items");
+            ts.zipWith(items, expected, (actual, expected) => {
+                assert.equal(actual.text, expected.text, "Text");
+                assert.deepEqual(actual.span, expected.span, "Span");
+            });
+        }
+
         public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
             if (options.marker === undefined) {
                 this.verifyCompletionsWorker(options);

@@ -481,7 +481,14 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
-        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[]
+        provideInlayHints(fileName: string, span: TextSpan, options: InlayHintsOptions | undefined): InlayHint[]
+        provideInlineCompletions(
+            fileName: string,
+            position: number,
+            triggerKind: InlineCompletionTriggerKind,
+            selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined,
+            preferences: UserPreferences | undefined
+        ): InlineCompletionItem[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -563,6 +570,28 @@ namespace ts {
 
         /** Completion was re-triggered as the current completion list is incomplete. */
         TriggerForIncompleteCompletions = 3,
+    }
+
+    export const enum InlineCompletionTriggerKind {
+        /**
+         * Completion was triggered automatically while editing. It is sufficient to return a single completion item in this case.
+         */
+        Automatic = 0,
+
+        /**
+         * Completion was triggered explicitly by a user gesture. Return multiple completion items to enable cycling through them.
+         */
+        Explicit = 1,
+    }
+
+    export interface InlineCompletionSelectedCompletionInfo {
+        span?: TextSpan;
+        text: string;
+    }
+
+    export interface ProvideInlineCompletionsOptions extends UserPreferences {
+        triggerKind: InlineCompletionTriggerKind;
+        selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined;
     }
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
@@ -723,6 +752,11 @@ namespace ts {
         kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+    }
+
+    export interface InlineCompletionItem {
+        text: string;
+        span?: TextSpan;
     }
 
     export interface TodoCommentDescriptor {
@@ -1612,6 +1646,17 @@ namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
+        preferences: InlayHintsOptions;
+    }
+
+    export interface InlineCompletionsContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
+        position: number;
+        triggerKind: InlineCompletionTriggerKind;
+        selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined;
         preferences: InlayHintsOptions;
     }
 }

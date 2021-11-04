@@ -35,6 +35,7 @@
         "smartSelection.ts",
         "signatureHelp.ts",
         "inlayHints.ts",
+        "inlineCompletions.ts",
         "sourcemaps.ts",
         "suggestionDiagnostics.ts",
         "symbolDisplay.ts",

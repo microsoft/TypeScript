@@ -603,6 +603,9 @@ namespace Harness.LanguageService {
         provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.InlayHintsOptions) {
             return unwrapJSONCallResult(this.shim.provideInlayHints(fileName, span, preference));
         }
+        provideInlineCompletions(fileName: string, position: number, triggerKind: ts.InlineCompletionTriggerKind, selectedCompletionInfo: ts.InlineCompletionSelectedCompletionInfo | undefined, preference: ts.InlayHintsOptions) {
+            return unwrapJSONCallResult(this.shim.provideInlineCompletions(fileName, position, triggerKind, selectedCompletionInfo, preference));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }

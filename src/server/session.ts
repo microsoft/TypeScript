@@ -1463,6 +1463,46 @@ namespace ts.server {
             }));
         }
 
+        private provideInlineCompletions(args: protocol.InlineCompletionsArgs): readonly protocol.InlineCompletionItem[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const position = this.getPositionInFile(args.position, file);
+            const selectedCompletionInfo = this.getSelectedCompletionInfoFromProtocol(args.selectedCompletionInfo, scriptInfo);
+
+            const items = project.getLanguageService().provideInlineCompletions(
+                file,
+                position,
+                args.triggerKind as unknown as InlineCompletionTriggerKind,
+                selectedCompletionInfo,
+                this.getPreferences(file)
+            );
+
+            return items.map(item => {
+                const { span, ...others } = item;
+                return {
+                    ...others,
+                    span: span ? toProtocolTextSpan(span, scriptInfo) : undefined
+                };
+            });
+        }
+
+        private getSelectedCompletionInfoFromProtocol(selectedCompletionInfo: protocol.InlineCompletionSelectedCompletionInfo | undefined, scriptInfo: ScriptInfo): InlineCompletionSelectedCompletionInfo | undefined {
+            if (!selectedCompletionInfo) {
+                return undefined;
+            }
+
+            const span = selectedCompletionInfo.span ? this.getTextSpanFromPositions(
+                selectedCompletionInfo.span.start,
+                selectedCompletionInfo.span.end,
+                scriptInfo
+            ) : undefined;
+
+            return {
+                text: selectedCompletionInfo.text,
+                span
+            };
+        }
+
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
             this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
         }
@@ -1627,6 +1667,16 @@ namespace ts.server {
 
         private getPosition(args: protocol.Location & { position?: number }, scriptInfo: ScriptInfo): number {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
+        }
+
+        private getTextSpanFromPositions(start: protocol.Location & { position?: number }, end: protocol.Location & { position?: number }, scriptInfo: ScriptInfo): TextSpan {
+            const startPosition = this.getPosition(start, scriptInfo);
+            const endPosition = this.getPosition(end, scriptInfo);
+
+            return {
+                start: startPosition,
+                length: endPosition - startPosition
+            };
         }
 
         private getPositionInFile(args: protocol.Location & { position?: number }, file: NormalizedPath): number {
@@ -2981,6 +3031,9 @@ namespace ts.server {
             },
             [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
                 return this.requiredResponse(this.provideInlayHints(request.arguments));
+            },
+            [CommandNames.ProvideInlineCompletions]: (request: protocol.InlineCompletionsRequest) => {
+                return this.requiredResponse(this.provideInlineCompletions(request.arguments));
             }
         }));
 

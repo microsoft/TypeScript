@@ -154,7 +154,8 @@ namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-        ProvideInlayHints = "provideInlayHints"
+        ProvideInlayHints = "provideInlayHints",
+        ProvideInlineCompletions = "provideInlineCompletions"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     }
@@ -2590,6 +2591,36 @@ namespace ts.server.protocol {
 
     export interface InlayHintsResponse extends Response {
         body?: InlayHintItem[];
+    }
+
+    export const enum InlineCompletionTriggerKind {
+        Automatic = 0,
+        Explicit = 1,
+    }
+
+    export interface InlineCompletionSelectedCompletionInfo {
+        span?: TextSpan;
+        text: string;
+    }
+
+    export interface InlineCompletionsArgs extends FileRequestArgs {
+        position: Location;
+        triggerKind: InlineCompletionTriggerKind;
+        selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined;
+    }
+
+    export interface InlineCompletionsRequest extends Request {
+        command: CommandTypes.ProvideInlineCompletions;
+        arguments: InlineCompletionsArgs;
+    }
+
+    export interface InlineCompletionItem {
+        text: string;
+        span?: TextSpan;
+    }
+
+    export interface InlineCompletionsResponse extends Response {
+        body?: InlineCompletionItem[];
     }
 
     /**

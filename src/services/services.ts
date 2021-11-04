@@ -1195,7 +1195,8 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
-        "provideInlayHints"
+        "provideInlayHints",
+        "provideInlineCompletions",
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1217,6 +1218,7 @@ namespace ts {
         "getRenameInfo",
         "findRenameLocations",
         "getApplicableRefactors",
+        "provideInlineCompletions",
     ];
     export function createLanguageService(
         host: LanguageServiceHost,
@@ -2536,6 +2538,25 @@ namespace ts {
             };
         }
 
+        function getInlineCompletionsContext(
+            file: SourceFile,
+            position: number,
+            triggerKind: InlineCompletionTriggerKind,
+            selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined,
+            preferences: UserPreferences
+        ): InlineCompletionsContext {
+            return {
+                file,
+                program: getProgram()!,
+                host,
+                position,
+                preferences,
+                cancellationToken,
+                triggerKind,
+                selectedCompletionInfo
+            };
+        }
+
         function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
@@ -2594,6 +2615,24 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
+        }
+
+        function provideInlineCompletions(
+            fileName: string,
+            position: number,
+            triggerKind: InlineCompletionTriggerKind,
+            selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined,
+            preferences: UserPreferences = emptyOptions
+        ): InlineCompletionItem[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            return InlineCompletions.provideInlineCompletions(getInlineCompletionsContext(
+                sourceFile,
+                position,
+                triggerKind,
+                selectedCompletionInfo,
+                preferences
+            ));
         }
 
         const ls: LanguageService = {
@@ -2662,6 +2701,7 @@ namespace ts {
             commentSelection,
             uncommentSelection,
             provideInlayHints,
+            provideInlineCompletions
         };
 
         switch (languageServiceMode) {

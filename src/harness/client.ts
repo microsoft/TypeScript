@@ -542,6 +542,13 @@ namespace ts.server {
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
+        private encodeSpan(span: TextSpan, fileName: string): protocol.TextSpan {
+            return {
+                start: this.positionToOneBasedLineOffset(fileName, span.start),
+                end: this.positionToOneBasedLineOffset(fileName, span.start + span.length),
+            };
+        }
+
         private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
             return tags.map(tag => typeof tag.text === "string" ? {
                 ...tag,
@@ -662,6 +669,31 @@ namespace ts.server {
                 ...item,
                 kind: item.kind as InlayHintKind,
                 position: this.lineOffsetToPosition(file, item.position),
+            }));
+        }
+
+        provideInlineCompletions(
+            file: string,
+            position: number,
+            triggerKind: InlineCompletionTriggerKind,
+            selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined,
+        ): InlineCompletionItem[] {
+            const args: protocol.InlineCompletionsArgs = {
+                file,
+                position: this.positionToOneBasedLineOffset(file, position),
+                triggerKind: triggerKind as unknown as protocol.InlineCompletionTriggerKind,
+                selectedCompletionInfo: selectedCompletionInfo ? {
+                    ...selectedCompletionInfo,
+                    span: selectedCompletionInfo.span ? this.encodeSpan(selectedCompletionInfo.span, file) : undefined
+                } : undefined
+            };
+
+            const request = this.processRequest<protocol.InlineCompletionsRequest>(CommandNames.ProvideInlineCompletions, args);
+            const response = this.processResponse<protocol.InlineCompletionsResponse>(request);
+
+            return response.body!.map(item => ({ // TODO: GH#18217
+                ...item,
+                span: item.span ? this.decodeSpan(item.span, file) : undefined
             }));
         }
 

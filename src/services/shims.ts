@@ -283,6 +283,14 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
         provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string;
+        provideInlineCompletions(
+            fileName: string,
+            position: number,
+            triggerKind: InlineCompletionTriggerKind,
+            selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined,
+            preferences: UserPreferences | undefined
+        ): string;
+
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
@@ -1073,6 +1081,19 @@ namespace ts {
             return this.forwardJSONCall(
                 `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
                 () => this.languageService.provideInlayHints(fileName, span, preference)
+            );
+        }
+
+        public provideInlineCompletions(
+            fileName: string,
+            position: number,
+            triggerKind: InlineCompletionTriggerKind,
+            selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined,
+            preferences: UserPreferences | undefined
+        ): string {
+            return this.forwardJSONCall(
+                `provideInlineCompletions('${fileName}', ${position}, ${triggerKind}, '${JSON.stringify(selectedCompletionInfo)}')`,
+                () => this.languageService.provideInlineCompletions(fileName, position, triggerKind, selectedCompletionInfo, preferences)
             );
         }
 
