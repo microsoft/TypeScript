@@ -1485,6 +1485,7 @@ namespace ts.server {
             });
         }
 
+        /* @internal */
         private getSelectedCompletionInfoFromProtocol(selectedCompletionInfo: protocol.InlineCompletionSelectedCompletionInfo | undefined, scriptInfo: ScriptInfo): InlineCompletionSelectedCompletionInfo | undefined {
             if (!selectedCompletionInfo) {
                 return undefined;
