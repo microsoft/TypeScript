@@ -41620,8 +41620,9 @@ namespace ts {
                 return getEnumMemberValue(node);
             }
 
+            // Cached name resolution result of import equals declaration/access expression
             const symbol = isEntityName(node)
-                ? resolveEntityName(node, SymbolFlags.EnumMember, /*ignoreErrors*/ true)
+                ? isDeclaration(node.parent) && resolveAlias(getSymbolOfNode(node.parent))
                 : getNodeLinks(node).resolvedSymbol;
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 // inline property\index accesses only for const enums
