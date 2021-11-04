@@ -680,7 +680,7 @@ namespace ts.server {
         ): InlineCompletionItem[] {
             const args: protocol.InlineCompletionsArgs = {
                 file,
-                position: this.positionToOneBasedLineOffset(file, position),
+                position,
                 triggerKind: triggerKind as unknown as protocol.InlineCompletionTriggerKind,
                 selectedCompletionInfo: selectedCompletionInfo ? {
                     ...selectedCompletionInfo,

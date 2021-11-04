@@ -2604,7 +2604,7 @@ namespace ts.server.protocol {
     }
 
     export interface InlineCompletionsArgs extends FileRequestArgs {
-        position: Location;
+        position: number;
         triggerKind: InlineCompletionTriggerKind;
         selectedCompletionInfo: InlineCompletionSelectedCompletionInfo | undefined;
     }

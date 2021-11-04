@@ -1466,12 +1466,11 @@ namespace ts.server {
         private provideInlineCompletions(args: protocol.InlineCompletionsArgs): readonly protocol.InlineCompletionItem[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-            const position = this.getPositionInFile(args.position, file);
             const selectedCompletionInfo = this.getSelectedCompletionInfoFromProtocol(args.selectedCompletionInfo, scriptInfo);
 
             const items = project.getLanguageService().provideInlineCompletions(
                 file,
-                position,
+                args.position,
                 args.triggerKind as unknown as InlineCompletionTriggerKind,
                 selectedCompletionInfo,
                 this.getPreferences(file)
