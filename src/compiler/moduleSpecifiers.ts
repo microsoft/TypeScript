@@ -707,13 +707,15 @@ namespace ts.moduleSpecifiers {
             if (host.fileExists(packageJsonPath)) {
                 const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
                 // TODO: Inject `require` or `import` condition based on the intended import mode
-                const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string" ? tryGetModuleNameFromExports(options, path, packageRootPath, packageJsonContent.name, packageJsonContent.exports, ["node", "types"]) : undefined;
-                if (fromExports) {
-                    const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry) ? fromExports : { moduleFileToTry: removeFileExtension(fromExports.moduleFileToTry) + tryGetJSExtensionForFile(fromExports.moduleFileToTry, options) };
-                    return { ...withJsExtension, verbatimFromExports: true };
-                }
-                if (packageJsonContent.exports) {
-                    return { moduleFileToTry: path, blockedByExports: true };
+                if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
+                    const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string" ? tryGetModuleNameFromExports(options, path, packageRootPath, packageJsonContent.name, packageJsonContent.exports, ["node", "types"]) : undefined;
+                    if (fromExports) {
+                        const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry) ? fromExports : { moduleFileToTry: removeFileExtension(fromExports.moduleFileToTry) + tryGetJSExtensionForFile(fromExports.moduleFileToTry, options) };
+                        return { ...withJsExtension, verbatimFromExports: true };
+                    }
+                    if (packageJsonContent.exports) {
+                        return { moduleFileToTry: path, blockedByExports: true };
+                    }
                 }
                 const versionPaths = packageJsonContent.typesVersions
                     ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
