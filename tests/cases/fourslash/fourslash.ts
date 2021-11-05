@@ -856,6 +856,7 @@ declare namespace completion {
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;
     export const globals: ReadonlyArray<Entry>;
+    export const globalsSortedByName: ReadonlyArray<Entry>;
     export const globalsInJs: ReadonlyArray<Entry>;
     export const globalKeywords: ReadonlyArray<Entry>;
     export const globalInJsKeywords: ReadonlyArray<Entry>;

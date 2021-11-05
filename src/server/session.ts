@@ -1861,7 +1861,16 @@ namespace ts.server {
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
                 }
-            }), (a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
+            }), (a, b) => {
+                const byName = compareStringsCaseSensitiveUI(a.name, b.name);
+                if (byName === Comparison.EqualTo && (a.data as CompletionEntryData)?.moduleSpecifier && (b.data as CompletionEntryData)?.moduleSpecifier) {
+                    return compareNumberOfDirectorySeparators(
+                        (a.data as CompletionEntryDataResolved).moduleSpecifier,
+                        (b.data as CompletionEntryDataResolved).moduleSpecifier,
+                    );
+                }
+                return byName;
+            });
 
             if (kind === protocol.CommandTypes.Completions) {
                 if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;

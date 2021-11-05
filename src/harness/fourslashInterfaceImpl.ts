@@ -1569,6 +1569,8 @@ namespace FourSlashInterface {
             ...globalKeywords
         ];
 
+        export const globalsSortedByName = ts.sort(globals, (a, b) => ts.compareStringsCaseSensitiveUI(a.name, b.name));
+
         export const globalsInJs: readonly ExpectedCompletionEntryObject[] = [
             globalThisEntry,
             ...globalsVars,
