@@ -1000,13 +1000,25 @@ namespace ts.codefix {
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
-            if (usage.properties?.size || usage.calls?.length || usage.constructs?.length || usage.stringIndex) {
+            if (usage.properties?.size || usage.constructs?.length || usage.stringIndex) {
                 types.push(inferStructuralType(usage));
             }
 
-            types.push(...(usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
-            types.push(...inferNamedTypesFromProperties(usage));
+            const candidateTypes = (usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t));
+            const callsType = usage.calls?.length ? inferStructuralType(usage) : undefined;
+            if (callsType && candidateTypes) {
+                types.push(checker.getUnionType([callsType, ...candidateTypes], UnionReduction.Subtype));
+            }
+            else {
+                if (callsType) {
+                    types.push(callsType);
+                }
+                if (length(candidateTypes)) {
+                    types.push(...candidateTypes);
+                }
+            }
 
+            types.push(...inferNamedTypesFromProperties(usage));
             return types;
         }
 
