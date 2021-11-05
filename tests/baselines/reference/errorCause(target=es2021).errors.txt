@@ -1,0 +1,8 @@
+tests/cases/compiler/errorCause.ts(1,18): error TS2554: Expected 0-1 arguments, but got 2.
+
+
+==== tests/cases/compiler/errorCause.ts (1 errors) ====
+    new Error("foo", { cause: new Error("bar") });
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    

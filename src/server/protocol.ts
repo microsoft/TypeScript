@@ -3199,6 +3199,25 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
+    // A __GDPR__FRAGMENT__ has no meaning until it is ${include}d by a __GDPR__ comment, at which point
+    // the included properties are effectively inlined into the __GDPR__ declaration.  In this case, for
+    // example, any __GDPR__ comment including the TypeScriptCommonProperties will be updated with an
+    // additional version property with the classification below.  Obviously, the purpose of such a construct
+    // is to reduce duplication and keep multiple use sites consistent (e.g. by making sure that all reflect
+    // any newly added TypeScriptCommonProperties).  Unfortunately, the system has limits - in particular,
+    // these reusable __GDPR__FRAGMENT__s are not accessible across repo boundaries.  Therefore, even though
+    // the code for adding the common properties (i.e. version), along with the corresponding __GDPR__FRAGMENT__,
+    // lives in the VS Code repo (see https://github.com/microsoft/vscode/blob/main/extensions/typescript-language-features/src/utils/telemetry.ts)
+    // we have to duplicate it here.  It would be nice to keep them in sync, but the only likely failure mode
+    // is adding a property to the VS Code repro but not here and the only consequence would be having that
+    // property suppressed on the events (i.e. __GDPT__ comments) in this repo that reference the out-of-date
+    // local __GDPR__FRAGMENT__.
+    /* __GDPR__FRAGMENT__
+        "TypeScriptCommonProperties" : {
+            "version" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
+    */
+
     /* __GDPR__
         "typingsinstalled" : {
             "${include}": ["${TypeScriptCommonProperties}"],
@@ -3515,6 +3534,7 @@ namespace ts.server.protocol {
         ES2019 = "ES2019",
         ES2020 = "ES2020",
         ES2021 = "ES2021",
+        ES2022 = "ES2022",
         ESNext = "ESNext"
     }
 
