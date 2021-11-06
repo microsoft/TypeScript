@@ -1901,7 +1901,7 @@ namespace ts {
                         exportedNames = append(exportedNames, factory.getDeclarationName(valueDeclaration));
                     }
 
-                    exportedNames = addRange(exportedNames, moduleInfo && moduleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)]);
+                    exportedNames = addRange(exportedNames, moduleInfo && moduleInfo.exportedBindings.get(getOriginalNode(valueDeclaration)));
                 }
             }
 

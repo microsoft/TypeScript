@@ -245,7 +245,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
 
         let renamedCatchVariables: ESMap<string, boolean>;
-        let renamedCatchVariableDeclarations: Identifier[];
+        let renamedCatchVariableDeclarations: ESMap<Node, Identifier>;
 
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;
@@ -1969,7 +1969,7 @@ namespace ts {
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
                     if (declaration) {
-                        const name = renamedCatchVariableDeclarations[getOriginalNodeId(declaration)];
+                        const name = renamedCatchVariableDeclarations.get(getOriginalNode(declaration));
                         if (name) {
                             // TODO(rbuckton): Does this need to be parented?
                             const clone = setParent(setTextRange(factory.cloneNode(name), name), name.parent);
@@ -2137,12 +2137,12 @@ namespace ts {
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
                     renamedCatchVariables = new Map<string, boolean>();
-                    renamedCatchVariableDeclarations = [];
+                    renamedCatchVariableDeclarations = new Map<Node, Identifier>();
                     context.enableSubstitution(SyntaxKind.Identifier);
                 }
 
                 renamedCatchVariables.set(text, true);
-                renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
+                renamedCatchVariableDeclarations.set(getOriginalNode(variable), name);
             }
 
             const exception = peekBlock() as ExceptionBlock;

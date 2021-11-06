@@ -40,8 +40,8 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-        const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-        const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const moduleInfoMap = new Map<Node, ExternalModuleInfo>(); // The ExternalModuleInfo for each file.
+        const deferredExports = new Map<Node, Statement[] | undefined>();; // Exports to defer until an EndOfDeclarationMarker is found.
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
@@ -65,7 +65,7 @@ namespace ts {
 
             currentSourceFile = node;
             currentModuleInfo = collectExternalModuleInfo(context, node, resolver, compilerOptions);
-            moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
+            moduleInfoMap.set(getOriginalNode(node), currentModuleInfo);
 
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
@@ -981,8 +981,8 @@ namespace ts {
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportDeclaration(deferredExports[id], node);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportsOfImportDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfImportDeclaration(statements, node);
@@ -1072,8 +1072,8 @@ namespace ts {
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportsOfImportEqualsDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfImportEqualsDeclaration(statements, node);
@@ -1206,8 +1206,8 @@ namespace ts {
             const original = node.original;
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportStatement(deferredExports.get(originalNode), factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true));
             }
             else {
                 statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
@@ -1249,8 +1249,8 @@ namespace ts {
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportsOfHoistedDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfHoistedDeclaration(statements, node);
@@ -1290,8 +1290,8 @@ namespace ts {
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportsOfHoistedDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfHoistedDeclaration(statements, node);
@@ -1370,8 +1370,8 @@ namespace ts {
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportsOfVariableStatement(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfVariableStatement(statements, node);
@@ -1441,8 +1441,8 @@ namespace ts {
             // To balance the declaration, add the exports of the elided variable
             // statement.
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
-                const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as VariableStatement);
+                const originalNode = getOriginalNode(node);
+                deferredExports.set(node, appendExportsOfVariableStatement(deferredExports.get(originalNode), node.original as VariableStatement));
             }
 
             return node;
@@ -1467,10 +1467,10 @@ namespace ts {
             // For some transformations we emit an `EndOfDeclarationMarker` to mark the actual
             // end of the transformed declaration. We use this marker to emit any deferred exports
             // of the declaration.
-            const id = getOriginalNodeId(node);
-            const statements = deferredExports[id];
+            const originalNode = getOriginalNode(node);
+            const statements = deferredExports.get(originalNode);
             if (statements) {
-                delete deferredExports[id];
+                deferredExports.delete(node);
                 return append(statements, node);
             }
 
@@ -1770,7 +1770,7 @@ namespace ts {
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
                 currentSourceFile = node as SourceFile;
-                currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
+                currentModuleInfo = moduleInfoMap.get(getOriginalNode(currentSourceFile))!;
 
                 previousOnEmitNode(hint, node, emitCallback);
 
@@ -1984,7 +1984,7 @@ namespace ts {
                     || resolver.getReferencedValueDeclaration(name);
                 if (valueDeclaration) {
                     return currentModuleInfo
-                        && currentModuleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)];
+                        && currentModuleInfo.exportedBindings.get(getOriginalNode(valueDeclaration));
                 }
             }
         }
