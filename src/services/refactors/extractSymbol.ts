@@ -364,10 +364,11 @@ namespace ts.refactor.extractSymbol {
                     return node.expression;
                 }
             }
-            else if (isVariableStatement(node)) {
+            else if (isVariableStatement(node) || isVariableDeclarationList(node)) {
+                const declarations = isVariableStatement(node) ? node.declarationList.declarations : node.declarations;
                 let numInitializers = 0;
                 let lastInitializer: Expression | undefined;
-                for (const declaration of node.declarationList.declarations) {
+                for (const declaration of declarations) {
                     if (declaration.initializer) {
                         numInitializers++;
                         lastInitializer = declaration.initializer;
@@ -383,7 +384,6 @@ namespace ts.refactor.extractSymbol {
                     return node.initializer;
                 }
             }
-
             return node;
         }
 
