@@ -64,7 +64,7 @@ namespace ts {
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             // TODO: do we need to check for a Node ID here?
-            if (getNodeIdOrDefault(node) && noSubstitution?.has(node)) {
+            if (noSubstitution?.has(node)) {
                 return previousOnSubstituteNode(hint, node);
             }
 

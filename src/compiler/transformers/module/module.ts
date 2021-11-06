@@ -698,7 +698,7 @@ namespace ts {
                     }
 
                     if (temp) {
-                        noSubstitution.add(expression);;
+                        noSubstitution.add(expression);
                         expression = factory.createComma(expression, temp);
                         setTextRange(expression, node);
                     }
@@ -1852,7 +1852,7 @@ namespace ts {
         function substituteCallExpression(node: CallExpression) {
             if (isIdentifier(node.expression)) {
                 const expression = substituteExpressionIdentifier(node.expression);
-                noSubstitution.add(expression);;
+                noSubstitution.add(expression);
                 if (!isIdentifier(expression)) {
                     return addEmitFlags(
                         factory.updateCallExpression(node,
@@ -1962,7 +1962,7 @@ namespace ts {
                     let expression: Expression = node;
                     for (const exportName of exportedNames) {
                         // Mark the node to prevent triggering this rule again.
-                        noSubstitution.add(expression);;
+                        noSubstitution.add(expression);
                         expression = createExportExpression(exportName, expression, /*location*/ node);
                     }
 

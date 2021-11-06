@@ -288,14 +288,6 @@ namespace ts {
         return result;
     }
 
-    export function getNodeIdOrDefault(node: Node): number {
-        return idCache.get(node) || 0;
-    }
-
-    export function setNodeIdForStrangeRedirect(node: Node, id: number): void {
-        idCache.set(node, id);
-    }
-
     export function getSymbolId(symbol: Symbol): SymbolId {
         if (!symbol.id) {
             symbol.id = nextSymbolId;
@@ -971,7 +963,7 @@ namespace ts {
         let flowInvocationCount = 0;
         let lastFlowNode: FlowNode | undefined;
         let lastFlowNodeReachable: boolean;
-        let flowTypeCache: Type[] | undefined;
+        let flowTypeCache: ESMap<Node, Type> | undefined;
 
         const emptyStringType = getStringLiteralType("");
         const zeroType = getNumberLiteralType(0);
@@ -3899,10 +3891,9 @@ namespace ts {
 
         function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] {
             const containingFile = getSourceFileOfNode(enclosingDeclaration);
-            const id = getNodeId(containingFile);
             const links = getSymbolLinks(symbol);
             let results: Symbol[] | undefined;
-            if (links.extendedContainersByFile && (results = links.extendedContainersByFile.get(id))) {
+            if (links.extendedContainersByFile && (results = links.extendedContainersByFile.get(containingFile))) {
                 return results;
             }
             if (containingFile && containingFile.imports) {
@@ -3916,7 +3907,7 @@ namespace ts {
                     results = append(results, resolvedModule);
                 }
                 if (length(results)) {
-                    (links.extendedContainersByFile || (links.extendedContainersByFile = new Map())).set(id, results!);
+                    (links.extendedContainersByFile ||= new Map()).set(containingFile, results!);
                     return results!;
                 }
             }
@@ -33799,7 +33790,7 @@ namespace ts {
             }
             // If a type has been cached for the node, return it.
             if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
-                const cachedType = flowTypeCache[getNodeId(node)];
+                const cachedType = flowTypeCache.get(node);
                 if (cachedType) {
                     return cachedType;
                 }
@@ -33808,8 +33799,8 @@ namespace ts {
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.
             if (flowInvocationCount !== startInvocationCount) {
-                const cache = flowTypeCache || (flowTypeCache = []);
-                cache[getNodeId(node)] = type;
+                const cache = (flowTypeCache ||= new Map<Node, Type>());
+                cache.set(node, type);
                 setNodeFlags(node, node.flags | NodeFlags.TypeCached);
             }
             return type;
@@ -41612,9 +41603,6 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            // TODO: probably not meaningful, right?
-            // const nodeId = getNodeIdOrDefault(node);
-            // if (nodeId < 0 || nodeId >= nodeLinks.length) return 0;
             return nodeLinks.get(node)?.flags || 0;
         }
 
