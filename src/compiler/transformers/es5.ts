@@ -11,14 +11,14 @@ namespace ts {
 
         // enable emit notification only if using --jsx preserve or react-native
         let previousOnEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
-        let noSubstitution: boolean[];
+        let noSubstitution: Set<Node>;
         if (compilerOptions.jsx === JsxEmit.Preserve || compilerOptions.jsx === JsxEmit.ReactNative) {
             previousOnEmitNode = context.onEmitNode;
             context.onEmitNode = onEmitNode;
             context.enableEmitNotification(SyntaxKind.JsxOpeningElement);
             context.enableEmitNotification(SyntaxKind.JsxClosingElement);
             context.enableEmitNotification(SyntaxKind.JsxSelfClosingElement);
-            noSubstitution = [];
+            noSubstitution = new Set<Node>();
         }
 
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -49,7 +49,7 @@ namespace ts {
                 case SyntaxKind.JsxClosingElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     const tagName = (node as JsxOpeningElement | JsxClosingElement | JsxSelfClosingElement).tagName;
-                    noSubstitution[getOriginalNodeId(tagName)] = true;
+                    noSubstitution.add(getOriginalNode(tagName));
                     break;
             }
 
@@ -63,7 +63,8 @@ namespace ts {
          * @param node The node to substitute.
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
-            if (node.id && noSubstitution && noSubstitution[node.id]) {
+            // TODO: do we need to check for a Node ID here?
+            if (getNodeIdOrDefault(node) && noSubstitution?.has(node)) {
                 return previousOnSubstituteNode(hint, node);
             }
 

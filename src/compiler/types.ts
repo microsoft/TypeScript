@@ -857,7 +857,6 @@ namespace ts {
         /* @internal */ readonly transformFlags: TransformFlags; // Flags for transforms
         readonly decorators?: NodeArray<Decorator>;           // Array of decorators (in document order)
         readonly modifiers?: ModifiersArray;                  // Array of modifiers
-        /* @internal */ id?: NodeId;                          // Unique id (used to look up NodeLinks)
         readonly parent: Node;                                // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
         /* @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)

@@ -78,7 +78,7 @@ namespace ts {
          * A map that keeps track of aliases created for classes with decorators to avoid issues
          * with the double-binding behavior of classes.
          */
-        let classAliases: Identifier[];
+        let classAliases: ESMap<Node, Identifier>;
 
         /**
          * Keeps track of whether we are within any containing namespaces when performing
@@ -1237,7 +1237,7 @@ namespace ts {
                 return undefined;
             }
 
-            const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
+            const classAlias = classAliases?.get(getOriginalNode(node));
 
             // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
             // without any block-scoped variable collision handling
@@ -3139,7 +3139,7 @@ namespace ts {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
                 enableSubstitutionForClassAliases();
                 const classAlias = factory.createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
-                classAliases[getOriginalNodeId(node)] = classAlias;
+                classAliases.set(getOriginalNode(node), classAlias);
                 hoistVariableDeclaration(classAlias);
                 return classAlias;
             }
@@ -3171,7 +3171,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = [];
+                classAliases = new Map<Node, Identifier>();
             }
         }
 
@@ -3290,7 +3290,7 @@ namespace ts {
                     // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
+                        const classAlias = classAliases.get(declaration);
                         if (classAlias) {
                             const clone = factory.cloneNode(classAlias);
                             setSourceMapRange(clone, node);

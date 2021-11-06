@@ -277,12 +277,23 @@ namespace ts {
         this.flags = 0;
     }
 
+    const idCache = new Map<Node, number>();
     export function getNodeId(node: Node): number {
-        if (!node.id) {
-            node.id = nextNodeId;
+        let result = idCache.get(node);
+        if (!result) {
+            result = nextNodeId;
+            idCache.set(node, result);
             nextNodeId++;
         }
-        return node.id;
+        return result;
+    }
+
+    export function getNodeIdOrDefault(node: Node): number {
+        return idCache.get(node) || 0;
+    }
+
+    export function setNodeIdForStrangeRedirect(node: Node, id: number): void {
+        idCache.set(node, id);
     }
 
     export function getSymbolId(symbol: Symbol): SymbolId {
@@ -974,7 +985,7 @@ namespace ts {
         const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
-        const nodeLinks: ESMap<Node, NodeLinks> = new Map();
+        const nodeLinks = new Map<Node, NodeLinks>();
         const flowLoopCaches: ESMap<string, Type>[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
@@ -40319,7 +40330,7 @@ namespace ts {
             const enclosingFile = getSourceFileOfNode(node);
             const links = getNodeLinks(enclosingFile);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                links.deferredNodes = links.deferredNodes || new Set();
+                links.deferredNodes ||= new Set();
                 links.deferredNodes.add(node);
             }
         }
@@ -41601,6 +41612,9 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
+            // TODO: probably not meaningful, right?
+            // const nodeId = getNodeIdOrDefault(node);
+            // if (nodeId < 0 || nodeId >= nodeLinks.length) return 0;
             return nodeLinks.get(node)?.flags || 0;
         }
 

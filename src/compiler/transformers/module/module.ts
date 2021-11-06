@@ -45,7 +45,7 @@ namespace ts {
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
-        const noSubstitution: boolean[] = []; // Set of nodes for which substitution rules should be ignored.
+        const noSubstitution = new Set<Node>(); // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
 
         return chainBundle(context, transformSourceFile);
@@ -692,13 +692,13 @@ namespace ts {
                     }
 
                     for (const exportName of exportedNames) {
-                        noSubstitution[getNodeId(expression)] = true;
+                        noSubstitution.add(expression);
                         expression = createExportExpression(exportName, expression);
                         setTextRange(expression, node);
                     }
 
                     if (temp) {
-                        noSubstitution[getNodeId(expression)] = true;
+                        noSubstitution.add(expression);;
                         expression = factory.createComma(expression, temp);
                         setTextRange(expression, node);
                     }
@@ -1794,7 +1794,7 @@ namespace ts {
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
-            if (node.id && noSubstitution[node.id]) {
+            if (noSubstitution.has(node)) {
                 return node;
             }
 
@@ -1852,7 +1852,7 @@ namespace ts {
         function substituteCallExpression(node: CallExpression) {
             if (isIdentifier(node.expression)) {
                 const expression = substituteExpressionIdentifier(node.expression);
-                noSubstitution[getNodeId(expression)] = true;
+                noSubstitution.add(expression);;
                 if (!isIdentifier(expression)) {
                     return addEmitFlags(
                         factory.updateCallExpression(node,
@@ -1871,7 +1871,7 @@ namespace ts {
         function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
             if (isIdentifier(node.tag)) {
                 const tag = substituteExpressionIdentifier(node.tag);
-                noSubstitution[getNodeId(tag)] = true;
+                noSubstitution.add(tag);
                 if (!isIdentifier(tag)) {
                     return addEmitFlags(
                         factory.updateTaggedTemplateExpression(node,
@@ -1962,7 +1962,7 @@ namespace ts {
                     let expression: Expression = node;
                     for (const exportName of exportedNames) {
                         // Mark the node to prevent triggering this rule again.
-                        noSubstitution[getNodeId(expression)] = true;
+                        noSubstitution.add(expression);;
                         expression = createExportExpression(exportName, expression, /*location*/ node);
                     }
 

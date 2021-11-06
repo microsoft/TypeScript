@@ -2593,8 +2593,8 @@ namespace ts {
             sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
             Object.defineProperties(redirect, {
                 id: {
-                    get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
-                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo!.redirectTarget.id = value; },
+                    get(this: SourceFile) { return getNodeIdOrDefault(this.redirectInfo!.redirectTarget); },
+                    set(this: SourceFile, value: number) { setNodeIdForStrangeRedirect(this.redirectInfo!.redirectTarget, value); },
                 },
                 symbol: {
                     get(this: SourceFile) { return this.redirectInfo!.redirectTarget.symbol; },
