@@ -3444,7 +3444,7 @@ namespace ts {
 
     export interface FlowNodeBase {
         flags: FlowFlags;
-        id?: number;     // Node id used by flow type cache in checker
+        id: number;     // Node id used by flow type cache in checker
     }
 
     // FlowStart represents the start of a control flow. For a function expression or arrow

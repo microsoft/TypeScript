@@ -22792,7 +22792,7 @@ namespace ts {
         }
 
         function getFlowNodeId(flow: FlowNode): number {
-            if (!flow.id || flow.id < 0) {
+            if (flow.id <= 0) {
                 flow.id = nextFlowId;
                 nextFlowId++;
             }
