@@ -982,7 +982,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportsOfImportDeclaration(deferredExports.get(originalNode), node));
+                deferredExports.set(originalNode, appendExportsOfImportDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfImportDeclaration(statements, node);
@@ -1073,7 +1073,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportsOfImportEqualsDeclaration(deferredExports.get(originalNode), node));
+                deferredExports.set(originalNode, appendExportsOfImportEqualsDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfImportEqualsDeclaration(statements, node);
@@ -1207,7 +1207,7 @@ namespace ts {
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportStatement(deferredExports.get(originalNode), factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true));
+                deferredExports.set(originalNode, appendExportStatement(deferredExports.get(originalNode), factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true));
             }
             else {
                 statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
@@ -1250,7 +1250,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportsOfHoistedDeclaration(deferredExports.get(originalNode), node));
+                deferredExports.set(originalNode, appendExportsOfHoistedDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfHoistedDeclaration(statements, node);
@@ -1291,7 +1291,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportsOfHoistedDeclaration(deferredExports.get(originalNode), node));
+                deferredExports.set(originalNode, appendExportsOfHoistedDeclaration(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfHoistedDeclaration(statements, node);
@@ -1371,7 +1371,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportsOfVariableStatement(deferredExports.get(originalNode), node));
+                deferredExports.set(originalNode, appendExportsOfVariableStatement(deferredExports.get(originalNode), node));
             }
             else {
                 statements = appendExportsOfVariableStatement(statements, node);
@@ -1442,7 +1442,7 @@ namespace ts {
             // statement.
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const originalNode = getOriginalNode(node);
-                deferredExports.set(node, appendExportsOfVariableStatement(deferredExports.get(originalNode), node.original as VariableStatement));
+                deferredExports.set(originalNode, appendExportsOfVariableStatement(deferredExports.get(originalNode), node.original as VariableStatement));
             }
 
             return node;
