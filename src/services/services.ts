@@ -604,6 +604,12 @@ namespace ts {
             return;
         }
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
+            if (declaration.modifiers?.some(modifier => modifier.kind === SyntaxKind.StaticKeyword)) {
+            // For nodes like `class Foo extends Bar {}`, superTypeNode refers to an ExpressionWithTypeArguments with its expression being `Bar`.
+            const baseClassSymbol = checker.getSymbolAtLocation(isExpressionWithTypeArguments(superTypeNode) && !superTypeNode.typeArguments?.length ? superTypeNode.expression : superTypeNode);
+                const symbol = baseClassSymbol?.exports?.get(declaration.symbol.name as __String);
+                return symbol ? cb(symbol) : undefined;
+            }
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
