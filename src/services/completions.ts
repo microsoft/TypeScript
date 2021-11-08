@@ -3526,6 +3526,7 @@ namespace ts.Completions {
         // function f<T>(x: T) {}
         // f({ abc/**/: "" }) // `abc` is a member of `T` but only because it declares itself
         function hasDeclarationOtherThanSelf(member: Symbol) {
+            if (!length(member.declarations)) return true;
             return some(member.declarations, decl => decl.parent !== obj);
         }
     }
