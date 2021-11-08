@@ -219,6 +219,7 @@ namespace Utils {
                     case "locals":
                     case "localSymbol":
                     case "kind":
+                    case "id":
                     case "nodeCount":
                     case "symbolCount":
                     case "identifierCount":
