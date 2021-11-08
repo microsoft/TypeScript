@@ -2592,6 +2592,10 @@ namespace ts {
             redirect.redirectInfo = { redirectTarget, unredirected };
             sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
             Object.defineProperties(redirect, {
+                id: {
+                    get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
+                    set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo!.redirectTarget.id = value; },
+                },
                 symbol: {
                     get(this: SourceFile) { return this.redirectInfo!.redirectTarget.symbol; },
                     set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo!.redirectTarget.symbol = value; },
