@@ -277,15 +277,13 @@ namespace ts {
         this.flags = 0;
     }
 
-    const idCache = new Map<Node, number>();
     export function getNodeId(node: Node): number {
-        let result = idCache.get(node);
-        if (!result) {
-            result = nextNodeId;
-            idCache.set(node, result);
+        let id = node.id;
+        if (!id) {
+            node.id = id = nextNodeId;
             nextNodeId++;
         }
-        return result;
+        return id;
     }
 
     export function getSymbolId(symbol: Symbol): SymbolId {
@@ -963,7 +961,7 @@ namespace ts {
         let flowInvocationCount = 0;
         let lastFlowNode: FlowNode | undefined;
         let lastFlowNodeReachable: boolean;
-        let flowTypeCache: ESMap<Node, Type> | undefined;
+        let flowTypeCache: Type[] | undefined;
 
         const emptyStringType = getStringLiteralType("");
         const zeroType = getNumberLiteralType(0);
@@ -977,7 +975,7 @@ namespace ts {
         const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
-        const nodeLinks = new Map<Node, NodeLinks>();
+        const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: ESMap<string, Type>[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
@@ -1466,11 +1464,8 @@ namespace ts {
         }
 
         function getNodeLinks(node: Node): NodeLinks {
-            let result = nodeLinks.get(node);
-            if (!result) {
-                nodeLinks.set(node, result = new (NodeLinks as any)() as NodeLinks);
-            }
-            return result;
+            const nodeId = getNodeId(node);
+            return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -33790,7 +33785,7 @@ namespace ts {
             }
             // If a type has been cached for the node, return it.
             if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
-                const cachedType = flowTypeCache.get(node);
+                const cachedType = flowTypeCache[getNodeId(node)];
                 if (cachedType) {
                     return cachedType;
                 }
@@ -33799,8 +33794,8 @@ namespace ts {
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.
             if (flowInvocationCount !== startInvocationCount) {
-                const cache = (flowTypeCache ||= new Map<Node, Type>());
-                cache.set(node, type);
+                const cache = (flowTypeCache ||= []);
+                cache[getNodeId(node)] = type;
                 setNodeFlags(node, node.flags | NodeFlags.TypeCached);
             }
             return type;
@@ -41603,7 +41598,9 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            return nodeLinks.get(node)?.flags || 0;
+            const nodeId = node.id || 0;
+            if (nodeId < 0 || nodeId >= nodeLinks.length) return 0;
+            return nodeLinks[nodeId]?.flags || 0;
         }
 
         function getEnumMemberValue(node: EnumMember): string | number | undefined {

@@ -5821,6 +5821,7 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
@@ -5832,6 +5833,7 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
@@ -5841,6 +5843,7 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
