@@ -91,7 +91,7 @@ interface BigInt64Array {
      * Returns the item located at the specified index.
      * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
      */
-    at(index: number): number | undefined;
+    at(index: number): bigint | undefined;
 }
 
 interface BigUint64Array {
@@ -99,5 +99,5 @@ interface BigUint64Array {
      * Returns the item located at the specified index.
      * @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
      */
-    at(index: number): number | undefined;
+    at(index: number): bigint | undefined;
 }
