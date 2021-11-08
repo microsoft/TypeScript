@@ -599,10 +599,11 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
+        if (hasStaticModifier(declaration)) return;
+
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
-        if (!classOrInterfaceDeclaration) {
-            return;
-        }
+        if (!classOrInterfaceDeclaration) return;
+
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
