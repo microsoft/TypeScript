@@ -29473,17 +29473,29 @@ namespace ts {
                     // We can call checkExpressionCached because spread expressions never have a contextual type.
                     const argType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((arg as SpreadElement).expression) : checkExpressionCached((arg as SpreadElement).expression));
                     if (argType) {
-                        const spreadTypes = !!(argType.flags & TypeFlags.Intersection) ? (argType as IntersectionType).types : [argType];
-                        const spreadTypeIndex = spreadTypes.findIndex((value) => isTupleType(value));
+                        let spreadType: TupleTypeReference | undefined;
+                        if (!!(argType.flags & TypeFlags.Intersection)) {
+                            for (const type of (argType as IntersectionType).types) {
+                                if (isTupleType(type)) {
+                                    if (spreadType) {
+                                        // If there's multiple tuples in this intersection,
+                                        // do not try to resolve into multiple arguments.
+                                        spreadType = undefined;
+                                        break;
+                                    }
+                                    spreadType = type;
+                                }
+                            }
+                        }
+                        else {
+                            spreadType = isTupleType(argType) ? argType : undefined;
+                        }
 
-                        // If a tuple type is found, ensure that it is the only tuple in the intersection,
-                        // as intersections between tuple types can't be resolved into effective arguments.
-                        if (spreadTypeIndex >= 0 && spreadTypes.every((value, index) => !isTupleType(value) || index === spreadTypeIndex)) {
-                            const spreadType = spreadTypes[spreadTypeIndex] as TupleTypeReference;
+                        if (spreadType) {
                             forEach(getTypeArguments(spreadType), (t, i) => {
-                                const flags = spreadType.target.elementFlags[i];
+                                const flags = spreadType!.target.elementFlags[i];
                                 const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
-                                    !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
+                                    !!(flags & ElementFlags.Variable), spreadType!.target.labeledElementDeclarations?.[i]);
                                 effectiveArgs.push(syntheticArg);
                             });
                         }
