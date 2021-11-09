@@ -5339,7 +5339,7 @@ namespace ts {
         }
 
         function flattenCommaElements(node: Expression): Expression | readonly Expression[] {
-            if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode) {
+            if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
                 if (isCommaListExpression(node)) {
                     return node.elements;
                 }

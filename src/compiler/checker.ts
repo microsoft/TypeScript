@@ -3887,9 +3887,10 @@ namespace ts {
 
         function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] {
             const containingFile = getSourceFileOfNode(enclosingDeclaration);
+            const id = getNodeId(containingFile);
             const links = getSymbolLinks(symbol);
             let results: Symbol[] | undefined;
-            if (links.extendedContainersByFile && (results = links.extendedContainersByFile.get(containingFile))) {
+            if (links.extendedContainersByFile && (results = links.extendedContainersByFile.get(id))) {
                 return results;
             }
             if (containingFile && containingFile.imports) {
@@ -3903,7 +3904,7 @@ namespace ts {
                     results = append(results, resolvedModule);
                 }
                 if (length(results)) {
-                    (links.extendedContainersByFile ||= new Map()).set(containingFile, results!);
+                    (links.extendedContainersByFile || (links.extendedContainersByFile = new Map())).set(id, results!);
                     return results!;
                 }
             }
@@ -33795,7 +33796,7 @@ namespace ts {
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.
             if (flowInvocationCount !== startInvocationCount) {
-                const cache = (flowTypeCache ||= []);
+                const cache = flowTypeCache || (flowTypeCache = []);
                 cache[getNodeId(node)] = type;
                 setNodeFlags(node, node.flags | NodeFlags.TypeCached);
             }
@@ -40317,8 +40318,9 @@ namespace ts {
             const enclosingFile = getSourceFileOfNode(node);
             const links = getNodeLinks(enclosingFile);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                links.deferredNodes ||= new Set();
-                links.deferredNodes.add(node);
+                links.deferredNodes = links.deferredNodes || new Map();
+                const id = getNodeId(node);
+                links.deferredNodes.set(id, node);
             }
         }
 

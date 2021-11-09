@@ -60,7 +60,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Set<string> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: ESMap<Node, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+        let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -84,7 +84,7 @@ namespace ts {
         let errorFallbackNode: Declaration | undefined;
 
         let currentSourceFile: SourceFile;
-        let refs: ESMap<Node, SourceFile>;
+        let refs: ESMap<NodeId, SourceFile>;
         let libs: ESMap<string, boolean>;
         let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
@@ -110,7 +110,7 @@ namespace ts {
             }
             // Otherwise we should emit a path-based reference
             const container = getSourceFileOfNode(node);
-            refs.set(getOriginalNode(container), container);
+            refs.set(getOriginalNodeId(container), container);
         }
 
         function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -426,12 +426,12 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: ESMap<Node, SourceFile>) {
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: ESMap<NodeId, SourceFile>) {
             if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = host.getSourceFileFromReference(sourceFile, f);
                 if (elem) {
-                    ret.set(getOriginalNode(elem), elem);
+                    ret.set(getOriginalNodeId(elem), elem);
                 }
             });
             return ret;
@@ -812,7 +812,7 @@ namespace ts {
                 needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
                 const result = transformTopLevelDeclaration(i);
                 needsDeclare = priorNeedsDeclare;
-                lateStatementReplacementMap.set(getOriginalNode(i), result);
+                lateStatementReplacementMap.set(getOriginalNodeId(i), result);
             }
 
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
@@ -821,10 +821,10 @@ namespace ts {
 
             function visitLateVisibilityMarkedStatements(statement: Statement) {
                 if (isLateVisibilityPaintedStatement(statement)) {
-                    const originalNode = getOriginalNode(statement);
-                    if (lateStatementReplacementMap.has(originalNode)) {
-                        const result = lateStatementReplacementMap.get(originalNode);
-                        lateStatementReplacementMap.delete(originalNode);
+                    const key = getOriginalNodeId(statement);
+                    if (lateStatementReplacementMap.has(key)) {
+                        const result = lateStatementReplacementMap.get(key);
+                        lateStatementReplacementMap.delete(key);
                         if (result) {
                             if (isArray(result) ? some(result, needsScopeMarker) : needsScopeMarker(result)) {
                                 // Top-level declarations in .d.ts files are always considered exported even without a modifier unless there's an export assignment or specifier
@@ -1146,7 +1146,7 @@ namespace ts {
 
             const result = transformTopLevelDeclaration(input);
             // Don't actually transform yet; just leave as original node - will be elided/swapped by late pass
-            lateStatementReplacementMap.set(getOriginalNode(input), result);
+            lateStatementReplacementMap.set(getOriginalNodeId(input), result);
             return input;
         }
 
@@ -1348,9 +1348,9 @@ namespace ts {
                         needsDeclare = false;
                         visitNode(inner, visitDeclarationStatements);
                         // eagerly transform nested namespaces (the nesting doesn't need any elision or painting done)
-                        const originalNode = getOriginalNode(inner!); // TODO: GH#18217
-                        const body = lateStatementReplacementMap.get(originalNode);
-                        lateStatementReplacementMap.delete(originalNode);
+                        const id = getOriginalNodeId(inner!); // TODO: GH#18217
+                        const body = lateStatementReplacementMap.get(id);
+                        lateStatementReplacementMap.delete(id);
                         return cleanup(factory.updateModuleDeclaration(
                             input,
                             /*decorators*/ undefined,

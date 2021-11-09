@@ -46,7 +46,7 @@ namespace ts {
         /** Whether the async function contains an element access on super (`super[x]`). */
         let hasSuperElementAccess: boolean;
         /** A set of node IDs for generated super accessors (variable statements). */
-        const substitutedSuperAccessors = new Set<Node>();
+        const substitutedSuperAccessors: boolean[] = [];
 
         let contextFlags: ContextFlags = 0;
 
@@ -503,7 +503,7 @@ namespace ts {
                     enableSubstitutionForAsyncMethodsWithSuper();
                     if (capturedSuperProperties.size) {
                         const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
-                        substitutedSuperAccessors.add(variableStatement);
+                        substitutedSuperAccessors[getNodeId(variableStatement)] = true;
                         insertStatementsAfterStandardPrologue(statements, [variableStatement]);
                     }
                 }
@@ -613,7 +613,7 @@ namespace ts {
                 }
             }
             // Disable substitution in the generated super accessor itself.
-            else if (enabledSubstitutions && substitutedSuperAccessors.has(node)) {
+            else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                 enclosingSuperContainerFlags = 0;
                 previousOnEmitNode(hint, node, emitCallback);

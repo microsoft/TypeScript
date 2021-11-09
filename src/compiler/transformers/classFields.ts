@@ -147,7 +147,7 @@ namespace ts {
 
         let enabledSubstitutions: ClassPropertySubstitutionFlags;
 
-        let classAliases: ESMap<Node, Identifier>;
+        let classAliases: Identifier[];
 
         /**
          * Tracks what computed name expressions originating from elided names must be inlined
@@ -162,7 +162,7 @@ namespace ts {
         let pendingStatements: Statement[] | undefined;
 
         const classLexicalEnvironmentStack: (ClassLexicalEnvironment | undefined)[] = [];
-        const classLexicalEnvironmentMap = new WeakMap<Node, ClassLexicalEnvironment>();
+        const classLexicalEnvironmentMap = new Map<number, ClassLexicalEnvironment>();
         let currentClassLexicalEnvironment: ClassLexicalEnvironment | undefined;
         let currentComputedPropertyNameClassLexicalEnvironment: ClassLexicalEnvironment | undefined;
         let currentStaticPropertyDeclarationOrStaticBlock: PropertyDeclaration | ClassStaticBlockDeclaration | undefined;
@@ -738,7 +738,7 @@ namespace ts {
         function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
             if (shouldTransformPrivateElementsOrClassStaticBlocks) {
                 if (currentClassLexicalEnvironment) {
-                    classLexicalEnvironmentMap.set(getOriginalNode(node), currentClassLexicalEnvironment);
+                    classLexicalEnvironmentMap.set(getOriginalNodeId(node), currentClassLexicalEnvironment);
                 }
 
                 startLexicalEnvironment();
@@ -1128,7 +1128,7 @@ namespace ts {
                         enableSubstitutionForClassAliases();
                         const alias = factory.cloneNode(temp) as GeneratedIdentifier;
                         alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
-                        classAliases.set(getOriginalNode(node), alias);
+                        classAliases[getOriginalNodeId(node)] = alias;
                     }
 
                     // To preserve the behavior of the old emitter, we explicitly indent
@@ -1375,7 +1375,7 @@ namespace ts {
                 // capture the lexical environment for the member
                 setOriginalNode(transformed, property);
                 addEmitFlags(transformed, EmitFlags.AdviseOnEmitNode);
-                classLexicalEnvironmentMap.set(getOriginalNode(transformed), currentClassLexicalEnvironment);
+                classLexicalEnvironmentMap.set(getOriginalNodeId(transformed), currentClassLexicalEnvironment);
             }
             currentStaticPropertyDeclarationOrStaticBlock = savedCurrentStaticPropertyDeclarationOrStaticBlock;
             return transformed;
@@ -1453,7 +1453,7 @@ namespace ts {
                 context.enableSubstitution(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
-                classAliases = new Map<Node, Identifier>();
+                classAliases = [];
             }
         }
 
@@ -1516,16 +1516,18 @@ namespace ts {
 
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             const original = getOriginalNode(node);
-            const classLexicalEnvironment = classLexicalEnvironmentMap.get(original);
-            if (classLexicalEnvironment) {
-                const savedClassLexicalEnvironment = currentClassLexicalEnvironment;
-                const savedCurrentComputedPropertyNameClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
-                currentClassLexicalEnvironment = classLexicalEnvironment;
-                currentComputedPropertyNameClassLexicalEnvironment = classLexicalEnvironment;
-                previousOnEmitNode(hint, node, emitCallback);
-                currentClassLexicalEnvironment = savedClassLexicalEnvironment;
-                currentComputedPropertyNameClassLexicalEnvironment = savedCurrentComputedPropertyNameClassLexicalEnvironment;
-                return;
+            if (original.id) {
+                const classLexicalEnvironment = classLexicalEnvironmentMap.get(original.id);
+                if (classLexicalEnvironment) {
+                    const savedClassLexicalEnvironment = currentClassLexicalEnvironment;
+                    const savedCurrentComputedPropertyNameClassLexicalEnvironment = currentComputedPropertyNameClassLexicalEnvironment;
+                    currentClassLexicalEnvironment = classLexicalEnvironment;
+                    currentComputedPropertyNameClassLexicalEnvironment = classLexicalEnvironment;
+                    previousOnEmitNode(hint, node, emitCallback);
+                    currentClassLexicalEnvironment = savedClassLexicalEnvironment;
+                    currentComputedPropertyNameClassLexicalEnvironment = savedCurrentComputedPropertyNameClassLexicalEnvironment;
+                    return;
+                }
             }
 
             switch (node.kind) {
@@ -1631,7 +1633,7 @@ namespace ts {
                     // constructor references in static property initializers.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = classAliases.get(declaration);
+                        const classAlias = classAliases[declaration.id!]; // TODO: GH#18217
                         if (classAlias) {
                             const clone = factory.cloneNode(classAlias);
                             setSourceMapRange(clone, node);
