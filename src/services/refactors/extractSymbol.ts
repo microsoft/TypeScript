@@ -1597,7 +1597,7 @@ namespace ts.refactor.extractSymbol {
         const functionErrorsPerScope: Diagnostic[][] = [];
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
-        const exposedVariableSymbolSet = new Map<string, true>(); // Key is symbol ID
+        const exposedVariableSymbolSet = new Set<Symbol>(); // Key is symbol ID
         const exposedVariableDeclarations: VariableDeclaration[] = [];
         let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
@@ -1903,10 +1903,10 @@ namespace ts.refactor.extractSymbol {
                 const decl = find(visibleDeclarationsInExtractedRange, d => d.symbol === sym);
                 if (decl) {
                     if (isVariableDeclaration(decl)) {
-                        const idString = decl.symbol.id!.toString();
-                        if (!exposedVariableSymbolSet.has(idString)) {
+                        const declSymbol = decl.symbol;
+                        if (!exposedVariableSymbolSet.has(declSymbol)) {
                             exposedVariableDeclarations.push(decl);
-                            exposedVariableSymbolSet.set(idString, true);
+                            exposedVariableSymbolSet.add(declSymbol);
                         }
                     }
                     else {
