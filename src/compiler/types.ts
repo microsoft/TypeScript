@@ -4900,7 +4900,7 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
-        /* @internal */ id?: SymbolId;          // Unique id (used to look up SymbolLinks)
+        /* @internal */ id: SymbolId;          // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol

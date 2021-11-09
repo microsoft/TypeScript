@@ -287,12 +287,13 @@ namespace ts {
     }
 
     export function getSymbolId(symbol: Symbol): SymbolId {
-        if (!symbol.id) {
-            symbol.id = nextSymbolId;
+        let id = symbol.id;
+        if (!id) {
+            symbol.id = id = nextSymbolId;
             nextSymbolId++;
         }
 
-        return symbol.id;
+        return id;
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
