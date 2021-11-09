@@ -29490,7 +29490,6 @@ namespace ts {
                         else {
                             spreadType = isTupleType(argType) ? argType : undefined;
                         }
-
                         if (spreadType) {
                             forEach(getTypeArguments(spreadType), (t, i) => {
                                 const flags = spreadType!.target.elementFlags[i];
