@@ -43,7 +43,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "method(): number {\n}\n",
+            insertText: "method(): number {\n}",
         },
     ],
 });
@@ -65,7 +65,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "method(): number;\n",
+            insertText: "method(): number;",
         },
     ],
 });
@@ -88,9 +88,10 @@ verify.completions({
                 end: 0,
             },
             insertText:
-                "fun(a: number): number;\n\
-public fun(a: undefined, b: string): number;\n\
-public fun(a: any, b?: any): number {\n}\n",
+`fun(a: number): number;
+public fun(a: undefined, b: string): number;
+public fun(a: any, b?: any): number {
+}`,
         },
     ],
 });

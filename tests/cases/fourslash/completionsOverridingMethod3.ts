@@ -29,8 +29,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"boo(): string;\n",
+            insertText: "boo(): string;",
         }
     ],
 });
