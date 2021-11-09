@@ -28454,7 +28454,7 @@ namespace ts {
             if (relatedInfo) {
                 addRelatedInfo(resultDiagnostic, relatedInfo);
             }
-            addErrorOrSuggestion(!isUncheckedJS, resultDiagnostic);
+            addErrorOrSuggestion(!isUncheckedJS || errorInfo.code !== Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2.code, resultDiagnostic);
         }
 
         function containerSeemsToBeEmptyDomElement(containingType: Type) {
