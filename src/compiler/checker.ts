@@ -40317,8 +40317,8 @@ namespace ts {
             const enclosingFile = getSourceFileOfNode(node);
             const links = getNodeLinks(enclosingFile);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                links.deferredNodes ||= new Set();
-                links.deferredNodes.add(node);
+                links.deferredNodes ||= [];
+                links.deferredNodes[getNodeId(node)] = node;
             }
         }
 
