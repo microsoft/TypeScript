@@ -1323,7 +1323,7 @@ namespace ts.FindAllReferences {
             if (!symbol) return undefined;
             for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name, searchContainer)) {
                 if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;
-                const referenceSymbol: Symbol = checker.getSymbolAtLocation(token)!; // See GH#19955 for why the type annotation is necessary
+                const referenceSymbol = checker.getSymbolAtLocation(token)!;
                 if (referenceSymbol === symbol
                     || checker.getShorthandAssignmentValueSymbol(token.parent) === symbol
                     || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol) {

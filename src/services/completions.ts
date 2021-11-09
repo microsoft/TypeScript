@@ -851,7 +851,7 @@ namespace ts.Completions {
             removeComments: true,
             module: options.module,
             target: options.target,
-            omitTrailingSemicolon: true,
+            omitTrailingSemicolon: false,
             newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
@@ -923,7 +923,10 @@ namespace ts.Completions {
             isAbstract);
 
         if (completionNodes.length) {
-            insertText = printer.printSnippetList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
+            insertText = printer.printSnippetList(
+                ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
+                factory.createNodeArray(completionNodes),
+                sourceFile);
         }
 
         return { insertText, isSnippet, importAdder };
