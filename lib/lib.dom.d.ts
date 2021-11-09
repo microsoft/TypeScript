@@ -10509,7 +10509,10 @@ interface Node extends EventTarget {
      * Returns whether node has children.
      */
     hasChildNodes(): boolean;
-    insertBefore<T extends Node>(node: T, child: Node | null): T;
+    /**
+     * Insert a new node before an existing child node
+     */
+    insertBefore<T extends Node>(newNode: T, child: Node | null): T;
     isDefaultNamespace(namespace: string | null): boolean;
     /**
      * Returns whether node and otherNode have the same properties.
