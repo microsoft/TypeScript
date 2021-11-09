@@ -1,29 +1,16 @@
 /// <reference path="fourslash.ts" />
 
+// @Filename: a.ts
 // @newline: LF
-// @Filename: secret.ts
-// Case: accessibility modifier inheritance
-////class Secret {
-////    #secret(): string {
-////        return "secret";
-////    }
-////
-////    private tell(): string {
-////        return this.#secret();
-////    }
-////
-////    protected hint(): string {
-////        return "hint";
-////    }
-////
-////    public refuse(): string {
-////        return "no comments";
-////    }
+// Case: formatting: semicolons
+////interface Base {
+////    a: string;
+////    b(a: string): void;
+////    c(a: string): string;
+////    c(a: number): number;
 ////}
-////
-////class Gossip extends Secret {
-////    /* no telling secrets */
-////    /*a*/
+////class Sub implements Base {
+////   /*a*/
 ////}
 
 
@@ -35,30 +22,42 @@ verify.completions({
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithClassMemberSnippets: true,
     },
-    excludes: [
-        "tell",
-        "#secret",
-    ],
     includes: [
         {
-            name: "hint",
+            name: "a",
             sortText: completion.SortText.LocationPriority,
             replacementSpan: {
                 fileName: "",
                 pos: 0,
                 end: 0,
             },
-            insertText: "protected hint(): string {\n}",
+            insertText: "a: string;",
         },
         {
-            name: "refuse",
+            name: "b",
             sortText: completion.SortText.LocationPriority,
             replacementSpan: {
                 fileName: "",
                 pos: 0,
                 end: 0,
             },
-            insertText: "public refuse(): string {\n}",
-        }
+            insertText:
+`b(a: string): void {
+}`,
+        },
+        {
+            name: "c",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            insertText:
+`c(a: string): string;
+c(a: number): number;
+c(a: any): string | number {
+}`,
+        },
     ],
 });

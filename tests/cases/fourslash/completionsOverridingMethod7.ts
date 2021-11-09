@@ -31,8 +31,7 @@ verify.completions({
             },
             insertText:
 `M<T>(t: T): void;
-abstract M<T>(t: T, x: number): void;
-`,
+abstract M<T>(t: T, x: number): void;`,
         },
     ],
 });

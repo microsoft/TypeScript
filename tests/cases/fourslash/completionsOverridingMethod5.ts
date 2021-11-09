@@ -34,7 +34,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met(n: string): void {\n}\n",
+            insertText: "met(n: string): void {\n}",
         },
         {
             name: "met2",
@@ -44,7 +44,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met2(n: number): void {\n}\n",
+            insertText: "met2(n: number): void {\n}",
         }
     ],
 });
@@ -66,7 +66,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met(n: string): void;\n",
+            insertText: "met(n: string): void;",
         },
         {
             name: "met2",
@@ -76,7 +76,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met2(n: number): void;\n",
+            insertText: "met2(n: number): void;",
         }
     ],
 });
@@ -98,7 +98,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met(n: string): void;\n",
+            insertText: "met(n: string): void;",
         },
         {
             name: "met2",
@@ -108,7 +108,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met2(n: number): void;\n",
+            insertText: "met2(n: number): void;",
         }
     ],
 });

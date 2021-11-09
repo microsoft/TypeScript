@@ -129,8 +129,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"foo(param1: string, param2: boolean): Promise<void> {\n}\n",
+            insertText: "foo(param1: string, param2: boolean): Promise<void> {\n}",
         }
     ],
 });
@@ -152,8 +151,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"foo(a: string, b: string): string {\n}\n",
+            insertText: "foo(a: string, b: string): string {\n}",
         }
     ],
 });
@@ -175,8 +173,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"foo(a: string): string {\n}\n",
+            insertText: "foo(a: string): string {\n}",
         }
     ],
 });
@@ -198,8 +195,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"foo(a: string): string {\n}\n",
+            insertText: "foo(a: string): string {\n}",
         }
     ],
 });
@@ -221,8 +217,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"foo(a: string): string {\n}\n",
+            insertText: "foo(a: string): string {\n}",
         }
     ],
 });
@@ -244,8 +239,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"foo(a: string): string {\n}\n",
+            insertText: "foo(a: string): string {\n}",
         }
     ],
 });
@@ -268,9 +262,10 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string): string;\n\
-foo(a: undefined, b: number): string;\n\
-foo(a: any, b?: any): string {\n}\n",
+`foo(a: string): string;
+foo(a: undefined, b: number): string;
+foo(a: any, b?: any): string {
+}`,
         }
     ],
 });
@@ -302,8 +297,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"met(n: number): number {\n}\n",
+            insertText: "met(n: number): number {\n}",
         }
     ],
 });
@@ -325,8 +319,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"met<T>(t: T): T {\n}\n",
+            insertText: "met<T>(t: T): T {\n}",
         },
         {
             name: "metcons",
@@ -336,8 +329,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"metcons<T extends string | number>(t: T): T {\n}\n",
+            insertText: "metcons<T extends string | number>(t: T): T {\n}",
         }
     ],
 });
