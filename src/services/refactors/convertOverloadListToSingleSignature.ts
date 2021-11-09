@@ -138,7 +138,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         function convertSignatureParametersToTuple(decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration): TupleTypeNode {
             const members = map(decl.parameters, convertParameterToNamedTupleMember);
-            return setEmitFlags(factory.createTupleTypeNode(members), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
+            return setEmitFlags(factory.createTupleTypeNode(members, /** isESTuple */ false), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
         }
 
         function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {

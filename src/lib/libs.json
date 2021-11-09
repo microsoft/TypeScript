@@ -52,6 +52,7 @@
         "es2021.promise",
         "es2021.weakref",
         "esnext.intl",
+        "esnext.record.tuple.box",
         // Default libraries
         "es5.full",
         "es2015.full",

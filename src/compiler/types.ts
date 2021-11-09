@@ -1633,11 +1633,13 @@ namespace ts {
     export interface ArrayTypeNode extends TypeNode {
         readonly kind: SyntaxKind.ArrayType;
         readonly elementType: TypeNode;
+        readonly isESTuple: boolean;
     }
 
     export interface TupleTypeNode extends TypeNode {
         readonly kind: SyntaxKind.TupleType;
         readonly elements: NodeArray<TypeNode | NamedTupleMember>;
+        readonly isESTuple: boolean;
     }
 
     export interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
@@ -5425,6 +5427,7 @@ namespace ts {
         hasRestElement: boolean;  // True if tuple has any rest or variadic elements
         combinedFlags: ElementFlags;
         readonly: boolean;
+        isESTuple: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
 
@@ -7131,10 +7134,10 @@ namespace ts {
         updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
-        createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;
-        updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode;
-        createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode;
-        updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode;
+        createArrayTypeNode(elementType: TypeNode, isESTuple: boolean): ArrayTypeNode;
+        updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode, isESTuple: boolean): ArrayTypeNode;
+        createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[], isESTuple: boolean): TupleTypeNode;
+        updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[], isESTuple: boolean): TupleTypeNode;
         createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
         updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
         createOptionalTypeNode(type: TypeNode): OptionalTypeNode;

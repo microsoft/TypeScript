@@ -106,7 +106,7 @@ namespace ts.codefix {
     }
 
     function transformJSDocVariadicType(node: JSDocVariadicType) {
-        return factory.createArrayTypeNode(visitNode(node.type, transformJSDocType));
+        return factory.createArrayTypeNode(visitNode(node.type, transformJSDocType), /** isESTuple */ false);
     }
 
     function transformJSDocFunctionType(node: JSDocFunctionType) {

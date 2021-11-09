@@ -2215,6 +2215,9 @@ namespace ts {
         }
 
         function emitArrayType(node: ArrayTypeNode) {
+            if (node.isESTuple) {
+                return emitTypeReference(factory.createTypeReferenceNode("Tuple", [node.elementType]));
+            }
             emit(node.elementType, parenthesizer.parenthesizeElementTypeOfArrayType);
             writePunctuation("[");
             writePunctuation("]");
@@ -2226,7 +2229,7 @@ namespace ts {
         }
 
         function emitTupleType(node: TupleTypeNode) {
-            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.pos, writePunctuation, node);
+            emitTokenWithComment(node.isESTuple ? SyntaxKind.HashOpenBracketToken : SyntaxKind.OpenBracketToken, node.pos, writePunctuation, node);
             const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTupleTypeElements : ListFormat.MultiLineTupleTypeElements;
             emitList(node, node.elements, flags | ListFormat.NoSpaceIfEmpty);
             emitTokenWithComment(SyntaxKind.CloseBracketToken, node.elements.end, writePunctuation, node);

@@ -1869,32 +1869,34 @@ namespace ts {
         }
 
         // @api
-        function createArrayTypeNode(elementType: TypeNode) {
+        function createArrayTypeNode(elementType: TypeNode, isESTuple: boolean) {
             const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
             node.elementType = parenthesizerRules().parenthesizeElementTypeOfArrayType(elementType);
+            node.isESTuple = isESTuple;
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
         // @api
-        function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
+        function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode, isESTuple: boolean): ArrayTypeNode {
             return node.elementType !== elementType
-                ? update(createArrayTypeNode(elementType), node)
+                ? update(createArrayTypeNode(elementType, isESTuple), node)
                 : node;
         }
 
         // @api
-        function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
+        function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[], isESTuple: boolean) {
             const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
             node.elements = createNodeArray(elements);
+            node.isESTuple = isESTuple;
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
         // @api
-        function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]) {
+        function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[], isESTuple: boolean) {
             return node.elements !== elements
-                ? update(createTupleTypeNode(elements), node)
+                ? update(createTupleTypeNode(elements, isESTuple), node)
                 : node;
         }
 

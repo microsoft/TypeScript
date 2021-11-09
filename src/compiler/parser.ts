@@ -3570,11 +3570,12 @@ namespace ts {
             return parseTupleElementType();
         }
 
-        function parseTupleType(): TupleTypeNode {
+        function parseTupleType(kind: SyntaxKind.OpenBracketToken | SyntaxKind.HashOpenBracketToken): TupleTypeNode {
             const pos = getNodePos();
             return finishNode(
                 factory.createTupleTypeNode(
-                    parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementNameOrTupleElementType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken)
+                    parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementNameOrTupleElementType, kind, SyntaxKind.CloseBracketToken),
+                    kind === SyntaxKind.HashOpenBracketToken,
                 ),
                 pos
             );
@@ -3713,7 +3714,8 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                     return lookAhead(isStartOfMappedType) ? parseMappedType() : parseTypeLiteral();
                 case SyntaxKind.OpenBracketToken:
-                    return parseTupleType();
+                case SyntaxKind.HashOpenBracketToken:
+                    return parseTupleType(token() as SyntaxKind.OpenBracketToken | SyntaxKind.HashOpenBracketToken);
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 case SyntaxKind.ImportKeyword:
@@ -3746,6 +3748,7 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
+                case SyntaxKind.HashOpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.BarToken:
                 case SyntaxKind.AmpersandToken:
@@ -3810,7 +3813,7 @@ namespace ts {
                         }
                         else {
                             parseExpected(SyntaxKind.CloseBracketToken);
-                            type = finishNode(factory.createArrayTypeNode(type), pos);
+                            type = finishNode(factory.createArrayTypeNode(type, /** isESTuple */ false), pos);
                         }
                         break;
                     default:

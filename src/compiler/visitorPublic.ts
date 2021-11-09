@@ -548,12 +548,12 @@ namespace ts {
             case SyntaxKind.ArrayType:
                 Debug.type<ArrayTypeNode>(node);
                 return factory.updateArrayTypeNode(node,
-                    nodeVisitor(node.elementType, visitor, isTypeNode));
+                    nodeVisitor(node.elementType, visitor, isTypeNode), node.isESTuple);
 
             case SyntaxKind.TupleType:
                 Debug.type<TupleTypeNode>(node);
                 return factory.updateTupleTypeNode(node,
-                    nodesVisitor(node.elements, visitor, isTypeNode));
+                    nodesVisitor(node.elements, visitor, isTypeNode), node.isESTuple);
 
             case SyntaxKind.OptionalType:
                 Debug.type<OptionalTypeNode>(node);

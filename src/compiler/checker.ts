@@ -932,6 +932,7 @@ namespace ts {
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
+        let deferredGlobalTupleType: GenericType;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -5047,14 +5048,17 @@ namespace ts {
 
                 function typeReferenceToTypeNode(type: TypeReference) {
                     let typeArguments: readonly Type[] = getTypeArguments(type);
-                    if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
+                    const globalTupleType = getGlobalTupleType(/** report error */ false);
+                    if (type.target === globalArrayType || type.target === globalReadonlyArrayType || type.target === globalTupleType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
-                            return factory.createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
+                            return factory.createTypeReferenceNode(type.target === globalArrayType ? "Array" : type.target === globalTupleType ? "Tuple" : "ReadonlyArray", [typeArgumentNode]);
                         }
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
-                        const arrayType = factory.createArrayTypeNode(elementType);
-                        return type.target === globalArrayType ? arrayType : factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
+                        const arrayType = factory.createArrayTypeNode(elementType, /** isESTuple */ type.target === globalTupleType);
+                        if (type.target === globalArrayType) return arrayType;
+                        if (type.target === globalTupleType) return arrayType;
+                        return factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         typeArguments = sameMap(typeArguments, (t, i) => removeMissingType(t, !!((type.target as TupleType).elementFlags[i] & ElementFlags.Optional)));
@@ -5069,7 +5073,7 @@ namespace ts {
                                             flags & ElementFlags.Variable ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined,
                                             factory.createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel((type.target as TupleType).labeledElementDeclarations![i]))),
                                             flags & ElementFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                                            flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) :
+                                            flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i], /** isESTuple */ false) :
                                             tupleConstituentNodes[i]
                                         );
                                     }
@@ -5078,17 +5082,17 @@ namespace ts {
                                     for (let i = 0; i < Math.min(arity, tupleConstituentNodes.length); i++) {
                                         const flags = (type.target as TupleType).elementFlags[i];
                                         tupleConstituentNodes[i] =
-                                            flags & ElementFlags.Variable ? factory.createRestTypeNode(flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) : tupleConstituentNodes[i]) :
+                                            flags & ElementFlags.Variable ? factory.createRestTypeNode(flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i], /** isESTuple */ false) : tupleConstituentNodes[i]) :
                                             flags & ElementFlags.Optional ? factory.createOptionalTypeNode(tupleConstituentNodes[i]) :
                                             tupleConstituentNodes[i];
                                     }
                                 }
-                                const tupleTypeNode = setEmitFlags(factory.createTupleTypeNode(tupleConstituentNodes), EmitFlags.SingleLine);
+                                const tupleTypeNode = setEmitFlags(factory.createTupleTypeNode(tupleConstituentNodes, /** isESTuple */ false), EmitFlags.SingleLine);
                                 return (type.target as TupleType).readonly ? factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                             }
                         }
                         if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            const tupleTypeNode = setEmitFlags(factory.createTupleTypeNode([]), EmitFlags.SingleLine);
+                            const tupleTypeNode = setEmitFlags(factory.createTupleTypeNode([], /** isESTuple */ false), EmitFlags.SingleLine);
                             return (type.target as TupleType).readonly ? factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                         }
                         context.encounteredError = true;
@@ -6219,7 +6223,7 @@ namespace ts {
                         return visitNode(node.type, visitExistingNodeTreeSymbols);
                     }
                     if (isJSDocVariadicType(node)) {
-                        return factory.createArrayTypeNode(visitNode((node as JSDocVariadicType).type, visitExistingNodeTreeSymbols));
+                        return factory.createArrayTypeNode(visitNode((node as JSDocVariadicType).type, visitExistingNodeTreeSymbols), /** isESTuple */ false);
                     }
                     if (isJSDocTypeLiteral(node)) {
                         return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
@@ -13464,6 +13468,10 @@ namespace ts {
             return deferredGlobalBigIntType || (deferredGlobalBigIntType = getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
+        function getGlobalTupleType(reportErrors: boolean) {
+            return deferredGlobalTupleType || (deferredGlobalTupleType = getGlobalType("Tuple" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -13629,7 +13637,7 @@ namespace ts {
         //
         // Note that the generic type created by this function has no symbol associated with it. The same
         // is true for each of the synthesized type parameters.
-        function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
+        function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined, isESTuple: boolean): TupleType {
             const arity = elementFlags.length;
             const minLength = countWhere(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic)));
             let typeParameters: TypeParameter[] | undefined;
@@ -13681,8 +13689,9 @@ namespace ts {
             type.fixedLength = fixedLength;
             type.hasRestElement = !!(combinedFlags & ElementFlags.Variable);
             type.combinedFlags = combinedFlags;
-            type.readonly = readonly;
+            type.readonly = isESTuple || readonly;
             type.labeledElementDeclarations = namedMemberDeclarations;
+            type.isESTuple = isESTuple;
             return type;
         }
 

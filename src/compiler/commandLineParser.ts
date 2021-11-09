@@ -78,7 +78,8 @@ namespace ts {
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
         ["esnext.string", "lib.es2021.string.d.ts"],
         ["esnext.promise", "lib.es2021.promise.d.ts"],
-        ["esnext.weakref", "lib.es2021.weakref.d.ts"]
+        ["esnext.weakref", "lib.es2021.weakref.d.ts"],
+        ["esnext.record.tuple.box", "lib.esnext.record.tuple.box.d.ts"]
     ];
 
     /**
