@@ -287,6 +287,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
+        id = 0;
         escapedName: __String;
         declarations!: Declaration[];
         valueDeclaration!: Declaration;
