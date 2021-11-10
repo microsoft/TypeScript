@@ -20,5 +20,5 @@ class Foo {
 const foo = new Foo();
 (_a = foo.m) === null || _a === void 0 ? void 0 : _a.call(foo);
 (_b = foo.m) === null || _b === void 0 ? void 0 : _b.call(foo);
-/*a1*/ (_c = foo.m /*a3*/ /*a4*/) === null || _c === void 0 ? void 0 : _c.call(/*a2*/ foo);
-/*b1*/ (_d = foo.m /*b3*/ /*b4*/) === null || _d === void 0 ? void 0 : _d.call(foo);
+/*a1*/ (_c = /*a2*/ foo.m /*a3*/ /*a4*/) === null || _c === void 0 ? void 0 : _c.call(foo);
+/*b1*/ (_d = /*b2*/ foo.m /*b3*/ /*b4*/) === null || _d === void 0 ? void 0 : _d.call(foo);
