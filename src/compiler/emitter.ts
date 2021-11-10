@@ -2747,7 +2747,7 @@ namespace ts {
         function emitYieldExpression(node: YieldExpression) {
             emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
             emit(node.asteriskToken);
-            emitExpressionWithLeadingSpace(node.expression, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitExpressionWithLeadingSpace(node.expression && parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsiAndDisallowedComma);
         }
 
         function emitSpreadElement(node: SpreadElement) {
@@ -2971,9 +2971,49 @@ namespace ts {
             return pos;
         }
 
+        function commentWillEmitNewLine(node: CommentRange) {
+            return node.kind === SyntaxKind.SingleLineCommentTrivia || !!node.hasTrailingNewLine;
+        }
+
+        function willEmitLeadingNewLine(node: Expression): boolean {
+            if (!currentSourceFile) return false;
+            if (some(getLeadingCommentRanges(currentSourceFile.text, node.pos), commentWillEmitNewLine)) return true;
+            if (some(getSyntheticLeadingComments(node), commentWillEmitNewLine)) return true;
+            if (isPartiallyEmittedExpression(node)) {
+                if (node.pos !== node.expression.pos) {
+                    if (some(getTrailingCommentRanges(currentSourceFile.text, node.expression.pos), commentWillEmitNewLine)) return true;
+                }
+                return willEmitLeadingNewLine(node.expression);
+            }
+            return false;
+        }
+
+        /**
+         * Wraps an expression in parens if we would emit a leading comment that would introduce a line separator
+         * between the node and its parent.
+         */
+        function parenthesizeExpressionForNoAsi(node: Expression) {
+            if (!commentsDisabled && isPartiallyEmittedExpression(node) && willEmitLeadingNewLine(node)) {
+                const parseNode = getParseTreeNode(node);
+                if (parseNode && isParenthesizedExpression(parseNode)) {
+                    // If the original node was a parenthesized expression, restore it to preserve comment and source map emit
+                    const parens = factory.createParenthesizedExpression(node.expression);
+                    setOriginalNode(parens, node);
+                    setTextRange(parens, parseNode);
+                    return parens;
+                }
+                return factory.createParenthesizedExpression(node);
+            }
+            return node;
+        }
+
+        function parenthesizeExpressionForNoAsiAndDisallowedComma(node: Expression) {
+            return parenthesizeExpressionForNoAsi(parenthesizer.parenthesizeExpressionForDisallowedComma(node));
+        }
+
         function emitReturnStatement(node: ReturnStatement) {
             emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, writeKeyword, /*contextNode*/ node);
-            emitExpressionWithLeadingSpace(node.expression);
+            emitExpressionWithLeadingSpace(node.expression && parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsi);
             writeTrailingSemicolon();
         }
 
@@ -3005,7 +3045,7 @@ namespace ts {
 
         function emitThrowStatement(node: ThrowStatement) {
             emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
-            emitExpressionWithLeadingSpace(node.expression);
+            emitExpressionWithLeadingSpace(parenthesizeExpressionForNoAsi(node.expression), parenthesizeExpressionForNoAsi);
             writeTrailingSemicolon();
         }
 
