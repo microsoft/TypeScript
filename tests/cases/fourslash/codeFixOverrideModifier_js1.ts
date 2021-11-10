@@ -21,7 +21,7 @@ verify.codeFix({
 }
 class D extends B {
     /**
-     * @public
+     * 
      * @override
      */
     foo (v) {}

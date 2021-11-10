@@ -495,22 +495,22 @@ namespace ts.textChanges {
         }
 
         public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-            const comments = mapDefined(parent.jsDoc, j => j.comment);
+            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
             const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
-            const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
+            const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
                 const merged = tryMergeJsdocTags(tag, newTag);
                 if (merged) oldTags[i] = merged;
                 return !!merged;
             }));
-            const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...oldTags, ...unmergedNewTags]));
             const host = updateJSDocHost(parent);
             this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
 
         public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
-            const comments = mapDefined(parent.jsDoc, j => j.comment);
-            const oldTags = filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate);
-            const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray)]));
+            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
+            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(filter(oldTags, predicate) || emptyArray)]));
             const host = updateJSDocHost(parent);
             this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
@@ -790,6 +790,7 @@ namespace ts.textChanges {
         public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
             if (!containingList) {
                 Debug.fail("node is not a list element");
+                return;
             }
             const index = indexOfNode(containingList, after);
             if (index < 0) {
@@ -941,11 +942,12 @@ namespace ts.textChanges {
     }
 
     function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
-        const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ?
-            parent.parent.kind === SyntaxKind.PropertyDeclaration ?
-                parent.parent as HasJSDoc :
-                parent.parent.parent as HasJSDoc :
-            parent;
+        if (parent.kind !== SyntaxKind.ArrowFunction) {
+            return parent;
+        }
+        const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration ?
+            parent.parent as HasJSDoc :
+            parent.parent.parent as HasJSDoc;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
         return jsDocNode;
