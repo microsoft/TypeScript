@@ -3964,7 +3964,14 @@ namespace ts {
         // Transformation nodes
 
         function emitPartiallyEmittedExpression(node: PartiallyEmittedExpression) {
+            const emitFlags = getEmitFlags(node);
+            if (!(emitFlags & EmitFlags.NoLeadingComments) && node.pos !== node.expression.pos) {
+                emitTrailingCommentsOfPosition(node.expression.pos);
+            }
             emitExpression(node.expression);
+            if (!(emitFlags & EmitFlags.NoTrailingComments) && node.end !== node.expression.end) {
+                emitLeadingCommentsOfPosition(node.expression.end);
+            }
         }
 
         function emitCommaList(node: CommaListExpression) {
@@ -4352,10 +4359,8 @@ namespace ts {
                     // Emit this child.
                     previousSourceFileTextKind = recordBundleFileInternalSectionStart(child);
                     if (shouldEmitInterveningComments) {
-                        if (emitTrailingCommentsOfPosition) {
-                            const commentRange = getCommentRange(child);
-                            emitTrailingCommentsOfPosition(commentRange.pos);
-                        }
+                        const commentRange = getCommentRange(child);
+                        emitTrailingCommentsOfPosition(commentRange.pos);
                     }
                     else {
                         shouldEmitInterveningComments = mayEmitInterveningComments;
@@ -4723,7 +4728,7 @@ namespace ts {
         function writeLineSeparatorsAndIndentBefore(node: Node, parent: Node): boolean {
             const leadingNewlines = preserveSourceNewlines && getLeadingLineTerminatorCount(parent, [node], ListFormat.None);
             if (leadingNewlines) {
-                writeLinesAndIndent(leadingNewlines, /*writeLinesIfNotIndenting*/ false);
+                writeLinesAndIndent(leadingNewlines, /*writeSpaceIfNotIndenting*/ false);
             }
             return !!leadingNewlines;
         }
