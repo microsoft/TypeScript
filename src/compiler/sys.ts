@@ -1625,7 +1625,6 @@ namespace ts {
                         sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
-
                     try {
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
@@ -1804,7 +1803,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath, directoryExists);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {

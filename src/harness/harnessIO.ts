@@ -1438,15 +1438,14 @@ namespace Harness {
             }
 
             const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
-            let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]); // always an _absolute_ path
+            let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
             if (extension === ".ts" || referencedExtensions && referencedExtensions.indexOf(".ts") > -1 && referencedExtensions.indexOf(".d.ts") === -1) {
                 // special-case and filter .d.ts out of .ts results
                 existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));
             }
             const missing: string[] = [];
-            const absoluteTestDir = `${process.cwd()}/${referenceDir}`;
             for (const name of existing) {
-                const localCopy = name.substring(absoluteTestDir.length - relativeFileBase.length);
+                const localCopy = name.substring(referenceDir.length - relativeFileBase.length);
                 if (!writtenFiles.has(localCopy)) {
                     missing.push(localCopy);
                 }
