@@ -71,7 +71,7 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }
 
-interface Array<T> {
+interface Array<T> extends ReadonlyArray<T> {
     /**
      * Returns an object whose properties have the value 'true'
      * when they will be absent when used in a 'with' statement.
