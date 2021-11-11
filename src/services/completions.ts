@@ -738,10 +738,6 @@ namespace ts.Completions {
                 insertText = `${escapeSnippetText(name)}={$1}`;
                 isSnippet = true;
             }
-
-            if (isSnippet) {
-                replacementSpan = createTextSpanFromNode(location, sourceFile);
-            }
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
