@@ -738,10 +738,6 @@ namespace ts.Completions {
                 insertText = `${escapeSnippetText(name)}={$1}`;
                 isSnippet = true;
             }
-
-            if (isSnippet) {
-                replacementSpan = createTextSpanFromNode(location, sourceFile);
-            }
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
@@ -3529,6 +3525,7 @@ namespace ts.Completions {
         // function f<T>(x: T) {}
         // f({ abc/**/: "" }) // `abc` is a member of `T` but only because it declares itself
         function hasDeclarationOtherThanSelf(member: Symbol) {
+            if (!length(member.declarations)) return true;
             return some(member.declarations, decl => decl.parent !== obj);
         }
     }
