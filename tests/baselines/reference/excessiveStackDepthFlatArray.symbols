@@ -2,7 +2,7 @@
 interface MiddlewareArray<T> extends Array<T> {}
 >MiddlewareArray : Symbol(MiddlewareArray, Decl(index.tsx, 0, 0))
 >T : Symbol(T, Decl(index.tsx, 0, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(index.tsx, 0, 26))
 
 declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
@@ -61,7 +61,7 @@ declare namespace React {
 
   interface ReactNodeArray extends Array<ReactNode> {}
 >ReactNodeArray : Symbol(ReactNodeArray, Decl(index.tsx, 16, 43))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >ReactNode : Symbol(ReactNode, Decl(index.tsx, 12, 3))
 }
 declare namespace JSX {
@@ -107,9 +107,9 @@ const Component = () => {
 >li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
 
       {categories.map((category) => (
->categories.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>categories.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >categories : Symbol(categories, Decl(index.tsx, 28, 7))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >category : Symbol(category, Decl(index.tsx, 33, 23))
 
         <li key={category}>{category}</li> // Error about 'key' only

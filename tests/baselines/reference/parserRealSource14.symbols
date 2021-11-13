@@ -91,11 +91,11 @@ module TypeScript {
 >clone.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >clone : Symbol(clone, Decl(parserRealSource14.ts, 31, 15))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
->this.asts.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>this.asts.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >this.asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
 >this : Symbol(AstPath, Decl(parserRealSource14.ts, 16, 5))
 >asts : Symbol(AstPath.asts, Decl(parserRealSource14.ts, 22, 26))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource14.ts, 32, 40))
 >value : Symbol(value, Decl(parserRealSource14.ts, 32, 40))
 

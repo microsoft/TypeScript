@@ -67,17 +67,17 @@ function filePath(fullPath: string) {
 
     var path: string[] = components.slice(0, components.length - 1);
 >path : Symbol(path, Decl(parserharness.ts, 34, 7))
->components.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>components.slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >components : Symbol(components, Decl(parserharness.ts, 33, 7))
->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >components.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >components : Symbol(components, Decl(parserharness.ts, 33, 7))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
     return path.join("/") + "/";
->path.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>path.join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 34, 7))
->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 }
 
 var typescriptServiceFileName = filePath(IO.getExecutingFilePath()) + "typescriptServices.js";
@@ -209,9 +209,9 @@ module Harness {
 >id : Symbol(id, Decl(parserharness.ts, 87, 28))
 
             if (bugIds.indexOf(id) < 0) {
->bugIds.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>bugIds.indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
 >bugIds : Symbol(bugIds, Decl(parserharness.ts, 81, 18))
->indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
 >id : Symbol(id, Decl(parserharness.ts, 87, 28))
 
                 bugIds.push(id);
@@ -237,9 +237,9 @@ module Harness {
 >bugs : Symbol(bugs, Decl(parserharness.ts, 95, 15))
 
                 bugs.forEach(bug => assert.bug(bug));
->bugs.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>bugs.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >bugs : Symbol(bugs, Decl(parserharness.ts, 95, 15))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >bug : Symbol(bug, Decl(parserharness.ts, 97, 29))
 >assert : Symbol(assert, Decl(parserharness.ts, 20, 11))
 >bug : Symbol(bug, Decl(parserharness.ts, 97, 29))
@@ -276,9 +276,9 @@ module Harness {
 >actual : Symbol(actual, Decl(parserharness.ts, 109, 19))
 
                 arr.forEach(n => actual = actual + '\n      ' + n.toString());
->arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>arr.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(parserharness.ts, 107, 38))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(parserharness.ts, 110, 28))
 >actual : Symbol(actual, Decl(parserharness.ts, 109, 19))
 >actual : Symbol(actual, Decl(parserharness.ts, 109, 19))
@@ -361,11 +361,11 @@ module Harness {
 >actual : Symbol(actual, Decl(parserharness.ts, 135, 19))
 
                 result.errors.forEach(err => {
->result.errors.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>result.errors.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >result.errors : Symbol(Compiler.CompilerResult.errors, Decl(parserharness.ts, 1171, 32))
 >result : Symbol(result, Decl(parserharness.ts, 133, 40))
 >errors : Symbol(Compiler.CompilerResult.errors, Decl(parserharness.ts, 1171, 32))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >err : Symbol(err, Decl(parserharness.ts, 136, 38))
 
                     actual = actual + '\n     ' + err.toString();
@@ -2952,9 +2952,9 @@ module Harness {
 >name : Symbol(name, Decl(parserharness.ts, 1002, 35), Decl(parserharness.ts, 1011, 39))
 
                                 if (!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type))) {
->matchingIdentifiers.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>matchingIdentifiers.some : Symbol(ReadonlyArray.some, Decl(lib.es5.d.ts, --, --))
 >matchingIdentifiers : Symbol(matchingIdentifiers, Decl(parserharness.ts, 978, 19))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>some : Symbol(ReadonlyArray.some, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserharness.ts, 1004, 62))
 >value.identifier : Symbol(Type.identifier, Decl(parserharness.ts, 804, 49))
 >value : Symbol(value, Decl(parserharness.ts, 1004, 62))
@@ -3016,9 +3016,9 @@ module Harness {
 >targetIdentifier : Symbol(targetIdentifier, Decl(parserharness.ts, 958, 19))
 
                                         if (!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type))) {
->matchingIdentifiers.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>matchingIdentifiers.some : Symbol(ReadonlyArray.some, Decl(lib.es5.d.ts, --, --))
 >matchingIdentifiers : Symbol(matchingIdentifiers, Decl(parserharness.ts, 978, 19))
->some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>some : Symbol(ReadonlyArray.some, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserharness.ts, 1014, 70))
 >value.identifier : Symbol(Type.identifier, Decl(parserharness.ts, 804, 49))
 >value : Symbol(value, Decl(parserharness.ts, 1014, 70))
@@ -3350,11 +3350,11 @@ module Harness {
 
                         results = writer.lines.join('\n');
 >results : Symbol(results, Decl(parserharness.ts, 1135, 19))
->writer.lines.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>writer.lines.join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 >writer.lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
 >writer : Symbol(writer, Decl(parserharness.ts, 1138, 27))
 >lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 
                         if (verifyNoDeclFile && results != "") {
 >verifyNoDeclFile : Symbol(verifyNoDeclFile, Decl(parserharness.ts, 1106, 54))
@@ -3442,14 +3442,14 @@ module Harness {
 >lines : Symbol(lines, Decl(parserharness.ts, 1176, 19))
 
                 fileResults.forEach(v => lines = lines.concat(v.file.lines));
->fileResults.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>fileResults.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >fileResults : Symbol(fileResults, Decl(parserharness.ts, 1175, 24))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(parserharness.ts, 1177, 36))
 >lines : Symbol(lines, Decl(parserharness.ts, 1176, 19))
->lines.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>lines.concat : Symbol(ReadonlyArray.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >lines : Symbol(lines, Decl(parserharness.ts, 1176, 19))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(ReadonlyArray.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >v.file.lines : Symbol(WriterAggregator.lines, Decl(parserharness.ts, 690, 62))
 >v.file : Symbol(file, Decl(parserharness.ts, 1175, 63))
 >v : Symbol(v, Decl(parserharness.ts, 1177, 36))
@@ -3460,9 +3460,9 @@ module Harness {
 >this.code : Symbol(CompilerResult.code, Decl(parserharness.ts, 1170, 37))
 >this : Symbol(CompilerResult, Decl(parserharness.ts, 1167, 9))
 >code : Symbol(CompilerResult.code, Decl(parserharness.ts, 1170, 37))
->lines.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>lines.join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 >lines : Symbol(lines, Decl(parserharness.ts, 1176, 19))
->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 
                 this.errors = [];
 >this.errors : Symbol(CompilerResult.errors, Decl(parserharness.ts, 1171, 32))
@@ -3949,9 +3949,9 @@ module Harness {
 
             var dependencies = units.slice(0, units.length - 1);
 >dependencies : Symbol(dependencies, Decl(parserharness.ts, 1329, 15))
->units.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>units.slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >units : Symbol(units, Decl(parserharness.ts, 1325, 37))
->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >units.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >units : Symbol(units, Decl(parserharness.ts, 1325, 37))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -4144,9 +4144,9 @@ module Harness {
                     // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
                     // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
                     dependencies.forEach(dep => {
->dependencies.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>dependencies.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >dependencies : Symbol(dependencies, Decl(parserharness.ts, 1381, 73))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >dep : Symbol(dep, Decl(parserharness.ts, 1390, 41))
 
                         addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
@@ -4180,9 +4180,9 @@ module Harness {
 >postcompile : Symbol(postcompile, Decl(parserharness.ts, 1395, 19))
 
                     addedFiles.forEach(file => {
->addedFiles.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>addedFiles.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >addedFiles : Symbol(addedFiles, Decl(parserharness.ts, 1386, 19))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >file : Symbol(file, Decl(parserharness.ts, 1396, 39))
 
                         updateUnit('', file);
@@ -4398,9 +4398,9 @@ module Harness {
                     optionRegex.lastIndex = 0;
                     var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
 >fileNameIndex : Symbol(fileNameIndex, Decl(parserharness.ts, 1484, 23))
->fileMetadataNames.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>fileMetadataNames.indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
 >fileMetadataNames : Symbol(fileMetadataNames, Decl(parserharness.ts, 1432, 11))
->indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>indexOf : Symbol(ReadonlyArray.indexOf, Decl(lib.es5.d.ts, --, --))
 >testMetaData : Symbol(testMetaData, Decl(parserharness.ts, 1465, 19))
 
                     if (fileNameIndex == -1) {
@@ -4409,9 +4409,9 @@ module Harness {
                         throw new Error('Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' + fileMetadataNames.join(', '));
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >testMetaData : Symbol(testMetaData, Decl(parserharness.ts, 1465, 19))
->fileMetadataNames.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>fileMetadataNames.join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 >fileMetadataNames : Symbol(fileMetadataNames, Decl(parserharness.ts, 1432, 11))
->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>join : Symbol(ReadonlyArray.join, Decl(lib.es5.d.ts, --, --))
 
                     } else if (fileNameIndex == 0) {
 >fileNameIndex : Symbol(fileNameIndex, Decl(parserharness.ts, 1484, 23))
@@ -4743,24 +4743,24 @@ module Harness {
 
             var entries = this.editRanges.slice(initialEditRangeIndex);
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
->this.editRanges.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>this.editRanges.slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >this.editRanges : Symbol(ScriptInfo.editRanges, Decl(parserharness.ts, 1546, 31))
 >this : Symbol(ScriptInfo, Decl(parserharness.ts, 1543, 5))
 >editRanges : Symbol(ScriptInfo.editRanges, Decl(parserharness.ts, 1546, 31))
->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >initialEditRangeIndex : Symbol(initialEditRangeIndex, Decl(parserharness.ts, 1587, 15))
 
             var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
 >minDistFromStart : Symbol(minDistFromStart, Decl(parserharness.ts, 1595, 15))
->entries.map(x => x.editRange.minChar).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->entries.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>entries.map(x => x.editRange.minChar).reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parserharness.ts, 1595, 47))
 >x.editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
 >x : Symbol(x, Decl(parserharness.ts, 1595, 47))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1595, 81))
 >current : Symbol(current, Decl(parserharness.ts, 1595, 86))
 >Math.min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
@@ -4771,10 +4771,10 @@ module Harness {
 
             var minDistFromEnd = entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current));
 >minDistFromEnd : Symbol(minDistFromEnd, Decl(parserharness.ts, 1596, 15))
->entries.map(x => x.length - x.editRange.limChar).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->entries.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>entries.map(x => x.length - x.editRange.limChar).reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parserharness.ts, 1596, 45))
 >x.length : Symbol(length, Decl(parserharness.ts, 1547, 28))
 >x : Symbol(x, Decl(parserharness.ts, 1596, 45))
@@ -4782,7 +4782,7 @@ module Harness {
 >x.editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
 >x : Symbol(x, Decl(parserharness.ts, 1596, 45))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1596, 90))
 >current : Symbol(current, Decl(parserharness.ts, 1596, 95))
 >Math.min : Symbol(Math.min, Decl(lib.es5.d.ts, --, --))
@@ -4793,15 +4793,15 @@ module Harness {
 
             var aggDelta = entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current);
 >aggDelta : Symbol(aggDelta, Decl(parserharness.ts, 1597, 15))
->entries.map(x => x.editRange.delta).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->entries.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>entries.map(x => x.editRange.delta).reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >entries : Symbol(entries, Decl(parserharness.ts, 1593, 15))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parserharness.ts, 1597, 39))
 >x.editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
 >x : Symbol(x, Decl(parserharness.ts, 1597, 39))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(ReadonlyArray.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(parserharness.ts, 1597, 71))
 >current : Symbol(current, Decl(parserharness.ts, 1597, 76))
 >prev : Symbol(prev, Decl(parserharness.ts, 1597, 71))

@@ -1,5 +1,5 @@
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(23,16): error TS2339: Property 'notAValue' does not exist on type 'Data'.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(45,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(45,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(46,5): error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: Type 'string[]' is not assignable to type '[any, any]'.
   Target requires 2 element(s) but source may have fewer.
@@ -54,7 +54,7 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(53,5): error TS2322: T
         arr = arrayish;
         arr = objectish;
         ~~~
-!!! error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
         arr = indirectArrayish;
         ~~~
 !!! error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.

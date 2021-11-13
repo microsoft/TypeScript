@@ -251,9 +251,9 @@ function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => vo
 
     const values = args.slice(0, -1) as unknown as T;
 >values : Symbol(values, Decl(variadicTuples2.ts, 80, 9))
->args.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>args.slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >args : Symbol(args, Decl(variadicTuples2.ts, 78, 44))
->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(variadicTuples2.ts, 78, 14))
 
     callback(...values);

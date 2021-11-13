@@ -60,8 +60,8 @@ function onlyErrorsWhenUnusedInBody() {
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
 
         [() => null].forEach(() => {
->[() => null].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>[() => null].forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 
             test();
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
@@ -73,8 +73,8 @@ function onlyErrorsWhenUnusedInBody() {
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 14, 39))
 
         [() => null].forEach(test => {
->[() => null].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>[() => null].forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >test : Symbol(test, Decl(truthinessCallExpressionCoercion.ts, 36, 29))
 
             test();

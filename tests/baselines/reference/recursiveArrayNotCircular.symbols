@@ -111,11 +111,11 @@ function reducer(action: ReducerAction): void {
 >Batch : Symbol(ActionType.Batch, Decl(recursiveArrayNotCircular.ts, 5, 8))
 
             action.payload.map(reducer);
->action.payload.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>action.payload.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
 >action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
 >payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >reducer : Symbol(reducer, Decl(recursiveArrayNotCircular.ts, 17, 1))
 
             break;

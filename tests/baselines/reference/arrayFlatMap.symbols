@@ -7,9 +7,9 @@ const readonlyArray: ReadonlyArray<number> = [];
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
 
 array.flatMap((): ReadonlyArray<number> => []); // ok
->array.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>array.flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
 >array : Symbol(array, Decl(arrayFlatMap.ts, 0, 5))
->flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>flatMap : Symbol(ReadonlyArray.flatMap, Decl(lib.es2019.array.d.ts, --, --))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
 
 readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok

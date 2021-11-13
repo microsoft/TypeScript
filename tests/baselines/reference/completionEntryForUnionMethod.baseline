@@ -81,154 +81,6 @@
           ]
         },
         {
-          "name": "toString",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "toString",
-              "kind": "propertyName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Returns a string representation of an array.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "toLocaleString",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "toLocaleString",
-              "kind": "propertyName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "pop",
           "kind": "method",
           "kindModifiers": "declare",
@@ -436,621 +288,6 @@
           ]
         },
         {
-          "name": "concat",
-          "kind": "property",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "concat",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "{",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "items",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ConcatArray",
-              "kind": "interfaceName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "items",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ConcatArray",
-              "kind": "interfaceName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "}",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "{",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "items",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ConcatArray",
-              "kind": "interfaceName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "items",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ConcatArray",
-              "kind": "interfaceName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "...",
-              "kind": "text"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "}",
-              "kind": "punctuation"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Combines two or more arrays.\r\nThis method returns a new array without modifying any existing arrays.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "items",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "Additional arrays and/or items to add to the end of the array.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "items",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "Additional arrays and/or items to add to the end of the array.",
-                  "kind": "text"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "join",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "join",
-              "kind": "propertyName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "separator",
-              "kind": "parameterName"
-            },
-            {
-              "text": "?",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Adds all the elements of an array into a string, separated by the specified separator string.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "separator",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.",
-                  "kind": "text"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "reverse",
           "kind": "method",
           "kindModifiers": "declare",
@@ -1243,196 +480,6 @@
             {
               "text": "Removes the first element from an array and returns it.\r\nIf the array is empty, undefined is returned and the array is not modified.",
               "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "slice",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "slice",
-              "kind": "propertyName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "start",
-              "kind": "parameterName"
-            },
-            {
-              "text": "?",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "end",
-              "kind": "parameterName"
-            },
-            {
-              "text": "?",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "|",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Returns a copy of a section of an array.\r\nFor both start and end, a negative index can be used to indicate an offset from the end of the array.\r\nFor example, -2 refers to the second to last element of the array.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "start",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "The beginning index of the specified portion of the array.\r\nIf start is undefined, then the slice begins at index 0.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "end",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.\r\nIf end is undefined, then the slice extends to the end of the array.",
-                  "kind": "text"
-                }
-              ]
             }
           ]
         },
@@ -2070,6 +1117,959 @@
           ]
         },
         {
+          "name": "toString",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "toString",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Returns a string representation of an array.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "toLocaleString",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "toLocaleString",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "concat",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "concat",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "items",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ConcatArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "items",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ConcatArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "{",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "items",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ConcatArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "    ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "items",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ConcatArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ";",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "}",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Combines two or more arrays.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "items",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Additional items to add to the end of array1.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "items",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Additional items to add to the end of array1.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "join",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "join",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "separator",
+              "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Adds all the elements of an array separated by the specified separator string.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "separator",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "slice",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "slice",
+              "kind": "propertyName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "start",
+              "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "end",
+              "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Returns a section of an array.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "start",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The beginning of the specified portion of the array.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "end",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The end of the specified portion of the array. This is exclusive of the element at the index 'end'.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "indexOf",
           "kind": "method",
           "kindModifiers": "declare",
@@ -2092,8 +2092,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -2178,7 +2178,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the index of the first occurrence of a value in an array, or -1 if it is not present.",
+              "text": "Returns the index of the first occurrence of a value in an array.",
               "kind": "text"
             }
           ],
@@ -2242,8 +2242,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -2328,7 +2328,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.",
+              "text": "Returns the index of the last occurrence of a specified value in an array.",
               "kind": "text"
             }
           ],
@@ -2362,7 +2362,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The array index at which to begin searching backward. If fromIndex is omitted, the search starts at the last index in the array.",
+                  "text": "The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.",
                   "kind": "text"
                 }
               ]
@@ -2392,8 +2392,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -2641,6 +2641,14 @@
             },
             {
               "text": "is",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "readonly",
               "kind": "keyword"
             },
             {
@@ -2980,8 +2988,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -3346,8 +3354,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -3712,8 +3720,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -4098,8 +4106,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -4678,8 +4686,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",
@@ -5414,8 +5422,8 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
             },
             {
               "text": "<",

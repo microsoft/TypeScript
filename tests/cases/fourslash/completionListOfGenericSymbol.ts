@@ -17,7 +17,7 @@ verify.completions({
         },
         {
             name: "toString",
-            text: "(method) Array<number>.toString(): string",
+            text: "(method) ReadonlyArray<number>.toString(): string",
             documentation: "Returns a string representation of an array.",
             kind: "method",
             kindModifiers: "declare",

@@ -416,9 +416,9 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >html : any
 >'ul' : "ul"
 >node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  }) : any[]
->node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
+>node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: Tree) => U, thisArg?: any) => U[]
 >node : Tree
->map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
+>map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: Tree) => U, thisArg?: any) => U[]
 >([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : ([el, children]: [HTMLHeadingElement, Tree], i: number) => any
 >el : HTMLHeadingElement
 >children : Tree

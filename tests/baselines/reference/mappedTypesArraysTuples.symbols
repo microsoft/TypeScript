@@ -294,9 +294,9 @@ function f2<T extends any[]>(a: Boxified<T>) {
     let y: Box<any>[] = a.concat(a);
 >y : Symbol(y, Decl(mappedTypesArraysTuples.ts, 73, 7))
 >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
->a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.concat : Symbol(ReadonlyArray.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(ReadonlyArray.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
 }
 

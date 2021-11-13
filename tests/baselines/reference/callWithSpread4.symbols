@@ -43,7 +43,7 @@ declare const pli: {
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
 >streams : Symbol(streams, Decl(callWithSpread4.ts, 6, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))

@@ -178,24 +178,8 @@
                   "kind": "space"
                 },
                 {
-                  "text": "readonly",
+                  "text": "this",
                   "kind": "keyword"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "T",
-                  "kind": "typeParameterName"
-                },
-                {
-                  "text": "[",
-                  "kind": "punctuation"
-                },
-                {
-                  "text": "]",
-                  "kind": "punctuation"
                 },
                 {
                   "text": ")",
@@ -457,24 +441,8 @@
                   "kind": "space"
                 },
                 {
-                  "text": "readonly",
+                  "text": "this",
                   "kind": "keyword"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "T",
-                  "kind": "typeParameterName"
-                },
-                {
-                  "text": "[",
-                  "kind": "punctuation"
-                },
-                {
-                  "text": "]",
-                  "kind": "punctuation"
                 },
                 {
                   "text": ")",

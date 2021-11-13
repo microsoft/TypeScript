@@ -289,9 +289,9 @@ module Harness {
 
                 bugs.forEach(bug => assert.bug(bug));
 >bugs.forEach(bug => assert.bug(bug)) : void
->bugs.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>bugs.forEach : (callbackfn: (value: string, index: number, array: RegExpMatchArray) => void, thisArg?: any) => void
 >bugs : RegExpMatchArray
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (callbackfn: (value: string, index: number, array: RegExpMatchArray) => void, thisArg?: any) => void
 >bug => assert.bug(bug) : (bug: string) => any
 >bug : string
 >assert.bug(bug) : any

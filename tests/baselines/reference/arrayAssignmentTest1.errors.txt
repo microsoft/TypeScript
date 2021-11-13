@@ -20,12 +20,12 @@ tests/cases/compiler/arrayAssignmentTest1.ts(76,1): error TS2322: Type 'C1[]' is
   Property 'CM3M1' is missing in type 'C1' but required in type 'C3'.
 tests/cases/compiler/arrayAssignmentTest1.ts(77,1): error TS2322: Type 'I1[]' is not assignable to type 'C3[]'.
   Property 'CM3M1' is missing in type 'I1' but required in type 'C3'.
-tests/cases/compiler/arrayAssignmentTest1.ts(79,1): error TS2740: Type '() => C1' is missing the following properties from type 'any[]': pop, push, concat, join, and 15 more.
-tests/cases/compiler/arrayAssignmentTest1.ts(80,1): error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-tests/cases/compiler/arrayAssignmentTest1.ts(82,1): error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-tests/cases/compiler/arrayAssignmentTest1.ts(83,1): error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-tests/cases/compiler/arrayAssignmentTest1.ts(84,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+tests/cases/compiler/arrayAssignmentTest1.ts(79,1): error TS2740: Type '() => C1' is missing the following properties from type 'any[]': pop, push, reverse, shift, and 15 more.
+tests/cases/compiler/arrayAssignmentTest1.ts(80,1): error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
+tests/cases/compiler/arrayAssignmentTest1.ts(82,1): error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
+tests/cases/compiler/arrayAssignmentTest1.ts(83,1): error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
+tests/cases/compiler/arrayAssignmentTest1.ts(84,1): error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
+tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
 
 
 ==== tests/cases/compiler/arrayAssignmentTest1.ts (19 errors) ====
@@ -152,20 +152,20 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is m
     
     arr_any = f1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type '() => C1' is missing the following properties from type 'any[]': pop, push, concat, join, and 15 more.
+!!! error TS2740: Type '() => C1' is missing the following properties from type 'any[]': pop, push, reverse, shift, and 15 more.
     arr_any = o1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type '{ one: number; }' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
     arr_any = a1; // should be ok - is
     arr_any = c1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'C1' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
     arr_any = c2; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'C2' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
     arr_any = c3; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'C3' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.
     arr_any = i1; // should be an error - is
     ~~~~~~~
-!!! error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+!!! error TS2740: Type 'I1' is missing the following properties from type 'any[]': length, pop, push, reverse, and 16 more.

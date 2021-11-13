@@ -43,9 +43,9 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >files : Symbol(files, Decl(undeclaredModuleError.ts, 8, 26))
 
                 files.forEach((file) => {
->files.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>files.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >files : Symbol(files, Decl(undeclaredModuleError.ts, 8, 26))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >file : Symbol(file, Decl(undeclaredModuleError.ts, 9, 31))
 
                     var fullPath = join(IDoNotExist);

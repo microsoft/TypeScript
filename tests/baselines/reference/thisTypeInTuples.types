@@ -1,5 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInTuples.ts ===
-interface Array<T> {
+interface ReadonlyArray<T> {
     slice(): this;
 >slice : { (start?: number, end?: number): T[]; (): this; }
 }

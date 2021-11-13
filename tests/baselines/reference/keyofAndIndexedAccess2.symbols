@@ -326,9 +326,9 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 84, 49))
 
     return ids.map(id => entities[id]);
->ids.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>ids.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 85, 11))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 86, 19))
 >entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 85, 16))
 >id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 86, 19))
@@ -352,9 +352,9 @@ export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>):
 >state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 89, 56))
 
     if (!ids.includes(id)) {
->ids.includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>ids.includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
 >ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 90, 11))
->includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>includes : Symbol(ReadonlyArray.includes, Decl(lib.es2016.array.include.d.ts, --, --))
 >id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 89, 44))
 
         return undefined;
@@ -440,9 +440,9 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 >fn : Symbol(fn, Decl(keyofAndIndexedAccess2.ts, 115, 69))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
 >elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 51))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 119, 77))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
 >cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 119, 86))
@@ -459,7 +459,7 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
 >fn2 : Symbol(fn2, Decl(keyofAndIndexedAccess2.ts, 121, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 123, 38))
 >T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
 >cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 123, 47))
@@ -494,7 +494,7 @@ function fn4<K extends number>() {
 
     let x: Array<string>[K] = 'abc';
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 134, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 133, 13))
 
     let y: ReadonlyArray<string>[K] = 'abc';

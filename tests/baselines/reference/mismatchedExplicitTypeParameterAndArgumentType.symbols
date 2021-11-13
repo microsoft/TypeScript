@@ -15,9 +15,9 @@ function map<T, U>(xs: T[], f: (x: T) => U) {
 >U : Symbol(U, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 15))
 
     xs.forEach(x => ys.push(f(x)));
->xs.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>xs.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >xs : Symbol(xs, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 19))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 2, 15))
 >ys.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >ys : Symbol(ys, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 1, 7))

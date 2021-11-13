@@ -620,9 +620,9 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >ids : Symbol(ids, Decl(discriminantPropertyCheck.ts, 222, 50))
 
     ids.forEach(id => {
->ids.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>ids.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >ids : Symbol(ids, Decl(discriminantPropertyCheck.ts, 222, 50))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >id : Symbol(id, Decl(discriminantPropertyCheck.ts, 223, 16))
 
         let test;

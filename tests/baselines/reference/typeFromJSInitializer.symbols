@@ -189,8 +189,8 @@ const e = [1, undefined];
 // should be undefined[]
 const g = e.filter(isUndef);
 >g : Symbol(g, Decl(a.js, 59, 5))
->e.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e.filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(a.js, 56, 5))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isUndef : Symbol(isUndef, Decl(a.js, 55, 5))
 

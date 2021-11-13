@@ -1,7 +1,7 @@
 === tests/cases/compiler/indexAt.ts ===
 [0].at(0);
->[0].at : Symbol(Array.at, Decl(lib.es2022.array.d.ts, --, --))
->at : Symbol(Array.at, Decl(lib.es2022.array.d.ts, --, --))
+>[0].at : Symbol(ReadonlyArray.at, Decl(lib.es2022.array.d.ts, --, --))
+>at : Symbol(ReadonlyArray.at, Decl(lib.es2022.array.d.ts, --, --))
 
 "foo".at(0);
 >"foo".at : Symbol(String.at, Decl(lib.es2022.string.d.ts, --, --))

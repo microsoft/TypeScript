@@ -68,80 +68,80 @@ declare class MyArray<T> implements Array<T> {
 >searchElement : T
 >fromIndex : number
 
-    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
->every : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
->callbackfn : (value: T, index: number, array: T[]) => boolean
+    every(callbackfn: (value: T, index: number, array: this) => boolean, thisArg?: any): boolean;
+>every : (callbackfn: (value: T, index: number, array: this) => boolean, thisArg?: any) => boolean
+>callbackfn : (value: T, index: number, array: this) => boolean
 >value : T
 >index : number
->array : T[]
+>array : this
 >thisArg : any
 
-    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
->some : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean
->callbackfn : (value: T, index: number, array: T[]) => boolean
+    some(callbackfn: (value: T, index: number, array: this) => boolean, thisArg?: any): boolean;
+>some : (callbackfn: (value: T, index: number, array: this) => boolean, thisArg?: any) => boolean
+>callbackfn : (value: T, index: number, array: this) => boolean
 >value : T
 >index : number
->array : T[]
+>array : this
 >thisArg : any
 
-    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
->forEach : (callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any) => void
->callbackfn : (value: T, index: number, array: T[]) => void
+    forEach(callbackfn: (value: T, index: number, array: this) => void, thisArg?: any): void;
+>forEach : (callbackfn: (value: T, index: number, array: this) => void, thisArg?: any) => void
+>callbackfn : (value: T, index: number, array: this) => void
 >value : T
 >index : number
->array : T[]
+>array : this
 >thisArg : any
 
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
->map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
->callbackfn : (value: T, index: number, array: T[]) => U
+    map<U>(callbackfn: (value: T, index: number, array: this) => U, thisArg?: any): U[];
+>map : <U>(callbackfn: (value: T, index: number, array: this) => U, thisArg?: any) => U[]
+>callbackfn : (value: T, index: number, array: this) => U
 >value : T
 >index : number
->array : T[]
+>array : this
 >thisArg : any
 
-    filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
->filter : (callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => T[]
->callbackfn : (value: T, index: number, array: T[]) => boolean
+    filter(callbackfn: (value: T, index: number, array: this) => boolean, thisArg?: any): T[];
+>filter : (callbackfn: (value: T, index: number, array: this) => boolean, thisArg?: any) => T[]
+>callbackfn : (value: T, index: number, array: this) => boolean
 >value : T
 >index : number
->array : T[]
+>array : this
 >thisArg : any
 
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T;
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; }
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: this) => T
 >previousValue : T
 >currentValue : T
 >currentIndex : number
->array : T[]
+>array : this
 >initialValue : T
 
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U;
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; }
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: this) => U
 >previousValue : U
 >currentValue : T
 >currentIndex : number
->array : T[]
+>array : this
 >initialValue : U
 
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
->reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T;
+>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; }
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: this) => T
 >previousValue : T
 >currentValue : T
 >currentIndex : number
->array : T[]
+>array : this
 >initialValue : T
 
-    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
->reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
+    reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U;
+>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U, initialValue: U): U; }
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: this) => U
 >previousValue : U
 >currentValue : T
 >currentIndex : number
->array : T[]
+>array : this
 >initialValue : U
 
     length: number;

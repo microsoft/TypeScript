@@ -1,5 +1,5 @@
 //// [thisTypeInTuples.ts]
-interface Array<T> {
+interface ReadonlyArray<T> {
     slice(): this;
 }
 

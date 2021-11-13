@@ -81,8 +81,8 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 
     // ok
     [].forEach((f: () => void) => f && f.apply(parent, []));
->[].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>[].forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
 >f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))

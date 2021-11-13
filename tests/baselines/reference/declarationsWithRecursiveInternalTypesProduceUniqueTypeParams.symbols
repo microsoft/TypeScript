@@ -80,7 +80,7 @@ export const updateIfChanged = <T>(t: T) => {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))
 >u : Symbol(u, Decl(declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts, 7, 23))

@@ -800,9 +800,9 @@ const map = <T, U>(transform: (t: T) => U) =>
     (arr: T[]) => arr.map(transform)
 >arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
 >T : Symbol(T, Decl(genericFunctionInference1.ts, 150, 13))
->arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arr.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
 >transform : Symbol(transform, Decl(genericFunctionInference1.ts, 150, 19))
 
 const identityStr = (t: string) => t;
