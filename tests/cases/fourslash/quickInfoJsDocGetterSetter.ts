@@ -45,11 +45,11 @@
 //// new C()./*8*/x = "1";
 //// new D()./*9*/x = "1";
 
-verify.quickInfoAt("1", "(getter) A.x", 'getter A', [{ name: "returns", text: "return A" }]);
-verify.quickInfoAt("2", "(setter) A.x", 'setter A', [{ name: "param", text: "value foo A" }, { name: "todo", text: "empty jsdoc" }]);
-verify.quickInfoAt("3", "(getter) B.x", 'getter B', [{ name: "returns", text: "return B" }]);
-verify.quickInfoAt("4", "(setter) B.x", 'setter B', [{ name: "param", text: "value foo B" }]);
-verify.quickInfoAt("5", "(setter) D.x", 'setter D', [{ name: "param", text: "value foo D" }]);
+verify.quickInfoAt("1", "(getter) A.x: string", 'getter A', [{ name: "returns", text: "return A" }]);
+verify.quickInfoAt("2", "(setter) A.x: string", 'setter A', [{ name: "param", text: "value foo A" }, { name: "todo", text: "empty jsdoc" }]);
+verify.quickInfoAt("3", "(getter) B.x: string", 'getter B', [{ name: "returns", text: "return B" }]);
+verify.quickInfoAt("4", "(setter) B.x: string", 'setter B', [{ name: "param", text: "value foo B" }]);
+verify.quickInfoAt("5", "(setter) D.x: string", 'setter D', [{ name: "param", text: "value foo D" }]);
 
 verify.quickInfoAt("6", "(property) A.x: string", 'getter A\nsetter A', [
     { name: "returns", text: "return A" },
