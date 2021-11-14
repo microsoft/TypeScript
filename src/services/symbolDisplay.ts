@@ -519,6 +519,8 @@ namespace ts.SymbolDisplay {
 
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
+                        symbolKind === ScriptElementKind.memberGetAccessorElement ||
+                        symbolKind === ScriptElementKind.memberSetAccessorElement ||
                         symbolKind === ScriptElementKind.jsxAttribute ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
