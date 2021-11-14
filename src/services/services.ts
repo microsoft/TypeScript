@@ -363,7 +363,7 @@ namespace ts {
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations, checker);
+                this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
             }
 
             return this.tags;
@@ -374,13 +374,13 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                     if (!this.contextualGetAccessorTags) {
                         this.contextualGetAccessorTags = emptyArray;
-                        this.contextualGetAccessorTags = getJsDocTags(filter(this.declarations, isGetAccessor), checker);
+                        this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                     }
                     return this.contextualGetAccessorTags;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorTags) {
                         this.contextualSetAccessorTags = emptyArray;
-                        this.contextualSetAccessorTags = getJsDocTags(filter(this.declarations, isSetAccessor), checker);
+                        this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                     }
                     return this.contextualSetAccessorTags;
                 default:
@@ -586,10 +586,7 @@ namespace ts {
         }
 
         getJsDocTags(): JSDocTagInfo[] {
-            if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? getJsDocTagsOfDeclaration(this.declaration, this.checker) : [];
-            }
-            return this.jsDocTags;
+            return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
         }
     }
 
@@ -602,24 +599,22 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
-    function getJsDocTagsOfDeclaration(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
-        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
-        if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
-            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
-            if (inheritedTags) {
-                tags = [...inheritedTags, ...tags];
-            }
-        }
-        return tags;
-    }
-
-    function getJsDocTags(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+    function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
         if (!declarations) return emptyArray;
 
         let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
         if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+            const seenSymbols = new Set<Symbol>();
             for (const declaration of declarations) {
-                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
+                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol);
+                        if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                            return symbol.getContextualJsDocTags(declaration, checker);
+                        }
+                        return symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined;
+                    }
+                });
                 if (inheritedTags) {
                     tags = [...inheritedTags, ...tags];
                 }
@@ -638,6 +633,9 @@ namespace ts {
                 const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
                     if (!seenSymbols.has(symbol)) {
                         seenSymbols.add(symbol);
+                        if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                            return symbol.getContextualDocumentationComment(declaration, checker);
+                        }
                         return symbol.getDocumentationComment(checker);
                     }
                 });

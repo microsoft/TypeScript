@@ -399,9 +399,9 @@ declare namespace FourSlashInterface {
         baselineRename(marker: string, options: RenameOptions): void;
 
         /** Verify the quick info available at the current marker. */
-        quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
+        quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]): void;
         /** Goto a marker and call `quickInfoIs`. */
-        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]): void;
         /**
          * Call `quickInfoAt` for each pair in the object.
          * (If the value is an array, it is [expectedText, expectedDocumentation].)

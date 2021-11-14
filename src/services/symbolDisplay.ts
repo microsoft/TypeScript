@@ -593,7 +593,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (tags.length === 0 && !hasMultipleSignatures) {
-            tags = symbol.getJsDocTags(typeChecker);
+            tags = symbol.getContextualJsDocTags(enclosingDeclaration, typeChecker);
         }
 
         if (documentation.length === 0 && documentationFromAlias) {
