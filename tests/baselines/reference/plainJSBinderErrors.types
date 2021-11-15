@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/plainJSReservedWord.js ===
+=== tests/cases/conformance/salsa/plainJSBinderErrors.js ===
 export default 12
 export default 13
 const await = 1
@@ -63,6 +63,36 @@ class C {
         const arguments = 8
 >arguments : 8
 >8 : 8
+    }
+    withOctal() {
+>withOctal : () => any
+
+        const redundant = 010
+>redundant : 10
+>010 : 10
+
+        with (redundant) {
+>redundant : 10
+
+            return toFixed()
+>toFixed() : any
+>toFixed : any
+        }
+    }
+    label() {
+>label : () => number
+
+        for(;;) {
+            label: var x = 1
+>label : any
+>x : number
+>1 : 1
+
+            break label
+>label : any
+        }
+        return x
+>x : number
     }
 }
 const eval = 9

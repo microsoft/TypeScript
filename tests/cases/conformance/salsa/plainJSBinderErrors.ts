@@ -1,7 +1,7 @@
 // @outdir: out/
 // @target: esnext
 // @allowJS: true
-// @filename: plainJSReservedWord.js
+// @filename: plainJSBinderErrors.js
 export default 12
 export default 13
 const await = 1
@@ -25,6 +25,19 @@ class C {
     evalArguments() {
         const eval = 7
         const arguments = 8
+    }
+    withOctal() {
+        const redundant = 010
+        with (redundant) {
+            return toFixed()
+        }
+    }
+    label() {
+        for(;;) {
+            label: var x = 1
+            break label
+        }
+        return x
     }
 }
 const eval = 9

@@ -832,6 +832,9 @@ namespace ts {
         Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode.code,
         Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
         Diagnostics.Invalid_use_of_0_in_strict_mode.code,
+        Diagnostics.A_label_is_not_allowed_here.code,
+        Diagnostics.Octal_literals_are_not_allowed_in_strict_mode.code,
+        Diagnostics.with_statements_are_not_allowed_in_strict_mode.code,
     ]);
 
     /**
@@ -2020,13 +2023,12 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
-                const isCheckJs = !!isCheckJsEnabledForFile(sourceFile, options) && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
+                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options) && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
                 const isPlainJs = !sourceFile.checkJsDirective && options.checkJs === undefined && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (
-                    sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
                         || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
