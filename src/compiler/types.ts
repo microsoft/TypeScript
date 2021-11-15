@@ -5226,6 +5226,8 @@ namespace ts {
         /* @internal */
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
+        uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
+        /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */
         widened?: Type; // Cached widened form of the type
