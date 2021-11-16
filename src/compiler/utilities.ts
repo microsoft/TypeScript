@@ -6979,18 +6979,6 @@ namespace ts {
         return { min, max };
     }
 
-    /** @deprecated Use `ReadonlySet<TNode>` instead. */
-    export type ReadonlyNodeSet<TNode extends Node> = ReadonlySet<TNode>;
-
-    /** @deprecated Use `Set<TNode>` instead. */
-    export type NodeSet<TNode extends Node> = Set<TNode>;
-
-    /** @deprecated Use `ReadonlyMap<TNode, TValue>` instead. */
-    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyESMap<TNode, TValue>;
-
-    /** @deprecated Use `Map<TNode, TValue>` instead. */
-    export type NodeMap<TNode extends Node, TValue> = ESMap<TNode, TValue>;
-
     export function rangeOfNode(node: Node): TextRange {
         return { pos: getTokenPosOfNode(node), end: node.end };
     }
