@@ -198,7 +198,7 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
-        const symbol = typeChecker.getSymbolAtLocation(node);
+        const symbol = getSymbol(node, typeChecker);
         if (!symbol) return undefined;
 
         const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
@@ -208,18 +208,9 @@ namespace ts.GoToDefinition {
         const typeDefinitions = fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
         return typeDefinitions.length
             ? typeDefinitions
-            : symbolHasTypeMeaning(symbol, typeChecker)
-                ? definitionForTypeSymbol(symbol, node, typeChecker)
+            : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type
+                ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node)
                 : undefined;
-    }
-
-    function definitionForTypeSymbol(symbol: Symbol, node: Node, typeChecker: TypeChecker): readonly DefinitionInfo[] | undefined {
-        symbol = symbol.flags & SymbolFlags.Alias ? typeChecker.getAliasedSymbol(symbol) : symbol;
-        return getDefinitionFromSymbol(typeChecker, symbol, node);
-    }
-
-    function symbolHasTypeMeaning(symbol: Symbol, typeChecker: TypeChecker): boolean {
-        return !!(symbol.flags & SymbolFlags.Type || symbol.flags & SymbolFlags.Alias && typeChecker.getAliasedSymbol(symbol).flags & SymbolFlags.Type);
     }
 
     function definitionFromType(type: Type, checker: TypeChecker, node: Node): readonly DefinitionInfo[] {
