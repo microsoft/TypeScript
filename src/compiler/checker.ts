@@ -41589,7 +41589,7 @@ namespace ts {
             if (!symbol) {
                 return false;
             }
-            const target = resolveAlias(symbol);
+            const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
             if (target === unknownSymbol) {
                 return true;
             }
