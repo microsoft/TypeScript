@@ -1124,7 +1124,9 @@ namespace ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
+        const newSourceFile = createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
+        newSourceFile.impliedNodeFormat = sourceFile.impliedNodeFormat;
+        return newSourceFile;
     }
 
     const NoopCancellationToken: CancellationToken = {
