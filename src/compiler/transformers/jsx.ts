@@ -48,11 +48,11 @@ namespace ts {
                 return existing.name;
             }
             if (!currentFileState.utilizedImplicitRuntimeImports) {
-                currentFileState.utilizedImplicitRuntimeImports = createMap();
+                currentFileState.utilizedImplicitRuntimeImports = new Map();
             }
             let specifierSourceImports = currentFileState.utilizedImplicitRuntimeImports.get(importSource);
             if (!specifierSourceImports) {
-                specifierSourceImports = createMap();
+                specifierSourceImports = new Map();
                 currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);

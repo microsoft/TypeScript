@@ -24,16 +24,6 @@ namespace ts {
     export const emptySet: ReadonlySet<never> = new Set<never>();
 
     /**
-     * Create a new map.
-     * @deprecated Use `new Map()` instead.
-     */
-    export function createMap<K, V>(): ESMap<K, V>;
-    export function createMap<T>(): ESMap<string, T>;
-    export function createMap<K, V>(): ESMap<K, V> {
-        return new Map<K, V>();
-    }
-
-    /**
      * Create a new map from a template object is provided, the map will copy entries from it.
      * @deprecated Use `new Map(getEntries(template))` instead.
      */
