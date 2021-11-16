@@ -28,7 +28,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "a?: number;\n"
+            insertText: "a?: number;"
         },
         {
             name: "b",
@@ -38,7 +38,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "b(x: number): void {\n}\n"
+            insertText: "b(x: number): void {\n}"
         },
     ],
 });

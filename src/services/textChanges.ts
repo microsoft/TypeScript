@@ -494,6 +494,27 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 
+        public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
+            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
+            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
+                const merged = tryMergeJsdocTags(tag, newTag);
+                if (merged) oldTags[i] = merged;
+                return !!merged;
+            }));
+            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...oldTags, ...unmergedNewTags]));
+            const host = updateJSDocHost(parent);
+            this.insertJsdocCommentBefore(sourceFile, host, tag);
+        }
+
+        public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
+            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
+            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(filter(oldTags, predicate) || emptyArray)]));
+            const host = updateJSDocHost(parent);
+            this.insertJsdocCommentBefore(sourceFile, host, tag);
+        }
+
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
@@ -917,6 +938,35 @@ namespace ts.textChanges {
 
         public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[]): void {
             this.newFiles.push({ oldFile, fileName, statements });
+        }
+    }
+
+    function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
+        if (parent.kind !== SyntaxKind.ArrowFunction) {
+            return parent;
+        }
+        const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration ?
+            parent.parent as HasJSDoc :
+            parent.parent.parent as HasJSDoc;
+        jsDocNode.jsDoc = parent.jsDoc;
+        jsDocNode.jsDocCache = parent.jsDocCache;
+        return jsDocNode;
+    }
+
+    function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
+        if (oldTag.kind !== newTag.kind) {
+            return undefined;
+        }
+        switch (oldTag.kind) {
+            case SyntaxKind.JSDocParameterTag: {
+                const oldParam = oldTag as JSDocParameterTag;
+                const newParam = newTag as JSDocParameterTag;
+                return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
+                    : undefined;
+            }
+            case SyntaxKind.JSDocReturnTag:
+                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
         }
     }
 

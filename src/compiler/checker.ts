@@ -41589,7 +41589,7 @@ namespace ts {
             if (!symbol) {
                 return false;
             }
-            const target = resolveAlias(symbol);
+            const target = getExportSymbolOfValueSymbolIfExported(resolveAlias(symbol));
             if (target === unknownSymbol) {
                 return true;
             }
@@ -43062,8 +43062,7 @@ namespace ts {
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
                 if (prop.modifiers) {
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                    for (const mod of prop.modifiers!) { // TODO: GH#19955
+                    for (const mod of prop.modifiers) {
                         if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
                             grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
                         }

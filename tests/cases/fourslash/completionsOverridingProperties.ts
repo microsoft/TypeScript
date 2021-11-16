@@ -5,7 +5,6 @@
 // Case: Properties
 ////class Base {
 ////    protected foo: string = "bar";
-////
 ////}
 ////
 ////class Sub extends Base {
@@ -32,8 +31,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"protected foo: string;\n",
+            insertText: "protected foo: string;",
         }
     ],
 });
