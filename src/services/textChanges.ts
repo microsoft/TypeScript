@@ -1052,7 +1052,7 @@ namespace ts.textChanges {
                     ? "" : options.suffix);
         }
 
-        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+        export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
             const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
             const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
             return {
@@ -1110,7 +1110,7 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
-    function assignPositionsToNode(node: Node): Node {
+    export function assignPositionsToNode(node: Node): Node {
         const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
@@ -1131,7 +1131,7 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    function createWriter(newLine: string): TextChangesWriter {
+    export function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine);

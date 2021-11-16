@@ -229,6 +229,7 @@ namespace ts.Completions {
         triggerCharacter: CompletionsTriggerCharacter | undefined,
         completionKind: CompletionTriggerKind | undefined,
         cancellationToken: CancellationToken,
+        formatContext?: formatting.FormatContext,
     ): CompletionInfo | undefined {
         const { previousToken } = getRelevantTokens(position, sourceFile);
         if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
@@ -275,7 +276,7 @@ namespace ts.Completions {
 
         switch (completionData.kind) {
             case CompletionDataKind.Data:
-                const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences);
+                const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences, formatContext);
                 if (response?.isIncomplete) {
                     incompleteCompletionsCache?.set(response);
                 }
@@ -412,6 +413,7 @@ namespace ts.Completions {
         log: Log,
         completionData: CompletionData,
         preferences: UserPreferences,
+        formatContext: formatting.FormatContext | undefined,
     ): CompletionInfo | undefined {
         const {
             symbols,
@@ -459,6 +461,7 @@ namespace ts.Completions {
                 completionKind,
                 preferences,
                 compilerOptions,
+                formatContext,
                 isTypeOnlyLocation,
                 propertyAccessToConvert,
                 isJsxIdentifierExpected,
@@ -489,6 +492,7 @@ namespace ts.Completions {
                 completionKind,
                 preferences,
                 compilerOptions,
+                formatContext,
                 isTypeOnlyLocation,
                 propertyAccessToConvert,
                 isJsxIdentifierExpected,
@@ -638,6 +642,7 @@ namespace ts.Completions {
         options: CompilerOptions,
         preferences: UserPreferences,
         completionKind: CompletionKind,
+        formatContext: formatting.FormatContext | undefined,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -706,7 +711,7 @@ namespace ts.Completions {
             completionKind === CompletionKind.MemberLike &&
             isClassLikeMemberCompletion(symbol, location)) {
             let importAdder;
-            ({ insertText, isSnippet, importAdder } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken));
+            ({ insertText, isSnippet, importAdder } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
@@ -832,6 +837,7 @@ namespace ts.Completions {
         symbol: Symbol,
         location: Node,
         contextToken: Node | undefined,
+        formatContext: formatting.FormatContext | undefined,
     ): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder } {
         const classLikeDeclaration = findAncestor(location, isClassLike);
         if (!classLikeDeclaration) {
@@ -852,15 +858,16 @@ namespace ts.Completions {
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
+        // Create empty body for possible method implementation.
         let body;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
             // We are adding a tabstop (i.e. `$0`) in the body of the suggested member,
             // if it has one, so that the cursor ends up in the body once the completion is inserted.
             // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
-            const emptyStatement = factory.createExpressionStatement(factory.createIdentifier(""));
-            setSnippetElement(emptyStatement, { kind: SnippetKind.TabStop, order: 0 });
-            body = factory.createBlock([emptyStatement], /* multiline */ true);
+            const emptyStmt = factory.createEmptyStatement();
+            body = factory.createBlock([emptyStmt], /* multiline */ true);
+            setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
         }
         else {
             body = factory.createBlock([], /* multiline */ true);
@@ -911,7 +918,6 @@ namespace ts.Completions {
                     modifiers = node.modifierFlagsCache | requiredModifiers | presentModifiers;
                 }
                 node = factory.updateModifiers(node, modifiers & (~presentModifiers));
-
                 completionNodes.push(node);
             },
             body,
@@ -919,10 +925,38 @@ namespace ts.Completions {
             isAbstract);
 
         if (completionNodes.length) {
-            insertText = printer.printSnippetList(
-                ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
-                factory.createNodeArray(completionNodes),
-                sourceFile);
+             // If we have access to formatting settings, we print the nodes using the emitter,
+             // and then format the printed text.
+            if (formatContext) {
+                const syntheticFile = {
+                    text: printer.printSnippetList(
+                        ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
+                        factory.createNodeArray(completionNodes),
+                        sourceFile),
+                    getLineAndCharacterOfPosition(pos: number) {
+                        return getLineAndCharacterOfPosition(this, pos);
+                    },
+                };
+
+                const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+                const changes = flatMap(completionNodes, node => {
+                    const nodeWithPos = textChanges.assignPositionsToNode(node);
+                    return formatting.formatNodeGivenIndentation(
+                        nodeWithPos,
+                        syntheticFile,
+                        sourceFile.languageVariant,
+                        /* indentation */ 0,
+                        /* delta */ 0,
+                        { ...formatContext, options: formatOptions });
+                });
+                insertText = textChanges.applyChanges(syntheticFile.text, changes);
+            }
+            else { // Otherwise, just use emitter to print the new nodes.
+                insertText = printer.printSnippetList(
+                    ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
+                    factory.createNodeArray(completionNodes),
+                    sourceFile);
+            }
         }
 
         return { insertText, isSnippet, importAdder };
@@ -972,8 +1006,8 @@ namespace ts.Completions {
     function createSnippetPrinter(
         printerOptions: PrinterOptions,
     ) {
-        const printer = createPrinter(printerOptions);
-        const baseWriter = createTextWriter(getNewLineCharacter(printerOptions));
+        const baseWriter = textChanges.createWriter(getNewLineCharacter(printerOptions));
+        const printer = createPrinter(printerOptions, baseWriter);
         const writer: EmitTextWriter = {
             ...baseWriter,
             write: s => baseWriter.write(escapeSnippetText(s)),
@@ -1117,6 +1151,7 @@ namespace ts.Completions {
         kind: CompletionKind,
         preferences: UserPreferences,
         compilerOptions: CompilerOptions,
+        formatContext: formatting.FormatContext | undefined,
         isTypeOnlyLocation?: boolean,
         propertyAccessToConvert?: PropertyAccessExpression,
         jsxIdentifierExpected?: boolean,
@@ -1166,6 +1201,7 @@ namespace ts.Completions {
                 compilerOptions,
                 preferences,
                 kind,
+                formatContext,
             );
             if (!entry) {
                 continue;
@@ -1444,7 +1480,8 @@ namespace ts.Completions {
                 name,
                 symbol,
                 location,
-                contextToken);
+                contextToken,
+                formatContext);
             if (importAdder) {
                 const changes = textChanges.ChangeTracker.with(
                     { host, formatContext, preferences },

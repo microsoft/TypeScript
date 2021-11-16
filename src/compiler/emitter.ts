@@ -1940,7 +1940,7 @@ namespace ts {
                     emitPlaceholder(hint, node, snippet);
                     break;
                 case SnippetKind.TabStop:
-                    emitTabStop(snippet);
+                    emitTabStop(hint, node, snippet);
                     break;
             }
         }
@@ -1952,7 +1952,11 @@ namespace ts {
             // `${2:...}`
         }
 
-        function emitTabStop(snippet: TabStop) {
+        function emitTabStop(hint: EmitHint, node: Node, snippet: TabStop) {
+            Debug.assert(node.kind === SyntaxKind.EmptyStatement,
+                `A tab stop cannot be attached to a node of kind ${Debug.formatSyntaxKind(node.kind)}.`);
+            Debug.assert(hint !== EmitHint.EmbeddedStatement,
+                `A tab stop cannot be attached to an embedded statement.`);
             nonEscapingWrite(`\$${snippet.order}`);
         }
 
@@ -4109,9 +4113,13 @@ namespace ts {
         }
 
         function emitModifiers(node: Node, modifiers: NodeArray<Modifier> | undefined) {
-            if (modifiers && modifiers.length) {
-                emitList(node, modifiers, ListFormat.Modifiers);
-                writeSpace();
+            if (modifiers) {
+                onBeforeEmitNodeArray?.(modifiers);
+                if (modifiers.length) {
+                    emitList(node, modifiers, ListFormat.Modifiers);
+                    writeSpace();
+                }
+                onAfterEmitNodeArray?.(modifiers);
             }
         }
 

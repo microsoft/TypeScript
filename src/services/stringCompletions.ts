@@ -54,6 +54,7 @@ namespace ts.Completions.StringCompletions {
                     CompletionKind.String,
                     preferences,
                     options,
+                    /*formatContext*/ undefined,
                 ); // Target will not be used, so arbitrary
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
             }
