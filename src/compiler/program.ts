@@ -2023,20 +2023,24 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
-                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options) && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
-                const isPlainJs = !sourceFile.checkJsDirective && options.checkJs === undefined && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
+                const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+                const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+                const isPlainJs = isJs && !sourceFile.checkJsDirective && options.checkJs === undefined;
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
-                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
+                // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+                // - plain JS: .js files with no // ts-check and checkJs: undefined
+                // - check JS: .js files with either // ts-check or checkJs: true
+                // - external: files that are added by plugins
                 const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
                         || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 if (isPlainJs) {
-                    bindDiagnostics = bindDiagnostics.filter(d => plainJSErrors.has(d.code));
-                    checkDiagnostics = checkDiagnostics.filter(d => plainJSErrors.has(d.code));
+                    bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
+                    checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
                 }
-
+                // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
                 return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
