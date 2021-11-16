@@ -1604,6 +1604,7 @@ namespace ts {
                         return emitJSDocSignature(node as JSDocSignature);
                     case SyntaxKind.JSDocTag:
                     case SyntaxKind.JSDocClassTag:
+                    case SyntaxKind.JSDocOverrideTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:
@@ -1616,7 +1617,6 @@ namespace ts {
                     case SyntaxKind.JSDocPrivateTag:
                     case SyntaxKind.JSDocProtectedTag:
                     case SyntaxKind.JSDocReadonlyTag:
-                    case SyntaxKind.JSDocOverrideTag:
                         return;
                     case SyntaxKind.JSDocCallbackTag:
                         return emitJSDocCallbackTag(node as JSDocCallbackTag);

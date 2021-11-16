@@ -1,28 +1,27 @@
 /// <reference path='fourslash.ts' />
+
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
 // @noImplicitOverride: true
 // @filename: a.js
-//// class B {
-////     foo (v) {}
-//// }
+//// class B { }
 //// class D extends B {
-////     /** @public */
+////     /**
+////      * @public
+////      * @override
+////      */
 ////     foo (v) {}
 //// }
 
 verify.codeFix({
-    description: "Add 'override' modifier",
+    description: "Remove 'override' modifier",
     index: 0,
     newFileContent:
-`class B {
-    foo (v) {}
-}
+`class B { }
 class D extends B {
     /**
      * 
-     * @override
      */
     foo (v) {}
 }`,
