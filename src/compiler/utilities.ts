@@ -21,14 +21,6 @@ namespace ts {
     }
 
     /**
-     * Create a new escaped identifier map.
-     * @deprecated Use `new Map<__String, T>()` instead.
-     */
-    export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<__String, T>();
-    }
-
-    /**
      * @deprecated Use `!!map?.size` instead
      */
     export function hasEntries(map: ReadonlyCollection<any> | undefined): map is ReadonlyCollection<any> {
