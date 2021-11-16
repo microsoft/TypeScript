@@ -184,12 +184,6 @@ namespace ts {
             return value;
         }
 
-        /**
-         * @deprecated Use `checkEachDefined` to check whether the elements of an array are defined inline. Use `assertEachIsDefined` to check whether
-         * the elements of an array are defined at the statement level.
-         */
-        export const assertEachDefined = checkEachDefined;
-
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
             const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
