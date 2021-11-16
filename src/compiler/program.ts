@@ -3160,7 +3160,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            const isNightly = stringContains(version, "-dev");
+            const isNightly = stringContains(version, "-dev") || stringContains(version, "-insiders");
             if (!isNightly) {
                 if (getEmitModuleKind(options) === ModuleKind.Node12) {
                     createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "node12");
