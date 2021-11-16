@@ -41,7 +41,7 @@ function main(): void {
     const outputFilesDir = path.dirname(inputFilePath);
     const thisFilePathRel = path.relative(process.cwd(), outputFilesDir);
 
-    const infoFileOutput = buildInfoFileOutput(diagnosticMessages, "./diagnosticInformationMap.generated.ts", thisFilePathRel);
+    const infoFileOutput = buildInfoFileOutput(diagnosticMessages, `./${path.basename(inputFilePath)}`, thisFilePathRel);
     checkForUniqueCodes(diagnosticMessages);
     writeFile("diagnosticInformationMap.generated.ts", infoFileOutput);
 
