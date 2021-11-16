@@ -584,9 +584,9 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare var Number: NumberConstructor;
 
-interface TemplateStringsArray extends ReadonlyArray<string | undefined> {
-    readonly raw: readonly string[];
-}
+type TemplateStringsArray =
+	& readonly [string | undefined, ...(string | undefined)[]]
+	& { readonly raw: readonly [string, ...string[]] };
 
 /**
  * The type of `import.meta`.
