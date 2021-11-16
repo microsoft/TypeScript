@@ -131,7 +131,7 @@ namespace ts.codefix {
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
                         const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ undefined);
-                        addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
+                        changes.addJSDocTags(sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
                     importAdder.writeFixes(changes);
                     return parent;
@@ -271,7 +271,7 @@ namespace ts.codefix {
     }
 
     function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
-        addJSDocTags(changes, sourceFile, containingFunction, [
+        changes.addJSDocTags(sourceFile, containingFunction, [
             factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
         ]);
     }
@@ -311,7 +311,7 @@ namespace ts.codefix {
                 }
                 const typeExpression = factory.createJSDocTypeExpression(typeNode);
                 const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined) : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
-                addJSDocTags(changes, sourceFile, parent, [typeTag]);
+                changes.addJSDocTags(sourceFile, parent, [typeTag]);
             }
             else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
@@ -378,46 +378,7 @@ namespace ts.codefix {
         else {
             const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
                 factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, /*comment*/ undefined));
-            addJSDocTags(changes, sourceFile, signature, paramTags);
-        }
-    }
-
-    export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-        const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
-        const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
-        const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
-            const merged = tryMergeJsdocTags(tag, newTag);
-            if (merged) oldTags[i] = merged;
-            return !!merged;
-        }));
-        const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
-        const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
-        jsDocNode.jsDoc = parent.jsDoc;
-        jsDocNode.jsDocCache = parent.jsDocCache;
-        changes.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
-    }
-
-    function getJsDocNodeForArrowFunction(signature: ArrowFunction): HasJSDoc {
-        if (signature.parent.kind === SyntaxKind.PropertyDeclaration) {
-            return signature.parent as HasJSDoc;
-        }
-        return signature.parent.parent as HasJSDoc;
-    }
-
-    function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
-        if (oldTag.kind !== newTag.kind) {
-            return undefined;
-        }
-        switch (oldTag.kind) {
-            case SyntaxKind.JSDocParameterTag: {
-                const oldParam = oldTag as JSDocParameterTag;
-                const newParam = newTag as JSDocParameterTag;
-                return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
-                    : undefined;
-            }
-            case SyntaxKind.JSDocReturnTag:
-                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+            changes.addJSDocTags(sourceFile, signature, paramTags);
         }
     }
 
