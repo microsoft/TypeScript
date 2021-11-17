@@ -585,7 +585,7 @@ interface NumberConstructor {
 declare var Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string | undefined> {
-	readonly raw: readonly [string, ...string[]];
+    readonly raw: readonly [string, ...string[]];
 }
 
 /**
