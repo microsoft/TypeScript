@@ -6223,12 +6223,8 @@ namespace ts {
                             firstChar = symbolName.charCodeAt(0);
                         }
                         let expression: Expression | undefined;
-                        if (isSingleOrDoubleQuote(firstChar)) {
-                            expression = factory.createStringLiteral(
-                                symbolName
-                                    .substring(1, symbolName.length - 1)
-                                    .replace(/\\./g, s => s.substring(1)),
-                                firstChar === CharacterCodes.singleQuote);
+                        if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
+                           expression = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), firstChar === CharacterCodes.singleQuote);
                         }
                         else if (("" + +symbolName) === symbolName) {
                             expression = factory.createNumericLiteral(+symbolName);
