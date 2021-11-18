@@ -2035,10 +2035,9 @@ namespace ts {
                 const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
                         || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                let checkDiagnostics = includeBindAndCheckDiagnostics && !isPlainJs ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
                 if (isPlainJs) {
                     bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
-                    checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
                 }
                 // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
                 return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
