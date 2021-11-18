@@ -1279,7 +1279,7 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
+            const realpathSync = _fs.realpathSync.native;
 
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());

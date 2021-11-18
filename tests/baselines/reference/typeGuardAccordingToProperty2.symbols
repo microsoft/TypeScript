@@ -1,0 +1,57 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToProperty2.ts ===
+interface A {
+>A : Symbol(A, Decl(typeGuardAccordingToProperty2.ts, 0, 0))
+
+    kind: 'A';
+>kind : Symbol(A.kind, Decl(typeGuardAccordingToProperty2.ts, 0, 13))
+
+    symbol: object;
+>symbol : Symbol(A.symbol, Decl(typeGuardAccordingToProperty2.ts, 1, 14))
+
+    fileName: string;
+>fileName : Symbol(A.fileName, Decl(typeGuardAccordingToProperty2.ts, 2, 19))
+}
+
+interface B {
+>B : Symbol(B, Decl(typeGuardAccordingToProperty2.ts, 4, 1))
+
+    kind: 'B';
+>kind : Symbol(B.kind, Decl(typeGuardAccordingToProperty2.ts, 6, 13))
+}
+
+declare var s: A | B;
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+>A : Symbol(A, Decl(typeGuardAccordingToProperty2.ts, 0, 0))
+>B : Symbol(B, Decl(typeGuardAccordingToProperty2.ts, 4, 1))
+
+if (s.kind === 'A') {
+>s.kind : Symbol(kind, Decl(typeGuardAccordingToProperty2.ts, 0, 13), Decl(typeGuardAccordingToProperty2.ts, 6, 13))
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+>kind : Symbol(kind, Decl(typeGuardAccordingToProperty2.ts, 0, 13), Decl(typeGuardAccordingToProperty2.ts, 6, 13))
+
+    if (s.symbol) {     // this is a truthy condition, we could narrow it, but it has a property `symbol`, so do nothing.
+>s.symbol : Symbol(A.symbol, Decl(typeGuardAccordingToProperty2.ts, 1, 14))
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+>symbol : Symbol(A.symbol, Decl(typeGuardAccordingToProperty2.ts, 1, 14))
+
+        s;    // A
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+
+    } else {
+        s.fileName;  // A
+>s.fileName : Symbol(A.fileName, Decl(typeGuardAccordingToProperty2.ts, 2, 19))
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+>fileName : Symbol(A.fileName, Decl(typeGuardAccordingToProperty2.ts, 2, 19))
+    }
+
+    if (s) {    // this is another truthy condition, now it is alone, so narrow it.
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+
+        s; // A
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+
+    } else {
+        s; // never
+>s : Symbol(s, Decl(typeGuardAccordingToProperty2.ts, 10, 11))
+    }
+}

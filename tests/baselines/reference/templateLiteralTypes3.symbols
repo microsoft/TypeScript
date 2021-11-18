@@ -505,14 +505,12 @@ function reducer(action: Action) {
 >type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
 
         action.type;
->action.type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+>action.type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
 >action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
->type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
 
         action.response;
->action.response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
 >action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
->response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
     }
 }
 

@@ -1,0 +1,776 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToProperty.ts ===
+// Primitive value ---- boolean bigint number string symbol undefined function object
+// ts special type ---- any, void, unknown, union, intersection
+
+//// Property Access ---- a.b
+//// Element Access ---- a["b"]
+
+interface Boolean1 {
+    key: boolean;
+>key : boolean
+
+    b1: number;
+>b1 : number
+
+};
+
+interface Boolean2 {
+    key: boolean;
+>key : boolean
+
+    b2: number;
+>b2 : number
+
+};
+
+interface BigInt1 {
+    key: bigint;
+>key : bigint
+
+    bi1: number;
+>bi1 : number
+
+};
+
+interface Number1 {
+    key: number;
+>key : number
+
+    n1: number;
+>n1 : number
+
+};
+
+interface String1 {
+    key: string;
+>key : string
+
+    st1: number;
+>st1 : number
+}
+
+interface Symbol1 {
+    key: symbol;
+>key : symbol
+
+    sy1: number;
+>sy1 : number
+}
+
+interface Undefined1 {
+    key: undefined;
+>key : undefined
+
+    u1: number;
+>u1 : number
+}
+
+interface Function1 {
+    key: () => void;
+>key : () => void
+
+    f1: number;
+>f1 : number
+}
+
+interface Obejct1 {
+    key: {
+>key : { notEmpty: number; }
+
+        notEmpty: number;
+>notEmpty : number
+
+    };
+    o1: number;
+>o1 : number
+}
+
+type Union1 = Boolean1 | Boolean2 | Number1;
+>Union1 : Union1
+
+type Union2 = Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1;
+>Union2 : Union2
+
+function f1_1(u: Union1) {
+>f1_1 : (u: Union1) => void
+>u : Union1
+
+    if (typeof u.key !== 'boolean') {
+>typeof u.key !== 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : number | boolean
+>u : Union1
+>key : number | boolean
+>'boolean' : "boolean"
+
+        u;      // Number1
+>u : Number1
+
+        u.n1;   // number
+>u.n1 : number
+>u : Number1
+>n1 : number
+    }
+}
+function f1_2(u: Union1) {
+>f1_2 : (u: Union1) => void
+>u : Union1
+
+    if (typeof u.key === 'boolean') {
+>typeof u.key === 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : number | boolean
+>u : Union1
+>key : number | boolean
+>'boolean' : "boolean"
+
+        u;      // Bolean1 | Bolean2
+>u : Boolean1 | Boolean2
+
+        u.b1;   // Error
+>u.b1 : any
+>u : Boolean1 | Boolean2
+>b1 : any
+
+        u.b2;   // Error
+>u.b2 : any
+>u : Boolean1 | Boolean2
+>b2 : any
+    }
+}
+
+function f1ElementAccess_1(u: Union1) {
+>f1ElementAccess_1 : (u: Union1) => void
+>u : Union1
+
+    if (typeof u["key"] !== 'boolean') {
+>typeof u["key"] !== 'boolean' : boolean
+>typeof u["key"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u["key"] : number | boolean
+>u : Union1
+>"key" : "key"
+>'boolean' : "boolean"
+
+        u;      // Number1
+>u : Number1
+
+        u.n1;   // number
+>u.n1 : number
+>u : Number1
+>n1 : number
+    }
+}
+function f1ElementAccess_2(u: Union1) {
+>f1ElementAccess_2 : (u: Union1) => void
+>u : Union1
+
+    if (typeof u["key"] === 'boolean') {
+>typeof u["key"] === 'boolean' : boolean
+>typeof u["key"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u["key"] : number | boolean
+>u : Union1
+>"key" : "key"
+>'boolean' : "boolean"
+
+        u;      // Bolean1 | Bolean2
+>u : Boolean1 | Boolean2
+
+        u.b1;   // Error
+>u.b1 : any
+>u : Boolean1 | Boolean2
+>b1 : any
+
+        u.b2;   // Error
+>u.b2 : any
+>u : Boolean1 | Boolean2
+>b2 : any
+    }
+}
+
+function f1_Plus(u: Union1) {
+>f1_Plus : (u: Union1) => void
+>u : Union1
+
+    if (typeof u.key !== 'boolean') {
+>typeof u.key !== 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : number | boolean
+>u : Union1
+>key : number | boolean
+>'boolean' : "boolean"
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    u;  // Bolean1 | Bolean2
+>u : Boolean1 | Boolean2
+
+    if (typeof u.key === 'boolean') {
+>typeof u.key === 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : boolean
+>u : Boolean1 | Boolean2
+>key : boolean
+>'boolean' : "boolean"
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    u;  // never
+>u : never
+}
+
+// boolean bigint number string symbol undefined function object
+function f2_1(u: Union2) {
+>f2_1 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'bigint') {
+>typeof u.key === 'bigint' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'bigint' : "bigint"
+
+        u;      // BigInt1
+>u : BigInt1
+
+        u.bi1;
+>u.bi1 : number
+>u : BigInt1
+>bi1 : number
+    }
+    if (typeof u.key == 'bigint') {
+>typeof u.key == 'bigint' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'bigint' : "bigint"
+
+        u;      // BigInt1
+>u : BigInt1
+
+        u.bi1;
+>u.bi1 : number
+>u : BigInt1
+>bi1 : number
+    }
+}
+function f2_2(u: Union2) {
+>f2_2 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'boolean') {
+>typeof u.key === 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'boolean' : "boolean"
+
+        u;      // Boolean1
+>u : Boolean1
+
+        u.b1;
+>u.b1 : number
+>u : Boolean1
+>b1 : number
+    }
+    if (typeof u.key == 'boolean') {
+>typeof u.key == 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'boolean' : "boolean"
+
+        u;      // Boolean1
+>u : Boolean1
+
+        u.b1;
+>u.b1 : number
+>u : Boolean1
+>b1 : number
+    }
+}
+function f2_3(u: Union2) {
+>f2_3 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'number') {
+>typeof u.key === 'number' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'number' : "number"
+
+        u;      // Number1
+>u : Number1
+
+        u.n1;
+>u.n1 : number
+>u : Number1
+>n1 : number
+    }
+    if (typeof u.key == 'number') {
+>typeof u.key == 'number' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'number' : "number"
+
+        u;      // Number1
+>u : Number1
+
+        u.n1;
+>u.n1 : number
+>u : Number1
+>n1 : number
+    }
+}
+function f2_4(u: Union2) {
+>f2_4 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'string') {
+>typeof u.key === 'string' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'string' : "string"
+
+        u;      // String1
+>u : String1
+
+        u.st1;
+>u.st1 : number
+>u : String1
+>st1 : number
+    }
+    if (typeof u.key == 'string') {
+>typeof u.key == 'string' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'string' : "string"
+
+        u;      // String1
+>u : String1
+
+        u.st1;
+>u.st1 : number
+>u : String1
+>st1 : number
+    }
+}
+function f2_5(u: Union2) {
+>f2_5 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'symbol') {
+>typeof u.key === 'symbol' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'symbol' : "symbol"
+
+        u;      // Symbol1
+>u : Symbol1
+
+        u.sy1;
+>u.sy1 : number
+>u : Symbol1
+>sy1 : number
+    }
+    if (typeof u.key == 'symbol') {
+>typeof u.key == 'symbol' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'symbol' : "symbol"
+
+        u;      // Symbol1
+>u : Symbol1
+
+        u.sy1;
+>u.sy1 : number
+>u : Symbol1
+>sy1 : number
+    }
+}
+function f2_6(u: Union2) {
+>f2_6 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'undefined') {
+>typeof u.key === 'undefined' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'undefined' : "undefined"
+
+        u;      // Undefined1
+>u : Undefined1
+
+        u.u1
+>u.u1 : number
+>u : Undefined1
+>u1 : number
+    }
+    if (typeof u.key == 'undefined') {
+>typeof u.key == 'undefined' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'undefined' : "undefined"
+
+        u;      // Undefined1
+>u : Undefined1
+
+        u.u1
+>u.u1 : number
+>u : Undefined1
+>u1 : number
+    }
+}
+function f2_7(u: Union2) {
+>f2_7 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'function') {
+>typeof u.key === 'function' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'function' : "function"
+
+        u;      // Function1
+>u : Function1
+
+        u.f1;
+>u.f1 : number
+>u : Function1
+>f1 : number
+    }
+    if (typeof u.key == 'function') {
+>typeof u.key == 'function' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'function' : "function"
+
+        u;      // Function1
+>u : Function1
+
+        u.f1;
+>u.f1 : number
+>u : Function1
+>f1 : number
+    }
+}
+function f2_8(u: Union2) {
+>f2_8 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key === 'object') {
+>typeof u.key === 'object' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'object' : "object"
+
+        u;      // Object1
+>u : Obejct1
+
+        u.o1;
+>u.o1 : number
+>u : Obejct1
+>o1 : number
+    }
+    if (typeof u.key == 'object') {
+>typeof u.key == 'object' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'object' : "object"
+
+        u;      // Object1
+>u : Obejct1
+
+        u.o1;
+>u.o1 : number
+>u : Obejct1
+>o1 : number
+    }
+}
+
+function f2Not_1(u: Union2) {
+>f2Not_1 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'bigint') {
+>typeof u.key !== 'bigint' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'bigint' : "bigint"
+
+        u;      // not BigInt1
+>u : Boolean1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+    if (typeof u.key != 'bigint') {
+>typeof u.key != 'bigint' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'bigint' : "bigint"
+
+        u;      // not BigInt1
+>u : Boolean1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+}
+function f2Not_2(u: Union2) {
+>f2Not_2 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'boolean') {
+>typeof u.key !== 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'boolean' : "boolean"
+
+        u;      // not Boolean1
+>u : BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+    if (typeof u.key != 'boolean') {
+>typeof u.key != 'boolean' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'boolean' : "boolean"
+
+        u;      // not Boolean1
+>u : BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+}
+
+function f2Not_3(u: Union2) {
+>f2Not_3 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'number') {
+>typeof u.key !== 'number' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'number' : "number"
+
+        u;      // not Number1
+>u : Boolean1 | BigInt1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+    if (typeof u.key != 'number') {
+>typeof u.key != 'number' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'number' : "number"
+
+        u;      // not Number1
+>u : Boolean1 | BigInt1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+}
+
+function f2Not_4(u: Union2) {
+>f2Not_4 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'string') {
+>typeof u.key !== 'string' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'string' : "string"
+
+        u;      // not String1
+>u : Boolean1 | BigInt1 | Number1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+    if (typeof u.key != 'string') {
+>typeof u.key != 'string' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'string' : "string"
+
+        u;      // not String1
+>u : Boolean1 | BigInt1 | Number1 | Symbol1 | Undefined1 | Function1 | Obejct1
+    }
+}
+
+function f2Not_5(u: Union2) {
+>f2Not_5 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'symbol') {
+>typeof u.key !== 'symbol' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'symbol' : "symbol"
+
+        u;      // not Symbol1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Undefined1 | Function1 | Obejct1
+    }
+    if (typeof u.key != 'symbol') {
+>typeof u.key != 'symbol' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'symbol' : "symbol"
+
+        u;      // not Symbol1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Undefined1 | Function1 | Obejct1
+    }
+}
+
+function f2Not_6(u: Union2) {
+>f2Not_6 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'undefined') {
+>typeof u.key !== 'undefined' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'undefined' : "undefined"
+
+        u;      // not Undefined1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Function1 | Obejct1
+    }
+    if (typeof u.key != 'undefined') {
+>typeof u.key != 'undefined' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'undefined' : "undefined"
+
+        u;      // not Undefined1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Function1 | Obejct1
+    }
+}
+
+function f2Not_7(u: Union2) {
+>f2Not_7 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'function') {
+>typeof u.key !== 'function' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'function' : "function"
+
+        u;      // not Function1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Obejct1
+    }
+    if (typeof u.key != 'function') {
+>typeof u.key != 'function' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'function' : "function"
+
+        u;      // not Function1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Obejct1
+    }
+}
+
+function f2Not_8(u: Union2) {
+>f2Not_8 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.key !== 'object') {
+>typeof u.key !== 'object' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'object' : "object"
+
+        u;      // not Object1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1
+    }
+    if (typeof u.key != 'object') {
+>typeof u.key != 'object' : boolean
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>'object' : "object"
+
+        u;      // not Object1
+>u : Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1
+    }
+}
+
+interface A { x: string, y: string };
+>x : string
+>y : string
+
+interface B { x: number, y: number };
+>x : number
+>y : number
+
+type X = A | B;
+>X : X
+
+function f3(bar: X) {
+>f3 : (bar: X) => void
+>bar : X
+
+    if (typeof bar.x === 'string') {
+>typeof bar.x === 'string' : boolean
+>typeof bar.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>bar.x : string | number
+>bar : X
+>x : string | number
+>'string' : "string"
+
+        let y = bar.y; // string
+>y : string
+>bar.y : string
+>bar : A
+>y : string
+    }
+}
+

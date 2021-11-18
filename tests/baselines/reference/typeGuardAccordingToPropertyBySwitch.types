@@ -1,0 +1,397 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyBySwitch.ts ===
+// Primitive value ---- boolean bigint number string symbol undefined function object
+// ts special type ---- any, void, unknown, union, intersection
+
+//// Property Access ---- a.b
+//// Element Access ---- a["b"]
+
+interface Boolean1 {
+    key: boolean;
+>key : boolean
+
+    b1: number;
+>b1 : number
+
+};
+
+interface Boolean2 {
+    key: boolean;
+>key : boolean
+
+    b2: number;
+>b2 : number
+
+};
+
+interface BigInt1 {
+    key: bigint;
+>key : bigint
+
+    bi1: number;
+>bi1 : number
+
+};
+
+interface Number1 {
+    key: number;
+>key : number
+
+    n1: number;
+>n1 : number
+
+};
+
+interface String1 {
+    key: string;
+>key : string
+
+    st1: number;
+>st1 : number
+}
+
+interface Symbol1 {
+    key: symbol;
+>key : symbol
+
+    sy1: number;
+>sy1 : number
+}
+
+interface Undefined1 {
+    key: undefined;
+>key : undefined
+
+    u1: number;
+>u1 : number
+}
+
+interface Function1 {
+    key: () => void;
+>key : () => void
+
+    f1: number;
+>f1 : number
+}
+
+interface Obejct1 {
+    key: {
+>key : { notEmpty: number; }
+
+        notEmpty: number;
+>notEmpty : number
+
+    };
+    o1: number;
+>o1 : number
+}
+
+type Union1 = Boolean1 | Boolean2 | Number1;
+>Union1 : Union1
+
+type Union2 = Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1;
+>Union2 : Union2
+
+function f1_1(u: Union1) {
+>f1_1 : (u: Union1) => void
+>u : Union1
+
+    switch (typeof u.key) {
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : number | boolean
+>u : Union1
+>key : number | boolean
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+            u;    // Boolean1 | Boolean2
+>u : Boolean1 | Boolean2
+
+            break;
+        case 'number':
+>'number' : "number"
+
+            u;    // Number1
+>u : Number1
+
+            break;
+        default:
+            u;    // never
+>u : never
+
+            break;
+    }
+}
+
+function f1_2(u: Union1) {
+>f1_2 : (u: Union1) => void
+>u : Union1
+
+    switch (typeof u.key) {
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : number | boolean
+>u : Union1
+>key : number | boolean
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+            u;    // Boolean1 | Boolean2
+>u : Boolean1 | Boolean2
+
+            break;
+        default:
+            u;    // Number1
+>u : Number1
+
+            break;
+    }
+}
+
+
+function f1ElementAccess_1(u: Union1) {
+>f1ElementAccess_1 : (u: Union1) => void
+>u : Union1
+
+    if (typeof u["key"] !== 'boolean') {
+>typeof u["key"] !== 'boolean' : boolean
+>typeof u["key"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u["key"] : number | boolean
+>u : Union1
+>"key" : "key"
+>'boolean' : "boolean"
+
+        u;      // Number1
+>u : Number1
+
+        u.n1;   // number
+>u.n1 : number
+>u : Number1
+>n1 : number
+    }
+}
+
+// boolean bigint number string symbol undefined function object
+function f2_1(u: Union2) {
+>f2_1 : (u: Union2) => void
+>u : Union2
+
+    switch (typeof u.key) {
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+
+        case 'bigint':
+>'bigint' : "bigint"
+
+            u;  // Bigint1
+>u : BigInt1
+
+            break;
+        case 'boolean':
+>'boolean' : "boolean"
+
+            u;  // Boolean1
+>u : Boolean1
+
+            break;
+        case 'number':
+>'number' : "number"
+
+            u;  // Number1
+>u : Number1
+
+            break;
+        case 'string':
+>'string' : "string"
+
+            u;  // String1
+>u : String1
+
+            break;
+        case 'symbol':
+>'symbol' : "symbol"
+
+            u;  // Symbol1
+>u : Symbol1
+
+            break;
+        case 'undefined':
+>'undefined' : "undefined"
+
+            u;  // Undefined1
+>u : Undefined1
+
+            break;
+        case 'function':
+>'function' : "function"
+
+            u;  // Function1
+>u : Function1
+
+            break;
+        case 'object':
+>'object' : "object"
+
+            u;  // Object1
+>u : Obejct1
+
+            break;
+    }
+}
+
+function f2_2(u: Union2) {
+>f2_2 : (u: Union2) => void
+>u : Union2
+
+    switch (typeof u.key) {
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+
+        case 'bigint':
+>'bigint' : "bigint"
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+        case 'number':
+>'number' : "number"
+
+        case 'string':
+>'string' : "string"
+
+            u;  // Boolean1 | Number1 | BigInt1 | String1
+>u : Boolean1 | BigInt1 | Number1 | String1
+
+            break;
+        case 'symbol':
+>'symbol' : "symbol"
+
+        case 'undefined':
+>'undefined' : "undefined"
+
+        case 'function':
+>'function' : "function"
+
+        case 'object':
+>'object' : "object"
+
+            u;   // Symbol1 | Undefined1 | Function1 | Obejct1
+>u : Symbol1 | Undefined1 | Function1 | Obejct1
+
+            break;
+    }
+}
+
+function f2_3(u: Union2) {
+>f2_3 : (u: Union2) => void
+>u : Union2
+
+    switch (typeof u.key) {
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+
+        case 'bigint':
+>'bigint' : "bigint"
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+        case 'number':
+>'number' : "number"
+
+        case 'string':
+>'string' : "string"
+
+            u;  // Boolean1 | Number1 | BigInt1 | String1
+>u : Boolean1 | BigInt1 | Number1 | String1
+
+            break;
+        default:
+            u;  // Symbol1 | Undefined1 | Function1 | Obejct1
+>u : Symbol1 | Undefined1 | Function1 | Obejct1
+
+            break;
+    }
+}
+
+function f2_4(u: Union2) {
+>f2_4 : (u: Union2) => void
+>u : Union2
+
+    switch (typeof u.key) {
+>typeof u.key : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+>u : Union2
+>key : string | number | bigint | boolean | symbol | (() => void) | { notEmpty: number; } | undefined
+
+        case 'symbol':
+>'symbol' : "symbol"
+
+        case 'undefined':
+>'undefined' : "undefined"
+
+        case 'function':
+>'function' : "function"
+
+        case 'object':
+>'object' : "object"
+
+            u;  // Symbol1 | Undefined1 | Function1 | Obejct1
+>u : Symbol1 | Undefined1 | Function1 | Obejct1
+
+            break;
+        default:
+            u;  // Boolean1 | BigInt1 | Number1 | String1
+>u : Boolean1 | BigInt1 | Number1 | String1
+
+            break;
+    }
+}
+
+interface A { x: string, y: string };
+>x : string
+>y : string
+
+interface B { x: number, y: number };
+>x : number
+>y : number
+
+type X = A | B;
+>X : X
+
+function f3(bar: X) {
+>f3 : (bar: X) => void
+>bar : X
+
+    switch (typeof bar.x) {
+>typeof bar.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>bar.x : string | number
+>bar : X
+>x : string | number
+
+        case 'string':
+>'string' : "string"
+
+            let y = bar.y; // string
+>y : string
+>bar.y : string
+>bar : A
+>y : string
+
+            break;
+        default:
+            bar.y;
+>bar.y : number
+>bar : B
+>y : number
+
+            break;
+    }
+}
+

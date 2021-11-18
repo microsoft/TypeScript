@@ -1618,9 +1618,9 @@ function f23(o: Thing | undefined) {
 >"undefined" : "undefined"
 
         o.foo;  // Error
->o.foo : never
->o : Thing | undefined
->foo : never
+>o.foo : any
+>o : undefined
+>foo : any
     }
     else {
         o.foo;
@@ -1643,9 +1643,9 @@ function f23(o: Thing | undefined) {
     }
     else {
         o.foo;  // Error
->o.foo : never
->o : Thing | undefined
->foo : never
+>o.foo : any
+>o : undefined
+>foo : any
     }
     if (typeof o?.foo == "undefined") {
 >typeof o?.foo == "undefined" : boolean
@@ -1656,9 +1656,9 @@ function f23(o: Thing | undefined) {
 >"undefined" : "undefined"
 
         o.foo;  // Error
->o.foo : never
->o : Thing | undefined
->foo : never
+>o.foo : any
+>o : undefined
+>foo : any
     }
     else {
         o.foo;
@@ -1681,9 +1681,9 @@ function f23(o: Thing | undefined) {
     }
     else {
         o.foo;  // Error
->o.foo : never
->o : Thing | undefined
->foo : never
+>o.foo : any
+>o : undefined
+>foo : any
     }
 }
 
@@ -1852,15 +1852,15 @@ function f41(o: Thing | undefined) {
 >"undefined" : "undefined"
 
             o.foo;  // Error
->o.foo : never
->o : Thing | undefined
->foo : never
+>o.foo : any
+>o : undefined
+>foo : any
 
             break;
         default:
-            o.foo;  // Error
+            o.foo;
 >o.foo : never
->o : Thing | undefined
+>o : Thing
 >foo : never
 
             break;

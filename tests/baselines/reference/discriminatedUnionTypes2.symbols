@@ -366,10 +366,8 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 >value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
     }
     else {
-        x.value;  // number
->x.value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
+        x.value;  // Error, x is never
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 126, 14))
->value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 122, 23))
     }
 }
 

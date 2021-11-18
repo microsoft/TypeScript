@@ -503,13 +503,13 @@ function reducer(action: Action) {
 
         action.type;
 >action.type : "FOO_SUCCESS"
->action : { type: `${string}_SUCCESS`; response: string; }
+>action : Action
 >type : "FOO_SUCCESS"
 
         action.response;
->action.response : string
->action : { type: `${string}_SUCCESS`; response: string; }
->response : string
+>action.response : any
+>action : Action
+>response : any
     }
 }
 

@@ -1,0 +1,371 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyBySwitch.ts ===
+// Primitive value ---- boolean bigint number string symbol undefined function object
+// ts special type ---- any, void, unknown, union, intersection
+
+//// Property Access ---- a.b
+//// Element Access ---- a["b"]
+
+interface Boolean1 {
+>Boolean1 : Symbol(Boolean1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 0, 0))
+
+    key: boolean;
+>key : Symbol(Boolean1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20))
+
+    b1: number;
+>b1 : Symbol(Boolean1.b1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 7, 17))
+
+};
+
+interface Boolean2 {
+>Boolean2 : Symbol(Boolean2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 9, 2))
+
+    key: boolean;
+>key : Symbol(Boolean2.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 11, 20))
+
+    b2: number;
+>b2 : Symbol(Boolean2.b2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 12, 17))
+
+};
+
+interface BigInt1 {
+>BigInt1 : Symbol(BigInt1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 14, 2))
+
+    key: bigint;
+>key : Symbol(BigInt1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19))
+
+    bi1: number;
+>bi1 : Symbol(BigInt1.bi1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 17, 16))
+
+};
+
+interface Number1 {
+>Number1 : Symbol(Number1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 19, 2))
+
+    key: number;
+>key : Symbol(Number1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19))
+
+    n1: number;
+>n1 : Symbol(Number1.n1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 22, 16))
+
+};
+
+interface String1 {
+>String1 : Symbol(String1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 24, 2))
+
+    key: string;
+>key : Symbol(String1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19))
+
+    st1: number;
+>st1 : Symbol(String1.st1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 27, 16))
+}
+
+interface Symbol1 {
+>Symbol1 : Symbol(Symbol1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 29, 1))
+
+    key: symbol;
+>key : Symbol(Symbol1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19))
+
+    sy1: number;
+>sy1 : Symbol(Symbol1.sy1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 32, 16))
+}
+
+interface Undefined1 {
+>Undefined1 : Symbol(Undefined1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 34, 1))
+
+    key: undefined;
+>key : Symbol(Undefined1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 36, 22))
+
+    u1: number;
+>u1 : Symbol(Undefined1.u1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 37, 19))
+}
+
+interface Function1 {
+>Function1 : Symbol(Function1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 39, 1))
+
+    key: () => void;
+>key : Symbol(Function1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 41, 21))
+
+    f1: number;
+>f1 : Symbol(Function1.f1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 42, 20))
+}
+
+interface Obejct1 {
+>Obejct1 : Symbol(Obejct1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 44, 1))
+
+    key: {
+>key : Symbol(Obejct1.key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 46, 19))
+
+        notEmpty: number;
+>notEmpty : Symbol(notEmpty, Decl(typeGuardAccordingToPropertyBySwitch.ts, 47, 10))
+
+    };
+    o1: number;
+>o1 : Symbol(Obejct1.o1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 49, 6))
+}
+
+type Union1 = Boolean1 | Boolean2 | Number1;
+>Union1 : Symbol(Union1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 51, 1))
+>Boolean1 : Symbol(Boolean1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 0, 0))
+>Boolean2 : Symbol(Boolean2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 9, 2))
+>Number1 : Symbol(Number1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 19, 2))
+
+type Union2 = Boolean1 | BigInt1 | Number1 | String1 | Symbol1 | Undefined1 | Function1 | Obejct1;
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 53, 44))
+>Boolean1 : Symbol(Boolean1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 0, 0))
+>BigInt1 : Symbol(BigInt1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 14, 2))
+>Number1 : Symbol(Number1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 19, 2))
+>String1 : Symbol(String1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 24, 2))
+>Symbol1 : Symbol(Symbol1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 29, 1))
+>Undefined1 : Symbol(Undefined1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 34, 1))
+>Function1 : Symbol(Function1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 39, 1))
+>Obejct1 : Symbol(Obejct1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 44, 1))
+
+function f1_1(u: Union1) {
+>f1_1 : Symbol(f1_1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 54, 98))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 56, 14))
+>Union1 : Symbol(Union1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 51, 1))
+
+    switch (typeof u.key) {
+>u.key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 11, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 56, 14))
+>key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 11, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19))
+
+        case 'boolean':
+            u;    // Boolean1 | Boolean2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 56, 14))
+
+            break;
+        case 'number':
+            u;    // Number1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 56, 14))
+
+            break;
+        default:
+            u;    // never
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 56, 14))
+
+            break;
+    }
+}
+
+function f1_2(u: Union1) {
+>f1_2 : Symbol(f1_2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 68, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 70, 14))
+>Union1 : Symbol(Union1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 51, 1))
+
+    switch (typeof u.key) {
+>u.key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 11, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 70, 14))
+>key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 11, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19))
+
+        case 'boolean':
+            u;    // Boolean1 | Boolean2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 70, 14))
+
+            break;
+        default:
+            u;    // Number1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 70, 14))
+
+            break;
+    }
+}
+
+
+function f1ElementAccess_1(u: Union1) {
+>f1ElementAccess_1 : Symbol(f1ElementAccess_1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 79, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 82, 27))
+>Union1 : Symbol(Union1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 51, 1))
+
+    if (typeof u["key"] !== 'boolean') {
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 82, 27))
+>"key" : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 11, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19))
+
+        u;      // Number1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 82, 27))
+
+        u.n1;   // number
+>u.n1 : Symbol(Number1.n1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 22, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 82, 27))
+>n1 : Symbol(Number1.n1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 22, 16))
+    }
+}
+
+// boolean bigint number string symbol undefined function object
+function f2_1(u: Union2) {
+>f2_1 : Symbol(f2_1, Decl(typeGuardAccordingToPropertyBySwitch.ts, 87, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 53, 44))
+
+    switch (typeof u.key) {
+>u.key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+>key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+
+        case 'bigint':
+            u;  // Bigint1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'boolean':
+            u;  // Boolean1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'number':
+            u;  // Number1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'string':
+            u;  // String1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'symbol':
+            u;  // Symbol1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'undefined':
+            u;  // Undefined1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'function':
+            u;  // Function1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+        case 'object':
+            u;  // Object1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 90, 14))
+
+            break;
+    }
+}
+
+function f2_2(u: Union2) {
+>f2_2 : Symbol(f2_2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 117, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 119, 14))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 53, 44))
+
+    switch (typeof u.key) {
+>u.key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 119, 14))
+>key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+
+        case 'bigint':
+        case 'boolean':
+        case 'number':
+        case 'string':
+            u;  // Boolean1 | Number1 | BigInt1 | String1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 119, 14))
+
+            break;
+        case 'symbol':
+        case 'undefined':
+        case 'function':
+        case 'object':
+            u;   // Symbol1 | Undefined1 | Function1 | Obejct1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 119, 14))
+
+            break;
+    }
+}
+
+function f2_3(u: Union2) {
+>f2_3 : Symbol(f2_3, Decl(typeGuardAccordingToPropertyBySwitch.ts, 134, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 136, 14))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 53, 44))
+
+    switch (typeof u.key) {
+>u.key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 136, 14))
+>key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+
+        case 'bigint':
+        case 'boolean':
+        case 'number':
+        case 'string':
+            u;  // Boolean1 | Number1 | BigInt1 | String1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 136, 14))
+
+            break;
+        default:
+            u;  // Symbol1 | Undefined1 | Function1 | Obejct1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 136, 14))
+
+            break;
+    }
+}
+
+function f2_4(u: Union2) {
+>f2_4 : Symbol(f2_4, Decl(typeGuardAccordingToPropertyBySwitch.ts, 148, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 150, 14))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyBySwitch.ts, 53, 44))
+
+    switch (typeof u.key) {
+>u.key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 150, 14))
+>key : Symbol(key, Decl(typeGuardAccordingToPropertyBySwitch.ts, 6, 20), Decl(typeGuardAccordingToPropertyBySwitch.ts, 16, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 21, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 26, 19), Decl(typeGuardAccordingToPropertyBySwitch.ts, 31, 19) ... and 3 more)
+
+        case 'symbol':
+        case 'undefined':
+        case 'function':
+        case 'object':
+            u;  // Symbol1 | Undefined1 | Function1 | Obejct1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 150, 14))
+
+            break;
+        default:
+            u;  // Boolean1 | BigInt1 | Number1 | String1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyBySwitch.ts, 150, 14))
+
+            break;
+    }
+}
+
+interface A { x: string, y: string };
+>A : Symbol(A, Decl(typeGuardAccordingToPropertyBySwitch.ts, 162, 1))
+>x : Symbol(A.x, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 13))
+>y : Symbol(A.y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 24))
+
+interface B { x: number, y: number };
+>B : Symbol(B, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 37))
+>x : Symbol(B.x, Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 13))
+>y : Symbol(B.y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 24))
+
+type X = A | B;
+>X : Symbol(X, Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 37))
+>A : Symbol(A, Decl(typeGuardAccordingToPropertyBySwitch.ts, 162, 1))
+>B : Symbol(B, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 37))
+
+function f3(bar: X) {
+>f3 : Symbol(f3, Decl(typeGuardAccordingToPropertyBySwitch.ts, 166, 15))
+>bar : Symbol(bar, Decl(typeGuardAccordingToPropertyBySwitch.ts, 168, 12))
+>X : Symbol(X, Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 37))
+
+    switch (typeof bar.x) {
+>bar.x : Symbol(x, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 13), Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 13))
+>bar : Symbol(bar, Decl(typeGuardAccordingToPropertyBySwitch.ts, 168, 12))
+>x : Symbol(x, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 13), Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 13))
+
+        case 'string':
+            let y = bar.y; // string
+>y : Symbol(y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 171, 15))
+>bar.y : Symbol(A.y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 24))
+>bar : Symbol(bar, Decl(typeGuardAccordingToPropertyBySwitch.ts, 168, 12))
+>y : Symbol(A.y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 164, 24))
+
+            break;
+        default:
+            bar.y;
+>bar.y : Symbol(B.y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 24))
+>bar : Symbol(bar, Decl(typeGuardAccordingToPropertyBySwitch.ts, 168, 12))
+>y : Symbol(B.y, Decl(typeGuardAccordingToPropertyBySwitch.ts, 165, 24))
+
+            break;
+    }
+}
+

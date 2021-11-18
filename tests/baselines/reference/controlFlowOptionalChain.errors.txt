@@ -57,11 +57,10 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(463,9): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(498,13): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(501,13): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(515,13): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(518,13): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (61 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (60 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -697,9 +696,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
 !!! error TS2532: Object is possibly 'undefined'.
                 break;
             default:
-                o.foo;  // Error
-                ~
-!!! error TS2532: Object is possibly 'undefined'.
+                o.foo;
                 break;
         }
     }

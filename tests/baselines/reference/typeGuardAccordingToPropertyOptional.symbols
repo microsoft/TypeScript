@@ -1,0 +1,311 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyOptional.ts ===
+interface Foo1 {
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 0))
+
+    key1: {
+>key1 : Symbol(Foo1.key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16))
+
+        key2: number;
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11))
+
+    } | undefined;
+    f1: number;
+>f1 : Symbol(Foo1.f1, Decl(typeGuardAccordingToPropertyOptional.ts, 3, 18))
+}
+
+interface Foo2 {
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyOptional.ts, 5, 1))
+
+    key1: {
+>key1 : Symbol(Foo2.key1, Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+
+        key2: string
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+
+    } | undefined;
+    f2: number;
+>f2 : Symbol(Foo2.f2, Decl(typeGuardAccordingToPropertyOptional.ts, 10, 18))
+}
+
+interface Foo3 {
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyOptional.ts, 12, 1))
+
+    key1: {
+>key1 : Symbol(Foo3.key1, Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        key2: number;
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+    };
+    f2: number;
+>f2 : Symbol(Foo3.f2, Decl(typeGuardAccordingToPropertyOptional.ts, 17, 6))
+}
+type U1 = Foo1 | Foo2 | Foo3;
+>U1 : Symbol(U1, Decl(typeGuardAccordingToPropertyOptional.ts, 19, 1))
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyOptional.ts, 5, 1))
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyOptional.ts, 12, 1))
+
+type U2 = Foo1 | Foo2 | Foo3 | undefined;
+>U2 : Symbol(U2, Decl(typeGuardAccordingToPropertyOptional.ts, 20, 29))
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyOptional.ts, 5, 1))
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyOptional.ts, 12, 1))
+
+
+// unnecessary optional chain
+function f1(u: U1) {
+>f1 : Symbol(f1, Decl(typeGuardAccordingToPropertyOptional.ts, 21, 41))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+>U1 : Symbol(U1, Decl(typeGuardAccordingToPropertyOptional.ts, 19, 1))
+
+    if (typeof u?.key1 !== 'number') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  // U1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+    }
+    if (typeof u?.key1 === 'number') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  // never
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+    }
+    if (typeof u?.key1 !== 'undefined') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  // U1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+    }
+    if (typeof u?.key1 === 'undefined') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  // Foo1 | Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 25, 12))
+    }
+}
+
+// non-root optional chain
+function f2(u: U1) {
+>f2 : Symbol(f2, Decl(typeGuardAccordingToPropertyOptional.ts, 38, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+>U1 : Symbol(U1, Decl(typeGuardAccordingToPropertyOptional.ts, 19, 1))
+
+    if (typeof u.key1?.key2 !== 'number') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+    }
+    if (typeof u.key1?.key2 === 'number') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo3
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+    }
+    if (typeof u.key1?.key2 !== 'undefined') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //U1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+    }
+    if (typeof u.key1?.key2 === 'undefined') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 41, 12))
+    }
+}
+
+function f2Plus(u: U1) {
+>f2Plus : Symbol(f2Plus, Decl(typeGuardAccordingToPropertyOptional.ts, 54, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>U1 : Symbol(U1, Decl(typeGuardAccordingToPropertyOptional.ts, 19, 1))
+
+    if (typeof u.key1?.key2 === 'undefined' && typeof u.key1?.key2 === 'number') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+
+        u;    //should be never, but this should be a design limit?
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+    }
+    if (typeof u.key1?.key2 === 'undefined' || typeof u.key1?.key2 === 'number') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;    //U1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+    }
+    if (typeof u.key1?.key2 === 'number' && typeof u.key1?.key2 === 'undefined') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11))
+
+        u;    //should be never, but this should be a design limit?
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+    }
+    if (typeof u.key1?.key2 === 'number' || typeof u.key1?.key2 === 'undefined') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+
+        u;    //U1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+    }
+    if (typeof u.key1?.key2 === 'number' || typeof u.key1?.key2 !== 'undefined') {
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+>u.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11))
+
+        u;    //U1
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 56, 16))
+    }
+}
+
+// root optional chain
+function f3(u: U2) {
+>f3 : Symbol(f3, Decl(typeGuardAccordingToPropertyOptional.ts, 72, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+>U2 : Symbol(U2, Decl(typeGuardAccordingToPropertyOptional.ts, 20, 29))
+
+    if (typeof u?.key1 !== 'number') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  //U2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+    }
+    if (typeof u?.key1 === 'number') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  //never
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+    }
+    if (typeof u?.key1 !== 'undefined') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  //Foo1 | Foo2 | Foo3
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+    }
+    if (typeof u?.key1 === 'undefined') {
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+
+        u;  //Foo1 | Foo2 | Undefined
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 75, 12))
+    }
+}
+
+// multi optional chain
+function f4(u: U2) {
+>f4 : Symbol(f4, Decl(typeGuardAccordingToPropertyOptional.ts, 88, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+>U2 : Symbol(U2, Decl(typeGuardAccordingToPropertyOptional.ts, 20, 29))
+
+    if (typeof u?.key1?.key2 !== 'number') {
+>u?.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo2 | Undefined
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+    }
+    if (typeof u?.key1?.key2 === 'number') {
+>u?.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo3
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+    }
+    if (typeof u?.key1?.key2 !== 'undefined') {
+>u?.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo2 | Foo3
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+    }
+    if (typeof u?.key1?.key2 === 'undefined') {
+>u?.key1?.key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+>u?.key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+>key1 : Symbol(key1, Decl(typeGuardAccordingToPropertyOptional.ts, 0, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 7, 16), Decl(typeGuardAccordingToPropertyOptional.ts, 14, 16))
+>key2 : Symbol(key2, Decl(typeGuardAccordingToPropertyOptional.ts, 1, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 8, 11), Decl(typeGuardAccordingToPropertyOptional.ts, 15, 11))
+
+        u;  //Foo1 | Foo2 | Undefined
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyOptional.ts, 91, 12))
+    }
+}
+

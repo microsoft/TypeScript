@@ -2,9 +2,10 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(27,30): error TS
   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS2339: Property 'b' does not exist on type '{ a: 0; b: string; } | { a: T; c: number; }'.
   Property 'b' does not exist on type '{ a: T; c: number; }'.
+tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(132,11): error TS2339: Property 'value' does not exist on type 'never'.
 
 
-==== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts (2 errors) ====
+==== tests/cases/conformance/types/union/discriminatedUnionTypes2.ts (3 errors) ====
     function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
         if (x.kind === false) {
             x.a;
@@ -142,7 +143,9 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
             x.value;  // number
         }
         else {
-            x.value;  // number
+            x.value;  // Error, x is never
+              ~~~~~
+!!! error TS2339: Property 'value' does not exist on type 'never'.
         }
     }
     

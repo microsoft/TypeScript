@@ -1438,9 +1438,7 @@ function f23(o: Thing | undefined) {
 >foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
@@ -1460,9 +1458,7 @@ function f23(o: Thing | undefined) {
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     if (typeof o?.foo == "undefined") {
 >o?.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
@@ -1470,9 +1466,7 @@ function f23(o: Thing | undefined) {
 >foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
     else {
         o.foo;
@@ -1492,9 +1486,7 @@ function f23(o: Thing | undefined) {
     }
     else {
         o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 439, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
     }
 }
 
@@ -1636,13 +1628,11 @@ function f41(o: Thing | undefined) {
             break;
         case "undefined":
             o.foo;  // Error
->o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
->foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 
             break;
         default:
-            o.foo;  // Error
+            o.foo;
 >o.foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 505, 13))
 >foo : Symbol(foo, Decl(controlFlowOptionalChain.ts, 161, 14))

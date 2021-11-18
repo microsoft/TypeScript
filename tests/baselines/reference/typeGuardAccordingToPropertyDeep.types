@@ -1,0 +1,140 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyDeep.ts ===
+//// deep property access ---- a.b.c.d.e.f, a["b"]["c"]["d"]
+//// mix deep property access ---- a.b["c"]["d"].e
+
+interface Foo1 {
+    firstKey: number,
+>firstKey : number
+
+    inner: {
+>inner : { secondKey: number; f1: number; }
+
+        secondKey: number,
+>secondKey : number
+
+        f1: number
+>f1 : number
+    }
+}
+
+interface Foo2 {
+    firstKey: boolean,
+>firstKey : boolean
+
+    inner: {
+>inner : { secondKey: boolean; f2: number; }
+
+        secondKey: boolean,
+>secondKey : boolean
+
+        f2: number
+>f2 : number
+    }
+}
+
+interface Foo3 {
+    firstKey: string;
+>firstKey : string
+}
+
+type Union = Foo1 | Foo2 | Foo3;
+>Union : Union
+
+function f(u: Union) {
+>f : (u: Union) => void
+>u : Union
+
+    if (typeof u.firstKey === "number" || typeof u.firstKey === "boolean") {
+>typeof u.firstKey === "number" || typeof u.firstKey === "boolean" : boolean
+>typeof u.firstKey === "number" : boolean
+>typeof u.firstKey : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.firstKey : string | number | boolean
+>u : Union
+>firstKey : string | number | boolean
+>"number" : "number"
+>typeof u.firstKey === "boolean" : boolean
+>typeof u.firstKey : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.firstKey : string | boolean
+>u : Foo2 | Foo3
+>firstKey : string | boolean
+>"boolean" : "boolean"
+
+        u;  // Foo1 | Foo2
+>u : Foo1 | Foo2
+
+        if (typeof u.inner.secondKey === "boolean") {
+>typeof u.inner.secondKey === "boolean" : boolean
+>typeof u.inner.secondKey : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.inner.secondKey : number | boolean
+>u.inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>u : Foo1 | Foo2
+>inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>secondKey : number | boolean
+>"boolean" : "boolean"
+
+            u;  // Foo2
+>u : Foo2
+        }
+    }
+}
+
+type Union2 = Foo1 | Foo2;
+>Union2 : Union2
+
+function f2(u: Union2) {
+>f2 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u.inner["secondKey"] === "boolean") {
+>typeof u.inner["secondKey"] === "boolean" : boolean
+>typeof u.inner["secondKey"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.inner["secondKey"] : number | boolean
+>u.inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>u : Union2
+>inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>"secondKey" : "secondKey"
+>"boolean" : "boolean"
+
+        u;  // Foo2
+>u : Foo2
+    }
+}
+
+function f3(u: Union2) {
+>f3 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u["inner"]["secondKey"] === "boolean") {
+>typeof u["inner"]["secondKey"] === "boolean" : boolean
+>typeof u["inner"]["secondKey"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u["inner"]["secondKey"] : number | boolean
+>u["inner"] : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>u : Union2
+>"inner" : "inner"
+>"secondKey" : "secondKey"
+>"boolean" : "boolean"
+
+        u;  // Foo2
+>u : Foo2
+    }
+}
+
+function f4(u: Union2) {
+>f4 : (u: Union2) => void
+>u : Union2
+
+    if (typeof u["inner"].secondKey === "boolean") {
+>typeof u["inner"].secondKey === "boolean" : boolean
+>typeof u["inner"].secondKey : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u["inner"].secondKey : number | boolean
+>u["inner"] : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>u : Union2
+>"inner" : "inner"
+>secondKey : number | boolean
+>"boolean" : "boolean"
+
+        u;  // Foo2
+>u : Foo2
+    }
+}
+

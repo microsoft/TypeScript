@@ -1,0 +1,108 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyDeepBySwitch.ts ===
+interface Foo1 {
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 0, 0))
+
+    firstKey: number,
+>firstKey : Symbol(Foo1.firstKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 0, 16))
+
+    inner: {
+>inner : Symbol(Foo1.inner, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 1, 21))
+
+        secondKey: number,
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 2, 12))
+
+        f1: number
+>f1 : Symbol(f1, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 3, 26))
+    }
+}
+
+interface Foo2 {
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 6, 1))
+
+    firstKey: boolean,
+>firstKey : Symbol(Foo2.firstKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 8, 16))
+
+    inner: {
+>inner : Symbol(Foo2.inner, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 9, 22))
+
+        secondKey: boolean,
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 10, 12))
+
+        f2: number
+>f2 : Symbol(f2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 11, 27))
+    }
+}
+
+interface Foo3 {
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 14, 1))
+
+    firstKey: string;
+>firstKey : Symbol(Foo3.firstKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 16, 16))
+}
+
+type Union = Foo1 | Foo2 | Foo3;
+>Union : Symbol(Union, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 18, 1))
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 6, 1))
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 14, 1))
+
+function f(u: Union) {
+>f : Symbol(f, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 20, 32))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 22, 11))
+>Union : Symbol(Union, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 18, 1))
+
+    switch (typeof u.firstKey) {
+>u.firstKey : Symbol(firstKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 0, 16), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 8, 16), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 16, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 22, 11))
+>firstKey : Symbol(firstKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 0, 16), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 8, 16), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 16, 16))
+
+        case 'number':
+        case 'boolean':
+            u;
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 22, 11))
+
+            switch (typeof u.inner.secondKey) {
+>u.inner.secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 2, 12), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 10, 12))
+>u.inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 1, 21), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 9, 22))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 22, 11))
+>inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 1, 21), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 9, 22))
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 2, 12), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 10, 12))
+
+                case 'boolean':
+                    u;
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 22, 11))
+            }
+    }
+}
+
+type Union2 = Foo1 | Foo2;
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 32, 1))
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 6, 1))
+
+// fall through
+function f2(u: Union2) {
+>f2 : Symbol(f2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 34, 26))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 37, 12))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 32, 1))
+
+    switch (typeof u.inner["secondKey"]) {
+>u.inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 1, 21), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 9, 22))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 37, 12))
+>inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 1, 21), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 9, 22))
+>"secondKey" : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 2, 12), Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 10, 12))
+
+        case 'boolean':
+            u;  // never
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 37, 12))
+
+        case 'bigint':
+            u;  // Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 37, 12))
+
+        default:
+            u;  // Union2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeepBySwitch.ts, 37, 12))
+    }
+}
+

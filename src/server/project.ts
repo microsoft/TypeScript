@@ -307,7 +307,7 @@ namespace ts.server {
                     this.compilerOptions.types = [];
                     break;
                 default:
-                    Debug.assertNever(projectService.serverMode);
+                    throw new Error("never");
             }
 
             this.setInternalCompilerOptionsForEmittingJsFiles();

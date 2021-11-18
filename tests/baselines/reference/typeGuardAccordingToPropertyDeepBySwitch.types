@@ -1,0 +1,109 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyDeepBySwitch.ts ===
+interface Foo1 {
+    firstKey: number,
+>firstKey : number
+
+    inner: {
+>inner : { secondKey: number; f1: number; }
+
+        secondKey: number,
+>secondKey : number
+
+        f1: number
+>f1 : number
+    }
+}
+
+interface Foo2 {
+    firstKey: boolean,
+>firstKey : boolean
+
+    inner: {
+>inner : { secondKey: boolean; f2: number; }
+
+        secondKey: boolean,
+>secondKey : boolean
+
+        f2: number
+>f2 : number
+    }
+}
+
+interface Foo3 {
+    firstKey: string;
+>firstKey : string
+}
+
+type Union = Foo1 | Foo2 | Foo3;
+>Union : Union
+
+function f(u: Union) {
+>f : (u: Union) => void
+>u : Union
+
+    switch (typeof u.firstKey) {
+>typeof u.firstKey : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.firstKey : string | number | boolean
+>u : Union
+>firstKey : string | number | boolean
+
+        case 'number':
+>'number' : "number"
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+            u;
+>u : Foo1 | Foo2
+
+            switch (typeof u.inner.secondKey) {
+>typeof u.inner.secondKey : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.inner.secondKey : number | boolean
+>u.inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>u : Foo1 | Foo2
+>inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>secondKey : number | boolean
+
+                case 'boolean':
+>'boolean' : "boolean"
+
+                    u;
+>u : Foo2
+            }
+    }
+}
+
+type Union2 = Foo1 | Foo2;
+>Union2 : Union2
+
+// fall through
+function f2(u: Union2) {
+>f2 : (u: Union2) => void
+>u : Union2
+
+    switch (typeof u.inner["secondKey"]) {
+>typeof u.inner["secondKey"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>u.inner["secondKey"] : number | boolean
+>u.inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>u : Union2
+>inner : { secondKey: number; f1: number; } | { secondKey: boolean; f2: number; }
+>"secondKey" : "secondKey"
+
+        case 'boolean':
+>'boolean' : "boolean"
+
+            u;  // never
+>u : Foo2
+
+        case 'bigint':
+>'bigint' : "bigint"
+
+            u;  // Foo2
+>u : Foo2
+
+        default:
+            u;  // Union2
+>u : Union2
+    }
+}
+

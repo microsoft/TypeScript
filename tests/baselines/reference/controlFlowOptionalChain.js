@@ -516,7 +516,7 @@ function f41(o: Thing | undefined) {
             o.foo;  // Error
             break;
         default:
-            o.foo;  // Error
+            o.foo;
             break;
     }
 }
@@ -1049,7 +1049,7 @@ function f41(o) {
             o.foo; // Error
             break;
         default:
-            o.foo; // Error
+            o.foo;
             break;
     }
 }

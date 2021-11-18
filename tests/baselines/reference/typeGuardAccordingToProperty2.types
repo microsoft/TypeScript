@@ -1,0 +1,53 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToProperty2.ts ===
+interface A {
+    kind: 'A';
+>kind : "A"
+
+    symbol: object;
+>symbol : object
+
+    fileName: string;
+>fileName : string
+}
+
+interface B {
+    kind: 'B';
+>kind : "B"
+}
+
+declare var s: A | B;
+>s : A | B
+
+if (s.kind === 'A') {
+>s.kind === 'A' : boolean
+>s.kind : "A" | "B"
+>s : A | B
+>kind : "A" | "B"
+>'A' : "A"
+
+    if (s.symbol) {     // this is a truthy condition, we could narrow it, but it has a property `symbol`, so do nothing.
+>s.symbol : object
+>s : A
+>symbol : object
+
+        s;    // A
+>s : A
+
+    } else {
+        s.fileName;  // A
+>s.fileName : string
+>s : A
+>fileName : string
+    }
+
+    if (s) {    // this is another truthy condition, now it is alone, so narrow it.
+>s : A
+
+        s; // A
+>s : A
+
+    } else {
+        s; // never
+>s : never
+    }
+}

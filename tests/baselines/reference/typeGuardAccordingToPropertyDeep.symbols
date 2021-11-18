@@ -1,0 +1,132 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardAccordingToPropertyDeep.ts ===
+//// deep property access ---- a.b.c.d.e.f, a["b"]["c"]["d"]
+//// mix deep property access ---- a.b["c"]["d"].e
+
+interface Foo1 {
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyDeep.ts, 0, 0))
+
+    firstKey: number,
+>firstKey : Symbol(Foo1.firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 3, 16))
+
+    inner: {
+>inner : Symbol(Foo1.inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21))
+
+        secondKey: number,
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12))
+
+        f1: number
+>f1 : Symbol(f1, Decl(typeGuardAccordingToPropertyDeep.ts, 6, 26))
+    }
+}
+
+interface Foo2 {
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyDeep.ts, 9, 1))
+
+    firstKey: boolean,
+>firstKey : Symbol(Foo2.firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 11, 16))
+
+    inner: {
+>inner : Symbol(Foo2.inner, Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+
+        secondKey: boolean,
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+
+        f2: number
+>f2 : Symbol(f2, Decl(typeGuardAccordingToPropertyDeep.ts, 14, 27))
+    }
+}
+
+interface Foo3 {
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyDeep.ts, 17, 1))
+
+    firstKey: string;
+>firstKey : Symbol(Foo3.firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 19, 16))
+}
+
+type Union = Foo1 | Foo2 | Foo3;
+>Union : Symbol(Union, Decl(typeGuardAccordingToPropertyDeep.ts, 21, 1))
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyDeep.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyDeep.ts, 9, 1))
+>Foo3 : Symbol(Foo3, Decl(typeGuardAccordingToPropertyDeep.ts, 17, 1))
+
+function f(u: Union) {
+>f : Symbol(f, Decl(typeGuardAccordingToPropertyDeep.ts, 23, 32))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 25, 11))
+>Union : Symbol(Union, Decl(typeGuardAccordingToPropertyDeep.ts, 21, 1))
+
+    if (typeof u.firstKey === "number" || typeof u.firstKey === "boolean") {
+>u.firstKey : Symbol(firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 3, 16), Decl(typeGuardAccordingToPropertyDeep.ts, 11, 16), Decl(typeGuardAccordingToPropertyDeep.ts, 19, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 25, 11))
+>firstKey : Symbol(firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 3, 16), Decl(typeGuardAccordingToPropertyDeep.ts, 11, 16), Decl(typeGuardAccordingToPropertyDeep.ts, 19, 16))
+>u.firstKey : Symbol(firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 11, 16), Decl(typeGuardAccordingToPropertyDeep.ts, 19, 16))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 25, 11))
+>firstKey : Symbol(firstKey, Decl(typeGuardAccordingToPropertyDeep.ts, 11, 16), Decl(typeGuardAccordingToPropertyDeep.ts, 19, 16))
+
+        u;  // Foo1 | Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 25, 11))
+
+        if (typeof u.inner.secondKey === "boolean") {
+>u.inner.secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12), Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+>u.inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21), Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 25, 11))
+>inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21), Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12), Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+
+            u;  // Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 25, 11))
+        }
+    }
+}
+
+type Union2 = Foo1 | Foo2;
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyDeep.ts, 32, 1))
+>Foo1 : Symbol(Foo1, Decl(typeGuardAccordingToPropertyDeep.ts, 0, 0))
+>Foo2 : Symbol(Foo2, Decl(typeGuardAccordingToPropertyDeep.ts, 9, 1))
+
+function f2(u: Union2) {
+>f2 : Symbol(f2, Decl(typeGuardAccordingToPropertyDeep.ts, 34, 26))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 36, 12))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyDeep.ts, 32, 1))
+
+    if (typeof u.inner["secondKey"] === "boolean") {
+>u.inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21), Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 36, 12))
+>inner : Symbol(inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21), Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+>"secondKey" : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12), Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+
+        u;  // Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 36, 12))
+    }
+}
+
+function f3(u: Union2) {
+>f3 : Symbol(f3, Decl(typeGuardAccordingToPropertyDeep.ts, 40, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 42, 12))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyDeep.ts, 32, 1))
+
+    if (typeof u["inner"]["secondKey"] === "boolean") {
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 42, 12))
+>"inner" : Symbol(inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21), Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+>"secondKey" : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12), Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+
+        u;  // Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 42, 12))
+    }
+}
+
+function f4(u: Union2) {
+>f4 : Symbol(f4, Decl(typeGuardAccordingToPropertyDeep.ts, 46, 1))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 48, 12))
+>Union2 : Symbol(Union2, Decl(typeGuardAccordingToPropertyDeep.ts, 32, 1))
+
+    if (typeof u["inner"].secondKey === "boolean") {
+>u["inner"].secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12), Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 48, 12))
+>"inner" : Symbol(inner, Decl(typeGuardAccordingToPropertyDeep.ts, 4, 21), Decl(typeGuardAccordingToPropertyDeep.ts, 12, 22))
+>secondKey : Symbol(secondKey, Decl(typeGuardAccordingToPropertyDeep.ts, 5, 12), Decl(typeGuardAccordingToPropertyDeep.ts, 13, 12))
+
+        u;  // Foo2
+>u : Symbol(u, Decl(typeGuardAccordingToPropertyDeep.ts, 48, 12))
+    }
+}
+

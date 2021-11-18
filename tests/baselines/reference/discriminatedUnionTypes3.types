@@ -1,4 +1,226 @@
 === tests/cases/conformance/types/union/discriminatedUnionTypes3.ts ===
+type A = { type2: "a", a: number }
+>A : A
+>type2 : "a"
+>a : number
+
+type B = { type2: "b", b: number }
+>B : B
+>type2 : "b"
+>b : number
+
+type C = { type2: "c", b: number | string }
+>C : C
+>type2 : "c"
+>b : string | number
+
+type X = { type1: A, x: string }
+>X : X
+>type1 : A
+>x : string
+
+type Y = { type1: B, y: string }
+>Y : Y
+>type1 : B
+>y : string
+
+type Z = { type1: C, z: string }
+>Z : Z
+>type1 : C
+>z : string
+
+type W = { type1: undefined }
+>W : W
+>type1 : undefined
+
+function f32(x: X | Y) {
+>f32 : (x: X | Y) => void
+>x : X | Y
+
+    switch (x.type1.type2) {
+>x.type1.type2 : "a" | "b"
+>x.type1 : A | B
+>x : X | Y
+>type1 : A | B
+>type2 : "a" | "b"
+
+        case "a":
+>"a" : "a"
+
+            x.x // typeof x is X
+>x.x : string
+>x : X
+>x : string
+
+            break;
+        case "b":
+>"b" : "b"
+
+            x.y // typeof x is Y
+>x.y : string
+>x : Y
+>y : string
+
+            break;
+    }
+}
+
+function f33(x: A | B) {
+>f33 : (x: A | B) => void
+>x : A | B
+
+    switch (x.type2) {
+>x.type2 : "a" | "b"
+>x : A | B
+>type2 : "a" | "b"
+
+        case "a":
+>"a" : "a"
+
+            x // typeof x is X
+>x : A
+
+            break;
+        case "b":
+>"b" : "b"
+
+            x // typeof x is Y
+>x : B
+
+            break;
+    }
+}
+
+function f34(x: X | Y) {
+>f34 : (x: X | Y) => void
+>x : X | Y
+
+    if (x.type1.type2 === "a") {
+>x.type1.type2 === "a" : boolean
+>x.type1.type2 : "a" | "b"
+>x.type1 : A | B
+>x : X | Y
+>type1 : A | B
+>type2 : "a" | "b"
+>"a" : "a"
+
+        x.x // typeof x is X
+>x.x : string
+>x : X
+>x : string
+
+    } else if (x.type1.type2 === "b") {
+>x.type1.type2 === "b" : boolean
+>x.type1.type2 : "b"
+>x.type1 : B
+>x : Y
+>type1 : B
+>type2 : "b"
+>"b" : "b"
+
+        x.y // typeof x is Y
+>x.y : string
+>x : Y
+>y : string
+    }
+}
+
+function f35(x: X | W) {
+>f35 : (x: X | W) => void
+>x : X | W
+
+    if (x.type1?.type2 === "a") {
+>x.type1?.type2 === "a" : boolean
+>x.type1?.type2 : "a" | undefined
+>x.type1 : A | undefined
+>x : X | W
+>type1 : A | undefined
+>type2 : "a" | undefined
+>"a" : "a"
+
+        x.x
+>x.x : string
+>x : X
+>x : string
+    }
+}
+
+function f36(x: X | W) {
+>f36 : (x: X | W) => void
+>x : X | W
+
+    x.type1?.type2 ?? x;
+>x.type1?.type2 ?? x : "a" | W
+>x.type1?.type2 : "a" | undefined
+>x.type1 : A | undefined
+>x : X | W
+>type1 : A | undefined
+>type2 : "a" | undefined
+>x : W
+}
+
+type S = { sub: { type0: X }, s: string }
+>S : S
+>sub : { type0: X; }
+>type0 : X
+>s : string
+
+type T = { sub: { type0: Y }, t: string }
+>T : T
+>sub : { type0: Y; }
+>type0 : Y
+>t : string
+
+function f37(s: S | T) {
+>f37 : (s: S | T) => void
+>s : S | T
+
+    if (s.sub.type0.type1.type2 === "a") {
+>s.sub.type0.type1.type2 === "a" : boolean
+>s.sub.type0.type1.type2 : "a" | "b"
+>s.sub.type0.type1 : A | B
+>s.sub.type0 : X | Y
+>s.sub : { type0: X; } | { type0: Y; }
+>s : S | T
+>sub : { type0: X; } | { type0: Y; }
+>type0 : X | Y
+>type1 : A | B
+>type2 : "a" | "b"
+>"a" : "a"
+
+        s.s // typeof s is S
+>s.s : string
+>s : S
+>s : string
+
+        s.sub.type0.x // type of s.sub.type is X
+>s.sub.type0.x : string
+>s.sub.type0 : X
+>s.sub : { type0: X; }
+>s : S
+>sub : { type0: X; }
+>type0 : X
+>x : string
+
+        s.sub.type0.type1.a // type of s.sub.type.type is A
+>s.sub.type0.type1.a : number
+>s.sub.type0.type1 : A
+>s.sub.type0 : X
+>s.sub : { type0: X; }
+>s : S
+>sub : { type0: X; }
+>type0 : X
+>type1 : A
+>a : number
+
+    } else {
+        s.s // type error!
+>s.s : any
+>s : T
+>s : any
+    }
+}
+
 // Repro from #44435
 
 type Correct = {
@@ -36,7 +258,8 @@ if (example.err === undefined) {
 >undefined : undefined
 
 	example.property;  // true
->example.property : true
->example : Correct
->property : true
+>example.property : any
+>example : SomeReturnType
+>property : any
 }
+

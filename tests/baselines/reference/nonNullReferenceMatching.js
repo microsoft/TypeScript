@@ -10,6 +10,14 @@ type ComponentProps = {
     thumbXProps: ThumbProps;
 }
 
+type ThumbProps2 = {
+    elementRef: ElementRef | null;
+}
+
+type ComponentProps2 = {
+    thumbYProps: ThumbProps2 | null;
+}
+
 class Component {
     props!: ComponentProps;
     public thumbYElementRef = (ref: HTMLElement | null) => {
@@ -33,6 +41,17 @@ class Component {
     };
 }
 
+class Component2 {
+    props!: ComponentProps2;
+    public thumbYElementRef = (ref: HTMLElement | null) => {
+        typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);
+
+        typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref);
+
+        typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref);
+    }
+}
+
 //// [nonNullReferenceMatching.js]
 "use strict";
 var Component = /** @class */ (function () {
@@ -51,4 +70,15 @@ var Component = /** @class */ (function () {
         };
     }
     return Component;
+}());
+var Component2 = /** @class */ (function () {
+    function Component2() {
+        var _this = this;
+        this.thumbYElementRef = function (ref) {
+            typeof _this.props.thumbYProps.elementRef === 'function' && _this.props.thumbYProps.elementRef(ref);
+            typeof (_this.props.thumbYProps.elementRef) === 'function' && _this.props.thumbYProps.elementRef(ref);
+            typeof ((_this.props).thumbYProps.elementRef) === 'function' && _this.props.thumbYProps.elementRef(ref);
+        };
+    }
+    return Component2;
 }());

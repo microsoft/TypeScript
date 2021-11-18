@@ -1,42 +1,261 @@
 === tests/cases/conformance/types/union/discriminatedUnionTypes3.ts ===
+type A = { type2: "a", a: number }
+>A : Symbol(A, Decl(discriminatedUnionTypes3.ts, 0, 0))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10))
+>a : Symbol(a, Decl(discriminatedUnionTypes3.ts, 0, 22))
+
+type B = { type2: "b", b: number }
+>B : Symbol(B, Decl(discriminatedUnionTypes3.ts, 0, 34))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 1, 10))
+>b : Symbol(b, Decl(discriminatedUnionTypes3.ts, 1, 22))
+
+type C = { type2: "c", b: number | string }
+>C : Symbol(C, Decl(discriminatedUnionTypes3.ts, 1, 34))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 2, 10))
+>b : Symbol(b, Decl(discriminatedUnionTypes3.ts, 2, 22))
+
+type X = { type1: A, x: string }
+>X : Symbol(X, Decl(discriminatedUnionTypes3.ts, 2, 43))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10))
+>A : Symbol(A, Decl(discriminatedUnionTypes3.ts, 0, 0))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+
+type Y = { type1: B, y: string }
+>Y : Symbol(Y, Decl(discriminatedUnionTypes3.ts, 4, 32))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 5, 10))
+>B : Symbol(B, Decl(discriminatedUnionTypes3.ts, 0, 34))
+>y : Symbol(y, Decl(discriminatedUnionTypes3.ts, 5, 20))
+
+type Z = { type1: C, z: string }
+>Z : Symbol(Z, Decl(discriminatedUnionTypes3.ts, 5, 32))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 6, 10))
+>C : Symbol(C, Decl(discriminatedUnionTypes3.ts, 1, 34))
+>z : Symbol(z, Decl(discriminatedUnionTypes3.ts, 6, 20))
+
+type W = { type1: undefined }
+>W : Symbol(W, Decl(discriminatedUnionTypes3.ts, 6, 32))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 7, 10))
+
+function f32(x: X | Y) {
+>f32 : Symbol(f32, Decl(discriminatedUnionTypes3.ts, 7, 29))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 9, 13))
+>X : Symbol(X, Decl(discriminatedUnionTypes3.ts, 2, 43))
+>Y : Symbol(Y, Decl(discriminatedUnionTypes3.ts, 4, 32))
+
+    switch (x.type1.type2) {
+>x.type1.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 5, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 9, 13))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 5, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+
+        case "a":
+            x.x // typeof x is X
+>x.x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 9, 13))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+
+            break;
+        case "b":
+            x.y // typeof x is Y
+>x.y : Symbol(y, Decl(discriminatedUnionTypes3.ts, 5, 20))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 9, 13))
+>y : Symbol(y, Decl(discriminatedUnionTypes3.ts, 5, 20))
+
+            break;
+    }
+}
+
+function f33(x: A | B) {
+>f33 : Symbol(f33, Decl(discriminatedUnionTypes3.ts, 18, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 20, 13))
+>A : Symbol(A, Decl(discriminatedUnionTypes3.ts, 0, 0))
+>B : Symbol(B, Decl(discriminatedUnionTypes3.ts, 0, 34))
+
+    switch (x.type2) {
+>x.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 20, 13))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+
+        case "a":
+            x // typeof x is X
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 20, 13))
+
+            break;
+        case "b":
+            x // typeof x is Y
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 20, 13))
+
+            break;
+    }
+}
+
+function f34(x: X | Y) {
+>f34 : Symbol(f34, Decl(discriminatedUnionTypes3.ts, 29, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 31, 13))
+>X : Symbol(X, Decl(discriminatedUnionTypes3.ts, 2, 43))
+>Y : Symbol(Y, Decl(discriminatedUnionTypes3.ts, 4, 32))
+
+    if (x.type1.type2 === "a") {
+>x.type1.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 5, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 31, 13))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 5, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+
+        x.x // typeof x is X
+>x.x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 31, 13))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+
+    } else if (x.type1.type2 === "b") {
+>x.type1.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 1, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 5, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 31, 13))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 5, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 1, 10))
+
+        x.y // typeof x is Y
+>x.y : Symbol(y, Decl(discriminatedUnionTypes3.ts, 5, 20))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 31, 13))
+>y : Symbol(y, Decl(discriminatedUnionTypes3.ts, 5, 20))
+    }
+}
+
+function f35(x: X | W) {
+>f35 : Symbol(f35, Decl(discriminatedUnionTypes3.ts, 37, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 39, 13))
+>X : Symbol(X, Decl(discriminatedUnionTypes3.ts, 2, 43))
+>W : Symbol(W, Decl(discriminatedUnionTypes3.ts, 6, 32))
+
+    if (x.type1?.type2 === "a") {
+>x.type1?.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 7, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 39, 13))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 7, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10))
+
+        x.x
+>x.x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 39, 13))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+    }
+}
+
+function f36(x: X | W) {
+>f36 : Symbol(f36, Decl(discriminatedUnionTypes3.ts, 43, 1))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 45, 13))
+>X : Symbol(X, Decl(discriminatedUnionTypes3.ts, 2, 43))
+>W : Symbol(W, Decl(discriminatedUnionTypes3.ts, 6, 32))
+
+    x.type1?.type2 ?? x;
+>x.type1?.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10))
+>x.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 7, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 45, 13))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 7, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 45, 13))
+}
+
+type S = { sub: { type0: X }, s: string }
+>S : Symbol(S, Decl(discriminatedUnionTypes3.ts, 47, 1))
+>sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17))
+>X : Symbol(X, Decl(discriminatedUnionTypes3.ts, 2, 43))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 49, 29))
+
+type T = { sub: { type0: Y }, t: string }
+>T : Symbol(T, Decl(discriminatedUnionTypes3.ts, 49, 41))
+>sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 50, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 50, 17))
+>Y : Symbol(Y, Decl(discriminatedUnionTypes3.ts, 4, 32))
+>t : Symbol(t, Decl(discriminatedUnionTypes3.ts, 50, 29))
+
+function f37(s: S | T) {
+>f37 : Symbol(f37, Decl(discriminatedUnionTypes3.ts, 50, 41))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 52, 13))
+>S : Symbol(S, Decl(discriminatedUnionTypes3.ts, 47, 1))
+>T : Symbol(T, Decl(discriminatedUnionTypes3.ts, 49, 41))
+
+    if (s.sub.type0.type1.type2 === "a") {
+>s.sub.type0.type1.type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+>s.sub.type0.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 5, 10))
+>s.sub.type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17), Decl(discriminatedUnionTypes3.ts, 50, 17))
+>s.sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10), Decl(discriminatedUnionTypes3.ts, 50, 10))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 52, 13))
+>sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10), Decl(discriminatedUnionTypes3.ts, 50, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17), Decl(discriminatedUnionTypes3.ts, 50, 17))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10), Decl(discriminatedUnionTypes3.ts, 5, 10))
+>type2 : Symbol(type2, Decl(discriminatedUnionTypes3.ts, 0, 10), Decl(discriminatedUnionTypes3.ts, 1, 10))
+
+        s.s // typeof s is S
+>s.s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 49, 29))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 52, 13))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 49, 29))
+
+        s.sub.type0.x // type of s.sub.type is X
+>s.sub.type0.x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+>s.sub.type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17))
+>s.sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 52, 13))
+>sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17))
+>x : Symbol(x, Decl(discriminatedUnionTypes3.ts, 4, 20))
+
+        s.sub.type0.type1.a // type of s.sub.type.type is A
+>s.sub.type0.type1.a : Symbol(a, Decl(discriminatedUnionTypes3.ts, 0, 22))
+>s.sub.type0.type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10))
+>s.sub.type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17))
+>s.sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10))
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 52, 13))
+>sub : Symbol(sub, Decl(discriminatedUnionTypes3.ts, 49, 10))
+>type0 : Symbol(type0, Decl(discriminatedUnionTypes3.ts, 49, 17))
+>type1 : Symbol(type1, Decl(discriminatedUnionTypes3.ts, 4, 10))
+>a : Symbol(a, Decl(discriminatedUnionTypes3.ts, 0, 22))
+
+    } else {
+        s.s // type error!
+>s : Symbol(s, Decl(discriminatedUnionTypes3.ts, 52, 13))
+    }
+}
+
 // Repro from #44435
 
 type Correct = {
->Correct : Symbol(Correct, Decl(discriminatedUnionTypes3.ts, 0, 0))
+>Correct : Symbol(Correct, Decl(discriminatedUnionTypes3.ts, 60, 1))
 
 	code: string
->code : Symbol(code, Decl(discriminatedUnionTypes3.ts, 2, 16))
+>code : Symbol(code, Decl(discriminatedUnionTypes3.ts, 64, 16))
 
 	property: true
->property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 3, 13))
+>property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 65, 13))
 
 	err: undefined
->err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 4, 15))
+>err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 66, 15))
 }
 type Err = {
->Err : Symbol(Err, Decl(discriminatedUnionTypes3.ts, 6, 1))
+>Err : Symbol(Err, Decl(discriminatedUnionTypes3.ts, 68, 1))
 
 	err: `${string} is wrong!`
->err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 7, 12))
+>err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 69, 12))
 }
 type SomeReturnType = Correct | Err;
->SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 9, 1))
->Correct : Symbol(Correct, Decl(discriminatedUnionTypes3.ts, 0, 0))
->Err : Symbol(Err, Decl(discriminatedUnionTypes3.ts, 6, 1))
+>SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 71, 1))
+>Correct : Symbol(Correct, Decl(discriminatedUnionTypes3.ts, 60, 1))
+>Err : Symbol(Err, Decl(discriminatedUnionTypes3.ts, 68, 1))
 
 const example: SomeReturnType = {} as SomeReturnType;
->example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 12, 5))
->SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 9, 1))
->SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 9, 1))
+>example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 74, 5))
+>SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 71, 1))
+>SomeReturnType : Symbol(SomeReturnType, Decl(discriminatedUnionTypes3.ts, 71, 1))
 
 if (example.err === undefined) {
->example.err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 4, 15), Decl(discriminatedUnionTypes3.ts, 7, 12))
->example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 12, 5))
->err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 4, 15), Decl(discriminatedUnionTypes3.ts, 7, 12))
+>example.err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 66, 15), Decl(discriminatedUnionTypes3.ts, 69, 12))
+>example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 74, 5))
+>err : Symbol(err, Decl(discriminatedUnionTypes3.ts, 66, 15), Decl(discriminatedUnionTypes3.ts, 69, 12))
 >undefined : Symbol(undefined)
 
 	example.property;  // true
->example.property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 3, 13))
->example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 12, 5))
->property : Symbol(property, Decl(discriminatedUnionTypes3.ts, 3, 13))
+>example : Symbol(example, Decl(discriminatedUnionTypes3.ts, 74, 5))
 }
+

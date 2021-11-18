@@ -798,7 +798,7 @@ namespace ts.server {
                     );
                     break;
                 default:
-                    Debug.assertNever(this.projectService.serverMode);
+                    throw new Error("never");
             }
         }
 
@@ -1512,6 +1512,7 @@ namespace ts.server {
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
             if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
+                // @ts-ignore
                 this.projectService.logErrorForScriptInfoNotFound(args.file ?? args.projectFileName);
                 return Errors.ThrowNoProject();
             }
