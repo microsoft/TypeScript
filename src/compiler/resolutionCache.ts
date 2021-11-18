@@ -619,7 +619,7 @@ namespace ts {
         ) {
             if (resolution.refCount) {
                 resolution.refCount++;
-                Debug.assertDefined(resolution.files);
+                Debug.assertIsDefined(resolution.files);
             }
             else {
                 resolution.refCount = 1;
@@ -696,7 +696,7 @@ namespace ts {
             filePath: Path,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
         ) {
-            unorderedRemoveItem(Debug.assertDefined(resolution.files), filePath);
+            unorderedRemoveItem(Debug.checkDefined(resolution.files), filePath);
             resolution.refCount!--;
             if (resolution.refCount) {
                 return;
@@ -798,7 +798,7 @@ namespace ts {
             for (const resolution of resolutions) {
                 if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
                 resolution.isInvalidated = invalidated = true;
-                for (const containingFilePath of Debug.assertDefined(resolution.files)) {
+                for (const containingFilePath of Debug.checkDefined(resolution.files)) {
                     (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
                     hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);

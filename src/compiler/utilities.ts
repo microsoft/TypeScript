@@ -20,21 +20,6 @@ namespace ts {
         return undefined;
     }
 
-    /**
-     * Create a new escaped identifier map.
-     * @deprecated Use `new Map<__String, T>()` instead.
-     */
-    export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<__String, T>();
-    }
-
-    /**
-     * @deprecated Use `!!map?.size` instead
-     */
-    export function hasEntries(map: ReadonlyCollection<any> | undefined): map is ReadonlyCollection<any> {
-        return !!map && !!map.size;
-    }
-
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
         const result = new Map<__String, Symbol>();
         if (symbols) {
@@ -6993,18 +6978,6 @@ namespace ts {
         }
         return { min, max };
     }
-
-    /** @deprecated Use `ReadonlySet<TNode>` instead. */
-    export type ReadonlyNodeSet<TNode extends Node> = ReadonlySet<TNode>;
-
-    /** @deprecated Use `Set<TNode>` instead. */
-    export type NodeSet<TNode extends Node> = Set<TNode>;
-
-    /** @deprecated Use `ReadonlyMap<TNode, TValue>` instead. */
-    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyESMap<TNode, TValue>;
-
-    /** @deprecated Use `Map<TNode, TValue>` instead. */
-    export type NodeMap<TNode extends Node, TValue> = ESMap<TNode, TValue>;
 
     export function rangeOfNode(node: Node): TextRange {
         return { pos: getTokenPosOfNode(node), end: node.end };
