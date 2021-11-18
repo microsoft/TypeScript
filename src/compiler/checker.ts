@@ -43560,7 +43560,7 @@ namespace ts {
         function checkNumericLiteralValueSize(node: NumericLiteral) {
             // We should test against `getTextOfNode(node)` rather than `node.text`, because `node.text` for large numeric literals can contain "."
             // e.g. `node.text` for numeric literal `1100000000000000000000` is `1.1e21`.
-            const isFractional = getTextOfNode(node).includes(".");
+            const isFractional = getTextOfNode(node).indexOf(".") !== -1;
             const isScientific = node.numericLiteralFlags & TokenFlags.Scientific;
 
             // Scientific notation (e.g. 2e54 and 1e00000000010) can't be converted to bigint
