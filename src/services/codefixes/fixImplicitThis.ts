@@ -26,9 +26,9 @@ namespace ts.codefix {
         if (!isFunctionDeclaration(fn) && !isFunctionExpression(fn)) return undefined;
 
         if (!isSourceFile(getThisContainer(fn, /*includeArrowFunctions*/ false))) { // 'this' is defined outside, convert to arrow function
-            const fnKeyword = Debug.assertDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
+            const fnKeyword = Debug.checkDefined(findChildOfKind(fn, SyntaxKind.FunctionKeyword, sourceFile));
             const { name } = fn;
-            const body = Debug.assertDefined(fn.body); // Should be defined because the function contained a 'this' expression
+            const body = Debug.checkDefined(fn.body); // Should be defined because the function contained a 'this' expression
             if (isFunctionExpression(fn)) {
                 if (name && FindAllReferences.Core.isSymbolReferencedInFile(name, checker, sourceFile, body)) {
                     // Function expression references itself. To fix we would have to extract it to a const.

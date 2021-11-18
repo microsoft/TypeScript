@@ -23,34 +23,6 @@ namespace ts {
     export const emptyMap: ReadonlyESMap<never, never> = new Map<never, never>();
     export const emptySet: ReadonlySet<never> = new Set<never>();
 
-    /**
-     * Create a new map.
-     * @deprecated Use `new Map()` instead.
-     */
-    export function createMap<K, V>(): ESMap<K, V>;
-    export function createMap<T>(): ESMap<string, T>;
-    export function createMap<K, V>(): ESMap<K, V> {
-        return new Map<K, V>();
-    }
-
-    /**
-     * Create a new map from a template object is provided, the map will copy entries from it.
-     * @deprecated Use `new Map(getEntries(template))` instead.
-     */
-    export function createMapFromTemplate<T>(template: MapLike<T>): ESMap<string, T> {
-        const map: ESMap<string, T> = new Map<string, T>();
-
-        // Copies keys/values from template. Note that for..in will not throw if
-        // template is undefined, and instead will just exit the loop.
-        for (const key in template) {
-            if (hasOwnProperty.call(template, key)) {
-                map.set(key, template[key]);
-            }
-        }
-
-        return map;
-    }
-
     export function length(array: readonly any[] | undefined): number {
         return array ? array.length : 0;
     }
