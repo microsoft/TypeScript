@@ -7414,7 +7414,7 @@ namespace ts {
     export function escapeSnippetText(text: string): string {
         return text.replace(/\$/gm, "\\$");
     }
-    
+
     /**
      * A free identifier is an identifier that can be accessed through name lookup as a local variable.
      * In the expression `x.y`, `x` is a free identifier, but `y` is not.
