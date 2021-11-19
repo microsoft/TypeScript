@@ -121,7 +121,14 @@ fs2_(...s_, ...s_, ...s_); // error on ...s_
 >...s_ : string
 >s_ : string[]
 
-// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_(...s2, ...s_); // error on ...s_
+>fs2n_(...s2, ...s_) : void
+>fs2n_ : (a: string, b: string, ...c: number[]) => void
+>...s2 : string
+>s2 : [string, string]
+>...s_ : string
+>s_ : string[]
+
 fs2n_(...s2_); // error on ...s2_
 >fs2n_(...s2_) : void
 >fs2n_ : (a: string, b: string, ...c: number[]) => void

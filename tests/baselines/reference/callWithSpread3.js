@@ -22,7 +22,7 @@ fs2_(...s_); // error on ...s_
 fs2_(...s2n_); // error on ...s2n_
 fs2_(...s_, ...s_); // error on ...s_
 fs2_(...s_, ...s_, ...s_); // error on ...s_
-// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_(...s2, ...s_); // error on ...s_
 fs2n_(...s2_); // error on ...s2_
 
 // ok
@@ -57,7 +57,7 @@ fs2_.apply(void 0, s_); // error on ...s_
 fs2_.apply(void 0, s2n_); // error on ...s2n_
 fs2_.apply(void 0, __spreadArray(__spreadArray([], s_, false), s_, false)); // error on ...s_
 fs2_.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], s_, false), s_, false), s_, false)); // error on ...s_
-// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_.apply(void 0, __spreadArray(__spreadArray([], s2, false), s_, false)); // error on ...s_
 fs2n_.apply(void 0, s2_); // error on ...s2_
 // ok
 fs2_.apply(void 0, s2_);

@@ -8,11 +8,12 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(20,6): erro
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(21,6): error TS2599: Argument of type 'number' is not assignable to parameter at position 2 of type 'string'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(22,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(23,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(24,14): error TS2599: Argument of type 'string' is not assignable to parameter at position 2 of type 'number'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): error TS2599: Argument of type 'string' is not assignable to parameter at position 2 of type 'number'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (12 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (13 errors) ====
     declare const s2: [string, string];
     declare const s3: [string, string, string];
     declare const s2_: [string, string, ...string[]];
@@ -56,7 +57,9 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,6): erro
     fs2_(...s_, ...s_, ...s_); // error on ...s_
          ~~~~~
 !!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-    // fs2n_(...s2, ...s_); //           FIXME: should be a type error
+    fs2n_(...s2, ...s_); // error on ...s_
+                 ~~~~~
+!!! error TS2599: Argument of type 'string' is not assignable to parameter at position 2 of type 'number'.
     fs2n_(...s2_); // error on ...s2_
           ~~~~~~
 !!! error TS2599: Argument of type 'string' is not assignable to parameter at position 2 of type 'number'.
