@@ -293,8 +293,13 @@ namespace ts.JsTyping {
                 const ownTypes = packageJson.types || packageJson.typings;
                 if (ownTypes) {
                     const absolutePath = getNormalizedAbsolutePath(ownTypes, getDirectoryPath(normalizedFileName));
-                    if (log) log(`    Package '${packageJson.name}' provides its own types.`);
-                    inferredTypings.set(packageJson.name, absolutePath);
+                    if (host.fileExists(absolutePath)) {
+                        if (log) log(`    Package '${packageJson.name}' provides its own types.`);
+                        inferredTypings.set(packageJson.name, absolutePath);
+                    }
+                    else {
+                         if (log) log(`    Package '${packageJson.name}' provides its own types but they are missing.`);
+                    }
                 }
                 else {
                     packageNames.push(packageJson.name);
