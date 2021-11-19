@@ -344,7 +344,7 @@ namespace ts.formatting {
     }
 
     export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number, formatContext: FormatContext): TextChange[] {
-        const range = { pos: 0, end: sourceFileLike.text.length };
+        const range = { pos: node.pos, end: node.end };
         return getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner => formatSpanWorker(
             range,
             node,
@@ -435,6 +435,25 @@ namespace ts.formatting {
                 if (options.trimTrailingWhitespace !== false) {
                     trimTrailingWhitespacesForRemainingRange(leadingTrivia);
                 }
+            }
+        }
+
+        if (previousRange! && formattingScanner.getStartPos() >= originalRange.end) {
+            const token =
+                formattingScanner.isOnEOF() ? formattingScanner.readEOFTokenRange() :
+                formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(enclosingNode).token :
+                undefined;
+
+            if (token) {
+                processPair(
+                    token,
+                    sourceFile.getLineAndCharacterOfPosition(token.pos).line,
+                    enclosingNode,
+                    previousRange,
+                    previousRangeStartLine!,
+                    previousParent!,
+                    enclosingNode,
+                    /*dynamicIndentation*/ undefined);
             }
         }
 
@@ -653,27 +672,12 @@ namespace ts.formatting {
                 });
 
             // proceed any tokens in the node that are located after child nodes
-            while (formattingScanner.isOnToken()) {
+            while (formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
                 const tokenInfo = formattingScanner.readTokenInfo(node);
-                if (tokenInfo.token.end > node.end) {
+                if (tokenInfo.token.end > Math.min(node.end, originalRange.end)) {
                     break;
                 }
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation, node);
-            }
-
-            if (!node.parent && formattingScanner.isOnEOF()) {
-                const token = formattingScanner.readEOFTokenRange();
-                if (token.end <= node.end && previousRange) {
-                    processPair(
-                        token,
-                        sourceFile.getLineAndCharacterOfPosition(token.pos).line,
-                        node,
-                        previousRange,
-                        previousRangeStartLine,
-                        previousParent,
-                        contextNode,
-                        nodeDynamicIndentation);
-                }
             }
 
             function processChildNode(
@@ -717,9 +721,12 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                while (formattingScanner.isOnToken()) {
+                while (formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
                     // proceed any parent tokens that are located prior to child.getStart()
                     const tokenInfo = formattingScanner.readTokenInfo(node);
+                    if (tokenInfo.token.end > originalRange.end) {
+                        return inheritedIndentation;
+                    }
                     if (tokenInfo.token.end > childStartPos) {
                         if (tokenInfo.token.pos > childStartPos) {
                             formattingScanner.skipToStartOf(child);
@@ -731,7 +738,7 @@ namespace ts.formatting {
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, node);
                 }
 
-                if (!formattingScanner.isOnToken()) {
+                if (!formattingScanner.isOnToken() || formattingScanner.getStartPos() >= originalRange.end) {
                     return inheritedIndentation;
                 }
 
@@ -773,7 +780,7 @@ namespace ts.formatting {
 
                 if (listStartToken !== SyntaxKind.Unknown) {
                     // introduce a new indentation scope for lists (including list start and end tokens)
-                    while (formattingScanner.isOnToken()) {
+                    while (formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
                         const tokenInfo = formattingScanner.readTokenInfo(parent);
                         if (tokenInfo.token.end > nodes.pos) {
                             // stop when formatting scanner moves past the beginning of node list
@@ -814,7 +821,7 @@ namespace ts.formatting {
                 }
 
                 const listEndToken = getCloseTokenForOpenToken(listStartToken);
-                if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken()) {
+                if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
                     let tokenInfo: TokenInfo | undefined = formattingScanner.readTokenInfo(parent);
                     if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
                         const commaTokenLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
@@ -969,7 +976,7 @@ namespace ts.formatting {
             previousStartLine: number,
             previousParent: Node,
             contextNode: Node,
-            dynamicIndentation: DynamicIndentation): LineAction {
+            dynamicIndentation: DynamicIndentation | undefined): LineAction {
 
             formattingContext.updateContext(previousItem, previousParent, currentItem, currentParent, contextNode);
 
@@ -982,24 +989,26 @@ namespace ts.formatting {
                 // win in a conflict with lower priority rules.
                 forEachRight(rules, rule => {
                     lineAction = applyRuleEdits(rule, previousItem, previousStartLine, currentItem, currentStartLine);
-                    switch (lineAction) {
-                        case LineAction.LineRemoved:
-                            // Handle the case where the next line is moved to be the end of this line.
-                            // In this case we don't indent the next line in the next pass.
-                            if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false, contextNode);
-                            }
-                            break;
-                        case LineAction.LineAdded:
-                            // Handle the case where token2 is moved to the new line.
-                            // In this case we indent token2 in the next pass but we set
-                            // sameLineIndent flag to notify the indenter that the indentation is within the line.
-                            if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true, contextNode);
-                            }
-                            break;
-                        default:
-                            Debug.assert(lineAction === LineAction.None);
+                    if (dynamicIndentation) {
+                        switch (lineAction) {
+                            case LineAction.LineRemoved:
+                                // Handle the case where the next line is moved to be the end of this line.
+                                // In this case we don't indent the next line in the next pass.
+                                if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                                    dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false, contextNode);
+                                }
+                                break;
+                            case LineAction.LineAdded:
+                                // Handle the case where token2 is moved to the new line.
+                                // In this case we indent token2 in the next pass but we set
+                                // sameLineIndent flag to notify the indenter that the indentation is within the line.
+                                if (currentParent.getStart(sourceFile) === currentItem.pos) {
+                                    dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true, contextNode);
+                                }
+                                break;
+                            default:
+                                Debug.assert(lineAction === LineAction.None);
+                        }
                     }
 
                     // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
