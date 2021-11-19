@@ -57,7 +57,7 @@ var ElementsArray = /** @class */ (function (_super) {
 _b = ElementsArray;
 (function () {
     var superisArray = _super.isArray;
-    var customIsArray = function (arg) { return superisArray(arg); };
+    var customIsArray = function customIsArray(arg) { return superisArray(arg); };
     _b.isArray = customIsArray;
 })();
 ElementsArray.isArray(new ElementsArray());
