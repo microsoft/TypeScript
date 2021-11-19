@@ -6387,7 +6387,7 @@ namespace ts {
             sourceMapText = mapTextOrStripInternal as string;
         }
         const node = oldFileOfCurrentEmit ?
-            parseOldFileOfCurrentEmit(Debug.assertDefined(bundleFileInfo)) :
+            parseOldFileOfCurrentEmit(Debug.checkDefined(bundleFileInfo)) :
             parseUnparsedSourceFile(bundleFileInfo, stripInternal, length);
         node.fileName = fileName;
         node.sourceMapPath = sourceMapPath;
@@ -6587,13 +6587,13 @@ namespace ts {
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
-            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationPath = Debug.checkDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
             node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
-                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationText: { get() { return definedTextGetter(Debug.checkDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
                 buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });

@@ -2112,7 +2112,7 @@ namespace ts.server {
         private getFullNavigateToItems(args: protocol.NavtoRequestArgs): CombineOutputResult<NavigateToItem> {
             const { currentFileOnly, searchValue, maxResultCount, projectFileName } = args;
             if (currentFileOnly) {
-                Debug.assertDefined(args.file);
+                Debug.assertIsDefined(args.file);
                 const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
                 return [{ project, result: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
             }
