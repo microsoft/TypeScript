@@ -110,7 +110,6 @@ namespace ts {
         }
 
         export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
-            debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((Error as any).captureStackTrace) {
                 (Error as any).captureStackTrace(e, stackCrawlMark || fail);
