@@ -818,6 +818,25 @@ namespace ts {
         }
     }
 
+    /** @internal */
+    export const plainJSErrors: Set<number> = new Set([
+        Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
+        Diagnostics.A_module_cannot_have_multiple_default_exports.code,
+        Diagnostics.Another_export_default_is_here.code,
+        Diagnostics.The_first_export_default_is_here.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here.code,
+        Diagnostics.constructor_is_a_reserved_word.code,
+        Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode.code,
+        Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode.code,
+        Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
+        Diagnostics.Invalid_use_of_0_in_strict_mode.code,
+        Diagnostics.A_label_is_not_allowed_here.code,
+        Diagnostics.Octal_literals_are_not_allowed_in_strict_mode.code,
+        Diagnostics.with_statements_are_not_allowed_in_strict_mode.code,
+    ]);
+
     /**
      * Determine if source file needs to be re-created even if its text hasn't changed
      */
@@ -1577,6 +1596,7 @@ namespace ts {
                 newSourceFile.originalFileName = oldSourceFile.originalFileName;
                 newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
                 newSourceFile.fileName = oldSourceFile.fileName;
+                newSourceFile.impliedNodeFormat = oldSourceFile.impliedNodeFormat;
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
                 if (packageName !== undefined) {
@@ -2004,15 +2024,24 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
-                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
+                const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+                const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+                const isPlainJs = isJs && !sourceFile.checkJsDirective && options.checkJs === undefined;
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
-                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                    || sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
-                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+                // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+                // - plain JS: .js files with no // ts-check and checkJs: undefined
+                // - check JS: .js files with either // ts-check or checkJs: true
+                // - external: files that are added by plugins
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                        || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                const checkDiagnostics = includeBindAndCheckDiagnostics && !isPlainJs ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                if (isPlainJs) {
+                    bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
+                }
+                // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
+                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
 
@@ -3160,7 +3189,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            const isNightly = stringContains(version, "-dev");
+            const isNightly = stringContains(version, "-dev") || stringContains(version, "-insiders");
             if (!isNightly) {
                 if (getEmitModuleKind(options) === ModuleKind.Node12) {
                     createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "node12");
