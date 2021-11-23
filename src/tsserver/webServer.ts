@@ -44,7 +44,7 @@ namespace ts.server {
             logger: createLogger(),
             cancellationToken: nullCancellationToken,
             // Webserver defaults to partial semantic mode
-            serverMode: serverMode ?? LanguageServiceMode.PartialSemantic,
+            serverMode: serverMode ?? LanguageServiceMode.Semantic,
             unknownServerMode,
             startSession: startWebSession
         };

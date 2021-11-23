@@ -186,14 +186,20 @@ namespace ts.server {
         readonly moduleVersion: string
         readonly vfsPath: string
         readonly path: string
-    };
+    }
 
     interface NPMTreeMeta {
         readonly default: string;
         readonly files: readonly { readonly name: string }[];
         readonly moduleName: string;
         readonly version: string;
-    };
+    }
+
+    interface ATAError {
+        readonly error: Error;
+        readonly userFacingMessage: string;
+    }
+
 
     /**
      * Typings installer that runs in browsers. Stores typings files in memory.
@@ -205,6 +211,8 @@ namespace ts.server {
         private projectService?: ProjectService;
 
         private readonly fsMap = new Map<string, string>();
+
+        private readonly acquiredTypings = new Map<string, Promise<NPMTreeMeta | ATAError>>();
 
         constructor(
             private readonly logger: Logger
@@ -264,9 +272,22 @@ namespace ts.server {
 
         // #endregion
 
-        private async installDeps(p: Project, depsToGet: readonly { module: string; version: undefined; }[]) {
+        private async installDeps(p: Project, depsToGet: readonly { readonly module: string; readonly version: undefined; }[]) {
+            const existingDepsTasks = depsToGet.map(async dep => {
+                await this.acquiredTypings.get(dep.module);
+            });
+
+            const newDeps = depsToGet.filter(dep => !this.acquiredTypings.has(dep.module));
+
+            const installTasks: Promise<NPMTreeMeta | ATAError>[] = [];
+            for (const dep of newDeps) {
+                const task = this.getFileTreeForModuleWithTag(dep.module, dep.version);
+                installTasks.push(task);
+                this.acquiredTypings.set(dep.module, task);
+            }
+
             // Grab the module trees which gives us a list of files to download
-            const trees = await Promise.all(depsToGet.map(f => this.getFileTreeForModuleWithTag(f.module, f.version)));
+            const trees = await Promise.all(installTasks);
             const treesOnly = trees.filter(t => !("error" in t)) as NPMTreeMeta[];
 
             // These are the modules which we can grab directly
@@ -305,8 +326,9 @@ namespace ts.server {
             }
 
             // Grab all dts files
-            await Promise.all(
-                allDTSFiles.map(async (dts) => {
+            await Promise.all([
+                ...existingDepsTasks,
+                ...allDTSFiles.map(async (dts) => {
                     const dtsCode = await this.getDTSFileForModuleWithVersion(dts.moduleName, dts.moduleVersion, dts.path);
                     if (dtsCode instanceof Error) {
                         this.logger.info(`Had an issue getting ${dts.path} for ${dts.moduleName}`);
@@ -321,7 +343,7 @@ namespace ts.server {
                         this.fsMap.set(dts.vfsPath, dtsCode);
                     }
                 })
-            );
+            ]);
         }
 
         private async getDTSFileForModuleWithVersion(moduleName: string, version: string, file: string) {
@@ -361,7 +383,7 @@ namespace ts.server {
         }
 
         private async getFileTreeForModuleWithTag(moduleName: string, tag: string | undefined
-        ) {
+        ): Promise<NPMTreeMeta | ATAError> {
             let toDownload = tag || "latest";
 
             // I think having at least 2 dots is a reasonable approx for being a semver and not a tag,
@@ -382,7 +404,7 @@ namespace ts.server {
                     const versions = await this.getNPMVersionsForModule(moduleName);
                     if (versions instanceof Error) {
                         return {
-                            error: response,
+                            error: versions,
                             userFacingMessage: `Could not get versions on npm for ${moduleName} - possible typo?`,
                         };
                     }
