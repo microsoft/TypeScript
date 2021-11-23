@@ -1,7 +1,8 @@
 /*@internal*/
-namespace ts.server {
-    declare const fetch: any;
 
+/// <reference lib="webworker" />
+
+namespace ts.server {
     export interface HostWithWriteMessage {
         writeMessage(s: any): void;
     }
@@ -215,7 +216,7 @@ namespace ts.server {
         public readonly globalTypingsCacheLocation: string | undefined;
 
         public isKnownTypesPackageName(name: string): boolean {
-            // TODO
+            // TODO: implement this
             this.logger.info(`isKnownTypesPackageName ${name}`);
             return false;
         }
@@ -225,7 +226,7 @@ namespace ts.server {
                 throw new Error("No project service");
             }
 
-            // TODO: Can this be implemented on web?
+            // TODO: Can this be implemented on web? Probably not but is throwing an error ok here?
 
             console.log("install", options.projectName);
 
