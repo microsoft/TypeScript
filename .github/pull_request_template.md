@@ -9,6 +9,12 @@ Please verify that:
 
 Refer to CONTRIBUTING.MD for more details.
   https://github.com/Microsoft/TypeScript/blob/main/CONTRIBUTING.md
+
+** Please don't send typo fixes! **
+We understand that typo fixes are generally nice, but these fixes don't help
+with code quality and add work to the core team. The same generally applies
+to other projects. If you're interested in sending a PR, the issue tracker
+has many issues marked `help wanted`.
 -->
 
 Fixes #
