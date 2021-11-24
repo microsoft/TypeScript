@@ -40422,9 +40422,8 @@ namespace ts {
             const enclosingFile = getSourceFileOfNode(node);
             const links = getNodeLinks(enclosingFile);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                links.deferredNodes = links.deferredNodes || new Map();
-                const id = getNodeId(node);
-                links.deferredNodes.set(id, node);
+                links.deferredNodes ||= new Set();
+                links.deferredNodes.add(node);
             }
         }
 
