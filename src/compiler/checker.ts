@@ -6062,8 +6062,8 @@ namespace ts {
                 function createAccessFromSymbolChain(chain: Symbol[], index: number, stopper: number): EntityName | IndexedAccessTypeNode {
                     const typeParameterNodes = index === (chain.length - 1) ? overrideTypeArguments : lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
-
                     const parent = chain[index - 1];
+
                     let symbolName: string | undefined;
                     if (index === 0) {
                         context.flags |= NodeBuilderFlags.InInitialEntityName;
@@ -6082,7 +6082,16 @@ namespace ts {
                             });
                         }
                     }
-                    if (!symbolName) {
+
+                    if (symbolName === undefined) {
+                        const name = firstDefined(symbol.declarations, getNameOfDeclaration);
+                        if (name && isComputedPropertyName(name) && isEntityName(name.expression)) {
+                            const LHS = createAccessFromSymbolChain(chain, index - 1, stopper);
+                            if (isEntityName(LHS)) {
+                                return factory.createIndexedAccessTypeNode(factory.createParenthesizedType(factory.createTypeQueryNode(LHS)), factory.createTypeQueryNode(name.expression));
+                            }
+                            return LHS;
+                        }
                         symbolName = getNameOfSymbolAsWritten(symbol, context);
                     }
                     context.approximateLength += symbolName.length + 1;
