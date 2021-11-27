@@ -2062,8 +2062,14 @@ namespace ts {
                             tokenValue = String.fromCharCode(codePointAt(text, pos));
                             if (/*isInsidePipelineHack*/ false) {
                                 error(Diagnostics.Invalid_character /* Hack placeholder token outside pipeline. */);
+                                return token = SyntaxKind.PrivateIdentifier;
+                            }
+                            else if ((pos >= 1) && text.charCodeAt(pos - 1) === CharacterCodes.dot) {
+                                error(Diagnostics.Invalid_character, pos++, charSize(ch));
+                                return token = SyntaxKind.PrivateIdentifier;
                             }
                             else {
+                                // Pipeline topic
                                 pos++;
                                 return token = SyntaxKind.Identifier;
                             }
