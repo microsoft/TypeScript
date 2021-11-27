@@ -31,7 +31,7 @@ function Programmer (name, age) {
 
 //// [pipelineDecoratorFunction.js]
 function greets(person) {
-    person.greet = function () { return person.name + " says hi!"; };
+    person.greet = function () { return "".concat(person.name, " says hi!"); };
     return person;
 }
 function ages(age) {
@@ -44,7 +44,7 @@ function ages(age) {
 function programs(favLang) {
     return function (person) {
         person.favLang = favLang;
-        person.program = function () { return person.name + " starts to write " + person.favLang + "!"; };
+        person.program = function () { return "".concat(person.name, " starts to write ").concat(person.favLang, "!"); };
         return person;
     };
 }
