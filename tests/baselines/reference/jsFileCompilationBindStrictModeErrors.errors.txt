@@ -1,5 +1,4 @@
-tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
-tests/cases/compiler/a.js(5,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/compiler/a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 tests/cases/compiler/a.js(8,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 tests/cases/compiler/a.js(8,8): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -15,16 +14,14 @@ tests/cases/compiler/d.js(2,9): error TS1121: Octal literals are not allowed in 
 tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/a.js (9 errors) ====
+==== tests/cases/compiler/a.js (8 errors) ====
     "use strict";
     var a = {
         a: "hello", // error
         b: 10,
         a: 10 // error
         ~
-!!! error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
-        ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     };
     var let = 10; // error
         ~~~

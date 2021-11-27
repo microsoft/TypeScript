@@ -335,7 +335,7 @@
         "category": "Error",
         "code": 1116
     },
-    "An object literal cannot have multiple properties with the same name in strict mode.": {
+    "An object literal cannot have multiple properties with the same name.": {
         "category": "Error",
         "code": 1117
     },
