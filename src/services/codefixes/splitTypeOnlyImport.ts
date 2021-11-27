@@ -5,7 +5,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixId],
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToSplitTypeOnlyImport(context) {
             const changes = textChanges.ChangeTracker.with(context, t => {
                 return splitTypeOnlyImport(t, getImportDeclaration(context.sourceFile, context.span), context);
             });

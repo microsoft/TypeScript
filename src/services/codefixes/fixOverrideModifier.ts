@@ -85,7 +85,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixOverrideModifierIssues(context) {
             const { errorCode, span } = context;
 
             const info = errorCodeFixIdMap[errorCode];
