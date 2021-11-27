@@ -15,7 +15,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixId],
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixReturnTypeInAsyncFunction(context) {
             const { sourceFile, program, span } = context;
             const checker = program.getTypeChecker();
             const info = getInfo(sourceFile, program.getTypeChecker(), span.start);
