@@ -1,0 +1,43 @@
+=== tests/cases/conformance/pipeline/pipelineHackAndPApp.ts ===
+(1.1 + 2.6) |> (# |>> Math.round);
+>(1.1 + 2.6) |> (# |>> Math.round) : number
+>(1.1 + 2.6) : number
+>1.1 + 2.6 : number
+>1.1 : 1.1
+>2.6 : 2.6
+>(# |>> Math.round) : number
+># |>> Math.round : number
+># : number
+>Math.round : (x: number) => number
+>Math : Math
+>round : (x: number) => number
+
+(3) |> (3 |>> ((o) => Math.pow(o, #)));
+>(3) |> (3 |>> ((o) => Math.pow(o, #))) : number
+>(3) : 3
+>3 : 3
+>(3 |>> ((o) => Math.pow(o, #))) : number
+>3 |>> ((o) => Math.pow(o, #)) : number
+>3 : 3
+>((o) => Math.pow(o, #)) : (o: any) => number
+>(o) => Math.pow(o, #) : (o: any) => number
+>o : any
+>Math.pow(o, #) : number
+>Math.pow : (x: number, y: number) => number
+>Math : Math
+>pow : (x: number, y: number) => number
+>o : any
+># : 3
+
+5.7 |>> ((a) => a |> # * 100);
+>5.7 |>> ((a) => a |> # * 100) : number
+>5.7 : 5.7
+>((a) => a |> # * 100) : (a: any) => number
+>(a) => a |> # * 100 : (a: any) => number
+>a : any
+>a |> # * 100 : number
+>a : any
+># * 100 : number
+># : any
+>100 : 100
+

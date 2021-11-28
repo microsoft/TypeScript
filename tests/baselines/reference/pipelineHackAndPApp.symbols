@@ -1,0 +1,20 @@
+=== tests/cases/conformance/pipeline/pipelineHackAndPApp.ts ===
+(1.1 + 2.6) |> (# |>> Math.round);
+># : Symbol(#, Decl(pipelineHackAndPApp.ts, 0, 0))
+>Math.round : Symbol(Math.round, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>round : Symbol(Math.round, Decl(lib.es5.d.ts, --, --))
+
+(3) |> (3 |>> ((o) => Math.pow(o, #)));
+>o : Symbol(o, Decl(pipelineHackAndPApp.ts, 2, 16))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(pipelineHackAndPApp.ts, 2, 16))
+># : Symbol(#, Decl(pipelineHackAndPApp.ts, 0, 34))
+
+5.7 |>> ((a) => a |> # * 100);
+>a : Symbol(a, Decl(pipelineHackAndPApp.ts, 4, 10))
+>a : Symbol(a, Decl(pipelineHackAndPApp.ts, 4, 10))
+># : Symbol(#, Decl(pipelineHackAndPApp.ts, 4, 15))
+
