@@ -123,3 +123,12 @@ const c = 'c' |> ((s: string) => s)(#);
 >s : string
 ># : "c"
 
+const nestedPipelines = 1 |> (# |> #);
+>nestedPipelines : any
+>1 |> (# |> #) : any
+>1 : 1
+>(# |> #) : any
+># |> # : any
+># : any
+># : any
+

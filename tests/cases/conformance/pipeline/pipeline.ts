@@ -17,3 +17,5 @@ const ternaryFunctions = 11 |>
 ('a' as string) |> console.log(#);
 'b' as string |> console.log(#);
 const c = 'c' |> ((s: string) => s)(#);
+
+const nestedPipelines = 1 |> (# |> #);

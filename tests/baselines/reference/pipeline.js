@@ -19,9 +19,11 @@ const ternaryFunctions = 11 |>
 'b' as string |> console.log(#);
 const c = 'c' |> ((s: string) => s)(#);
 
+const nestedPipelines = 1 |> (# |> #);
+
 
 //// [pipeline.js]
-var pipelineHackPlaceholder_1, pipelineHackPlaceholder_2, pipelineHackPlaceholder_3, pipelineHackPlaceholder_4, pipelineHackPlaceholder_5, pipelineHackPlaceholder_6, pipelineHackPlaceholder_7, pipelineHackPlaceholder_8;
+var pipelineHackPlaceholder_1, pipelineHackPlaceholder_2, pipelineHackPlaceholder_3, pipelineHackPlaceholder_4, pipelineHackPlaceholder_5, pipelineHackPlaceholder_6, pipelineHackPlaceholder_7, pipelineHackPlaceholder_8, pipelineHackPlaceholder_9, pipelineHackPlaceholder_10;
 var uried = (pipelineHackPlaceholder_1 = 'Foobar', encodeURI(pipelineHackPlaceholder_1));
 var squared = ((pipelineHackPlaceholder_2 = 3, (function (n) { return n * n; })(pipelineHackPlaceholder_2)));
 var makeAdder = function (addNum) {
@@ -35,3 +37,4 @@ var ternaryFunctions = ((pipelineHackPlaceholder_5 = 11, (zeroOrOne() === 0
 (pipelineHackPlaceholder_6 = 'a', console.log(pipelineHackPlaceholder_6));
 (pipelineHackPlaceholder_7 = 'b', console.log(pipelineHackPlaceholder_7));
 var c = ((pipelineHackPlaceholder_8 = 'c', (function (s) { return s; })(pipelineHackPlaceholder_8)));
+var nestedPipelines = (pipelineHackPlaceholder_9 = 1, ((pipelineHackPlaceholder_10 = pipelineHackPlaceholder_9, pipelineHackPlaceholder_10)));

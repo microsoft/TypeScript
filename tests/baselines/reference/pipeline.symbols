@@ -69,3 +69,8 @@ const c = 'c' |> ((s: string) => s)(#);
 >s : Symbol(s, Decl(pipeline.ts, 18, 19))
 ># : Symbol(#, Decl(pipeline.ts, 18, 9))
 
+const nestedPipelines = 1 |> (# |> #);
+>nestedPipelines : Symbol(nestedPipelines, Decl(pipeline.ts, 20, 5))
+># : Symbol(#, Decl(pipeline.ts, 20, 30))
+># : Symbol(#, Decl(pipeline.ts, 20, 30))
+
