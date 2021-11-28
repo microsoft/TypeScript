@@ -1,14 +1,13 @@
 /* @internal */
 namespace ts.codefix {
-    const fixIdAddMissingTypeof = "fixConvertToMappedObjectType";
-    const fixId = fixIdAddMissingTypeof;
+    const fixId = "fixConvertToMappedObjectType";
     const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
 
     type FixableDeclaration = InterfaceDeclaration | TypeAliasDeclaration;
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertToMappedTypeObject(context) {
             const { sourceFile, span } = context;
             const info = getInfo(sourceFile, span.start);
             if (!info) return undefined;
