@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.refactor.convertParamsToDestructuredObject {
     const refactorName = "Convert parameters to destructured object";
-    const minimumParameterLength = 2;
+    const minimumParameterLength = 1;
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
 
     const toDestructuredAction = {
