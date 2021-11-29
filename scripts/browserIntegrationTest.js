@@ -1,5 +1,4 @@
 // @ts-check
-const chalk = require("chalk");
 const { join } = require("path");
 const { readFileSync } = require("fs");
 try {
@@ -18,6 +17,7 @@ const playwright = require("playwright");
 const debugging = false;
 
 (async () => {
+  const chalk = (await import("chalk")).default;
   for (const browserType of ["chromium", "firefox"]) {
     const browser = await playwright[browserType].launch({ headless: !debugging });
     const context = await browser.newContext();
