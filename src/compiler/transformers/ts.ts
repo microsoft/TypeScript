@@ -2237,11 +2237,10 @@ namespace ts {
                 // we can safely elide the parentheses here, as a new synthetic
                 // ParenthesizedExpression will be inserted if we remove parentheses too
                 // aggressively.
-                // HOWEVER - if there are leading comments on the expression itself, to handle ASI
-                // correctly for return and throw, we must keep the parenthesis
-                if (length(getLeadingCommentRangesOfNode(expression, currentSourceFile))) {
-                    return factory.updateParenthesizedExpression(node, expression);
-                }
+                //
+                // If there are leading comments on the expression itself, the emitter will handle ASI
+                // for return, throw, and yield by re-introducing parenthesis during emit on an as-need
+                // basis.
                 return factory.createPartiallyEmittedExpression(expression, node);
             }
 
