@@ -15,7 +15,7 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
+        getAllCodeActions: function getAllCodeActionsToFixAwaitInSyncFunction(context) {
             const seen = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file, diag.start);

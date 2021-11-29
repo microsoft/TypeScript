@@ -5,7 +5,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertLiteralTypeToMappedType(context) {
             const { sourceFile, span } = context;
             const info = getInfo(sourceFile, span.start);
             if (!info) {

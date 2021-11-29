@@ -30,7 +30,7 @@ namespace ts.codefix {
     registerCodeFix({
         fixIds: [fixId],
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToAddMissingAwait(context) {
             const { sourceFile, errorCode, span, cancellationToken, program } = context;
             const expression = getAwaitErrorSpanExpression(sourceFile, errorCode, span, cancellationToken, program);
             if (!expression) {
