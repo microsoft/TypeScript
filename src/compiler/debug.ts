@@ -171,12 +171,6 @@ namespace ts {
             return value;
         }
 
-        /**
-         * @deprecated Use `checkDefined` to check whether a value is defined inline. Use `assertIsDefined` to check whether
-         * a value is defined at the statement level.
-         */
-        export const assertDefined = checkDefined;
-
         export function assertEachIsDefined<T extends Node>(value: NodeArray<T>, message?: string, stackCrawlMark?: AnyFunction): asserts value is NodeArray<T>;
         export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
         export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
@@ -189,12 +183,6 @@ namespace ts {
             assertEachIsDefined(value, message, stackCrawlMark || checkEachDefined);
             return value;
         }
-
-        /**
-         * @deprecated Use `checkEachDefined` to check whether the elements of an array are defined inline. Use `assertEachIsDefined` to check whether
-         * the elements of an array are defined at the statement level.
-         */
-        export const assertEachDefined = checkEachDefined;
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
             const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") && formatSyntaxKind ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);

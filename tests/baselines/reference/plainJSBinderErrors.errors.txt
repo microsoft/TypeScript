@@ -1,0 +1,97 @@
+tests/cases/conformance/salsa/plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(4,7): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(9,11): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(12,5): error TS18012: '#constructor' is a reserved word.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(15,20): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(18,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(26,27): error TS1121: Octal literals are not allowed in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+tests/cases/conformance/salsa/plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
+
+
+==== tests/cases/conformance/salsa/plainJSBinderErrors.js (17 errors) ====
+    export default 12
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2753 tests/cases/conformance/salsa/plainJSBinderErrors.js:2:1: Another export default is here.
+    export default 13
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2752 tests/cases/conformance/salsa/plainJSBinderErrors.js:1:1: The first export default is here.
+    const await = 1
+          ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    const yield = 2
+          ~~~~~
+!!! error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
+    async function f() {
+        const await = 3
+              ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+    }
+    function* g() {
+        const yield = 4
+              ~~~~~
+!!! error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
+    }
+    class C {
+        #constructor = 5
+        ~~~~~~~~~~~~
+!!! error TS18012: '#constructor' is a reserved word.
+        deleted() {
+            function container(f) {
+                delete f
+                       ~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+            }
+            var g = 6
+            delete g
+                   ~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+            delete container
+                   ~~~~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+        }
+        evalArguments() {
+            const eval = 7
+                  ~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+            const arguments = 8
+                  ~~~~~~~~~
+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
+        }
+        withOctal() {
+            const redundant = 010
+                              ~~~
+!!! error TS1121: Octal literals are not allowed in strict mode.
+            with (redundant) {
+            ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+                return toFixed()
+            }
+        }
+        label() {
+            for(;;) {
+                label: var x = 1
+                ~~~~~
+!!! error TS1344: 'A label is not allowed here.
+                break label
+            }
+            return x
+        }
+    }
+    const eval = 9
+          ~~~~
+!!! error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+    const arguments = 10
+          ~~~~~~~~~
+!!! error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
+    

@@ -1609,7 +1609,7 @@ namespace ts {
     export interface TypePredicateNode extends TypeNode {
         readonly kind: SyntaxKind.TypePredicate;
         readonly parent: SignatureDeclaration | JSDocTypeExpression;
-        readonly assertsModifier?: AssertsToken;
+        readonly assertsModifier?: AssertsKeyword;
         readonly parameterName: Identifier | ThisTypeNode;
         readonly type?: TypeNode;
     }
@@ -1702,7 +1702,7 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         readonly kind: SyntaxKind.MappedType;
-        readonly readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
+        readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
         readonly nameType?: TypeNode;
         readonly questionToken?: QuestionToken | PlusToken | MinusToken;
@@ -2756,7 +2756,7 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         readonly kind: SyntaxKind.ForOfStatement;
-        readonly awaitModifier?: AwaitKeywordToken;
+        readonly awaitModifier?: AwaitKeyword;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
@@ -5107,7 +5107,7 @@ namespace ts {
         jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
         jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
         contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-        deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
+        deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
         isExhaustive?: boolean;             // Is node an exhaustive switch statement

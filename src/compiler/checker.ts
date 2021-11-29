@@ -5657,8 +5657,8 @@ namespace ts {
                 const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
                 // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
                 const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor, options?.privateSymbolVisitor, options?.bundledImports));
-                if (signature.thisParameter) {
-                    const thisParameter = symbolToParameterDeclaration(signature.thisParameter, context);
+                const thisParameter = tryGetThisParameterDeclaration(signature, context);
+                if (thisParameter) {
                     parameters.unshift(thisParameter);
                 }
 
@@ -5711,6 +5711,25 @@ namespace ts {
                 }
 
                 return node;
+            }
+
+            function tryGetThisParameterDeclaration(signature: Signature, context: NodeBuilderContext) {
+                if (signature.thisParameter) {
+                    return symbolToParameterDeclaration(signature.thisParameter, context);
+                }
+                if (signature.declaration) {
+                    const thisTag = getJSDocThisTag(signature.declaration);
+                    if (thisTag && thisTag.typeExpression) {
+                        return factory.createParameterDeclaration(
+                            /* decorators */ undefined,
+                            /* modifiers */ undefined,
+                            /* dotDotDotToken */ undefined,
+                            "this",
+                            /* questionToken */ undefined,
+                            typeToTypeNodeHelper(getTypeFromTypeNode(thisTag.typeExpression), context)
+                        );
+                    }
+                }
             }
 
             function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
@@ -6204,12 +6223,8 @@ namespace ts {
                             firstChar = symbolName.charCodeAt(0);
                         }
                         let expression: Expression | undefined;
-                        if (isSingleOrDoubleQuote(firstChar)) {
-                            expression = factory.createStringLiteral(
-                                symbolName
-                                    .substring(1, symbolName.length - 1)
-                                    .replace(/\\./g, s => s.substring(1)),
-                                firstChar === CharacterCodes.singleQuote);
+                        if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
+                           expression = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), firstChar === CharacterCodes.singleQuote);
                         }
                         else if (("" + +symbolName) === symbolName) {
                             expression = factory.createNumericLiteral(+symbolName);
@@ -40407,9 +40422,8 @@ namespace ts {
             const enclosingFile = getSourceFileOfNode(node);
             const links = getNodeLinks(enclosingFile);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                links.deferredNodes = links.deferredNodes || new Map();
-                const id = getNodeId(node);
-                links.deferredNodes.set(id, node);
+                links.deferredNodes ||= new Set();
+                links.deferredNodes.add(node);
             }
         }
 
