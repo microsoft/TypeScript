@@ -1089,6 +1089,17 @@ namespace FourSlash {
             }
         }
 
+        public verifyTypeAtLocation(range: Range, expected: string): void {
+            const checker = this.getChecker();
+            const node = this.goToAndGetNode(range);
+            const type = checker.getTypeAtLocation(node);
+
+            const actual = checker.typeToString(type);
+            if (actual !== expected) {
+                this.raiseError(displayExpectedAndActualString(expected, actual));
+            }
+        }
+
         private verifyDocumentHighlightsRespectFilesList(files: readonly string[]): void {
             const startFile = this.activeFile.fileName;
             for (const fileName of files) {
