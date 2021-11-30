@@ -88,4 +88,101 @@ namespace ts {
             commandLineArgs: ["-b", "/src", "--verbose"]
         });
     });
+
+    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node12`, some `exports` maps blocking direct access, and no `baseUrl`
+    describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
+        verifyTsc({
+            scenario: "moduleSpecifiers",
+            subScenario: `synthesized module specifiers across projects resolve correctly`,
+            fs: () => loadProjectFromFiles({
+                "/src/src-types/index.ts": Utils.dedent`
+                    export * from './dogconfig.js';`,
+                "/src/src-types/dogconfig.ts": Utils.dedent`
+                    export interface DogConfig {
+                        name: string;
+                    }`,
+                "/src/src-dogs/index.ts": Utils.dedent`
+                    export * from 'src-types';
+                    export * from './lassie/lassiedog.js';
+                    `,
+                "/src/src-dogs/dogconfig.ts": Utils.dedent`
+                    import { DogConfig } from 'src-types';
+
+                    export const DOG_CONFIG: DogConfig = {
+                        name: 'Default dog',
+                    };
+                    `,
+                "/src/src-dogs/dog.ts": Utils.dedent`
+                    import { DogConfig } from 'src-types';
+                    import { DOG_CONFIG } from './dogconfig.js';
+                    
+                    export abstract class Dog {
+                    
+                        public static getCapabilities(): DogConfig {
+                            return DOG_CONFIG;
+                        }
+                    }
+                    `,
+                "/src/src-dogs/lassie/lassiedog.ts": Utils.dedent`
+                    import { Dog } from '../dog.js';
+                    import { LASSIE_CONFIG } from './lassieconfig.js';
+                    
+                    export class LassieDog extends Dog {
+                        protected static getDogConfig = () => LASSIE_CONFIG;
+                    }
+                    `,
+                "/src/src-dogs/lassie/lassieconfig.ts": Utils.dedent`
+                    import { DogConfig } from 'src-types';
+
+                    export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
+                    `,
+                "/src/tsconfig-base.json": Utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "declaration": true,
+                            "module": "node12"
+                        }
+                    }`,
+                "/src/src-types/package.json": Utils.dedent`
+                    {
+                        "type": "module",
+                        "exports": "./index.js"
+                    }`,
+                "/src/src-dogs/package.json": Utils.dedent`
+                    {
+                        "type": "module",
+                        "exports": "./index.js"
+                    }`,
+                "/src/src-types/tsconfig.json": Utils.dedent`
+                    {
+                        "extends": "../tsconfig-base.json",
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "include": [
+                            "**/*"
+                        ]
+                    }`,
+                "/src/src-dogs/tsconfig.json": Utils.dedent`
+                    {
+                        "extends": "../tsconfig-base.json",
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "references": [
+                            { "path": "../src-types" }
+                        ],
+                        "include": [
+                            "**/*"
+                        ]
+                    }`,
+            }, ""),
+            modifyFs: fs => {
+                fs.writeFileSync("/lib/lib.es2020.full.d.ts", tscWatch.libFile.content);
+                fs.symlinkSync("/src", "/src/src-types/node_modules");
+                fs.symlinkSync("/src", "/src/src-dogs/node_modules");
+            },
+            commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"]
+        });
+    });
 }

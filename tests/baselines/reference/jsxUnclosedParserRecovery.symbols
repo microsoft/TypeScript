@@ -1,0 +1,318 @@
+=== tests/cases/conformance/jsx/jsxParserRecovery.tsx ===
+// should have no errors here; all these functions should parse and resolve
+noName(); noClose(); noCloseTypeArg(); noCloseAttrs(); noCloseTypeArgAttrs(); noCloseBracket(); noCloseBracketTypeArgAttrs(); noSelfclose(); noSelfcloseTypeArgAttrs();
+>noName : Symbol(noName, Decl(jsxParserRecovery.tsx, 11, 7))
+>noClose : Symbol(noClose, Decl(jsxParserRecovery.tsx, 15, 7))
+>noCloseTypeArg : Symbol(noCloseTypeArg, Decl(jsxParserRecovery.tsx, 19, 7))
+>noCloseAttrs : Symbol(noCloseAttrs, Decl(jsxParserRecovery.tsx, 23, 7))
+>noCloseTypeArgAttrs : Symbol(noCloseTypeArgAttrs, Decl(jsxParserRecovery.tsx, 27, 7))
+>noCloseBracket : Symbol(noCloseBracket, Decl(jsxParserRecovery.tsx, 31, 7))
+>noCloseBracketTypeArgAttrs : Symbol(noCloseBracketTypeArgAttrs, Decl(jsxParserRecovery.tsx, 35, 7))
+>noSelfclose : Symbol(noSelfclose, Decl(jsxParserRecovery.tsx, 39, 7))
+>noSelfcloseTypeArgAttrs : Symbol(noSelfcloseTypeArgAttrs, Decl(jsxParserRecovery.tsx, 43, 7))
+
+noNameTrailingTag(); noCloseTrailingTag(); noCloseTypeArgTrailingTag(); noCloseAttrsTrailingTag(); noCloseTypeArgAttrsTrailingTag(); noCloseBracketTrailingTag(); noCloseBracketTypeArgAttrsTrailingTag(); // noSelfcloseTrailingTag(); noSelfcloseTypeArgAttrsTrailingTag();
+>noNameTrailingTag : Symbol(noNameTrailingTag, Decl(jsxParserRecovery.tsx, 49, 7))
+>noCloseTrailingTag : Symbol(noCloseTrailingTag, Decl(jsxParserRecovery.tsx, 54, 7))
+>noCloseTypeArgTrailingTag : Symbol(noCloseTypeArgTrailingTag, Decl(jsxParserRecovery.tsx, 59, 7))
+>noCloseAttrsTrailingTag : Symbol(noCloseAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 64, 7))
+>noCloseTypeArgAttrsTrailingTag : Symbol(noCloseTypeArgAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 69, 7))
+>noCloseBracketTrailingTag : Symbol(noCloseBracketTrailingTag, Decl(jsxParserRecovery.tsx, 74, 7))
+>noCloseBracketTypeArgAttrsTrailingTag : Symbol(noCloseBracketTypeArgAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 79, 7))
+
+noNameTrailingText(); noCloseTrailingText(); noCloseTypeArgTrailingText(); noCloseAttrsTrailingText(); noCloseTypeArgAttrsTrailingText(); noCloseBracketTrailingText(); noCloseBracketTypeArgAttrsTrailingText(); // noSelfcloseTrailingText(); noSelfcloseTypeArgAttrsTrailingText();
+>noNameTrailingText : Symbol(noNameTrailingText, Decl(jsxParserRecovery.tsx, 95, 7))
+>noCloseTrailingText : Symbol(noCloseTrailingText, Decl(jsxParserRecovery.tsx, 100, 7))
+>noCloseTypeArgTrailingText : Symbol(noCloseTypeArgTrailingText, Decl(jsxParserRecovery.tsx, 105, 7))
+>noCloseAttrsTrailingText : Symbol(noCloseAttrsTrailingText, Decl(jsxParserRecovery.tsx, 110, 7))
+>noCloseTypeArgAttrsTrailingText : Symbol(noCloseTypeArgAttrsTrailingText, Decl(jsxParserRecovery.tsx, 115, 7))
+>noCloseBracketTrailingText : Symbol(noCloseBracketTrailingText, Decl(jsxParserRecovery.tsx, 120, 7))
+>noCloseBracketTypeArgAttrsTrailingText : Symbol(noCloseBracketTypeArgAttrsTrailingText, Decl(jsxParserRecovery.tsx, 125, 7))
+
+function diddy() {
+>diddy : Symbol(diddy, Decl(jsxParserRecovery.tsx, 3, 209))
+
+    return null;
+}
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <
+</div>;
+function noName() { }
+>noName : Symbol(noName, Decl(jsxParserRecovery.tsx, 11, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy
+</div>;
+function noClose() { }
+>noClose : Symbol(noClose, Decl(jsxParserRecovery.tsx, 15, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean>
+</div>;
+function noCloseTypeArg() { }
+>noCloseTypeArg : Symbol(noCloseTypeArg, Decl(jsxParserRecovery.tsx, 19, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy bananas="please"
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 22, 10))
+
+</div>;
+function noCloseAttrs() { }
+>noCloseAttrs : Symbol(noCloseAttrs, Decl(jsxParserRecovery.tsx, 23, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please"
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 26, 19))
+
+</div>;
+function noCloseTypeArgAttrs() { }
+>noCloseTypeArgAttrs : Symbol(noCloseTypeArgAttrs, Decl(jsxParserRecovery.tsx, 27, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy/
+</div>;
+function noCloseBracket() { }
+>noCloseBracket : Symbol(noCloseBracket, Decl(jsxParserRecovery.tsx, 31, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please"/
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 34, 19))
+
+</div>;
+function noCloseBracketTypeArgAttrs() { }
+>noCloseBracketTypeArgAttrs : Symbol(noCloseBracketTypeArgAttrs, Decl(jsxParserRecovery.tsx, 35, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy>
+</div>;
+function noSelfclose() { }
+>noSelfclose : Symbol(noSelfclose, Decl(jsxParserRecovery.tsx, 39, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please">
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 42, 19))
+
+</div>;
+function noSelfcloseTypeArgAttrs() { }
+>noSelfcloseTypeArgAttrs : Symbol(noSelfcloseTypeArgAttrs, Decl(jsxParserRecovery.tsx, 43, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <
+    <diddy/>
+>diddy : Symbol(diddy)
+
+</div>;
+function noNameTrailingTag() { }
+>noNameTrailingTag : Symbol(noNameTrailingTag, Decl(jsxParserRecovery.tsx, 49, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy
+    <diddy/>
+>diddy : Symbol(diddy)
+
+</div>;
+function noCloseTrailingTag() { }
+>noCloseTrailingTag : Symbol(noCloseTrailingTag, Decl(jsxParserRecovery.tsx, 54, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean>
+    <diddy/>
+</div>;
+function noCloseTypeArgTrailingTag() { }
+>noCloseTypeArgTrailingTag : Symbol(noCloseTypeArgTrailingTag, Decl(jsxParserRecovery.tsx, 59, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy bananas="please"
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 62, 10))
+
+    <diddy/>
+</div>;
+function noCloseAttrsTrailingTag() { }
+>noCloseAttrsTrailingTag : Symbol(noCloseAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 64, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please"
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 67, 19))
+
+    <diddy/>
+</div>;
+function noCloseTypeArgAttrsTrailingTag() { }
+>noCloseTypeArgAttrsTrailingTag : Symbol(noCloseTypeArgAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 69, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy/
+    <diddy/>
+</div>;
+function noCloseBracketTrailingTag() { }
+>noCloseBracketTrailingTag : Symbol(noCloseBracketTrailingTag, Decl(jsxParserRecovery.tsx, 74, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please"/
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 77, 19))
+
+    <diddy/>
+</div>;
+function noCloseBracketTypeArgAttrsTrailingTag() { }
+>noCloseBracketTypeArgAttrsTrailingTag : Symbol(noCloseBracketTypeArgAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 79, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy>
+    <diddy/>
+</div>;
+function noSelfcloseTrailingTag() { }
+>noSelfcloseTrailingTag : Symbol(noSelfcloseTrailingTag, Decl(jsxParserRecovery.tsx, 84, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please">
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 87, 19))
+
+    <diddy/>
+</div>;
+function noSelfcloseTypeArgAttrsTrailingTag() { }
+>noSelfcloseTypeArgAttrsTrailingTag : Symbol(noSelfcloseTypeArgAttrsTrailingTag, Decl(jsxParserRecovery.tsx, 89, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <
+    Cranky Wrinkly Funky
+>Wrinkly : Symbol(Wrinkly, Decl(jsxParserRecovery.tsx, 94, 10))
+>Funky : Symbol(Funky, Decl(jsxParserRecovery.tsx, 94, 18))
+
+</div>;
+function noNameTrailingText() { }
+>noNameTrailingText : Symbol(noNameTrailingText, Decl(jsxParserRecovery.tsx, 95, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy
+    Cranky Wrinkly Funky
+>Cranky : Symbol(Cranky, Decl(jsxParserRecovery.tsx, 98, 10))
+>Wrinkly : Symbol(Wrinkly, Decl(jsxParserRecovery.tsx, 99, 10))
+>Funky : Symbol(Funky, Decl(jsxParserRecovery.tsx, 99, 18))
+
+</div>;
+function noCloseTrailingText() { }
+>noCloseTrailingText : Symbol(noCloseTrailingText, Decl(jsxParserRecovery.tsx, 100, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean>
+    Cranky Wrinkly Funky
+>Cranky : Symbol(Cranky, Decl(jsxParserRecovery.tsx, 103, 19))
+>Wrinkly : Symbol(Wrinkly, Decl(jsxParserRecovery.tsx, 104, 10))
+>Funky : Symbol(Funky, Decl(jsxParserRecovery.tsx, 104, 18))
+
+</div>;
+function noCloseTypeArgTrailingText() { }
+>noCloseTypeArgTrailingText : Symbol(noCloseTypeArgTrailingText, Decl(jsxParserRecovery.tsx, 105, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy bananas="please"
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 108, 10))
+
+    Cranky Wrinkly Funky
+>Cranky : Symbol(Cranky, Decl(jsxParserRecovery.tsx, 108, 27))
+>Wrinkly : Symbol(Wrinkly, Decl(jsxParserRecovery.tsx, 109, 10))
+>Funky : Symbol(Funky, Decl(jsxParserRecovery.tsx, 109, 18))
+
+</div>;
+function noCloseAttrsTrailingText() { }
+>noCloseAttrsTrailingText : Symbol(noCloseAttrsTrailingText, Decl(jsxParserRecovery.tsx, 110, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please"
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 113, 19))
+
+    Cranky Wrinkly Funky
+>Cranky : Symbol(Cranky, Decl(jsxParserRecovery.tsx, 113, 36))
+>Wrinkly : Symbol(Wrinkly, Decl(jsxParserRecovery.tsx, 114, 10))
+>Funky : Symbol(Funky, Decl(jsxParserRecovery.tsx, 114, 18))
+
+</div>;
+function noCloseTypeArgAttrsTrailingText() { }
+>noCloseTypeArgAttrsTrailingText : Symbol(noCloseTypeArgAttrsTrailingText, Decl(jsxParserRecovery.tsx, 115, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy/
+    Cranky Wrinkly Funky
+</div>;
+function noCloseBracketTrailingText() { }
+>noCloseBracketTrailingText : Symbol(noCloseBracketTrailingText, Decl(jsxParserRecovery.tsx, 120, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please"/
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 123, 19))
+
+    Cranky Wrinkly Funky
+</div>;
+function noCloseBracketTypeArgAttrsTrailingText() { }
+>noCloseBracketTypeArgAttrsTrailingText : Symbol(noCloseBracketTypeArgAttrsTrailingText, Decl(jsxParserRecovery.tsx, 125, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy>
+    Cranky Wrinkly Funky
+</div>;
+function noSelfcloseTrailingText() { }
+>noSelfcloseTrailingText : Symbol(noSelfcloseTrailingText, Decl(jsxParserRecovery.tsx, 130, 7))
+
+var donkey = <div>
+>donkey : Symbol(donkey, Decl(jsxParserRecovery.tsx, 9, 3), Decl(jsxParserRecovery.tsx, 13, 3), Decl(jsxParserRecovery.tsx, 17, 3), Decl(jsxParserRecovery.tsx, 21, 3), Decl(jsxParserRecovery.tsx, 25, 3) ... and 22 more)
+
+    <diddy<boolean> bananas="please">
+>bananas : Symbol(bananas, Decl(jsxParserRecovery.tsx, 133, 19))
+
+    Cranky Wrinkly Funky
+</div>;
+function noSelfcloseTypeArgAttrsTrailingText() { }
+>noSelfcloseTypeArgAttrsTrailingText : Symbol(noSelfcloseTypeArgAttrsTrailingText, Decl(jsxParserRecovery.tsx, 135, 7))
+

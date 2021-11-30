@@ -3,105 +3,59 @@ namespace ts.projectSystem {
         const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
         const usageLocation = `${tscWatch.projectRoot}/usage`;
 
-
-        interface VerifyUsageAndDependency {
-            allFiles: readonly [File, File, File, File]; // dependencyTs, dependencyConfig, usageTs, usageConfig
-            usageDiagnostics(): GetErrDiagnostics;
-            dependencyDiagnostics(): GetErrDiagnostics;
-
-        }
-        function verifyUsageAndDependency({ allFiles, usageDiagnostics, dependencyDiagnostics }: VerifyUsageAndDependency) {
-            const [dependencyTs, dependencyConfig, usageTs, usageConfig] = allFiles;
+        function verifyUsageAndDependency(scenario: string, dependencyTs: File, dependencyConfig: File, usageTs: File, usageConfig: File) {
             function usageProjectDiagnostics(): GetErrForProjectDiagnostics {
-                return {
-                    project: usageTs.path,
-                    errors: [
-                        usageDiagnostics(),
-                        emptyDiagnostics(dependencyTs)
-                    ]
-                };
+                return { project: usageTs, files: [usageTs, dependencyTs] };
             }
 
             function dependencyProjectDiagnostics(): GetErrForProjectDiagnostics {
-                return {
-                    project: dependencyTs.path,
-                    errors: [
-                        dependencyDiagnostics()
-                    ]
-                };
-            }
-
-            function usageConfigDiag(): server.ConfigFileDiagEvent["data"] {
-                return {
-                    triggerFile: usageTs.path,
-                    configFileName: usageConfig.path,
-                    diagnostics: emptyArray
-                };
-            }
-
-            function dependencyConfigDiag(): server.ConfigFileDiagEvent["data"] {
-                return {
-                    triggerFile: dependencyTs.path,
-                    configFileName: dependencyConfig.path,
-                    diagnostics: emptyArray
-                };
+                return { project: dependencyTs, files: [dependencyTs] };
             }
 
             describe("when dependency project is not open", () => {
                 verifyGetErrScenario({
-                    allFiles: () => allFiles,
+                    scenario: "projectReferenceErrors",
+                    subScenario: `${scenario} when dependency project is not open`,
+                    allFiles: () => [dependencyTs, dependencyConfig, usageTs, usageConfig],
                     openFiles: () => [usageTs],
-                    expectedGetErr: () => [
-                        usageDiagnostics()
-                    ],
-                    expectedGetErrForProject: () => [
+                    getErrRequest: () => [usageTs],
+                    getErrForProjectRequest: () => [
                         usageProjectDiagnostics(),
                         {
-                            project: dependencyTs.path,
-                            errors: [
-                                emptyDiagnostics(dependencyTs),
-                                usageDiagnostics()
-                            ]
+                            project: dependencyTs,
+                            files: [dependencyTs, usageTs]
                         }
                     ],
-                    expectedSyncDiagnostics: () => [
+                    syncDiagnostics: () => [
                         // Without project
-                        usageDiagnostics(),
-                        emptyDiagnostics(dependencyTs),
+                        { file: usageTs },
+                        { file: dependencyTs },
                         // With project
-                        syncDiagnostics(usageDiagnostics(), usageConfig.path),
-                        syncDiagnostics(emptyDiagnostics(dependencyTs), usageConfig.path),
-                    ],
-                    expectedConfigFileDiagEvents: () => [
-                        usageConfigDiag()
+                        { file: usageTs, project: usageConfig },
+                        { file: dependencyTs, project: usageConfig },
                     ],
                 });
             });
 
             describe("when the depedency file is open", () => {
                 verifyGetErrScenario({
-                    allFiles: () => allFiles,
+                    scenario: "projectReferenceErrors",
+                    subScenario: `${scenario} when the depedency file is open`,
+                    allFiles: () => [dependencyTs, dependencyConfig, usageTs, usageConfig],
                     openFiles: () => [usageTs, dependencyTs],
-                    expectedGetErr: () => [
-                        usageDiagnostics(),
-                        dependencyDiagnostics(),
-                    ],
-                    expectedGetErrForProject: () => [
+                    getErrRequest: () => [usageTs, dependencyTs],
+                    getErrForProjectRequest: () => [
                         usageProjectDiagnostics(),
                         dependencyProjectDiagnostics()
                     ],
-                    expectedSyncDiagnostics: () => [
+                    syncDiagnostics: () => [
                         // Without project
-                        usageDiagnostics(),
-                        dependencyDiagnostics(),
+                        { file: usageTs },
+                        { file: dependencyTs },
                         // With project
-                        syncDiagnostics(usageDiagnostics(), usageConfig.path),
-                        syncDiagnostics(emptyDiagnostics(dependencyTs), usageConfig.path),
-                        syncDiagnostics(dependencyDiagnostics(), dependencyConfig.path),
-                    ],
-                    expectedConfigFileDiagEvents: () => [
-                        usageConfigDiag(),
-                        dependencyConfigDiag()
+                        { file: usageTs, project: usageConfig },
+                        { file: dependencyTs, project: usageConfig },
+                        { file: dependencyTs, project: dependencyConfig },
                     ],
                 });
             });
@@ -140,45 +94,7 @@ fnErr();
                     references: [{ path: "../dependency" }]
                 })
             };
-            function usageDiagnostics(): GetErrDiagnostics {
-                return {
-                    file: usageTs,
-                    syntax: emptyArray,
-                    semantic: [
-                        createDiagnostic(
-                            { line: 4, offset: 5 },
-                            { line: 4, offset: 10 },
-                            Diagnostics.Module_0_has_no_exported_member_1,
-                            [`"../decls/fns"`, "fnErr"],
-                            "error",
-                        )
-                    ],
-                    suggestion: emptyArray
-                };
-            }
-
-            function dependencyDiagnostics(): GetErrDiagnostics {
-                return {
-                    file: dependencyTs,
-                    syntax: emptyArray,
-                    semantic: [
-                        createDiagnostic(
-                            { line: 6, offset: 12 },
-                            { line: 6, offset: 13 },
-                            Diagnostics.Type_0_is_not_assignable_to_type_1,
-                            ["number", "string"],
-                            "error",
-                        )
-                    ],
-                    suggestion: emptyArray
-                };
-            }
-
-            verifyUsageAndDependency({
-                allFiles: [dependencyTs, dependencyConfig, usageTs, usageConfig],
-                usageDiagnostics,
-                dependencyDiagnostics
-            });
+            verifyUsageAndDependency("with module scenario", dependencyTs, dependencyConfig, usageTs, usageConfig);
         });
 
         describe("with non module --out", () => {
@@ -209,45 +125,7 @@ fnErr();
                     references: [{ path: "../dependency" }]
                 })
             };
-            function usageDiagnostics(): GetErrDiagnostics {
-                return {
-                    file: usageTs,
-                    syntax: emptyArray,
-                    semantic: [
-                        createDiagnostic(
-                            { line: 3, offset: 1 },
-                            { line: 3, offset: 6 },
-                            Diagnostics.Cannot_find_name_0,
-                            ["fnErr"],
-                            "error",
-                        )
-                    ],
-                    suggestion: emptyArray
-                };
-            }
-
-            function dependencyDiagnostics(): GetErrDiagnostics {
-                return {
-                    file: dependencyTs,
-                    syntax: emptyArray,
-                    semantic: [
-                        createDiagnostic(
-                            { line: 6, offset: 5 },
-                            { line: 6, offset: 6 },
-                            Diagnostics.Type_0_is_not_assignable_to_type_1,
-                            ["number", "string"],
-                            "error",
-                        )
-                    ],
-                    suggestion: emptyArray
-                };
-            }
-
-            verifyUsageAndDependency({
-                allFiles: [dependencyTs, dependencyConfig, usageTs, usageConfig],
-                usageDiagnostics,
-                dependencyDiagnostics
-            });
+            verifyUsageAndDependency("with non module", dependencyTs, dependencyConfig, usageTs, usageConfig);
         });
     });
 }

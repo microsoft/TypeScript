@@ -1,5 +1,6 @@
 // @target: esnext
 // @lib: esnext
+// @useDefineForClassFields: false
 
 class A {
     #foo(a: number) {}

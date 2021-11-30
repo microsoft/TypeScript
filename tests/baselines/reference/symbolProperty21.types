@@ -2,15 +2,15 @@
 interface I<T, U> {
     [Symbol.unscopables]: T;
 >[Symbol.unscopables] : T
->Symbol.unscopables : symbol
+>Symbol.unscopables : unique symbol
 >Symbol : SymbolConstructor
->unscopables : symbol
+>unscopables : unique symbol
 
     [Symbol.isConcatSpreadable]: U;
 >[Symbol.isConcatSpreadable] : U
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 }
 
 declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
@@ -26,23 +26,23 @@ foo({
 
     [Symbol.isConcatSpreadable]: "",
 >[Symbol.isConcatSpreadable] : string
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 >"" : ""
 
     [Symbol.toPrimitive]: 0,
 >[Symbol.toPrimitive] : number
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >0 : 0
 
     [Symbol.unscopables]: true
 >[Symbol.unscopables] : true
->Symbol.unscopables : symbol
+>Symbol.unscopables : unique symbol
 >Symbol : SymbolConstructor
->unscopables : symbol
+>unscopables : unique symbol
 >true : true
 
 });

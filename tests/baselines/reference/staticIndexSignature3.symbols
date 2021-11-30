@@ -1,0 +1,70 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts ===
+class B {
+>B : Symbol(B, Decl(staticIndexSignature3.ts, 0, 0))
+
+    static readonly [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature3.ts, 1, 21))
+
+    static readonly [s: number]: 42 | 233
+>s : Symbol(s, Decl(staticIndexSignature3.ts, 2, 21))
+}
+
+class D extends B {
+>D : Symbol(D, Decl(staticIndexSignature3.ts, 3, 1))
+>B : Symbol(B, Decl(staticIndexSignature3.ts, 0, 0))
+
+    static readonly [s: string]: number
+>s : Symbol(s, Decl(staticIndexSignature3.ts, 6, 21))
+}
+
+class ED extends D {
+>ED : Symbol(ED, Decl(staticIndexSignature3.ts, 7, 1))
+>D : Symbol(D, Decl(staticIndexSignature3.ts, 3, 1))
+
+    static readonly [s: string]: boolean
+>s : Symbol(s, Decl(staticIndexSignature3.ts, 10, 21))
+
+    static readonly [s: number]: 1 
+>s : Symbol(s, Decl(staticIndexSignature3.ts, 11, 21))
+}
+
+class DD extends D {
+>DD : Symbol(DD, Decl(staticIndexSignature3.ts, 12, 1))
+>D : Symbol(D, Decl(staticIndexSignature3.ts, 3, 1))
+
+    static readonly [s: string]: 421
+>s : Symbol(s, Decl(staticIndexSignature3.ts, 15, 21))
+}
+
+const a = B["f"];
+>a : Symbol(a, Decl(staticIndexSignature3.ts, 18, 5))
+>B : Symbol(B, Decl(staticIndexSignature3.ts, 0, 0))
+
+const b =  B[42];
+>b : Symbol(b, Decl(staticIndexSignature3.ts, 19, 5))
+>B : Symbol(B, Decl(staticIndexSignature3.ts, 0, 0))
+
+const c = D["f"]
+>c : Symbol(c, Decl(staticIndexSignature3.ts, 20, 5))
+>D : Symbol(D, Decl(staticIndexSignature3.ts, 3, 1))
+
+const d = D[42]
+>d : Symbol(d, Decl(staticIndexSignature3.ts, 21, 5))
+>D : Symbol(D, Decl(staticIndexSignature3.ts, 3, 1))
+
+const e = ED["f"]
+>e : Symbol(e, Decl(staticIndexSignature3.ts, 22, 5))
+>ED : Symbol(ED, Decl(staticIndexSignature3.ts, 7, 1))
+
+const f = ED[42]
+>f : Symbol(f, Decl(staticIndexSignature3.ts, 23, 5))
+>ED : Symbol(ED, Decl(staticIndexSignature3.ts, 7, 1))
+
+const g = DD["f"]
+>g : Symbol(g, Decl(staticIndexSignature3.ts, 24, 5))
+>DD : Symbol(DD, Decl(staticIndexSignature3.ts, 12, 1))
+
+const h = DD[42]
+>h : Symbol(h, Decl(staticIndexSignature3.ts, 25, 5))
+>DD : Symbol(DD, Decl(staticIndexSignature3.ts, 12, 1))
+

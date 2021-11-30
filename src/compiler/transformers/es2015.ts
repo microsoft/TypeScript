@@ -169,6 +169,8 @@ namespace ts {
         ForStatement = 1 << 11,                 // Enclosing block-scoped container is a ForStatement
         ForInOrForOfStatement = 1 << 12,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
         ConstructorWithCapturedSuper = 1 << 13, // Enclosed in a constructor that captures 'this' for use with 'super'
+        StaticInitializer = 1 << 14,            // Enclosed in a static initializer
+
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
         // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
@@ -176,7 +178,7 @@ namespace ts {
         // Ancestor masks
         //
 
-        AncestorFactsMask = (ConstructorWithCapturedSuper << 1) - 1,
+        AncestorFactsMask = (StaticInitializer << 1) - 1,
 
         // We are always in *some* kind of block scope, but only specific block-scope containers are
         // top-level or Blocks.
@@ -189,7 +191,7 @@ namespace ts {
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer | StaticInitializer,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
@@ -225,12 +227,15 @@ namespace ts {
         IterationStatementBlockIncludes = IterationStatementBlock,
         IterationStatementBlockExcludes = BlockScopeExcludes,
 
+        StaticInitializerIncludes = FunctionIncludes | StaticInitializer,
+        StaticInitializerExcludes = FunctionExcludes,
+
         //
         // Subtree facts
         //
 
-        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
-        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
+        NewTarget = 1 << 15,                            // Contains a 'new.target' meta-property
+        CapturedLexicalThis = 1 << 16,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
@@ -240,6 +245,21 @@ namespace ts {
 
         ArrowFunctionSubtreeExcludes = None,
         FunctionSubtreeExcludes = NewTarget | CapturedLexicalThis,
+    }
+
+    const enum SpreadSegmentKind {
+        None,           // Not a spread segment
+        UnpackedSpread, // A spread segment that must be packed (i.e., converting `[...[1, , 2]]` into `[1, undefined, 2]`)
+        PackedSpread,   // A spread segment that is known to already be packed (i.e., `[...[1, 2]]` or `[...__read(a)]`)
+    }
+
+    interface SpreadSegment {
+        kind: SpreadSegmentKind;
+        expression: Expression;
+    }
+
+    function createSpreadSegment(kind: SpreadSegmentKind, expression: Expression): SpreadSegment {
+        return { kind, expression };
     }
 
     export function transformES2015(context: TransformationContext) {
@@ -327,7 +347,7 @@ namespace ts {
         function isReturnVoidStatementInConstructorWithCapturedSuper(node: Node): boolean {
             return (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper) !== 0
                 && node.kind === SyntaxKind.ReturnStatement
-                && !(<ReturnStatement>node).expression;
+                && !(node as ReturnStatement).expression;
         }
 
         function isOrMayContainReturnCompletion(node: Node) {
@@ -362,6 +382,23 @@ namespace ts {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
         }
 
+        function classWrapperStatementVisitor(node: Node): VisitResult<Node> {
+            if (shouldVisitNode(node)) {
+                const original = getOriginalNode(node);
+                if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
+                    const ancestorFacts = enterSubtree(
+                        HierarchyFacts.StaticInitializerExcludes,
+                        HierarchyFacts.StaticInitializerIncludes
+                    );
+                    const result = visitorWorker(node, /*expressionResultIsUnused*/ false);
+                    exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
+                    return result;
+                }
+                return visitorWorker(node, /*expressionResultIsUnused*/ false);
+            }
+            return node;
+        }
+
         function callExpressionVisitor(node: Node): VisitResult<Node> {
             if (node.kind === SyntaxKind.SuperKeyword) {
                 return visitSuperKeyword(/*isExpressionOfCall*/ true);
@@ -375,117 +412,117 @@ namespace ts {
                     return undefined; // elide static keyword
 
                 case SyntaxKind.ClassDeclaration:
-                    return visitClassDeclaration(<ClassDeclaration>node);
+                    return visitClassDeclaration(node as ClassDeclaration);
 
                 case SyntaxKind.ClassExpression:
-                    return visitClassExpression(<ClassExpression>node);
+                    return visitClassExpression(node as ClassExpression);
 
                 case SyntaxKind.Parameter:
-                    return visitParameter(<ParameterDeclaration>node);
+                    return visitParameter(node as ParameterDeclaration);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return visitFunctionDeclaration(node as FunctionDeclaration);
 
                 case SyntaxKind.ArrowFunction:
-                    return visitArrowFunction(<ArrowFunction>node);
+                    return visitArrowFunction(node as ArrowFunction);
 
                 case SyntaxKind.FunctionExpression:
-                    return visitFunctionExpression(<FunctionExpression>node);
+                    return visitFunctionExpression(node as FunctionExpression);
 
                 case SyntaxKind.VariableDeclaration:
-                    return visitVariableDeclaration(<VariableDeclaration>node);
+                    return visitVariableDeclaration(node as VariableDeclaration);
 
                 case SyntaxKind.Identifier:
-                    return visitIdentifier(<Identifier>node);
+                    return visitIdentifier(node as Identifier);
 
                 case SyntaxKind.VariableDeclarationList:
-                    return visitVariableDeclarationList(<VariableDeclarationList>node);
+                    return visitVariableDeclarationList(node as VariableDeclarationList);
 
                 case SyntaxKind.SwitchStatement:
-                    return visitSwitchStatement(<SwitchStatement>node);
+                    return visitSwitchStatement(node as SwitchStatement);
 
                 case SyntaxKind.CaseBlock:
-                    return visitCaseBlock(<CaseBlock>node);
+                    return visitCaseBlock(node as CaseBlock);
 
                 case SyntaxKind.Block:
-                    return visitBlock(<Block>node, /*isFunctionBody*/ false);
+                    return visitBlock(node as Block, /*isFunctionBody*/ false);
 
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
-                    return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                    return visitBreakOrContinueStatement(node as BreakOrContinueStatement);
 
                 case SyntaxKind.LabeledStatement:
-                    return visitLabeledStatement(<LabeledStatement>node);
+                    return visitLabeledStatement(node as LabeledStatement);
 
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
-                    return visitDoOrWhileStatement(<DoStatement | WhileStatement>node, /*outermostLabeledStatement*/ undefined);
+                    return visitDoOrWhileStatement(node as DoStatement | WhileStatement, /*outermostLabeledStatement*/ undefined);
 
                 case SyntaxKind.ForStatement:
-                    return visitForStatement(<ForStatement>node, /*outermostLabeledStatement*/ undefined);
+                    return visitForStatement(node as ForStatement, /*outermostLabeledStatement*/ undefined);
 
                 case SyntaxKind.ForInStatement:
-                    return visitForInStatement(<ForInStatement>node, /*outermostLabeledStatement*/ undefined);
+                    return visitForInStatement(node as ForInStatement, /*outermostLabeledStatement*/ undefined);
 
                 case SyntaxKind.ForOfStatement:
-                    return visitForOfStatement(<ForOfStatement>node, /*outermostLabeledStatement*/ undefined);
+                    return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
 
                 case SyntaxKind.ExpressionStatement:
-                    return visitExpressionStatement(<ExpressionStatement>node);
+                    return visitExpressionStatement(node as ExpressionStatement);
 
                 case SyntaxKind.ObjectLiteralExpression:
-                    return visitObjectLiteralExpression(<ObjectLiteralExpression>node);
+                    return visitObjectLiteralExpression(node as ObjectLiteralExpression);
 
                 case SyntaxKind.CatchClause:
-                    return visitCatchClause(<CatchClause>node);
+                    return visitCatchClause(node as CatchClause);
 
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return visitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                    return visitShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
 
                 case SyntaxKind.ComputedPropertyName:
-                    return visitComputedPropertyName(<ComputedPropertyName>node);
+                    return visitComputedPropertyName(node as ComputedPropertyName);
 
                 case SyntaxKind.ArrayLiteralExpression:
-                    return visitArrayLiteralExpression(<ArrayLiteralExpression>node);
+                    return visitArrayLiteralExpression(node as ArrayLiteralExpression);
 
                 case SyntaxKind.CallExpression:
-                    return visitCallExpression(<CallExpression>node);
+                    return visitCallExpression(node as CallExpression);
 
                 case SyntaxKind.NewExpression:
-                    return visitNewExpression(<NewExpression>node);
+                    return visitNewExpression(node as NewExpression);
 
                 case SyntaxKind.ParenthesizedExpression:
-                    return visitParenthesizedExpression(<ParenthesizedExpression>node, expressionResultIsUnused);
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, expressionResultIsUnused);
 
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(<BinaryExpression>node, expressionResultIsUnused);
+                    return visitBinaryExpression(node as BinaryExpression, expressionResultIsUnused);
 
                 case SyntaxKind.CommaListExpression:
-                    return visitCommaListExpression(<CommaListExpression>node, expressionResultIsUnused);
+                    return visitCommaListExpression(node as CommaListExpression, expressionResultIsUnused);
 
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
-                    return visitTemplateLiteral(<LiteralExpression>node);
+                    return visitTemplateLiteral(node as LiteralExpression);
 
                 case SyntaxKind.StringLiteral:
-                    return visitStringLiteral(<StringLiteral>node);
+                    return visitStringLiteral(node as StringLiteral);
 
                 case SyntaxKind.NumericLiteral:
-                    return visitNumericLiteral(<NumericLiteral>node);
+                    return visitNumericLiteral(node as NumericLiteral);
 
                 case SyntaxKind.TaggedTemplateExpression:
-                    return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
 
                 case SyntaxKind.TemplateExpression:
-                    return visitTemplateExpression(<TemplateExpression>node);
+                    return visitTemplateExpression(node as TemplateExpression);
 
                 case SyntaxKind.YieldExpression:
-                    return visitYieldExpression(<YieldExpression>node);
+                    return visitYieldExpression(node as YieldExpression);
 
                 case SyntaxKind.SpreadElement:
-                    return visitSpreadElement(<SpreadElement>node);
+                    return visitSpreadElement(node as SpreadElement);
 
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword(/*isExpressionOfCall*/ false);
@@ -494,20 +531,20 @@ namespace ts {
                     return visitThisKeyword(node);
 
                 case SyntaxKind.MetaProperty:
-                    return visitMetaProperty(<MetaProperty>node);
+                    return visitMetaProperty(node as MetaProperty);
 
                 case SyntaxKind.MethodDeclaration:
-                    return visitMethodDeclaration(<MethodDeclaration>node);
+                    return visitMethodDeclaration(node as MethodDeclaration);
 
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return visitAccessorDeclaration(<AccessorDeclaration>node);
+                    return visitAccessorDeclaration(node as AccessorDeclaration);
 
                 case SyntaxKind.VariableStatement:
-                    return visitVariableStatement(<VariableStatement>node);
+                    return visitVariableStatement(node as VariableStatement);
 
                 case SyntaxKind.ReturnStatement:
-                    return visitReturnStatement(<ReturnStatement>node);
+                    return visitReturnStatement(node as ReturnStatement);
 
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
@@ -587,7 +624,7 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
-            if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
+            if (hierarchyFacts & HierarchyFacts.ArrowFunction && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
             if (convertedLoopState) {
@@ -919,7 +956,7 @@ namespace ts {
             // If this is the case, we do not include the synthetic `...args` parameter and
             // will instead use the `arguments` object in ES5/3.
             return visitParameterList(constructor && !hasSynthesizedSuper ? constructor.parameters : undefined, visitor, context)
-                || <ParameterDeclaration[]>[];
+                || [] as ParameterDeclaration[];
         }
 
         function createDefaultConstructorBody(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
@@ -1578,16 +1615,16 @@ namespace ts {
             for (const member of node.members) {
                 switch (member.kind) {
                     case SyntaxKind.SemicolonClassElement:
-                        statements.push(transformSemicolonClassElementToStatement(<SemicolonClassElement>member));
+                        statements.push(transformSemicolonClassElementToStatement(member as SemicolonClassElement));
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), <MethodDeclaration>member, node));
+                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), member as MethodDeclaration, node));
                         break;
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        const accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
+                        const accessors = getAllAccessorDeclarations(node.members, member as AccessorDeclaration);
                         if (member === accessors.firstAccessor) {
                             statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member), accessors, node));
                         }
@@ -1595,6 +1632,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
                         // Constructors are handled in visitClassExpression/visitClassDeclaration
                         break;
 
@@ -1626,7 +1664,7 @@ namespace ts {
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
             const propertyName = visitNode(member.name, visitor, isPropertyName);
             let e: Expression;
-            if (!isPrivateIdentifier(propertyName) && context.getCompilerOptions().useDefineForClassFields) {
+            if (!isPrivateIdentifier(propertyName) && getUseDefineForClassFields(context.getCompilerOptions())) {
                 const name = isComputedPropertyName(propertyName) ? propertyName.expression
                     : isIdentifier(propertyName) ? factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
                     : propertyName;
@@ -1734,7 +1772,7 @@ namespace ts {
          * @param node An ArrowFunction node.
          */
         function visitArrowFunction(node: ArrowFunction) {
-            if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+            if (node.transformFlags & TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
 
@@ -1753,10 +1791,6 @@ namespace ts {
             setTextRange(func, node);
             setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
-
-            if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis) {
-                enableSubstitutionsForCapturedThis();
-            }
 
             // If an arrow function contains
             exitSubtree(ancestorFacts, HierarchyFacts.ArrowFunctionSubtreeExcludes, HierarchyFacts.None);
@@ -1837,7 +1871,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !isStatic(node)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -2274,13 +2308,13 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
-                    return visitDoOrWhileStatement(<DoStatement | WhileStatement>node, outermostLabeledStatement);
+                    return visitDoOrWhileStatement(node as DoStatement | WhileStatement, outermostLabeledStatement);
                 case SyntaxKind.ForStatement:
-                    return visitForStatement(<ForStatement>node, outermostLabeledStatement);
+                    return visitForStatement(node as ForStatement, outermostLabeledStatement);
                 case SyntaxKind.ForInStatement:
-                    return visitForInStatement(<ForInStatement>node, outermostLabeledStatement);
+                    return visitForInStatement(node as ForInStatement, outermostLabeledStatement);
                 case SyntaxKind.ForOfStatement:
-                    return visitForOfStatement(<ForOfStatement>node, outermostLabeledStatement);
+                    return visitForOfStatement(node as ForOfStatement, outermostLabeledStatement);
             }
         }
 
@@ -2853,9 +2887,9 @@ namespace ts {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    const initializer = (<ForStatement | ForInStatement | ForOfStatement>node).initializer;
+                    const initializer = (node as ForStatement | ForInStatement | ForOfStatement).initializer;
                     if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
-                        loopInitializer = <VariableDeclarationList>initializer;
+                        loopInitializer = initializer as VariableDeclarationList;
                     }
                     break;
             }
@@ -3243,7 +3277,7 @@ namespace ts {
                 !state.labeledNonLocalBreaks &&
                 !state.labeledNonLocalContinues;
 
-            const call = factory.createCallExpression(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => <Identifier>p.name));
+            const call = factory.createCallExpression(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => p.name as Identifier));
             const callResult = containsYield
                 ? factory.createYieldExpression(
                     factory.createToken(SyntaxKind.AsteriskToken),
@@ -3599,7 +3633,7 @@ namespace ts {
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
             if (some(node.elements, isSpreadElement)) {
                 // We are here because we contain a SpreadElementExpression.
-                return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, !!node.multiLine, /*hasTrailingComma*/ !!node.elements.hasTrailingComma);
+                return transformAndSpreadElements(node.elements, /*isArgumentList*/ false, !!node.multiLine, /*hasTrailingComma*/ !!node.elements.hasTrailingComma);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -3672,7 +3706,7 @@ namespace ts {
             // visit the class body statements outside of any converted loop body.
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const bodyStatements = visitNodes(body.statements, visitor, isStatement);
+            const bodyStatements = visitNodes(body.statements, classWrapperStatementVisitor, isStatement);
             convertedLoopState = savedConvertedLoopState;
 
             const classStatements = filter(bodyStatements, isVariableStatementWithInitializer);
@@ -3699,7 +3733,10 @@ namespace ts {
             //      return C;
             //  }())
             //
-            const aliasAssignment = tryCast(initializer, isAssignmentExpression);
+            let aliasAssignment = tryCast(initializer, isAssignmentExpression);
+            if (!aliasAssignment && isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.CommaToken) {
+                aliasAssignment = tryCast(initializer.left, isAssignmentExpression);
+            }
 
             // The underlying call (3) is another IIFE that may contain a '_super' argument.
             const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
@@ -3820,7 +3857,7 @@ namespace ts {
                     resultingCall = factory.createFunctionApplyCall(
                         visitNode(target, callExpressionVisitor, isExpression),
                         node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
-                        transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
+                        transformAndSpreadElements(node.arguments, /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     );
                 }
                 else {
@@ -3878,7 +3915,7 @@ namespace ts {
                     factory.createFunctionApplyCall(
                         visitNode(target, visitor, isExpression),
                         thisArg,
-                        transformAndSpreadElements(factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]), /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
+                        transformAndSpreadElements(factory.createNodeArray([factory.createVoidZero(), ...node.arguments!]), /*isArgumentList*/ true, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     ),
                     /*typeArguments*/ undefined,
                     []
@@ -3891,12 +3928,12 @@ namespace ts {
          * Transforms an array of Expression nodes that contains a SpreadExpression.
          *
          * @param elements The array of Expression nodes.
-         * @param needsUniqueCopy A value indicating whether to ensure that the result is a fresh array.
-         * This should be `true` when spreading into an `ArrayLiteral`, and `false` when spreading into an
+         * @param isArgumentList A value indicating whether to ensure that the result is a fresh array.
+         * This should be `false` when spreading into an `ArrayLiteral`, and `true` when spreading into an
          * argument list.
          * @param multiLine A value indicating whether the result should be emitted on multiple lines.
          */
-        function transformAndSpreadElements(elements: NodeArray<Expression>, needsUniqueCopy: boolean, multiLine: boolean, hasTrailingComma: boolean): Expression {
+        function transformAndSpreadElements(elements: NodeArray<Expression>, isArgumentList: boolean, multiLine: boolean, hasTrailingComma: boolean): Expression {
             // When there is no leading SpreadElement:
             //
             // [source]
@@ -3931,7 +3968,10 @@ namespace ts {
             // Map spans of spread expressions into their expressions and spans of other
             // expressions into an array literal.
             const numElements = elements.length;
-            const segments = flatten<Expression>(
+            const segments = flatten<SpreadSegment>(
+                // As we visit each element, we return one of two functions to use as the "key":
+                // - `visitSpanOfSpreads` for one or more contiguous `...` spread expressions, i.e. `...a, ...b` in `[1, 2, ...a, ...b]`
+                // - `visitSpanOfNonSpreads` for one or more contiguous non-spread elements, i.e. `1, 2`, in `[1, 2, ...a, ...b]`
                 spanMap(elements, partitionSpread, (partition, visitPartition, _start, end) =>
                     visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
                 )
@@ -3943,26 +3983,26 @@ namespace ts {
                 // a CallExpression or NewExpression. When using `--downlevelIteration`, we need
                 // to coerce this into an array for use with `apply`, so we will use the code path
                 // that follows instead.
-                if (!needsUniqueCopy && !compilerOptions.downlevelIteration
-                    || isPackedArrayLiteral(firstSegment) // see NOTE (above)
-                    || isCallToHelper(firstSegment, "___spreadArray" as __String)) {
-                    return segments[0];
+                if (isArgumentList && !compilerOptions.downlevelIteration
+                    || isPackedArrayLiteral(firstSegment.expression) // see NOTE (above)
+                    || isCallToHelper(firstSegment.expression, "___spreadArray" as __String)) {
+                    return firstSegment.expression;
                 }
             }
 
             const helpers = emitHelpers();
-            const startsWithSpread = isSpreadElement(elements[0]);
+            const startsWithSpread = segments[0].kind !== SpreadSegmentKind.None;
             let expression: Expression =
                 startsWithSpread ? factory.createArrayLiteralExpression() :
-                segments[0];
+                segments[0].expression;
             for (let i = startsWithSpread ? 0 : 1; i < segments.length; i++) {
+                const segment = segments[i];
+                // If this is for an argument list, it doesn't matter if the array is packed or sparse
                 expression = helpers.createSpreadArrayHelper(
                     expression,
-                    compilerOptions.downlevelIteration && !isPackedArrayLiteral(segments[i]) ? // see NOTE (above)
-                        helpers.createReadHelper(segments[i], /*count*/ undefined) :
-                        segments[i]);
+                    segment.expression,
+                    segment.kind === SpreadSegmentKind.UnpackedSpread && !isArgumentList);
             }
-
             return expression;
         }
 
@@ -3972,27 +4012,38 @@ namespace ts {
                 : visitSpanOfNonSpreads;
         }
 
-        function visitSpanOfSpreads(chunk: Expression[]): VisitResult<Expression> {
+        function visitSpanOfSpreads(chunk: Expression[]): SpreadSegment[] {
             return map(chunk, visitExpressionOfSpread);
         }
 
-        function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
-            return factory.createArrayLiteralExpression(
+        function visitExpressionOfSpread(node: SpreadElement): SpreadSegment {
+            let expression = visitNode(node.expression, visitor, isExpression);
+
+            // We don't need to pack already packed array literals, or existing calls to the `__read` helper.
+            const isCallToReadHelper = isCallToHelper(expression, "___read" as __String);
+            let kind = isCallToReadHelper || isPackedArrayLiteral(expression) ? SpreadSegmentKind.PackedSpread : SpreadSegmentKind.UnpackedSpread;
+
+            // We don't need the `__read` helper for array literals. Array packing will be performed by `__spreadArray`.
+            if (compilerOptions.downlevelIteration && kind === SpreadSegmentKind.UnpackedSpread && !isArrayLiteralExpression(expression) && !isCallToReadHelper) {
+                expression = emitHelpers().createReadHelper(expression, /*count*/ undefined);
+                // the `__read` helper returns a packed array, so we don't need to ensure a packed array
+                kind = SpreadSegmentKind.PackedSpread;
+            }
+
+            return createSpreadSegment(kind, expression);
+        }
+
+        function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): SpreadSegment {
+            const expression = factory.createArrayLiteralExpression(
                 visitNodes(factory.createNodeArray(chunk, hasTrailingComma), visitor, isExpression),
-                multiLine
-            );
+                multiLine);
+
+            // We do not pack non-spread segments, this is so that `[1, , ...[2, , 3], , 4]` is properly downleveled to
+            // `[1, , 2, undefined, 3, , 4]`. See the NOTE in `transformAndSpreadElements`
+            return createSpreadSegment(SpreadSegmentKind.None, expression);
         }
 
         function visitSpreadElement(node: SpreadElement) {
-            return visitNode(node.expression, visitor, isExpression);
-        }
-
-        /**
-         * Transforms the expression of a SpreadExpression node.
-         *
-         * @param node A SpreadExpression node.
-         */
-        function visitExpressionOfSpread(node: SpreadElement) {
             return visitNode(node.expression, visitor, isExpression);
         }
 
@@ -4051,86 +4102,22 @@ namespace ts {
          * @param node A TemplateExpression node.
          */
         function visitTemplateExpression(node: TemplateExpression): Expression {
-            const expressions: Expression[] = [];
-            addTemplateHead(expressions, node);
-            addTemplateSpans(expressions, node);
-
-            // createAdd will check if each expression binds less closely than binary '+'.
-            // If it does, it wraps the expression in parentheses. Otherwise, something like
-            //    `abc${ 1 << 2 }`
-            // becomes
-            //    "abc" + 1 << 2 + ""
-            // which is really
-            //    ("abc" + 1) << (2 + "")
-            // rather than
-            //    "abc" + (1 << 2) + ""
-            const expression = reduceLeft(expressions, factory.createAdd)!;
-            if (nodeIsSynthesized(expression)) {
-                setTextRange(expression, node);
-            }
-
-            return expression;
-        }
-
-        /**
-         * Gets a value indicating whether we need to include the head of a TemplateExpression.
-         *
-         * @param node A TemplateExpression node.
-         */
-        function shouldAddTemplateHead(node: TemplateExpression) {
-            // If this expression has an empty head literal and the first template span has a non-empty
-            // literal, then emitting the empty head literal is not necessary.
-            //     `${ foo } and ${ bar }`
-            // can be emitted as
-            //     foo + " and " + bar
-            // This is because it is only required that one of the first two operands in the emit
-            // output must be a string literal, so that the other operand and all following operands
-            // are forced into strings.
-            //
-            // If the first template span has an empty literal, then the head must still be emitted.
-            //     `${ foo }${ bar }`
-            // must still be emitted as
-            //     "" + foo + bar
-
-            // There is always atleast one templateSpan in this code path, since
-            // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
-            Debug.assert(node.templateSpans.length !== 0);
-
-            return node.head.text.length !== 0 || node.templateSpans[0].literal.text.length === 0;
-        }
-
-        /**
-         * Adds the head of a TemplateExpression to an array of expressions.
-         *
-         * @param expressions An array of expressions.
-         * @param node A TemplateExpression node.
-         */
-        function addTemplateHead(expressions: Expression[], node: TemplateExpression): void {
-            if (!shouldAddTemplateHead(node)) {
-                return;
-            }
-
-            expressions.push(factory.createStringLiteral(node.head.text));
-        }
-
-        /**
-         * Visits and adds the template spans of a TemplateExpression to an array of expressions.
-         *
-         * @param expressions An array of expressions.
-         * @param node A TemplateExpression node.
-         */
-        function addTemplateSpans(expressions: Expression[], node: TemplateExpression): void {
+            let expression: Expression = factory.createStringLiteral(node.head.text);
             for (const span of node.templateSpans) {
-                expressions.push(visitNode(span.expression, visitor, isExpression));
+                const args = [visitNode(span.expression, visitor, isExpression)];
 
-                // Only emit if the literal is non-empty.
-                // The binary '+' operator is left-associative, so the first string concatenation
-                // with the head will force the result up to this point to be a string.
-                // Emitting a '+ ""' has no semantic effect for middles and tails.
-                if (span.literal.text.length !== 0) {
-                    expressions.push(factory.createStringLiteral(span.literal.text));
+                if (span.literal.text.length > 0) {
+                    args.push(factory.createStringLiteral(span.literal.text));
                 }
+
+                expression = factory.createCallExpression(
+                    factory.createPropertyAccessExpression(expression, "concat"),
+                    /*typeArguments*/ undefined,
+                    args,
+                );
             }
+
+            return setTextRange(expression, node);
         }
 
         /**
@@ -4250,8 +4237,8 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.VariableDeclaration:
-                    return (<NamedDeclaration>node.parent).name === node
-                        && resolver.isDeclarationWithCollidingName(<Declaration>node.parent);
+                    return (node.parent as NamedDeclaration).name === node
+                        && resolver.isDeclarationWithCollidingName(node.parent as Declaration);
             }
 
             return false;
@@ -4265,10 +4252,10 @@ namespace ts {
         function substituteExpression(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return substituteExpressionIdentifier(<Identifier>node);
+                    return substituteExpressionIdentifier(node as Identifier);
 
                 case SyntaxKind.ThisKeyword:
-                    return substituteThisKeyword(<PrimaryExpression>node);
+                    return substituteThisKeyword(node as PrimaryExpression);
             }
 
             return node;
@@ -4328,7 +4315,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
+            return isStatic(member)
                 ? factory.getInternalName(node)
                 : factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
         }
@@ -4347,22 +4334,22 @@ namespace ts {
                 return false;
             }
 
-            const statementExpression = (<ExpressionStatement>statement).expression;
+            const statementExpression = (statement as ExpressionStatement).expression;
             if (!nodeIsSynthesized(statementExpression) || statementExpression.kind !== SyntaxKind.CallExpression) {
                 return false;
             }
 
-            const callTarget = (<CallExpression>statementExpression).expression;
+            const callTarget = (statementExpression as CallExpression).expression;
             if (!nodeIsSynthesized(callTarget) || callTarget.kind !== SyntaxKind.SuperKeyword) {
                 return false;
             }
 
-            const callArgument = singleOrUndefined((<CallExpression>statementExpression).arguments);
+            const callArgument = singleOrUndefined((statementExpression as CallExpression).arguments);
             if (!callArgument || !nodeIsSynthesized(callArgument) || callArgument.kind !== SyntaxKind.SpreadElement) {
                 return false;
             }
 
-            const expression = (<SpreadElement>callArgument).expression;
+            const expression = (callArgument as SpreadElement).expression;
             return isIdentifier(expression) && expression.escapedText === "arguments";
         }
     }

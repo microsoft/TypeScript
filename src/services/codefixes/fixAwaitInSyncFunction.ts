@@ -15,8 +15,8 @@ namespace ts.codefix {
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
-            const seen = new Map<string, true>();
+        getAllCodeActions: function getAllCodeActionsToFixAwaitInSyncFunction(context) {
+            const seen = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file, diag.start);
                 if (!nodes || !addToSeen(seen, getNodeId(nodes.insertBefore))) return;
@@ -53,7 +53,8 @@ namespace ts.codefix {
                 insertBefore = findChildOfKind(containingFunction, SyntaxKind.FunctionKeyword, sourceFile);
                 break;
             case SyntaxKind.ArrowFunction:
-                insertBefore = findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile) || first(containingFunction.parameters);
+                const kind = containingFunction.typeParameters ? SyntaxKind.LessThanToken : SyntaxKind.OpenParenToken;
+                insertBefore = findChildOfKind(containingFunction, kind, sourceFile) || first(containingFunction.parameters);
                 break;
             default:
                 return;

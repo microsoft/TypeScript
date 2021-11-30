@@ -1,0 +1,204 @@
+[
+  {
+    "marker": {
+      "fileName": "/module1.ts",
+      "position": 210,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 210,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "CC",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "C",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/jsdocLink3.ts",
+            "textSpan": {
+              "start": 0,
+              "length": 18
+            }
+          }
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ],
+      "tags": [
+        {
+          "name": "wat",
+          "text": [
+            {
+              "text": "Makes a ",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": ". A default one.\n",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C()",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": "\n",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            },
+            {
+              "text": "|postfix text",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": "\n",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "unformatted postfix text",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            }
+          ]
+        },
+        {
+          "name": "see",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": " its great",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

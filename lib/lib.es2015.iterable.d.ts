@@ -25,7 +25,7 @@ interface SymbolConstructor {
      * A method that returns the default iterator for an object. Called by the semantics of the
      * for-of statement.
      */
-    readonly iterator: symbol;
+    readonly iterator: unique symbol;
 }
 
 interface IteratorYieldResult<TYield> {
@@ -163,7 +163,7 @@ interface MapConstructor {
 interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object, V>(iterable: Iterable<readonly [K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {

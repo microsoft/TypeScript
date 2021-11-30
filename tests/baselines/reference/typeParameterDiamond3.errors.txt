@@ -1,24 +1,12 @@
 tests/cases/compiler/typeParameterDiamond3.ts(8,13): error TS2322: Type 'T | U' is not assignable to type 'Top'.
   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-    Type 'T' is not assignable to type 'Top'.
-      'Top' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/compiler/typeParameterDiamond3.ts(9,13): error TS2322: Type 'Bottom' is not assignable to type 'T | U'.
   Type 'Top | T | U' is not assignable to type 'T | U'.
     Type 'Top' is not assignable to type 'T | U'.
       Type 'Top' is not assignable to type 'U'.
         'U' could be instantiated with an arbitrary type which could be unrelated to 'Top'.
-          Type 'Bottom' is not assignable to type 'U'.
-            'U' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
-              Type 'Top | T | U' is not assignable to type 'U'.
-                'U' could be instantiated with an arbitrary type which could be unrelated to 'Top | T | U'.
-                  Type 'Top' is not assignable to type 'U'.
-                    'U' could be instantiated with an arbitrary type which could be unrelated to 'Top'.
 tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom' is not assignable to type 'Top'.
   'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
-    Type 'Top | T | U' is not assignable to type 'Top'.
-      'Top' could be instantiated with an arbitrary type which could be unrelated to 'Top | T | U'.
-        Type 'T' is not assignable to type 'Top'.
-          'Top' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
 ==== tests/cases/compiler/typeParameterDiamond3.ts (3 errors) ====
@@ -33,8 +21,6 @@ tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom
                 ~~~
 !!! error TS2322: Type 'T | U' is not assignable to type 'Top'.
 !!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:     Type 'T' is not assignable to type 'Top'.
-!!! error TS2322:       'Top' could be instantiated with an arbitrary type which could be unrelated to 'T'.
                 middle = bottom;
                 ~~~~~~
 !!! error TS2322: Type 'Bottom' is not assignable to type 'T | U'.
@@ -42,20 +28,10 @@ tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom
 !!! error TS2322:     Type 'Top' is not assignable to type 'T | U'.
 !!! error TS2322:       Type 'Top' is not assignable to type 'U'.
 !!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'Top'.
-!!! error TS2322:           Type 'Bottom' is not assignable to type 'U'.
-!!! error TS2322:             'U' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
-!!! error TS2322:               Type 'Top | T | U' is not assignable to type 'U'.
-!!! error TS2322:                 'U' could be instantiated with an arbitrary type which could be unrelated to 'Top | T | U'.
-!!! error TS2322:                   Type 'Top' is not assignable to type 'U'.
-!!! error TS2322:                     'U' could be instantiated with an arbitrary type which could be unrelated to 'Top'.
                 top = bottom;
                 ~~~
 !!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.
 !!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
-!!! error TS2322:     Type 'Top | T | U' is not assignable to type 'Top'.
-!!! error TS2322:       'Top' could be instantiated with an arbitrary type which could be unrelated to 'Top | T | U'.
-!!! error TS2322:         Type 'T' is not assignable to type 'Top'.
-!!! error TS2322:           'Top' could be instantiated with an arbitrary type which could be unrelated to 'T'.
             }
         }
     }

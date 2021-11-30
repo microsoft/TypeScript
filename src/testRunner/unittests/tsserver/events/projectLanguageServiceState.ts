@@ -23,12 +23,12 @@ namespace ts.projectSystem {
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
             const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand({
                 seq: 0,
                 type: "request",
                 command: "open",
                 arguments: { file: f1.path }
-            });
+            } as protocol.OpenRequest);
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
@@ -68,18 +68,12 @@ namespace ts.projectSystem {
                 content: "{}"
             };
             const host = createServerHost([f1, f2, f3, libFile, config]);
-            const logs: string[] = [];
-            const logger: server.Logger = {
-                ...nullLogger,
-                info: s => logs.push(s)
-            };
-            const service = createProjectService(host, { logger });
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             service.openClientFile(f1.path);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(config.path)!;
-            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-            assert.equal(project.lastFileExceededProgramSize, f2.path);
-            assert.isTrue(contains(logs, `Non TS file size exceeded limit (${f1.content.length + f2.fileSize!}). Largest files: ${f2.path}:${f2.fileSize}, ${f1.path}:${f1.content.length}`));
+            service.logger.logs.push(`languageServiceEnabled: ${project.languageServiceEnabled}`);
+            service.logger.logs.push(`lastFileExceededProgramSize: ${project.lastFileExceededProgramSize}`);
+            baselineTsserverLogs("projectLanguageServiceStateEvent", "large file size is determined correctly", service);
         });
     });
 }

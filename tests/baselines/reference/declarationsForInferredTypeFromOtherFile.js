@@ -37,7 +37,7 @@ exports.__esModule = true;
 exports.bar = void 0;
 var file2_1 = require("./file2");
 function bar() {
-    return file2_1.foo();
+    return (0, file2_1.foo)();
 }
 exports.bar = bar;
 

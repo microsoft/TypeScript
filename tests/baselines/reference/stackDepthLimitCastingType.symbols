@@ -1,0 +1,110 @@
+=== tests/cases/compiler/node_modules/backbone/index.d.ts ===
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 0, 0))
+
+    interface JQueryXHR { }
+>JQueryXHR : Symbol(JQueryXHR, Decl(index.d.ts, 0, 16))
+
+    class Model<T = any, E = {}> {
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+>T : Symbol(T, Decl(index.d.ts, 2, 16))
+>E : Symbol(E, Decl(index.d.ts, 2, 24))
+
+        initialize(attributes?: T, options?: CombinedModelConstructorOptions<E, this>): void;
+>initialize : Symbol(Model.initialize, Decl(index.d.ts, 2, 34))
+>attributes : Symbol(attributes, Decl(index.d.ts, 3, 19))
+>T : Symbol(T, Decl(index.d.ts, 2, 16))
+>options : Symbol(options, Decl(index.d.ts, 3, 34))
+>CombinedModelConstructorOptions : Symbol(CombinedModelConstructorOptions, Decl(index.d.ts, 11, 5))
+>E : Symbol(E, Decl(index.d.ts, 2, 24))
+
+        fetch(options?: any): JQueryXHR;
+>fetch : Symbol(Model.fetch, Decl(index.d.ts, 3, 93))
+>options : Symbol(options, Decl(index.d.ts, 4, 14))
+>JQueryXHR : Symbol(JQueryXHR, Decl(index.d.ts, 0, 16))
+    }
+    interface ModelConstructorOptions<TModel extends Model = Model> {
+>ModelConstructorOptions : Symbol(ModelConstructorOptions, Decl(index.d.ts, 5, 5))
+>TModel : Symbol(TModel, Decl(index.d.ts, 6, 38))
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+
+        collection?: Collection<TModel>;
+>collection : Symbol(ModelConstructorOptions.collection, Decl(index.d.ts, 6, 69))
+>Collection : Symbol(Collection, Decl(index.d.ts, 8, 5))
+>TModel : Symbol(TModel, Decl(index.d.ts, 6, 38))
+    }
+    class Collection<TModel extends Model = Model> {
+>Collection : Symbol(Collection, Decl(index.d.ts, 8, 5))
+>TModel : Symbol(TModel, Decl(index.d.ts, 9, 21))
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+
+        without(...values: TModel[]): TModel[];
+>without : Symbol(Collection.without, Decl(index.d.ts, 9, 52))
+>values : Symbol(values, Decl(index.d.ts, 10, 16))
+>TModel : Symbol(TModel, Decl(index.d.ts, 9, 21))
+>TModel : Symbol(TModel, Decl(index.d.ts, 9, 21))
+    }
+    type CombinedModelConstructorOptions<E, M extends Model<any, E> = Model> = ModelConstructorOptions<M> & E;
+>CombinedModelConstructorOptions : Symbol(CombinedModelConstructorOptions, Decl(index.d.ts, 11, 5))
+>E : Symbol(E, Decl(index.d.ts, 12, 41))
+>M : Symbol(M, Decl(index.d.ts, 12, 43))
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+>E : Symbol(E, Decl(index.d.ts, 12, 41))
+>Model : Symbol(Model, Decl(index.d.ts, 1, 27))
+>ModelConstructorOptions : Symbol(ModelConstructorOptions, Decl(index.d.ts, 5, 5))
+>M : Symbol(M, Decl(index.d.ts, 12, 43))
+>E : Symbol(E, Decl(index.d.ts, 12, 41))
+}
+
+export {
+    Model
+>Model : Symbol(Model, Decl(index.d.ts, 15, 8))
+
+};
+export as namespace Backbone;
+>Backbone : Symbol(Backbone, Decl(index.d.ts, 17, 2))
+
+=== tests/cases/compiler/node_modules/backbone-fetch-cache/index.d.ts ===
+import * as Backbone from "backbone";
+>Backbone : Symbol(Backbone, Decl(index.d.ts, 0, 6))
+
+declare module "backbone" {
+>"backbone" : Symbol(Backbone, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 37))
+
+    interface ModelWithCache extends Model {
+>ModelWithCache : Symbol(ModelWithCache, Decl(index.d.ts, 1, 27))
+>Model : Symbol(Backbone.Model, Decl(index.d.ts, 1, 27))
+
+        fetch(options?: any): JQueryXHR;
+>fetch : Symbol(ModelWithCache.fetch, Decl(index.d.ts, 2, 44))
+>options : Symbol(options, Decl(index.d.ts, 3, 14))
+>JQueryXHR : Symbol(JQueryXHR, Decl(index.d.ts, 0, 16))
+    }
+}
+export {};
+export as namespace BackboneFetchCache;
+>BackboneFetchCache : Symbol(BackboneFetchCache, Decl(index.d.ts, 6, 10))
+
+=== tests/cases/compiler/index.ts ===
+import * as Backbone from "backbone";
+>Backbone : Symbol(Backbone, Decl(index.ts, 0, 6))
+
+import * as BackboneFetchCache from "backbone-fetch-cache";
+>BackboneFetchCache : Symbol(BackboneFetchCache, Decl(index.ts, 1, 6))
+
+
+const hoge = new Backbone.Model() as Backbone.ModelWithCache;
+>hoge : Symbol(hoge, Decl(index.ts, 4, 5))
+>Backbone.Model : Symbol(Backbone.Model, Decl(index.d.ts, 15, 8))
+>Backbone : Symbol(Backbone, Decl(index.ts, 0, 6))
+>Model : Symbol(Backbone.Model, Decl(index.d.ts, 15, 8))
+>Backbone : Symbol(Backbone, Decl(index.ts, 0, 6))
+>ModelWithCache : Symbol(Backbone.ModelWithCache, Decl(index.d.ts, 1, 27))
+
+hoge.fetch(null as any);
+>hoge.fetch : Symbol(Backbone.ModelWithCache.fetch, Decl(index.d.ts, 2, 44))
+>hoge : Symbol(hoge, Decl(index.ts, 4, 5))
+>fetch : Symbol(Backbone.ModelWithCache.fetch, Decl(index.d.ts, 2, 44))
+

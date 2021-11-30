@@ -42,7 +42,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
@@ -63,6 +63,8 @@ Program files::
 /user/username/projects/myproject/XY/a.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -156,7 +158,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
@@ -177,6 +179,8 @@ Program files::
 /user/username/projects/myproject/XY/a.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

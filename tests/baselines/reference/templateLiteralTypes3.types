@@ -1,0 +1,515 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypes3.ts ===
+// Inference from template literal type to template literal type
+
+type Foo1<T> = T extends `*${infer U}*` ? U : never;
+>Foo1 : Foo1<T>
+
+type T01 = Foo1<'hello'>;
+>T01 : never
+
+type T02 = Foo1<'*hello*'>;
+>T02 : "hello"
+
+type T03 = Foo1<'**hello**'>;
+>T03 : "*hello*"
+
+type T04 = Foo1<`*${string}*`>;
+>T04 : string
+
+type T05 = Foo1<`*${number}*`>;
+>T05 : `${number}`
+
+type T06 = Foo1<`*${bigint}*`>;
+>T06 : `${bigint}`
+
+type T07 = Foo1<`*${any}*`>;
+>T07 : any
+
+type T08 = Foo1<`**${string}**`>;
+>T08 : `*${string}*`
+
+type T09 = Foo1<`**${string}**${string}**`>;
+>T09 : `*${string}**${string}*`
+
+type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
+>T10 : T10
+
+type T11 = Foo1<`**${boolean}**${boolean}**`>;
+>T11 : T11
+
+declare function foo1<V extends string>(arg: `*${V}*`): V;
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>arg : `*${V}*`
+
+function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
+>f1 : <T extends string>(s: string, n: number, b: boolean, t: T) => void
+>s : string
+>n : number
+>b : boolean
+>t : T
+
+    let x1 = foo1('hello');  // Error
+>x1 : string
+>foo1('hello') : string
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>'hello' : "hello"
+
+    let x2 = foo1('*hello*');
+>x2 : "hello"
+>foo1('*hello*') : "hello"
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>'*hello*' : "*hello*"
+
+    let x3 = foo1('**hello**');
+>x3 : "*hello*"
+>foo1('**hello**') : "*hello*"
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>'**hello**' : "**hello**"
+
+    let x4 = foo1(`*${s}*` as const);
+>x4 : string
+>foo1(`*${s}*` as const) : string
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>`*${s}*` as const : `*${string}*`
+>`*${s}*` : `*${string}*`
+>s : string
+
+    let x5 = foo1(`*${n}*` as const);
+>x5 : `${number}`
+>foo1(`*${n}*` as const) : `${number}`
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>`*${n}*` as const : `*${number}*`
+>`*${n}*` : `*${number}*`
+>n : number
+
+    let x6 = foo1(`*${b}*` as const);
+>x6 : "false" | "true"
+>foo1(`*${b}*` as const) : "false" | "true"
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>`*${b}*` as const : "*false*" | "*true*"
+>`*${b}*` : "*false*" | "*true*"
+>b : boolean
+
+    let x7 = foo1(`*${t}*` as const);
+>x7 : `${T}`
+>foo1(`*${t}*` as const) : `${T}`
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>`*${t}*` as const : `*${T}*`
+>`*${t}*` : `*${T}*`
+>t : T
+
+    let x8 = foo1(`**${s}**` as const);
+>x8 : `*${string}*`
+>foo1(`**${s}**` as const) : `*${string}*`
+>foo1 : <V extends string>(arg: `*${V}*`) => V
+>`**${s}**` as const : `**${string}**`
+>`**${s}**` : `**${string}**`
+>s : string
+}
+
+// Inference to a placeholder immediately followed by another placeholder infers a single
+// character or placeholder from the source.
+
+type Parts<T> =
+>Parts : Parts<T>
+
+    T extends '' ? [] :
+    T extends `${infer Head}${infer Tail}` ? [Head, ...Parts<Tail>] :
+    never;
+
+type T20 = Parts<`abc`>;
+>T20 : ["a", "b", "c"]
+
+type T21 = Parts<`*${string}*`>;
+>T21 : ["*", string, "*"]
+
+type T22 = Parts<`*${number}*`>;
+>T22 : ["*", `${number}`, "*"]
+
+type T23 = Parts<`*${number}*${string}*${bigint}*`>;
+>T23 : ["*", `${number}`, "*", string, "*", `${bigint}`, "*"]
+
+function f2() {
+>f2 : () => void
+
+    let x: `${number}.${number}.${number}`;
+>x : `${number}.${number}.${number}`
+
+    x = '1.1.1';
+>x = '1.1.1' : "1.1.1"
+>x : `${number}.${number}.${number}`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `1.1.${number}`;
+>x = '1.1.1' as `1.1.${number}` : `1.1.${number}`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `1.1.${number}` : `1.1.${number}`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `1.${number}.1`;
+>x = '1.1.1' as `1.${number}.1` : `1.${number}.1`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `1.${number}.1` : `1.${number}.1`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `1.${number}.${number}`;
+>x = '1.1.1' as `1.${number}.${number}` : `1.${number}.${number}`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `1.${number}.${number}` : `1.${number}.${number}`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `${number}.1.1`;
+>x = '1.1.1' as `${number}.1.1` : `${number}.1.1`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `${number}.1.1` : `${number}.1.1`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `${number}.1.${number}`;
+>x = '1.1.1' as `${number}.1.${number}` : `${number}.1.${number}`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `${number}.1.${number}` : `${number}.1.${number}`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `${number}.${number}.1`;
+>x = '1.1.1' as `${number}.${number}.1` : `${number}.${number}.1`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `${number}.${number}.1` : `${number}.${number}.1`
+>'1.1.1' : "1.1.1"
+
+    x = '1.1.1' as `${number}.${number}.${number}`;
+>x = '1.1.1' as `${number}.${number}.${number}` : `${number}.${number}.${number}`
+>x : `${number}.${number}.${number}`
+>'1.1.1' as `${number}.${number}.${number}` : `${number}.${number}.${number}`
+>'1.1.1' : "1.1.1"
+}
+
+function f3<T extends string>(s: string, n: number, b: boolean, t: T) {
+>f3 : <T extends string>(s: string, n: number, b: boolean, t: T) => void
+>s : string
+>n : number
+>b : boolean
+>t : T
+
+    let x: `*${string}*`;
+>x : `*${string}*`
+
+    x = 'hello';  // Error
+>x = 'hello' : "hello"
+>x : `*${string}*`
+>'hello' : "hello"
+
+    x = '*hello*';
+>x = '*hello*' : "*hello*"
+>x : `*${string}*`
+>'*hello*' : "*hello*"
+
+    x = '**hello**';
+>x = '**hello**' : "**hello**"
+>x : `*${string}*`
+>'**hello**' : "**hello**"
+
+    x = `*${s}*` as const;
+>x = `*${s}*` as const : `*${string}*`
+>x : `*${string}*`
+>`*${s}*` as const : `*${string}*`
+>`*${s}*` : `*${string}*`
+>s : string
+
+    x = `*${n}*` as const;
+>x = `*${n}*` as const : `*${number}*`
+>x : `*${string}*`
+>`*${n}*` as const : `*${number}*`
+>`*${n}*` : `*${number}*`
+>n : number
+
+    x = `*${b}*` as const;
+>x = `*${b}*` as const : "*false*" | "*true*"
+>x : `*${string}*`
+>`*${b}*` as const : "*false*" | "*true*"
+>`*${b}*` : "*false*" | "*true*"
+>b : boolean
+
+    x = `*${t}*` as const;
+>x = `*${t}*` as const : `*${T}*`
+>x : `*${string}*`
+>`*${t}*` as const : `*${T}*`
+>`*${t}*` : `*${T}*`
+>t : T
+
+    x = `**${s}**` as const;
+>x = `**${s}**` as const : `**${string}**`
+>x : `*${string}*`
+>`**${s}**` as const : `**${string}**`
+>`**${s}**` : `**${string}**`
+>s : string
+}
+
+function f4<T extends number>(s: string, n: number, b: boolean, t: T) {
+>f4 : <T extends number>(s: string, n: number, b: boolean, t: T) => void
+>s : string
+>n : number
+>b : boolean
+>t : T
+
+    let x: `*${number}*`;
+>x : `*${number}*`
+
+    x = '123';  // Error
+>x = '123' : "123"
+>x : `*${number}*`
+>'123' : "123"
+
+    x = '*123*';
+>x = '*123*' : "*123*"
+>x : `*${number}*`
+>'*123*' : "*123*"
+
+    x = '**123**';  // Error
+>x = '**123**' : "**123**"
+>x : `*${number}*`
+>'**123**' : "**123**"
+
+    x = `*${s}*` as const;  // Error
+>x = `*${s}*` as const : `*${string}*`
+>x : `*${number}*`
+>`*${s}*` as const : `*${string}*`
+>`*${s}*` : `*${string}*`
+>s : string
+
+    x = `*${n}*` as const;
+>x = `*${n}*` as const : `*${number}*`
+>x : `*${number}*`
+>`*${n}*` as const : `*${number}*`
+>`*${n}*` : `*${number}*`
+>n : number
+
+    x = `*${b}*` as const;  // Error
+>x = `*${b}*` as const : "*false*" | "*true*"
+>x : `*${number}*`
+>`*${b}*` as const : "*false*" | "*true*"
+>`*${b}*` : "*false*" | "*true*"
+>b : boolean
+
+    x = `*${t}*` as const;
+>x = `*${t}*` as const : `*${T}*`
+>x : `*${number}*`
+>`*${t}*` as const : `*${T}*`
+>`*${t}*` : `*${T}*`
+>t : T
+}
+
+// Repro from #43060
+
+type A<T> = T extends `${infer U}.${infer V}` ? U | V : never
+>A : A<T>
+
+type B = A<`test.1024`>;  // "test" | "1024"
+>B : "test" | "1024"
+
+type C = A<`test.${number}`>;  // "test" | `${number}`
+>C : `${number}` | "test"
+
+type D<T> = T extends `${infer U}.${number}` ? U : never
+>D : D<T>
+
+type E = D<`test.1024`>;  // "test"
+>E : "test"
+
+type F = D<`test.${number}`>;  // "test"
+>F : "test"
+
+type G<T> = T extends `${infer U}.${infer V}` ? U | V : never
+>G : G<T>
+
+type H = G<`test.hoge`>;  // "test" | "hoge"
+>H : "test" | "hoge"
+
+type I = G<`test.${string}`>;  // string ("test" | string reduces to string)
+>I : string
+
+type J<T> = T extends `${infer U}.${string}` ? U : never
+>J : J<T>
+
+type K = J<`test.hoge`>;  // "test"
+>K : "test"
+
+type L = J<`test.${string}`>;  // "test""
+>L : "test"
+
+// Repro from #43243
+
+type Templated = `${string} ${string}`;
+>Templated : `${string} ${string}`
+
+const value1: string = "abc";
+>value1 : string
+>"abc" : "abc"
+
+const templated1: Templated = `${value1} abc` as const;
+>templated1 : `${string} ${string}`
+>`${value1} abc` as const : `${string} abc`
+>`${value1} abc` : `${string} abc`
+>value1 : string
+
+// Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
+
+const value2 = "abc";
+>value2 : "abc"
+>"abc" : "abc"
+
+const templated2: Templated = `${value2} abc` as const;
+>templated2 : `${string} ${string}`
+>`${value2} abc` as const : "abc abc"
+>`${value2} abc` : "abc abc"
+>value2 : "abc"
+
+// Repro from #43620
+
+type Prefixes = "foo" | "bar";
+>Prefixes : Prefixes
+
+type AllPrefixData = "foo:baz" | "bar:baz";
+>AllPrefixData : AllPrefixData
+
+type PrefixData<P extends Prefixes> = `${P}:baz`;
+>PrefixData : `${P}:baz`
+
+interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
+    blah: string;
+>blah : string
+}
+
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+>Schema : Schema
+>a : { b: {    c: number;}; }
+>b : { c: number; }
+>c : number
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+>chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>field : F | `${F}.${F}`
+
+chain("a");
+>chain("a") : void
+>chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>"a" : "a"
+
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+>ff1 : (x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) => void
+>x : `foo-${string}`
+>y : `${string}-bar`
+>z : `baz-${string}`
+
+    if (x === y) {
+>x === y : boolean
+>x : `foo-${string}`
+>y : `${string}-bar`
+
+        x;  // `foo-${string}`
+>x : `foo-${string}`
+    }
+    if (x === z) {  // Error
+>x === z : boolean
+>x : `foo-${string}`
+>z : `baz-${string}`
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+>ff2 : <T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) => void
+>x : `foo-${T}`
+>y : `${T}-bar`
+>z : `baz-${T}`
+
+    if (x === y) {
+>x === y : boolean
+>x : `foo-${T}`
+>y : `${T}-bar`
+
+        x;  // `foo-${T}`
+>x : `foo-${T}`
+    }
+    if (x === z) {  // Error
+>x === z : boolean
+>x : `foo-${T}`
+>z : `baz-${T}`
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+>ff3 : (x: string, y: `foo-${string}` | 'bar') => void
+>x : string
+>y : "bar" | `foo-${string}`
+
+    if (x === y) {
+>x === y : boolean
+>x : string
+>y : "bar" | `foo-${string}`
+
+        x;  // `foo-${string}` | 'bar'
+>x : "bar" | `foo-${string}`
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+>ff4 : (x: string, y: `foo-${string}`) => void
+>x : string
+>y : `foo-${string}`
+
+    if (x === 'foo-test') {
+>x === 'foo-test' : boolean
+>x : string
+>'foo-test' : "foo-test"
+
+        x;  // 'foo-test'
+>x : "foo-test"
+    }
+    if (y === 'foo-test') {
+>y === 'foo-test' : boolean
+>y : `foo-${string}`
+>'foo-test' : "foo-test"
+
+        y;  // 'foo-test'
+>y : "foo-test"
+    }
+}
+
+// Repro from #46045
+
+type Action =
+>Action : Action
+
+    | { type: `${string}_REQUEST` }
+>type : `${string}_REQUEST`
+
+    | { type: `${string}_SUCCESS`, response: string };
+>type : `${string}_SUCCESS`
+>response : string
+
+function reducer(action: Action) {
+>reducer : (action: Action) => void
+>action : Action
+
+    if (action.type === 'FOO_SUCCESS') {
+>action.type === 'FOO_SUCCESS' : boolean
+>action.type : `${string}_REQUEST` | `${string}_SUCCESS`
+>action : Action
+>type : `${string}_REQUEST` | `${string}_SUCCESS`
+>'FOO_SUCCESS' : "FOO_SUCCESS"
+
+        action.type;
+>action.type : "FOO_SUCCESS"
+>action : { type: `${string}_SUCCESS`; response: string; }
+>type : "FOO_SUCCESS"
+
+        action.response;
+>action.response : string
+>action : { type: `${string}_SUCCESS`; response: string; }
+>response : string
+    }
+}
+

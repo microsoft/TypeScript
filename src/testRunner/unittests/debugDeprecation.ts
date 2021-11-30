@@ -1,10 +1,12 @@
 namespace ts {
     describe("unittests:: debugDeprecation", () => {
+        let loggingHost: LoggingHost | undefined;
         beforeEach(() => {
-            const loggingHost = Debug.loggingHost;
-            afterEach(() => {
-                Debug.loggingHost = loggingHost;
-            });
+            loggingHost = Debug.loggingHost;
+        });
+        afterEach(() => {
+            Debug.loggingHost = loggingHost;
+            loggingHost = undefined;
         });
         describe("deprecateFunction", () => {
             it("silent deprecation", () => {
@@ -13,7 +15,11 @@ namespace ts {
                     typeScriptVersion: "3.8"
                 });
                 let logWritten = false;
-                Debug.loggingHost = { log() { logWritten = true; } };
+                Debug.loggingHost = {
+                    log() {
+                        logWritten = true;
+                    }
+                };
                 deprecation();
                 assert.isFalse(logWritten);
             });
@@ -23,7 +29,11 @@ namespace ts {
                     typeScriptVersion: "3.9"
                 });
                 let logWritten = false;
-                Debug.loggingHost = { log() { logWritten = true; } };
+                Debug.loggingHost = {
+                    log() {
+                        logWritten = true;
+                    }
+                };
                 deprecation();
                 assert.isTrue(logWritten);
             });
@@ -32,7 +42,11 @@ namespace ts {
                     typeScriptVersion: "3.9"
                 });
                 let logWritten = false;
-                Debug.loggingHost = { log() { logWritten = true; } };
+                Debug.loggingHost = {
+                    log() {
+                        logWritten = true;
+                    }
+                };
                 deprecation();
                 assert.isTrue(logWritten);
             });
@@ -41,7 +55,11 @@ namespace ts {
                     typeScriptVersion: "3.9"
                 });
                 let logWrites = 0;
-                Debug.loggingHost = { log() { logWrites++; } };
+                Debug.loggingHost = {
+                    log() {
+                        logWrites++;
+                    }
+                };
                 deprecation();
                 deprecation();
                 assert.equal(logWrites, 1);
@@ -53,7 +71,11 @@ namespace ts {
                     typeScriptVersion: "3.9"
                 });
                 let logWritten = false;
-                Debug.loggingHost = { log() { logWritten = true; } };
+                Debug.loggingHost = {
+                    log() {
+                        logWritten = true;
+                    }
+                };
                 expect(deprecation).throws();
                 assert.isFalse(logWritten);
             });
@@ -62,7 +84,11 @@ namespace ts {
                     error: true,
                 });
                 let logWritten = false;
-                Debug.loggingHost = { log() { logWritten = true; } };
+                Debug.loggingHost = {
+                    log() {
+                        logWritten = true;
+                    }
+                };
                 expect(deprecation).throws();
                 assert.isFalse(logWritten);
             });

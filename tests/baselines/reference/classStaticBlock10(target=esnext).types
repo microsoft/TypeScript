@@ -1,0 +1,72 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock10.ts ===
+var a1 = 1;
+>a1 : number
+>1 : 1
+
+var a2 = 1;
+>a2 : number
+>1 : 1
+
+const b1 = 2;
+>b1 : 2
+>2 : 2
+
+const b2 = 2;
+>b2 : 2
+>2 : 2
+
+function f () {
+>f : () => void
+
+    var a1 = 11;
+>a1 : number
+>11 : 11
+
+    const b1 = 22;
+>b1 : 22
+>22 : 22
+
+    class C1 {
+>C1 : C1
+
+        static {
+            var a1 = 111;
+>a1 : number
+>111 : 111
+
+            var a2 = 111;
+>a2 : number
+>111 : 111
+
+            const b1 = 222;
+>b1 : 222
+>222 : 222
+
+            const b2 = 222;
+>b2 : 222
+>222 : 222
+        }
+    }
+}
+
+class C2 {
+>C2 : C2
+
+    static {
+        var a1 = 111;
+>a1 : number
+>111 : 111
+
+        var a2 = 111;
+>a2 : number
+>111 : 111
+
+        const b1 = 222;
+>b1 : 222
+>222 : 222
+
+        const b2 = 222;
+>b2 : 222
+>222 : 222
+    }
+}

@@ -158,11 +158,11 @@ namespace ts.projectSystem {
                 function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
                     const { session, service, verifyEvent: verifyEventWorker, getNumberOfEvents } = createSessionToVerifyEvent(files);
                     service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
-                    service.openExternalProject(<protocol.ExternalProject>{
+                    service.openExternalProject({
                         projectFileName,
                         rootFiles: toExternalFiles([aTs.path, configA.path]),
                         options: {}
-                    });
+                    } as protocol.ExternalProject);
                     checkNumberOfProjects(service, { configuredProjects: 1 });
                     return { session, service, verifyEvent, getNumberOfEvents };
 

@@ -250,7 +250,7 @@ namespace ts {
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ElementAccessExpression:
-                    if (capturedSuperProperties && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                    if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
@@ -282,7 +282,7 @@ namespace ts {
         function visitYieldExpression(node: YieldExpression) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 if (node.asteriskToken) {
-                    const expression = visitNode(Debug.assertDefined(node.expression), visitor, isExpression);
+                    const expression = visitNode(Debug.checkDefined(node.expression), visitor, isExpression);
 
                     return setOriginalNode(
                         setTextRange(
@@ -342,8 +342,8 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement) {
             if (enclosingFunctionFlags & FunctionFlags.Async) {
                 const statement = unwrapInnermostStatementOfLabel(node);
-                if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
-                    return visitForOfStatement(<ForOfStatement>statement, node);
+                if (statement.kind === SyntaxKind.ForOfStatement && (statement as ForOfStatement).awaitModifier) {
+                    return visitForOfStatement(statement as ForOfStatement, node);
                 }
                 return factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node);
             }
@@ -575,7 +575,7 @@ namespace ts {
                 visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
-                visitNode(node.statement, visitor, isStatement)
+                visitIterationBody(node.statement, visitor, context)
             );
         }
 
@@ -648,7 +648,7 @@ namespace ts {
             let bodyLocation: TextRange | undefined;
             let statementsLocation: TextRange | undefined;
             const statements: Statement[] = [visitNode(binding, visitor, isStatement)];
-            const statement = visitNode(node.statement, visitor, isStatement);
+            const statement = visitIterationBody(node.statement, visitor, context);
             if (isBlock(statement)) {
                 addRange(statements, statement.statements);
                 bodyLocation = statement;
@@ -1107,7 +1107,7 @@ namespace ts {
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
             if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
-                return substituteExpression(<Expression>node);
+                return substituteExpression(node as Expression);
             }
             return node;
         }
@@ -1115,11 +1115,11 @@ namespace ts {
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
+                    return substitutePropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.ElementAccessExpression:
-                    return substituteElementAccessExpression(<ElementAccessExpression>node);
+                    return substituteElementAccessExpression(node as ElementAccessExpression);
                 case SyntaxKind.CallExpression:
-                    return substituteCallExpression(<CallExpression>node);
+                    return substituteCallExpression(node as CallExpression);
             }
             return node;
         }

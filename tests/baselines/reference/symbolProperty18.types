@@ -5,23 +5,23 @@ var i = {
 
     [Symbol.iterator]: 0,
 >[Symbol.iterator] : number
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >0 : 0
 
     [Symbol.toStringTag]() { return "" },
 >[Symbol.toStringTag] : () => string
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >"" : ""
 
     set [Symbol.toPrimitive](p: boolean) { }
 >[Symbol.toPrimitive] : boolean
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >p : boolean
 }
 
@@ -29,25 +29,25 @@ var it = i[Symbol.iterator];
 >it : number
 >i[Symbol.iterator] : number
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
 var str = i[Symbol.toStringTag]();
 >str : string
 >i[Symbol.toStringTag]() : string
 >i[Symbol.toStringTag] : () => string
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
 i[Symbol.toPrimitive] = false;
 >i[Symbol.toPrimitive] = false : false
 >i[Symbol.toPrimitive] : boolean
 >i : { [Symbol.iterator]: number; [Symbol.toStringTag](): string; [Symbol.toPrimitive]: boolean; }
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >false : false
 

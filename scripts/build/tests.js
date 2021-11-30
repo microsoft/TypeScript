@@ -9,6 +9,7 @@ const log = require("fancy-log");
 const cmdLineOptions = require("./options");
 const { CancellationToken } = require("prex");
 const { exec } = require("./utils");
+const { findUpFile } = require("./findUpDir");
 
 const mochaJs = require.resolve("mocha/bin/_mocha");
 exports.localBaseline = "tests/baselines/local/";
@@ -27,8 +28,7 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
 async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
     let testTimeout = cmdLineOptions.timeout;
     let tests = cmdLineOptions.tests;
-    const debug = cmdLineOptions.debug;
-    const inspect = cmdLineOptions.inspect;
+    const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
@@ -74,11 +74,11 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     /** @type {string[]} */
     let args = [];
 
-    // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
         args.push(mochaJs);
-        args.push("-R", "scripts/failed-tests");
+        args.push("-R", findUpFile("scripts/failed-tests.js"));
         args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {
             args.push("-g", `"${tests}"`);
@@ -101,11 +101,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift(inspect == "" ? "--inspect-brk" : "--inspect-brk="+inspect);
-            args.push("-t", "0");
-        }
-        else if (debug) {
-            args.unshift("--debug-brk");
+            args.unshift((inspect == "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
             args.push("-t", "0");
         }
         else {

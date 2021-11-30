@@ -29,7 +29,7 @@ var n;
 
 // should get any on parameter initialisers
 function f(a = null, b = n, l = []) {
-    // a should be any
+    // a should be null in strict mode
     a = undefined
     a = null
     a = 1
@@ -62,5 +62,5 @@ l.push('ok')
 const isUndef = v => v === undefined;
 const e = [1, undefined];
 
-// should be  undefined[]
+// should be undefined[]
 const g = e.filter(isUndef);

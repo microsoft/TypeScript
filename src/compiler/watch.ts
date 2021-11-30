@@ -1,16 +1,16 @@
 /*@internal*/
 namespace ts {
-    const sysFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
+    const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
         getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
-    } : undefined!; // TODO: GH#18217
+    } : undefined;
 
     /**
      * Create a function that reports error by writing to the system and handles the formating of the diagnostic
      */
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
-        const host: FormatDiagnosticsHost = system === sys ? sysFormatDiagnosticsHost : {
+        const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
             getCurrentDirectory: () => system.getCurrentDirectory(),
             getNewLine: () => system.newLine,
             getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
@@ -89,10 +89,10 @@ namespace ts {
     }
 
     /** Parses config file using System interface */
-    export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
-        const host: ParseConfigFileHost = <any>system;
+    export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
+        const host: ParseConfigFileHost = system as any;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
-        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, /*extendedConfigCache*/ undefined, watchOptionsToExtend);
+        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
         return result;
     }
@@ -113,8 +113,8 @@ namespace ts {
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
-    export function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-        return !!(program as T).getState;
+    export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
+        return !!(program as BuilderProgram).getState;
     }
 
     export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
@@ -279,7 +279,7 @@ namespace ts {
                 );
             case FileIncludeKind.LibFile:
                 if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
-                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
+                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
                 return chainDiagnosticMessages(
                     /*details*/ undefined,
                     target ?
@@ -414,7 +414,11 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
-        TypeRoots: "Type roots"
+        TypeRoots: "Type roots",
+        ConfigFileOfReferencedProject: "Config file of referened project",
+        ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
+        WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
+        PackageJson: "package.json file",
     };
 
     export interface WatchTypeRegistry {
@@ -424,7 +428,11 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
-        TypeRoots: "Type roots"
+        TypeRoots: "Type roots",
+        ConfigFileOfReferencedProject: "Config file of referened project",
+        ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
+        WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
+        PackageJson: "package.json file",
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
@@ -476,6 +484,7 @@ namespace ts {
             getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
             createHash: maybeBind(host, host.createHash),
             readDirectory: maybeBind(host, host.readDirectory),
+            disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
@@ -538,7 +547,8 @@ namespace ts {
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             createHash: maybeBind(system, system.createHash),
-            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
+            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
+            disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
         };
     }
 

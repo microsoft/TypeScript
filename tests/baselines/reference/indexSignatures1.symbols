@@ -1,0 +1,937 @@
+=== tests/cases/conformance/types/members/indexSignatures1.ts ===
+// Symbol index signature checking
+
+const sym = Symbol();
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [sym]: number }) {
+>gg3 : Symbol(gg3, Decl(indexSignatures1.ts, 2, 21))
+>x : Symbol(x, Decl(indexSignatures1.ts, 4, 13))
+>key : Symbol(key, Decl(indexSignatures1.ts, 4, 19))
+>y : Symbol(y, Decl(indexSignatures1.ts, 4, 42))
+>key : Symbol(key, Decl(indexSignatures1.ts, 4, 49))
+>z : Symbol(z, Decl(indexSignatures1.ts, 4, 72))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 4, 77))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+    x = z;
+>x : Symbol(x, Decl(indexSignatures1.ts, 4, 13))
+>z : Symbol(z, Decl(indexSignatures1.ts, 4, 72))
+
+    y = z;  // Error
+>y : Symbol(y, Decl(indexSignatures1.ts, 4, 42))
+>z : Symbol(z, Decl(indexSignatures1.ts, 4, 72))
+}
+
+// Overlapping index signatures
+
+function gg1(x: { [key: `a${string}`]: string, [key: `${string}a`]: string }, y: { [key: `a${string}a`]: string }) {
+>gg1 : Symbol(gg1, Decl(indexSignatures1.ts, 7, 1))
+>x : Symbol(x, Decl(indexSignatures1.ts, 11, 13))
+>key : Symbol(key, Decl(indexSignatures1.ts, 11, 19))
+>key : Symbol(key, Decl(indexSignatures1.ts, 11, 48))
+>y : Symbol(y, Decl(indexSignatures1.ts, 11, 77))
+>key : Symbol(key, Decl(indexSignatures1.ts, 11, 84))
+
+    x = y;
+>x : Symbol(x, Decl(indexSignatures1.ts, 11, 13))
+>y : Symbol(y, Decl(indexSignatures1.ts, 11, 77))
+
+    y = x;
+>y : Symbol(y, Decl(indexSignatures1.ts, 11, 77))
+>x : Symbol(x, Decl(indexSignatures1.ts, 11, 13))
+}
+
+interface IX { [key: `a${string}`]: string, [key: `${string}a`]: string }
+>IX : Symbol(IX, Decl(indexSignatures1.ts, 14, 1))
+>key : Symbol(key, Decl(indexSignatures1.ts, 16, 16))
+>key : Symbol(key, Decl(indexSignatures1.ts, 16, 45))
+
+interface IY { [key: `a${string}a`]: string }
+>IY : Symbol(IY, Decl(indexSignatures1.ts, 16, 73))
+>key : Symbol(key, Decl(indexSignatures1.ts, 17, 16))
+
+function gg2(x: IX, y: IY) {
+>gg2 : Symbol(gg2, Decl(indexSignatures1.ts, 17, 45))
+>x : Symbol(x, Decl(indexSignatures1.ts, 19, 13))
+>IX : Symbol(IX, Decl(indexSignatures1.ts, 14, 1))
+>y : Symbol(y, Decl(indexSignatures1.ts, 19, 19))
+>IY : Symbol(IY, Decl(indexSignatures1.ts, 16, 73))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(indexSignatures1.ts, 19, 13))
+>y : Symbol(y, Decl(indexSignatures1.ts, 19, 19))
+
+    y = x;
+>y : Symbol(y, Decl(indexSignatures1.ts, 19, 19))
+>x : Symbol(x, Decl(indexSignatures1.ts, 19, 13))
+}
+
+// Intersection of multiple applicable index signatures
+
+declare let combo: { [x: `foo-${string}`]: 'a' | 'b' } & { [x: `${string}-bar`]: 'b' | 'c' };
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>x : Symbol(x, Decl(indexSignatures1.ts, 26, 22))
+>x : Symbol(x, Decl(indexSignatures1.ts, 26, 60))
+
+const x1 = combo['foo-test'];  // 'a' | 'b'
+>x1 : Symbol(x1, Decl(indexSignatures1.ts, 27, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+
+const x2 = combo['test-bar'];  // 'b' | 'c'
+>x2 : Symbol(x2, Decl(indexSignatures1.ts, 28, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+
+const x3 = combo['foo-test-bar'];  // 'b' (('a' | 'b') & ('b' | 'c'))
+>x3 : Symbol(x3, Decl(indexSignatures1.ts, 29, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+
+declare var str: string;
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+const x4 = combo[`foo-${str}`];
+>x4 : Symbol(x4, Decl(indexSignatures1.ts, 33, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+const x5 = combo[`${str}-bar`];
+>x5 : Symbol(x5, Decl(indexSignatures1.ts, 34, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+const x6 = combo[`foo-${str}-bar`];
+>x6 : Symbol(x6, Decl(indexSignatures1.ts, 35, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+declare let combo2: { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string };
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+>x : Symbol(x, Decl(indexSignatures1.ts, 37, 23))
+
+const x7 = combo2['axxxbyyyc'];
+>x7 : Symbol(x7, Decl(indexSignatures1.ts, 39, 5))
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+
+const x8 = combo2['ayyyxxxbc'];
+>x8 : Symbol(x8, Decl(indexSignatures1.ts, 40, 5))
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+
+const x9 = combo2['axxxbbbyc'];  // Error
+>x9 : Symbol(x9, Decl(indexSignatures1.ts, 41, 5))
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+
+// Property access on template pattern index signature
+
+declare let dom: { [x: `data${string}`]: string };
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>x : Symbol(x, Decl(indexSignatures1.ts, 45, 20))
+
+const y1 = dom['data123'];
+>y1 : Symbol(y1, Decl(indexSignatures1.ts, 46, 5))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+
+const y2 = dom.data123;
+>y2 : Symbol(y2, Decl(indexSignatures1.ts, 47, 5))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+
+// Excess property checking for template pattern index signature
+
+dom = { data123: 'hello' };
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>data123 : Symbol(data123, Decl(indexSignatures1.ts, 51, 7))
+
+dom = { date123: 'hello' };  // Error
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>date123 : Symbol(date123, Decl(indexSignatures1.ts, 52, 7))
+
+// Contextual typing by index signature with template literal pattern
+
+type Funcs = {
+>Funcs : Symbol(Funcs, Decl(indexSignatures1.ts, 52, 27))
+
+    [key: `s${string}`]: (x: string) => void,
+>key : Symbol(key, Decl(indexSignatures1.ts, 57, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 57, 26))
+
+    [key: `n${string}`]: (x: number) => void,
+>key : Symbol(key, Decl(indexSignatures1.ts, 58, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 58, 26))
+}
+
+const funcs: Funcs = {
+>funcs : Symbol(funcs, Decl(indexSignatures1.ts, 61, 5))
+>Funcs : Symbol(Funcs, Decl(indexSignatures1.ts, 52, 27))
+
+    sfoo: x => x.length,  // x: string
+>sfoo : Symbol(sfoo, Decl(indexSignatures1.ts, 61, 22))
+>x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    nfoo: x => x * 2,     // n: number
+>nfoo : Symbol(nfoo, Decl(indexSignatures1.ts, 62, 24))
+>x : Symbol(x, Decl(indexSignatures1.ts, 63, 9))
+>x : Symbol(x, Decl(indexSignatures1.ts, 63, 9))
+}
+
+// Duplicate index signature checking
+
+type Duplicates = {
+>Duplicates : Symbol(Duplicates, Decl(indexSignatures1.ts, 64, 1))
+
+    [key: string | number]: any;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 69, 5))
+
+    [key: number | symbol]: any;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 70, 5))
+
+    [key: symbol | `foo${string}`]: any;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 71, 5))
+
+    [key: `foo${string}`]: any;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 72, 5))
+}
+
+// Conflicting index signature checking
+
+type Conflicting = {
+>Conflicting : Symbol(Conflicting, Decl(indexSignatures1.ts, 73, 1))
+
+    [key: `a${string}`]: 'a';
+>key : Symbol(key, Decl(indexSignatures1.ts, 78, 5))
+
+    [key: `${string}a`]: 'b';
+>key : Symbol(key, Decl(indexSignatures1.ts, 79, 5))
+
+    [key: `a${string}a`]: 'c';  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 80, 5))
+}
+
+// Invalid index signatures
+
+type Invalid<T extends string> = {
+>Invalid : Symbol(Invalid, Decl(indexSignatures1.ts, 81, 1))
+>T : Symbol(T, Decl(indexSignatures1.ts, 85, 13))
+
+    [key: 'a' | 'b' | 'c']: string;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 86, 5))
+
+    [key: T | number]: string;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 87, 5))
+>T : Symbol(T, Decl(indexSignatures1.ts, 85, 13))
+
+    [key: Error]: string;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 88, 5))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [key: T & string]: string;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 89, 5))
+>T : Symbol(T, Decl(indexSignatures1.ts, 85, 13))
+}
+
+// Intersections in index signatures
+
+type Tag1 = { __tag1__: void };
+>Tag1 : Symbol(Tag1, Decl(indexSignatures1.ts, 90, 1))
+>__tag1__ : Symbol(__tag1__, Decl(indexSignatures1.ts, 94, 13))
+
+type Tag2 = { __tag2__: void };
+>Tag2 : Symbol(Tag2, Decl(indexSignatures1.ts, 94, 31))
+>__tag2__ : Symbol(__tag2__, Decl(indexSignatures1.ts, 95, 13))
+
+type TaggedString1 = string & Tag1;
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>Tag1 : Symbol(Tag1, Decl(indexSignatures1.ts, 90, 1))
+
+type TaggedString2 = string & Tag2;
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+>Tag2 : Symbol(Tag2, Decl(indexSignatures1.ts, 94, 31))
+
+declare let s0: string;
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+declare let s1: TaggedString1;
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+
+declare let s2: TaggedString2;
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let s3: TaggedString1 | TaggedString2;
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let s4: TaggedString1 & TaggedString2;
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+interface I1 { [key: TaggedString1]: string }
+>I1 : Symbol(I1, Decl(indexSignatures1.ts, 104, 46))
+>key : Symbol(key, Decl(indexSignatures1.ts, 106, 16))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+
+interface I2 { [key: TaggedString2]: string }
+>I2 : Symbol(I2, Decl(indexSignatures1.ts, 106, 45))
+>key : Symbol(key, Decl(indexSignatures1.ts, 107, 16))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+interface I3 { [key: TaggedString1 | TaggedString2]: string }
+>I3 : Symbol(I3, Decl(indexSignatures1.ts, 107, 45))
+>key : Symbol(key, Decl(indexSignatures1.ts, 108, 16))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+interface I4 { [key: TaggedString1 & TaggedString2]: string }
+>I4 : Symbol(I4, Decl(indexSignatures1.ts, 108, 61))
+>key : Symbol(key, Decl(indexSignatures1.ts, 109, 16))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let i1: I1;
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>I1 : Symbol(I1, Decl(indexSignatures1.ts, 104, 46))
+
+declare let i2: I2;
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>I2 : Symbol(I2, Decl(indexSignatures1.ts, 106, 45))
+
+declare let i3: I3;
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>I3 : Symbol(I3, Decl(indexSignatures1.ts, 107, 45))
+
+declare let i4: I4;
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>I4 : Symbol(I4, Decl(indexSignatures1.ts, 108, 61))
+
+i1[s0];  // Error
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+i1[s1];
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+i1[s2];  // Error
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+i1[s3];  // Error
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+i1[s4];
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+i2[s0];  // Error
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+i2[s1];  // Error
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+i2[s2];
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+i2[s3];  // Error
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+i2[s4];
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+i3[s0];  // Error
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+i3[s1];
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+i3[s2];
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+i3[s3];
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+i3[s4];
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+i4[s0];  // Error
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+i4[s1];  // Error
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+i4[s2];  // Error
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+i4[s3];  // Error
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+i4[s4];
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+i1 = i2;  // Error
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+
+i1 = i3;
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+
+i1 = i4;  // Error
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+
+i2 = i1;  // Error
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+
+i2 = i3;
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+
+i2 = i4;  // Error
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+
+i3 = i1;  // Error
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+
+i3 = i2;  // Error
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+
+i3 = i4;  // Error
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+
+i4 = i1;
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>i1 : Symbol(i1, Decl(indexSignatures1.ts, 111, 11))
+
+i4 = i2;
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>i2 : Symbol(i2, Decl(indexSignatures1.ts, 112, 11))
+
+i4 = i3;
+>i4 : Symbol(i4, Decl(indexSignatures1.ts, 114, 11))
+>i3 : Symbol(i3, Decl(indexSignatures1.ts, 113, 11))
+
+declare let o1: { [key: TaggedString1]: string };
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 156, 19))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+
+declare let o2: { [key: TaggedString2]: string };
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 157, 19))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let o3: { [key: TaggedString1 | TaggedString2]: string };
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 158, 19))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let o4: { [key: TaggedString1 & TaggedString2]: string };
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 159, 19))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+o1[s0];  // Error
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+o1[s1];
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+o1[s2];  // Error
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+o1[s3];  // Error
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+o1[s4];
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+o2[s0];  // Error
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+o2[s1];  // Error
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+o2[s2];
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+o2[s3];  // Error
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+o2[s4];
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+o3[s0];  // Error
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+o3[s1];
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+o3[s2];
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+o3[s3];
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+o3[s4];
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+o4[s0];  // Error
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 100, 11))
+
+o4[s1];  // Error
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 101, 11))
+
+o4[s2];  // Error
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 102, 11))
+
+o4[s3];  // Error
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 103, 11))
+
+o4[s4];
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 104, 11))
+
+o1 = o2;
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+
+o1 = o3;
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+
+o1 = o4;
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+
+o2 = o1;
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+
+o2 = o3;
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+
+o2 = o4;
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+
+o3 = o1;
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+
+o3 = o2;
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+
+o3 = o4;
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+
+o4 = o1;
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>o1 : Symbol(o1, Decl(indexSignatures1.ts, 156, 11))
+
+o4 = o2;
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>o2 : Symbol(o2, Decl(indexSignatures1.ts, 157, 11))
+
+o4 = o3;
+>o4 : Symbol(o4, Decl(indexSignatures1.ts, 159, 11))
+>o3 : Symbol(o3, Decl(indexSignatures1.ts, 158, 11))
+
+// Index signatures inferred from computed property names
+
+const obj10 = {
+>obj10 : Symbol(obj10, Decl(indexSignatures1.ts, 203, 5))
+
+    ['x']: 0 as const,
+>['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
+>'x' : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
+>const : Symbol(const)
+
+    ['a' + 'b']: 1 as const,
+>['a' + 'b'] : Symbol(['a' + 'b'], Decl(indexSignatures1.ts, 204, 22))
+>const : Symbol(const)
+
+};
+
+const obj11 = {
+>obj11 : Symbol(obj11, Decl(indexSignatures1.ts, 208, 5))
+
+    [1]: 2 as const,
+>[1] : Symbol([1], Decl(indexSignatures1.ts, 208, 15))
+>1 : Symbol([1], Decl(indexSignatures1.ts, 208, 15))
+>const : Symbol(const)
+
+    [1 + 2]: 3 as const,
+>[1 + 2] : Symbol([1 + 2], Decl(indexSignatures1.ts, 209, 20))
+>const : Symbol(const)
+
+};
+
+const obj12 = {
+>obj12 : Symbol(obj12, Decl(indexSignatures1.ts, 213, 5))
+
+    [sym]: 4 as const,
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 213, 15))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>const : Symbol(const)
+
+    [Symbol()]: 5 as const,
+>[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 214, 22))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>const : Symbol(const)
+
+};
+
+const obj13 = {
+>obj13 : Symbol(obj13, Decl(indexSignatures1.ts, 218, 5))
+
+    ['x']: 0 as const,
+>['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
+>'x' : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
+>const : Symbol(const)
+
+    ['a' + 'b']: 1 as const,
+>['a' + 'b'] : Symbol(['a' + 'b'], Decl(indexSignatures1.ts, 219, 22))
+>const : Symbol(const)
+
+    [1]: 2 as const,
+>[1] : Symbol([1], Decl(indexSignatures1.ts, 220, 28))
+>1 : Symbol([1], Decl(indexSignatures1.ts, 220, 28))
+>const : Symbol(const)
+
+    [1 + 2]: 3 as const,
+>[1 + 2] : Symbol([1 + 2], Decl(indexSignatures1.ts, 221, 20))
+>const : Symbol(const)
+
+    [sym]: 4 as const,
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 222, 24))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>const : Symbol(const)
+
+    [Symbol()]: 5 as const,
+>[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 223, 22))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>const : Symbol(const)
+
+};
+
+// Repros from #1863
+
+const system = Symbol('system');
+>system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const SomeSytePlugin = Symbol('SomeSytePlugin');
+>SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 230, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+interface Plugs {
+>Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 230, 48))
+
+    [key: symbol]: (...args: any) => unknown;
+>key : Symbol(key, Decl(indexSignatures1.ts, 233, 5))
+>args : Symbol(args, Decl(indexSignatures1.ts, 233, 20))
+}
+
+const plugins = {
+>plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
+
+    "user": {} as Plugs,
+>"user" : Symbol("user", Decl(indexSignatures1.ts, 236, 17))
+>Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 230, 48))
+
+    [system]: {} as Plugs
+>[system] : Symbol([system], Decl(indexSignatures1.ts, 237, 24))
+>system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
+>Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 230, 48))
+
+};
+
+plugins[system][SomeSytePlugin] = () => console.log('awsome');
+>plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
+>system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
+>SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 230, 5))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+plugins[system][SomeSytePlugin]();
+>plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
+>system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
+>SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 230, 5))
+
+var theAnswer: symbol = Symbol('secret');
+>theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 244, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+var obj = {} as Record<symbol, number>;
+>obj : Symbol(obj, Decl(indexSignatures1.ts, 245, 3))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+obj[theAnswer] = 42;
+>obj : Symbol(obj, Decl(indexSignatures1.ts, 245, 3))
+>theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 244, 3))
+
+// Repro from #26470
+
+const directive = Symbol('directive');
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 250, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 250, 38))
+>TArg : Symbol(TArg, Decl(indexSignatures1.ts, 251, 21))
+>TRet : Symbol(TRet, Decl(indexSignatures1.ts, 251, 26))
+>TDir : Symbol(TDir, Decl(indexSignatures1.ts, 251, 32))
+>options : Symbol(options, Decl(indexSignatures1.ts, 251, 39))
+>x : Symbol(x, Decl(indexSignatures1.ts, 251, 51))
+>arg : Symbol(arg, Decl(indexSignatures1.ts, 251, 66))
+>TArg : Symbol(TArg, Decl(indexSignatures1.ts, 251, 21))
+>TRet : Symbol(TRet, Decl(indexSignatures1.ts, 251, 26))
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 251, 90))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 250, 5))
+>TDir : Symbol(TDir, Decl(indexSignatures1.ts, 251, 32))
+
+let case1 = foo({
+>case1 : Symbol(case1, Decl(indexSignatures1.ts, 253, 3))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 250, 38))
+
+    [directive]: (x: string) => 'str',
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 253, 17))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 250, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 254, 18))
+
+    addOne: (x: number) => x + 1,
+>addOne : Symbol(addOne, Decl(indexSignatures1.ts, 254, 38))
+>x : Symbol(x, Decl(indexSignatures1.ts, 255, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 255, 13))
+
+    double: (x: number) => x + x,
+>double : Symbol(double, Decl(indexSignatures1.ts, 255, 33))
+>x : Symbol(x, Decl(indexSignatures1.ts, 256, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 256, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 256, 13))
+
+});
+
+let case2 = foo({
+>case2 : Symbol(case2, Decl(indexSignatures1.ts, 259, 3))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 250, 38))
+
+    addOne: (x: number) => x + 1,
+>addOne : Symbol(addOne, Decl(indexSignatures1.ts, 259, 17))
+>x : Symbol(x, Decl(indexSignatures1.ts, 260, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 260, 13))
+
+    double: (x: number) => x + x,
+>double : Symbol(double, Decl(indexSignatures1.ts, 260, 33))
+>x : Symbol(x, Decl(indexSignatures1.ts, 261, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 261, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 261, 13))
+
+    [directive]: (x: string) => 'str',
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 261, 33))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 250, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 262, 18))
+
+});
+
+let case3 = foo({
+>case3 : Symbol(case3, Decl(indexSignatures1.ts, 265, 3))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 250, 38))
+
+    [directive]: 'str',
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 265, 17))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 250, 5))
+
+    addOne: (x: number) => x + 1,
+>addOne : Symbol(addOne, Decl(indexSignatures1.ts, 266, 23))
+>x : Symbol(x, Decl(indexSignatures1.ts, 267, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 267, 13))
+
+    double: (x: number) => x + x,
+>double : Symbol(double, Decl(indexSignatures1.ts, 267, 33))
+>x : Symbol(x, Decl(indexSignatures1.ts, 268, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 268, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 268, 13))
+
+});
+
+// Repros from #42192
+
+type Pseudo = `&:${string}`;
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 269, 3))
+
+const AmIPseudo1: Pseudo = '&:test';
+>AmIPseudo1 : Symbol(AmIPseudo1, Decl(indexSignatures1.ts, 275, 5))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 269, 3))
+
+const AmIPseudo: Pseudo = '&';  // Error
+>AmIPseudo : Symbol(AmIPseudo, Decl(indexSignatures1.ts, 276, 5))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 269, 3))
+
+type PseudoDeclaration = { [key in Pseudo]: string };
+>PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 276, 30))
+>key : Symbol(key, Decl(indexSignatures1.ts, 278, 28))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 269, 3))
+
+const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
+>test : Symbol(test, Decl(indexSignatures1.ts, 280, 5))
+>PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 276, 30))
+>'someKey' : Symbol('someKey', Decl(indexSignatures1.ts, 280, 33))
+
+type FieldPattern = `/${string}`;
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 280, 60))
+
+const path1: FieldPattern = '/one';
+>path1 : Symbol(path1, Decl(indexSignatures1.ts, 284, 5))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 280, 60))
+
+const path2: FieldPattern = 'two';  // Error
+>path2 : Symbol(path2, Decl(indexSignatures1.ts, 285, 5))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 280, 60))
+
+type PathsObject = { [P in FieldPattern]: object; };
+>PathsObject : Symbol(PathsObject, Decl(indexSignatures1.ts, 285, 34))
+>P : Symbol(P, Decl(indexSignatures1.ts, 287, 22))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 280, 60))
+
+const pathObject: PathsObject = 123;  // Error
+>pathObject : Symbol(pathObject, Decl(indexSignatures1.ts, 288, 5))
+>PathsObject : Symbol(PathsObject, Decl(indexSignatures1.ts, 285, 34))
+
+type IdType = `${number}-${number}-${number}-${number}`
+>IdType : Symbol(IdType, Decl(indexSignatures1.ts, 288, 36))
+
+const id: IdType = '0000-0000-0000-0001';
+>id : Symbol(id, Decl(indexSignatures1.ts, 291, 5))
+>IdType : Symbol(IdType, Decl(indexSignatures1.ts, 288, 36))
+
+type A = Record<IdType, string>;
+>A : Symbol(A, Decl(indexSignatures1.ts, 291, 41))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>IdType : Symbol(IdType, Decl(indexSignatures1.ts, 288, 36))
+
+const a: A = { [id]: 'test' }
+>a : Symbol(a, Decl(indexSignatures1.ts, 295, 5))
+>A : Symbol(A, Decl(indexSignatures1.ts, 291, 41))
+>[id] : Symbol([id], Decl(indexSignatures1.ts, 295, 14))
+>id : Symbol(id, Decl(indexSignatures1.ts, 291, 5))
+
+let aid = a[id];
+>aid : Symbol(aid, Decl(indexSignatures1.ts, 297, 3))
+>a : Symbol(a, Decl(indexSignatures1.ts, 295, 5))
+>id : Symbol(id, Decl(indexSignatures1.ts, 291, 5))
+
+// Repro from #44793
+
+interface AA {
+>AA : Symbol(AA, Decl(indexSignatures1.ts, 297, 16))
+
+    a?: string;
+>a : Symbol(AA.a, Decl(indexSignatures1.ts, 301, 14))
+
+    b?: number;
+>b : Symbol(AA.b, Decl(indexSignatures1.ts, 302, 15))
+
+    [key: symbol]: string;
+>key : Symbol(key, Decl(indexSignatures1.ts, 304, 5))
+}
+
+const aa: AA = { [sym]: '123' };
+>aa : Symbol(aa, Decl(indexSignatures1.ts, 307, 5))
+>AA : Symbol(AA, Decl(indexSignatures1.ts, 297, 16))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 307, 16))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 309, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 309, 15))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 309, 41))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 310, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 310, 15))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 310, 41))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 311, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 311, 15))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 311, 41))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+// Repro from #45772
+
+type Id = string & { __tag: 'id '};
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+>__tag : Symbol(__tag, Decl(indexSignatures1.ts, 315, 20))
+
+type Rec1 = { [key: Id]: number };
+>Rec1 : Symbol(Rec1, Decl(indexSignatures1.ts, 315, 35))
+>key : Symbol(key, Decl(indexSignatures1.ts, 316, 15))
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+
+type Rec2 = Record<Id, number>;
+>Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+
+type K1 = keyof Rec1;  // Id
+>K1 : Symbol(K1, Decl(indexSignatures1.ts, 317, 31))
+>Rec1 : Symbol(Rec1, Decl(indexSignatures1.ts, 315, 35))
+
+type K2 = keyof Rec2;  // Id
+>K2 : Symbol(K2, Decl(indexSignatures1.ts, 319, 21))
+>Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
+

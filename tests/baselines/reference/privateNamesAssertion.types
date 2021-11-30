@@ -34,3 +34,36 @@ class Foo {
     }
 }
 
+class Foo2 {
+>Foo2 : Foo2
+
+    #p1(v: any): asserts v is string {
+>#p1 : (v: any) => asserts v is string
+>v : any
+
+        if (typeof v !== "string") {
+>typeof v !== "string" : boolean
+>typeof v : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>v : any
+>"string" : "string"
+
+            throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+        }
+    }
+    m1(v: unknown) {
+>m1 : (v: unknown) => void
+>v : unknown
+
+        this.#p1(v);
+>this.#p1(v) : void
+>this.#p1 : (v: any) => asserts v is string
+>this : this
+>v : unknown
+
+        v;
+>v : string
+    }
+}
+

@@ -5,15 +5,15 @@ var obj = {
 
     get [Symbol.isConcatSpreadable]() { return '' },
 >[Symbol.isConcatSpreadable] : string
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 >'' : ""
 
     set [Symbol.isConcatSpreadable](x) { }
 >[Symbol.isConcatSpreadable] : string
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 >x : string
 }

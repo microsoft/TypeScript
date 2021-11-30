@@ -4,15 +4,15 @@ class C {
 
     get [Symbol.toPrimitive]() { return ""; }
 >[Symbol.toPrimitive] : string
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >"" : ""
 
     set [Symbol.toPrimitive](x) { }
 >[Symbol.toPrimitive] : string
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 >x : string
 }

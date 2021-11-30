@@ -18,23 +18,22 @@ interface C {
 
 
 //// [privateNameConstructorSignature.js]
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var _x;
+var _C_x;
 class C {
     constructor() {
-        _x.set(this, void 0);
+        _C_x.set(this, void 0);
     }
     static test() {
-        __classPrivateFieldSet(new C(), _x, 10);
+        __classPrivateFieldSet(new C(), _C_x, 10, "f");
         const y = new C();
         const z = new y();
         z.x = 123;
     }
 }
-_x = new WeakMap();
+_C_x = new WeakMap();

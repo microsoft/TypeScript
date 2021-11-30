@@ -1,0 +1,33 @@
+=== tests/cases/compiler/voidUndefinedReduction.ts ===
+// Repro from #42786
+
+function isDefined<T>(value: T | undefined | null | void): value is T {
+>isDefined : Symbol(isDefined, Decl(voidUndefinedReduction.ts, 0, 0))
+>T : Symbol(T, Decl(voidUndefinedReduction.ts, 2, 19))
+>value : Symbol(value, Decl(voidUndefinedReduction.ts, 2, 22))
+>T : Symbol(T, Decl(voidUndefinedReduction.ts, 2, 19))
+>value : Symbol(value, Decl(voidUndefinedReduction.ts, 2, 22))
+>T : Symbol(T, Decl(voidUndefinedReduction.ts, 2, 19))
+
+  return value !== undefined && value !== null;
+>value : Symbol(value, Decl(voidUndefinedReduction.ts, 2, 22))
+>undefined : Symbol(undefined)
+>value : Symbol(value, Decl(voidUndefinedReduction.ts, 2, 22))
+}
+
+declare const foo: string | undefined;
+>foo : Symbol(foo, Decl(voidUndefinedReduction.ts, 6, 13))
+
+if (isDefined(foo)) {
+>isDefined : Symbol(isDefined, Decl(voidUndefinedReduction.ts, 0, 0))
+>foo : Symbol(foo, Decl(voidUndefinedReduction.ts, 6, 13))
+
+  console.log(foo.toUpperCase()); 
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(voidUndefinedReduction.ts, 6, 13))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+

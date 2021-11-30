@@ -21,7 +21,7 @@ exports.__esModule = true;
 exports.b = void 0;
 var a_1 = require("@ts-bug/a");
 function b(text) {
-    return a_1.a(text);
+    return (0, a_1.a)(text);
 }
 exports.b = b;
 

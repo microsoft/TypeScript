@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/classExpressions/classExpressionLoop.ts ===
+let arr = [];
+>arr : Symbol(arr, Decl(classExpressionLoop.ts, 0, 3))
+
+for (let i = 0; i < 10; ++i) {
+>i : Symbol(i, Decl(classExpressionLoop.ts, 1, 8))
+>i : Symbol(i, Decl(classExpressionLoop.ts, 1, 8))
+>i : Symbol(i, Decl(classExpressionLoop.ts, 1, 8))
+
+    arr.push(class C {
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(classExpressionLoop.ts, 0, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(classExpressionLoop.ts, 2, 13))
+
+        prop = i;
+>prop : Symbol(C.prop, Decl(classExpressionLoop.ts, 2, 22))
+>i : Symbol(i, Decl(classExpressionLoop.ts, 1, 8))
+
+    });
+}
+

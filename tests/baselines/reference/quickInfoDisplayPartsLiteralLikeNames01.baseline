@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 21
+      "position": 21,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "method",
@@ -71,7 +72,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 41
+      "position": 41,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "method",
@@ -136,7 +138,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 70
+      "position": 70,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "method",
@@ -201,7 +204,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 91
+      "position": 91,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "method",
@@ -270,7 +274,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 145
+      "position": 145,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "method",
@@ -339,7 +344,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 164
+      "position": 164,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "method",
@@ -408,7 +414,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 185
+      "position": 185,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "method",
@@ -473,7 +480,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 210
+      "position": 210,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "method",
@@ -538,7 +546,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 238
+      "position": 238,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "method",
@@ -603,7 +612,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLiteralLikeNames01.ts",
-      "position": 255
+      "position": 255,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "method",

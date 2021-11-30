@@ -17,8 +17,7 @@ namespace ts.refactor.inferFunctionReturnType {
     function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
         const info = getInfo(context);
         if (info && !isRefactorErrorInfo(info)) {
-            const edits = textChanges.ChangeTracker.with(context, t =>
-                t.tryInsertTypeAnnotation(context.file, info.declaration, info.returnTypeNode));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, t, info.declaration, info.returnTypeNode));
             return { renameFilename: undefined, renameLocation: undefined, edits };
         }
         return undefined;
@@ -53,6 +52,19 @@ namespace ts.refactor.inferFunctionReturnType {
     interface FunctionInfo {
         declaration: ConvertibleDeclaration;
         returnTypeNode: TypeNode;
+    }
+
+    function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, declaration: ConvertibleDeclaration, typeNode: TypeNode) {
+        const closeParen = findChildOfKind(declaration, SyntaxKind.CloseParenToken, sourceFile);
+        const needParens = isArrowFunction(declaration) && closeParen === undefined;
+        const endNode = needParens ? first(declaration.parameters) : closeParen;
+        if (endNode) {
+            if (needParens) {
+                changes.insertNodeBefore(sourceFile, endNode, factory.createToken(SyntaxKind.OpenParenToken));
+                changes.insertNodeAfter(sourceFile, endNode, factory.createToken(SyntaxKind.CloseParenToken));
+            }
+            changes.insertNodeAt(sourceFile, endNode.end, typeNode, { prefix: ": " });
+        }
     }
 
     function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | undefined {

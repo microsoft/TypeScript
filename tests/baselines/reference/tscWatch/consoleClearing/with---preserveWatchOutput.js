@@ -35,6 +35,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /f.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/f.ts (used version)
+
 WatchedFiles::
 /f.ts:
   {"fileName":"/f.ts","pollingInterval":250}
@@ -74,6 +78,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /f.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 WatchedFiles::
 /f.ts:

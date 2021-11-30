@@ -260,7 +260,7 @@ declare const o5: <T>() => undefined | (() => void);
 >o5 : <T>() => undefined | (() => void)
 
 o5<number>()?.();
->o5<number>()?.() : void
+>o5<number>()?.() : void | undefined
 >o5<number>() : (() => void) | undefined
 >o5 : <T>() => (() => void) | undefined
 

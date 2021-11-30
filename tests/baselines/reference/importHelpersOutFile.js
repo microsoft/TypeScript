@@ -37,7 +37,7 @@ define("b", ["require", "exports", "tslib", "a"], function (require, exports, ts
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     var B = /** @class */ (function (_super) {
-        tslib_1.__extends(B, _super);
+        (0, tslib_1.__extends)(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -50,7 +50,7 @@ define("c", ["require", "exports", "tslib", "a"], function (require, exports, ts
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.C = void 0;
     var C = /** @class */ (function (_super) {
-        tslib_2.__extends(C, _super);
+        (0, tslib_2.__extends)(C, _super);
         function C() {
             return _super !== null && _super.apply(this, arguments) || this;
         }

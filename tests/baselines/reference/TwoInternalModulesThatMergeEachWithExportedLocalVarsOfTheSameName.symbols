@@ -48,6 +48,7 @@ export module A {
     // collision with 'Origin' var in other part of merged module
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Symbol(Origin, Decl(part2.ts, 2, 14))
+>Point : Symbol(Point)
 >x : Symbol(x, Decl(part2.ts, 2, 32))
 >y : Symbol(y, Decl(part2.ts, 2, 38))
 
@@ -59,7 +60,9 @@ export module A {
 
             constructor(public tl: Point, public br: Point) { }
 >tl : Symbol(Plane.tl, Decl(part2.ts, 6, 24))
+>Point : Symbol(Point)
 >br : Symbol(Plane.br, Decl(part2.ts, 6, 41))
+>Point : Symbol(Point)
         }
     }
 }

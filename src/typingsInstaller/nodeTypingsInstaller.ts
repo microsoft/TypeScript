@@ -54,12 +54,12 @@ namespace ts.server.typingsInstaller {
             return new Map<string, MapLike<string>>();
         }
         try {
-            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
+            const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
             return new Map(getEntries(content.entries));
         }
         catch (e) {
             if (log.isEnabled()) {
-                log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
+                log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
             }
             return new Map<string, MapLike<string>>();
         }
@@ -117,13 +117,13 @@ namespace ts.server.typingsInstaller {
             }
             catch (e) {
                 if (this.log.isEnabled()) {
-                    this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(<Error>e).message}`);
+                    this.log.writeLine(`Error updating ${typesRegistryPackageName} package: ${(e as Error).message}`);
                 }
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
                     kind: "event::initializationFailed",
-                    message: (<Error>e).message,
-                    stack: (<Error>e).stack,
+                    message: (e as Error).message,
+                    stack: (e as Error).stack,
                 };
             }
 

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/formatToPartsBigInt.ts ===
+// Intl.NumberFormat.formatToParts should support bigInt
+
+// Test Intl methods with new parameter type
+new Intl.NumberFormat("fr").formatToParts(3000n);
+>new Intl.NumberFormat("fr").formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+
+new Intl.NumberFormat("fr").formatToParts(BigInt(123));
+>new Intl.NumberFormat("fr").formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+

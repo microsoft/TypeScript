@@ -1,9 +1,9 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 Object.defineProperty(module.exports, "a", { value: function a() {} });
->Object.defineProperty(module.exports, "a", { value: function a() {} }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "a", { value: function a() {} }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -14,10 +14,10 @@ Object.defineProperty(module.exports, "a", { value: function a() {} });
 >a : () => void
 
 Object.defineProperty(module.exports, "b", { value: function b() {} });
->Object.defineProperty(module.exports, "b", { value: function b() {} }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "b", { value: function b() {} }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -28,10 +28,10 @@ Object.defineProperty(module.exports, "b", { value: function b() {} });
 >b : () => void
 
 Object.defineProperty(module.exports.b, "cat", { value: "cat" });
->Object.defineProperty(module.exports.b, "cat", { value: "cat" }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports.b, "cat", { value: "cat" }) : () => void
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports.b : () => void
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
@@ -55,10 +55,10 @@ function d(a, b) { return /** @type {*} */(null); }
 >null : null
 
 Object.defineProperty(module.exports, "d", { value: d });
->Object.defineProperty(module.exports, "d", { value: d }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "d", { value: d }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -82,10 +82,10 @@ function e(a, b) { return /** @type {*} */(null); }
 >null : null
 
 Object.defineProperty(module.exports, "e", { value: e });
->Object.defineProperty(module.exports, "e", { value: e }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "e", { value: e }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -106,10 +106,10 @@ function f(a) {
 >a : T
 }
 Object.defineProperty(module.exports, "f", { value: f });
->Object.defineProperty(module.exports, "f", { value: f }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "f", { value: f }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -119,10 +119,10 @@ Object.defineProperty(module.exports, "f", { value: f });
 >f : <T>(a: T) => T
 
 Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
->Object.defineProperty(module.exports.f, "self", { value: module.exports.f }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports.f, "self", { value: module.exports.f }) : <T>(a: T) => T
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports.f : <T>(a: T) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
@@ -157,10 +157,10 @@ function g(a, b) {
 >y : () => void
 }
 Object.defineProperty(module.exports, "g", { value: g });
->Object.defineProperty(module.exports, "g", { value: g }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "g", { value: g }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -190,10 +190,10 @@ function hh(a, b) {
 >y : () => void
 }
 Object.defineProperty(module.exports, "h", { value: hh });
->Object.defineProperty(module.exports, "h", { value: hh }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "h", { value: hh }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -203,10 +203,10 @@ Object.defineProperty(module.exports, "h", { value: hh });
 >hh : (a: { x: string; }, b: { y: () => void; }) => void
 
 Object.defineProperty(module.exports, "i", { value: function i(){} });
->Object.defineProperty(module.exports, "i", { value: function i(){} }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "i", { value: function i(){} }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -217,10 +217,10 @@ Object.defineProperty(module.exports, "i", { value: function i(){} });
 >i : () => void
 
 Object.defineProperty(module.exports, "ii", { value: module.exports.i });
->Object.defineProperty(module.exports, "ii", { value: module.exports.i }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "ii", { value: module.exports.i }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -235,10 +235,10 @@ Object.defineProperty(module.exports, "ii", { value: module.exports.i });
 
 // note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
 Object.defineProperty(module.exports, "jj", { value: module.exports.j });
->Object.defineProperty(module.exports, "jj", { value: module.exports.j }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "jj", { value: module.exports.j }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -252,10 +252,10 @@ Object.defineProperty(module.exports, "jj", { value: module.exports.j });
 >j : () => void
 
 Object.defineProperty(module.exports, "j", { value: function j() {} });
->Object.defineProperty(module.exports, "j", { value: function j() {} }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, "j", { value: function j() {} }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports

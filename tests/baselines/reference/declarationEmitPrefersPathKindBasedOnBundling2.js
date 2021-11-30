@@ -34,7 +34,7 @@ define("settings/spacing", ["require", "exports", "lib/operators/scalar"], funct
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
         get xs() {
-            return scalar_1.scalar("14px");
+            return (0, scalar_1.scalar)("14px");
         }
     };
 });

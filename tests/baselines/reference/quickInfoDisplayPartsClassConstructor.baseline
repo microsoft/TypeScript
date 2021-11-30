@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 14
+      "position": 14,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -51,7 +52,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 42
+      "position": 42,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "var",
@@ -92,7 +94,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 58
+      "position": 58,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -141,7 +144,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 67
+      "position": 67,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "var",
@@ -190,7 +194,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 74
+      "position": 74,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "class",
@@ -219,7 +224,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 104
+      "position": 104,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -312,7 +318,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 132
+      "position": 132,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -405,7 +412,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 160
+      "position": 160,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -498,7 +506,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 194
+      "position": 194,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "var",
@@ -539,7 +548,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 223
+      "position": 223,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -632,7 +642,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 252
+      "position": 252,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "var",
@@ -673,7 +684,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 282
+      "position": 282,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -766,7 +778,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 306
+      "position": 306,
+      "name": "13"
     },
     "quickInfo": {
       "kind": "var",
@@ -815,7 +828,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 326
+      "position": 326,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "class",
@@ -844,7 +858,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 377
+      "position": 377,
+      "name": "15"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -937,7 +952,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 405
+      "position": 405,
+      "name": "16"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -1030,7 +1046,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 433
+      "position": 433,
+      "name": "17"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -1123,7 +1140,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 462
+      "position": 462,
+      "name": "18"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -1216,7 +1234,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 496
+      "position": 496,
+      "name": "19"
     },
     "quickInfo": {
       "kind": "var",
@@ -1257,7 +1276,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 533
+      "position": 533,
+      "name": "20"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -1350,7 +1370,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 570
+      "position": 570,
+      "name": "21"
     },
     "quickInfo": {
       "kind": "var",
@@ -1391,7 +1412,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 608
+      "position": 608,
+      "name": "22"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -1484,7 +1506,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 640
+      "position": 640,
+      "name": "23"
     },
     "quickInfo": {
       "kind": "var",
@@ -1525,7 +1548,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 678
+      "position": 678,
+      "name": "24"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -1618,7 +1642,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 712
+      "position": 712,
+      "name": "25"
     },
     "quickInfo": {
       "kind": "var",
@@ -1667,7 +1692,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts",
-      "position": 740
+      "position": 740,
+      "name": "26"
     },
     "quickInfo": {
       "kind": "class",

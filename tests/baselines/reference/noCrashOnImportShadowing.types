@@ -50,6 +50,6 @@ OriginalB.zzz;
 >zzz : 123
 
 const y: OriginalB = x;
->y : any
+>y : OriginalB
 >x : B
 

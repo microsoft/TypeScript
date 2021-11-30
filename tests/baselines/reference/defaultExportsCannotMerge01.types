@@ -38,10 +38,10 @@ Entity();
 >Entity : any
 
 var x: Entity;
->x : any
+>x : Entity
 
 var y: Entity.I;
->y : any
+>y : Entity.I
 >Entity : any
 
 Entity.x;

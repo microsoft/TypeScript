@@ -201,10 +201,10 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
         if (!every(decls, d => getSourceFileOfNode(d) === file)) {
             return;
         }
-        if (!isConvertableSignatureDeclaration(decls[0])) {
+        if (!isConvertableSignatureDeclaration(decls![0])) {
             return;
         }
-        const kindOne = decls[0].kind;
+        const kindOne = decls![0].kind;
         if (!every(decls, d => d.kind === kindOne)) {
             return;
         }

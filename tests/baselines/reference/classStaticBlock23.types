@@ -1,0 +1,57 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts ===
+const nums = [1, 2, 3].map(n => Promise.resolve(n))
+>nums : Promise<number>[]
+>[1, 2, 3].map(n => Promise.resolve(n)) : Promise<number>[]
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>n => Promise.resolve(n) : (n: number) => Promise<number>
+>n : number
+>Promise.resolve(n) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>n : number
+
+class C {
+>C : C
+
+  static {
+    for await (const nn of nums) {
+>nn : number
+>nums : Promise<number>[]
+
+        console.log(nn)
+>console.log(nn) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>nn : number
+    }
+  }
+}
+
+async function foo () {
+>foo : () => Promise<void>
+
+  class C {
+>C : C
+
+    static {
+      for await (const nn of nums) {
+>nn : number
+>nums : Promise<number>[]
+
+          console.log(nn)
+>console.log(nn) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>nn : number
+      }
+    }
+  }
+}

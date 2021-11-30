@@ -15,8 +15,8 @@ module clodule1 {
 >clodule1 : typeof clodule1
 
     function f(x: T) { }
->f : (x: any) => void
->x : any
+>f : (x: T) => void
+>x : T
 }
 
 class clodule2<T>{
@@ -33,7 +33,7 @@ module clodule2 {
 >clodule2 : typeof clodule2
 
     var x: T;
->x : any
+>x : T
 
     class D<U extends T>{
 >D : D<U>
@@ -83,7 +83,7 @@ module clodule4 {
 >D : D
 
         name: T;
->name : any
+>name : T
     }
 }
 

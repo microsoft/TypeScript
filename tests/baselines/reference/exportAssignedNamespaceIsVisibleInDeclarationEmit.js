@@ -15,7 +15,7 @@ export const thing = f();
 exports.__esModule = true;
 exports.thing = void 0;
 var thing_1 = require("./thing");
-exports.thing = thing_1.f();
+exports.thing = (0, thing_1.f)();
 
 
 //// [index.d.ts]
