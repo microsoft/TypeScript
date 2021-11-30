@@ -4543,12 +4543,12 @@ namespace ts {
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
 
-            let maybeJSDocFunctionType = type;
-            while (maybeJSDocFunctionType && isParenthesizedTypeNode(maybeJSDocFunctionType)) {
-                maybeJSDocFunctionType = maybeJSDocFunctionType.type;  // Skip parens if need be
+            let unwrappedType = type;
+            while (unwrappedType?.kind === SyntaxKind.ParenthesizedType) {
+                unwrappedType = (unwrappedType as ParenthesizedTypeNode).type;  // Skip parens if need be
             }
 
-            const hasJSDocFunctionType = maybeJSDocFunctionType && isJSDocFunctionType(maybeJSDocFunctionType);
+            const hasJSDocFunctionType = unwrappedType && isJSDocFunctionType(unwrappedType);
             // const hasJSDocFunctionType = type && isJSDocFunctionType(skipParentheses(type));
             if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
