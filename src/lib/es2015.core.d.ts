@@ -401,6 +401,7 @@ interface String {
      * same as the corresponding elements of this object (converted to a String) starting at
      * endPosition – length(this). Otherwise returns false.
      */
+    endsWith<T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`;
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
@@ -431,6 +432,7 @@ interface String {
      * same as the corresponding elements of this object (converted to a String) starting at
      * position. Otherwise returns false.
      */
+    startsWith<T extends string>(searchString: T, position?: 0): this is `${T}${string}`;
     startsWith(searchString: string, position?: number): boolean;
 
     /**
