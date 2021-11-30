@@ -17,12 +17,9 @@
 // @Filename: main.ts
 //// normalize/**/
 
-const insertionIndex = completion.globalsSortedByName.findIndex(c => c.name > "normalize");
-
 verify.completions({
   marker: "",
-  exact: [
-    ...completion.globalsSortedByName.slice(0, insertionIndex),
+  exact: completion.globalsPlus([
     {
       name: "normalize",
       source: "path",
@@ -44,8 +41,7 @@ verify.completions({
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions,
     },
-    ...completion.globalsSortedByName.slice(insertionIndex),
-  ],
+  ]),
   preferences: {
     includeCompletionsForModuleExports: true,
     includeCompletionsWithInsertText: true,

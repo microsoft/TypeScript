@@ -34,25 +34,25 @@ verify.completions(
     {
         marker: ["1", "6"],
         exact: [
-          "onClick",
           { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
           { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
-          "goTo"
+          "goTo",
+          "onClick",
         ]
     },
     {
       marker: "2",
       exact: [
-        "onClick",
         { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
-        "goTo"
+        "goTo",
+        "onClick",
       ]
     },
     {
       marker: ["3", "4", "5"],
       exact: [
         { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
-        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember }
+        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
       ]
     },
 );

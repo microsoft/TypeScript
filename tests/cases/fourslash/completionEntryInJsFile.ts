@@ -14,18 +14,18 @@
 ////}
 const warnings = [
     { name: "classA", sortText: completion.SortText.JavascriptIdentifiers },
+    { name: "foo", sortText: completion.SortText.JavascriptIdentifiers },
     { name: "Test7", sortText: completion.SortText.JavascriptIdentifiers },
-    { name: "foo", sortText: completion.SortText.JavascriptIdentifiers }
 ];
 verify.completions(
     { marker: "global", exact: completion.globalsInJsPlus(["foo", "classA", "Test7"]) },
     {
         marker: "class",
         isNewIdentifierLocation: true,
-        exact: [
+        exact: completion.sorted([
             ...warnings,
             ...completion.classElementInJsKeywords
-        ]
+        ])
     },
     {
         marker: "constructorParameter",

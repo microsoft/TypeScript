@@ -33,6 +33,6 @@
 ////ci1./*2*/b;
 
 verify.completions(
-    { marker: "1", exact: ["i1", "i2", "i3", "a", "b", "c"] },
-    { marker: "2", exact: ["i11", "i12", "a", "b", "b1"] },
+    { marker: "1", exact: completion.sorted(["i1", "i2", "i3", "a", "b", "c"]) },
+    { marker: "2", exact: completion.sorted(["i11", "i12", "a", "b", "b1"]) },
 );

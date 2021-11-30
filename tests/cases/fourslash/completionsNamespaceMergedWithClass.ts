@@ -16,10 +16,9 @@ verify.completions(
     { marker: "type", exact: "T" },
     {
         marker: "value",
-        exact: [
+        exact: completion.functionMembersPlus([
             { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "m", sortText: completion.SortText.LocalDeclarationPriority },
-            ...completion.functionMembers
-        ]
+        ])
     },
 );

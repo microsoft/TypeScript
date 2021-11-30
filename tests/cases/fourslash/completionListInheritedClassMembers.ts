@@ -37,7 +37,7 @@
 ////}
 
 verify.completions(
-    { marker: "1", exact: ["m1", "m2", "m3", ...completion.classElementKeywords], isNewIdentifierLocation: true },
-    { marker: "2", exact: ["m1", "m2", "m3", ...completion.classElementKeywords], isNewIdentifierLocation: true },
-    { marker: "3", exact: ["m1", "m3", ...completion.classElementKeywords], isNewIdentifierLocation: true }
+    { marker: "1", exact: completion.sorted(["m1", "m2", "m3", ...completion.classElementKeywords]), isNewIdentifierLocation: true },
+    { marker: "2", exact: completion.sorted(["m1", "m2", "m3", ...completion.classElementKeywords]), isNewIdentifierLocation: true },
+    { marker: "3", exact: completion.sorted(["m1", "m3", ...completion.classElementKeywords]), isNewIdentifierLocation: true }
 );

@@ -128,13 +128,13 @@ verify.completions(
     {
         // Not a class element declaration location
         marker: "InsideMethod",
-        exact: [
+        exact: completion.sorted([
             "arguments",
             completion.globalThisEntry,
             "B", "C", "D", "D1", "D2", "D3", "D4", "D5", "D6", "E", "F", "F2", "G", "G2", "H", "I", "J", "K", "L", "L2", "M", "N", "O",
             completion.undefinedVarEntry,
             ...completion.insideMethodKeywords,
-        ],
+        ]),
     },
     {
         // Only keywords allowed at this position since they dont extend the class or are private
@@ -146,7 +146,7 @@ verify.completions(
             "classThatStartedWritingIdentifierAfterPrivateModifier",
             "classThatStartedWritingIdentifierAfterPrivateStaticModifier",
         ],
-        exact: ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(
+        exact: completion.sorted(["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"]).map(
             name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
             ),
         isNewIdentifierLocation: true,
@@ -176,13 +176,13 @@ verify.completions(
             "classThatHasWrittenAsyncKeyword",
             "classElementAfterConstructorSeparatedByComma",
         ],
-        exact: [protectedMethod, getValue, ...completion.classElementKeywords],
+        exact: completion.sorted([protectedMethod, getValue, ...completion.classElementKeywords]),
         isNewIdentifierLocation: true,
     },
     {
         // Static Base members and class member keywords allowed
         marker: ["classElementContainingStatic", "classThatStartedWritingIdentifierAfterStaticModifier"],
-        exact: [staticMethod, ...completion.classElementKeywords],
+        exact: completion.sorted([staticMethod, ...completion.classElementKeywords]),
         isNewIdentifierLocation: true,
     },
     {
@@ -190,7 +190,7 @@ verify.completions(
             "classThatHasAlreadyImplementedAnotherClassMethod",
             "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
         ],
-        exact: [protectedMethod, ...completion.classElementKeywords],
+        exact: completion.sorted([protectedMethod, ...completion.classElementKeywords]),
         isNewIdentifierLocation: true,
     },
     {
@@ -198,23 +198,23 @@ verify.completions(
             "classThatHasAlreadyImplementedAnotherClassProtectedMethod",
             "classThatHasDifferentMethodThanBaseAfterProtectedMethod",
         ],
-        exact: [getValue, ...completion.classElementKeywords],
+        exact: completion.sorted([getValue, ...completion.classElementKeywords]),
         isNewIdentifierLocation: true,
     },
     {
         // instance memebers in D1 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClass",
-        exact: ["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords],
+        exact: completion.sorted(["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords]),
         isNewIdentifierLocation: true,
     },
     {
         // instance memebers in D2 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClassWithOverridingMember",
-        exact: [
+        exact: completion.sorted([
             { name: "protectedMethod", text: "(method) D2.protectedMethod(): void" },
             getValue,
             ...completion.classElementKeywords,
-        ],
+        ]),
         isNewIdentifierLocation: true,
     },
     {
@@ -223,7 +223,7 @@ verify.completions(
             "classThatExtendsClassExtendingAnotherClassAndTypesStatic",
             "classThatExtendsClassExtendingAnotherClassWithOverridingMemberAndTypesStatic"
         ],
-        exact: [staticMethod, ...completion.classElementKeywords],
+        exact: completion.sorted([staticMethod, ...completion.classElementKeywords]),
         isNewIdentifierLocation: true,
     },
 );

@@ -11,13 +11,13 @@
       "isNewIdentifierLocation": false,
       "entries": [
         {
-          "name": "globalThis",
-          "kind": "module",
+          "name": "a",
+          "kind": "class",
           "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "module",
+              "text": "class",
               "kind": "keyword"
             },
             {
@@ -25,101 +25,44 @@
               "kind": "space"
             },
             {
-              "text": "globalThis",
-              "kind": "moduleName"
+              "text": "a",
+              "kind": "className"
             }
           ],
           "documentation": []
         },
         {
-          "name": "eval",
-          "kind": "function",
-          "kindModifiers": "declare",
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "function",
+              "text": "abstract",
               "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "eval",
-              "kind": "functionName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "x",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
+            }
+          ]
+        },
+        {
+          "name": "any",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
             {
               "text": "any",
               "kind": "keyword"
             }
-          ],
-          "documentation": [
-            {
-              "text": "Evaluates JavaScript code and executes it.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "x",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A String value that contains valid JavaScript code.",
-                  "kind": "text"
-                }
-              ]
-            }
           ]
         },
         {
-          "name": "parseInt",
-          "kind": "function",
+          "name": "Array",
+          "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "function",
+              "text": "interface",
               "kind": "keyword"
             },
             {
@@ -127,16 +70,36 @@
               "kind": "space"
             },
             {
-              "text": "parseInt",
-              "kind": "functionName"
+              "text": "Array",
+              "kind": "localName"
             },
             {
-              "text": "(",
+              "text": "<",
               "kind": "punctuation"
             },
             {
-              "text": "string",
-              "kind": "parameterName"
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Array",
+              "kind": "localName"
             },
             {
               "text": ":",
@@ -147,105 +110,20 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "radix",
-              "kind": "parameterName"
-            },
-            {
-              "text": "?",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "text": "ArrayConstructor",
+              "kind": "interfaceName"
             }
           ],
-          "documentation": [
-            {
-              "text": "Converts a string to an integer.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "string",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string to convert into a number.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "radix",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
-                  "kind": "text"
-                }
-              ]
-            }
-          ]
+          "documentation": []
         },
         {
-          "name": "parseFloat",
-          "kind": "function",
+          "name": "ArrayBuffer",
+          "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "function",
+              "text": "interface",
               "kind": "keyword"
             },
             {
@@ -253,16 +131,24 @@
               "kind": "space"
             },
             {
-              "text": "parseFloat",
-              "kind": "functionName"
+              "text": "ArrayBuffer",
+              "kind": "localName"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
+              "text": "\n",
+              "kind": "lineBreak"
             },
             {
-              "text": "string",
-              "kind": "parameterName"
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
             },
             {
               "text": ":",
@@ -273,141 +159,97 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "text": "ArrayBufferConstructor",
+              "kind": "interfaceName"
             }
           ],
           "documentation": [
             {
-              "text": "Converts a string to a floating-point number.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
               "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "string",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string that contains a floating-point number.",
-                  "kind": "text"
-                }
-              ]
             }
           ]
         },
         {
-          "name": "isNaN",
-          "kind": "function",
-          "kindModifiers": "declare",
+          "name": "as",
+          "kind": "keyword",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "function",
+              "text": "as",
               "kind": "keyword"
-            },
+            }
+          ]
+        },
+        {
+          "name": "asserts",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
             {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "isNaN",
-              "kind": "functionName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "number",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
+              "text": "asserts",
               "kind": "keyword"
-            },
+            }
+          ]
+        },
+        {
+          "name": "async",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
             {
-              "text": ")",
-              "kind": "punctuation"
-            },
+              "text": "async",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "await",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
             {
-              "text": ":",
-              "kind": "punctuation"
-            },
+              "text": "await",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "bigint",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
             {
-              "text": " ",
-              "kind": "space"
-            },
+              "text": "bigint",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "boolean",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
             {
               "text": "boolean",
               "kind": "keyword"
             }
-          ],
-          "documentation": [
-            {
-              "text": "Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number).",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "number",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A numeric value.",
-                  "kind": "text"
-                }
-              ]
-            }
           ]
         },
         {
-          "name": "isFinite",
-          "kind": "function",
+          "name": "Boolean",
+          "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "function",
+              "text": "interface",
               "kind": "keyword"
             },
             {
@@ -415,16 +257,24 @@
               "kind": "space"
             },
             {
-              "text": "isFinite",
-              "kind": "functionName"
+              "text": "Boolean",
+              "kind": "localName"
             },
             {
-              "text": "(",
-              "kind": "punctuation"
+              "text": "\n",
+              "kind": "lineBreak"
             },
             {
-              "text": "number",
-              "kind": "parameterName"
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Boolean",
+              "kind": "localName"
             },
             {
               "text": ":",
@@ -435,49 +285,333 @@
               "kind": "space"
             },
             {
-              "text": "number",
+              "text": "BooleanConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "break",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "break",
               "kind": "keyword"
-            },
+            }
+          ]
+        },
+        {
+          "name": "c2",
+          "kind": "class",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
             {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
+              "text": "class",
+              "kind": "keyword"
             },
             {
               "text": " ",
               "kind": "space"
             },
             {
-              "text": "boolean",
-              "kind": "keyword"
+              "text": "c2",
+              "kind": "className"
             }
           ],
           "documentation": [
             {
-              "text": "Determines whether a supplied number is finite.",
+              "text": "This is class c2 without constructor",
               "kind": "text"
             }
-          ],
-          "tags": [
+          ]
+        },
+        {
+          "name": "c3",
+          "kind": "class",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
             {
-              "name": "param",
-              "text": [
-                {
-                  "text": "number",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "Any numeric value.",
-                  "kind": "text"
-                }
-              ]
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c3",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "c4",
+          "kind": "class",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c4",
+              "kind": "className"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Class comment",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "c5",
+          "kind": "class",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c5",
+              "kind": "className"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Class with statics",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "c6",
+          "kind": "class",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c6",
+              "kind": "className"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "class with statics and constructor",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "case",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "case",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "catch",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "catch",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "class",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "class",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "const",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "const",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "continue",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "continue",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "DataView",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "DataView",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "DataView",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "DataViewConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "Date",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Date",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Date",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "DateConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Enables basic storage and retrieval of dates and times.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "debugger",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "debugger",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "declare",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "declare",
+              "kind": "keyword"
             }
           ]
         },
@@ -640,6 +774,54 @@
                   "kind": "text"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "default",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "default",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "delete",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "delete",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "do",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "do",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "else",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "else",
+              "kind": "keyword"
             }
           ]
         },
@@ -838,6 +1020,67 @@
           ]
         },
         {
+          "name": "enum",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "enum",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Error",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Error",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Error",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ErrorConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
@@ -928,10 +1171,10 @@
           ]
         },
         {
-          "name": "unescape",
+          "name": "eval",
           "kind": "function",
-          "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "kindModifiers": "declare",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -942,7 +1185,7 @@
               "kind": "space"
             },
             {
-              "text": "unescape",
+              "text": "eval",
               "kind": "functionName"
             },
             {
@@ -950,7 +1193,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "string",
+              "text": "x",
               "kind": "parameterName"
             },
             {
@@ -978,31 +1221,22 @@
               "kind": "space"
             },
             {
-              "text": "string",
+              "text": "any",
               "kind": "keyword"
             }
           ],
           "documentation": [
             {
-              "text": "Computes a new string in which hexadecimal escape sequences are replaced with the character that it represents.",
+              "text": "Evaluates JavaScript code and executes it.",
               "kind": "text"
             }
           ],
           "tags": [
             {
-              "name": "deprecated",
-              "text": [
-                {
-                  "text": "A legacy feature for browser compatibility",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
               "name": "param",
               "text": [
                 {
-                  "text": "string",
+                  "text": "x",
                   "kind": "parameterName"
                 },
                 {
@@ -1010,7 +1244,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A string value",
+                  "text": "A String value that contains valid JavaScript code.",
                   "kind": "text"
                 }
               ]
@@ -1018,73 +1252,7 @@
           ]
         },
         {
-          "name": "NaN",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "NaN",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "Infinity",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Infinity",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "Object",
+          "name": "EvalError",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -1098,7 +1266,7 @@
               "kind": "space"
             },
             {
-              "text": "Object",
+              "text": "EvalError",
               "kind": "localName"
             },
             {
@@ -1114,7 +1282,7 @@
               "kind": "space"
             },
             {
-              "text": "Object",
+              "text": "EvalError",
               "kind": "localName"
             },
             {
@@ -1126,14 +1294,189 @@
               "kind": "space"
             },
             {
-              "text": "ObjectConstructor",
+              "text": "EvalErrorConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "export",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "export",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "extends",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "extends",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "false",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "finally",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "finally",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Float32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Float32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Float32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Float32ArrayConstructor",
               "kind": "interfaceName"
             }
           ],
           "documentation": [
             {
-              "text": "Provides functionality common to all JavaScript objects.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Float64Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Float64Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Float64Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Float64ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "for",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "for",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "function",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "keyword"
             }
           ]
         },
@@ -1192,7 +1535,503 @@
           ]
         },
         {
-          "name": "String",
+          "name": "globalThis",
+          "kind": "module",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "globalThis",
+              "kind": "moduleName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i2",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i2",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c2",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i2_c",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i2_c",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "typeof",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c2",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i3",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i3",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c3",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i3_c",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i3_c",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "typeof",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c3",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i4",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i4",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c4",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i4_c",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i4_c",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "typeof",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c4",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i5",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i5",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c5",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i5_c",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i5_c",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "typeof",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c5",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i6",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i6",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c6",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "i6_c",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "i6_c",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "typeof",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c6",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "if",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "if",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "implements",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "implements",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "import",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "in",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "in",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "infer",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "infer",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Infinity",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Infinity",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "instanceof",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "instanceof",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -1206,7 +2045,7 @@
               "kind": "space"
             },
             {
-              "text": "String",
+              "text": "Int16Array",
               "kind": "localName"
             },
             {
@@ -1222,7 +2061,7 @@
               "kind": "space"
             },
             {
-              "text": "String",
+              "text": "Int16Array",
               "kind": "localName"
             },
             {
@@ -1234,19 +2073,19 @@
               "kind": "space"
             },
             {
-              "text": "StringConstructor",
+              "text": "Int16ArrayConstructor",
               "kind": "interfaceName"
             }
           ],
           "documentation": [
             {
-              "text": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
         },
         {
-          "name": "Boolean",
+          "name": "Int32Array",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -1260,7 +2099,7 @@
               "kind": "space"
             },
             {
-              "text": "Boolean",
+              "text": "Int32Array",
               "kind": "localName"
             },
             {
@@ -1276,7 +2115,7 @@
               "kind": "space"
             },
             {
-              "text": "Boolean",
+              "text": "Int32Array",
               "kind": "localName"
             },
             {
@@ -1288,68 +2127,19 @@
               "kind": "space"
             },
             {
-              "text": "BooleanConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "Number",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Number",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Number",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "NumberConstructor",
+              "text": "Int32ArrayConstructor",
               "kind": "interfaceName"
             }
           ],
           "documentation": [
             {
-              "text": "An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
         },
         {
-          "name": "Math",
+          "name": "Int8Array",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -1363,7 +2153,7 @@
               "kind": "space"
             },
             {
-              "text": "Math",
+              "text": "Int8Array",
               "kind": "localName"
             },
             {
@@ -1379,7 +2169,7 @@
               "kind": "space"
             },
             {
-              "text": "Math",
+              "text": "Int8Array",
               "kind": "localName"
             },
             {
@@ -1391,95 +2181,37 @@
               "kind": "space"
             },
             {
-              "text": "Math",
-              "kind": "localName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "An intrinsic object that provides basic mathematics functionality and constants.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Date",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Date",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Date",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "DateConstructor",
+              "text": "Int8ArrayConstructor",
               "kind": "interfaceName"
             }
           ],
           "documentation": [
             {
-              "text": "Enables basic storage and retrieval of dates and times.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
         },
         {
-          "name": "RegExp",
-          "kind": "var",
-          "kindModifiers": "declare",
+          "name": "interface",
+          "kind": "keyword",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
               "kind": "keyword"
-            },
+            }
+          ]
+        },
+        {
+          "name": "Intl",
+          "kind": "module",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
             {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "RegExp",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
+              "text": "namespace",
               "kind": "keyword"
             },
             {
@@ -1487,32 +2219,20 @@
               "kind": "space"
             },
             {
-              "text": "RegExp",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "RegExpConstructor",
-              "kind": "interfaceName"
+              "text": "Intl",
+              "kind": "moduleName"
             }
           ],
           "documentation": []
         },
         {
-          "name": "Error",
-          "kind": "var",
+          "name": "isFinite",
+          "kind": "function",
           "kindModifiers": "declare",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "interface",
+              "text": "function",
               "kind": "keyword"
             },
             {
@@ -1520,24 +2240,16 @@
               "kind": "space"
             },
             {
-              "text": "Error",
-              "kind": "localName"
+              "text": "isFinite",
+              "kind": "functionName"
             },
             {
-              "text": "\n",
-              "kind": "lineBreak"
+              "text": "(",
+              "kind": "punctuation"
             },
             {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Error",
-              "kind": "localName"
+              "text": "number",
+              "kind": "parameterName"
             },
             {
               "text": ":",
@@ -1548,20 +2260,60 @@
               "kind": "space"
             },
             {
-              "text": "ErrorConstructor",
-              "kind": "interfaceName"
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "boolean",
+              "kind": "keyword"
             }
           ],
-          "documentation": []
+          "documentation": [
+            {
+              "text": "Determines whether a supplied number is finite.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "number",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Any numeric value.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
         },
         {
-          "name": "EvalError",
-          "kind": "var",
+          "name": "isNaN",
+          "kind": "function",
           "kindModifiers": "declare",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "interface",
+              "text": "function",
               "kind": "keyword"
             },
             {
@@ -1569,24 +2321,16 @@
               "kind": "space"
             },
             {
-              "text": "EvalError",
-              "kind": "localName"
+              "text": "isNaN",
+              "kind": "functionName"
             },
             {
-              "text": "\n",
-              "kind": "lineBreak"
+              "text": "(",
+              "kind": "punctuation"
             },
             {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "EvalError",
-              "kind": "localName"
+              "text": "number",
+              "kind": "parameterName"
             },
             {
               "text": ":",
@@ -1597,45 +2341,12 @@
               "kind": "space"
             },
             {
-              "text": "EvalErrorConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "RangeError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
+              "text": "number",
               "kind": "keyword"
             },
             {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "RangeError",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "RangeError",
-              "kind": "localName"
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -1646,207 +2357,35 @@
               "kind": "space"
             },
             {
-              "text": "RangeErrorConstructor",
-              "kind": "interfaceName"
+              "text": "boolean",
+              "kind": "keyword"
             }
           ],
-          "documentation": []
-        },
-        {
-          "name": "ReferenceError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
+          "documentation": [
             {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ReferenceError",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ReferenceError",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ReferenceErrorConstructor",
-              "kind": "interfaceName"
+              "text": "Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number).",
+              "kind": "text"
             }
           ],
-          "documentation": []
-        },
-        {
-          "name": "SyntaxError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
+          "tags": [
             {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "SyntaxError",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "SyntaxError",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "SyntaxErrorConstructor",
-              "kind": "interfaceName"
+              "name": "param",
+              "text": [
+                {
+                  "text": "number",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A numeric value.",
+                  "kind": "text"
+                }
+              ]
             }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "TypeError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "TypeError",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "TypeError",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "TypeErrorConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "URIError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "URIError",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "URIError",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "URIErrorConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": []
+          ]
         },
         {
           "name": "JSON",
@@ -1903,13 +2442,37 @@
           ]
         },
         {
-          "name": "Array",
-          "kind": "var",
-          "kindModifiers": "declare",
+          "name": "keyof",
+          "kind": "keyword",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "interface",
+              "text": "keyof",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "let",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "let",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "m",
+          "kind": "module",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "namespace",
               "kind": "keyword"
             },
             {
@@ -1917,54 +2480,14 @@
               "kind": "space"
             },
             {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "ArrayConstructor",
-              "kind": "interfaceName"
+              "text": "m",
+              "kind": "moduleName"
             }
           ],
           "documentation": []
         },
         {
-          "name": "ArrayBuffer",
+          "name": "Math",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -1978,7 +2501,7 @@
               "kind": "space"
             },
             {
-              "text": "ArrayBuffer",
+              "text": "Math",
               "kind": "localName"
             },
             {
@@ -1994,7 +2517,7 @@
               "kind": "space"
             },
             {
-              "text": "ArrayBuffer",
+              "text": "Math",
               "kind": "localName"
             },
             {
@@ -2006,19 +2529,173 @@
               "kind": "space"
             },
             {
-              "text": "ArrayBufferConstructor",
-              "kind": "interfaceName"
+              "text": "Math",
+              "kind": "localName"
             }
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "An intrinsic object that provides basic mathematics functionality and constants.",
               "kind": "text"
             }
           ]
         },
         {
-          "name": "DataView",
+          "name": "module",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "module",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "myVar",
+          "kind": "var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "myVar",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "m",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "m2",
+              "kind": "moduleName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "c1",
+              "kind": "className"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "namespace",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "namespace",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "NaN",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "NaN",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "never",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "never",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "new",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "new",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "null",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "null",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "number",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Number",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -2032,7 +2709,7 @@
               "kind": "space"
             },
             {
-              "text": "DataView",
+              "text": "Number",
               "kind": "localName"
             },
             {
@@ -2048,7 +2725,7 @@
               "kind": "space"
             },
             {
-              "text": "DataView",
+              "text": "Number",
               "kind": "localName"
             },
             {
@@ -2060,14 +2737,365 @@
               "kind": "space"
             },
             {
-              "text": "DataViewConstructor",
+              "text": "NumberConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "object",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "object",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Object",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Object",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Object",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ObjectConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Provides functionality common to all JavaScript objects.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "package",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "package",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "parseFloat",
+          "kind": "function",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "parseFloat",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "string",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Converts a string to a floating-point number.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "string",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A string that contains a floating-point number.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "parseInt",
+          "kind": "function",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "parseInt",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "string",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "radix",
+              "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Converts a string to an integer.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "string",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A string to convert into a number.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "radix",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RangeError",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "RangeError",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "RangeError",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "RangeErrorConstructor",
               "kind": "interfaceName"
             }
           ],
           "documentation": []
         },
         {
-          "name": "Int8Array",
+          "name": "readonly",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "ReferenceError",
           "kind": "var",
           "kindModifiers": "declare",
           "sortText": "15",
@@ -2081,7 +3109,7 @@
               "kind": "space"
             },
             {
-              "text": "Int8Array",
+              "text": "ReferenceError",
               "kind": "localName"
             },
             {
@@ -2097,7 +3125,7 @@
               "kind": "space"
             },
             {
-              "text": "Int8Array",
+              "text": "ReferenceError",
               "kind": "localName"
             },
             {
@@ -2109,13 +3137,449 @@
               "kind": "space"
             },
             {
-              "text": "Int8ArrayConstructor",
+              "text": "ReferenceErrorConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "RegExp",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "RegExp",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "RegExp",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "RegExpConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "return",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "return",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "string",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "String",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "String",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "String",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "StringConstructor",
               "kind": "interfaceName"
             }
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "super",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "super",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "switch",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "switch",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "symbol",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "symbol",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "SyntaxError",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "SyntaxError",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "SyntaxError",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "SyntaxErrorConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "this",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "this",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "throw",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "throw",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "true",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "true",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "try",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "TypeError",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TypeError",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TypeError",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "TypeErrorConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "typeof",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "typeof",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -2229,937 +3693,6 @@
           ]
         },
         {
-          "name": "Int16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Float32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Float32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Float32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Float32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Float64Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Float64Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Float64Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Float64ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Intl",
-          "kind": "module",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "namespace",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Intl",
-              "kind": "moduleName"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "c2",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c2",
-              "kind": "className"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "This is class c2 without constructor",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "i2",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i2",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c2",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "i2_c",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i2_c",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c2",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "c3",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c3",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "i3",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i3",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c3",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "i3_c",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i3_c",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c3",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "c4",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c4",
-              "kind": "className"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Class comment",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "i4",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i4",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c4",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "i4_c",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i4_c",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c4",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "c5",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c5",
-              "kind": "className"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Class with statics",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "i5",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i5",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c5",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "i5_c",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i5_c",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c5",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "c6",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c6",
-              "kind": "className"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "class with statics and constructor",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "i6",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i6",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c6",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "i6_c",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "i6_c",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "c6",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "a",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "a",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "m",
-          "kind": "module",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "namespace",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "m",
-              "kind": "moduleName"
-            }
-          ],
-          "documentation": []
-        },
-        {
-          "name": "myVar",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "myVar",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "m",
-              "kind": "moduleName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "m2",
-              "kind": "moduleName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "c1",
-              "kind": "className"
-            }
-          ],
-          "documentation": []
-        },
-        {
           "name": "undefined",
           "kind": "var",
           "kindModifiers": "",
@@ -3181,388 +3714,167 @@
           "documentation": []
         },
         {
-          "name": "break",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "break",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "case",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "case",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "catch",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "catch",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "class",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "class",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "const",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "const",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "continue",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "continue",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "debugger",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "debugger",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "default",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "default",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "delete",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "delete",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "do",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "do",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "else",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "else",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "enum",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "enum",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "export",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "export",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "extends",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "extends",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "false",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "false",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "finally",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "finally",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "for",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "for",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "function",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
+          "name": "unescape",
+          "kind": "function",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
               "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "unescape",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "string",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Computes a new string in which hexadecimal escape sequences are replaced with the character that it represents.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "string",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A string value",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         },
         {
-          "name": "if",
+          "name": "unique",
           "kind": "keyword",
           "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "if",
+              "text": "unique",
               "kind": "keyword"
             }
           ]
         },
         {
-          "name": "import",
+          "name": "unknown",
           "kind": "keyword",
           "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "import",
+              "text": "unknown",
               "kind": "keyword"
             }
           ]
         },
         {
-          "name": "in",
-          "kind": "keyword",
-          "kindModifiers": "",
+          "name": "URIError",
+          "kind": "var",
+          "kindModifiers": "declare",
           "sortText": "15",
           "displayParts": [
             {
-              "text": "in",
+              "text": "interface",
               "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "instanceof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+            },
             {
-              "text": "instanceof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "new",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
-              "text": "new",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "null",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "URIError",
+              "kind": "localName"
+            },
             {
-              "text": "null",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "return",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "\n",
+              "kind": "lineBreak"
+            },
             {
-              "text": "return",
+              "text": "var",
               "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "super",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+            },
             {
-              "text": "super",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "switch",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
-              "text": "switch",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "this",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "URIError",
+              "kind": "localName"
+            },
             {
-              "text": "this",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "throw",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ":",
+              "kind": "punctuation"
+            },
             {
-              "text": "throw",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "true",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
-              "text": "true",
-              "kind": "keyword"
+              "text": "URIErrorConstructor",
+              "kind": "interfaceName"
             }
-          ]
-        },
-        {
-          "name": "try",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "try",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "typeof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            }
-          ]
+          ],
+          "documentation": []
         },
         {
           "name": "var",
@@ -3613,54 +3925,6 @@
           ]
         },
         {
-          "name": "implements",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "implements",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "interface",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "let",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "let",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "package",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "package",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "yield",
           "kind": "keyword",
           "kindModifiers": "",
@@ -3668,270 +3932,6 @@
           "displayParts": [
             {
               "text": "yield",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "abstract",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "abstract",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "as",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "as",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "asserts",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "asserts",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "any",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "any",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "async",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "async",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "await",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "await",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "boolean",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "boolean",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "declare",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "declare",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "infer",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "infer",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "keyof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "keyof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "module",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "module",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "namespace",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "namespace",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "never",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "never",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "readonly",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "readonly",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "number",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "number",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "object",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "object",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "string",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "symbol",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "symbol",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "type",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "type",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "unique",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "unique",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "unknown",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "bigint",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "bigint",
               "kind": "keyword"
             }
           ]

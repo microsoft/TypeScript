@@ -12,10 +12,10 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.sorted([
         { name: "A", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "B", sortText: completion.SortText.JavascriptIdentifiers },
         ...completion.classElementInJsKeywords
-    ],
+    ]),
     isNewIdentifierLocation: true
 });

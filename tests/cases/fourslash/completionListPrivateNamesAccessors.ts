@@ -31,7 +31,7 @@
 
 
 
-verify.completions({ marker: "1", exact: ["#z", "t", "l", "y"] });
-verify.completions({ marker: "2", exact: ["#z", "#u", "v", "k"] });
-verify.completions({ marker: "3", exact: ["#z", "t", "l", "y"] });
+verify.completions({ marker: "1", exact: completion.sorted(["#z", "t", "l", "y"]) });
+verify.completions({ marker: "2", exact: completion.sorted(["#z", "#u", "v", "k"]) });
+verify.completions({ marker: "3", exact: completion.sorted(["#z", "t", "l", "y"]) });
 verify.completions({ marker: "4", exact: ["y"] });

@@ -14,7 +14,7 @@
 
 verify.completions({
   marker: "",
-  exact: [
+  exact: completion.sorted([
     "arguments",
     completion.globalThisEntry,
     ...completion.globalsVars,
@@ -44,7 +44,7 @@ verify.completions({
       source: completion.CompletionSource.ThisProperty
     },
     ...completion.insideMethodKeywords
-  ],
+  ]),
   preferences: {
     includeInsertTextCompletions: true
   }

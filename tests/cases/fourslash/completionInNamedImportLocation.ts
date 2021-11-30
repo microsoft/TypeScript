@@ -16,15 +16,16 @@ verify.completions(
     {
         marker: "1",
         exact: [
+            { name: "type", sortText: completion.SortText.GlobalsOrKeywords },
             { name: "x", text: "var x: number" },
             { name: "y", text: "var y: number" },
-            { name: "type", sortText: completion.SortText.GlobalsOrKeywords }
         ]
     },
     {
         marker: "2",
         exact: [
+            { name: "type", sortText: completion.SortText.GlobalsOrKeywords },
             { name: "y", text: "var y: number" },
-            { name: "type", sortText: completion.SortText.GlobalsOrKeywords }
-        ] },
+        ]
+    },
 );

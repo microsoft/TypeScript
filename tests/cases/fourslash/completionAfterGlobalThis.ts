@@ -4,7 +4,7 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.sorted([
         completion.globalThisEntry,
         ...completion.globalsVars,
         completion.undefinedVarEntry
@@ -13,5 +13,5 @@ verify.completions({
             return { ...e, sortText: completion.SortText.DeprecatedLocationPriority };
         }
         return { ...e, sortText: completion.SortText.LocationPriority };
-    })
+    }))
 });

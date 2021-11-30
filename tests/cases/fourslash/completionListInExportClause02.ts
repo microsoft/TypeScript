@@ -8,4 +8,4 @@
 ////    export { /**/ } from "M1"
 ////}
 
-verify.completions({ marker: "", exact: ["V", { name: "type", sortText: completion.SortText.GlobalsOrKeywords }] });
+verify.completions({ marker: "", exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }, "V"] });

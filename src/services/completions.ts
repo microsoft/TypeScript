@@ -614,7 +614,7 @@ namespace ts.Completions {
         position: number,
         uniqueNames: UniqueNameSet,
         target: ScriptTarget,
-        entries: Push<CompletionEntry>): void {
+        entries: SortedArray<CompletionEntry>): void {
         getNameTable(sourceFile).forEach((pos, name) => {
             // Skip identifiers produced only from the current location
             if (pos === position) {
@@ -623,13 +623,13 @@ namespace ts.Completions {
             const realName = unescapeLeadingUnderscores(name);
             if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
                 uniqueNames.add(realName);
-                entries.push({
+                insertSorted(entries, {
                     name: realName,
                     kind: ScriptElementKind.warning,
                     kindModifiers: "",
                     sortText: SortText.JavascriptIdentifiers,
                     isFromUncheckedFile: true
-                });
+                }, compareCompletionEntries);
             }
         });
     }
@@ -1198,9 +1198,9 @@ namespace ts.Completions {
             }
 
             /** True for locals; false for globals, module exports from other files, `this.` completions. */
-            const shouldShadowEarlierSymbols = !origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
-            uniques.set(name, shouldShadowEarlierSymbols);
-            insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ !shouldShadowEarlierSymbols);
+            const shouldShadowLaterSymbols = !origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
+            uniques.set(name, shouldShadowLaterSymbols);
+            insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ true);
         }
 
         log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));

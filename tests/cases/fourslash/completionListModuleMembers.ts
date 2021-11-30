@@ -24,10 +24,10 @@
 verify.completions(
     {
         marker: ["ValueReference", "TypeReferenceInExtendsList"],
-        exact: ["exportedFunction", "exportedVariable", "exportedClass", "exportedModule"],
+        exact: completion.sorted(["exportedFunction", "exportedVariable", "exportedClass", "exportedModule"]),
     },
     {
         marker: ["TypeReference", "TypeReferenceInImplementsList"],
-        exact: ["exportedClass", "exportedInterface"],
+        exact: completion.sorted(["exportedClass", "exportedInterface"]),
     },
 );
