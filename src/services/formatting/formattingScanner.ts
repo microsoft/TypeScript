@@ -5,6 +5,7 @@ namespace ts.formatting {
 
     export interface FormattingScanner {
         advance(): void;
+        getStartPos(): number;
         isOnToken(): boolean;
         isOnEOF(): boolean;
         readTokenInfo(n: Node): TokenInfo;
@@ -49,6 +50,7 @@ namespace ts.formatting {
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
             skipToStartOf,
+            getStartPos: () => lastTokenInfo?.token.pos ?? scanner.getTokenPos(),
         });
 
         lastTokenInfo = undefined;
@@ -265,8 +267,7 @@ namespace ts.formatting {
 
         function isOnToken(): boolean {
             const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
-            const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
-            return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
+            return current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
 
         function isOnEOF(): boolean {

@@ -122,11 +122,11 @@ namespace ts {
 
         function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean): Expression {
             const { expression, chain } = flattenChain(node);
-            const left = visitNonOptionalExpression(expression, isCallChain(chain[0]), /*isDelete*/ false);
-            const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
-            let leftExpression = isSyntheticReference(left) ? left.expression : left;
-            let capturedLeft: Expression = leftExpression;
-            if (!isSimpleCopiableExpression(leftExpression)) {
+            const left = visitNonOptionalExpression(skipPartiallyEmittedExpressions(expression), isCallChain(chain[0]), /*isDelete*/ false);
+            let leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
+            let capturedLeft = isSyntheticReference(left) ? left.expression : left;
+            let leftExpression = factory.restoreOuterExpressions(expression, capturedLeft, OuterExpressionKinds.PartiallyEmittedExpressions);
+            if (!isSimpleCopiableExpression(capturedLeft)) {
                 capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
                 leftExpression = factory.createAssignment(capturedLeft, leftExpression);
             }
@@ -152,6 +152,10 @@ namespace ts {
                         break;
                     case SyntaxKind.CallExpression:
                         if (i === 0 && leftThisArg) {
+                            if (!isGeneratedIdentifier(leftThisArg)) {
+                                leftThisArg = factory.cloneNode(leftThisArg);
+                                addEmitFlags(leftThisArg, EmitFlags.NoComments);
+                            }
                             rightExpression = factory.createFunctionCallCall(
                                 rightExpression,
                                 leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
