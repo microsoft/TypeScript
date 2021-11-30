@@ -2544,7 +2544,7 @@ namespace ts {
                 else if (n === parent) {
                     return true;
                 }
-                else if(isFunctionLike(n)) {
+                else if (isFunctionLike(n)) {
                     return getImmediatelyInvokedFunctionExpression(n) ? false : "quit";
                 }
                 else {
