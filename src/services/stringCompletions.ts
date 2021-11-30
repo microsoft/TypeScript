@@ -39,7 +39,7 @@ namespace ts.Completions.StringCompletions {
             case StringLiteralCompletionKind.Paths:
                 return convertPathCompletions(completion.paths);
             case StringLiteralCompletionKind.Properties: {
-                const entries: CompletionEntry[] = [];
+                const entries = createSortedArray<CompletionEntry>();
                 getCompletionEntriesFromSymbols(
                     completion.symbols,
                     entries,
