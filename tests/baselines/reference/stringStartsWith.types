@@ -1,0 +1,77 @@
+=== tests/cases/compiler/stringStartsWith.ts ===
+declare var test: string;
+>test : string
+
+declare function requirePrefix(input: `test${string}`): void;
+>requirePrefix : (input: `test${string}`) => void
+>input : `test${string}`
+
+// works
+if (test.startsWith('test')) requirePrefix(test);
+>test.startsWith('test') : boolean
+>test.startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>test : string
+>startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>'test' : "test"
+>requirePrefix(test) : void
+>requirePrefix : (input: `test${string}`) => void
+>test : `test${string}`
+
+if (test.startsWith('test', undefined)) requirePrefix(test);
+>test.startsWith('test', undefined) : boolean
+>test.startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>test : string
+>startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>'test' : "test"
+>undefined : undefined
+>requirePrefix(test) : void
+>requirePrefix : (input: `test${string}`) => void
+>test : `test${string}`
+
+if (test.startsWith('test', 0)) requirePrefix(test);
+>test.startsWith('test', 0) : boolean
+>test.startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>test : string
+>startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>'test' : "test"
+>0 : 0
+>requirePrefix(test) : void
+>requirePrefix : (input: `test${string}`) => void
+>test : `test${string}`
+
+// errors
+if (test.startsWith('test', 1)) requirePrefix(test);
+>test.startsWith('test', 1) : boolean
+>test.startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>test : string
+>startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>'test' : "test"
+>1 : 1
+>requirePrefix(test) : void
+>requirePrefix : (input: `test${string}`) => void
+>test : string
+
+if (test.startsWith('test', 0 as number)) requirePrefix(test);
+>test.startsWith('test', 0 as number) : boolean
+>test.startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>test : string
+>startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>'test' : "test"
+>0 as number : number
+>0 : 0
+>requirePrefix(test) : void
+>requirePrefix : (input: `test${string}`) => void
+>test : string
+
+if (test.startsWith('test', 1 as number)) requirePrefix(test);
+>test.startsWith('test', 1 as number) : boolean
+>test.startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>test : string
+>startsWith : { <T extends string>(searchString: T, position?: 0): this is `${T}${string}`; (searchString: string, position?: number): boolean; }
+>'test' : "test"
+>1 as number : number
+>1 : 1
+>requirePrefix(test) : void
+>requirePrefix : (input: `test${string}`) => void
+>test : string
+

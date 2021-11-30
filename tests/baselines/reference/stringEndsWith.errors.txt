@@ -1,0 +1,28 @@
+tests/cases/compiler/stringEndsWith.ts(9,46): error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+tests/cases/compiler/stringEndsWith.ts(10,46): error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+tests/cases/compiler/stringEndsWith.ts(11,56): error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+tests/cases/compiler/stringEndsWith.ts(12,56): error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+
+
+==== tests/cases/compiler/stringEndsWith.ts (4 errors) ====
+    declare var test: string;
+    declare function requirePostfix(input: `${string}test`): void;
+    
+    // works
+    if (test.endsWith('test')) requirePostfix(test);
+    if (test.endsWith('test', undefined)) requirePostfix(test);
+    
+    // errors
+    if (test.endsWith('test', 0)) requirePostfix(test);
+                                                 ~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+    if (test.endsWith('test', 1)) requirePostfix(test);
+                                                 ~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+    if (test.endsWith('test', 0 as number)) requirePostfix(test);
+                                                           ~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+    if (test.endsWith('test', 1 as number)) requirePostfix(test);
+                                                           ~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '`${string}test`'.
+    

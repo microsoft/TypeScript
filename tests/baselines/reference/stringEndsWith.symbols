@@ -1,0 +1,53 @@
+=== tests/cases/compiler/stringEndsWith.ts ===
+declare var test: string;
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+
+declare function requirePostfix(input: `${string}test`): void;
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>input : Symbol(input, Decl(stringEndsWith.ts, 1, 32))
+
+// works
+if (test.endsWith('test')) requirePostfix(test);
+>test.endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+>endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+
+if (test.endsWith('test', undefined)) requirePostfix(test);
+>test.endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+>endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>undefined : Symbol(undefined)
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+
+// errors
+if (test.endsWith('test', 0)) requirePostfix(test);
+>test.endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+>endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+
+if (test.endsWith('test', 1)) requirePostfix(test);
+>test.endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+>endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+
+if (test.endsWith('test', 0 as number)) requirePostfix(test);
+>test.endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+>endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+
+if (test.endsWith('test', 1 as number)) requirePostfix(test);
+>test.endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+>endsWith : Symbol(String.endsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePostfix : Symbol(requirePostfix, Decl(stringEndsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringEndsWith.ts, 0, 11))
+

@@ -1,0 +1,53 @@
+=== tests/cases/compiler/stringStartsWith.ts ===
+declare var test: string;
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+
+declare function requirePrefix(input: `test${string}`): void;
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>input : Symbol(input, Decl(stringStartsWith.ts, 1, 31))
+
+// works
+if (test.startsWith('test')) requirePrefix(test);
+>test.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+
+if (test.startsWith('test', undefined)) requirePrefix(test);
+>test.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>undefined : Symbol(undefined)
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+
+if (test.startsWith('test', 0)) requirePrefix(test);
+>test.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+
+// errors
+if (test.startsWith('test', 1)) requirePrefix(test);
+>test.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+
+if (test.startsWith('test', 0 as number)) requirePrefix(test);
+>test.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+
+if (test.startsWith('test', 1 as number)) requirePrefix(test);
+>test.startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+>startsWith : Symbol(String.startsWith, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>requirePrefix : Symbol(requirePrefix, Decl(stringStartsWith.ts, 0, 25))
+>test : Symbol(test, Decl(stringStartsWith.ts, 0, 11))
+

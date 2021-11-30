@@ -1,0 +1,77 @@
+=== tests/cases/compiler/stringEndsWith.ts ===
+declare var test: string;
+>test : string
+
+declare function requirePostfix(input: `${string}test`): void;
+>requirePostfix : (input: `${string}test`) => void
+>input : `${string}test`
+
+// works
+if (test.endsWith('test')) requirePostfix(test);
+>test.endsWith('test') : boolean
+>test.endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>test : string
+>endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>'test' : "test"
+>requirePostfix(test) : void
+>requirePostfix : (input: `${string}test`) => void
+>test : `${string}test`
+
+if (test.endsWith('test', undefined)) requirePostfix(test);
+>test.endsWith('test', undefined) : boolean
+>test.endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>test : string
+>endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>'test' : "test"
+>undefined : undefined
+>requirePostfix(test) : void
+>requirePostfix : (input: `${string}test`) => void
+>test : `${string}test`
+
+// errors
+if (test.endsWith('test', 0)) requirePostfix(test);
+>test.endsWith('test', 0) : boolean
+>test.endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>test : string
+>endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>'test' : "test"
+>0 : 0
+>requirePostfix(test) : void
+>requirePostfix : (input: `${string}test`) => void
+>test : string
+
+if (test.endsWith('test', 1)) requirePostfix(test);
+>test.endsWith('test', 1) : boolean
+>test.endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>test : string
+>endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>'test' : "test"
+>1 : 1
+>requirePostfix(test) : void
+>requirePostfix : (input: `${string}test`) => void
+>test : string
+
+if (test.endsWith('test', 0 as number)) requirePostfix(test);
+>test.endsWith('test', 0 as number) : boolean
+>test.endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>test : string
+>endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>'test' : "test"
+>0 as number : number
+>0 : 0
+>requirePostfix(test) : void
+>requirePostfix : (input: `${string}test`) => void
+>test : string
+
+if (test.endsWith('test', 1 as number)) requirePostfix(test);
+>test.endsWith('test', 1 as number) : boolean
+>test.endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>test : string
+>endsWith : { <T extends string>(searchString: T, endPosition?: undefined): this is `${string}${T}`; (searchString: string, endPosition?: number): boolean; }
+>'test' : "test"
+>1 as number : number
+>1 : 1
+>requirePostfix(test) : void
+>requirePostfix : (input: `${string}test`) => void
+>test : string
+
