@@ -665,8 +665,19 @@ namespace ts {
 
         function updateProgramWithWatchStatus() {
             timerToUpdateProgram = undefined;
-            reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+
+            const oldProgram = getCurrentBuilderProgram();
             updateProgram();
+            const newProgram = getCurrentBuilderProgram();
+
+            // This event may not have actually changed anything; avoid
+            // printing this message if the program didn't change, as
+            // host.afterProgramCreate will not be called to print out
+            // "Watching for file changes", potentially confusing external
+            // tools into thinking the compilation is hanging.
+            if (newProgram !== oldProgram) {
+                reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            }
         }
 
         function updateProgram() {
