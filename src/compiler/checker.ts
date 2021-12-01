@@ -2122,7 +2122,7 @@ namespace ts {
                 }
             }
             if (!result) {
-                if (nameNotFoundMessage) {
+                if (nameNotFoundMessage && produceDiagnostics) {
                     if (!errorLocation ||
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
                         !checkAndReportErrorForExtendingInterface(errorLocation) &&
@@ -2172,7 +2172,7 @@ namespace ts {
             }
 
             // Perform extra checks only if error reporting was requested
-            if (nameNotFoundMessage) {
+            if (nameNotFoundMessage && produceDiagnostics) {
                 if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
@@ -28816,7 +28816,8 @@ namespace ts {
                     return candidateName;
                 }
 
-                if (candidate.flags & SymbolFlags.Alias) {
+                // Don't try to resolve aliases if global types aren't initialized yet
+                if (globalObjectType && candidate.flags & SymbolFlags.Alias) {
                     const alias = tryResolveAlias(candidate);
                     if (alias && alias.flags & meaning) {
                         return candidateName;
