@@ -160,7 +160,13 @@ namespace ts {
 
         // value type and possible value
         const valueCandidates = getValueCandidate(option);
-        const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
+        const defaultValueDescription =
+            typeof option.defaultValueDescription === "object"
+                ? getDiagnosticText(option.defaultValueDescription)
+                : formatDefaultValue(
+                      option.defaultValueDescription,
+                      option.type === "list" ? option.element.type : option.type
+                  );
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
         // Note: child_process might return `terminalWidth` as undefined.
@@ -202,6 +208,19 @@ namespace ts {
             text.push(sys.newLine);
         }
         return text;
+
+        function formatDefaultValue(
+            defaultValue: CommandLineOption["defaultValueDescription"],
+            type: CommandLineOption["type"]
+        ) {
+            return defaultValue !== undefined && typeof type === "object"
+                // e.g. ScriptTarget.ES2015 -> "es6/es2015"
+                ? arrayFrom(type.entries())
+                      .filter(([, value]) => value === defaultValue)
+                      .map(([name]) => name)
+                      .join("/")
+                : String(defaultValue);
+        }
 
         function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, option: CommandLineOption): boolean {
             const ignoreValues = ["string"];
@@ -286,8 +305,14 @@ namespace ts {
                         break;
                     default:
                         // ESMap<string, number | string>
-                        const keys = arrayFrom(option.type.keys());
-                        possibleValues = keys.join(", ");
+                        // Group synonyms: es6/es2015
+                        const inverted: { [value: string]: string[] } = {};
+                        option.type.forEach((value, name) => {
+                            (inverted[value] ||= []).push(name);
+                        });
+                        return getEntries(inverted)
+                            .map(([, synonyms]) => synonyms.join("/"))
+                            .join(", ");
                 }
                 return possibleValues;
             }
