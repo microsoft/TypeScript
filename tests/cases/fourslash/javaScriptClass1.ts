@@ -22,9 +22,9 @@ edit.insert('.');
 verify.completions({
     exact: [
         "bar",
+        { name: "Foo", sortText: completion.SortText.JavascriptIdentifiers },
         "thing",
         "union",
-        { name: "Foo", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "x", sortText: completion.SortText.JavascriptIdentifiers }
     ]
 });

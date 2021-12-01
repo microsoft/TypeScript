@@ -25,11 +25,11 @@ verify.completions(
     {
         marker: "3",
         exact: [
-            "V",
             { name: "ref1", sortText: completion.SortText.JavascriptIdentifiers },
             { name: "ref2", sortText: completion.SortText.JavascriptIdentifiers },
             { name: "require", sortText: completion.SortText.JavascriptIdentifiers },
             { name: "v", sortText: completion.SortText.JavascriptIdentifiers },
+            "V",
             { name: "x", sortText: completion.SortText.JavascriptIdentifiers }
         ]
     },
