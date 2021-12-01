@@ -14200,7 +14200,7 @@ namespace ts {
         function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
             // [] and [T] immediately reduce to [] and [T] respectively
             if (types.length < 2) {
-                // return types;
+                return types;
             }
 
             const id = getTypeListId(types);
