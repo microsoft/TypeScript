@@ -14198,14 +14198,15 @@ namespace ts {
         }
 
         function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
+            // [] and [T] immediately reduce to [] and [T] respectively
+            if (types.length < 2) {
+                // return types;
+            }
+
             const id = getTypeListId(types);
             const match = subtypeReductionCache.get(id);
             if (match) {
                 return match;
-            }
-            // [] and [T] immediately reduce to [] and [T] respectively
-            if (types.length < 2) {
-                return types;
             }
 
             // We assume that redundant primitive types have already been removed from the types array and that there
