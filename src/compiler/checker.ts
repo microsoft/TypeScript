@@ -14333,7 +14333,6 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-
             let typeSet: Type[] | undefined = [];
             const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
