@@ -1464,6 +1464,10 @@ namespace FourSlashInterface {
         ].map(keywordEntry);
 
         function compareExpectedCompletionEntries(a: ExpectedCompletionEntry, b: ExpectedCompletionEntry) {
+            const aSortText = typeof a !== "string" && a.sortText || ts.Completions.SortText.LocationPriority;
+            const bSortText = typeof b !== "string" && b.sortText || ts.Completions.SortText.LocationPriority;
+            const bySortText = ts.compareStringsCaseSensitiveUI(aSortText, bSortText);
+            if (bySortText !== ts.Comparison.EqualTo) return bySortText;
             return ts.compareStringsCaseSensitiveUI(typeof a === "string" ? a : a.name, typeof b === "string" ? b : b.name);
         }
 

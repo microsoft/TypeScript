@@ -15,27 +15,6 @@
       },
       "entries": [
         {
-          "name": "a",
-          "kind": "warning",
-          "kindModifiers": "",
-          "sortText": "17",
-          "isFromUncheckedFile": true
-        },
-        {
-          "name": "C",
-          "kind": "warning",
-          "kindModifiers": "",
-          "sortText": "17",
-          "isFromUncheckedFile": true
-        },
-        {
-          "name": "f",
-          "kind": "warning",
-          "kindModifiers": "",
-          "sortText": "17",
-          "isFromUncheckedFile": true
-        },
-        {
           "name": "m",
           "kind": "property",
           "kindModifiers": "",
@@ -143,6 +122,27 @@
               ]
             }
           ]
+        },
+        {
+          "name": "a",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "C",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
+          "name": "f",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
         },
         {
           "name": "prototype",

@@ -16,12 +16,12 @@
 goTo.marker('a');
 verify.completions({
     exact: [
+        "property",
         { name: "blah", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "class2", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "constructor", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "inst2", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "instance", sortText: completion.SortText.JavascriptIdentifiers },
-        "property",
         { name: "prototype", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "TestObj", sortText: completion.SortText.JavascriptIdentifiers },
     ]

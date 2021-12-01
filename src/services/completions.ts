@@ -295,17 +295,18 @@ namespace ts.Completions {
         }
     }
 
-    // Editors will use the `sortText` for coarse sorting, and otherwise leave entries in the response order.
-    // So there's no need for us to consider `sortText` here, but beyond that, the order should be predictable
-    // if not logical. Historically, we just sorted everything by name on its way out of TS Server, but this
-    // has always made fourslash tests weird since most of them just use `getCompletionsAtPosition`, while
-    // `fourslash/server` tests used the alphabetical order from TS Server.
+    // Editors will use the `sortText` and then fall back to `name` for sorting, but leave ties in response order.
+    // So, it's important that we sort those ties in the order we want them displayed if it matters. We don't
+    // strictly need to sort by name or SortText here since clients are going to do it anyway, but we have to
+    // do the work of comparing them so we can sort those ties appropriately; plus, it makes the order returned
+    // by the language service consistent with what TS Server does and what editors typically do. This also makes
+    // completions tests make more sense. We used to sort only alphabetically and only in the server layer, but
+    // this made tests really weird, since most fourslash tests don't use the server.
     function compareCompletionEntries(entryInArray: CompletionEntry, entryToInsert: CompletionEntry): Comparison {
-        if (entryInArray.kind === ScriptElementKind.parameterElement && entryToInsert.kind === ScriptElementKind.parameterElement) {
-            // Keep parameters sorted in declaration order
-            return Comparison.EqualTo;
+        let result = compareStringsCaseSensitiveUI(entryInArray.sortText, entryToInsert.sortText);
+        if (result === Comparison.EqualTo) {
+            result = compareStringsCaseSensitiveUI(entryInArray.name, entryToInsert.name);
         }
-        let result = compareStringsCaseSensitiveUI(entryInArray.name, entryToInsert.name);
         if (result === Comparison.EqualTo && entryInArray.data?.moduleSpecifier && entryToInsert.data?.moduleSpecifier) {
             // Sort same-named auto-imports by module specifier
             result = compareNumberOfDirectorySeparators(

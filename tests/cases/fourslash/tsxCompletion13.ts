@@ -34,18 +34,18 @@ verify.completions(
     {
         marker: ["1", "6"],
         exact: [
-          { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
-          { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
           "goTo",
           "onClick",
+          { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+          { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
         ]
     },
     {
       marker: "2",
       exact: [
-        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
         "goTo",
         "onClick",
+        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
       ]
     },
     {
