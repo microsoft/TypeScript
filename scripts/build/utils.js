@@ -8,6 +8,7 @@ const mkdirp = require("mkdirp");
 const del = require("del");
 const File = require("vinyl");
 const ts = require("../../lib/typescript");
+const chalk = require("chalk");
 const which = require("which");
 const { spawn } = require("child_process");
 const { CancellationToken, CancelError, Deferred } = require("prex");
@@ -26,7 +27,6 @@ const { Readable, Duplex } = require("stream");
  * @property {boolean} [waitForExit=true]
  */
 async function exec(cmd, args, options = {}) {
-    const chalk = (await import("chalk")).default;
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
         const { ignoreExitCode, cancelToken = CancellationToken.none, waitForExit = true } = options;
         cancelToken.throwIfCancellationRequested();
