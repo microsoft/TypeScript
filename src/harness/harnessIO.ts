@@ -304,21 +304,21 @@ namespace Harness {
 
         // Additional options not already in ts.optionDeclarations
         const harnessOptionDeclarations: ts.CommandLineOption[] = [
-            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: "false" },
-            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: "false" },
+            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false },
+            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false },
             { name: "baselineFile", type: "string" },
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: "false" },
-            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: "false" },
-            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: "false" },
+            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: false },
+            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: false },
+            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: false },
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
-            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: "false" },
+            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
             // Emitted js baseline will print full paths for every output file
-            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: "false" }
+            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
         ];
 
         let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
