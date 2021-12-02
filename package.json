@@ -61,7 +61,7 @@
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
-        "chalk": "latest",
+        "chalk": "^4.1.2",
         "convert-source-map": "latest",
         "del": "5.1.0",
         "diff": "^4.0.2",

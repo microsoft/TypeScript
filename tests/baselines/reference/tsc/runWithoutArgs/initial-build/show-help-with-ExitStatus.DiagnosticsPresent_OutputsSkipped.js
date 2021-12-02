@@ -68,16 +68,18 @@ default: true
 
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
-one of: es3, es5, es6, es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext
-default: ES3
+one of: es3, es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext
+default: es3
 
 [94m--module, -m[39m
 Specify what module code is generated.
-one of: none, commonjs, amd, system, umd, es6, es2015, es2020, es2022, esnext, node12, nodenext
+one of: none, commonjs, amd, umd, system, es6/es2015, es2020, es2022, esnext, node12, nodenext
+default: undefined
 
 [94m--lib[39m
 Specify a set of bundled library declaration files that describe the target runtime environment.
-one or more: es5, es6, es2015, es7, es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext, dom, dom.iterable, webworker, webworker.importscripts, webworker.iterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol, es2020.bigint, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2021.promise, es2021.string, es2021.weakref, es2021.intl, es2022.array, es2022.error, es2022.object, es2022.string, esnext.array, esnext.symbol, esnext.asynciterable, esnext.intl, esnext.bigint, esnext.string, esnext.promise, esnext.weakref
+one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext, dom, dom.iterable, webworker, webworker.importscripts, webworker.iterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable/esnext.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol/esnext.symbol, es2020.bigint/esnext.bigint, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2021.promise/esnext.promise, es2021.string, es2021.weakref/esnext.weakref, es2021.intl, es2022.array/esnext.array, es2022.error, es2022.object, es2022.string/esnext.string, esnext.intl
+default: undefined
 
 [94m--allowJs[39m
 Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.
@@ -91,7 +93,7 @@ default: false
 
 [94m--jsx[39m
 Specify what JSX code is generated.
-one of: preserve, react-native, react, react-jsx, react-jsxdev
+one of: preserve, react, react-native, react-jsx, react-jsxdev
 default: undefined
 
 [94m--declaration, -d[39m
