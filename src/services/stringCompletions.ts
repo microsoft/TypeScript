@@ -264,7 +264,7 @@ namespace ts.Completions.StringCompletions {
         checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
         const types = flatMap(candidates, candidate => {
             if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
-            const type = checker.getParameterType(candidate, argumentInfo.argumentIndex);
+            const type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);
         });
