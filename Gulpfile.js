@@ -18,8 +18,9 @@ const { buildProject, cleanProject, watchProject } = require("./scripts/build/pr
 const cmdLineOptions = require("./scripts/build/options");
 
 const copyright = "CopyrightNotice.txt";
-const testRoot = "built/local/testRunner/Harness.js";
-//!!! const testRoot = "built/local/run.js";
+const testRootFile = "built/local/testRunner/Harness.js";
+const testRootBundle = "built/local/run.js";
+const testRoot = testRootBundle; // use testRootFile to run directly from the module files
 const cleanTasks = [];
 
 const buildScripts = () => buildProject("scripts");
@@ -322,7 +323,14 @@ task("watch-lssl").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-const buildTests = () => buildProject("src/testRunner");
+const buildTests = series(
+  () => buildProject("src/testRunner"),
+  () => exec("npx", [
+    "esbuild", "--bundle", "--format=cjs", "--platform=node", "--target=node12",
+    "--legal-comments=none",
+    `--outfile=${testRootBundle}`, testRootFile,
+  ]),
+);
 task("tests", series(preBuild, parallel(buildLssl, buildTests)));
 task("tests").description = "Builds the test infrastructure";
 task("tests").flags = {
