@@ -295,6 +295,32 @@ namespace ts.Completions {
         }
     }
 
+    // Editors will use the `sortText` and then fall back to `name` for sorting, but leave ties in response order.
+    // So, it's important that we sort those ties in the order we want them displayed if it matters. We don't
+    // strictly need to sort by name or SortText here since clients are going to do it anyway, but we have to
+    // do the work of comparing them so we can sort those ties appropriately; plus, it makes the order returned
+    // by the language service consistent with what TS Server does and what editors typically do. This also makes
+    // completions tests make more sense. We used to sort only alphabetically and only in the server layer, but
+    // this made tests really weird, since most fourslash tests don't use the server.
+    function compareCompletionEntries(entryInArray: CompletionEntry, entryToInsert: CompletionEntry): Comparison {
+        let result = compareStringsCaseSensitiveUI(entryInArray.sortText, entryToInsert.sortText);
+        if (result === Comparison.EqualTo) {
+            result = compareStringsCaseSensitiveUI(entryInArray.name, entryToInsert.name);
+        }
+        if (result === Comparison.EqualTo && entryInArray.data?.moduleSpecifier && entryToInsert.data?.moduleSpecifier) {
+            // Sort same-named auto-imports by module specifier
+            result = compareNumberOfDirectorySeparators(
+                (entryInArray.data as CompletionEntryDataResolved).moduleSpecifier,
+                (entryToInsert.data as CompletionEntryDataResolved).moduleSpecifier,
+            );
+        }
+        if (result === Comparison.EqualTo) {
+            // Fall back to symbol order - if we return `EqualTo`, `insertSorted` will put later symbols first.
+            return Comparison.LessThan;
+        }
+        return result;
+    }
+
     function completionEntryDataIsResolved(data: CompletionEntryDataAutoImport | undefined): data is CompletionEntryDataResolved {
         return !!data?.moduleSpecifier;
     }
@@ -442,7 +468,7 @@ namespace ts.Completions {
             }
         }
 
-        const entries: CompletionEntry[] = [];
+        const entries = createSortedArray<CompletionEntry>();
 
         if (isUncheckedFile(sourceFile, compilerOptions)) {
             const uniqueNames = getCompletionEntriesFromSymbols(
@@ -504,13 +530,13 @@ namespace ts.Completions {
             const entryNames = new Set(entries.map(e => e.name));
             for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
                 if (!entryNames.has(keywordEntry.name)) {
-                    entries.push(keywordEntry);
+                    insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
                 }
             }
         }
 
         for (const literal of literals) {
-            entries.push(createCompletionEntryForLiteral(sourceFile, preferences, literal));
+            insertSorted(entries, createCompletionEntryForLiteral(sourceFile, preferences, literal), compareCompletionEntries, /*allowDuplicates*/ true);
         }
 
         return {
@@ -589,7 +615,7 @@ namespace ts.Completions {
         position: number,
         uniqueNames: UniqueNameSet,
         target: ScriptTarget,
-        entries: Push<CompletionEntry>): void {
+        entries: SortedArray<CompletionEntry>): void {
         getNameTable(sourceFile).forEach((pos, name) => {
             // Skip identifiers produced only from the current location
             if (pos === position) {
@@ -598,13 +624,13 @@ namespace ts.Completions {
             const realName = unescapeLeadingUnderscores(name);
             if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
                 uniqueNames.add(realName);
-                entries.push({
+                insertSorted(entries, {
                     name: realName,
                     kind: ScriptElementKind.warning,
                     kindModifiers: "",
                     sortText: SortText.JavascriptIdentifiers,
                     isFromUncheckedFile: true
-                });
+                }, compareCompletionEntries);
             }
         });
     }
@@ -1105,7 +1131,7 @@ namespace ts.Completions {
 
     export function getCompletionEntriesFromSymbols(
         symbols: readonly Symbol[],
-        entries: Push<CompletionEntry>,
+        entries: SortedArray<CompletionEntry>,
         replacementToken: Node | undefined,
         contextToken: Node | undefined,
         location: Node,
@@ -1174,7 +1200,7 @@ namespace ts.Completions {
             /** True for locals; false for globals, module exports from other files, `this.` completions. */
             const shouldShadowLaterSymbols = !origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
             uniques.set(name, shouldShadowLaterSymbols);
-            entries.push(entry);
+            insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ true);
         }
 
         log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
@@ -1831,7 +1857,7 @@ namespace ts.Completions {
                         // For `<div className="x" [||] ></div>`, `parent` will be JsxAttribute and `previousToken` will be its initializer
                         if ((parent as JsxAttribute).initializer === previousToken &&
                             previousToken.end < position) {
-                            isJsxIdentifierExpected = true;
+                            isJsxIdentifierExpected = true;
                             break;
                         }
                         switch (previousToken.kind) {
