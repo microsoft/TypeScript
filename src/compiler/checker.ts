@@ -43906,19 +43906,24 @@ namespace ts {
         }
 
         function checkNumericLiteralValueSize(node: NumericLiteral) {
+            // We should test against `getTextOfNode(node)` rather than `node.text`, because `node.text` for large numeric literals can contain "."
+            // e.g. `node.text` for numeric literal `1100000000000000000000` is `1.1e21`.
+            const isFractional = getTextOfNode(node).indexOf(".") !== -1;
+            const isScientific = node.numericLiteralFlags & TokenFlags.Scientific;
+
             // Scientific notation (e.g. 2e54 and 1e00000000010) can't be converted to bigint
-            // Literals with 15 or fewer characters aren't long enough to reach past 2^53 - 1
             // Fractional numbers (e.g. 9000000000000000.001) are inherently imprecise anyway
-            if (node.numericLiteralFlags & TokenFlags.Scientific || node.text.length <= 15 || node.text.indexOf(".") !== -1) {
+            if (isFractional || isScientific) {
                 return;
             }
 
-            // We can't rely on the runtime to accurately store and compare extremely large numeric values
-            // Even for internal use, we use getTextOfNode: https://github.com/microsoft/TypeScript/issues/33298
-            // Thus, if the runtime claims a too-large number is lower than Number.MAX_SAFE_INTEGER,
-            // it's likely addition operations on it will fail too
-            const apparentValue = +getTextOfNode(node);
-            if (apparentValue <= 2 ** 53 - 1 && apparentValue + 1 > apparentValue) {
+            // Here `node` is guaranteed to be a numeric literal representing an integer.
+            // We need to judge whether the integer `node` represents is <= 2 ** 53 - 1, which can be accomplished by comparing to `value` defined below because:
+            // 1) when `node` represents an integer <= 2 ** 53 - 1, `node.text` is its exact string representation and thus `value` precisely represents the integer.
+            // 2) otherwise, although `node.text` may be imprecise string representation, its mathematical value and consequently `value` cannot be less than 2 ** 53,
+            //    thus the result of the predicate won't be affected.
+            const value = +node.text;
+            if (value <= 2 ** 53 - 1) {
                 return;
             }
 
