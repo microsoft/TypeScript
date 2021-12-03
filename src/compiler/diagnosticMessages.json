@@ -1491,6 +1491,10 @@
         "category": "Error",
         "code": 2310
     },
+    "Cannot find name '{0}'. Did you mean to write this in an async function?": {
+        "category": "Error",
+        "code": 2311
+    },
     "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2312
