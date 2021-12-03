@@ -27265,7 +27265,7 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            const t = removeDefinitelyFalsyTypes(getBaseConstraintOrType(type));
+            const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType));
             return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
                 t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
         }
