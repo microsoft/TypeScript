@@ -22544,6 +22544,11 @@ namespace ts {
                 case "BigInt64Array":
                 case "BigUint64Array":
                     return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later;
+                case "await":
+                    if (isCallExpression(node.parent)) {
+                        return Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function;
+                    }
+                    // falls through
                 default:
                     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
