@@ -17,10 +17,10 @@ goTo.file('consumer.js');
 goTo.marker();
 edit.insert('.');
 verify.completions({
-    exact: completion.sorted([
+    unsorted: [
         ...["n", "s", "b"].map(name => ({ name, kind: "property" })),
         ...["x", "require"].map(name => ({ name, kind: "warning", sortText: completion.SortText.JavascriptIdentifiers })),
-    ]),
+    ],
 });
 edit.insert('n.');
 verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

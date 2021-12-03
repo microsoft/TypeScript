@@ -18,10 +18,10 @@
 
 function verifyHasBar() {
     verify.completions({
-        exact: completion.sorted([
+        unsorted: [
             { name: "bar", text: "(method) IFoo.bar(): void", kind: "method" },
             ...completion.classElementKeywords,
-        ]),
+        ],
         isNewIdentifierLocation: true,
     });
 }

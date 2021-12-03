@@ -258,7 +258,7 @@ const commonTypes: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> =
 verify.completions(
     {
         marker: ["shadowNamespaceWithNoExport", "shadowNamespaceWithExport"],
-        exact: completion.globalsPlus([
+        unsorted: completion.globalsPlus([
             ...commonValues,
             { name: "shwfn", text: "function shwfn(shadow: any): void" },
             { name: "shwvar", text: "var shwvar: string" },
@@ -267,7 +267,7 @@ verify.completions(
         ], { noLib: true }),
     }, {
         marker: ["shadowNamespaceWithNoExportType", "shadowNamespaceWithExportType"],
-        exact: completion.typeKeywordsPlus([
+        unsorted: completion.typeKeywordsPlus([
             completion.globalThisEntry,
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },
@@ -276,7 +276,7 @@ verify.completions(
     },
     {
         marker: "namespaceWithImport",
-        exact: completion.globalsPlus([
+        unsorted: completion.globalsPlus([
             "Mod1",
             "iMod1",
             "tmp",
@@ -288,7 +288,7 @@ verify.completions(
     },
     {
         marker: "namespaceWithImportType",
-        exact: completion.typeKeywordsPlus([
+        unsorted: completion.typeKeywordsPlus([
             completion.globalThisEntry,
             "Mod1",
             "iMod1",

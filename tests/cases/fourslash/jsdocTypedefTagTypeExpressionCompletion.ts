@@ -70,8 +70,8 @@ verify.completions(
     {
         marker: "valueMemberOfFoo",
         exact: completion.functionMembersPlus([
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "method1", kind: "method", kindModifiers: "static", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
         ]),
     },
     {

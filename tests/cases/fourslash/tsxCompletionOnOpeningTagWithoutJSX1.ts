@@ -4,4 +4,4 @@
 //// var x = 'something'
 //// var y = </**/;
 
-verify.completions({ marker: "", exact: completion.sorted([completion.globalThisEntry, ...completion.globalsVars, "x", completion.undefinedVarEntry]) });
+verify.completions({ marker: "", unsorted: [completion.globalThisEntry, ...completion.globalsVars, "x", completion.undefinedVarEntry] });

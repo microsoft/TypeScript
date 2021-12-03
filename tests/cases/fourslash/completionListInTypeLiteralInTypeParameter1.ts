@@ -18,6 +18,6 @@
 
 verify.completions({
     marker: "",
-    exact: completion.sorted(["one", "two", "\"333\"", "\"4four\"", "\"5 five\"", "number", "Object"]),
+    unsorted: ["one", "two", "\"333\"", "\"4four\"", "\"5 five\"", "number", "Object"],
     isNewIdentifierLocation: true
 });

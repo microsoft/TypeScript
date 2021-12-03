@@ -18,7 +18,7 @@ edit.insert('.');
 // Check members of the function
 verify.completions({
     marker: "",
-    exact: completion.sorted([
+    unsorted: [
         { name: "bar", kind: "method" },
         { name: "qua", kind: "property" },
         ...["myCtor", "x", "prototype"].map(name => ({
@@ -27,5 +27,5 @@ verify.completions({
             sortText: completion.SortText.JavascriptIdentifiers
         })),
         { name: "foo", kind: "method" },
-    ]),
+    ],
 });

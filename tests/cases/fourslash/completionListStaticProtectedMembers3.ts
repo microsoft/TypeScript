@@ -26,8 +26,8 @@
 verify.completions({
     marker: ["1", "2"],
     exact: completion.functionMembersPlus([
-        { name: "prototype", sortText: completion.SortText.LocationPriority },
         { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
         { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "prototype", sortText: completion.SortText.LocationPriority },
     ]),
 });

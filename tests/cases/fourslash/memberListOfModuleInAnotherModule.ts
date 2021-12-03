@@ -27,7 +27,7 @@ const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
     { name: "meX", text: "var mod1.meX: number" },
 ];
 verify.completions(
-    { marker: "1", exact: completion.sorted([...values, { name: "meInt", text: "interface mod1.meInt" }]) },
+    { marker: "1", unsorted: [...values, { name: "meInt", text: "interface mod1.meInt" }] },
     { marker: "2", exact: values },
     { marker: "3", exact: { name: "iMex", text: "var mod1.meMod.iMex: number" } },
 );

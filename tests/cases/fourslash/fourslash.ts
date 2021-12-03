@@ -669,7 +669,10 @@ declare namespace FourSlashInterface {
         readonly isNewIdentifierLocation?: boolean;
         readonly isGlobalCompletion?: boolean;
         readonly optionalReplacementSpan?: Range;
+        /** Must provide all completion entries in order. */
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        /** Must provide all completion entries, but order doesn't matter. */
+        readonly unsorted?: readonly ExpectedCompletionEntry[];
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;

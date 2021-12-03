@@ -35,23 +35,23 @@ verify.completions(
     {
         // Sub class, everything but private is visible
         marker: "1",
-        exact: completion.sorted([
+        unsorted: [
             { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedMethod", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedProperty", sortText: completion.SortText.LocalDeclarationPriority },
             ...publicCompletions
-        ]),
+        ],
     },
     {
         // Can see protected methods elevated to public
         marker: "2",
-        exact: completion.sorted([
+        unsorted: [
             { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
             ...publicCompletions,
-        ]),
+        ],
     },
 );

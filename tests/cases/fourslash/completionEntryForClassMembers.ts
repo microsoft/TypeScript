@@ -128,13 +128,13 @@ verify.completions(
     {
         // Not a class element declaration location
         marker: "InsideMethod",
-        exact: completion.sorted([
+        unsorted: [
             "arguments",
             completion.globalThisEntry,
             "B", "C", "D", "D1", "D2", "D3", "D4", "D5", "D6", "E", "F", "F2", "G", "G2", "H", "I", "J", "K", "L", "L2", "M", "N", "O",
             completion.undefinedVarEntry,
             ...completion.insideMethodKeywords,
-        ]),
+        ],
     },
     {
         // Only keywords allowed at this position since they dont extend the class or are private
@@ -146,7 +146,7 @@ verify.completions(
             "classThatStartedWritingIdentifierAfterPrivateModifier",
             "classThatStartedWritingIdentifierAfterPrivateStaticModifier",
         ],
-        exact: completion.sorted(["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"]).map(
+        unsorted: ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(
             name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
             ),
         isNewIdentifierLocation: true,
@@ -176,13 +176,13 @@ verify.completions(
             "classThatHasWrittenAsyncKeyword",
             "classElementAfterConstructorSeparatedByComma",
         ],
-        exact: completion.sorted([protectedMethod, getValue, ...completion.classElementKeywords]),
+        unsorted: [protectedMethod, getValue, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
         // Static Base members and class member keywords allowed
         marker: ["classElementContainingStatic", "classThatStartedWritingIdentifierAfterStaticModifier"],
-        exact: completion.sorted([staticMethod, ...completion.classElementKeywords]),
+        unsorted: [staticMethod, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
@@ -190,7 +190,7 @@ verify.completions(
             "classThatHasAlreadyImplementedAnotherClassMethod",
             "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
         ],
-        exact: completion.sorted([protectedMethod, ...completion.classElementKeywords]),
+        unsorted: [protectedMethod, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
@@ -198,23 +198,23 @@ verify.completions(
             "classThatHasAlreadyImplementedAnotherClassProtectedMethod",
             "classThatHasDifferentMethodThanBaseAfterProtectedMethod",
         ],
-        exact: completion.sorted([getValue, ...completion.classElementKeywords]),
+        unsorted: [getValue, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
         // instance memebers in D1 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClass",
-        exact: completion.sorted(["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords]),
+        unsorted: ["getValue1", "protectedMethod", "getValue", ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {
         // instance memebers in D2 and base class are shown
         marker: "classThatExtendsClassExtendingAnotherClassWithOverridingMember",
-        exact: completion.sorted([
+        unsorted: [
             { name: "protectedMethod", text: "(method) D2.protectedMethod(): void" },
             getValue,
             ...completion.classElementKeywords,
-        ]),
+        ],
         isNewIdentifierLocation: true,
     },
     {
@@ -223,7 +223,7 @@ verify.completions(
             "classThatExtendsClassExtendingAnotherClassAndTypesStatic",
             "classThatExtendsClassExtendingAnotherClassWithOverridingMemberAndTypesStatic"
         ],
-        exact: completion.sorted([staticMethod, ...completion.classElementKeywords]),
+        unsorted: [staticMethod, ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
 );

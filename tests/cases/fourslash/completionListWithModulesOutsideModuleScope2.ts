@@ -234,7 +234,7 @@
 verify.completions(
     {
         marker: "extendedClass",
-        exact: completion.sorted(["scpfn", "scpvar", ...completion.classElementKeywords]),
+        unsorted: ["scpfn", "scpvar", ...completion.classElementKeywords],
         isNewIdentifierLocation: true,
     },
     {

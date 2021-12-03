@@ -18,8 +18,8 @@ verify.completions(
     {
         marker: "1",
         exact: completion.functionMembersPlus([
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "staticMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
         ])
     },
     { marker: ["2", "3", "4"], exact: undefined },

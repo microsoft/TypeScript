@@ -17,8 +17,8 @@ verify.completions(
     {
         marker: "value",
         exact: completion.functionMembersPlus([
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "m", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
         ])
     },
 );

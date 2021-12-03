@@ -24,10 +24,10 @@ verify.completions(
     {
         marker: ["2", "4"],
         exact: completion.functionMembersPlus([
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "boo", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "x", sortText: completion.SortText.LocationPriority },
             { name: "foo", sortText: completion.SortText.LocationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "x", sortText: completion.SortText.LocationPriority },
         ])
     },
     { marker: "3", exact: ["bar", "foo"] },

@@ -52,8 +52,8 @@
 ////}
 
 verify.completions(
-    { marker: "objectMembers", exact: completion.sorted(["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"]) },
-    { marker: "interfaceMembers", exact: completion.sorted(["bar21", "bar22", "bar11", "bar12"]) },
-    { marker: "callableMembers", exact: completion.sorted(["name", ...completion.functionMembersWithPrototype]) },
-    { marker: "publicOnlyMembers", exact: completion.sorted(["publicProperty", "publicMethod"]) },
+    { marker: "objectMembers", unsorted: ["constructor", "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable"] },
+    { marker: "interfaceMembers", unsorted: ["bar21", "bar22", "bar11", "bar12"] },
+    { marker: "callableMembers", unsorted: ["name", ...completion.functionMembersWithPrototype] },
+    { marker: "publicOnlyMembers", unsorted: ["publicProperty", "publicMethod"] },
 );

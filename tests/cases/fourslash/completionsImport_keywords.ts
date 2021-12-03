@@ -33,7 +33,7 @@ verify.completions(
     // yes contextual keywords
     {
         marker: "unique",
-        exact: completion.sorted([
+        unsorted: [
             completion.globalThisEntry,
             ...completion.globalsVars,
             completion.undefinedVarEntry,
@@ -46,7 +46,7 @@ verify.completions(
                 sortText: completion.SortText.AutoImportSuggestions
             },
             ...completion.globalKeywords.filter(e => e.name !== "unique"),
-        ]),
+        ],
         preferences,
     },
 );

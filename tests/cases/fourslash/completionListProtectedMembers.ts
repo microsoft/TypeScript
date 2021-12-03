@@ -19,9 +19,9 @@
 ////f./*5*/
 
 verify.completions(
-    { marker: "1", exact: completion.sorted(["y", "x", "method"]) },
-    { marker: "2", exact: completion.sorted(["z", "method1", "y", "x", "method"]) },
-    { marker: "3", exact: completion.sorted(["method2", "y", "x", "method"]) },
-    { marker: "4", exact: completion.sorted(["method2", "z", "method1", "y", "x", "method"]) },
+    { marker: "1", unsorted: ["y", "x", "method"] },
+    { marker: "2", unsorted: ["z", "method1", "y", "x", "method"] },
+    { marker: "3", unsorted: ["method2", "y", "x", "method"] },
+    { marker: "4", unsorted: ["method2", "z", "method1", "y", "x", "method"] },
     { marker: "5", exact: undefined },
 );

@@ -1046,12 +1046,25 @@ namespace FourSlashInterface {
             "void",
         ].map(keywordEntry);
 
-        export function typeKeywordsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
-            return [...typeKeywords, ...plus].sort(compareExpectedCompletionEntries);
-        }
-
         export function sorted(entries: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
             return ts.stableSort(entries, compareExpectedCompletionEntries);
+        }
+
+        // If you want to use a function like `globalsPlus`, that function needs to sort
+        // the concatted array since the entries provided as "plus" could be interleaved
+        // among the "globals." However, we still want to assert that the "plus" array
+        // was internally sorted correctly, so we tack it onto the sorted concatted array
+        // so `verify.completions` can assert that it represents the same order as the response.
+        function combineExpectedCompletionEntries(
+            functionName: string,
+            providedByHarness: readonly ExpectedCompletionEntry[],
+            providedByTest: readonly ExpectedCompletionEntry[],
+        ): ExpectedExactCompletionsPlus {
+            return Object.assign(sorted([...providedByHarness, ...providedByTest]), { plusFunctionName: functionName, plusArgument: providedByTest });
+        }
+
+        export function typeKeywordsPlus(plus: readonly ExpectedCompletionEntry[]) {
+            return combineExpectedCompletionEntries("typeKeywordsPlus", typeKeywords, plus);
         }
 
         const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
@@ -1166,13 +1179,12 @@ namespace FourSlashInterface {
             sortText: SortText.GlobalsOrKeywords
         };
         export const globalTypes = globalTypesPlus([]);
-        export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
-            return [
-                globalThisEntry,
-                ...globalTypeDecls,
-                ...plus,
-                ...typeKeywords,
-            ].sort(compareExpectedCompletionEntries);
+        export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[]) {
+            return combineExpectedCompletionEntries(
+                "globalTypesPlus",
+                [globalThisEntry, ...globalTypeDecls, ...typeKeywords],
+                plus
+            );
         }
 
         export const typeAssertionKeywords: readonly ExpectedCompletionEntry[] =
@@ -1249,8 +1261,8 @@ namespace FourSlashInterface {
             propertyEntry("caller"),
         ].sort(compareExpectedCompletionEntries);
 
-        export function functionMembersPlus(plus: readonly ExpectedCompletionEntryObject[]): readonly ExpectedCompletionEntryObject[] {
-            return [...functionMembers, ...plus].sort(compareExpectedCompletionEntries);
+        export function functionMembersPlus(plus: readonly ExpectedCompletionEntryObject[]) {
+            return combineExpectedCompletionEntries("functionMembersPlus", functionMembers, plus);
         }
 
         export const stringMembers: readonly ExpectedCompletionEntryObject[] = [
@@ -1282,7 +1294,7 @@ namespace FourSlashInterface {
             propertyEntry("prototype"),
         ].sort(compareExpectedCompletionEntries);
 
-        export function functionMembersWithPrototypePlus(plus: readonly ExpectedCompletionEntryObject[]): readonly ExpectedCompletionEntryObject[] {
+        export function functionMembersWithPrototypePlus(plus: readonly ExpectedCompletionEntryObject[]) {
             return [...functionMembersWithPrototype, ...plus].sort(compareExpectedCompletionEntries);
         }
 
@@ -1630,24 +1642,22 @@ namespace FourSlashInterface {
             ...globalInJsKeywords
         ].sort(compareExpectedCompletionEntries);
 
-        export function globalsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }): readonly ExpectedCompletionEntry[] {
-            return [
+        export function globalsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }) {
+            return combineExpectedCompletionEntries("globalsPlus", [
                 globalThisEntry,
                 ...options?.noLib ? [] : globalsVars,
-                ...plus,
                 undefinedVarEntry,
                 ...globalKeywords,
-            ].sort(compareExpectedCompletionEntries);
+            ], plus);
         }
 
-        export function globalsInJsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }): readonly ExpectedCompletionEntry[] {
-            return [
+        export function globalsInJsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }) {
+            return combineExpectedCompletionEntries("globalsInJsPlus", [
                 globalThisEntry,
                 ...options?.noLib ? [] : globalsVars,
-                ...plus,
                 undefinedVarEntry,
                 ...globalInJsKeywords,
-            ].sort(compareExpectedCompletionEntries);
+            ], plus);
         }
     }
 
@@ -1686,12 +1696,18 @@ namespace FourSlashInterface {
         readonly sortText?: ts.Completions.SortText;
     }
 
+    export type ExpectedExactCompletionsPlus = readonly ExpectedCompletionEntry[] & {
+        plusFunctionName: string,
+        plusArgument: readonly ExpectedCompletionEntry[]
+    };
+
     export interface VerifyCompletionsOptions {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
         readonly isNewIdentifierLocation?: boolean; // Always tested
         readonly isGlobalCompletion?: boolean; // Only tested if set
         readonly optionalReplacementSpan?: FourSlash.Range; // Only tested if set
-        readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly exact?: ArrayOrSingle<ExpectedCompletionEntry> | ExpectedExactCompletionsPlus;
+        readonly unsorted?: readonly ExpectedCompletionEntry[];
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: ts.UserPreferences;

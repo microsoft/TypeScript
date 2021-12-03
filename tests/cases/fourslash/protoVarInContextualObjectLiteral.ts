@@ -44,30 +44,30 @@ const proto: FourSlashInterface.ExpectedCompletionEntry = { name: "__proto__", t
 const protoQuoted: FourSlashInterface.ExpectedCompletionEntry = { name: "__proto__", text: '(property) "__proto__": number' };
 const p: FourSlashInterface.ExpectedCompletionEntry = { name: "p", text: "(property) p: number" };
 
-verify.completions({ marker: "1", exact: completion.sorted([proto, p]) });
+verify.completions({ marker: "1", unsorted: [proto, p] });
 edit.insert('__proto__: 10,');
 verify.completions({ exact: p });
 
-verify.completions({ marker: "2", exact: completion.sorted([proto, p]) });
+verify.completions({ marker: "2", unsorted: [proto, p] });
 edit.insert('"__proto__": 10,');
 verify.completions({ exact: p });
 
-verify.completions({ marker: "3", exact: completion.sorted([protoQuoted, p]) })
+verify.completions({ marker: "3", unsorted: [protoQuoted, p] })
 edit.insert('__proto__: 10,');
 verify.completions({ exact: p });
 
-verify.completions({ marker: "4", exact: completion.sorted([protoQuoted, p]) });
+verify.completions({ marker: "4", unsorted: [protoQuoted, p] });
 edit.insert('"__proto__": 10,');
 verify.completions({ exact: p });
 
-verify.completions({ marker: "5", exact: completion.sorted([proto, tripleProto, p]) });
+verify.completions({ marker: "5", unsorted: [proto, tripleProto, p] });
 edit.insert('__proto__: 10,');
-verify.completions({ exact: completion.sorted([tripleProto, p]) });
+verify.completions({ unsorted: [tripleProto, p] });
 edit.insert('"___proto__": "10",');
 verify.completions({ exact: p });
 
-verify.completions({ marker: "6", exact: completion.sorted([proto, tripleProto, p]) });
+verify.completions({ marker: "6", unsorted: [proto, tripleProto, p] });
 edit.insert('___proto__: "10",');
-verify.completions({ exact: completion.sorted([proto, p]) });
+verify.completions({ unsorted: [proto, p] });
 edit.insert('"__proto__": 10,');
 verify.completions({ exact: p });
