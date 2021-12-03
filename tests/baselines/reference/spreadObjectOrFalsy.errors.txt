@@ -1,0 +1,42 @@
+tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts(2,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts(10,14): error TS2698: Spread types may only be created from object types.
+
+
+==== tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts (2 errors) ====
+    function f1<T>(a: T & undefined) {
+        return { ...a };  // Error
+                 ~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    }
+    
+    function f2<T>(a: T | T & undefined) {
+        return { ...a };
+    }
+    
+    function f3<T extends undefined>(a: T) {
+        return { ...a };  // Error
+                 ~~~~
+!!! error TS2698: Spread types may only be created from object types.
+    }
+    
+    function f4<T extends undefined>(a: object | T) {
+        return { ...a };
+    }
+    
+    function f5<S, T extends undefined>(a: S | T) {
+        return { ...a };
+    }
+    
+    function f6<T extends object | undefined>(a: T) {
+        return { ...a };
+    }
+    
+    // Repro from #46976
+    
+    function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
+        const { z } = a;
+        return {
+            ...z
+        };
+    }
+    
