@@ -27265,15 +27265,9 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            if (type.flags & TypeFlags.Instantiable) {
-                const constraint = getBaseConstraintOfType(type);
-                if (constraint !== undefined) {
-                    return isValidSpreadType(constraint);
-                }
-            }
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
-                getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
-                type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isValidSpreadType));
+            const t = removeDefinitelyFalsyTypes(getBaseConstraintOrType(type));
+            return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
+                t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
         }
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
