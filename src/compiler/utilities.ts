@@ -7414,4 +7414,8 @@ namespace ts {
     export function escapeSnippetText(text: string): string {
         return text.replace(/\$/gm, "\\$");
     }
+
+    export function isThisTypeParameter(type: Type): boolean {
+        return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
+    }
 }

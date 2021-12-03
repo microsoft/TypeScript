@@ -432,6 +432,7 @@ namespace ts {
             getIndexInfosOfType,
             getSignaturesOfType,
             getIndexTypeOfType: (type, kind) => getIndexTypeOfType(type, kind === IndexKind.String ? stringType : numberType),
+            getIndexType: type => getIndexType(type),
             getBaseTypes,
             getBaseTypeOfLiteralType,
             getWidenedType,
@@ -15342,10 +15343,6 @@ namespace ts {
             }
             return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
                 (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
-        }
-
-        function isThisTypeParameter(type: Type): boolean {
-            return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
         }
 
         function getSimplifiedType(type: Type, writing: boolean): Type {
