@@ -1,0 +1,146 @@
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(21,29): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2304: Cannot find name '#fiel'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2339: Property '#fiel' does not exist on type 'any'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'boolean'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(43,27): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not allowed outside class bodies.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (9 errors) ====
+    class Foo {
+        #field = 1;
+        static #staticField = 2;
+        #method() {}
+        static #staticMethod() {}
+    
+        goodRhs(v: any) {
+            const a = #field in v;
+    
+            const b = #field in v.p1.p2;
+    
+            const c = #field in (v as {});
+    
+            const d = #field in (v as Foo);
+    
+            const e = #field in (v as never);
+    
+            for (let f in #field in v as any) { /**/ } // unlikely but valid
+        }
+        badRhs(v: any) {
+            const a = #field in (v as unknown); // Bad - RHS of in must be object type or any
+                                ~~~~~~~~~~~~~~
+!!! error TS2571: Object is of type 'unknown'.
+    
+            const b = #fiel in v; // Bad - typo in privateID
+                      ~~~~~
+!!! error TS2304: Cannot find name '#fiel'.
+                      ~~~~~
+!!! error TS2339: Property '#fiel' does not exist on type 'any'.
+    
+            const c = (#field) in v; // Bad - privateID is not an expression on its own
+                       ~~~~~~
+!!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+    
+            for (#field in v) { /**/ } // Bad - 'in' not allowed
+                 ~~~~~~
+!!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
+                 ~~~~~~
+!!! error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
+    
+            for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
+                          ~~~~~~~~~~~
+!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'boolean'.
+        }
+        whitespace(v: any) {
+            const a = v && /*0*/#field/*1*/
+                /*2*/in/*3*/
+                    /*4*/v/*5*/
+        }
+        flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
+    
+            if (typeof u === 'object') {
+                if (#field in n) {
+                    n; // good n is never
+                }
+    
+                if (#field in u) {
+                              ~
+!!! error TS2531: Object is possibly 'null'.
+                    u; // good u is Foo
+                } else {
+                    u; // good u is object | null
+                }
+    
+                if (u !== null) {
+                    if (#field in u) {
+                        u; // good u is Foo
+                    } else {
+                        u; // good u is object
+                    }
+    
+                    if (#method in u) {
+                        u; // good u is Foo
+                    }
+    
+                    if (#staticField in u) {
+                        u; // good u is typeof Foo
+                    }
+    
+                    if (#staticMethod in u) {
+                        u; // good u is typeof Foo
+                    }
+                }
+            }
+    
+            if (#field in fb) {
+                fb; // good fb is Foo
+            } else {
+                fb; // good fb is Bar
+            }
+    
+            if (#field in fs) {
+                fs; // good fs is FooSub
+            } else {
+                fs; // good fs is never
+            }
+    
+            if (#field in b) {
+                b; // good b is 'Bar & Foo'
+            } else {
+                b; // good b is Bar
+            }
+    
+            if (#field in fsb) {
+                fsb; // good fsb is FooSub
+            } else {
+                fsb; // good fsb is Bar
+            }
+    
+            if (#field in fsfb) {
+                fsfb; // good fsfb is 'Foo | FooSub'
+            } else {
+                fsfb; // good fsfb is Bar
+            }
+    
+            class Nested {
+                m(v: any) {
+                    if (#field in v) {
+                        v; // good v is Foo
+                    }
+                }
+            }
+        }
+    }
+    
+    class FooSub extends Foo { subTypeOfFoo = true }
+    class Bar { notFoo = true }
+    
+    function badSyntax(v: Foo) {
+        return #field in v; // Bad - outside of class
+               ~~~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    }
+    

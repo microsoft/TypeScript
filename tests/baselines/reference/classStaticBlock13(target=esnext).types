@@ -5,7 +5,7 @@ class C {
   static #x = 123;
 >#x : number
 >123 : 123
-  
+
   static {
     console.log(C.#x)
 >console.log(C.#x) : void
