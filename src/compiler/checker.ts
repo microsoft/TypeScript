@@ -2537,20 +2537,8 @@ namespace ts {
          * Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
          */
         function isSameScopeDescendentOf(initial: Node, parent: Node | undefined, stopAt: Node): boolean {
-            return !!parent && !!findAncestor(initial, n => {
-                if (n === stopAt) {
-                    return "quit";
-                }
-                else if (n === parent) {
-                    return true;
-                }
-                else if (isFunctionLike(n)) {
-                    return getImmediatelyInvokedFunctionExpression(n) ? false : "quit";
-                }
-                else {
-                    return false;
-                }
-            });
+            return !!parent && !!findAncestor(initial, n => n === parent
+                || (n === stopAt || isFunctionLike(n) && !getImmediatelyInvokedFunctionExpression(n) ? "quit" : false));
         }
 
         function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
