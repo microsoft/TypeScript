@@ -20871,7 +20871,7 @@ namespace ts {
         // flags for the string, number, boolean, "", 0, false, void, undefined, or null types respectively. Returns
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
-            return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((type as UnionType).types) :
+            return type.flags & TypeFlags.UnionOrIntersection ? getFalsyFlagsOfTypes((type as UnionType).types) :
                 type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value === "" ? TypeFlags.StringLiteral : 0 :
                 type.flags & TypeFlags.NumberLiteral ? (type as NumberLiteralType).value === 0 ? TypeFlags.NumberLiteral : 0 :
                 type.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(type as BigIntLiteralType) ? TypeFlags.BigIntLiteral : 0 :
@@ -27284,15 +27284,9 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            if (type.flags & TypeFlags.Instantiable) {
-                const constraint = getBaseConstraintOfType(type);
-                if (constraint !== undefined) {
-                    return isValidSpreadType(constraint);
-                }
-            }
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
-                getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
-                type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isValidSpreadType));
+            const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType));
+            return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
+                t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
         }
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
