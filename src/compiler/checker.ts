@@ -432,6 +432,7 @@ namespace ts {
             getIndexInfosOfType,
             getSignaturesOfType,
             getIndexTypeOfType: (type, kind) => getIndexTypeOfType(type, kind === IndexKind.String ? stringType : numberType),
+            getIndexType: type => getIndexType(type),
             getBaseTypes,
             getBaseTypeOfLiteralType,
             getWidenedType,
@@ -1781,8 +1782,9 @@ namespace ts {
             nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
-            excludeGlobals = false): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol);
+            excludeGlobals = false,
+            getSpellingSuggstions = true): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggstions, getSymbol);
         }
 
         function resolveNameHelper(
@@ -1793,6 +1795,7 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals: boolean,
+            getSpellingSuggestions: boolean,
             lookup: typeof getSymbol): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
@@ -2122,7 +2125,7 @@ namespace ts {
                 }
             }
             if (!result) {
-                if (nameNotFoundMessage) {
+                if (nameNotFoundMessage && produceDiagnostics) {
                     if (!errorLocation ||
                         !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
                         !checkAndReportErrorForExtendingInterface(errorLocation) &&
@@ -2132,7 +2135,7 @@ namespace ts {
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                         let suggestion: Symbol | undefined;
-                        if (suggestionCount < maximumSuggestionCount) {
+                        if (getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
                             const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                             if (isGlobalScopeAugmentationDeclaration) {
@@ -2172,7 +2175,7 @@ namespace ts {
             }
 
             // Perform extra checks only if error reporting was requested
-            if (nameNotFoundMessage) {
+            if (nameNotFoundMessage && produceDiagnostics) {
                 if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
@@ -13657,7 +13660,7 @@ namespace ts {
 
         function getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage | undefined): Symbol | undefined {
             // Don't track references for global symbols anyway, so value if `isReference` is arbitrary
-            return resolveName(undefined, name, meaning, diagnostic, name, /*isUse*/ false);
+            return resolveName(undefined, name, meaning, diagnostic, name, /*isUse*/ false, /*excludeGlobals*/ false, /*getSpellingSuggestions*/ false);
         }
 
         function getGlobalType(name: __String, arity: 0, reportErrors: true): ObjectType;
@@ -15342,10 +15345,6 @@ namespace ts {
             }
             return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
                 (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
-        }
-
-        function isThisTypeParameter(type: Type): boolean {
-            return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
         }
 
         function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -20872,7 +20871,7 @@ namespace ts {
         // flags for the string, number, boolean, "", 0, false, void, undefined, or null types respectively. Returns
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
-            return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((type as UnionType).types) :
+            return type.flags & TypeFlags.UnionOrIntersection ? getFalsyFlagsOfTypes((type as UnionType).types) :
                 type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value === "" ? TypeFlags.StringLiteral : 0 :
                 type.flags & TypeFlags.NumberLiteral ? (type as NumberLiteralType).value === 0 ? TypeFlags.NumberLiteral : 0 :
                 type.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(type as BigIntLiteralType) ? TypeFlags.BigIntLiteral : 0 :
@@ -22544,6 +22543,11 @@ namespace ts {
                 case "BigInt64Array":
                 case "BigUint64Array":
                     return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later;
+                case "await":
+                    if (isCallExpression(node.parent)) {
+                        return Diagnostics.Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function;
+                    }
+                    // falls through
                 default:
                     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
@@ -27280,15 +27284,9 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            if (type.flags & TypeFlags.Instantiable) {
-                const constraint = getBaseConstraintOfType(type);
-                if (constraint !== undefined) {
-                    return isValidSpreadType(constraint);
-                }
-            }
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
-                getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
-                type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isValidSpreadType));
+            const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType));
+            return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
+                t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
         }
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
@@ -28718,7 +28716,7 @@ namespace ts {
 
         function getSuggestedSymbolForNonexistentSymbol(location: Node | undefined, outerName: __String, meaning: SymbolFlags): Symbol | undefined {
             Debug.assert(outerName !== undefined, "outername should always be defined");
-            const result = resolveNameHelper(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, /*excludeGlobals*/ false, (symbols, name, meaning) => {
+            const result = resolveNameHelper(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, /*excludeGlobals*/ false, /*getSpellingSuggestions*/ true, (symbols, name, meaning) => {
                 Debug.assertEqual(outerName, name, "name should equal outerName");
                 const symbol = getSymbol(symbols, name, meaning);
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function

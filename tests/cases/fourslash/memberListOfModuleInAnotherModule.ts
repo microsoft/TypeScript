@@ -21,13 +21,13 @@
 ////}
 
 const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
-    { name: "meFunc", text: "function mod1.meFunc(): void" },
-    { name: "meX", text: "var mod1.meX: number" },
     { name: "meClass", text: "class mod1.meClass" },
+    { name: "meFunc", text: "function mod1.meFunc(): void" },
     { name: "meMod", text: "namespace mod1.meMod" },
+    { name: "meX", text: "var mod1.meX: number" },
 ];
 verify.completions(
-    { marker: "1", exact: [...values, { name: "meInt", text: "interface mod1.meInt" }] },
+    { marker: "1", unsorted: [...values, { name: "meInt", text: "interface mod1.meInt" }] },
     { marker: "2", exact: values },
     { marker: "3", exact: { name: "iMex", text: "var mod1.meMod.iMex: number" } },
 );
