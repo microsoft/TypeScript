@@ -9,7 +9,6 @@ class C {
 }
 
 
-
 //// [noRepeatedPropertyNames.js]
 // https://github.com/microsoft/TypeScript/issues/46815
 var first = { a: 1, a: 2 };
