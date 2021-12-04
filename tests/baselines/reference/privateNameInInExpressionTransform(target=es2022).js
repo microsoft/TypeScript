@@ -48,12 +48,9 @@ export { }
 
 //// [privateNameInInExpressionTransform.js]
 class Foo {
-    constructor() {
-        this.#field = 1;
-    }
-    #field;
+    #field = 1;
     #method() { }
-    static #staticField;
+    static #staticField = 2;
     static #staticMethod() { }
     check(v) {
         #field in v; // expect Foo's 'field' WeakMap
@@ -78,12 +75,8 @@ class Foo {
         10;
     }
 }
-Foo.#staticField = 2;
 class Bar {
-    constructor() {
-        this.#field = 1;
-    }
-    #field;
+    #field = 1;
     check(v) {
         #field in v; // expect Bar's 'field' WeakMap
     }

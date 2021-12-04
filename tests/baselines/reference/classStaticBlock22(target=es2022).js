@@ -97,10 +97,8 @@ class C {
     }
     static {
         class D {
-            constructor() {
-                this.await = 1; // legal
-                this.x = await; // legal (initializers have an implicit function boundary)
-            }
+            await = 1; // legal
+            x = await; // legal (initializers have an implicit function boundary)
         }
         ;
     }
@@ -119,11 +117,7 @@ class C {
     }
     static {
         class E {
-            constructor() {
-                this.propLambda = () => { await; };
-                this.propFunc = function () { await; };
-                await;
-            }
+            constructor() { await; }
             method() { await; }
             get accessor() {
                 await;
@@ -132,6 +126,8 @@ class C {
             set accessor(v) {
                 await;
             }
+            propLambda = () => { await; };
+            propFunc = function () { await; };
         }
     }
     static {
@@ -144,8 +140,8 @@ class C {
             static set accessor(v) {
                 await;
             }
+            static propLambda = () => { await; };
+            static propFunc = function () { await; };
         }
-        S.propLambda = () => { await; };
-        S.propFunc = function () { await; };
     }
 }

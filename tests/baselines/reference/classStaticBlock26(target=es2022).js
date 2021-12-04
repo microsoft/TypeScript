@@ -41,13 +41,9 @@ class C {
         ({ [await ]: 1 }); // illegal
     }
     static {
-        var _a;
         class D {
-            constructor() {
-                this[_a] = 1; // illegal (computed property names are evaluated outside of a class body
-            }
+            [await ] = 1; // illegal (computed property names are evaluated outside of a class body
         }
-        _a = await ;
         ;
     }
     static {
