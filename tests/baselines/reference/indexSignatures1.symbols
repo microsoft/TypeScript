@@ -224,7 +224,7 @@ type Invalid<T extends string> = {
 
     [key: Error]: string;  // Error
 >key : Symbol(key, Decl(indexSignatures1.ts, 88, 5))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     [key: T & string]: string;  // Error
 >key : Symbol(key, Decl(indexSignatures1.ts, 89, 5))

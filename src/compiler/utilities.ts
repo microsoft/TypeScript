@@ -627,7 +627,8 @@ namespace ts {
                 Float64Array: ["at"],
                 BigInt64Array: ["at"],
                 BigUint64Array: ["at"],
-                ObjectConstructor: ["hasOwn"]
+                ObjectConstructor: ["hasOwn"],
+                Error: ["cause"]
             }
         };
     }
