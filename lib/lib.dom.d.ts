@@ -11431,6 +11431,8 @@ interface PointerEvent extends MouseEvent {
     readonly tangentialPressure: number;
     readonly tiltX: number;
     readonly tiltY: number;
+    readonly layerX: number;
+    readonly layerY: number;
     readonly twist: number;
     readonly width: number;
     getCoalescedEvents(): PointerEvent[];
