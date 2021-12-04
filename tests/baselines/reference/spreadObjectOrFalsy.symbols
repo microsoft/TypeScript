@@ -1,0 +1,87 @@
+=== tests/cases/conformance/types/spread/spreadObjectOrFalsy.ts ===
+function f1<T>(a: T & undefined) {
+>f1 : Symbol(f1, Decl(spreadObjectOrFalsy.ts, 0, 0))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 0, 12))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 0, 15))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 0, 12))
+
+    return { ...a };  // Error
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 0, 15))
+}
+
+function f2<T>(a: T | T & undefined) {
+>f2 : Symbol(f2, Decl(spreadObjectOrFalsy.ts, 2, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 4, 12))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 4, 15))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 4, 12))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 4, 12))
+
+    return { ...a };
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 4, 15))
+}
+
+function f3<T extends undefined>(a: T) {
+>f3 : Symbol(f3, Decl(spreadObjectOrFalsy.ts, 6, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 8, 12))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 8, 33))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 8, 12))
+
+    return { ...a };  // Error
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 8, 33))
+}
+
+function f4<T extends undefined>(a: object | T) {
+>f4 : Symbol(f4, Decl(spreadObjectOrFalsy.ts, 10, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 12, 12))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 12, 33))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 12, 12))
+
+    return { ...a };
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 12, 33))
+}
+
+function f5<S, T extends undefined>(a: S | T) {
+>f5 : Symbol(f5, Decl(spreadObjectOrFalsy.ts, 14, 1))
+>S : Symbol(S, Decl(spreadObjectOrFalsy.ts, 16, 12))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 16, 14))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 16, 36))
+>S : Symbol(S, Decl(spreadObjectOrFalsy.ts, 16, 12))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 16, 14))
+
+    return { ...a };
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 16, 36))
+}
+
+function f6<T extends object | undefined>(a: T) {
+>f6 : Symbol(f6, Decl(spreadObjectOrFalsy.ts, 18, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 20, 12))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 20, 42))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 20, 12))
+
+    return { ...a };
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 20, 42))
+}
+
+// Repro from #46976
+
+function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
+>g1 : Symbol(g1, Decl(spreadObjectOrFalsy.ts, 22, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 26, 12))
+>A : Symbol(A, Decl(spreadObjectOrFalsy.ts, 26, 25))
+>z : Symbol(z, Decl(spreadObjectOrFalsy.ts, 26, 37))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 26, 12))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 26, 12))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 26, 64))
+>A : Symbol(A, Decl(spreadObjectOrFalsy.ts, 26, 25))
+
+    const { z } = a;
+>z : Symbol(z, Decl(spreadObjectOrFalsy.ts, 27, 11))
+>a : Symbol(a, Decl(spreadObjectOrFalsy.ts, 26, 64))
+
+    return {
+        ...z
+>z : Symbol(z, Decl(spreadObjectOrFalsy.ts, 27, 11))
+
+    };
+}
+
