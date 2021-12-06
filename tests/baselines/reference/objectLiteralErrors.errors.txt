@@ -1,22 +1,22 @@
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(2,18): error TS2300: Duplicate identifier 'a'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(3,19): error TS2300: Duplicate identifier 'a'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(4,18): error TS2300: Duplicate identifier 'a'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(5,21): error TS2300: Duplicate identifier 'a'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(6,19): error TS2300: Duplicate identifier 'a'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(7,18): error TS2300: Duplicate identifier ''a''.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(8,20): error TS2300: Duplicate identifier 'a'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(9,20): error TS2300: Duplicate identifier '"a"'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(10,20): error TS2300: Duplicate identifier ''a''.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(11,21): error TS2300: Duplicate identifier ''a''.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(12,21): error TS2300: Duplicate identifier ''1''.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(13,19): error TS2300: Duplicate identifier '0'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(14,19): error TS2300: Duplicate identifier '0'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(15,19): error TS2300: Duplicate identifier '0x0'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(2,18): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(3,19): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(4,18): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(5,21): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(6,19): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(7,18): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(8,20): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(9,20): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(10,20): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(11,21): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(12,21): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(13,19): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(14,19): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(15,19): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o0'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS2300: Duplicate identifier '000'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,23): error TS2300: Duplicate identifier '1e2'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(18,22): error TS2300: Duplicate identifier '3.2e1'.
-tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(19,25): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(16,19): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(17,23): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(18,22): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(19,25): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(22,12): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(22,22): error TS1119: An object literal cannot have property and accessor with the same name.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(22,22): error TS2300: Duplicate identifier 'a'.
@@ -80,60 +80,60 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts(44,16)
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
                      ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e2 = { a: '', a: '' };
                       ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e3 = { a: 0, a: '' };
                      ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e4 = { a: true, a: false };
                         ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e5 = { a: {}, a: {} };
                       ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e6 = { a: 0, 'a': 0 };
                      ~~~
-!!! error TS2300: Duplicate identifier ''a''.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e7 = { 'a': 0, a: 0 };
                        ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e8 = { 'a': 0, "a": 0 };
                        ~~~
-!!! error TS2300: Duplicate identifier '"a"'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e9 = { 'a': 0, 'a': 0 };
                        ~~~
-!!! error TS2300: Duplicate identifier ''a''.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e10 = { "a": 0, 'a': 0 };
                         ~~~
-!!! error TS2300: Duplicate identifier ''a''.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e11 = { 1.0: 0, '1': 0 };
                         ~~~
-!!! error TS2300: Duplicate identifier ''1''.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e12 = { 0: 0, 0: 0 };
                       ~
-!!! error TS2300: Duplicate identifier '0'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e13 = { 0: 0, 0: 0 };
                       ~
-!!! error TS2300: Duplicate identifier '0'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e14 = { 0: 0, 0x0: 0 };
                       ~~~
-!!! error TS2300: Duplicate identifier '0x0'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e14 = { 0: 0, 000: 0 };
                       ~~~
 !!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o0'.
                       ~~~
-!!! error TS2300: Duplicate identifier '000'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e15 = { "100": 0, 1e2: 0 };
                           ~~~
-!!! error TS2300: Duplicate identifier '1e2'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e16 = { 0x20: 0, 3.2e1: 0 };
                          ~~~~~
-!!! error TS2300: Duplicate identifier '3.2e1'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     var e17 = { a: 0, b: 1, a: 0 };
                             ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     
     // Accessor and property with the same name
     var f1 = { a: 0, get a() { return 0; } };

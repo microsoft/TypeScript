@@ -2066,12 +2066,6 @@ namespace ts {
                         seen.set(identifier.escapedText, currentKind);
                         continue;
                     }
-
-                    if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
-                        const span = getErrorSpanForNode(file, identifier);
-                        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                            Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
-                    }
                 }
             }
 
