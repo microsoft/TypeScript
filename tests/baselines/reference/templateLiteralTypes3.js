@@ -184,6 +184,11 @@ noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
 spread(`1.${'2'}.3`, `1.${'2'}.4`);
 spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 
+function ft1<T extends string>(t: T, u: Uppercase<T>) {
+    spread(`1.${t}.3`, `1.${t}.4`);
+    spread(`1.${u}.3`, `1.${u}.4`);
+}
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
@@ -274,6 +279,10 @@ noSpread(["1.".concat('2', ".3"), "1.".concat('2', ".4")]);
 noSpread(["1.".concat('2', ".3"), "1.".concat('2', ".4")]);
 spread("1.".concat('2', ".3"), "1.".concat('2', ".4"));
 spread("1.".concat('2', ".3"), "1.".concat('2', ".4"));
+function ft1(t, u) {
+    spread("1.".concat(t, ".3"), "1.".concat(t, ".4"));
+    spread("1.".concat(u, ".3"), "1.".concat(u, ".4"));
+}
 
 
 //// [templateLiteralTypes3.d.ts]
@@ -344,3 +353,4 @@ declare function reducer(action: Action): void;
 declare type DotString = `${string}.${string}.${string}`;
 declare function noSpread<P extends DotString>(args: P[]): P;
 declare function spread<P extends DotString>(...args: P[]): P;
+declare function ft1<T extends string>(t: T, u: Uppercase<T>): void;

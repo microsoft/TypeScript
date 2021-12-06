@@ -549,3 +549,23 @@ spread(`1.${'2'}.3`, `1.${'2'}.4`);
 spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 >spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
 
+function ft1<T extends string>(t: T, u: Uppercase<T>) {
+>ft1 : Symbol(ft1, Decl(templateLiteralTypes3.ts, 183, 55))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+>u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+
+    spread(`1.${t}.3`, `1.${t}.4`);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
+
+    spread(`1.${u}.3`, `1.${u}.4`);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+>u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
+>u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
+}
+

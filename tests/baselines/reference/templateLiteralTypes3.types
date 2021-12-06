@@ -564,3 +564,25 @@ spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 >'2' as string : string
 >'2' : "2"
 
+function ft1<T extends string>(t: T, u: Uppercase<T>) {
+>ft1 : <T extends string>(t: T, u: Uppercase<T>) => void
+>t : T
+>u : Uppercase<T>
+
+    spread(`1.${t}.3`, `1.${t}.4`);
+>spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${t}.3` : `1.${T}.3`
+>t : T
+>`1.${t}.4` : `1.${T}.4`
+>t : T
+
+    spread(`1.${u}.3`, `1.${u}.4`);
+>spread(`1.${u}.3`, `1.${u}.4`) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${u}.3` : `1.${Uppercase<T>}.3`
+>u : Uppercase<T>
+>`1.${u}.4` : `1.${Uppercase<T>}.4`
+>u : Uppercase<T>
+}
+
