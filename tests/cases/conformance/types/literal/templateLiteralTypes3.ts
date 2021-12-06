@@ -186,7 +186,8 @@ noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
 spread(`1.${'2'}.3`, `1.${'2'}.4`);
 spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 
-function ft1<T extends string>(t: T, u: Uppercase<T>) {
+function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
     spread(`1.${t}.3`, `1.${t}.4`);
     spread(`1.${u}.3`, `1.${u}.4`);
+    spread(u1, u2);
 }
