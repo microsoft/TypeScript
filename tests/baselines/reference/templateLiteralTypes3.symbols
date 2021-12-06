@@ -516,3 +516,67 @@ function reducer(action: Action) {
     }
 }
 
+// Repro from #46768
+
+type DotString = `${string}.${string}.${string}`;
+>DotString : Symbol(DotString, Decl(templateLiteralTypes3.ts, 170, 1))
+
+declare function noSpread<P extends DotString>(args: P[]): P;
+>noSpread : Symbol(noSpread, Decl(templateLiteralTypes3.ts, 174, 49))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 176, 26))
+>DotString : Symbol(DotString, Decl(templateLiteralTypes3.ts, 170, 1))
+>args : Symbol(args, Decl(templateLiteralTypes3.ts, 176, 47))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 176, 26))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 176, 26))
+
+declare function spread<P extends DotString>(...args: P[]): P;
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 177, 24))
+>DotString : Symbol(DotString, Decl(templateLiteralTypes3.ts, 170, 1))
+>args : Symbol(args, Decl(templateLiteralTypes3.ts, 177, 45))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 177, 24))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 177, 24))
+
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+>noSpread : Symbol(noSpread, Decl(templateLiteralTypes3.ts, 174, 49))
+
+noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
+>noSpread : Symbol(noSpread, Decl(templateLiteralTypes3.ts, 174, 49))
+
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+
+spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+
+function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
+>ft1 : Symbol(ft1, Decl(templateLiteralTypes3.ts, 183, 55))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+>u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+>u1 : Symbol(u1, Decl(templateLiteralTypes3.ts, 185, 53))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+>u2 : Symbol(u2, Decl(templateLiteralTypes3.ts, 185, 80))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
+
+    spread(`1.${t}.3`, `1.${t}.4`);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
+
+    spread(`1.${u}.3`, `1.${u}.4`);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+>u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
+>u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
+
+    spread(u1, u2);
+>spread : Symbol(spread, Decl(templateLiteralTypes3.ts, 176, 61))
+>u1 : Symbol(u1, Decl(templateLiteralTypes3.ts, 185, 53))
+>u2 : Symbol(u2, Decl(templateLiteralTypes3.ts, 185, 80))
+}
+
