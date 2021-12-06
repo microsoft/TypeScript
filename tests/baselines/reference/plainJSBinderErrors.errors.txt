@@ -10,14 +10,13 @@ tests/cases/conformance/salsa/plainJSBinderErrors.js(18,16): error TS1102: 'dele
 tests/cases/conformance/salsa/plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 tests/cases/conformance/salsa/plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 tests/cases/conformance/salsa/plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-tests/cases/conformance/salsa/plainJSBinderErrors.js(26,27): error TS1121: Octal literals are not allowed in strict mode.
 tests/cases/conformance/salsa/plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
 tests/cases/conformance/salsa/plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
 tests/cases/conformance/salsa/plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
 tests/cases/conformance/salsa/plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
 
 
-==== tests/cases/conformance/salsa/plainJSBinderErrors.js (17 errors) ====
+==== tests/cases/conformance/salsa/plainJSBinderErrors.js (16 errors) ====
     export default 12
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
@@ -70,8 +69,6 @@ tests/cases/conformance/salsa/plainJSBinderErrors.js(40,7): error TS1215: Invali
         }
         withOctal() {
             const redundant = 010
-                              ~~~
-!!! error TS1121: Octal literals are not allowed in strict mode.
             with (redundant) {
             ~~~~
 !!! error TS1101: 'with' statements are not allowed in strict mode.
