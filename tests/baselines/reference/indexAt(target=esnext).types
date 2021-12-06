@@ -87,18 +87,18 @@ new Float64Array().at(0);
 >0 : 0
 
 new BigInt64Array().at(0);
->new BigInt64Array().at(0) : number
->new BigInt64Array().at : (index: number) => number
+>new BigInt64Array().at(0) : bigint
+>new BigInt64Array().at : (index: number) => bigint
 >new BigInt64Array() : BigInt64Array
 >BigInt64Array : BigInt64ArrayConstructor
->at : (index: number) => number
+>at : (index: number) => bigint
 >0 : 0
 
 new BigUint64Array().at(0);
->new BigUint64Array().at(0) : number
->new BigUint64Array().at : (index: number) => number
+>new BigUint64Array().at(0) : bigint
+>new BigUint64Array().at : (index: number) => bigint
 >new BigUint64Array() : BigUint64Array
 >BigUint64Array : BigUint64ArrayConstructor
->at : (index: number) => number
+>at : (index: number) => bigint
 >0 : 0
 

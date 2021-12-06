@@ -15,7 +15,14 @@
 
 verify.completions(
     // Should only have the enum's own members, and nothing else
-    { marker: "enumVariable", exact: ["Red", "Green"] },
+    { marker: "enumVariable", exact: ["Green", "Red"] },
     // Should have number members, and not enum members
-    { marker: ["variableOfEnumType", "callOfEnumReturnType"], exact: ["toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"] },
+    { marker: ["variableOfEnumType", "callOfEnumReturnType"], exact: [
+        "toExponential",
+        "toFixed",
+        "toLocaleString",
+        "toPrecision",
+        "toString",
+        "valueOf",
+    ] }
 );

@@ -30,8 +30,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText:
-"override foo(a: string): void {\n}\n",
+            insertText: "override foo(a: string): void {\n}",
         }
     ],
 });

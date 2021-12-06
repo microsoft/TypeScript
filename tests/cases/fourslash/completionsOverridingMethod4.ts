@@ -48,7 +48,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "protected hint(): string {\n}\n",
+            insertText: "protected hint(): string {\n}",
         },
         {
             name: "refuse",
@@ -58,7 +58,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "public refuse(): string {\n}\n",
+            insertText: "public refuse(): string {\n}",
         }
     ],
 });

@@ -26,7 +26,7 @@ const { Readable, Duplex } = require("stream");
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
  */
-function exec(cmd, args, options = {}) {
+async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
         const { ignoreExitCode, cancelToken = CancellationToken.none, waitForExit = true } = options;
         cancelToken.throwIfCancellationRequested();

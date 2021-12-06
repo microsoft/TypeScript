@@ -198,14 +198,17 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
-        const symbol = typeChecker.getSymbolAtLocation(node);
+        const symbol = getSymbol(node, typeChecker);
         if (!symbol) return undefined;
 
         const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
         const returnType = tryGetReturnTypeOfFunction(symbol, typeAtLocation, typeChecker);
         const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node);
         // If a function returns 'void' or some other type with no definition, just return the function definition.
-        return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+        const typeDefinitions = fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+        return typeDefinitions.length ? typeDefinitions
+            : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node)
+            : undefined;
     }
 
     function definitionFromType(type: Type, checker: TypeChecker, node: Node): readonly DefinitionInfo[] {

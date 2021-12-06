@@ -1944,14 +1944,14 @@ namespace ts.server {
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedFileName) continue;
                     const { resolvedFileName, originalPath } = resolution;
+                    if (originalPath) {
+                        symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalPath, resolvedFileName);
+                    }
                     if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
                         rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
                         if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
                             return ts.emptyArray;
-                        }
-                        if (originalPath) {
-                            symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalPath, resolvedFileName);
                         }
                     }
                 }

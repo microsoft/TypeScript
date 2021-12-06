@@ -23,14 +23,13 @@ verify.completions(
     { marker: "1", includes: "C" },
     {
         marker: ["2", "4"],
-        exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        exact: completion.functionMembersPlus([
             { name: "boo", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "x", sortText: completion.SortText.LocationPriority },
             { name: "foo", sortText: completion.SortText.LocationPriority },
-            ...completion.functionMembers
-        ]
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "x", sortText: completion.SortText.LocationPriority },
+        ])
     },
-    { marker: "3", exact: ["foo", "bar"] },
+    { marker: "3", exact: ["bar", "foo"] },
 );
 verify.noErrors();
