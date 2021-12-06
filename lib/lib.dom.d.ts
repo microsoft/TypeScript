@@ -8385,7 +8385,7 @@ interface HTMLTableElement extends HTMLElement {
      * Sets or retrieves a value that indicates the table alignment.
      */
     /** @deprecated */
-    align: string;
+    align: 'left' | 'center' | 'right';
     /** @deprecated */
     bgColor: string;
     /**
