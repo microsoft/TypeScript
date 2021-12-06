@@ -43126,8 +43126,11 @@ namespace ts {
                         seen.set(effectiveName, currentKind);
                     }
                     else {
-                        if ((currentKind & DeclarationMeaning.PropertyAssignmentOrMethod) && (existingKind & DeclarationMeaning.PropertyAssignmentOrMethod)) {
+                        if ((currentKind & DeclarationMeaning.Method) && (existingKind & DeclarationMeaning.Method)) {
                             grammarErrorOnNode(name, Diagnostics.Duplicate_identifier_0, getTextOfNode(name));
+                        }
+                        else if ((currentKind & DeclarationMeaning.PropertyAssignment) && (existingKind & DeclarationMeaning.PropertyAssignment)) {
+                            grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name, getTextOfNode(name));
                         }
                         else if ((currentKind & DeclarationMeaning.GetOrSetAccessor) && (existingKind & DeclarationMeaning.GetOrSetAccessor)) {
                             if (existingKind !== DeclarationMeaning.GetOrSetAccessor && currentKind !== existingKind) {
