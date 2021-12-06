@@ -2335,7 +2335,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
+            if (languageVersion < ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
