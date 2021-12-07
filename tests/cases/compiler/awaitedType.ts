@@ -24,6 +24,9 @@ interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
 interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
 type T17 = Awaited<BadPromise1>; // error
 
+// https://github.com/microsoft/TypeScript/issues/46934
+type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
+
 // https://github.com/microsoft/TypeScript/issues/33562
 type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 declare function MaybePromise<T>(value: T): MaybePromise<T>;
