@@ -1550,35 +1550,35 @@ namespace ts {
                 return state;
             }
 
-            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onLeft(left: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(left);
+                    const maybeBound = maybeBind(left);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(left);
+                    }
+                    return maybeBound;
                 }
             }
 
-            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, _node: BinaryExpression) {
                 if (!state.skip) {
-                    if (operatorToken.kind === SyntaxKind.CommaToken) {
-                        maybeBindExpressionFlowIfCall(node.left);
-                    }
                     bind(operatorToken);
                 }
             }
 
-            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onRight(right: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(right);
+                    const maybeBound = maybeBind(right);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(right);
+                    }
+                    return maybeBound;
                 }
             }
 
             function onExit(node: BinaryExpression, state: WorkArea) {
                 if (!state.skip) {
                     const operator = node.operatorToken.kind;
-
-                    if (operator === SyntaxKind.CommaToken) {
-                        maybeBindExpressionFlowIfCall(node.right);
-                    }
-
                     if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                         bindAssignmentTargetFlow(node.left);
                         if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
