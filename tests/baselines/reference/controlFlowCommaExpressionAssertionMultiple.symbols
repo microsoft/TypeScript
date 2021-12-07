@@ -24,3 +24,27 @@ function func(foo: any, bar: any) {
 >bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 23))
 }
 
+function func2(foo: any, bar: any, baz: any) {
+>func2 : Symbol(func2, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 6, 1))
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 15))
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 24))
+>baz : Symbol(baz, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 34))
+
+    Narrow<number>(foo), Narrow<string>(bar), Narrow<boolean>(baz);
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 15))
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 24))
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>baz : Symbol(baz, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 34))
+
+    foo;
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 15))
+
+    bar;
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 24))
+
+    baz;
+>baz : Symbol(baz, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 34))
+}
+

@@ -5,3 +5,10 @@ function func(foo: any, bar: any) {
     foo;
     bar;
 }
+
+function func2(foo: any, bar: any, baz: any) {
+    Narrow<number>(foo), Narrow<string>(bar), Narrow<boolean>(baz);
+    foo;
+    bar;
+    baz;
+}
