@@ -11,3 +11,13 @@ const c = true ? (a) : (function() {});
 >(function() {}) : () => void
 >function() {} : () => void
 
+const d = true ? (a) : ((function() {}));
+>d : any
+>true ? (a) : ((function() {})) : any
+>true : true
+>(a) : any
+>a : any
+>((function() {})) : () => void
+>(function() {}) : () => void
+>function() {} : () => void
+
