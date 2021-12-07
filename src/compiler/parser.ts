@@ -4549,7 +4549,6 @@ namespace ts {
             }
 
             const hasJSDocFunctionType = unwrappedType && isJSDocFunctionType(unwrappedType);
-            // const hasJSDocFunctionType = type && isJSDocFunctionType(skipParentheses(type));
             if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                     return undefined;
