@@ -340,7 +340,11 @@ namespace ts {
         }
 
         const failedLookupLocations: string[] = [];
-        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features: NodeResolutionFeatures.AllFeatures, conditions: ["node", "require", "types"] };
+        const features =
+            getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 ? NodeResolutionFeatures.Node12Default :
+            getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
+            NodeResolutionFeatures.None;
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions: ["node", "require", "types"] };
         let resolved = primaryLookup();
         let primary = true;
         if (!resolved) {
@@ -1186,6 +1190,10 @@ namespace ts {
         ExportsPatternTrailers = 1 << 4,
         AllFeatures = Imports | SelfName | Exports | ExportsPatternTrailers,
 
+        Node12Default = Imports | SelfName | Exports,
+
+        NodeNextDefault = AllFeatures,
+
         EsmMode = 1 << 5,
     }
 
@@ -1193,7 +1201,7 @@ namespace ts {
             host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
             resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
         return nodeNextModuleNameResolverWorker(
-            NodeResolutionFeatures.Imports | NodeResolutionFeatures.SelfName | NodeResolutionFeatures.Exports,
+            NodeResolutionFeatures.Node12Default,
             moduleName,
             containingFile,
             compilerOptions,
@@ -1208,7 +1216,7 @@ namespace ts {
             host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
             resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
         return nodeNextModuleNameResolverWorker(
-            NodeResolutionFeatures.AllFeatures,
+            NodeResolutionFeatures.NodeNextDefault,
             moduleName,
             containingFile,
             compilerOptions,
