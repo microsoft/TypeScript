@@ -112,6 +112,17 @@ function f30({ kind, isA }: Foo) {
     }
 }
 
+type Args = ['A', number] | ['B', string]
+
+function f40(...[kind, data]: Args) {
+    if (kind === 'A') {
+        data.toFixed();
+    }
+    if (kind === 'B') {
+        data.toUpperCase();
+    }
+}
+
 // Repro from #35283
 
 interface A<T> { variant: 'a', value: T }
@@ -252,6 +263,14 @@ function f30({ kind, isA }) {
         kind; // 'B' | 'C'
     }
 }
+function f40(...[kind, data]) {
+    if (kind === 'A') {
+        data.toFixed();
+    }
+    if (kind === 'B') {
+        data.toUpperCase();
+    }
+}
 function unrefined1(ab) {
     const { variant, value } = ab;
     if (variant === 'a') {
@@ -308,6 +327,8 @@ declare type Foo = {
     isA: false;
 };
 declare function f30({ kind, isA }: Foo): void;
+declare type Args = ['A', number] | ['B', string];
+declare function f40(...[kind, data]: Args): void;
 interface A<T> {
     variant: 'a';
     value: T;
