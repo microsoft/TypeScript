@@ -53,7 +53,7 @@ Output::
     The parser expected to find a '}' to match the '{' token here.
 
 
-Found 1 error.
+Found 1 error in /src/src/main.ts:4
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -172,7 +172,7 @@ Output::
     The parser expected to find a '}' to match the '{' token here.
 
 
-Found 1 error.
+Found 1 error in /src/src/main.ts:4
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
