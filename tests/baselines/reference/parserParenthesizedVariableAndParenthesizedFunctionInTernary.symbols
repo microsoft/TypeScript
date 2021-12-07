@@ -6,3 +6,7 @@ const c = true ? (a) : (function() {});
 >c : Symbol(c, Decl(parserParenthesizedVariableAndParenthesizedFunctionInTernary.ts, 1, 5))
 >a : Symbol(a, Decl(parserParenthesizedVariableAndParenthesizedFunctionInTernary.ts, 0, 3))
 
+const d = true ? (a) : ((function() {}));
+>d : Symbol(d, Decl(parserParenthesizedVariableAndParenthesizedFunctionInTernary.ts, 2, 5))
+>a : Symbol(a, Decl(parserParenthesizedVariableAndParenthesizedFunctionInTernary.ts, 0, 3))
+
