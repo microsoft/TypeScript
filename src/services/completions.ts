@@ -3531,8 +3531,9 @@ namespace ts.Completions {
 
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
     function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
-        const jsdoc = findAncestor(node, isJSDoc);
-        return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
+        return findAncestor(node, n =>
+            isJSDocTag(n) && rangeContainsPosition(n, position) ? true :
+                isJSDoc(n) ? "quit" : false) as JSDocTag | undefined;
     }
 
     export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
