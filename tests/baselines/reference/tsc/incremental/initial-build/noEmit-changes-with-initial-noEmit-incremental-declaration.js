@@ -198,7 +198,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -437,8 +437,12 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 3 errors.
+Found 3 errors in 3 files.
 
+Errors  Files
+     1  /src/project/src/directUse.ts:2
+     1  /src/project/src/indirectUse.ts:2
+     1  /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
@@ -767,7 +771,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
