@@ -1365,7 +1365,7 @@ namespace ts {
         }
 
         function maybeBindExpressionFlowIfCall(node: Expression) {
-            // A top level or LHS of comma expression call expression with a dotted function name and at least one argument
+            // A top level or comma expression call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
             if (node.kind === SyntaxKind.CallExpression) {
                 const call = node as CallExpression;
