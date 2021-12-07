@@ -1,0 +1,34 @@
+tests/cases/compiler/destructuringThisWithProperty.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/destructuringThisWithProperty.ts(17,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringThisWithProperty.ts(19,15): error TS2339: Property 'bar' does not exist on type '{}'.
+
+
+==== tests/cases/compiler/destructuringThisWithProperty.ts (3 errors) ====
+    class A {
+        constructor(public foo: string) {}
+    
+        get bar(): number {
+            ~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return 1;
+        }
+    
+        func() {
+            const {           ...rest1 } = this;
+            const {           ...rest2 } = this as A;
+            const { foo: _f1, ...rest3 } = this;
+            const { foo: _f2, ...rest4 } = this as A;
+    
+            // Rest destructuring drops properties provided by getters.
+            // "bar" should not be present in any of these.
+            rest1.bar;
+            rest2.bar;
+                  ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+            rest3.bar;
+            rest4.bar;
+                  ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{}'.
+        }
+    }
+    

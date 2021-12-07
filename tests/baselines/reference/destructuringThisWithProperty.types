@@ -1,0 +1,63 @@
+=== tests/cases/compiler/destructuringThisWithProperty.ts ===
+class A {
+>A : A
+
+    constructor(public foo: string) {}
+>foo : string
+
+    get bar(): number {
+>bar : number
+
+        return 1;
+>1 : 1
+    }
+
+    func() {
+>func : () => void
+
+        const {           ...rest1 } = this;
+>rest1 : this
+>this : this
+
+        const {           ...rest2 } = this as A;
+>rest2 : { foo: string; }
+>this as A : A
+>this : this
+
+        const { foo: _f1, ...rest3 } = this;
+>foo : any
+>_f1 : string
+>rest3 : Omit<this, "foo">
+>this : this
+
+        const { foo: _f2, ...rest4 } = this as A;
+>foo : any
+>_f2 : string
+>rest4 : {}
+>this as A : A
+>this : this
+
+        // Rest destructuring drops properties provided by getters.
+        // "bar" should not be present in any of these.
+        rest1.bar;
+>rest1.bar : number
+>rest1 : this
+>bar : number
+
+        rest2.bar;
+>rest2.bar : any
+>rest2 : { foo: string; }
+>bar : any
+
+        rest3.bar;
+>rest3.bar : this["bar"]
+>rest3 : Omit<this, "foo">
+>bar : this["bar"]
+
+        rest4.bar;
+>rest4.bar : any
+>rest4 : {}
+>bar : any
+    }
+}
+
