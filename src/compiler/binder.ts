@@ -1574,6 +1574,11 @@ namespace ts {
             function onExit(node: BinaryExpression, state: WorkArea) {
                 if (!state.skip) {
                     const operator = node.operatorToken.kind;
+
+                    if (operator === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(node.right);
+                    }
+
                     if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                         bindAssignmentTargetFlow(node.left);
                         if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {

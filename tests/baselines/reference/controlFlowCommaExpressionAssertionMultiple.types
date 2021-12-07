@@ -21,6 +21,6 @@ function func(foo: any, bar: any) {
 >foo : number
 
     bar;
->bar : any
+>bar : string
 }
 
