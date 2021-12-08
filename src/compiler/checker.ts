@@ -39231,9 +39231,6 @@ namespace ts {
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
                 let autoValue: number | undefined = 0;
-                // if (!node.members) {
-                //     return;
-                // }
                 for (const member of node.members) {
                     const value = computeMemberValue(member, autoValue);
                     getNodeLinks(member).enumMemberValue = value;
