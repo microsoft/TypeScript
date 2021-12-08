@@ -65,12 +65,16 @@ function restMustBeLast(...x, y) {
 }
 function restCantHaveInitialiser(...x = [1,2,3]) {
 }
+function restCantHaveTrailingComma (...x,) {
+}
 ;({ ...{} } = {})
 const doom = { e: 1, m: 1, name: "knee-deep" }
 const { ...rest, e: episode, m: mission } = doom
 const { e: eep, m: em, ...rest: noRestAllowed } = doom
+const { e: erp, m: erm, ...noInitialiser = true } = doom
 
 // left-over parsing
+var;
 var x = 1 || 2 ?? 3
 var x = 2 ?? 3 || 4
 const arr = x
@@ -90,6 +94,8 @@ const o = {
 const noAssignment = {
     assignment = 1,
 }
+var noTrailingComma = 1,;
+class MissingExtends extends { }
 
 // let/const mistakes
 const { e: ee };
@@ -112,6 +118,13 @@ for (const cantHaveInit = 1 of [1,2,3]) {
 for (const cantHaveInit = 1 in [1,2,3]) {
     console.log(cantHaveInit)
 }
+for (let y, x of [1,2,3]) {
+    console.log(x)
+}
+for (let y, x in [1,2,3]) {
+    console.log(x)
+}
+
 // duplication mistakes
 var b
 switch (b) {
@@ -231,12 +244,16 @@ function restMustBeLast(...x, y) {
 }
 function restCantHaveInitialiser(...x = [1, 2, 3]) {
 }
+function restCantHaveTrailingComma(...x) {
+}
 ;
 ({ ...{} } = {});
 const doom = { e: 1, m: 1, name: "knee-deep" };
 const { ...rest, e: episode, m: mission } = doom;
 const { e: eep, m: em, ...rest: noRestAllowed } = doom;
+const { e: erp, m: erm, ...noInitialiser = true } = doom;
 // left-over parsing
+var ;
 var x = 1 || 2 ?? 3;
 var x = 2 ?? 3 || 4;
 const arr = x => x + 1;
@@ -255,6 +272,9 @@ const o = {
 const noAssignment = {
     assignment = 1,
 };
+var noTrailingComma = 1;
+class MissingExtends extends  {
+}
 // let/const mistakes
 const { e: ee };
 const noInit;
@@ -274,6 +294,12 @@ for (const cantHaveInit = 1 of [1, 2, 3]) {
 }
 for (const cantHaveInit = 1 in [1, 2, 3]) {
     console.log(cantHaveInit);
+}
+for (let y, x of [1, 2, 3]) {
+    console.log(x);
+}
+for (let y, x in [1, 2, 3]) {
+    console.log(x);
 }
 // duplication mistakes
 var b;

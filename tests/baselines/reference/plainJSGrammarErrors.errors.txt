@@ -40,49 +40,56 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(59,1): error TS1042: 'asyn
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(60,1): error TS1042: 'async' modifier cannot be used here.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(63,25): error TS1014: A rest parameter must be last in a parameter list.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(65,37): error TS1048: A rest parameter cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(67,8): error TS2501: A rest element cannot contain a binding pattern.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(69,12): error TS2462: A rest element must be last in a destructuring pattern.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(70,33): error TS2566: A rest element cannot have a property name.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(73,9): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(74,14): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(76,3): error TS1200: Line terminator not permitted before arrow.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(78,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(80,6): error TS1171: A comma expression is not allowed in a computed property name.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(81,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(82,5): error TS1042: 'export' modifier cannot be used here.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(84,25): error TS1162: An object member cannot be declared optional.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(85,6): error TS1162: An object member cannot be declared optional.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(85,6): error TS8009: The '?' modifier can only be used in TypeScript files.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(86,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(87,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(90,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(94,7): error TS1182: A destructuring declaration must have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(95,7): error TS1155: 'const' declarations must be initialized.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(96,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(96,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(98,5): error TS1157: 'let' declarations can only be declared inside a block.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(100,5): error TS1156: 'const' declarations can only be declared inside a block.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(105,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(108,12): error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(111,12): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(121,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(128,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(132,5): error TS1114: Duplicate label 'label'.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(141,13): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(149,13): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(153,5): error TS1107: Jump target cannot cross function boundary.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(156,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(157,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(159,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(160,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(163,28): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(164,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(165,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(166,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(167,36): error TS1325: Argument of dynamic import cannot be spread element.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(67,41): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(69,8): error TS2501: A rest element cannot contain a binding pattern.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(71,12): error TS2462: A rest element must be last in a destructuring pattern.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(72,33): error TS2566: A rest element cannot have a property name.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(73,42): error TS1186: A rest element cannot have an initializer.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(76,4): error TS1123: Variable declaration list cannot be empty.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(77,9): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(78,14): error TS5076: '||' and '??' operations cannot be mixed without parentheses.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(80,3): error TS1200: Line terminator not permitted before arrow.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(82,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(84,6): error TS1171: A comma expression is not allowed in a computed property name.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(85,5): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(86,5): error TS1042: 'export' modifier cannot be used here.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(88,25): error TS1162: An object member cannot be declared optional.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(89,6): error TS1162: An object member cannot be declared optional.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(89,6): error TS8009: The '?' modifier can only be used in TypeScript files.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(90,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(91,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(94,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(96,24): error TS1009: Trailing comma not allowed.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(97,29): error TS1097: 'extends' list cannot be empty.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(100,7): error TS1182: A destructuring declaration must have an initializer.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(101,7): error TS1155: 'const' declarations must be initialized.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(102,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(102,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(104,5): error TS1157: 'let' declarations can only be declared inside a block.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(106,5): error TS1156: 'const' declarations can only be declared inside a block.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(111,6): error TS1106: The left-hand side of a 'for...of' statement may not be 'async'.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(114,12): error TS1190: The variable declaration of a 'for...of' statement cannot have an initializer.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(117,12): error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(120,13): error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(123,13): error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(134,5): error TS1113: A 'default' clause cannot appear more than once in a 'switch' statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(141,11): error TS2492: Cannot redeclare identifier 'e' in catch clause.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(145,5): error TS1114: Duplicate label 'label'.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(154,13): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(162,13): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(166,5): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(169,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(170,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(172,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(173,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(176,28): error TS17012: 'metal' is not a valid meta-property for keyword 'import'. Did you mean 'meta'?
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(177,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(178,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(179,30): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(180,36): error TS1325: Argument of dynamic import cannot be spread element.
 
 
-==== tests/cases/conformance/salsa/plainJSGrammarErrors.js (82 errors) ====
+==== tests/cases/conformance/salsa/plainJSGrammarErrors.js (89 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -233,6 +240,10 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(167,36): error TS1325: Arg
                                         ~
 !!! error TS1048: A rest parameter cannot have an initializer.
     }
+    function restCantHaveTrailingComma (...x,) {
+                                            ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+    }
     ;({ ...{} } = {})
            ~~
 !!! error TS2501: A rest element cannot contain a binding pattern.
@@ -243,8 +254,14 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(167,36): error TS1325: Arg
     const { e: eep, m: em, ...rest: noRestAllowed } = doom
                                     ~~~~~~~~~~~~~
 !!! error TS2566: A rest element cannot have a property name.
+    const { e: erp, m: erm, ...noInitialiser = true } = doom
+                                             ~
+!!! error TS1186: A rest element cannot have an initializer.
     
     // left-over parsing
+    var;
+       
+!!! error TS1123: Variable declaration list cannot be empty.
     var x = 1 || 2 ?? 3
             ~~~~~~
 !!! error TS5076: '||' and '??' operations cannot be mixed without parentheses.
@@ -290,6 +307,12 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(167,36): error TS1325: Arg
                    ~
 !!! error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
     }
+    var noTrailingComma = 1,;
+                           ~
+!!! error TS1009: Trailing comma not allowed.
+    class MissingExtends extends { }
+                                
+!!! error TS1097: 'extends' list cannot be empty.
     
     // let/const mistakes
     const { e: ee };
@@ -330,6 +353,17 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(167,36): error TS1325: Arg
 !!! error TS1189: The variable declaration of a 'for...in' statement cannot have an initializer.
         console.log(cantHaveInit)
     }
+    for (let y, x of [1,2,3]) {
+                ~
+!!! error TS1188: Only a single variable declaration is allowed in a 'for...of' statement.
+        console.log(x)
+    }
+    for (let y, x in [1,2,3]) {
+                ~
+!!! error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
+        console.log(x)
+    }
+    
     // duplication mistakes
     var b
     switch (b) {

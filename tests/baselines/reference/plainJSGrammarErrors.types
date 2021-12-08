@@ -171,6 +171,10 @@ function restCantHaveInitialiser(...x = [1,2,3]) {
 >2 : 2
 >3 : 3
 }
+function restCantHaveTrailingComma (...x,) {
+>restCantHaveTrailingComma : (...x: any[]) => void
+>x : any[]
+}
 ;({ ...{} } = {})
 >({ ...{} } = {}) : {}
 >{ ...{} } = {} : {}
@@ -205,7 +209,17 @@ const { e: eep, m: em, ...rest: noRestAllowed } = doom
 >noRestAllowed : { name: string; }
 >doom : { e: number; m: number; name: string; }
 
+const { e: erp, m: erm, ...noInitialiser = true } = doom
+>e : any
+>erp : number
+>m : any
+>erm : number
+>noInitialiser : true | { name: string; }
+>true : true
+>doom : { e: number; m: number; name: string; }
+
 // left-over parsing
+var;
 var x = 1 || 2 ?? 3
 >x : number
 >1 || 2 ?? 3 : 1 | 2 | 3
@@ -290,6 +304,12 @@ const noAssignment = {
 >assignment : any
 >1 : 1
 }
+var noTrailingComma = 1,;
+>noTrailingComma : number
+>1 : 1
+
+class MissingExtends extends { }
+>MissingExtends : MissingExtends
 
 // let/const mistakes
 const { e: ee };
@@ -369,6 +389,37 @@ for (const cantHaveInit = 1 in [1,2,3]) {
 >log : (...data: any[]) => void
 >cantHaveInit : string
 }
+for (let y, x of [1,2,3]) {
+>y : number
+>x : number
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    console.log(x)
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : number
+}
+for (let y, x in [1,2,3]) {
+>y : string
+>x : string
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    console.log(x)
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : string
+}
+
 // duplication mistakes
 var b
 >b : any
