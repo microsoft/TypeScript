@@ -41,6 +41,8 @@ class C {
 >log : (...data: any[]) => void
 >x : number
         }
+        return null
+>null : null
     }
     // modifier mistakes
     static constructor() { }
@@ -95,6 +97,22 @@ class C {
 >"constructor" : number
 >16 : 16
 }
+class {
+    missingName = true
+>missingName : boolean
+>true : true
+}
+class Doubler extends C extends C { }
+>Doubler : Doubler
+>C : C
+>C : C
+
+class Trebler extends C,C,C { }
+>Trebler : Trebler
+>C : C
+>C : C
+>C : C
+
 // #private mistakes
 #unrelated
 junk.#m
@@ -156,6 +174,34 @@ async const cantAsyncConst = 2
 async import 'assert'
 async export { CantAsyncClass }
 >CantAsyncClass : typeof CantAsyncClass
+
+export import 'fs'
+export export { C }
+>C : typeof C
+
+function nestedExports() {
+>nestedExports : () => void
+
+    export { staticParam }
+>staticParam : any
+
+    import 'fs'
+    export default 12
+}
+function outerStaticFunction() { 
+>outerStaticFunction : () => void
+
+    static function staticFunction() { }
+>staticFunction : () => void
+}
+const noStaticLiteralMethods = {
+>noStaticLiteralMethods : { m(): void; }
+>{    static m() {    }} : { m(): void; }
+
+    static m() {
+>m : () => void
+    }
+}
 
 // rest parameters
 function restMustBeLast(...x, y) {
@@ -471,6 +517,14 @@ catch (e) {
 >log : (...data: any[]) => void
 >e : 1
 }
+try {
+    throw 20
+>20 : 20
+}
+catch (e = 0) {
+>e : any
+>0 : 0
+}
 label: for (const x in [1,2,3]) {
 >label : any
 >x : string
@@ -569,4 +623,6 @@ const spreadDynamicImport = import(...[])
 >import(...[]) : Promise<any>
 >...[] : undefined
 >[] : undefined[]
+
+return
 
