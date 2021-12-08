@@ -178,7 +178,7 @@ node_modules/preact/jsx-runtime/index.d.ts
 index.tsx
   Matched by include pattern '**/*' in 'tsconfig.json'
 
-Found 1 error.
+Found 1 error in /users/username/projects/project/index.tsx:1
 
 
 

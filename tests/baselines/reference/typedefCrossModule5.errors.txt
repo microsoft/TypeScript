@@ -56,5 +56,8 @@
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
 !!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:2:7: 'Bar' was also declared here.
     
-Found 4 errors.
+Found 4 errors in 2 files.
 
+Errors  Files
+     2  tests/cases/conformance/jsdoc/mod1.js:1
+     2  tests/cases/conformance/jsdoc/mod2.js:1

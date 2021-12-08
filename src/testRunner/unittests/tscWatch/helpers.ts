@@ -204,13 +204,18 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    export function checkNormalBuildErrors(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], reportErrorSummary?: boolean) {
+    export function checkNormalBuildErrors(
+        host: WatchedSystem,
+        errors: readonly Diagnostic[] | readonly string[],
+        files: readonly ReportFileInError[],
+        reportErrorSummary?: boolean
+    ) {
         checkOutputErrors(
             host,
             [
                 ...map(errors, hostOutputDiagnostic),
                 ...reportErrorSummary ?
-                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, host.newLine))] :
+                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, files, host.newLine))] :
                     emptyArray
             ]
         );

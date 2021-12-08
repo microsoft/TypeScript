@@ -4156,6 +4156,12 @@
         "category": "Message",
         "code": 6040
     },
+    "Errors  Files": {
+        "_locale_notes": "There is a double space, and the order cannot be changed (they're table headings) ^",
+        "category": "Message",
+        "code": 6041
+    },
+    
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4934,6 +4940,18 @@
     "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
         "category": "Error",
         "code": 6258
+    },
+      "Found 1 error in {1}": {
+        "category": "Message",
+        "code": 6259
+    },
+    "Found {0} errors in 1 file.": {
+        "category": "Message",
+        "code": 6260
+    },
+    "Found {0} errors in {1} files.": {
+        "category": "Message",
+        "code": 6261
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
