@@ -60,7 +60,12 @@ namespace ts.projectSystem {
 
         it("works for paths close to the root", () => {
             const cache = createSymlinkCache("/", createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
-            cache.setSymlinkedDirectoryFromSymlinkedFile("/foo", "/one/two/foo"); // Used to crash, #44953
+            // Used to crash, #44953
+            cache.setSymlinksFromResolutions([], new Map([["foo", {
+                primary: true,
+                originalPath: "/foo",
+                resolvedFileName: "/one/two/foo",
+            }]]));
         });
     });
 

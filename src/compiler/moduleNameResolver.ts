@@ -436,7 +436,10 @@ namespace ts {
                 NodeResolutionFeatures.None;
     }
 
-    /** Does not try `@types/${packageName}` - use a second pass if needed. */
+    /**
+     * @internal
+     * Does not try `@types/${packageName}` - use a second pass if needed.
+     */
     export function resolvePackageNameToPackageJson(
         packageName: string,
         containingDirectory: string,
@@ -1566,14 +1569,21 @@ namespace ts {
         return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
     }
 
-    export function loadEntrypointsFromPackageJsonInfo(
+    /* @internal */
+    export function getEntrypointsFromPackageJsonInfo(
         packageJsonInfo: PackageJsonInfo,
         options: CompilerOptions,
         host: ModuleResolutionHost,
         cache: ModuleResolutionCache | undefined,
         resolveJs?: boolean,
-    ): PathAndExtension[] | undefined {
-        let resolutions: PathAndExtension[] | undefined;
+    ): string[] | false {
+        if (!resolveJs && packageJsonInfo.resolvedEntrypoints !== undefined) {
+            // Cached value excludes resolutions to JS files - those could be
+            // cached separately, but they're used rarely.
+            return packageJsonInfo.resolvedEntrypoints;
+        }
+
+        let entrypoints: string[] | undefined;
         const extensions = resolveJs ? Extensions.JavaScript : Extensions.TypeScript;
         const features = getDefaultNodeResolutionFeatures(options);
         const requireState: ModuleResolutionState = {
@@ -1592,19 +1602,7 @@ namespace ts {
             requireState,
             packageJsonInfo.packageJsonContent,
             packageJsonInfo.versionPaths);
-        resolutions = append(resolutions, requireResolution);
-
-        const importState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "types"] };
-        const importResolution = loadNodeModuleFromDirectoryWorker(
-            extensions,
-            packageJsonInfo.packageDirectory,
-            /*onlyRecordFailures*/ false,
-            importState,
-            packageJsonInfo.packageJsonContent,
-            packageJsonInfo.versionPaths);
-        if (importResolution) {
-            resolutions = appendIfUnique(resolutions, importResolution, (a, b) => a?.path === b?.path);
-        }
+        entrypoints = append(entrypoints, requireResolution?.path);
 
         if (features & NodeResolutionFeatures.Exports && packageJsonInfo.packageJsonContent.exports) {
             const exportState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "require", "types"] };
@@ -1615,12 +1613,12 @@ namespace ts {
                 extensions);
             if (exportResolutions) {
                 for (const resolution of exportResolutions) {
-                    resolutions = appendIfUnique(resolutions, resolution, (a, b) => a?.path === b?.path);
+                    entrypoints = appendIfUnique(entrypoints, resolution.path);
                 }
             }
         }
 
-        return resolutions;
+        return packageJsonInfo.resolvedEntrypoints = entrypoints || false;
     }
 
     function loadEntrypointsFromExportMap(
@@ -1677,6 +1675,8 @@ namespace ts {
         packageDirectory: string;
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
+        /** false: resolved to nothing. undefined: not yet resolved */
+        resolvedEntrypoints: string[] | false | undefined;
     }
 
     /**
@@ -1742,7 +1742,7 @@ namespace ts {
                 trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
             const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
-            const result = { packageDirectory, packageJsonContent, versionPaths };
+            const result = { packageDirectory, packageJsonContent, versionPaths, resolvedEntrypoints: undefined };
             state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
             return result;
         }
