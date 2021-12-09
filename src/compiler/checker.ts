@@ -34018,7 +34018,7 @@ namespace ts {
             }
             switch (kind) {
                 case SyntaxKind.Identifier:
-                    return checkIdentifier(node as Identifier, checkMode);
+                    return isThisInTypeQuery(node) ? checkThisExpression(node) : checkIdentifier(node as Identifier, checkMode);
                 case SyntaxKind.PrivateIdentifier:
                     return checkPrivateIdentifierExpression(node as PrivateIdentifier);
                 case SyntaxKind.ThisKeyword:
@@ -41072,7 +41072,10 @@ namespace ts {
                 case SyntaxKind.PrivateIdentifier:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
-                    return getSymbolOfNameOrPropertyAccessExpression(node as EntityName | PrivateIdentifier | PropertyAccessExpression);
+                    if (!isThisInTypeQuery(node)) {
+                        return getSymbolOfNameOrPropertyAccessExpression(node as EntityName | PrivateIdentifier | PropertyAccessExpression);
+                    }
+                    // falls through
 
                 case SyntaxKind.ThisKeyword:
                     const container = getThisContainer(node, /*includeArrowFunctions*/ false);
