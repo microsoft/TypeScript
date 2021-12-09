@@ -1,6 +1,9 @@
 //// [destructuringUnspreadableIntoRest.ts]
 class A {
-    constructor(public normal: string) {}
+    constructor(
+        public publicProp: string,
+        private privateProp: string,
+    ) {}
 
     get getter(): number {
         return 1;
@@ -9,10 +12,20 @@ class A {
     set setter(_v: number) {}
 
     method() {
-        const {           ...rest1 } = this;
-        const {           ...rest2 } = this as A;
-        const { normal: _1, ...rest3 } = this;
-        const { normal: _2, ...rest4 } = this as A;
+        const {                 ...rest1 } = this;
+        const {                 ...rest2 } = this as A;
+        const { publicProp: _1, ...rest3 } = this;
+        const { publicProp: _2, ...rest4 } = this as A;
+
+        rest1.publicProp;
+        rest2.publicProp;
+        rest3.publicProp;
+        rest4.publicProp;
+
+        rest1.privateProp;
+        rest2.privateProp;
+        rest3.privateProp;
+        rest4.privateProp;
 
         rest1.getter;
         rest2.getter;
@@ -32,10 +45,20 @@ class A {
 }
 
 function destructure<T extends A>(x: T) {
-    const {           ...rest1 } = x;
-    const {           ...rest2 } = x as A;
-    const { normal: _1, ...rest3 } = x;
-    const { normal: _2, ...rest4 } = x as A;
+    const {                 ...rest1 } = x;
+    const {                 ...rest2 } = x as A;
+    const { publicProp: _1, ...rest3 } = x;
+    const { publicProp: _2, ...rest4 } = x as A;
+
+    rest1.publicProp;
+    rest2.publicProp;
+    rest3.publicProp;
+    rest4.publicProp;
+
+    rest1.privateProp;
+    rest2.privateProp;
+    rest3.privateProp;
+    rest4.privateProp;
 
     rest1.getter;
     rest2.getter;
@@ -66,27 +89,28 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var A = /** @class */ (function () {
-    function A(normal) {
-        this.normal = normal;
+class A {
+    constructor(publicProp, privateProp) {
+        this.publicProp = publicProp;
+        this.privateProp = privateProp;
     }
-    Object.defineProperty(A.prototype, "getter", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(A.prototype, "setter", {
-        set: function (_v) { },
-        enumerable: false,
-        configurable: true
-    });
-    A.prototype.method = function () {
-        var rest1 = __rest(this, []);
-        var rest2 = __rest(this, []);
-        var _a = this, _1 = _a.normal, rest3 = __rest(_a, ["normal"]);
-        var _b = this, _2 = _b.normal, rest4 = __rest(_b, ["normal"]);
+    get getter() {
+        return 1;
+    }
+    set setter(_v) { }
+    method() {
+        const rest1 = __rest(this, []);
+        const rest2 = __rest(this, []);
+        const _a = this, { publicProp: _1 } = _a, rest3 = __rest(_a, ["publicProp"]);
+        const _b = this, { publicProp: _2 } = _b, rest4 = __rest(_b, ["publicProp"]);
+        rest1.publicProp;
+        rest2.publicProp;
+        rest3.publicProp;
+        rest4.publicProp;
+        rest1.privateProp;
+        rest2.privateProp;
+        rest3.privateProp;
+        rest4.privateProp;
         rest1.getter;
         rest2.getter;
         rest3.getter;
@@ -99,14 +123,21 @@ var A = /** @class */ (function () {
         rest2.method;
         rest3.method;
         rest4.method;
-    };
-    return A;
-}());
+    }
+}
 function destructure(x) {
-    var rest1 = __rest(x, []);
-    var rest2 = __rest(x, []);
-    var _1 = x.normal, rest3 = __rest(x, ["normal"]);
-    var _a = x, _2 = _a.normal, rest4 = __rest(_a, ["normal"]);
+    const rest1 = __rest(x, []);
+    const rest2 = __rest(x, []);
+    const { publicProp: _1 } = x, rest3 = __rest(x, ["publicProp"]);
+    const _a = x, { publicProp: _2 } = _a, rest4 = __rest(_a, ["publicProp"]);
+    rest1.publicProp;
+    rest2.publicProp;
+    rest3.publicProp;
+    rest4.publicProp;
+    rest1.privateProp;
+    rest2.privateProp;
+    rest3.privateProp;
+    rest4.privateProp;
     rest1.getter;
     rest2.getter;
     rest3.getter;

@@ -2,8 +2,14 @@
 class A {
 >A : A
 
-    constructor(public normal: string) {}
->normal : string
+    constructor(
+        public publicProp: string,
+>publicProp : string
+
+        private privateProp: string,
+>privateProp : string
+
+    ) {}
 
     get getter(): number {
 >getter : number
@@ -19,27 +25,67 @@ class A {
     method() {
 >method : () => void
 
-        const {           ...rest1 } = this;
+        const {                 ...rest1 } = this;
 >rest1 : Omit<this, "getter" | "setter" | "method">
 >this : this
 
-        const {           ...rest2 } = this as A;
->rest2 : { normal: string; }
+        const {                 ...rest2 } = this as A;
+>rest2 : { publicProp: string; }
 >this as A : A
 >this : this
 
-        const { normal: _1, ...rest3 } = this;
->normal : any
+        const { publicProp: _1, ...rest3 } = this;
+>publicProp : any
 >_1 : string
->rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
 >this : this
 
-        const { normal: _2, ...rest4 } = this as A;
->normal : any
+        const { publicProp: _2, ...rest4 } = this as A;
+>publicProp : any
 >_2 : string
 >rest4 : {}
 >this as A : A
 >this : this
+
+        rest1.publicProp;
+>rest1.publicProp : this["publicProp"]
+>rest1 : Omit<this, "getter" | "setter" | "method">
+>publicProp : this["publicProp"]
+
+        rest2.publicProp;
+>rest2.publicProp : string
+>rest2 : { publicProp: string; }
+>publicProp : string
+
+        rest3.publicProp;
+>rest3.publicProp : any
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>publicProp : any
+
+        rest4.publicProp;
+>rest4.publicProp : any
+>rest4 : {}
+>publicProp : any
+
+        rest1.privateProp;
+>rest1.privateProp : any
+>rest1 : Omit<this, "getter" | "setter" | "method">
+>privateProp : any
+
+        rest2.privateProp;
+>rest2.privateProp : any
+>rest2 : { publicProp: string; }
+>privateProp : any
+
+        rest3.privateProp;
+>rest3.privateProp : any
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>privateProp : any
+
+        rest4.privateProp;
+>rest4.privateProp : any
+>rest4 : {}
+>privateProp : any
 
         rest1.getter;
 >rest1.getter : any
@@ -48,12 +94,12 @@ class A {
 
         rest2.getter;
 >rest2.getter : any
->rest2 : { normal: string; }
+>rest2 : { publicProp: string; }
 >getter : any
 
         rest3.getter;
 >rest3.getter : any
->rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
 >getter : any
 
         rest4.getter;
@@ -68,12 +114,12 @@ class A {
 
         rest2.setter;
 >rest2.setter : any
->rest2 : { normal: string; }
+>rest2 : { publicProp: string; }
 >setter : any
 
         rest3.setter;
 >rest3.setter : any
->rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
 >setter : any
 
         rest4.setter;
@@ -88,12 +134,12 @@ class A {
 
         rest2.method;
 >rest2.method : any
->rest2 : { normal: string; }
+>rest2 : { publicProp: string; }
 >method : any
 
         rest3.method;
 >rest3.method : any
->rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
 >method : any
 
         rest4.method;
@@ -107,27 +153,67 @@ function destructure<T extends A>(x: T) {
 >destructure : <T extends A>(x: T) => void
 >x : T
 
-    const {           ...rest1 } = x;
+    const {                 ...rest1 } = x;
 >rest1 : Omit<T, "getter" | "setter" | "method">
 >x : T
 
-    const {           ...rest2 } = x as A;
->rest2 : { normal: string; }
+    const {                 ...rest2 } = x as A;
+>rest2 : { publicProp: string; }
 >x as A : A
 >x : T
 
-    const { normal: _1, ...rest3 } = x;
->normal : any
+    const { publicProp: _1, ...rest3 } = x;
+>publicProp : any
 >_1 : string
->rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
 >x : T
 
-    const { normal: _2, ...rest4 } = x as A;
->normal : any
+    const { publicProp: _2, ...rest4 } = x as A;
+>publicProp : any
 >_2 : string
 >rest4 : {}
 >x as A : A
 >x : T
+
+    rest1.publicProp;
+>rest1.publicProp : T["publicProp"]
+>rest1 : Omit<T, "getter" | "setter" | "method">
+>publicProp : T["publicProp"]
+
+    rest2.publicProp;
+>rest2.publicProp : string
+>rest2 : { publicProp: string; }
+>publicProp : string
+
+    rest3.publicProp;
+>rest3.publicProp : any
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>publicProp : any
+
+    rest4.publicProp;
+>rest4.publicProp : any
+>rest4 : {}
+>publicProp : any
+
+    rest1.privateProp;
+>rest1.privateProp : any
+>rest1 : Omit<T, "getter" | "setter" | "method">
+>privateProp : any
+
+    rest2.privateProp;
+>rest2.privateProp : any
+>rest2 : { publicProp: string; }
+>privateProp : any
+
+    rest3.privateProp;
+>rest3.privateProp : any
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>privateProp : any
+
+    rest4.privateProp;
+>rest4.privateProp : any
+>rest4 : {}
+>privateProp : any
 
     rest1.getter;
 >rest1.getter : any
@@ -136,12 +222,12 @@ function destructure<T extends A>(x: T) {
 
     rest2.getter;
 >rest2.getter : any
->rest2 : { normal: string; }
+>rest2 : { publicProp: string; }
 >getter : any
 
     rest3.getter;
 >rest3.getter : any
->rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
 >getter : any
 
     rest4.getter;
@@ -156,12 +242,12 @@ function destructure<T extends A>(x: T) {
 
     rest2.setter;
 >rest2.setter : any
->rest2 : { normal: string; }
+>rest2 : { publicProp: string; }
 >setter : any
 
     rest3.setter;
 >rest3.setter : any
->rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
 >setter : any
 
     rest4.setter;
@@ -176,12 +262,12 @@ function destructure<T extends A>(x: T) {
 
     rest2.method;
 >rest2.method : any
->rest2 : { normal: string; }
+>rest2 : { publicProp: string; }
 >method : any
 
     rest3.method;
 >rest3.method : any
->rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
 >method : any
 
     rest4.method;
