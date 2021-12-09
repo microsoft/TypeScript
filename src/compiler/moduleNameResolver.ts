@@ -1205,11 +1205,6 @@ namespace ts {
     }
 
     /* @internal */
-    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost) {
-        return tryResolveJSModuleWorker(moduleName, initialDir, host).resolvedModule;
-    }
-
-    /* @internal */
     enum NodeResolutionFeatures {
         None = 0,
         // resolving `#local` names in your own package.json
