@@ -1,0 +1,7 @@
+=== tests/cases/compiler/check.js ===
+module m2 {
+>m2 : Symbol(m2, Decl(check.js, 0, 0))
+
+    import m3 = require("use_glo_M1_public");
+>m3 : Symbol(m3, Decl(check.js, 0, 11))
+}
