@@ -61,3 +61,52 @@ class A {
     }
 }
 
+function destructure<T extends A>(x: T) {
+>destructure : <T extends A>(x: T) => void
+>x : T
+
+    const {           ...rest1 } = x;
+>rest1 : T
+>x : T
+
+    const {           ...rest2 } = x as A;
+>rest2 : { foo: string; }
+>x as A : A
+>x : T
+
+    const { foo: _f1, ...rest3 } = x;
+>foo : any
+>_f1 : string
+>rest3 : Omit<T, "foo">
+>x : T
+
+    const { foo: _f2, ...rest4 } = x as A;
+>foo : any
+>_f2 : string
+>rest4 : {}
+>x as A : A
+>x : T
+
+    // Rest destructuring drops properties provided by getters.
+    // "bar" should not be present in any of these.
+    rest1.bar;
+>rest1.bar : number
+>rest1 : T
+>bar : number
+
+    rest2.bar;
+>rest2.bar : any
+>rest2 : { foo: string; }
+>bar : any
+
+    rest3.bar;
+>rest3.bar : T["bar"]
+>rest3 : Omit<T, "foo">
+>bar : T["bar"]
+
+    rest4.bar;
+>rest4.bar : any
+>rest4 : {}
+>bar : any
+}
+

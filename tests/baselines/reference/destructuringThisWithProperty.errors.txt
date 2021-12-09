@@ -3,9 +3,11 @@ tests/cases/compiler/destructuringThisWithProperty.ts(16,15): error TS2339: Prop
 tests/cases/compiler/destructuringThisWithProperty.ts(17,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
 tests/cases/compiler/destructuringThisWithProperty.ts(18,15): error TS2339: Property 'bar' does not exist on type '{}'.
 tests/cases/compiler/destructuringThisWithProperty.ts(19,15): error TS2339: Property 'bar' does not exist on type '{}'.
+tests/cases/compiler/destructuringThisWithProperty.ts(32,11): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringThisWithProperty.ts(34,11): error TS2339: Property 'bar' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/destructuringThisWithProperty.ts (5 errors) ====
+==== tests/cases/compiler/destructuringThisWithProperty.ts (7 errors) ====
     class A {
         constructor(public foo: string) {}
     
@@ -36,5 +38,23 @@ tests/cases/compiler/destructuringThisWithProperty.ts(19,15): error TS2339: Prop
                   ~~~
 !!! error TS2339: Property 'bar' does not exist on type '{}'.
         }
+    }
+    
+    function destructure<T extends A>(x: T) {
+        const {           ...rest1 } = x;
+        const {           ...rest2 } = x as A;
+        const { foo: _f1, ...rest3 } = x;
+        const { foo: _f2, ...rest4 } = x as A;
+    
+        // Rest destructuring drops properties provided by getters.
+        // "bar" should not be present in any of these.
+        rest1.bar;
+        rest2.bar;
+              ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+        rest3.bar;
+        rest4.bar;
+              ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{}'.
     }
     
