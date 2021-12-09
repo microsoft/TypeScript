@@ -1,5 +1,6 @@
 === tests/cases/compiler/check.js ===
-module m2 {
-    import m3 = require("use_glo_M1_public");
->m3 : any
+function container() {
+>container : () => void
+
+    import "fs";
 }

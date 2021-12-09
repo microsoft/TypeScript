@@ -3,6 +3,6 @@
 // @checkJs: true
 
 // @filename: check.js
-module m2 {
-    import m3 = require("use_glo_M1_public");
+function container() {
+    import "fs";
 }

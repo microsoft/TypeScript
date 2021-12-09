@@ -1,12 +1,9 @@
-tests/cases/compiler/check.js(1,8): error TS8006: 'module' declarations can only be used in TypeScript files.
-tests/cases/compiler/check.js(2,25): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/check.js(2,5): error TS18042: An import declaration can only be used at the top level of a module.
 
 
-==== tests/cases/compiler/check.js (2 errors) ====
-    module m2 {
-           ~~
-!!! error TS8006: 'module' declarations can only be used in TypeScript files.
-        import m3 = require("use_glo_M1_public");
-                            ~~~~~~~~~~~~~~~~~~~
-!!! error TS1147: Import declarations in a namespace cannot reference a module.
+==== tests/cases/compiler/check.js (1 errors) ====
+    function container() {
+        import "fs";
+        ~~~~~~
+!!! error TS18042: An import declaration can only be used at the top level of a module.
     }
