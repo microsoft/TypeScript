@@ -16,7 +16,7 @@ class A {
 >func : () => void
 
         const {           ...rest1 } = this;
->rest1 : this
+>rest1 : { foo: string; }
 >this : this
 
         const {           ...rest2 } = this as A;
@@ -27,7 +27,7 @@ class A {
         const { foo: _f1, ...rest3 } = this;
 >foo : any
 >_f1 : string
->rest3 : Omit<this, "foo">
+>rest3 : {}
 >this : this
 
         const { foo: _f2, ...rest4 } = this as A;
@@ -40,9 +40,9 @@ class A {
         // Rest destructuring drops properties provided by getters.
         // "bar" should not be present in any of these.
         rest1.bar;
->rest1.bar : number
->rest1 : this
->bar : number
+>rest1.bar : any
+>rest1 : { foo: string; }
+>bar : any
 
         rest2.bar;
 >rest2.bar : any
@@ -50,9 +50,9 @@ class A {
 >bar : any
 
         rest3.bar;
->rest3.bar : this["bar"]
->rest3 : Omit<this, "foo">
->bar : this["bar"]
+>rest3.bar : any
+>rest3 : {}
+>bar : any
 
         rest4.bar;
 >rest4.bar : any

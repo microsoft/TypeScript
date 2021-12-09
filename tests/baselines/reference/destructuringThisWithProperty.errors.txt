@@ -1,9 +1,11 @@
 tests/cases/compiler/destructuringThisWithProperty.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/destructuringThisWithProperty.ts(16,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
 tests/cases/compiler/destructuringThisWithProperty.ts(17,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringThisWithProperty.ts(18,15): error TS2339: Property 'bar' does not exist on type '{}'.
 tests/cases/compiler/destructuringThisWithProperty.ts(19,15): error TS2339: Property 'bar' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/destructuringThisWithProperty.ts (3 errors) ====
+==== tests/cases/compiler/destructuringThisWithProperty.ts (5 errors) ====
     class A {
         constructor(public foo: string) {}
     
@@ -22,10 +24,14 @@ tests/cases/compiler/destructuringThisWithProperty.ts(19,15): error TS2339: Prop
             // Rest destructuring drops properties provided by getters.
             // "bar" should not be present in any of these.
             rest1.bar;
+                  ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
             rest2.bar;
                   ~~~
 !!! error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
             rest3.bar;
+                  ~~~
+!!! error TS2339: Property 'bar' does not exist on type '{}'.
             rest4.bar;
                   ~~~
 !!! error TS2339: Property 'bar' does not exist on type '{}'.

@@ -8465,7 +8465,7 @@ namespace ts {
                 return mapType(source, t => getRestType(t, properties, symbol));
             }
             const omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
-            if (isGenericObjectType(source) || isGenericIndexType(omitKeyType)) {
+            if (!isThisTypeParameter(source) && (isGenericObjectType(source) || isGenericIndexType(omitKeyType))) {
                 if (omitKeyType.flags & TypeFlags.Never) {
                     return source;
                 }

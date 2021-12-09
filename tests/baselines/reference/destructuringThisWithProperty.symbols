@@ -39,17 +39,13 @@ class A {
         // Rest destructuring drops properties provided by getters.
         // "bar" should not be present in any of these.
         rest1.bar;
->rest1.bar : Symbol(A.bar, Decl(destructuringThisWithProperty.ts, 1, 38))
 >rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 8, 15))
->bar : Symbol(A.bar, Decl(destructuringThisWithProperty.ts, 1, 38))
 
         rest2.bar;
 >rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 9, 15))
 
         rest3.bar;
->rest3.bar : Symbol(bar, Decl(destructuringThisWithProperty.ts, 1, 38))
 >rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 10, 25))
->bar : Symbol(bar, Decl(destructuringThisWithProperty.ts, 1, 38))
 
         rest4.bar;
 >rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 11, 25))
