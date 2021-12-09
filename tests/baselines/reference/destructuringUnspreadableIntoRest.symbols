@@ -2,117 +2,145 @@
 class A {
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
-    constructor(public foo: string) {}
->foo : Symbol(A.foo, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+    constructor(public normal: string) {}
+>normal : Symbol(A.normal, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
 
-    get bar(): number {
->bar : Symbol(A.bar, Decl(destructuringUnspreadableIntoRest.ts, 1, 38))
+    get getter(): number {
+>getter : Symbol(A.getter, Decl(destructuringUnspreadableIntoRest.ts, 1, 41))
 
         return 1;
     }
 
-    func() {
->func : Symbol(A.func, Decl(destructuringUnspreadableIntoRest.ts, 5, 5))
+    set setter(_v: number) {}
+>setter : Symbol(A.setter, Decl(destructuringUnspreadableIntoRest.ts, 5, 5))
+>_v : Symbol(_v, Decl(destructuringUnspreadableIntoRest.ts, 7, 15))
+
+    method() {
+>method : Symbol(A.method, Decl(destructuringUnspreadableIntoRest.ts, 7, 29))
 
         const {           ...rest1 } = this;
->rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 8, 15))
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 10, 15))
 >this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
         const {           ...rest2 } = this as A;
->rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 9, 15))
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 11, 15))
 >this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
-        const { foo: _f1, ...rest3 } = this;
->foo : Symbol(A.foo, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
->_f1 : Symbol(_f1, Decl(destructuringUnspreadableIntoRest.ts, 10, 15))
->rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 10, 25))
+        const { normal: _1, ...rest3 } = this;
+>normal : Symbol(A.normal, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_1 : Symbol(_1, Decl(destructuringUnspreadableIntoRest.ts, 12, 15))
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 12, 27))
 >this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
-        const { foo: _f2, ...rest4 } = this as A;
->foo : Symbol(A.foo, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
->_f2 : Symbol(_f2, Decl(destructuringUnspreadableIntoRest.ts, 11, 15))
->rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 11, 25))
+        const { normal: _2, ...rest4 } = this as A;
+>normal : Symbol(A.normal, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_2 : Symbol(_2, Decl(destructuringUnspreadableIntoRest.ts, 13, 15))
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 13, 27))
 >this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
-        rest1.bar;
->rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 8, 15))
+        rest1.getter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 10, 15))
 
-        rest2.bar;
->rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 9, 15))
+        rest2.getter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 11, 15))
 
-        rest3.bar;
->rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 10, 25))
+        rest3.getter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 12, 27))
 
-        rest4.bar;
->rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 11, 25))
+        rest4.getter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 13, 27))
 
-        rest1.func;
->rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 8, 15))
+        rest1.setter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 10, 15))
 
-        rest2.func;
->rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 9, 15))
+        rest2.setter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 11, 15))
 
-        rest3.func;
->rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 10, 25))
+        rest3.setter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 12, 27))
 
-        rest4.func;
->rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 11, 25))
+        rest4.setter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 13, 27))
+
+        rest1.method;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 10, 15))
+
+        rest2.method;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 11, 15))
+
+        rest3.method;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 12, 27))
+
+        rest4.method;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 13, 27))
     }
 }
 
 function destructure<T extends A>(x: T) {
->destructure : Symbol(destructure, Decl(destructuringUnspreadableIntoRest.ts, 23, 1))
->T : Symbol(T, Decl(destructuringUnspreadableIntoRest.ts, 25, 21))
+>destructure : Symbol(destructure, Decl(destructuringUnspreadableIntoRest.ts, 30, 1))
+>T : Symbol(T, Decl(destructuringUnspreadableIntoRest.ts, 32, 21))
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
->x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 25, 34))
->T : Symbol(T, Decl(destructuringUnspreadableIntoRest.ts, 25, 21))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 32, 34))
+>T : Symbol(T, Decl(destructuringUnspreadableIntoRest.ts, 32, 21))
 
     const {           ...rest1 } = x;
->rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 26, 11))
->x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 25, 34))
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 33, 11))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 32, 34))
 
     const {           ...rest2 } = x as A;
->rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 27, 11))
->x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 25, 34))
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 34, 11))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 32, 34))
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
-    const { foo: _f1, ...rest3 } = x;
->foo : Symbol(A.foo, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
->_f1 : Symbol(_f1, Decl(destructuringUnspreadableIntoRest.ts, 28, 11))
->rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 28, 21))
->x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 25, 34))
+    const { normal: _1, ...rest3 } = x;
+>normal : Symbol(A.normal, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_1 : Symbol(_1, Decl(destructuringUnspreadableIntoRest.ts, 35, 11))
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 35, 23))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 32, 34))
 
-    const { foo: _f2, ...rest4 } = x as A;
->foo : Symbol(A.foo, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
->_f2 : Symbol(_f2, Decl(destructuringUnspreadableIntoRest.ts, 29, 11))
->rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 29, 21))
->x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 25, 34))
+    const { normal: _2, ...rest4 } = x as A;
+>normal : Symbol(A.normal, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_2 : Symbol(_2, Decl(destructuringUnspreadableIntoRest.ts, 36, 11))
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 36, 23))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 32, 34))
 >A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
 
-    rest1.bar;
->rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 26, 11))
+    rest1.getter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 33, 11))
 
-    rest2.bar;
->rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 27, 11))
+    rest2.getter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 34, 11))
 
-    rest3.bar;
->rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 28, 21))
+    rest3.getter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 35, 23))
 
-    rest4.bar;
->rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 29, 21))
+    rest4.getter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 36, 23))
 
-    rest1.func;
->rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 26, 11))
+    rest1.setter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 33, 11))
 
-    rest2.func;
->rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 27, 11))
+    rest2.setter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 34, 11))
 
-    rest3.func;
->rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 28, 21))
+    rest3.setter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 35, 23))
 
-    rest4.func;
->rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 29, 21))
+    rest4.setter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 36, 23))
+
+    rest1.method;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 33, 11))
+
+    rest2.method;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 34, 11))
+
+    rest3.method;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 35, 23))
+
+    rest4.method;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 36, 23))
 }
 

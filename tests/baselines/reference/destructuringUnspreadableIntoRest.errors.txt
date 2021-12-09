@@ -1,96 +1,135 @@
 tests/cases/compiler/destructuringUnspreadableIntoRest.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(14,15): error TS2339: Property 'bar' does not exist on type 'Omit<this, "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(15,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(16,15): error TS2339: Property 'bar' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(17,15): error TS2339: Property 'bar' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(19,15): error TS2339: Property 'func' does not exist on type 'Omit<this, "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(20,15): error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(21,15): error TS2339: Property 'func' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(22,15): error TS2339: Property 'func' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(32,11): error TS2339: Property 'bar' does not exist on type 'Omit<T, "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(33,11): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(34,11): error TS2339: Property 'bar' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(35,11): error TS2339: Property 'bar' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(37,11): error TS2339: Property 'func' does not exist on type 'Omit<T, "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(38,11): error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(39,11): error TS2339: Property 'func' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(40,11): error TS2339: Property 'func' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(16,15): error TS2339: Property 'getter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(17,15): error TS2339: Property 'getter' does not exist on type '{ normal: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(18,15): error TS2339: Property 'getter' does not exist on type 'Omit<this, "normal" | "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(19,15): error TS2339: Property 'getter' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(21,15): error TS2339: Property 'setter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(22,15): error TS2339: Property 'setter' does not exist on type '{ normal: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(23,15): error TS2339: Property 'setter' does not exist on type 'Omit<this, "normal" | "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(24,15): error TS2339: Property 'setter' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(26,15): error TS2339: Property 'method' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(27,15): error TS2339: Property 'method' does not exist on type '{ normal: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(28,15): error TS2339: Property 'method' does not exist on type 'Omit<this, "normal" | "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(29,15): error TS2339: Property 'method' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(39,11): error TS2339: Property 'getter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(40,11): error TS2339: Property 'getter' does not exist on type '{ normal: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(41,11): error TS2339: Property 'getter' does not exist on type 'Omit<T, "normal" | "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(42,11): error TS2339: Property 'getter' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(44,11): error TS2339: Property 'setter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(45,11): error TS2339: Property 'setter' does not exist on type '{ normal: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(46,11): error TS2339: Property 'setter' does not exist on type 'Omit<T, "normal" | "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(47,11): error TS2339: Property 'setter' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(49,11): error TS2339: Property 'method' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(50,11): error TS2339: Property 'method' does not exist on type '{ normal: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(51,11): error TS2339: Property 'method' does not exist on type 'Omit<T, "normal" | "getter" | "setter" | "method">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(52,11): error TS2339: Property 'method' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/destructuringUnspreadableIntoRest.ts (17 errors) ====
+==== tests/cases/compiler/destructuringUnspreadableIntoRest.ts (26 errors) ====
     class A {
-        constructor(public foo: string) {}
+        constructor(public normal: string) {}
     
-        get bar(): number {
-            ~~~
+        get getter(): number {
+            ~~~~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return 1;
         }
     
-        func() {
+        set setter(_v: number) {}
+            ~~~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    
+        method() {
             const {           ...rest1 } = this;
             const {           ...rest2 } = this as A;
-            const { foo: _f1, ...rest3 } = this;
-            const { foo: _f2, ...rest4 } = this as A;
+            const { normal: _1, ...rest3 } = this;
+            const { normal: _2, ...rest4 } = this as A;
     
-            rest1.bar;
-                  ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'Omit<this, "bar" | "func">'.
-            rest2.bar;
-                  ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
-            rest3.bar;
-                  ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
-            rest4.bar;
-                  ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{}'.
+            rest1.getter;
+                  ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+            rest2.getter;
+                  ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type '{ normal: string; }'.
+            rest3.getter;
+                  ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type 'Omit<this, "normal" | "getter" | "setter" | "method">'.
+            rest4.getter;
+                  ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type '{}'.
     
-            rest1.func;
-                  ~~~~
-!!! error TS2339: Property 'func' does not exist on type 'Omit<this, "bar" | "func">'.
-            rest2.func;
-                  ~~~~
-!!! error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
-            rest3.func;
-                  ~~~~
-!!! error TS2339: Property 'func' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
-            rest4.func;
-                  ~~~~
-!!! error TS2339: Property 'func' does not exist on type '{}'.
+            rest1.setter;
+                  ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+            rest2.setter;
+                  ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type '{ normal: string; }'.
+            rest3.setter;
+                  ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type 'Omit<this, "normal" | "getter" | "setter" | "method">'.
+            rest4.setter;
+                  ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type '{}'.
+    
+            rest1.method;
+                  ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+            rest2.method;
+                  ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type '{ normal: string; }'.
+            rest3.method;
+                  ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type 'Omit<this, "normal" | "getter" | "setter" | "method">'.
+            rest4.method;
+                  ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type '{}'.
         }
     }
     
     function destructure<T extends A>(x: T) {
         const {           ...rest1 } = x;
         const {           ...rest2 } = x as A;
-        const { foo: _f1, ...rest3 } = x;
-        const { foo: _f2, ...rest4 } = x as A;
+        const { normal: _1, ...rest3 } = x;
+        const { normal: _2, ...rest4 } = x as A;
     
-        rest1.bar;
-              ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'Omit<T, "bar" | "func">'.
-        rest2.bar;
-              ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
-        rest3.bar;
-              ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
-        rest4.bar;
-              ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{}'.
+        rest1.getter;
+              ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+        rest2.getter;
+              ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type '{ normal: string; }'.
+        rest3.getter;
+              ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type 'Omit<T, "normal" | "getter" | "setter" | "method">'.
+        rest4.getter;
+              ~~~~~~
+!!! error TS2339: Property 'getter' does not exist on type '{}'.
     
-        rest1.func;
-              ~~~~
-!!! error TS2339: Property 'func' does not exist on type 'Omit<T, "bar" | "func">'.
-        rest2.func;
-              ~~~~
-!!! error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
-        rest3.func;
-              ~~~~
-!!! error TS2339: Property 'func' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
-        rest4.func;
-              ~~~~
-!!! error TS2339: Property 'func' does not exist on type '{}'.
+        rest1.setter;
+              ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+        rest2.setter;
+              ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type '{ normal: string; }'.
+        rest3.setter;
+              ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type 'Omit<T, "normal" | "getter" | "setter" | "method">'.
+        rest4.setter;
+              ~~~~~~
+!!! error TS2339: Property 'setter' does not exist on type '{}'.
+    
+        rest1.method;
+              ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+        rest2.method;
+              ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type '{ normal: string; }'.
+        rest3.method;
+              ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type 'Omit<T, "normal" | "getter" | "setter" | "method">'.
+        rest4.method;
+              ~~~~~~
+!!! error TS2339: Property 'method' does not exist on type '{}'.
     }
     

@@ -2,80 +2,104 @@
 class A {
 >A : A
 
-    constructor(public foo: string) {}
->foo : string
+    constructor(public normal: string) {}
+>normal : string
 
-    get bar(): number {
->bar : number
+    get getter(): number {
+>getter : number
 
         return 1;
 >1 : 1
     }
 
-    func() {
->func : () => void
+    set setter(_v: number) {}
+>setter : number
+>_v : number
+
+    method() {
+>method : () => void
 
         const {           ...rest1 } = this;
->rest1 : Omit<this, "bar" | "func">
+>rest1 : Omit<this, "getter" | "setter" | "method">
 >this : this
 
         const {           ...rest2 } = this as A;
->rest2 : { foo: string; }
+>rest2 : { normal: string; }
 >this as A : A
 >this : this
 
-        const { foo: _f1, ...rest3 } = this;
->foo : any
->_f1 : string
->rest3 : Omit<this, "foo" | "bar" | "func">
+        const { normal: _1, ...rest3 } = this;
+>normal : any
+>_1 : string
+>rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
 >this : this
 
-        const { foo: _f2, ...rest4 } = this as A;
->foo : any
->_f2 : string
+        const { normal: _2, ...rest4 } = this as A;
+>normal : any
+>_2 : string
 >rest4 : {}
 >this as A : A
 >this : this
 
-        rest1.bar;
->rest1.bar : any
->rest1 : Omit<this, "bar" | "func">
->bar : any
+        rest1.getter;
+>rest1.getter : any
+>rest1 : Omit<this, "getter" | "setter" | "method">
+>getter : any
 
-        rest2.bar;
->rest2.bar : any
->rest2 : { foo: string; }
->bar : any
+        rest2.getter;
+>rest2.getter : any
+>rest2 : { normal: string; }
+>getter : any
 
-        rest3.bar;
->rest3.bar : any
->rest3 : Omit<this, "foo" | "bar" | "func">
->bar : any
+        rest3.getter;
+>rest3.getter : any
+>rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>getter : any
 
-        rest4.bar;
->rest4.bar : any
+        rest4.getter;
+>rest4.getter : any
 >rest4 : {}
->bar : any
+>getter : any
 
-        rest1.func;
->rest1.func : any
->rest1 : Omit<this, "bar" | "func">
->func : any
+        rest1.setter;
+>rest1.setter : any
+>rest1 : Omit<this, "getter" | "setter" | "method">
+>setter : any
 
-        rest2.func;
->rest2.func : any
->rest2 : { foo: string; }
->func : any
+        rest2.setter;
+>rest2.setter : any
+>rest2 : { normal: string; }
+>setter : any
 
-        rest3.func;
->rest3.func : any
->rest3 : Omit<this, "foo" | "bar" | "func">
->func : any
+        rest3.setter;
+>rest3.setter : any
+>rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>setter : any
 
-        rest4.func;
->rest4.func : any
+        rest4.setter;
+>rest4.setter : any
 >rest4 : {}
->func : any
+>setter : any
+
+        rest1.method;
+>rest1.method : any
+>rest1 : Omit<this, "getter" | "setter" | "method">
+>method : any
+
+        rest2.method;
+>rest2.method : any
+>rest2 : { normal: string; }
+>method : any
+
+        rest3.method;
+>rest3.method : any
+>rest3 : Omit<this, "normal" | "getter" | "setter" | "method">
+>method : any
+
+        rest4.method;
+>rest4.method : any
+>rest4 : {}
+>method : any
     }
 }
 
@@ -84,65 +108,85 @@ function destructure<T extends A>(x: T) {
 >x : T
 
     const {           ...rest1 } = x;
->rest1 : Omit<T, "bar" | "func">
+>rest1 : Omit<T, "getter" | "setter" | "method">
 >x : T
 
     const {           ...rest2 } = x as A;
->rest2 : { foo: string; }
+>rest2 : { normal: string; }
 >x as A : A
 >x : T
 
-    const { foo: _f1, ...rest3 } = x;
->foo : any
->_f1 : string
->rest3 : Omit<T, "foo" | "bar" | "func">
+    const { normal: _1, ...rest3 } = x;
+>normal : any
+>_1 : string
+>rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
 >x : T
 
-    const { foo: _f2, ...rest4 } = x as A;
->foo : any
->_f2 : string
+    const { normal: _2, ...rest4 } = x as A;
+>normal : any
+>_2 : string
 >rest4 : {}
 >x as A : A
 >x : T
 
-    rest1.bar;
->rest1.bar : any
->rest1 : Omit<T, "bar" | "func">
->bar : any
+    rest1.getter;
+>rest1.getter : any
+>rest1 : Omit<T, "getter" | "setter" | "method">
+>getter : any
 
-    rest2.bar;
->rest2.bar : any
->rest2 : { foo: string; }
->bar : any
+    rest2.getter;
+>rest2.getter : any
+>rest2 : { normal: string; }
+>getter : any
 
-    rest3.bar;
->rest3.bar : any
->rest3 : Omit<T, "foo" | "bar" | "func">
->bar : any
+    rest3.getter;
+>rest3.getter : any
+>rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>getter : any
 
-    rest4.bar;
->rest4.bar : any
+    rest4.getter;
+>rest4.getter : any
 >rest4 : {}
->bar : any
+>getter : any
 
-    rest1.func;
->rest1.func : any
->rest1 : Omit<T, "bar" | "func">
->func : any
+    rest1.setter;
+>rest1.setter : any
+>rest1 : Omit<T, "getter" | "setter" | "method">
+>setter : any
 
-    rest2.func;
->rest2.func : any
->rest2 : { foo: string; }
->func : any
+    rest2.setter;
+>rest2.setter : any
+>rest2 : { normal: string; }
+>setter : any
 
-    rest3.func;
->rest3.func : any
->rest3 : Omit<T, "foo" | "bar" | "func">
->func : any
+    rest3.setter;
+>rest3.setter : any
+>rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>setter : any
 
-    rest4.func;
->rest4.func : any
+    rest4.setter;
+>rest4.setter : any
 >rest4 : {}
->func : any
+>setter : any
+
+    rest1.method;
+>rest1.method : any
+>rest1 : Omit<T, "getter" | "setter" | "method">
+>method : any
+
+    rest2.method;
+>rest2.method : any
+>rest2 : { normal: string; }
+>method : any
+
+    rest3.method;
+>rest3.method : any
+>rest3 : Omit<T, "normal" | "getter" | "setter" | "method">
+>method : any
+
+    rest4.method;
+>rest4.method : any
+>rest4 : {}
+>method : any
 }
 

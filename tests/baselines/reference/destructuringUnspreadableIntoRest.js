@@ -1,44 +1,56 @@
 //// [destructuringUnspreadableIntoRest.ts]
 class A {
-    constructor(public foo: string) {}
+    constructor(public normal: string) {}
 
-    get bar(): number {
+    get getter(): number {
         return 1;
     }
 
-    func() {
+    set setter(_v: number) {}
+
+    method() {
         const {           ...rest1 } = this;
         const {           ...rest2 } = this as A;
-        const { foo: _f1, ...rest3 } = this;
-        const { foo: _f2, ...rest4 } = this as A;
+        const { normal: _1, ...rest3 } = this;
+        const { normal: _2, ...rest4 } = this as A;
 
-        rest1.bar;
-        rest2.bar;
-        rest3.bar;
-        rest4.bar;
+        rest1.getter;
+        rest2.getter;
+        rest3.getter;
+        rest4.getter;
 
-        rest1.func;
-        rest2.func;
-        rest3.func;
-        rest4.func;
+        rest1.setter;
+        rest2.setter;
+        rest3.setter;
+        rest4.setter;
+
+        rest1.method;
+        rest2.method;
+        rest3.method;
+        rest4.method;
     }
 }
 
 function destructure<T extends A>(x: T) {
     const {           ...rest1 } = x;
     const {           ...rest2 } = x as A;
-    const { foo: _f1, ...rest3 } = x;
-    const { foo: _f2, ...rest4 } = x as A;
+    const { normal: _1, ...rest3 } = x;
+    const { normal: _2, ...rest4 } = x as A;
 
-    rest1.bar;
-    rest2.bar;
-    rest3.bar;
-    rest4.bar;
+    rest1.getter;
+    rest2.getter;
+    rest3.getter;
+    rest4.getter;
 
-    rest1.func;
-    rest2.func;
-    rest3.func;
-    rest4.func;
+    rest1.setter;
+    rest2.setter;
+    rest3.setter;
+    rest4.setter;
+
+    rest1.method;
+    rest2.method;
+    rest3.method;
+    rest4.method;
 }
 
 
@@ -55,43 +67,56 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var A = /** @class */ (function () {
-    function A(foo) {
-        this.foo = foo;
+    function A(normal) {
+        this.normal = normal;
     }
-    Object.defineProperty(A.prototype, "bar", {
+    Object.defineProperty(A.prototype, "getter", {
         get: function () {
             return 1;
         },
         enumerable: false,
         configurable: true
     });
-    A.prototype.func = function () {
+    Object.defineProperty(A.prototype, "setter", {
+        set: function (_v) { },
+        enumerable: false,
+        configurable: true
+    });
+    A.prototype.method = function () {
         var rest1 = __rest(this, []);
         var rest2 = __rest(this, []);
-        var _a = this, _f1 = _a.foo, rest3 = __rest(_a, ["foo"]);
-        var _b = this, _f2 = _b.foo, rest4 = __rest(_b, ["foo"]);
-        rest1.bar;
-        rest2.bar;
-        rest3.bar;
-        rest4.bar;
-        rest1.func;
-        rest2.func;
-        rest3.func;
-        rest4.func;
+        var _a = this, _1 = _a.normal, rest3 = __rest(_a, ["normal"]);
+        var _b = this, _2 = _b.normal, rest4 = __rest(_b, ["normal"]);
+        rest1.getter;
+        rest2.getter;
+        rest3.getter;
+        rest4.getter;
+        rest1.setter;
+        rest2.setter;
+        rest3.setter;
+        rest4.setter;
+        rest1.method;
+        rest2.method;
+        rest3.method;
+        rest4.method;
     };
     return A;
 }());
 function destructure(x) {
     var rest1 = __rest(x, []);
     var rest2 = __rest(x, []);
-    var _f1 = x.foo, rest3 = __rest(x, ["foo"]);
-    var _a = x, _f2 = _a.foo, rest4 = __rest(_a, ["foo"]);
-    rest1.bar;
-    rest2.bar;
-    rest3.bar;
-    rest4.bar;
-    rest1.func;
-    rest2.func;
-    rest3.func;
-    rest4.func;
+    var _1 = x.normal, rest3 = __rest(x, ["normal"]);
+    var _a = x, _2 = _a.normal, rest4 = __rest(_a, ["normal"]);
+    rest1.getter;
+    rest2.getter;
+    rest3.getter;
+    rest4.getter;
+    rest1.setter;
+    rest2.setter;
+    rest3.setter;
+    rest4.setter;
+    rest1.method;
+    rest2.method;
+    rest3.method;
+    rest4.method;
 }
