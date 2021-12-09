@@ -36,8 +36,6 @@ class A {
 >this : Symbol(A, Decl(destructuringThisWithProperty.ts, 0, 0))
 >A : Symbol(A, Decl(destructuringThisWithProperty.ts, 0, 0))
 
-        // Rest destructuring drops properties provided by getters.
-        // "bar" should not be present in any of these.
         rest1.bar;
 >rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 8, 15))
 
@@ -49,50 +47,72 @@ class A {
 
         rest4.bar;
 >rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 11, 25))
+
+        rest1.func;
+>rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 8, 15))
+
+        rest2.func;
+>rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 9, 15))
+
+        rest3.func;
+>rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 10, 25))
+
+        rest4.func;
+>rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 11, 25))
     }
 }
 
 function destructure<T extends A>(x: T) {
->destructure : Symbol(destructure, Decl(destructuringThisWithProperty.ts, 20, 1))
->T : Symbol(T, Decl(destructuringThisWithProperty.ts, 22, 21))
+>destructure : Symbol(destructure, Decl(destructuringThisWithProperty.ts, 23, 1))
+>T : Symbol(T, Decl(destructuringThisWithProperty.ts, 25, 21))
 >A : Symbol(A, Decl(destructuringThisWithProperty.ts, 0, 0))
->x : Symbol(x, Decl(destructuringThisWithProperty.ts, 22, 34))
->T : Symbol(T, Decl(destructuringThisWithProperty.ts, 22, 21))
+>x : Symbol(x, Decl(destructuringThisWithProperty.ts, 25, 34))
+>T : Symbol(T, Decl(destructuringThisWithProperty.ts, 25, 21))
 
     const {           ...rest1 } = x;
->rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 23, 11))
->x : Symbol(x, Decl(destructuringThisWithProperty.ts, 22, 34))
+>rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 26, 11))
+>x : Symbol(x, Decl(destructuringThisWithProperty.ts, 25, 34))
 
     const {           ...rest2 } = x as A;
->rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 24, 11))
->x : Symbol(x, Decl(destructuringThisWithProperty.ts, 22, 34))
+>rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 27, 11))
+>x : Symbol(x, Decl(destructuringThisWithProperty.ts, 25, 34))
 >A : Symbol(A, Decl(destructuringThisWithProperty.ts, 0, 0))
 
     const { foo: _f1, ...rest3 } = x;
 >foo : Symbol(A.foo, Decl(destructuringThisWithProperty.ts, 1, 16))
->_f1 : Symbol(_f1, Decl(destructuringThisWithProperty.ts, 25, 11))
->rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 25, 21))
->x : Symbol(x, Decl(destructuringThisWithProperty.ts, 22, 34))
+>_f1 : Symbol(_f1, Decl(destructuringThisWithProperty.ts, 28, 11))
+>rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 28, 21))
+>x : Symbol(x, Decl(destructuringThisWithProperty.ts, 25, 34))
 
     const { foo: _f2, ...rest4 } = x as A;
 >foo : Symbol(A.foo, Decl(destructuringThisWithProperty.ts, 1, 16))
->_f2 : Symbol(_f2, Decl(destructuringThisWithProperty.ts, 26, 11))
->rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 26, 21))
->x : Symbol(x, Decl(destructuringThisWithProperty.ts, 22, 34))
+>_f2 : Symbol(_f2, Decl(destructuringThisWithProperty.ts, 29, 11))
+>rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 29, 21))
+>x : Symbol(x, Decl(destructuringThisWithProperty.ts, 25, 34))
 >A : Symbol(A, Decl(destructuringThisWithProperty.ts, 0, 0))
 
-    // Rest destructuring drops properties provided by getters.
-    // "bar" should not be present in any of these.
     rest1.bar;
->rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 23, 11))
+>rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 26, 11))
 
     rest2.bar;
->rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 24, 11))
+>rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 27, 11))
 
     rest3.bar;
->rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 25, 21))
+>rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 28, 21))
 
     rest4.bar;
->rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 26, 21))
+>rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 29, 21))
+
+    rest1.func;
+>rest1 : Symbol(rest1, Decl(destructuringThisWithProperty.ts, 26, 11))
+
+    rest2.func;
+>rest2 : Symbol(rest2, Decl(destructuringThisWithProperty.ts, 27, 11))
+
+    rest3.func;
+>rest3 : Symbol(rest3, Decl(destructuringThisWithProperty.ts, 28, 21))
+
+    rest4.func;
+>rest4 : Symbol(rest4, Decl(destructuringThisWithProperty.ts, 29, 21))
 }
 

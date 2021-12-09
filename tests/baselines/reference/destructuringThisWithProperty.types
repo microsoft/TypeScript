@@ -37,8 +37,6 @@ class A {
 >this as A : A
 >this : this
 
-        // Rest destructuring drops properties provided by getters.
-        // "bar" should not be present in any of these.
         rest1.bar;
 >rest1.bar : any
 >rest1 : Omit<this, "bar" | "func">
@@ -58,6 +56,26 @@ class A {
 >rest4.bar : any
 >rest4 : {}
 >bar : any
+
+        rest1.func;
+>rest1.func : any
+>rest1 : Omit<this, "bar" | "func">
+>func : any
+
+        rest2.func;
+>rest2.func : any
+>rest2 : { foo: string; }
+>func : any
+
+        rest3.func;
+>rest3.func : any
+>rest3 : Omit<this, "foo" | "bar" | "func">
+>func : any
+
+        rest4.func;
+>rest4.func : any
+>rest4 : {}
+>func : any
     }
 }
 
@@ -87,8 +105,6 @@ function destructure<T extends A>(x: T) {
 >x as A : A
 >x : T
 
-    // Rest destructuring drops properties provided by getters.
-    // "bar" should not be present in any of these.
     rest1.bar;
 >rest1.bar : any
 >rest1 : Omit<T, "bar" | "func">
@@ -108,5 +124,25 @@ function destructure<T extends A>(x: T) {
 >rest4.bar : any
 >rest4 : {}
 >bar : any
+
+    rest1.func;
+>rest1.func : any
+>rest1 : Omit<T, "bar" | "func">
+>func : any
+
+    rest2.func;
+>rest2.func : any
+>rest2 : { foo: string; }
+>func : any
+
+    rest3.func;
+>rest3.func : any
+>rest3 : Omit<T, "foo" | "bar" | "func">
+>func : any
+
+    rest4.func;
+>rest4.func : any
+>rest4 : {}
+>func : any
 }
 
