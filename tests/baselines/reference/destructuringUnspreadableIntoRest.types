@@ -9,6 +9,9 @@ class A {
         private privateProp: string,
 >privateProp : string
 
+        protected protectedProp: string,
+>protectedProp : string
+
     ) {}
 
     get getter(): number {
@@ -86,6 +89,26 @@ class A {
 >rest4.privateProp : any
 >rest4 : {}
 >privateProp : any
+
+        rest1.protectedProp;
+>rest1.protectedProp : any
+>rest1 : Omit<this, "getter" | "setter" | "method">
+>protectedProp : any
+
+        rest2.protectedProp;
+>rest2.protectedProp : any
+>rest2 : { publicProp: string; }
+>protectedProp : any
+
+        rest3.protectedProp;
+>rest3.protectedProp : any
+>rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>protectedProp : any
+
+        rest4.protectedProp;
+>rest4.protectedProp : any
+>rest4 : {}
+>protectedProp : any
 
         rest1.getter;
 >rest1.getter : any
@@ -214,6 +237,26 @@ function destructure<T extends A>(x: T) {
 >rest4.privateProp : any
 >rest4 : {}
 >privateProp : any
+
+    rest1.protectedProp;
+>rest1.protectedProp : any
+>rest1 : Omit<T, "getter" | "setter" | "method">
+>protectedProp : any
+
+    rest2.protectedProp;
+>rest2.protectedProp : any
+>rest2 : { publicProp: string; }
+>protectedProp : any
+
+    rest3.protectedProp;
+>rest3.protectedProp : any
+>rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>protectedProp : any
+
+    rest4.protectedProp;
+>rest4.protectedProp : any
+>rest4 : {}
+>protectedProp : any
 
     rest1.getter;
 >rest1.getter : any

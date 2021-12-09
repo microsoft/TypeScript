@@ -3,6 +3,7 @@ class A {
     constructor(
         public publicProp: string,
         private privateProp: string,
+        protected protectedProp: string,
     ) {}
 
     get getter(): number {
@@ -26,6 +27,11 @@ class A {
         rest2.privateProp;
         rest3.privateProp;
         rest4.privateProp;
+
+        rest1.protectedProp;
+        rest2.protectedProp;
+        rest3.protectedProp;
+        rest4.protectedProp;
 
         rest1.getter;
         rest2.getter;
@@ -60,6 +66,11 @@ function destructure<T extends A>(x: T) {
     rest3.privateProp;
     rest4.privateProp;
 
+    rest1.protectedProp;
+    rest2.protectedProp;
+    rest3.protectedProp;
+    rest4.protectedProp;
+
     rest1.getter;
     rest2.getter;
     rest3.getter;
@@ -90,9 +101,10 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 class A {
-    constructor(publicProp, privateProp) {
+    constructor(publicProp, privateProp, protectedProp) {
         this.publicProp = publicProp;
         this.privateProp = privateProp;
+        this.protectedProp = protectedProp;
     }
     get getter() {
         return 1;
@@ -111,6 +123,10 @@ class A {
         rest2.privateProp;
         rest3.privateProp;
         rest4.privateProp;
+        rest1.protectedProp;
+        rest2.protectedProp;
+        rest3.protectedProp;
+        rest4.protectedProp;
         rest1.getter;
         rest2.getter;
         rest3.getter;
@@ -138,6 +154,10 @@ function destructure(x) {
     rest2.privateProp;
     rest3.privateProp;
     rest4.privateProp;
+    rest1.protectedProp;
+    rest2.protectedProp;
+    rest3.protectedProp;
+    rest4.protectedProp;
     rest1.getter;
     rest2.getter;
     rest3.getter;
