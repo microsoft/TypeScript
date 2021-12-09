@@ -1915,7 +1915,6 @@ namespace ts.server {
                 return ts.emptyArray;
             }
 
-            let typesPackageNames: Set<string> | undefined;
             let dependencyNames: Set<string> | undefined;
             let rootNames: string[] | undefined;
             const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
@@ -1923,42 +1922,58 @@ namespace ts.server {
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
-                packageJson.devDependencies?.forEach((_, dependencyName) => {
-                    if (startsWith(dependencyName, "@types")) {
-                        witnessTypesPackage(dependencyName);
-                    }
-                });
             }
 
             if (dependencyNames) {
+                let dependenciesAdded = 0;
                 const symlinkCache = hostProject.getSymlinkCache();
-                for (let name of arrayFrom(dependencyNames.keys())) {
-                    // Optimization: don't probe a non-@types package if a @types package for it was also a dependency.
-                    // In all likelihood, the @types package exists because the non-@types package doesn't have types.
-                    name = typesPackageNames?.has(name) ? `@types/${name}` : name;
-                    const packageJson = resolvePackageNameToPackageJson(name, hostProject.currentDirectory, compilerOptions, moduleResolutionHost, program.getModuleResolutionCache());
-                    if (packageJson) {
-                        const entrypoints = loadEntrypointsFromPackageJsonInfo(packageJson, compilerOptions, moduleResolutionHost, program.getModuleResolutionCache());
-                        if (entrypoints) {
-                            const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
-                            if (real && real !== packageJson.packageDirectory) {
-                                symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
-                                    real,
-                                    realPath: hostProject.toPath(real),
-                                });
-                            }
+                for (const name of arrayFrom(dependencyNames.keys())) {
+                    // Avoid creating a large project that would significantly slow down time to editor interactivity
+                    if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
+                        hostProject.log(`Auto-import provider attempted to add more than ${this.maxDependencies} dependencies.`);
+                        return ts.emptyArray;
+                    }
 
-                            for (const entrypoint of entrypoints) {
-                                // TODO: need to check if the realpath is in the program too?
-                                if (!program.getSourceFile(entrypoint.path)) {
-                                    rootNames = append(rootNames, entrypoint.path);
-                                    // Avoid creating a large project that would significantly slow down time to editor interactivity
-                                    if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
-                                        return ts.emptyArray;
-                                    }
-                                }
-                            }
+                    // 1. Try to load from the implementation package. For many dependencies, the
+                    //    package.json will exist, but the package will not contain any typings,
+                    //    so `entrypoints` will be undefined. In that case, or if the dependency
+                    //    is missing altogether, we will move on to trying the @types package (2).
+                    const packageJson = resolvePackageNameToPackageJson(
+                        name,
+                        hostProject.currentDirectory,
+                        compilerOptions,
+                        moduleResolutionHost,
+                        program.getModuleResolutionCache());
+                    if (packageJson) {
+                        const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache);
+                        if (entrypoints) {
+                            rootNames = concatenate(rootNames, entrypoints);
+                            dependenciesAdded += entrypoints.length ? 1 : 0;
+                            continue;
                         }
+                    }
+
+                    // 2. Try to load from the @types package.
+                    const typesPackageJson = resolvePackageNameToPackageJson(
+                        `@types/${name}`,
+                        hostProject.currentDirectory,
+                        compilerOptions,
+                        moduleResolutionHost,
+                        program.getModuleResolutionCache());
+                    if (typesPackageJson) {
+                        const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
+                        rootNames = concatenate(rootNames, entrypoints);
+                        dependenciesAdded += entrypoints?.length ? 1 : 0;
+                        continue;
+                    }
+
+                    // 3. If the @types package did not exist and the user has settings that
+                    //    allow processing JS from node_modules, go back to the implementation
+                    //    package and load the JS.
+                    if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
+                        const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*allowJs*/ true);
+                        rootNames = concatenate(rootNames, entrypoints);
+                        dependenciesAdded += entrypoints?.length ? 1 : 0;
                     }
                 }
             }
@@ -1966,15 +1981,36 @@ namespace ts.server {
             return rootNames || ts.emptyArray;
 
             function addDependency(dependency: string) {
-                if (startsWith(dependency, "@types/")) {
-                    witnessTypesPackage(dependency);
-                }
-                else {
+                if (!startsWith(dependency, "@types/")) {
                     (dependencyNames || (dependencyNames = new Set())).add(dependency);
                 }
             }
-            function witnessTypesPackage(dependency: string) {
-                (typesPackageNames || (typesPackageNames = new Set())).add(dependency.substring("@types/".length));
+
+            type PackageJsonInfo = Exclude<ReturnType<typeof resolvePackageNameToPackageJson>, undefined>;
+            function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
+                const entrypoints = loadEntrypointsFromPackageJsonInfo(
+                    packageJson,
+                    compilerOptions,
+                    moduleResolutionHost,
+                    program.getModuleResolutionCache(),
+                    resolveJs);
+                if (entrypoints) {
+                    const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
+                    const isSymlink = real && real !== packageJson.packageDirectory;
+                    if (isSymlink) {
+                        symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
+                            real,
+                            realPath: hostProject.toPath(real),
+                        });
+                    }
+
+                    return mapDefined(entrypoints, entrypoint => {
+                        const resolvedFileName = isSymlink ? entrypoint.path.replace(packageJson.packageDirectory, real) : entrypoint.path;
+                        if (!program.getSourceFile(resolvedFileName) && (!isSymlink || !program.getSourceFile(entrypoint.path))) {
+                            return resolvedFileName;
+                        }
+                    });
+                }
             }
         }
 

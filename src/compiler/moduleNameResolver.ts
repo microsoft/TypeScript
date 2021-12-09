@@ -1571,8 +1571,10 @@ namespace ts {
         options: CompilerOptions,
         host: ModuleResolutionHost,
         cache: ModuleResolutionCache | undefined,
+        resolveJs?: boolean,
     ): PathAndExtension[] | undefined {
         let resolutions: PathAndExtension[] | undefined;
+        const extensions = resolveJs ? Extensions.JavaScript : Extensions.TypeScript;
         const features = getDefaultNodeResolutionFeatures(options);
         const requireState: ModuleResolutionState = {
             compilerOptions: options,
@@ -1584,7 +1586,7 @@ namespace ts {
             features,
         };
         const requireResolution = loadNodeModuleFromDirectoryWorker(
-            Extensions.TypeScript,
+            extensions,
             packageJsonInfo.packageDirectory,
             /*onlyRecordFailures*/ false,
             requireState,
@@ -1594,7 +1596,7 @@ namespace ts {
 
         const importState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "types"] };
         const importResolution = loadNodeModuleFromDirectoryWorker(
-            Extensions.TypeScript,
+            extensions,
             packageJsonInfo.packageDirectory,
             /*onlyRecordFailures*/ false,
             importState,
@@ -1606,7 +1608,11 @@ namespace ts {
 
         if (features & NodeResolutionFeatures.Exports && packageJsonInfo.packageJsonContent.exports) {
             const exportState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "require", "types"] };
-            const exportResolutions = loadEntrypointsFromExportMap(packageJsonInfo, packageJsonInfo.packageJsonContent.exports, exportState);
+            const exportResolutions = loadEntrypointsFromExportMap(
+                packageJsonInfo,
+                packageJsonInfo.packageJsonContent.exports,
+                exportState,
+                extensions);
             if (exportResolutions) {
                 for (const resolution of exportResolutions) {
                     resolutions = appendIfUnique(resolutions, resolution, (a, b) => a?.path === b?.path);
@@ -1617,10 +1623,20 @@ namespace ts {
         return resolutions;
     }
 
-    function loadEntrypointsFromExportMap(scope: PackageJsonInfo, exports: object, state: ModuleResolutionState): PathAndExtension[] | undefined {
+    function loadEntrypointsFromExportMap(
+        scope: PackageJsonInfo,
+        exports: object,
+        state: ModuleResolutionState,
+        extensions: Extensions,
+    ): PathAndExtension[] | undefined {
         let entrypoints: PathAndExtension[] | undefined;
+        if (isArray(exports)) {
+            for (const target of exports) {
+                loadEntrypointsFromTargetExports(target);
+            }
+        }
         // eslint-disable-next-line no-null/no-null
-        if (typeof exports === "object" && exports !== null && allKeysStartWithDot(exports as MapLike<unknown>)) {
+        else if (typeof exports === "object" && exports !== null && allKeysStartWithDot(exports as MapLike<unknown>)) {
             for (const key in exports) {
                 loadEntrypointsFromTargetExports((exports as MapLike<unknown>)[key]);
             }
@@ -1639,25 +1655,19 @@ namespace ts {
                 }
                 const resolvedTarget = combinePaths(scope.packageDirectory, target);
                 const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
-                const result = loadJSOrExactTSFileName(Extensions.TypeScript, finalPath, /*recordOnlyFailures*/ false, state);
+                const result = loadJSOrExactTSFileName(extensions, finalPath, /*recordOnlyFailures*/ false, state);
                 if (result) {
                     entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
                 }
             }
             // eslint-disable-next-line no-null/no-null
-            else if (typeof target === "object" && target !== null) {
-                if (Array.isArray(target)) {
-                    for (const elem of target) {
-                        loadEntrypointsFromTargetExports(elem);
+            else if (typeof target === "object" && target !== null && !Array.isArray(target)) {
+                forEach(getOwnKeys(target as MapLike<unknown>), key => {
+                    if (key === "default" || contains(state.conditions, key) || isApplicableVersionedTypesKey(state.conditions, key)) {
+                        loadEntrypointsFromTargetExports((target as MapLike<unknown>)[key]);
+                        return true;
                     }
-                }
-                else {
-                    for (const key of getOwnKeys(target as MapLike<unknown>)) {
-                        if (key === "default" || contains(state.conditions, key) || isApplicableVersionedTypesKey(state.conditions, key)) {
-                            loadEntrypointsFromTargetExports((target as MapLike<unknown>)[key]);
-                        }
-                    }
-                }
+                });
             }
         }
     }
