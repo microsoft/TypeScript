@@ -1,23 +1,23 @@
-tests/cases/compiler/destructuringThisWithProperty.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/destructuringThisWithProperty.ts(14,15): error TS2339: Property 'bar' does not exist on type 'Omit<this, "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(15,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringThisWithProperty.ts(16,15): error TS2339: Property 'bar' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(17,15): error TS2339: Property 'bar' does not exist on type '{}'.
-tests/cases/compiler/destructuringThisWithProperty.ts(19,15): error TS2339: Property 'func' does not exist on type 'Omit<this, "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(20,15): error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringThisWithProperty.ts(21,15): error TS2339: Property 'func' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(22,15): error TS2339: Property 'func' does not exist on type '{}'.
-tests/cases/compiler/destructuringThisWithProperty.ts(32,11): error TS2339: Property 'bar' does not exist on type 'Omit<T, "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(33,11): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringThisWithProperty.ts(34,11): error TS2339: Property 'bar' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(35,11): error TS2339: Property 'bar' does not exist on type '{}'.
-tests/cases/compiler/destructuringThisWithProperty.ts(37,11): error TS2339: Property 'func' does not exist on type 'Omit<T, "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(38,11): error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
-tests/cases/compiler/destructuringThisWithProperty.ts(39,11): error TS2339: Property 'func' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
-tests/cases/compiler/destructuringThisWithProperty.ts(40,11): error TS2339: Property 'func' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(14,15): error TS2339: Property 'bar' does not exist on type 'Omit<this, "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(15,15): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(16,15): error TS2339: Property 'bar' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(17,15): error TS2339: Property 'bar' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(19,15): error TS2339: Property 'func' does not exist on type 'Omit<this, "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(20,15): error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(21,15): error TS2339: Property 'func' does not exist on type 'Omit<this, "foo" | "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(22,15): error TS2339: Property 'func' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(32,11): error TS2339: Property 'bar' does not exist on type 'Omit<T, "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(33,11): error TS2339: Property 'bar' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(34,11): error TS2339: Property 'bar' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(35,11): error TS2339: Property 'bar' does not exist on type '{}'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(37,11): error TS2339: Property 'func' does not exist on type 'Omit<T, "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(38,11): error TS2339: Property 'func' does not exist on type '{ foo: string; }'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(39,11): error TS2339: Property 'func' does not exist on type 'Omit<T, "foo" | "bar" | "func">'.
+tests/cases/compiler/destructuringUnspreadableIntoRest.ts(40,11): error TS2339: Property 'func' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/destructuringThisWithProperty.ts (17 errors) ====
+==== tests/cases/compiler/destructuringUnspreadableIntoRest.ts (17 errors) ====
     class A {
         constructor(public foo: string) {}
     

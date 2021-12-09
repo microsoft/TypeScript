@@ -1,4 +1,4 @@
-=== tests/cases/compiler/destructuringThisWithProperty.ts ===
+=== tests/cases/compiler/destructuringUnspreadableIntoRest.ts ===
 class A {
 >A : A
 
