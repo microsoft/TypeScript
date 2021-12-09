@@ -75,7 +75,7 @@ function Test3(this: { no: number }) {
     let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 27, 7))
 >this.no : Symbol(no, Decl(typeofThis.ts, 26, 22))
->this : Symbol(__type, Decl(typeofThis.ts, 26, 20))
+>this : Symbol(this, Decl(typeofThis.ts, 26, 15))
 >no : Symbol(no, Decl(typeofThis.ts, 26, 22))
 }
 
@@ -87,6 +87,7 @@ function Test4(this: { no: number } | undefined) {
     let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 31, 7))
 >this.no : Symbol(no, Decl(typeofThis.ts, 30, 22))
+>this : Symbol(this, Decl(typeofThis.ts, 30, 15))
 >no : Symbol(no, Decl(typeofThis.ts, 30, 22))
 }
 
@@ -156,6 +157,7 @@ class Test9 {
 
             const d1: typeof this = this;
 >d1 : Symbol(d1, Decl(typeofThis.ts, 65, 17))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
 
             d1.f1();
 >d1.f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
@@ -169,6 +171,7 @@ class Test9 {
 
             const d2: typeof this = this;
 >d2 : Symbol(d2, Decl(typeofThis.ts, 70, 17))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
 
             d2.f2();
 >d2.f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
