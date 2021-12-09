@@ -16,7 +16,7 @@ class A {
 >func : () => void
 
         const {           ...rest1 } = this;
->rest1 : { foo: string; }
+>rest1 : Omit<this, "bar" | "func">
 >this : this
 
         const {           ...rest2 } = this as A;
@@ -27,7 +27,7 @@ class A {
         const { foo: _f1, ...rest3 } = this;
 >foo : any
 >_f1 : string
->rest3 : {}
+>rest3 : Omit<this, "foo" | "bar" | "func">
 >this : this
 
         const { foo: _f2, ...rest4 } = this as A;
@@ -41,7 +41,7 @@ class A {
         // "bar" should not be present in any of these.
         rest1.bar;
 >rest1.bar : any
->rest1 : { foo: string; }
+>rest1 : Omit<this, "bar" | "func">
 >bar : any
 
         rest2.bar;
@@ -51,7 +51,7 @@ class A {
 
         rest3.bar;
 >rest3.bar : any
->rest3 : {}
+>rest3 : Omit<this, "foo" | "bar" | "func">
 >bar : any
 
         rest4.bar;
@@ -66,7 +66,7 @@ function destructure<T extends A>(x: T) {
 >x : T
 
     const {           ...rest1 } = x;
->rest1 : T
+>rest1 : Omit<T, "bar" | "func">
 >x : T
 
     const {           ...rest2 } = x as A;
@@ -77,7 +77,7 @@ function destructure<T extends A>(x: T) {
     const { foo: _f1, ...rest3 } = x;
 >foo : any
 >_f1 : string
->rest3 : Omit<T, "foo">
+>rest3 : Omit<T, "foo" | "bar" | "func">
 >x : T
 
     const { foo: _f2, ...rest4 } = x as A;
@@ -90,9 +90,9 @@ function destructure<T extends A>(x: T) {
     // Rest destructuring drops properties provided by getters.
     // "bar" should not be present in any of these.
     rest1.bar;
->rest1.bar : number
->rest1 : T
->bar : number
+>rest1.bar : any
+>rest1 : Omit<T, "bar" | "func">
+>bar : any
 
     rest2.bar;
 >rest2.bar : any
@@ -100,9 +100,9 @@ function destructure<T extends A>(x: T) {
 >bar : any
 
     rest3.bar;
->rest3.bar : T["bar"]
->rest3 : Omit<T, "foo">
->bar : T["bar"]
+>rest3.bar : any
+>rest3 : Omit<T, "foo" | "bar" | "func">
+>bar : any
 
     rest4.bar;
 >rest4.bar : any

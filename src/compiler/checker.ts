@@ -8464,8 +8464,32 @@ namespace ts {
             if (source.flags & TypeFlags.Union) {
                 return mapType(source, t => getRestType(t, properties, symbol));
             }
-            const omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
-            if (!isThisTypeParameter(source) && (isGenericObjectType(source) || isGenericIndexType(omitKeyType))) {
+
+            let omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
+
+            const spreadableProperties: Symbol[] = [];
+            const unspreadableToRestKeys: Type[] = [];
+
+            for (const prop of getPropertiesOfType(source)) {
+                const literalTypeFromProperty = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                if (!isTypeAssignableTo(literalTypeFromProperty, omitKeyType)
+                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
+                    && isSpreadableProperty(prop)) {
+                    spreadableProperties.push(prop);
+                }
+                else {
+                    unspreadableToRestKeys.push(literalTypeFromProperty);
+                }
+            }
+
+            if (isGenericObjectType(source) || isGenericIndexType(omitKeyType)) {
+                if (unspreadableToRestKeys.length) {
+                    // If the type we're spreading from has properties that cannot
+                    // be spread into the rest type (e.g. getters, methods), ensure
+                    // they are explicitly omitted, as they would in the non-generic case.
+                    omitKeyType = getUnionType([omitKeyType, ...unspreadableToRestKeys]);
+                }
+
                 if (omitKeyType.flags & TypeFlags.Never) {
                     return source;
                 }
@@ -8477,12 +8501,8 @@ namespace ts {
                 return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
             }
             const members = createSymbolTable();
-            for (const prop of getPropertiesOfType(source)) {
-                if (!isTypeAssignableTo(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), omitKeyType)
-                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
-                    && isSpreadableProperty(prop)) {
-                    members.set(prop.escapedName, getSpreadSymbol(prop, /*readonly*/ false));
-                }
+            for (const prop of spreadableProperties) {
+                members.set(prop.escapedName, getSpreadSymbol(prop, /*readonly*/ false));
             }
             const result = createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfosOfType(source));
             result.objectFlags |= ObjectFlags.ObjectRestType;
