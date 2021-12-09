@@ -1,0 +1,15 @@
+=== tests/cases/compiler/conditionalTypesCheckingConditionalTypes.ts ===
+type Bit = 0 | 1;
+>Bit : Bit
+
+type And<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
+>And : And<A, B>
+
+type Test<A extends Bit, B extends Bit> = And<A extends 1 ? 0 : 1, B extends 1 ? 0 : 1>;
+>Test : Test<A, B>
+
+//    ^? type Test<I1 extends Bit, I2 extends Bit> = 1
+
+type a = Test<1, 1>; // 1, should be 0
+>a : 0
+

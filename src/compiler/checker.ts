@@ -11775,7 +11775,7 @@ namespace ts {
             if (type.root.isDistributive && type.restrictiveInstantiation !== type) {
                 const simplified = getSimplifiedType(type.checkType, /*writing*/ false);
                 const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
-                if (constraint && constraint !== type.checkType) {
+                if (constraint && constraint !== type.checkType && simplified.restrictiveInstantiation !== simplified) {
                     const instantiated = getConditionalTypeInstantiation(type, prependTypeMapping(type.root.checkType, constraint, type.mapper));
                     if (!(instantiated.flags & TypeFlags.Never)) {
                         return instantiated;
@@ -16436,6 +16436,7 @@ namespace ts {
             return tp.constraint === unknownType ? tp : tp.restrictiveInstantiation || (
                 tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
                 (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
+                (tp.restrictiveInstantiation as TypeParameter).restrictiveInstantiation = tp.restrictiveInstantiation,
                 tp.restrictiveInstantiation
             );
         }

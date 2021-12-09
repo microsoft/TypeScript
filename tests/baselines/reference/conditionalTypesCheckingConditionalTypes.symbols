@@ -1,0 +1,29 @@
+=== tests/cases/compiler/conditionalTypesCheckingConditionalTypes.ts ===
+type Bit = 0 | 1;
+>Bit : Symbol(Bit, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 0))
+
+type And<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
+>And : Symbol(And, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 17))
+>A : Symbol(A, Decl(conditionalTypesCheckingConditionalTypes.ts, 1, 9))
+>Bit : Symbol(Bit, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 0))
+>B : Symbol(B, Decl(conditionalTypesCheckingConditionalTypes.ts, 1, 23))
+>Bit : Symbol(Bit, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 0))
+>A : Symbol(A, Decl(conditionalTypesCheckingConditionalTypes.ts, 1, 9))
+>B : Symbol(B, Decl(conditionalTypesCheckingConditionalTypes.ts, 1, 23))
+
+type Test<A extends Bit, B extends Bit> = And<A extends 1 ? 0 : 1, B extends 1 ? 0 : 1>;
+>Test : Symbol(Test, Decl(conditionalTypesCheckingConditionalTypes.ts, 1, 71))
+>A : Symbol(A, Decl(conditionalTypesCheckingConditionalTypes.ts, 3, 10))
+>Bit : Symbol(Bit, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 0))
+>B : Symbol(B, Decl(conditionalTypesCheckingConditionalTypes.ts, 3, 24))
+>Bit : Symbol(Bit, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 0))
+>And : Symbol(And, Decl(conditionalTypesCheckingConditionalTypes.ts, 0, 17))
+>A : Symbol(A, Decl(conditionalTypesCheckingConditionalTypes.ts, 3, 10))
+>B : Symbol(B, Decl(conditionalTypesCheckingConditionalTypes.ts, 3, 24))
+
+//    ^? type Test<I1 extends Bit, I2 extends Bit> = 1
+
+type a = Test<1, 1>; // 1, should be 0
+>a : Symbol(a, Decl(conditionalTypesCheckingConditionalTypes.ts, 3, 88))
+>Test : Symbol(Test, Decl(conditionalTypesCheckingConditionalTypes.ts, 1, 71))
+
