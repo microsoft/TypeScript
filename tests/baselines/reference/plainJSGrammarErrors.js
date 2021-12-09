@@ -15,6 +15,7 @@ class C {
         for await (const x of [1,2,3]) {
             console.log(x)
         }
+        return null
     }
     // modifier mistakes
     static constructor() { }
@@ -40,6 +41,11 @@ class C {
     // other
     "constructor" = 16
 }
+class {
+    missingName = true
+}
+class Doubler extends C extends C { }
+class Trebler extends C,C,C { }
 // #private mistakes
 #unrelated
 junk.#m
@@ -59,6 +65,20 @@ async class CantAsyncClass {
 async const cantAsyncConst = 2
 async import 'assert'
 async export { CantAsyncClass }
+export import 'fs'
+export export { C }
+function nestedExports() {
+    export { staticParam }
+    import 'fs'
+    export default 12
+}
+function outerStaticFunction() { 
+    static function staticFunction() { }
+}
+const noStaticLiteralMethods = {
+    static m() {
+    }
+}
 
 // rest parameters
 function restMustBeLast(...x, y) {
@@ -142,6 +162,11 @@ catch (e) {
     const e = 1
     console.log(e)
 }
+try {
+    throw 20
+}
+catch (e = 0) {
+}
 label: for (const x in [1,2,3]) {
     label: for (const y in [1,2,3]) {
         break label;
@@ -180,6 +205,8 @@ const nullaryDynamicImport = import()
 const trinaryDynamicImport = import('1', '2', '3')
 const spreadDynamicImport = import(...[])
 
+return
+
 
 //// [plainJSGrammarErrors.js]
 class C {
@@ -198,6 +225,7 @@ class C {
         for await (const x of [1, 2, 3]) {
             console.log(x);
         }
+        return null;
     }
     // modifier mistakes
     static constructor() { }
@@ -221,6 +249,13 @@ class C {
     // other
     "constructor" = 16;
 }
+class {
+    missingName = true;
+}
+class Doubler extends C extends C {
+}
+class Trebler extends C, C, C {
+}
 // #private mistakes
 #unrelated;
 junk.#m;
@@ -239,6 +274,20 @@ async class CantAsyncClass {
 async const cantAsyncConst = 2;
 async import 'assert';
 export { CantAsyncClass };
+export import 'fs';
+export { C };
+function nestedExports() {
+    export { staticParam };
+    import 'fs';
+    export default 12;
+}
+function outerStaticFunction() {
+    static function staticFunction() { }
+}
+const noStaticLiteralMethods = {
+    static m() {
+    }
+};
 // rest parameters
 function restMustBeLast(...x, y) {
 }
@@ -318,6 +367,11 @@ catch (e) {
     const e = 1;
     console.log(e);
 }
+try {
+    throw 20;
+}
+catch (e = 0) {
+}
 label: for (const x in [1, 2, 3]) {
     label: for (const y in [1, 2, 3]) {
         break label;
@@ -353,3 +407,4 @@ function foo() { new.targe; }
 const nullaryDynamicImport = import();
 const trinaryDynamicImport = import('1', '2', '3');
 const spreadDynamicImport = import(...[]);
+return;
