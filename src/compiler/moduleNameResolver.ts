@@ -340,10 +340,7 @@ namespace ts {
         }
 
         const failedLookupLocations: string[] = [];
-        const features =
-            getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 ? NodeResolutionFeatures.Node12Default :
-            getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
-            NodeResolutionFeatures.None;
+        const features = getDefaultNodeResolutionFeatures(options);
         const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions: ["node", "require", "types"] };
         let resolved = primaryLookup();
         let primary = true;
@@ -431,6 +428,39 @@ namespace ts {
                 }
             }
         }
+    }
+
+    function getDefaultNodeResolutionFeatures(options: CompilerOptions) {
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 ? NodeResolutionFeatures.Node12Default :
+            getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
+                NodeResolutionFeatures.None;
+    }
+
+    /** Does not try `@types/${packageName}` - use a second pass if needed. */
+    export function resolvePackageNameToPackageJson(
+        packageName: string,
+        containingDirectory: string,
+        options: CompilerOptions,
+        host: ModuleResolutionHost,
+        cache: ModuleResolutionCache | undefined,
+    ): PackageJsonInfo | undefined {
+        const moduleResolutionState: ModuleResolutionState = {
+            compilerOptions: options,
+            host,
+            traceEnabled: isTraceEnabled(options, host),
+            failedLookupLocations: [],
+            packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
+            conditions: emptyArray,
+            features: NodeResolutionFeatures.None,
+        };
+
+        return forEachAncestorDirectory(containingDirectory, ancestorDirectory => {
+            if (getBaseFileName(ancestorDirectory) !== "node_modules") {
+                const nodeModulesFolder = combinePaths(ancestorDirectory, "node_modules");
+                const candidate = combinePaths(nodeModulesFolder, packageName);
+                return getPackageJsonInfo(candidate, /*onlyRecordFailures*/ false, moduleResolutionState);
+            }
+        });
     }
 
     /**
@@ -1534,6 +1564,102 @@ namespace ts {
         const packageJsonContent = packageInfo && packageInfo.packageJsonContent;
         const versionPaths = packageInfo && packageInfo.versionPaths;
         return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
+    }
+
+    export function loadEntrypointsFromPackageJsonInfo(
+        packageJsonInfo: PackageJsonInfo,
+        options: CompilerOptions,
+        host: ModuleResolutionHost,
+        cache: ModuleResolutionCache | undefined,
+    ): PathAndExtension[] | undefined {
+        let resolutions: PathAndExtension[] | undefined;
+        const features = getDefaultNodeResolutionFeatures(options);
+        const requireState: ModuleResolutionState = {
+            compilerOptions: options,
+            host,
+            traceEnabled: isTraceEnabled(options, host),
+            failedLookupLocations: [],
+            packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
+            conditions: ["node", "require", "types"],
+            features,
+        };
+        const requireResolution = loadNodeModuleFromDirectoryWorker(
+            Extensions.TypeScript,
+            packageJsonInfo.packageDirectory,
+            /*onlyRecordFailures*/ false,
+            requireState,
+            packageJsonInfo.packageJsonContent,
+            packageJsonInfo.versionPaths);
+        resolutions = append(resolutions, requireResolution);
+
+        const importState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "types"] };
+        const importResolution = loadNodeModuleFromDirectoryWorker(
+            Extensions.TypeScript,
+            packageJsonInfo.packageDirectory,
+            /*onlyRecordFailures*/ false,
+            importState,
+            packageJsonInfo.packageJsonContent,
+            packageJsonInfo.versionPaths);
+        if (importResolution) {
+            resolutions = appendIfUnique(resolutions, importResolution, (a, b) => a?.path === b?.path);
+        }
+
+        if (features & NodeResolutionFeatures.Exports && packageJsonInfo.packageJsonContent.exports) {
+            const exportState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "require", "types"] };
+            const exportResolutions = loadEntrypointsFromExportMap(packageJsonInfo, packageJsonInfo.packageJsonContent.exports, exportState);
+            if (exportResolutions) {
+                for (const resolution of exportResolutions) {
+                    resolutions = appendIfUnique(resolutions, resolution, (a, b) => a?.path === b?.path);
+                }
+            }
+        }
+
+        return resolutions;
+    }
+
+    function loadEntrypointsFromExportMap(scope: PackageJsonInfo, exports: object, state: ModuleResolutionState): PathAndExtension[] | undefined {
+        let entrypoints: PathAndExtension[] | undefined;
+        // eslint-disable-next-line no-null/no-null
+        if (typeof exports === "object" && exports !== null && allKeysStartWithDot(exports as MapLike<unknown>)) {
+            for (const key in exports) {
+                loadEntrypointsFromTargetExports((exports as MapLike<unknown>)[key]);
+            }
+        }
+        else {
+            loadEntrypointsFromTargetExports(exports);
+        }
+        return entrypoints;
+
+        function loadEntrypointsFromTargetExports(target: unknown) {
+            if (typeof target === "string" && startsWith(target, "./") && target.indexOf("*") === -1) {
+                const parts = getPathComponents(target).slice(1);
+                const partsAfterFirst = parts.slice(1);
+                if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
+                    return;
+                }
+                const resolvedTarget = combinePaths(scope.packageDirectory, target);
+                const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
+                const result = loadJSOrExactTSFileName(Extensions.TypeScript, finalPath, /*recordOnlyFailures*/ false, state);
+                if (result) {
+                    entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
+                }
+            }
+            // eslint-disable-next-line no-null/no-null
+            else if (typeof target === "object" && target !== null) {
+                if (Array.isArray(target)) {
+                    for (const elem of target) {
+                        loadEntrypointsFromTargetExports(elem);
+                    }
+                }
+                else {
+                    for (const key of getOwnKeys(target as MapLike<unknown>)) {
+                        if (key === "default" || contains(state.conditions, key) || isApplicableVersionedTypesKey(state.conditions, key)) {
+                            loadEntrypointsFromTargetExports((target as MapLike<unknown>)[key]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /*@internal*/

@@ -1915,6 +1915,7 @@ namespace ts.server {
                 return ts.emptyArray;
             }
 
+            let typesPackageNames: Set<string> | undefined;
             let dependencyNames: Set<string> | undefined;
             let rootNames: string[] | undefined;
             const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
@@ -1922,36 +1923,41 @@ namespace ts.server {
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                packageJson.devDependencies?.forEach((_, dependencyName) => {
+                    if (startsWith(dependencyName, "@types")) {
+                        witnessTypesPackage(dependencyName);
+                    }
+                });
             }
 
             if (dependencyNames) {
-                const resolutions = mapDefined(arrayFrom(dependencyNames.keys()), name => {
-                    const types = resolveTypeReferenceDirective(
-                        name,
-                        rootFileName,
-                        compilerOptions,
-                        moduleResolutionHost);
-
-                    if (types.resolvedTypeReferenceDirective) {
-                        return types.resolvedTypeReferenceDirective;
-                    }
-                    if (compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                        return tryResolveJSModule(name, hostProject.currentDirectory, moduleResolutionHost);
-                    }
-                });
-
                 const symlinkCache = hostProject.getSymlinkCache();
-                for (const resolution of resolutions) {
-                    if (!resolution.resolvedFileName) continue;
-                    const { resolvedFileName, originalPath } = resolution;
-                    if (originalPath) {
-                        symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalPath, resolvedFileName);
-                    }
-                    if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
-                        rootNames = append(rootNames, resolvedFileName);
-                        // Avoid creating a large project that would significantly slow down time to editor interactivity
-                        if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
-                            return ts.emptyArray;
+                for (let name of arrayFrom(dependencyNames.keys())) {
+                    // Optimization: don't probe a non-@types package if a @types package for it was also a dependency.
+                    // In all likelihood, the @types package exists because the non-@types package doesn't have types.
+                    name = typesPackageNames?.has(name) ? `@types/${name}` : name;
+                    const packageJson = resolvePackageNameToPackageJson(name, hostProject.currentDirectory, compilerOptions, moduleResolutionHost, program.getModuleResolutionCache());
+                    if (packageJson) {
+                        const entrypoints = loadEntrypointsFromPackageJsonInfo(packageJson, compilerOptions, moduleResolutionHost, program.getModuleResolutionCache());
+                        if (entrypoints) {
+                            const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
+                            if (real && real !== packageJson.packageDirectory) {
+                                symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
+                                    real,
+                                    realPath: hostProject.toPath(real),
+                                });
+                            }
+
+                            for (const entrypoint of entrypoints) {
+                                // TODO: need to check if the realpath is in the program too?
+                                if (!program.getSourceFile(entrypoint.path)) {
+                                    rootNames = append(rootNames, entrypoint.path);
+                                    // Avoid creating a large project that would significantly slow down time to editor interactivity
+                                    if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
+                                        return ts.emptyArray;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1960,9 +1966,15 @@ namespace ts.server {
             return rootNames || ts.emptyArray;
 
             function addDependency(dependency: string) {
-                if (!startsWith(dependency, "@types/")) {
+                if (startsWith(dependency, "@types/")) {
+                    witnessTypesPackage(dependency);
+                }
+                else {
                     (dependencyNames || (dependencyNames = new Set())).add(dependency);
                 }
+            }
+            function witnessTypesPackage(dependency: string) {
+                (typesPackageNames || (typesPackageNames = new Set())).add(dependency.substring("@types/".length));
             }
         }
 
