@@ -713,8 +713,25 @@ namespace ts.Completions {
             }
         }
 
+        // Before offering up a JSX attribute snippet, ensure that we aren't potentially completing
+        // a tag name; this may appear as an attribute after the "<" when the tag has not yet been
+        // closed, as in:
+        //
+        //     return <>
+        //         foo <butto|
+        //     </>
+        //
+        // We can detect this case by checking if both:
+        //
+        //     1. The location is "<", so we are completing immediately after it.
+        //     2. The "<" has the same position as its parent, so is not a binary expression.
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
-        if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+        if (
+            kind === ScriptElementKind.jsxAttribute
+            && (location.kind !== SyntaxKind.LessThanToken || location.pos !== location.parent.pos)
+            && preferences.includeCompletionsWithSnippetText
+            && preferences.jsxAttributeCompletionStyle
+            && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
