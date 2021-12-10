@@ -62,7 +62,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.x = void 0;
 var tslib_1 = require("tslib");
-exports.x = (0, tslib_1.__assign)({});
+exports.x = tslib_1.__assign({});
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]

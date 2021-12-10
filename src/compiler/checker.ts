@@ -8464,8 +8464,32 @@ namespace ts {
             if (source.flags & TypeFlags.Union) {
                 return mapType(source, t => getRestType(t, properties, symbol));
             }
-            const omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
+
+            let omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
+
+            const spreadableProperties: Symbol[] = [];
+            const unspreadableToRestKeys: Type[] = [];
+
+            for (const prop of getPropertiesOfType(source)) {
+                const literalTypeFromProperty = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                if (!isTypeAssignableTo(literalTypeFromProperty, omitKeyType)
+                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
+                    && isSpreadableProperty(prop)) {
+                    spreadableProperties.push(prop);
+                }
+                else {
+                    unspreadableToRestKeys.push(literalTypeFromProperty);
+                }
+            }
+
             if (isGenericObjectType(source) || isGenericIndexType(omitKeyType)) {
+                if (unspreadableToRestKeys.length) {
+                    // If the type we're spreading from has properties that cannot
+                    // be spread into the rest type (e.g. getters, methods), ensure
+                    // they are explicitly omitted, as they would in the non-generic case.
+                    omitKeyType = getUnionType([omitKeyType, ...unspreadableToRestKeys]);
+                }
+
                 if (omitKeyType.flags & TypeFlags.Never) {
                     return source;
                 }
@@ -8477,12 +8501,8 @@ namespace ts {
                 return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
             }
             const members = createSymbolTable();
-            for (const prop of getPropertiesOfType(source)) {
-                if (!isTypeAssignableTo(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), omitKeyType)
-                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
-                    && isSpreadableProperty(prop)) {
-                    members.set(prop.escapedName, getSpreadSymbol(prop, /*readonly*/ false));
-                }
+            for (const prop of spreadableProperties) {
+                members.set(prop.escapedName, getSpreadSymbol(prop, /*readonly*/ false));
             }
             const result = createAnonymousType(symbol, members, emptyArray, emptyArray, getIndexInfosOfType(source));
             result.objectFlags |= ObjectFlags.ObjectRestType;
@@ -30263,7 +30283,7 @@ namespace ts {
                 typeArguments.pop();
             }
             while (typeArguments.length < typeParameters.length) {
-                typeArguments.push(getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isJs));
+                typeArguments.push(getDefaultFromTypeParameter(typeParameters[typeArguments.length]) || getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isJs));
             }
             return typeArguments;
         }
@@ -31013,7 +31033,7 @@ namespace ts {
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
         function checkCallExpression(node: CallExpression | NewExpression, checkMode?: CheckMode): Type {
-            if (!checkGrammarTypeArguments(node, node.typeArguments)) checkGrammarArguments(node.arguments);
+            checkGrammarTypeArguments(node, node.typeArguments);
 
             const signature = getResolvedSignature(node, /*candidatesOutArray*/ undefined, checkMode);
             if (signature === resolvingSignature) {
@@ -31133,7 +31153,7 @@ namespace ts {
 
         function checkImportCallExpression(node: ImportCall): Type {
             // Check grammar of dynamic import
-            if (!checkGrammarArguments(node.arguments)) checkGrammarImportCallExpression(node);
+            checkGrammarImportCallExpression(node);
 
             if (node.arguments.length === 0) {
                 return createPromiseReturnType(node, anyType);
@@ -42915,21 +42935,6 @@ namespace ts {
                 return grammarErrorOnNode(node.template, Diagnostics.Tagged_template_expressions_are_not_permitted_in_an_optional_chain);
             }
             return false;
-        }
-
-        function checkGrammarForOmittedArgument(args: NodeArray<Expression> | undefined): boolean {
-            if (args) {
-                for (const arg of args) {
-                    if (arg.kind === SyntaxKind.OmittedExpression) {
-                        return grammarErrorAtPos(arg, arg.pos, 0, Diagnostics.Argument_expression_expected);
-                    }
-                }
-            }
-            return false;
-        }
-
-        function checkGrammarArguments(args: NodeArray<Expression> | undefined): boolean {
-            return checkGrammarForOmittedArgument(args);
         }
 
         function checkGrammarHeritageClause(node: HeritageClause): boolean {

@@ -28,6 +28,7 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "packageManager": "npm@6.14.15",
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/browserify": "latest",
