@@ -739,7 +739,7 @@ namespace ts.Completions {
             }
         }
 
-        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
+        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location, contextToken);
         if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);

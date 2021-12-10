@@ -19,4 +19,4 @@
 //// declare function Opt(attributes: OptionPropBag): JSX.Element;
 //// let opt = <Opt [|{| "isWriteAccess": true, "isDefinition": true |}wrong|] />;
 
-verify.singleReferenceGroup("(property) wrong: true");
+verify.singleReferenceGroup("(JSX attribute) wrong: true");

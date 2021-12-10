@@ -1457,6 +1457,8 @@ namespace ts {
         /**
          * <JsxTagName attribute1 attribute2={0} />
          */
+        jsxTagName = "JSX tag name",
+
         jsxAttribute = "JSX attribute",
 
         /** String literal */

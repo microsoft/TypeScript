@@ -25,4 +25,4 @@
 //// declare function MainButton(props: ButtonProps | LinkProps): JSX.Element;
 //// let opt = <MainButton [|{| "isWriteAccess": true, "isDefinition": true |}wrong|] />;
 
-verify.singleReferenceGroup("(property) wrong: true");
+verify.singleReferenceGroup("(JSX attribute) wrong: true");
