@@ -39083,7 +39083,7 @@ namespace ts {
                 const properties = getPropertiesOfType(getTypeWithThisArgument(base, type.thisType));
                 for (const prop of properties) {
                     const existing = seen.get(prop.escapedName);
-                    if (existing && !isPropertyIdenticalTo(existing, prop)) {
+                    if (existing && prop.parent === existing.parent) {
                         seen.delete(prop.escapedName);
                     }
                 }
