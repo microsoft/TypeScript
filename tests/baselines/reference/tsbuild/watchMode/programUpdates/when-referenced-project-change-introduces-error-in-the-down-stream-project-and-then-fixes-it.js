@@ -184,16 +184,16 @@ Output::
 >> Screen clear
 [[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
 
-[96mApp/app.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS2551: [0mProperty 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
+● [96mApp/app.ts[0m:[93m2[0m:[93m20[0m TS2551
+| createSomeObject().message;
+  [91m                   ▔▔▔▔▔▔▔[0m
+Property 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
 
-[7m2[0m createSomeObject().message;
-[7m [0m [91m                   ~~~~~~~[0m
+'message2' is declared here.
+[96mLibrary/library.d.ts[0m:[93m2[0m:[93m5[0m
 
-  [96mLibrary/library.d.ts[0m:[93m2[0m:[93m5[0m
-    [7m2[0m     message2: string;
-    [7m [0m [96m    ~~~~~~~~[0m
-    'message2' is declared here.
-
+|     message2: string;
+  [96m    ▔▔▔▔▔▔▔▔[0m
 [[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
 
 

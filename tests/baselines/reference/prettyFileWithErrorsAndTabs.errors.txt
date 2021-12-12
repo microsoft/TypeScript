@@ -1,15 +1,15 @@
-[96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m3[0m   const x: string = 12;
-[7m [0m [91m        ~[0m
-[96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m4[0m   const y: string = 12;
-[7m [0m [91m        ~[0m
-[96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m5[0m   const z: string = 12;
-[7m [0m [91m        ~[0m
+● [96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m3[0m:[93m9[0m TS2322
+|   const x: string = 12;
+  [91m        ▔[0m
+Type 'number' is not assignable to type 'string'.
+● [96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m4[0m:[93m9[0m TS2322
+|   const y: string = 12;
+  [91m        ▔[0m
+Type 'number' is not assignable to type 'string'.
+● [96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m5[0m:[93m9[0m TS2322
+|   const z: string = 12;
+  [91m        ▔[0m
+Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/prettyFileWithErrorsAndTabs.ts (3 errors) ====

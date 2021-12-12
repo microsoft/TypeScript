@@ -30,34 +30,34 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[96mmoduleA.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
+● [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m TS1261
+| import a = require("./ModuleC")
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
+Already included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
     Matched by include pattern '**/*' in 'tsconfig.json'
 
-[7m1[0m import a = require("./ModuleC")
-[7m [0m [91m                   ~~~~~~~~~~~[0m
+File is included via import here.
+[96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
 
-  [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import a = require("./moduleC")
-    [7m [0m [96m                   ~~~~~~~~~~~[0m
-    File is included via import here.
-
-[96mmoduleB.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/moduleC.ts' differs from already included file name '/user/username/projects/myproject/ModuleC.ts' only in casing.
+| import a = require("./moduleC")
+  [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
+● [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m TS1149
+| import a = require("./moduleC")
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
+File name '/user/username/projects/myproject/moduleC.ts' differs from already included file name '/user/username/projects/myproject/ModuleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
     Matched by include pattern '**/*' in 'tsconfig.json'
 
-[7m1[0m import a = require("./moduleC")
-[7m [0m [91m                   ~~~~~~~~~~~[0m
+File is included via import here.
+[96mmoduleA.ts[0m:[93m1[0m:[93m20[0m
 
-  [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import a = require("./ModuleC")
-    [7m [0m [96m                   ~~~~~~~~~~~[0m
-    File is included via import here.
-
+| import a = require("./ModuleC")
+  [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 ModuleC.ts
@@ -145,34 +145,34 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-[96mmoduleA.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
+● [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m TS1261
+|                     import a = require("./ModuleC")
+  [91m                                       ▔▔▔▔▔▔▔▔▔▔▔[0m
+Already included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
     Matched by include pattern '**/*' in 'tsconfig.json'
 
-[7m2[0m                     import a = require("./ModuleC")
-[7m [0m [91m                                       ~~~~~~~~~~~[0m
+File is included via import here.
+[96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
 
-  [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import a = require("./moduleC")
-    [7m [0m [96m                   ~~~~~~~~~~~[0m
-    File is included via import here.
-
-[96mmoduleB.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/moduleC.ts' differs from already included file name '/user/username/projects/myproject/ModuleC.ts' only in casing.
+| import a = require("./moduleC")
+  [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
+● [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m TS1149
+| import a = require("./moduleC")
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
+File name '/user/username/projects/myproject/moduleC.ts' differs from already included file name '/user/username/projects/myproject/ModuleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
     Matched by include pattern '**/*' in 'tsconfig.json'
 
-[7m1[0m import a = require("./moduleC")
-[7m [0m [91m                   ~~~~~~~~~~~[0m
+File is included via import here.
+[96mmoduleA.ts[0m:[93m2[0m:[93m40[0m
 
-  [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m
-    [7m2[0m                     import a = require("./ModuleC")
-    [7m [0m [96m                                       ~~~~~~~~~~~[0m
-    File is included via import here.
-
+|                     import a = require("./ModuleC")
+  [96m                                       ▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 ModuleC.ts

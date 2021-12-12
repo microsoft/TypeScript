@@ -633,10 +633,10 @@ Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.c.json[0m:[93m1[0m:[93m100[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
-
-[7m1[0m {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}
-[7m [0m [91m                                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+● [96mtsconfig.c.json[0m:[93m1[0m:[93m100[0m TS6053
+| {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}
+  [91m                                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [[90m12:01:46 AM[0m] Found 1 error. Watching for file changes.
 
@@ -807,10 +807,10 @@ Output::
 >> Screen clear
 [[90m12:01:55 AM[0m] File change detected. Starting incremental compilation...
 
-[96mtsconfig.b.json[0m:[93m10[0m:[93m21[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
-
-[7m10[0m     "references": [ { "path": "tsconfig.a.json" } ]
-[7m  [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+● [96mtsconfig.b.json[0m:[93m10[0m:[93m21[0m TS6053
+ |     "references": [ { "path": "tsconfig.a.json" } ]
+   [91m                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
 
 [[90m12:01:59 AM[0m] Found 1 error. Watching for file changes.
 

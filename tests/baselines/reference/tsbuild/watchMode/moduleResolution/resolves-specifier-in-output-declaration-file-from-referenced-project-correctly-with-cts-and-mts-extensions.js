@@ -316,10 +316,10 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1471: [0mModule 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-
-[7m1[0m import type { TheNum } from 'pkg2'
-[7m [0m [91m                            ~~~~~~[0m
+● [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m TS1471
+| import type { TheNum } from 'pkg2'
+  [91m                            ▔▔▔▔▔▔[0m
+Module 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 
 [[90m12:01:14 AM[0m] Found 1 error. Watching for file changes.
 
@@ -546,10 +546,10 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1471: [0mModule 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-
-[7m1[0m import type { TheNum } from 'pkg2'
-[7m [0m [91m                            ~~~~~~[0m
+● [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m TS1471
+| import type { TheNum } from 'pkg2'
+  [91m                            ▔▔▔▔▔▔[0m
+Module 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 
 [[90m12:01:31 AM[0m] Found 1 error. Watching for file changes.
 

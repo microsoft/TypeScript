@@ -1,22 +1,22 @@
-[96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
+● [96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m TS6200
+| interface TopLevel {
+  [91m▔▔▔▔▔▔▔▔▔[0m
+Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
 
-[7m1[0m interface TopLevel {
-[7m [0m [91m~~~~~~~~~[0m
+Conflicts are in this file.
+[96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m1[0m
 
-  [96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m1[0m
-    [7m1[0m interface TopLevel {
-    [7m [0m [96m~~~~~~~~~[0m
-    Conflicts are in this file.
-[96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
+| interface TopLevel {
+  [96m▔▔▔▔▔▔▔▔▔[0m● [96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m1[0m TS6200
+| interface TopLevel {
+  [91m▔▔▔▔▔▔▔▔▔[0m
+Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8
 
-[7m1[0m interface TopLevel {
-[7m [0m [91m~~~~~~~~~[0m
+Conflicts are in this file.
+[96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m
 
-  [96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m
-    [7m1[0m interface TopLevel {
-    [7m [0m [96m~~~~~~~~~[0m
-    Conflicts are in this file.
-
+| interface TopLevel {
+  [96m▔▔▔▔▔▔▔▔▔[0m
 
 ==== tests/cases/compiler/file1.ts (1 errors) ====
     interface TopLevel {

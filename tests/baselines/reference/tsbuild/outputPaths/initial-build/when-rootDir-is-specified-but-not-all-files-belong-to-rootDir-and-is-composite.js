@@ -34,7 +34,7 @@ Output::
 
 [[90m12:01:00 AM[0m] Building project '/src/tsconfig.json'...
 
-[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
+File '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Matched by include pattern '**/*' in '/src/tsconfig.json'
 
@@ -59,7 +59,7 @@ Output::
 
 [[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
 
-[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
+File '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Matched by include pattern '**/*' in '/src/tsconfig.json'
 
@@ -77,7 +77,7 @@ Input::
 
 Output::
 /lib/tsc -p /src/tsconfig.json
-[91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
+File '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Matched by include pattern '**/*' in '/src/tsconfig.json'
 

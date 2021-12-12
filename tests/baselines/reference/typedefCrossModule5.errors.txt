@@ -1,40 +1,40 @@
-[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
+● [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m TS2300
+| /** @typedef {number} Foo */
+  [91m                      ▔▔▔[0m
+Duplicate identifier 'Foo'.
 
-[7m1[0m /** @typedef {number} Foo */
-[7m [0m [91m                      ~~~[0m
+'Foo' was also declared here.
+[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m
 
-  [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m
-    [7m1[0m class Foo { } // should error
-    [7m [0m [96m      ~~~[0m
-    'Foo' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+| class Foo { } // should error
+  [96m      ▔▔▔[0m● [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m TS2451
+| class Bar {}
+  [91m      ▔▔▔[0m
+Cannot redeclare block-scoped variable 'Bar'.
 
-[7m2[0m class Bar {}
-[7m [0m [91m      ~~~[0m
+'Bar' was also declared here.
+[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m
 
-  [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m
-    [7m2[0m const Bar = 3;
-    [7m [0m [96m      ~~~[0m
-    'Bar' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
+| const Bar = 3;
+  [96m      ▔▔▔[0m● [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m TS2300
+| class Foo { } // should error
+  [91m      ▔▔▔[0m
+Duplicate identifier 'Foo'.
 
-[7m1[0m class Foo { } // should error
-[7m [0m [91m      ~~~[0m
+'Foo' was also declared here.
+[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m
 
-  [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m
-    [7m1[0m /** @typedef {number} Foo */
-    [7m [0m [96m                      ~~~[0m
-    'Foo' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+| /** @typedef {number} Foo */
+  [96m                      ▔▔▔[0m● [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m TS2451
+| const Bar = 3;
+  [91m      ▔▔▔[0m
+Cannot redeclare block-scoped variable 'Bar'.
 
-[7m2[0m const Bar = 3;
-[7m [0m [91m      ~~~[0m
+'Bar' was also declared here.
+[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m
 
-  [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m
-    [7m2[0m class Bar {}
-    [7m [0m [96m      ~~~[0m
-    'Bar' was also declared here.
-
+| class Bar {}
+  [96m      ▔▔▔[0m
 
 ==== tests/cases/conformance/jsdoc/mod1.js (2 errors) ====
     /** @typedef {number} Foo */

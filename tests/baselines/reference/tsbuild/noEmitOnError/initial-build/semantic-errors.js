@@ -40,10 +40,10 @@ export { }
 
 Output::
 /lib/tsc --b /src/tsconfig.json
-[96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
+● [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+| const a: string = 10;
+  [91m      ▔[0m
+Type 'number' is not assignable to type 'string'.
 
 
 Found 1 error.
@@ -79,10 +79,10 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json
-[96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
+● [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+| const a: string = 10;
+  [91m      ▔[0m
+Type 'number' is not assignable to type 'string'.
 
 
 Found 1 error.

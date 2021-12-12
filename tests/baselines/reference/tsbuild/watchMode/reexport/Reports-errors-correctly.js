@@ -271,16 +271,16 @@ Output::
 
 [[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
+● [96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m TS2741
+| export const session: Session = {
+  [91m             ▔▔▔▔▔▔▔[0m
+Property 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
-[7m3[0m export const session: Session = {
-[7m [0m [91m             ~~~~~~~[0m
+'bar' is declared here.
+[96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
 
-  [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
-    [7m3[0m     bar: number;
-    [7m [0m [96m    ~~~[0m
-    'bar' is declared here.
-
+|     bar: number;
+  [96m    ▔▔▔[0m
 [[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -88,10 +88,10 @@ Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m2[0m:[93m6[0m - [91merror[0m[90m TS2345: [0mArgument of type 'number' is not assignable to parameter of type 'string'.
-
-[7m2[0m test(4, 5);
-[7m [0m [91m     ~[0m
+● [96ma.ts[0m:[93m2[0m:[93m6[0m TS2345
+| test(4, 5);
+  [91m     ▔[0m
+Argument of type 'number' is not assignable to parameter of type 'string'.
 
 [[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
@@ -203,15 +203,15 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m2[0m:[93m9[0m - [91merror[0m[90m TS2345: [0mArgument of type 'number' is not assignable to parameter of type 'string'.
+● [96ma.ts[0m:[93m2[0m:[93m9[0m TS2345
+| test(4, 5);
+  [91m        ▔[0m
+Argument of type 'number' is not assignable to parameter of type 'string'.
 
-[7m2[0m test(4, 5);
-[7m [0m [91m        ~[0m
-
-[96mb.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2362: [0mThe left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-
-[7m2[0m     return x + y / 5;
-[7m [0m [91m               ~[0m
+● [96mb.ts[0m:[93m2[0m:[93m16[0m TS2362
+|     return x + y / 5;
+  [91m               ▔[0m
+The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 [[90m12:00:39 AM[0m] Found 2 errors. Watching for file changes.
 

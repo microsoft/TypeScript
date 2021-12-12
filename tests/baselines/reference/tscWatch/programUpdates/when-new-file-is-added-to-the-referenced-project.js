@@ -180,15 +180,15 @@ CreatingProgramWith::
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
-[91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-  [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
-    [7m1[0m {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-    [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
-    File is output from referenced project specified here.
+File is output from referenced project specified here.
+[96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
+| {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+  [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -433,15 +433,15 @@ CreatingProgramWith::
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
-[91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-  [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
-    [7m1[0m {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-    [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
-    File is output from referenced project specified here.
+File is output from referenced project specified here.
+[96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
+| {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+  [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:01:18 AM[0m] Found 1 error. Watching for file changes.
 
 

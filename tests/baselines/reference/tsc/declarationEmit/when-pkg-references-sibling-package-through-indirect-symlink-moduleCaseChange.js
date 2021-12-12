@@ -57,10 +57,10 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -p pkg3 --explainFiles
 Output::
-[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
-
-[7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
-[7m [0m [91m             ~~~~~[0m
+● [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m TS2742
+| export const ADMIN = MetadataAccessor.create<boolean>('1');
+  [91m             ▔▔▔▔▔[0m
+The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'

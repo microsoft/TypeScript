@@ -51,16 +51,16 @@ Output::
 
 [[90m12:00:34 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
+● [96msrc/main.ts[0m:[93m4[0m:[93m1[0m TS1005
+| ;
+  [91m▔[0m
+',' expected.
 
-[7m4[0m ;
-[7m [0m [91m~[0m
+The parser expected to find a '}' to match the '{' token here.
+[96msrc/main.ts[0m:[93m2[0m:[93m11[0m
 
-  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
+| const a = {
+  [96m          ▔[0m
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -110,16 +110,16 @@ Output::
 
 [[90m12:00:41 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
+● [96msrc/main.ts[0m:[93m4[0m:[93m1[0m TS1005
+| ;
+  [91m▔[0m
+',' expected.
 
-[7m4[0m ;
-[7m [0m [91m~[0m
+The parser expected to find a '}' to match the '{' token here.
+[96msrc/main.ts[0m:[93m2[0m:[93m11[0m
 
-  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
+| const a = {
+  [96m          ▔[0m
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -253,10 +253,10 @@ Output::
 
 [[90m12:01:11 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
+● [96msrc/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+| const a: string = 10;
+  [91m      ▔[0m
+Type 'number' is not assignable to type 'string'.
 
 [[90m12:01:12 AM[0m] Found 1 error. Watching for file changes.
 
@@ -309,10 +309,10 @@ Output::
 
 [[90m12:01:18 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-[96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m2[0m const a: string = 10;
-[7m [0m [91m      ~[0m
+● [96msrc/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+| const a: string = 10;
+  [91m      ▔[0m
+Type 'number' is not assignable to type 'string'.
 
 [[90m12:01:19 AM[0m] Found 1 error. Watching for file changes.
 

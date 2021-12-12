@@ -690,10 +690,10 @@ Output::
 >> Screen clear
 [[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
 
-[96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
-
-[7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
-[7m [0m [91m                                                                                   ~~~~~~~~~~~~~~~[0m
+● [96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m TS6053
+| {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+  [91m                                                                                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/transitiveReferences/b' not found.
 
 [[90m12:01:52 AM[0m] Found 1 error. Watching for file changes.
 
@@ -875,10 +875,10 @@ Output::
 >> Screen clear
 [[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
 
-[96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
-
-[7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
-[7m [0m [91m                                                                                               ~~~~~~~~~~~~~~~[0m
+● [96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m TS6053
+| {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+  [91m                                                                                               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/transitiveReferences/a' not found.
 
 [[90m12:02:05 AM[0m] Found 1 error. Watching for file changes.
 

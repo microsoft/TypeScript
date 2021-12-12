@@ -27,15 +27,15 @@ Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
-[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+● [96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m TS2687
+ |     readonly fullscreen: boolean;
+   [91m             ▔▔▔▔▔▔▔▔▔▔[0m
+All declarations of 'fullscreen' must have identical modifiers.
 
-[7m13[0m     readonly fullscreen: boolean;
-[7m  [0m [91m             ~~~~~~~~~~[0m
-
-[96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
-
-[7m2[0m     fullscreen: boolean;
-[7m [0m [91m    ~~~~~~~~~~[0m
+● [96ma.ts[0m:[93m2[0m:[93m5[0m TS2687
+|     fullscreen: boolean;
+  [91m    ▔▔▔▔▔▔▔▔▔▔[0m
+All declarations of 'fullscreen' must have identical modifiers.
 
 [[90m12:00:22 AM[0m] Found 2 errors. Watching for file changes.
 
@@ -139,15 +139,15 @@ Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
-[96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
+● [96m../../../../a/lib/lib.d.ts[0m:[93m13[0m:[93m14[0m TS2687
+ |     readonly fullscreen: boolean;
+   [91m             ▔▔▔▔▔▔▔▔▔▔[0m
+All declarations of 'fullscreen' must have identical modifiers.
 
-[7m13[0m     readonly fullscreen: boolean;
-[7m  [0m [91m             ~~~~~~~~~~[0m
-
-[96ma.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2687: [0mAll declarations of 'fullscreen' must have identical modifiers.
-
-[7m2[0m     fullscreen: boolean;
-[7m [0m [91m    ~~~~~~~~~~[0m
+● [96ma.ts[0m:[93m2[0m:[93m5[0m TS2687
+|     fullscreen: boolean;
+  [91m    ▔▔▔▔▔▔▔▔▔▔[0m
+All declarations of 'fullscreen' must have identical modifiers.
 
 [[90m12:00:38 AM[0m] Found 2 errors. Watching for file changes.
 

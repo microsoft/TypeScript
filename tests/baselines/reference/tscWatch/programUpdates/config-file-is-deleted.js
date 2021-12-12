@@ -87,7 +87,7 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-[91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
+Cannot read file '/a/b/tsconfig.json'.
 
 
 

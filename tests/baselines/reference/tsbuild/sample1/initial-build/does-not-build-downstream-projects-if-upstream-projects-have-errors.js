@@ -103,10 +103,10 @@ Output::
 
 [[90m12:00:00 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-[96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
-
-[7m3[0m     return c.muitply();
-[7m [0m [91m             ~~~~~~~[0m
+● [96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m TS2339
+|     return c.muitply();
+  [91m             ▔▔▔▔▔▔▔[0m
+Property 'muitply' does not exist on type 'typeof import("/src/core/index")'.
 
 [[90m12:00:00 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
 

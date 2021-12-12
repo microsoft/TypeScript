@@ -224,10 +224,10 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
+● [96ma.ts[0m:[93m4[0m:[93m17[0m TS2339
+| console.log(b.c.d);
+  [91m                ▔[0m
+Property 'd' does not exist on type 'C'.
 
 [[90m12:01:08 AM[0m] Found 1 error. Watching for file changes.
 
@@ -391,10 +391,10 @@ Output::
 >> Screen clear
 [[90m12:01:15 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
+● [96ma.ts[0m:[93m4[0m:[93m17[0m TS2339
+| console.log(b.c.d);
+  [91m                ▔[0m
+Property 'd' does not exist on type 'C'.
 
 [[90m12:01:31 AM[0m] Found 1 error. Watching for file changes.
 
@@ -554,10 +554,10 @@ Output::
 >> Screen clear
 [[90m12:01:38 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
-
-[7m4[0m console.log(b.c.d);
-[7m [0m [91m                ~[0m
+● [96ma.ts[0m:[93m4[0m:[93m17[0m TS2339
+| console.log(b.c.d);
+  [91m                ▔[0m
+Property 'd' does not exist on type 'C'.
 
 [[90m12:01:54 AM[0m] Found 1 error. Watching for file changes.
 

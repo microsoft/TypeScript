@@ -167,10 +167,10 @@ Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] Starting compilation in watch mode...
 
-[96mindex.tsx[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS2307: [0mCannot find module 'react/jsx-runtime' or its corresponding type declarations.
-
-[7m1[0m export const App = () => <div propA={true}></div>;
-[7m [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+● [96mindex.tsx[0m:[93m1[0m:[93m26[0m TS2307
+| export const App = () => <div propA={true}></div>;
+  [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
 
 [[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
 

@@ -36,13 +36,13 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
+● [96mb.ts[0m:[93m2[0m:[93m19[0m TS1149
+| import { a } from "./Xy";
+  [91m                  ▔▔▔▔▔▔[0m
+File name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
     Matched by include pattern '**/*' in 'tsconfig.json'
     Imported via "./Xy" from file '/user/username/projects/myproject/b.ts'
-
-[7m2[0m import { a } from "./Xy";
-[7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
@@ -142,13 +142,13 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
+● [96mb.ts[0m:[93m2[0m:[93m19[0m TS1149
+| import { a } from "./Xy";
+  [91m                  ▔▔▔▔▔▔[0m
+File name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
     Matched by include pattern '**/*' in 'tsconfig.json'
     Imported via "./Xy" from file '/user/username/projects/myproject/b.ts'
-
-[7m2[0m import { a } from "./Xy";
-[7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'

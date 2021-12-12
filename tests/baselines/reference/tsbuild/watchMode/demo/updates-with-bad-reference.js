@@ -158,57 +158,57 @@ Output::
 
 [[90m12:00:49 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
-[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+● [96manimals/index.ts[0m:[93m1[0m:[93m20[0m TS6059
+| import Animal from './animal';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
-[7m1[0m import Animal from './animal';
-[7m [0m [91m                   ~~~~~~~~~~[0m
+● [96manimals/index.ts[0m:[93m1[0m:[93m20[0m TS6307
+| import Animal from './animal';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+● [96manimals/index.ts[0m:[93m4[0m:[93m32[0m TS6059
+| import { createDog, Dog } from './dog';
+  [91m                               ▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
-[7m1[0m import Animal from './animal';
-[7m [0m [91m                   ~~~~~~~~~~[0m
+● [96manimals/index.ts[0m:[93m4[0m:[93m32[0m TS6307
+| import { createDog, Dog } from './dog';
+  [91m                               ▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+● [96mcore/utilities.ts[0m:[93m1[0m:[93m1[0m TS6133
+| import * as A from '../animals';
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+'A' is declared but its value is never read.
 
-[7m4[0m import { createDog, Dog } from './dog';
-[7m [0m [91m                               ~~~~~~~[0m
-
-[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-[7m4[0m import { createDog, Dog } from './dog';
-[7m [0m [91m                               ~~~~~~~[0m
-
-[96mcore/utilities.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6133: [0m'A' is declared but its value is never read.
-
-[7m1[0m import * as A from '../animals';
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+● [96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m TS6059
+| import * as A from '../animals';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
     Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
-[7m1[0m import * as A from '../animals';
-[7m [0m [91m                   ~~~~~~~~~~~~[0m
+File is included via import here.
+[96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
 
-  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import Animal from '.';
-    [7m [0m [96m                   ~~~[0m
-    File is included via import here.
-
-[96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+| import Animal from '.';
+  [96m                   ▔▔▔[0m
+● [96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m TS6307
+| import * as A from '../animals';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
   The file is in the program because:
     Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
     Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
-[7m1[0m import * as A from '../animals';
-[7m [0m [91m                   ~~~~~~~~~~~~[0m
+File is included via import here.
+[96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
 
-  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import Animal from '.';
-    [7m [0m [96m                   ~~~[0m
-    File is included via import here.
-
+| import Animal from '.';
+  [96m                   ▔▔▔[0m
 [[90m12:00:59 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
 
 [[90m12:01:00 AM[0m] Skipping build of project '/user/username/projects/demo/animals/tsconfig.json' because its dependency '/user/username/projects/demo/core' has errors
@@ -440,57 +440,57 @@ Output::
 
 [[90m12:01:09 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
-[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+● [96manimals/index.ts[0m:[93m1[0m:[93m20[0m TS6059
+| import Animal from './animal';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/animal.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
-[7m1[0m import Animal from './animal';
-[7m [0m [91m                   ~~~~~~~~~~[0m
+● [96manimals/index.ts[0m:[93m1[0m:[93m20[0m TS6307
+| import Animal from './animal';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-[96manimals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/animal.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+● [96manimals/index.ts[0m:[93m4[0m:[93m32[0m TS6059
+| import { createDog, Dog } from './dog';
+  [91m                               ▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
 
-[7m1[0m import Animal from './animal';
-[7m [0m [91m                   ~~~~~~~~~~[0m
+● [96manimals/index.ts[0m:[93m4[0m:[93m32[0m TS6307
+| import { createDog, Dog } from './dog';
+  [91m                               ▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/dog.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+● [96mcore/utilities.ts[0m:[93m2[0m:[93m1[0m TS6133
+| import * as A from '../animals';
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+'A' is declared but its value is never read.
 
-[7m4[0m import { createDog, Dog } from './dog';
-[7m [0m [91m                               ~~~~~~~[0m
-
-[96manimals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/dog.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-[7m4[0m import { createDog, Dog } from './dog';
-[7m [0m [91m                               ~~~~~~~[0m
-
-[96mcore/utilities.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS6133: [0m'A' is declared but its value is never read.
-
-[7m2[0m import * as A from '../animals';
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+● [96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m TS6059
+| import * as A from '../animals';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
     Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
-[7m2[0m import * as A from '../animals';
-[7m [0m [91m                   ~~~~~~~~~~~~[0m
+File is included via import here.
+[96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
 
-  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import Animal from '.';
-    [7m [0m [96m                   ~~~[0m
-    File is included via import here.
-
-[96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+| import Animal from '.';
+  [96m                   ▔▔▔[0m
+● [96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m TS6307
+| import * as A from '../animals';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
   The file is in the program because:
     Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
     Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
-[7m2[0m import * as A from '../animals';
-[7m [0m [91m                   ~~~~~~~~~~~~[0m
+File is included via import here.
+[96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
 
-  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import Animal from '.';
-    [7m [0m [96m                   ~~~[0m
-    File is included via import here.
-
+| import Animal from '.';
+  [96m                   ▔▔▔[0m
 [[90m12:01:16 AM[0m] Found 7 errors. Watching for file changes.
 
 

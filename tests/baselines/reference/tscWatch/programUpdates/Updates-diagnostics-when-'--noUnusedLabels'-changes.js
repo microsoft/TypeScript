@@ -75,10 +75,10 @@ Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS7028: [0mUnused label.
-
-[7m1[0m label: while (1) {}
-[7m [0m [91m~~~~~[0m
+● [96ma.ts[0m:[93m1[0m:[93m1[0m TS7028
+| label: while (1) {}
+  [91m▔▔▔▔▔[0m
+Unused label.
 
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 

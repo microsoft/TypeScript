@@ -148,57 +148,57 @@ Output::
 
 [[90m12:00:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[96msrc/animals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/src/animals/animal.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
+● [96msrc/animals/index.ts[0m:[93m1[0m:[93m20[0m TS6059
+| import Animal from './animal';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔[0m
+File '/src/animals/animal.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
 
-[7m1[0m import Animal from './animal';
-[7m [0m [91m                   ~~~~~~~~~~[0m
+● [96msrc/animals/index.ts[0m:[93m1[0m:[93m20[0m TS6307
+| import Animal from './animal';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔[0m
+File '/src/animals/animal.ts' is not listed within the file list of project '/src/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-[96msrc/animals/index.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/src/animals/animal.ts' is not listed within the file list of project '/src/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+● [96msrc/animals/index.ts[0m:[93m4[0m:[93m32[0m TS6059
+| import { createDog, Dog } from './dog';
+  [91m                               ▔▔▔▔▔▔▔[0m
+File '/src/animals/dog.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
 
-[7m1[0m import Animal from './animal';
-[7m [0m [91m                   ~~~~~~~~~~[0m
+● [96msrc/animals/index.ts[0m:[93m4[0m:[93m32[0m TS6307
+| import { createDog, Dog } from './dog';
+  [91m                               ▔▔▔▔▔▔▔[0m
+File '/src/animals/dog.ts' is not listed within the file list of project '/src/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
 
-[96msrc/animals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6059: [0mFile '/src/animals/dog.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
+● [96msrc/core/utilities.ts[0m:[93m1[0m:[93m1[0m TS6133
+| import * as A from '../animals';
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+'A' is declared but its value is never read.
 
-[7m4[0m import { createDog, Dog } from './dog';
-[7m [0m [91m                               ~~~~~~~[0m
-
-[96msrc/animals/index.ts[0m:[93m4[0m:[93m32[0m - [91merror[0m[90m TS6307: [0mFile '/src/animals/dog.ts' is not listed within the file list of project '/src/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
-
-[7m4[0m import { createDog, Dog } from './dog';
-[7m [0m [91m                               ~~~~~~~[0m
-
-[96msrc/core/utilities.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6133: [0m'A' is declared but its value is never read.
-
-[7m1[0m import * as A from '../animals';
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-
-[96msrc/core/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/src/animals/index.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
+● [96msrc/core/utilities.ts[0m:[93m1[0m:[93m20[0m TS6059
+| import * as A from '../animals';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/src/animals/index.ts' is not under 'rootDir' '/src/core'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
     Imported via '../animals' from file '/src/core/utilities.ts'
     Imported via '.' from file '/src/animals/dog.ts'
 
-[7m1[0m import * as A from '../animals';
-[7m [0m [91m                   ~~~~~~~~~~~~[0m
+File is included via import here.
+[96msrc/animals/dog.ts[0m:[93m1[0m:[93m20[0m
 
-  [96msrc/animals/dog.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import Animal from '.';
-    [7m [0m [96m                   ~~~[0m
-    File is included via import here.
-
-[96msrc/core/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/src/animals/index.ts' is not listed within the file list of project '/src/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+| import Animal from '.';
+  [96m                   ▔▔▔[0m
+● [96msrc/core/utilities.ts[0m:[93m1[0m:[93m20[0m TS6307
+| import * as A from '../animals';
+  [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔[0m
+File '/src/animals/index.ts' is not listed within the file list of project '/src/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
   The file is in the program because:
     Imported via '../animals' from file '/src/core/utilities.ts'
     Imported via '.' from file '/src/animals/dog.ts'
 
-[7m1[0m import * as A from '../animals';
-[7m [0m [91m                   ~~~~~~~~~~~~[0m
+File is included via import here.
+[96msrc/animals/dog.ts[0m:[93m1[0m:[93m20[0m
 
-  [96msrc/animals/dog.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import Animal from '.';
-    [7m [0m [96m                   ~~~[0m
-    File is included via import here.
-
+| import Animal from '.';
+  [96m                   ▔▔▔[0m
 [[90m12:00:00 AM[0m] Project 'src/animals/tsconfig.json' can't be built because its dependency 'src/core' has errors
 
 [[90m12:00:00 AM[0m] Skipping build of project '/src/animals/tsconfig.json' because its dependency '/src/core' has errors

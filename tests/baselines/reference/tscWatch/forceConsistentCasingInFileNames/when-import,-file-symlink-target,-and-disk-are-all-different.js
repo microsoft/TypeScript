@@ -36,10 +36,10 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
-
-[7m2[0m import { a } from "./yX";
-[7m [0m [91m                  ~~~~~~[0m
+● [96mb.ts[0m:[93m2[0m:[93m19[0m TS2307
+| import { a } from "./yX";
+  [91m                  ▔▔▔▔▔▔[0m
+Cannot find module './yX' or its corresponding type declarations.
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
@@ -142,10 +142,10 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-[96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './yX' or its corresponding type declarations.
-
-[7m2[0m import { a } from "./yX";
-[7m [0m [91m                  ~~~~~~[0m
+● [96mb.ts[0m:[93m2[0m:[93m19[0m TS2307
+| import { a } from "./yX";
+  [91m                  ▔▔▔▔▔▔[0m
+Cannot find module './yX' or its corresponding type declarations.
 
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'

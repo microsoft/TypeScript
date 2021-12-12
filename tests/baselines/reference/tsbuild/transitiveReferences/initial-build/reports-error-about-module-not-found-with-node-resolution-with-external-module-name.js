@@ -54,10 +54,10 @@ Output::
 /lib/tsc --b /src/tsconfig.c.json --listFiles
 /lib/lib.d.ts
 /src/a.ts
-[96msrc/b.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
-
-[7m1[0m import {A} from 'a';
-[7m [0m [91m                ~~~[0m
+● [96msrc/b.ts[0m:[93m1[0m:[93m17[0m TS2307
+| import {A} from 'a';
+  [91m                ▔▔▔[0m
+Cannot find module 'a' or its corresponding type declarations.
 
 /lib/lib.d.ts
 /src/b.ts

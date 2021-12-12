@@ -33,10 +33,10 @@ Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
-[96ma/b/project/src/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2724: [0m'Common.SomeComponent.DynamicMenu' has no exported member named 'z'. Did you mean 'Z'?
-
-[7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
-[7m [0m [91m                                                                                                                 ~[0m
+● [96ma/b/project/src/main2.ts[0m:[93m1[0m:[93m114[0m TS2724
+| namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
+  [91m                                                                                                                 ▔[0m
+'Common.SomeComponent.DynamicMenu' has no exported member named 'z'. Did you mean 'Z'?
 
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
