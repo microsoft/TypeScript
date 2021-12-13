@@ -523,8 +523,7 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Emit,
             defaultValueDescription: 3,
-            // TODO:
-            description: Diagnostics.Create_source_map_files_for_emitted_JavaScript_files,
+            description: Diagnostics.Specifies_the_version_3_or_4_of_source_maps_that_should_be_generated_by_compiler_Requires_the_sourceMap_option_to_be_enabled,
         },
         {
             name: "outFile",

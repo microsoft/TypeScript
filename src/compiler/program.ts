@@ -3313,8 +3313,7 @@ namespace ts {
                 }
 
                 if (options.sourceMapVersion !== 3 && options.sourceMapVersion !== 4) {
-                    // TODO: Fix diagnostics message
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "sourceMapVersion");
+                    createDiagnosticForOptionName(Diagnostics.If_the_sourceMapVersion_option_is_specified_it_must_be_set_to_3_or_4, "sourceMapVersion");
                 }
             }
 
