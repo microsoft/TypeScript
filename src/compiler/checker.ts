@@ -20893,7 +20893,7 @@ namespace ts {
         // flags for the string, number, boolean, "", 0, false, void, undefined, or null types respectively. Returns
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
-            return type.flags & TypeFlags.UnionOrIntersection ? getFalsyFlagsOfTypes((type as UnionType).types) :
+            return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((type as UnionType).types) :
                 type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value === "" ? TypeFlags.StringLiteral : 0 :
                 type.flags & TypeFlags.NumberLiteral ? (type as NumberLiteralType).value === 0 ? TypeFlags.NumberLiteral : 0 :
                 type.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(type as BigIntLiteralType) ? TypeFlags.BigIntLiteral : 0 :
@@ -39397,7 +39397,7 @@ namespace ts {
                 if (memberSymbol) {
                     const declaration = memberSymbol.valueDeclaration;
                     if (declaration !== member) {
-                        if (declaration && isBlockScopedNameDeclaredBeforeUse(declaration, member)) {
+                        if (declaration && isBlockScopedNameDeclaredBeforeUse(declaration, member) && isEnumDeclaration(declaration.parent)) {
                             return getEnumMemberValue(declaration as EnumMember);
                         }
                         error(expr, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
