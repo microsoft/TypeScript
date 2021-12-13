@@ -145,8 +145,8 @@ namespace ts.refactor {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
                     const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    if (symbol?.declarations) {
-                        const declaration = cast(first(symbol.declarations), isTypeParameterDeclaration);
+                    const declaration = tryCast(symbol?.declarations?.[0], isTypeParameterDeclaration);
+                    if (declaration) {
                         if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
                             pushIfUnique(result, declaration);
                         }
