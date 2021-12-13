@@ -1600,15 +1600,17 @@ namespace ts {
         entrypoints = append(entrypoints, requireResolution?.path);
 
         if (features & NodeResolutionFeatures.Exports && packageJsonInfo.packageJsonContent.exports) {
-            const exportState = { ...requireState, failedLookupLocations: [], conditions: ["node", "import", "require", "types"] };
-            const exportResolutions = loadEntrypointsFromExportMap(
-                packageJsonInfo,
-                packageJsonInfo.packageJsonContent.exports,
-                exportState,
-                extensions);
-            if (exportResolutions) {
-                for (const resolution of exportResolutions) {
-                    entrypoints = appendIfUnique(entrypoints, resolution.path);
+            for (const conditions of [["node", "import", "types"], ["node", "require", "types"]]) {
+                const exportState = { ...requireState, failedLookupLocations: [], conditions };
+                const exportResolutions = loadEntrypointsFromExportMap(
+                    packageJsonInfo,
+                    packageJsonInfo.packageJsonContent.exports,
+                    exportState,
+                    extensions);
+                if (exportResolutions) {
+                    for (const resolution of exportResolutions) {
+                        entrypoints = appendIfUnique(entrypoints, resolution.path);
+                    }
                 }
             }
         }

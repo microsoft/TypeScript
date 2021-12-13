@@ -3085,7 +3085,7 @@ namespace ts {
             }
             const specifier = moduleSpecifiers.getNodeModulesPackageName(
                 host.getCompilationSettings(),
-                fromFile.path,
+                fromFile,
                 importedFileName,
                 moduleSpecifierResolutionHost,
                 preferences,
