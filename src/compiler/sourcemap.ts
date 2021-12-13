@@ -19,6 +19,11 @@ namespace ts {
         let nameToNameIndexMap: ESMap<string, number> | undefined;
         const mappingCharCodes: number[] = [];
         let mappings = "";
+        const scopeNames: string[] = [];
+        let scopeNamesToNameIndexMap: ESMap<string, number> | undefined;
+        let scopes = "";
+
+        const version = host.getCompilerOptions().sourceMapVersion;
 
         // Last recorded and encoded mappings
         let lastGeneratedLine = 0;
@@ -46,6 +51,9 @@ namespace ts {
             addName,
             addMapping,
             appendSourceMap,
+            addScopeName,
+            addScopeMapping,
+            shouldCollectScopeNames: () => !!version && version >= 4,
             toJSON,
             toString: () => JSON.stringify(toJSON())
         };
@@ -96,6 +104,22 @@ namespace ts {
             return nameIndex;
         }
 
+        function addScopeName(name: string): number {
+            if (version !== 4) {
+                return 0;
+            }
+            enter();
+            if (!scopeNamesToNameIndexMap) scopeNamesToNameIndexMap = new Map();
+            let nameIndex = scopeNamesToNameIndexMap.get(name);
+            if (nameIndex === undefined) {
+                nameIndex = scopeNames.length;
+                scopeNames.push(name);
+                scopeNamesToNameIndexMap.set(name, nameIndex);
+            }
+            exit();
+            return nameIndex;
+        }
+
         function isNewGeneratedPosition(generatedLine: number, generatedCharacter: number) {
             return !hasPending
                 || pendingGeneratedLine !== generatedLine
@@ -140,6 +164,17 @@ namespace ts {
                 }
             }
             exit();
+        }
+
+        function addScopeMapping(sourceIndex: number, start: LineAndCharacter, end: LineAndCharacter, scopeNameIndex: number) {
+            // TODO: Implement
+            if (version !== 4) {
+                return;
+            }
+            if (scopes.length) {
+                scopes += ",";
+            }
+            scopes += `[${sourceIndex},${start.line},${start.character},${end.line},${end.character},${scopeNameIndex}]`;
         }
 
         function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter) {
@@ -284,6 +319,21 @@ namespace ts {
         function toJSON(): RawSourceMap {
             commitPendingMapping();
             flushMappingBuffer();
+
+            if (version === 4) {
+                return {
+                    version,
+                    file,
+                    sourceRoot,
+                    sources,
+                    names,
+                    mappings,
+                    sourcesContent,
+                    scopeNames,
+                    scopes,
+                };
+            }
+
             return {
                 version: 3,
                 file,

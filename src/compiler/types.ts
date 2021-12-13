@@ -6145,6 +6145,7 @@ namespace ts {
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
+        sourceMapVersion?: 3 | 4;
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
@@ -8232,7 +8233,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface RawSourceMap {
+    export interface RawSourceMapV3 {
         version: 3;
         file: string;
         sourceRoot?: string | null;
@@ -8241,6 +8242,20 @@ namespace ts {
         mappings: string;
         names?: string[] | null;
     }
+
+    export interface RawSourceMapV4 {
+        version: 4;
+        file: string;
+        sourceRoot?: string | null;
+        sources: string[];
+        sourcesContent?: (string | null)[] | null;
+        mappings: string;
+        names?: string[] | null;
+        scopeNames: string[];
+        scopes: string;
+    }
+
+    export type RawSourceMap = RawSourceMapV3 | RawSourceMapV4;
 
     /**
      * Generates a source map.
@@ -8272,6 +8287,20 @@ namespace ts {
          * Appends a source map.
          */
         appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter): void;
+        /**
+         * Appends a 'scope name,' a concept in V4 of Source Maps which represents the original-source name of a function scope.
+         */
+        addScopeName(name: string): number;
+        /**
+         * Appends a 'scope mapping,' a concept in V4 of Source Maps which associates a runtime name of a function to the original source name.
+         */
+        addScopeMapping(sourceIndex: number, start: LineAndCharacter, end: LineAndCharacter, scopeNameIndex: number): void;
+        /**
+         * Whether the compiler should collect scope names during compilation. This should be true for version 4+ of
+         * source maps, and false for version 3. This is exposed because collecting scope names might negatively
+         * impact the performance of compilation.
+         */
+        shouldCollectScopeNames(): boolean;
         /**
          * Gets the source map as a `RawSourceMap` object.
          */

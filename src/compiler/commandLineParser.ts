@@ -517,6 +517,16 @@ namespace ts {
             description: Diagnostics.Create_source_map_files_for_emitted_JavaScript_files,
         },
         {
+            name: "sourceMapVersion",
+            type: "number",
+            affectsEmit: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Emit,
+            defaultValueDescription: 3,
+            // TODO:
+            description: Diagnostics.Create_source_map_files_for_emitted_JavaScript_files,
+        },
+        {
             name: "outFile",
             type: "string",
             affectsEmit: true,

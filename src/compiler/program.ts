@@ -3307,6 +3307,17 @@ namespace ts {
                 }
             }
 
+            if (options.sourceMapVersion) {
+                if (!options.sourceMap && !options.inlineSourceMap) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "sourceMapVersion", "sourceMap", "inlineSourceMap");
+                }
+
+                if (options.sourceMapVersion !== 3 && options.sourceMapVersion !== 4) {
+                    // TODO: Fix diagnostics message
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "sourceMapVersion");
+                }
+            }
+
             if (options.composite) {
                 if (options.declaration === false) {
                     createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");
