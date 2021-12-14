@@ -2068,6 +2068,11 @@ namespace ts {
             emitTypeAnnotation(node.type);
             emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end, node);
             writeTrailingSemicolon();
+
+            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                // TODO: Do I need to emit source maps v4 stuff here?
+                debugger;
+            }
         }
 
         function emitMethodSignature(node: MethodSignature) {
@@ -2090,6 +2095,39 @@ namespace ts {
             emit(node.name);
             emit(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
+
+            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                const functionName = getNameForScope(node.name, node);
+                let containerName;
+                if (node.parent && isClassDeclaration(node.parent)) {
+                    containerName = computeClassNameForScopeMap(node.parent, /* classNameOnly */ true);
+                }
+                else if (node.original?.parent && isClassDeclaration(node.original.parent)) {
+                    containerName = computeClassNameForScopeMap(node.original.parent, /* classNameOnly */ true);
+                }
+                else if (isObjectLiteralExpression(node.parent)) {
+                    containerName = computeClassNameForObjectLiteral(node.parent);
+                }
+                else if (node.original?.parent && isObjectLiteralExpression(node.original.parent)) {
+                    containerName = computeClassNameForObjectLiteral(node.original.parent);
+                }
+                else {
+                    debugger;
+                    containerName = "[Object]";
+                }
+
+                let scopeName = `${containerName}.${functionName}`;
+                if (functionName === "bar") {
+                    debugger;
+                }
+                if (node.modifierFlagsCache & ModifierFlags.Static) {
+                    scopeName = `static ${scopeName}`;
+                }
+                const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
+            }
         }
 
         function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
@@ -2097,12 +2135,58 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             writeKeyword("static");
             emitBlockFunctionBody(node.body);
+
+            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                // TODO: Do I need to emit source maps v4 stuff here?
+                debugger;
+            }
         }
 
         function emitConstructor(node: ConstructorDeclaration) {
             emitModifiers(node, node.modifiers);
             writeKeyword("constructor");
             emitSignatureAndBody(node, emitSignatureHead);
+
+            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                let parentScope = node.parent;
+                if (!parentScope) {
+                    parentScope = node.original?.parent as ClassLikeDeclaration;
+                }
+                const scopeName = "constructor for " + computeClassNameForScopeMap(parentScope, /* classNameOnly: */ true);
+                const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
+            }
+        }
+
+        function computeClassNameForScopeMap(node: ClassLikeDeclaration, classNameOnly = false): string {
+            if (!node) {
+                debugger;
+            }
+            if (node.name) {
+                if (!classNameOnly) {
+                    return `class ${node.name.escapedText}`;
+                }
+                return node.name.escapedText as string;
+            }
+
+            if (node.parent && isAssignmentExpression(node.parent)) {
+                return computeTextOfNodeForScopeMapping(node.parent.left);
+            }
+
+            if (classNameOnly) {
+                return "(anonymous class)";
+            }
+            return "anonymous class";
+        }
+
+        function computeClassNameForObjectLiteral(node: ObjectLiteralExpression) {
+            if (isAssignmentExpression(node.parent)) {
+                return computeTextOfNodeForScopeMapping(node.parent.left);
+            }
+
+            return "Object";
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
@@ -2112,6 +2196,41 @@ namespace ts {
             writeSpace();
             emit(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
+
+            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                let parentScope = node.parent as ClassLikeDeclaration | ObjectLiteralExpression;
+                if (!parentScope && node.original && node.original.parent) {
+                    parentScope = node.original?.parent as ClassLikeDeclaration | ObjectLiteralExpression;
+                }
+
+                if (isInterfaceDeclaration(parentScope)) {
+                    return;
+                }
+
+                let scopeName: string;
+                if (isClassDeclaration(parentScope)) {
+                    scopeName = computeClassNameForScopeMap(parentScope, /* classNameOnly */ true);
+                }
+                else if (isObjectLiteralExpression(parentScope)) {
+                    scopeName = computeClassNameForObjectLiteral(parentScope);
+                }
+                else {
+                    debugger;
+                    scopeName = "[Object]";
+                }
+
+                if (node.kind === SyntaxKind.GetAccessor) {
+                    scopeName += `.get ${computeTextOfNodeForScopeMapping(node.name)}`;
+                }
+                else { // node.kind === SetAccessor
+                    scopeName += `.set ${computeTextOfNodeForScopeMapping(node.name)}`;
+                }
+
+                const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
+            }
         }
 
         function emitCallSignature(node: CallSignatureDeclaration) {
@@ -2608,18 +2727,38 @@ namespace ts {
                     name = getNameForCallExpression(node.parent);
                     name = `anonymous callback to ${name}`;
                 }
+                else if (isPropertyDeclaration(node.parent)) {
+                    name = computeTextOfNodeForScopeMapping(node.parent.name);
+
+                    if (node.parent.parent && isClassDeclaration(node.parent.parent)) {
+                        name = `${computeClassNameForScopeMap(node.parent.parent, /* classNameOnly */ true)}.${name}`;
+                    }
+                    else if (node.parent.original && node.parent.original.parent && isClassDeclaration(node.parent.original.parent)) {
+                        name = `${computeClassNameForScopeMap(node.parent.original.parent, /* classNameOnly */ true)}.${name}`;
+                    }
+                }
             }
             else if (node.original && node.original.parent) {
                 if (isAssignmentExpression(node.original.parent)) {
                     name = getNameForAssignmentExpression(node.original.parent);
                 }
-                else if(isCallExpression(node.parent)) {
+                else if(isCallExpression(node.original.parent)) {
                     name = getNameForCallExpression(node.parent);
                     name = `anonymous callback to ${name}`;
+                }
+                else if (isPropertyDeclaration(node.original.parent)) {
+                    name = computeTextOfNodeForScopeMapping(node.original.parent.name);
+                    if (node.original.parent.parent && isClassDeclaration(node.original.parent.parent)) {
+                        name = `${computeClassNameForScopeMap(node.original.parent.parent, /* classNameOnly */ true)}.${name}`;
+                    }
+                    else if (node.original.parent.original && node.original.parent.original.parent && isClassDeclaration(node.original.parent.original.parent)) {
+                        name = `${computeClassNameForScopeMap(node.original.parent.original.parent, /* classNameOnly */ true)}.${name}`;
+                    }
                 }
             }
 
             if (!name) {
+                debugger;
                 name = "(anonymous arrow function)";
             }
 
@@ -3185,7 +3324,7 @@ namespace ts {
             emitIdentifierName(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
 
-            if (!sourceMapsDisabled && !!sourceMapGenerator) {
+            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
                 const scopeName = getNameForScope(node.name!, node);
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
                 const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
