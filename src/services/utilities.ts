@@ -1907,6 +1907,7 @@ namespace ts {
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
             getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
             getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
+            getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
