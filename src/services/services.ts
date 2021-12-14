@@ -1376,6 +1376,7 @@ namespace ts {
                 hasChangedAutomaticTypeDirectiveNames,
                 trace: parseConfigHost.trace,
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
+                getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
                 getParsedCommandLine,
