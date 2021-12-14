@@ -2978,6 +2978,7 @@ declare namespace ts {
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
+        sourceMapVersion?: 3 | 4;
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;

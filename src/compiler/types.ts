@@ -6352,30 +6352,35 @@ namespace ts {
         affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
+        defaultInitValue?: string | number | boolean;           // A custom default value to be used when generating tsconfig.json
     }
 
     /* @internal */
     export interface CommandLineOptionOfStringType extends CommandLineOptionBase {
         type: "string";
         defaultValueDescription?: string | undefined | DiagnosticMessage;
+        defaultInitValue?: string | undefined;
     }
 
     /* @internal */
     export interface CommandLineOptionOfNumberType extends CommandLineOptionBase {
         type: "number";
         defaultValueDescription: number | undefined | DiagnosticMessage;
+        defaultInitValue?: number | undefined;
     }
 
     /* @internal */
     export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
         type: "boolean";
         defaultValueDescription: boolean | undefined | DiagnosticMessage;
+        defaultInitValue?: boolean | undefined;
     }
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
         type: ESMap<string, number | string>;  // an object literal mapping named values to actual values
         defaultValueDescription: number | string | undefined | DiagnosticMessage;
+        defaultInitValue?: number | string | undefined;
     }
 
     /* @internal */
@@ -8243,6 +8248,7 @@ namespace ts {
         names?: string[] | null;
     }
 
+    /* @internal */
     export interface RawSourceMapV4 {
         version: 4;
         file: string;
@@ -8255,6 +8261,7 @@ namespace ts {
         scopes: string;
     }
 
+    /* @internal */
     export type RawSourceMap = RawSourceMapV3 | RawSourceMapV4;
 
     /**
