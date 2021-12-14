@@ -1,0 +1,82 @@
+=== tests/cases/compiler/typePredicatesInUnion3.ts ===
+function test1(x: string | 0) {
+>test1 : Symbol(test1, Decl(typePredicatesInUnion3.ts, 0, 0))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 0, 15))
+
+	if (check1(x)) {
+>check1 : Symbol(check1, Decl(typePredicatesInUnion3.ts, 26, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 0, 15))
+
+		x
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 0, 15))
+	}
+	if (check2(x)) {
+>check2 : Symbol(check2, Decl(typePredicatesInUnion3.ts, 30, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 0, 15))
+
+		x
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 0, 15))
+	}
+}
+
+function test2(x: string | number) {
+>test2 : Symbol(test2, Decl(typePredicatesInUnion3.ts, 7, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 9, 15))
+
+	if (check1(x)) {
+>check1 : Symbol(check1, Decl(typePredicatesInUnion3.ts, 26, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 9, 15))
+
+		x
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 9, 15))
+	}
+	if (check2(x)) {
+>check2 : Symbol(check2, Decl(typePredicatesInUnion3.ts, 30, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 9, 15))
+
+		x
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 9, 15))
+	}
+}
+
+
+function test3(x: "hello" | number) {
+>test3 : Symbol(test3, Decl(typePredicatesInUnion3.ts, 16, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 19, 15))
+
+	if (check1(x)) {
+>check1 : Symbol(check1, Decl(typePredicatesInUnion3.ts, 26, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 19, 15))
+
+		x
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 19, 15))
+	}
+	if (check2(x)) {
+>check2 : Symbol(check2, Decl(typePredicatesInUnion3.ts, 30, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 19, 15))
+
+		x
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 19, 15))
+	}
+}
+
+function check1(x: string | number): x is ("hello" | 0) {
+>check1 : Symbol(check1, Decl(typePredicatesInUnion3.ts, 26, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 16))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 16))
+
+	return x === "hello" || x === 0;
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 16))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 28, 16))
+}
+
+function check2(x: string | number): x is ("hello" | "bye" | 0) {
+>check2 : Symbol(check2, Decl(typePredicatesInUnion3.ts, 30, 1))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 32, 16))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 32, 16))
+
+	return x === "hello" || x === "bye" || x === 0;
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 32, 16))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 32, 16))
+>x : Symbol(x, Decl(typePredicatesInUnion3.ts, 32, 16))
+}

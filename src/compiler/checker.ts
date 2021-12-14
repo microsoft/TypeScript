@@ -24735,7 +24735,15 @@ namespace ts {
                 // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
                 if (type.flags & TypeFlags.Union) {
-                    const assignableType = filterType(type, t => isRelated(t, candidate));
+                    let assignableType = filterType(type, t => isRelated(t, candidate));
+                    if(candidate.flags & TypeFlags.Union){
+                        const unionAssignableType = mapType(type, type => {
+                            return filterType(candidate, candidate => isRelated(candidate, type));
+                        });
+                        if (!isTypeSubtypeOf(unionAssignableType, assignableType)) {
+                            assignableType = unionAssignableType;
+                        }
+                    }
                     if (!(assignableType.flags & TypeFlags.Never)) {
                         return assignableType;
                     }

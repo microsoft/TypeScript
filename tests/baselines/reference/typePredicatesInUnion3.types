@@ -1,0 +1,99 @@
+=== tests/cases/compiler/typePredicatesInUnion3.ts ===
+function test1(x: string | 0) {
+>test1 : (x: string | 0) => void
+>x : string | 0
+
+	if (check1(x)) {
+>check1(x) : boolean
+>check1 : (x: string | number) => x is 0 | "hello"
+>x : string | 0
+
+		x
+>x : 0 | "hello"
+	}
+	if (check2(x)) {
+>check2(x) : boolean
+>check2 : (x: string | number) => x is 0 | "hello" | "bye"
+>x : string | 0
+
+		x
+>x : 0 | "hello" | "bye"
+	}
+}
+
+function test2(x: string | number) {
+>test2 : (x: string | number) => void
+>x : string | number
+
+	if (check1(x)) {
+>check1(x) : boolean
+>check1 : (x: string | number) => x is 0 | "hello"
+>x : string | number
+
+		x
+>x : 0 | "hello"
+	}
+	if (check2(x)) {
+>check2(x) : boolean
+>check2 : (x: string | number) => x is 0 | "hello" | "bye"
+>x : string | number
+
+		x
+>x : 0 | "hello" | "bye"
+	}
+}
+
+
+function test3(x: "hello" | number) {
+>test3 : (x: "hello" | number) => void
+>x : number | "hello"
+
+	if (check1(x)) {
+>check1(x) : boolean
+>check1 : (x: string | number) => x is 0 | "hello"
+>x : number | "hello"
+
+		x
+>x : 0 | "hello"
+	}
+	if (check2(x)) {
+>check2(x) : boolean
+>check2 : (x: string | number) => x is 0 | "hello" | "bye"
+>x : number | "hello"
+
+		x
+>x : 0 | "hello"
+	}
+}
+
+function check1(x: string | number): x is ("hello" | 0) {
+>check1 : (x: string | number) => x is 0 | "hello"
+>x : string | number
+
+	return x === "hello" || x === 0;
+>x === "hello" || x === 0 : boolean
+>x === "hello" : boolean
+>x : string | number
+>"hello" : "hello"
+>x === 0 : boolean
+>x : string | number
+>0 : 0
+}
+
+function check2(x: string | number): x is ("hello" | "bye" | 0) {
+>check2 : (x: string | number) => x is 0 | "hello" | "bye"
+>x : string | number
+
+	return x === "hello" || x === "bye" || x === 0;
+>x === "hello" || x === "bye" || x === 0 : boolean
+>x === "hello" || x === "bye" : boolean
+>x === "hello" : boolean
+>x : string | number
+>"hello" : "hello"
+>x === "bye" : boolean
+>x : string | number
+>"bye" : "bye"
+>x === 0 : boolean
+>x : string | number
+>0 : 0
+}
