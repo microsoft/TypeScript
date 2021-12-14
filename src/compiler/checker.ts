@@ -12048,13 +12048,24 @@ namespace ts {
             return type;
         }
 
+        function isMappedTypeGenericIndexedAccess(type: Type) {
+            return type.flags & TypeFlags.IndexedAccess && getObjectFlags((type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
+                !isGenericMappedType((type as IndexedAccessType).objectType) && isGenericIndexType((type as IndexedAccessType).indexType);
+        }
+
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || unknownType : type;
+            // We obtain the base constraint for all instantiable types, except indexed access types of the form
+            // { [P in K]: E }[X], where K is non-generic and X is generic. For those types, we instead substitute an
+            // instantiation of E where P is replaced with X. We do this because getBaseConstraintOfType directly
+            // lowers to an instantiation where X's constraint is substituted for X, which isn't always desirable.
+            const t = !(type.flags & TypeFlags.Instantiable) ? type :
+                isMappedTypeGenericIndexedAccess(type) ? substituteIndexedMappedType((type as IndexedAccessType).objectType as MappedType, (type as IndexedAccessType).indexType) :
+                getBaseConstraintOfType(type) || unknownType;
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(t as MappedType) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(t as IntersectionType) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
@@ -21845,12 +21856,14 @@ namespace ts {
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
                     // when constructing types from type parameters that had no inference candidates).
-                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType || source === silentNeverType ||
-                        (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
+                    if (source === nonInferrableAnyType || source === silentNeverType || (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
+                        if (getObjectFlags(source) & ObjectFlags.NonInferrableType) {
+                            return;
+                        }
                         if (!inference.isFixed) {
                             if (inference.priority === undefined || priority < inference.priority) {
                                 inference.candidates = undefined;
@@ -21881,21 +21894,19 @@ namespace ts {
                         inferencePriority = Math.min(inferencePriority, priority);
                         return;
                     }
-                    else {
-                        // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
-                        const simplified = getSimplifiedType(target, /*writing*/ false);
-                        if (simplified !== target) {
-                            invokeOnce(source, simplified, inferFromTypes);
-                        }
-                        else if (target.flags & TypeFlags.IndexedAccess) {
-                            const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
-                            // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
-                            // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
-                            if (indexType.flags & TypeFlags.Instantiable) {
-                                const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
-                                if (simplified && simplified !== target) {
-                                    invokeOnce(source, simplified, inferFromTypes);
-                                }
+                    // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
+                    const simplified = getSimplifiedType(target, /*writing*/ false);
+                    if (simplified !== target) {
+                        inferFromTypes(source, simplified);
+                    }
+                    else if (target.flags & TypeFlags.IndexedAccess) {
+                        const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
+                        // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
+                        // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
+                        if (indexType.flags & TypeFlags.Instantiable) {
+                            const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
+                            if (simplified && simplified !== target) {
+                                inferFromTypes(source, simplified);
                             }
                         }
                     }
@@ -24929,7 +24940,7 @@ namespace ts {
             const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
                 someType(type, isGenericTypeWithUnionConstraint) &&
                 (isConstraintPosition(type, reference) || hasNonBindingPatternContextualTypeWithNoGenericTypes(reference));
-            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
+            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable && !isMappedTypeGenericIndexedAccess(t) ? getBaseConstraintOrType(t) : t) : type;
         }
 
         function isExportOrExportExpression(location: Node) {
