@@ -1986,7 +1986,7 @@ namespace ts.server {
                 }
             }
 
-            type PackageJsonInfo = Exclude<ReturnType<typeof resolvePackageNameToPackageJson>, undefined>;
+            type PackageJsonInfo = NonNullable<ReturnType<typeof resolvePackageNameToPackageJson>>;
             function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
@@ -2006,7 +2006,7 @@ namespace ts.server {
 
                     return mapDefined(entrypoints, entrypoint => {
                         const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real) : entrypoint;
-                        if (!program.getSourceFile(resolvedFileName) && (!isSymlink || !program.getSourceFile(entrypoint))) {
+                        if (!program.getSourceFile(resolvedFileName) && !(isSymlink && program.getSourceFile(entrypoint))) {
                             return resolvedFileName;
                         }
                     });

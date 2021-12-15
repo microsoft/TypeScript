@@ -1643,8 +1643,7 @@ namespace ts {
 
         function loadEntrypointsFromTargetExports(target: unknown) {
             if (typeof target === "string" && startsWith(target, "./") && target.indexOf("*") === -1) {
-                const parts = getPathComponents(target).slice(1);
-                const partsAfterFirst = parts.slice(1);
+                const partsAfterFirst = getPathComponents(target).slice(2);
                 if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
                     return;
                 }
