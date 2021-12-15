@@ -69,26 +69,26 @@ verify.completions({
   },
 });
 
-// goTo.marker("mts");
-// verify.completions({
-//   marker: "mts",
-//   exact: completion.globalsPlus([{
-//     name: "fooFromIndex",
-//     source: "dependency/lol",
-//     sourceDisplay: "dependency/lol",
-//     sortText: completion.SortText.AutoImportSuggestions,
-//     hasAction: true,
-//   }, {
-//     // TODO: this one will go away (see note in ./autoImportProvider_exportMap3.ts)
-//     name: "fooFromLol",
-//     source: "../node_modules/dependency/lib/index.js",
-//     sourceDisplay: "../node_modules/dependency/lib/index.js",
-//     sortText: completion.SortText.AutoImportSuggestions,
-//     hasAction: true,
-//   }]),
-//   preferences: {
-//     includeCompletionsForModuleExports: true,
-//     includeInsertTextCompletions: true,
-//     allowIncompleteCompletions: true,
-//   },
-// });
+goTo.marker("mts");
+verify.completions({
+  marker: "mts",
+  exact: completion.globalsPlus([{
+    name: "fooFromIndex",
+    source: "dependency/lol",
+    sourceDisplay: "dependency/lol",
+    sortText: completion.SortText.AutoImportSuggestions,
+    hasAction: true,
+  }, {
+    // TODO: this one will go away (see note in ./autoImportProvider_exportMap3.ts)
+    name: "fooFromLol",
+    source: "../node_modules/dependency/lib/lol.js",
+    sourceDisplay: "../node_modules/dependency/lib/lol.js",
+    sortText: completion.SortText.AutoImportSuggestions,
+    hasAction: true,
+  }]),
+  preferences: {
+    includeCompletionsForModuleExports: true,
+    includeInsertTextCompletions: true,
+    allowIncompleteCompletions: true,
+  },
+});
