@@ -299,7 +299,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/of).
          */
-        of(code: string): string;
+        of(code: string): string | undefined;
         /**
          * Returns a new object with properties reflecting the locale and style formatting options computed during the construction of the current
          * [`Intl/DisplayNames`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames) object.
