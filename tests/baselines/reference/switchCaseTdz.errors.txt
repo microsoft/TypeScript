@@ -19,10 +19,9 @@ tests/cases/compiler/switchCaseTdz.ts(46,13): error TS2837: Variable 'z' is decl
 tests/cases/compiler/switchCaseTdz.ts(50,13): error TS2837: Variable 'x' is declared in a prior case block.
 tests/cases/compiler/switchCaseTdz.ts(51,13): error TS2837: Variable 'y' is declared in a prior case block.
 tests/cases/compiler/switchCaseTdz.ts(52,13): error TS2837: Variable 'z' is declared in a prior case block.
-tests/cases/compiler/switchCaseTdz.ts(64,17): error TS2837: Variable 'x' is declared in a prior case block.
 
 
-==== tests/cases/compiler/switchCaseTdz.ts (22 errors) ====
+==== tests/cases/compiler/switchCaseTdz.ts (21 errors) ====
     switch (1 + 1) {
         case -1:
             x;
@@ -132,7 +131,5 @@ tests/cases/compiler/switchCaseTdz.ts(64,17): error TS2837: Variable 'x' is decl
                 case 2:
                     // Legal
                     x;
-                    ~
-!!! error TS2837: Variable 'x' is declared in a prior case block.
             }
     }

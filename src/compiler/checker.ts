@@ -25258,9 +25258,14 @@ namespace ts {
             //         if (true) x; // <- bad (note: need to walk to parent)
             // }
             if (container.kind === SyntaxKind.CaseBlock) {
-                const usageCaseBlock = getAncestor(node, SyntaxKind.CaseClause);
-                if (usageCaseBlock) {
-                    if (usageCaseBlock.pos > symbol.valueDeclaration.pos) {
+                let usageCaseClause = getAncestor(node, SyntaxKind.CaseClause);
+                if (usageCaseClause) {
+                    // Walk up until we're at the same level as the declaring block
+                    while (usageCaseClause.parent !== container) {
+                        usageCaseClause = usageCaseClause!.parent;
+                    }
+
+                    if (usageCaseClause.pos > symbol.valueDeclaration.pos) {
                         error(node, Diagnostics.Variable_0_is_declared_in_a_prior_case_block, symbolToString(symbol));
                     }
                 }
