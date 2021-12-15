@@ -5,9 +5,10 @@ tests/cases/compiler/unusedSwitchStatement.ts(9,13): error TS6133: 'z' is declar
 tests/cases/compiler/unusedSwitchStatement.ts(14,10): error TS2678: Type '0' is not comparable to type '2'.
 tests/cases/compiler/unusedSwitchStatement.ts(15,13): error TS6133: 'x' is declared but its value is never read.
 tests/cases/compiler/unusedSwitchStatement.ts(16,10): error TS2678: Type '1' is not comparable to type '2'.
+tests/cases/compiler/unusedSwitchStatement.ts(17,9): error TS2837: Variable 'x' is declared in a prior case block.
 
 
-==== tests/cases/compiler/unusedSwitchStatement.ts (7 errors) ====
+==== tests/cases/compiler/unusedSwitchStatement.ts (8 errors) ====
     switch (1) {
         case 0:
              ~
@@ -39,4 +40,6 @@ tests/cases/compiler/unusedSwitchStatement.ts(16,10): error TS2678: Type '1' is 
              ~
 !!! error TS2678: Type '1' is not comparable to type '2'.
             x++;
+            ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
     }

@@ -1,0 +1,157 @@
+=== tests/cases/compiler/switchCaseTdz.ts ===
+switch (1 + 1) {
+>1 + 1 : number
+>1 : 1
+>1 : 1
+
+    case -1:
+>-1 : -1
+>1 : 1
+
+        x;
+>x : number
+
+        y;
+>y : 0
+
+        z;
+>z : number
+
+    case 0:
+>0 : 0
+
+        var ok = 0;
+>ok : number
+>0 : 0
+
+        let x = 0;
+>x : number
+>0 : 0
+
+        const y = 0;
+>y : 0
+>0 : 0
+
+        const [z] = [0];
+>z : number
+>[0] : [number]
+>0 : 0
+
+        ok;
+>ok : number
+
+        x;
+>x : number
+
+        y;
+>y : 0
+
+        z;
+>z : number
+
+    case 1:
+>1 : 1
+
+        x = 0; // <- bad
+>x = 0 : 0
+>x : number
+>0 : 0
+
+        y; // <- bad
+>y : 0
+
+        z; // <- bad
+>z : number
+
+        ok;
+>ok : number
+
+        if (true) {
+>true : true
+
+            x = 0; // <- bad
+>x = 0 : 0
+>x : number
+>0 : 0
+
+            y; // <- bad
+>y : 0
+
+            z; // <- bad
+>z : number
+
+            ok;
+>ok : number
+        }
+        let f1 = function () {
+>f1 : () => void
+>function () {            x = 0; // <- bad            y; // <- bad            z; // <- bad            ok;        } : () => void
+
+            x = 0; // <- bad
+>x = 0 : 0
+>x : number
+>0 : 0
+
+            y; // <- bad
+>y : 0
+
+            z; // <- bad
+>z : number
+
+            ok;
+>ok : number
+        }
+        break;
+
+    case 2:
+>2 : 2
+
+    case 3:
+>3 : 3
+
+        x; // <- bad
+>x : number
+
+        y; // <- bad
+>y : 0
+
+        z; // <- bad
+>z : number
+
+        ok;
+>ok : number
+
+        if (true) {
+>true : true
+
+            x; // <- bad
+>x : number
+
+            y; // <- bad
+>y : 0
+
+            z; // <- bad
+>z : number
+
+            ok;
+>ok : number
+        }
+        let f2 = function () {
+>f2 : () => void
+>function () {            x; // <- bad            y; // <- bad            z; // <- bad            ok;        } : () => void
+
+            x; // <- bad
+>x : number
+
+            y; // <- bad
+>y : 0
+
+            z; // <- bad
+>z : number
+
+            ok;
+>ok : number
+        }
+
+}
+

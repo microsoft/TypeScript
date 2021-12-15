@@ -1,0 +1,126 @@
+tests/cases/compiler/switchCaseTdz.ts(3,9): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/switchCaseTdz.ts(4,9): error TS2448: Block-scoped variable 'y' used before its declaration.
+tests/cases/compiler/switchCaseTdz.ts(5,9): error TS2448: Block-scoped variable 'z' used before its declaration.
+tests/cases/compiler/switchCaseTdz.ts(19,9): error TS2837: Variable 'x' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(20,9): error TS2837: Variable 'y' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(21,9): error TS2837: Variable 'z' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(24,13): error TS2837: Variable 'x' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(25,13): error TS2837: Variable 'y' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(26,13): error TS2837: Variable 'z' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(30,13): error TS2837: Variable 'x' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(31,13): error TS2837: Variable 'y' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(32,13): error TS2837: Variable 'z' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(39,9): error TS2837: Variable 'x' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(40,9): error TS2837: Variable 'y' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(41,9): error TS2837: Variable 'z' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(44,13): error TS2837: Variable 'x' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(45,13): error TS2837: Variable 'y' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(46,13): error TS2837: Variable 'z' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(50,13): error TS2837: Variable 'x' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(51,13): error TS2837: Variable 'y' is declared in a prior case block.
+tests/cases/compiler/switchCaseTdz.ts(52,13): error TS2837: Variable 'z' is declared in a prior case block.
+
+
+==== tests/cases/compiler/switchCaseTdz.ts (21 errors) ====
+    switch (1 + 1) {
+        case -1:
+            x;
+            ~
+!!! error TS2448: Block-scoped variable 'x' used before its declaration.
+!!! related TS2728 tests/cases/compiler/switchCaseTdz.ts:9:13: 'x' is declared here.
+            y;
+            ~
+!!! error TS2448: Block-scoped variable 'y' used before its declaration.
+!!! related TS2728 tests/cases/compiler/switchCaseTdz.ts:10:15: 'y' is declared here.
+            z;
+            ~
+!!! error TS2448: Block-scoped variable 'z' used before its declaration.
+!!! related TS2728 tests/cases/compiler/switchCaseTdz.ts:11:16: 'z' is declared here.
+    
+        case 0:
+            var ok = 0;
+            let x = 0;
+            const y = 0;
+            const [z] = [0];
+    
+            ok;
+            x;
+            y;
+            z;
+    
+        case 1:
+            x = 0; // <- bad
+            ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
+            y; // <- bad
+            ~
+!!! error TS2837: Variable 'y' is declared in a prior case block.
+            z; // <- bad
+            ~
+!!! error TS2837: Variable 'z' is declared in a prior case block.
+            ok;
+            if (true) {
+                x = 0; // <- bad
+                ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
+                y; // <- bad
+                ~
+!!! error TS2837: Variable 'y' is declared in a prior case block.
+                z; // <- bad
+                ~
+!!! error TS2837: Variable 'z' is declared in a prior case block.
+                ok;
+            }
+            let f1 = function () {
+                x = 0; // <- bad
+                ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
+                y; // <- bad
+                ~
+!!! error TS2837: Variable 'y' is declared in a prior case block.
+                z; // <- bad
+                ~
+!!! error TS2837: Variable 'z' is declared in a prior case block.
+                ok;
+            }
+            break;
+    
+        case 2:
+        case 3:
+            x; // <- bad
+            ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
+            y; // <- bad
+            ~
+!!! error TS2837: Variable 'y' is declared in a prior case block.
+            z; // <- bad
+            ~
+!!! error TS2837: Variable 'z' is declared in a prior case block.
+            ok;
+            if (true) {
+                x; // <- bad
+                ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
+                y; // <- bad
+                ~
+!!! error TS2837: Variable 'y' is declared in a prior case block.
+                z; // <- bad
+                ~
+!!! error TS2837: Variable 'z' is declared in a prior case block.
+                ok;
+            }
+            let f2 = function () {
+                x; // <- bad
+                ~
+!!! error TS2837: Variable 'x' is declared in a prior case block.
+                y; // <- bad
+                ~
+!!! error TS2837: Variable 'y' is declared in a prior case block.
+                z; // <- bad
+                ~
+!!! error TS2837: Variable 'z' is declared in a prior case block.
+                ok;
+            }
+    
+    }
+    

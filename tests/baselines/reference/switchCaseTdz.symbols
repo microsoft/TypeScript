@@ -1,0 +1,125 @@
+=== tests/cases/compiler/switchCaseTdz.ts ===
+switch (1 + 1) {
+    case -1:
+        x;
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+        y;
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+        z;
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+    case 0:
+        var ok = 0;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+
+        let x = 0;
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+        const y = 0;
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+        const [z] = [0];
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+        ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+
+        x;
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+        y;
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+        z;
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+    case 1:
+        x = 0; // <- bad
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+        y; // <- bad
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+        z; // <- bad
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+        ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+
+        if (true) {
+            x = 0; // <- bad
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+            y; // <- bad
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+            z; // <- bad
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+            ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+        }
+        let f1 = function () {
+>f1 : Symbol(f1, Decl(switchCaseTdz.ts, 28, 11))
+
+            x = 0; // <- bad
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+            y; // <- bad
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+            z; // <- bad
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+            ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+        }
+        break;
+
+    case 2:
+    case 3:
+        x; // <- bad
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+        y; // <- bad
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+        z; // <- bad
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+        ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+
+        if (true) {
+            x; // <- bad
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+            y; // <- bad
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+            z; // <- bad
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+            ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+        }
+        let f2 = function () {
+>f2 : Symbol(f2, Decl(switchCaseTdz.ts, 48, 11))
+
+            x; // <- bad
+>x : Symbol(x, Decl(switchCaseTdz.ts, 8, 11))
+
+            y; // <- bad
+>y : Symbol(y, Decl(switchCaseTdz.ts, 9, 13))
+
+            z; // <- bad
+>z : Symbol(z, Decl(switchCaseTdz.ts, 10, 15))
+
+            ok;
+>ok : Symbol(ok, Decl(switchCaseTdz.ts, 7, 11))
+        }
+
+}
+

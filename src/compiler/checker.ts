@@ -25248,6 +25248,23 @@ namespace ts {
             if (isCaptured) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
+
+            // Check for usage of a variable from a case clause prior to the referencing one
+            // switch(n) {
+            //     case 0:
+            //         let x = 0;
+            //     case 1:
+            //         x; // <- bad
+            //         if (true) x; // <- bad (note: need to walk to parent)
+            // }
+            if (container.kind === SyntaxKind.CaseBlock) {
+                const usageCaseBlock = getAncestor(node, SyntaxKind.CaseClause);
+                if (usageCaseBlock) {
+                    if (usageCaseBlock.pos > symbol.valueDeclaration.pos) {
+                        error(node, Diagnostics.Variable_0_is_declared_in_a_prior_case_block, symbolToString(symbol));
+                    }
+                }
+            }
         }
 
         function isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement) {
