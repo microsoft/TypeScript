@@ -123,3 +123,18 @@ switch (1 + 1) {
 
 }
 
+switch(2 + 2) {
+    case 0:
+        let x = 1;
+>x : Symbol(x, Decl(switchCaseTdz.ts, 59, 11))
+
+        switch(x + x) {
+>x : Symbol(x, Decl(switchCaseTdz.ts, 59, 11))
+>x : Symbol(x, Decl(switchCaseTdz.ts, 59, 11))
+
+            case 2:
+                // Legal
+                x;
+>x : Symbol(x, Decl(switchCaseTdz.ts, 59, 11))
+        }
+}

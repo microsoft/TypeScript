@@ -54,3 +54,13 @@ switch (1 + 1) {
         }
 
 }
+
+switch(2 + 2) {
+    case 0:
+        let x = 1;
+        switch(x + x) {
+            case 2:
+                // Legal
+                x;
+        }
+}

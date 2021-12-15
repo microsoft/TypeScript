@@ -56,6 +56,15 @@ switch (1 + 1) {
 
 }
 
+switch(2 + 2) {
+    case 0:
+        let x = 1;
+        switch(x + x) {
+            case 2:
+                // Legal
+                x;
+        }
+}
 
 //// [switchCaseTdz.js]
 switch (1 + 1) {
@@ -108,4 +117,13 @@ switch (1 + 1) {
             z_1; // <- bad
             ok;
         };
+}
+switch (2 + 2) {
+    case 0:
+        var x = 1;
+        switch (x + x) {
+            case 2:
+                // Legal
+                x;
+        }
 }

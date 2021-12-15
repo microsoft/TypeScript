@@ -155,3 +155,28 @@ switch (1 + 1) {
 
 }
 
+switch(2 + 2) {
+>2 + 2 : number
+>2 : 2
+>2 : 2
+
+    case 0:
+>0 : 0
+
+        let x = 1;
+>x : number
+>1 : 1
+
+        switch(x + x) {
+>x + x : number
+>x : number
+>x : number
+
+            case 2:
+>2 : 2
+
+                // Legal
+                x;
+>x : number
+        }
+}
