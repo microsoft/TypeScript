@@ -4433,7 +4433,7 @@ namespace ts {
                                     return true;
                             }
                         }
-                        else if (third === SyntaxKind.CommaToken) {
+                        else if (third === SyntaxKind.CommaToken || third === SyntaxKind.EqualsToken) {
                             return true;
                         }
                         return false;

@@ -1,0 +1,575 @@
+=== tests/cases/compiler/correlatedUnions.ts ===
+// Various repros from #30581
+
+type RecordMap = { n: number, s: string, b: boolean };
+>RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
+>n : Symbol(n, Decl(correlatedUnions.ts, 2, 18))
+>s : Symbol(s, Decl(correlatedUnions.ts, 2, 29))
+>b : Symbol(b, Decl(correlatedUnions.ts, 2, 40))
+
+type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: {
+>UnionRecord : Symbol(UnionRecord, Decl(correlatedUnions.ts, 2, 54))
+>K : Symbol(K, Decl(correlatedUnions.ts, 3, 17))
+>RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
+>RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
+>P : Symbol(P, Decl(correlatedUnions.ts, 3, 67))
+>K : Symbol(K, Decl(correlatedUnions.ts, 3, 17))
+
+    kind: P,
+>kind : Symbol(kind, Decl(correlatedUnions.ts, 3, 77))
+>P : Symbol(P, Decl(correlatedUnions.ts, 3, 67))
+
+    v: RecordMap[P],
+>v : Symbol(v, Decl(correlatedUnions.ts, 4, 12))
+>RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
+>P : Symbol(P, Decl(correlatedUnions.ts, 3, 67))
+
+    f: (v: RecordMap[P]) => void
+>f : Symbol(f, Decl(correlatedUnions.ts, 5, 20))
+>v : Symbol(v, Decl(correlatedUnions.ts, 6, 8))
+>RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
+>P : Symbol(P, Decl(correlatedUnions.ts, 3, 67))
+
+}}[K];
+>K : Symbol(K, Decl(correlatedUnions.ts, 3, 17))
+
+function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>) {
+>processRecord : Symbol(processRecord, Decl(correlatedUnions.ts, 7, 6))
+>K : Symbol(K, Decl(correlatedUnions.ts, 9, 23))
+>RecordMap : Symbol(RecordMap, Decl(correlatedUnions.ts, 0, 0))
+>rec : Symbol(rec, Decl(correlatedUnions.ts, 9, 50))
+>UnionRecord : Symbol(UnionRecord, Decl(correlatedUnions.ts, 2, 54))
+>K : Symbol(K, Decl(correlatedUnions.ts, 9, 23))
+
+    rec.f(rec.v);
+>rec.f : Symbol(f, Decl(correlatedUnions.ts, 5, 20))
+>rec : Symbol(rec, Decl(correlatedUnions.ts, 9, 50))
+>f : Symbol(f, Decl(correlatedUnions.ts, 5, 20))
+>rec.v : Symbol(v, Decl(correlatedUnions.ts, 4, 12))
+>rec : Symbol(rec, Decl(correlatedUnions.ts, 9, 50))
+>v : Symbol(v, Decl(correlatedUnions.ts, 4, 12))
+}
+
+declare const r1: UnionRecord<'n'>;  // { kind: 'n', v: number, f: (v: number) => void }
+>r1 : Symbol(r1, Decl(correlatedUnions.ts, 13, 13))
+>UnionRecord : Symbol(UnionRecord, Decl(correlatedUnions.ts, 2, 54))
+
+declare const r2: UnionRecord;  // { kind: 'n', ... } | { kind: 's', ... } | { kind: 'b', ... }
+>r2 : Symbol(r2, Decl(correlatedUnions.ts, 14, 13))
+>UnionRecord : Symbol(UnionRecord, Decl(correlatedUnions.ts, 2, 54))
+
+processRecord(r1);
+>processRecord : Symbol(processRecord, Decl(correlatedUnions.ts, 7, 6))
+>r1 : Symbol(r1, Decl(correlatedUnions.ts, 13, 13))
+
+processRecord(r2);
+>processRecord : Symbol(processRecord, Decl(correlatedUnions.ts, 7, 6))
+>r2 : Symbol(r2, Decl(correlatedUnions.ts, 14, 13))
+
+processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
+>processRecord : Symbol(processRecord, Decl(correlatedUnions.ts, 7, 6))
+>kind : Symbol(kind, Decl(correlatedUnions.ts, 18, 15))
+>v : Symbol(v, Decl(correlatedUnions.ts, 18, 26))
+>f : Symbol(f, Decl(correlatedUnions.ts, 18, 33))
+>v : Symbol(v, Decl(correlatedUnions.ts, 18, 36))
+>v.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(correlatedUnions.ts, 18, 36))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+// --------
+
+type TextFieldData = { value: string }
+>TextFieldData : Symbol(TextFieldData, Decl(correlatedUnions.ts, 18, 63))
+>value : Symbol(value, Decl(correlatedUnions.ts, 22, 22))
+
+type SelectFieldData = { options: string[], selectedValue: string }
+>SelectFieldData : Symbol(SelectFieldData, Decl(correlatedUnions.ts, 22, 38))
+>options : Symbol(options, Decl(correlatedUnions.ts, 23, 24))
+>selectedValue : Symbol(selectedValue, Decl(correlatedUnions.ts, 23, 43))
+
+type FieldMap = {
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+
+    text: TextFieldData;
+>text : Symbol(text, Decl(correlatedUnions.ts, 25, 17))
+>TextFieldData : Symbol(TextFieldData, Decl(correlatedUnions.ts, 18, 63))
+
+    select: SelectFieldData;
+>select : Symbol(select, Decl(correlatedUnions.ts, 26, 24))
+>SelectFieldData : Symbol(SelectFieldData, Decl(correlatedUnions.ts, 22, 38))
+}
+
+type FormField<K extends keyof FieldMap> = { type: K, data: FieldMap[K] };
+>FormField : Symbol(FormField, Decl(correlatedUnions.ts, 28, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 30, 15))
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+>type : Symbol(type, Decl(correlatedUnions.ts, 30, 44))
+>K : Symbol(K, Decl(correlatedUnions.ts, 30, 15))
+>data : Symbol(data, Decl(correlatedUnions.ts, 30, 53))
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+>K : Symbol(K, Decl(correlatedUnions.ts, 30, 15))
+
+type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
+>RenderFunc : Symbol(RenderFunc, Decl(correlatedUnions.ts, 30, 74))
+>K : Symbol(K, Decl(correlatedUnions.ts, 32, 16))
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+>props : Symbol(props, Decl(correlatedUnions.ts, 32, 45))
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+>K : Symbol(K, Decl(correlatedUnions.ts, 32, 16))
+
+type RenderFuncMap = { [K in keyof FieldMap]: RenderFunc<K> };
+>RenderFuncMap : Symbol(RenderFuncMap, Decl(correlatedUnions.ts, 32, 73))
+>K : Symbol(K, Decl(correlatedUnions.ts, 33, 24))
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+>RenderFunc : Symbol(RenderFunc, Decl(correlatedUnions.ts, 30, 74))
+>K : Symbol(K, Decl(correlatedUnions.ts, 33, 24))
+
+function renderTextField(props: TextFieldData) {}
+>renderTextField : Symbol(renderTextField, Decl(correlatedUnions.ts, 33, 62))
+>props : Symbol(props, Decl(correlatedUnions.ts, 35, 25))
+>TextFieldData : Symbol(TextFieldData, Decl(correlatedUnions.ts, 18, 63))
+
+function renderSelectField(props: SelectFieldData) {}
+>renderSelectField : Symbol(renderSelectField, Decl(correlatedUnions.ts, 35, 49))
+>props : Symbol(props, Decl(correlatedUnions.ts, 36, 27))
+>SelectFieldData : Symbol(SelectFieldData, Decl(correlatedUnions.ts, 22, 38))
+
+const renderFuncs: RenderFuncMap = {
+>renderFuncs : Symbol(renderFuncs, Decl(correlatedUnions.ts, 38, 5))
+>RenderFuncMap : Symbol(RenderFuncMap, Decl(correlatedUnions.ts, 32, 73))
+
+    text: renderTextField,
+>text : Symbol(text, Decl(correlatedUnions.ts, 38, 36))
+>renderTextField : Symbol(renderTextField, Decl(correlatedUnions.ts, 33, 62))
+
+    select: renderSelectField,
+>select : Symbol(select, Decl(correlatedUnions.ts, 39, 26))
+>renderSelectField : Symbol(renderSelectField, Decl(correlatedUnions.ts, 35, 49))
+
+};
+
+function renderField<K extends keyof FieldMap>(field: FormField<K>) {
+>renderField : Symbol(renderField, Decl(correlatedUnions.ts, 41, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 43, 21))
+>FieldMap : Symbol(FieldMap, Decl(correlatedUnions.ts, 23, 67))
+>field : Symbol(field, Decl(correlatedUnions.ts, 43, 47))
+>FormField : Symbol(FormField, Decl(correlatedUnions.ts, 28, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 43, 21))
+
+    const renderFn = renderFuncs[field.type];
+>renderFn : Symbol(renderFn, Decl(correlatedUnions.ts, 44, 9))
+>renderFuncs : Symbol(renderFuncs, Decl(correlatedUnions.ts, 38, 5))
+>field.type : Symbol(type, Decl(correlatedUnions.ts, 30, 44))
+>field : Symbol(field, Decl(correlatedUnions.ts, 43, 47))
+>type : Symbol(type, Decl(correlatedUnions.ts, 30, 44))
+
+    renderFn(field.data);
+>renderFn : Symbol(renderFn, Decl(correlatedUnions.ts, 44, 9))
+>field.data : Symbol(data, Decl(correlatedUnions.ts, 30, 53))
+>field : Symbol(field, Decl(correlatedUnions.ts, 43, 47))
+>data : Symbol(data, Decl(correlatedUnions.ts, 30, 53))
+}
+
+// --------
+
+type TypeMap = {
+>TypeMap : Symbol(TypeMap, Decl(correlatedUnions.ts, 46, 1))
+
+    foo: string,
+>foo : Symbol(foo, Decl(correlatedUnions.ts, 50, 16))
+
+    bar: number
+>bar : Symbol(bar, Decl(correlatedUnions.ts, 51, 16))
+
+};
+
+type Keys = keyof TypeMap;
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 53, 2))
+>TypeMap : Symbol(TypeMap, Decl(correlatedUnions.ts, 46, 1))
+
+type HandlerMap = { [P in Keys]: (x: TypeMap[P]) => void };
+>HandlerMap : Symbol(HandlerMap, Decl(correlatedUnions.ts, 55, 26))
+>P : Symbol(P, Decl(correlatedUnions.ts, 57, 21))
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 53, 2))
+>x : Symbol(x, Decl(correlatedUnions.ts, 57, 34))
+>TypeMap : Symbol(TypeMap, Decl(correlatedUnions.ts, 46, 1))
+>P : Symbol(P, Decl(correlatedUnions.ts, 57, 21))
+
+const handlers: HandlerMap = {
+>handlers : Symbol(handlers, Decl(correlatedUnions.ts, 59, 5))
+>HandlerMap : Symbol(HandlerMap, Decl(correlatedUnions.ts, 55, 26))
+
+    foo: s => s.length,
+>foo : Symbol(foo, Decl(correlatedUnions.ts, 59, 30))
+>s : Symbol(s, Decl(correlatedUnions.ts, 60, 8))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(correlatedUnions.ts, 60, 8))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    bar: n => n.toFixed(2)
+>bar : Symbol(bar, Decl(correlatedUnions.ts, 60, 23))
+>n : Symbol(n, Decl(correlatedUnions.ts, 61, 8))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(correlatedUnions.ts, 61, 8))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+};
+
+type DataEntry<K extends Keys = Keys> = { [P in K]: {
+>DataEntry : Symbol(DataEntry, Decl(correlatedUnions.ts, 62, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 64, 15))
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 53, 2))
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 53, 2))
+>P : Symbol(P, Decl(correlatedUnions.ts, 64, 43))
+>K : Symbol(K, Decl(correlatedUnions.ts, 64, 15))
+
+    type: P,
+>type : Symbol(type, Decl(correlatedUnions.ts, 64, 53))
+>P : Symbol(P, Decl(correlatedUnions.ts, 64, 43))
+
+    data: TypeMap[P]
+>data : Symbol(data, Decl(correlatedUnions.ts, 65, 12))
+>TypeMap : Symbol(TypeMap, Decl(correlatedUnions.ts, 46, 1))
+>P : Symbol(P, Decl(correlatedUnions.ts, 64, 43))
+
+}}[K];
+>K : Symbol(K, Decl(correlatedUnions.ts, 64, 15))
+
+const data: DataEntry[] = [
+>data : Symbol(data, Decl(correlatedUnions.ts, 69, 5))
+>DataEntry : Symbol(DataEntry, Decl(correlatedUnions.ts, 62, 2))
+
+    { type: 'foo', data: 'abc' },
+>type : Symbol(type, Decl(correlatedUnions.ts, 70, 5))
+>data : Symbol(data, Decl(correlatedUnions.ts, 70, 18))
+
+    { type: 'foo', data: 'def' },
+>type : Symbol(type, Decl(correlatedUnions.ts, 71, 5))
+>data : Symbol(data, Decl(correlatedUnions.ts, 71, 18))
+
+    { type: 'bar', data: 42 },
+>type : Symbol(type, Decl(correlatedUnions.ts, 72, 5))
+>data : Symbol(data, Decl(correlatedUnions.ts, 72, 18))
+
+];
+
+function process<K extends Keys>(data: DataEntry<K>[]) {
+>process : Symbol(process, Decl(correlatedUnions.ts, 73, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 75, 17))
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 53, 2))
+>data : Symbol(data, Decl(correlatedUnions.ts, 75, 33))
+>DataEntry : Symbol(DataEntry, Decl(correlatedUnions.ts, 62, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 75, 17))
+
+    data.forEach(block => {
+>data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(correlatedUnions.ts, 75, 33))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>block : Symbol(block, Decl(correlatedUnions.ts, 76, 17))
+
+        if (block.type in handlers) {
+>block.type : Symbol(type, Decl(correlatedUnions.ts, 64, 53))
+>block : Symbol(block, Decl(correlatedUnions.ts, 76, 17))
+>type : Symbol(type, Decl(correlatedUnions.ts, 64, 53))
+>handlers : Symbol(handlers, Decl(correlatedUnions.ts, 59, 5))
+
+            handlers[block.type](block.data)
+>handlers : Symbol(handlers, Decl(correlatedUnions.ts, 59, 5))
+>block.type : Symbol(type, Decl(correlatedUnions.ts, 64, 53))
+>block : Symbol(block, Decl(correlatedUnions.ts, 76, 17))
+>type : Symbol(type, Decl(correlatedUnions.ts, 64, 53))
+>block.data : Symbol(data, Decl(correlatedUnions.ts, 65, 12))
+>block : Symbol(block, Decl(correlatedUnions.ts, 76, 17))
+>data : Symbol(data, Decl(correlatedUnions.ts, 65, 12))
+        }
+    });
+}
+
+process(data);
+>process : Symbol(process, Decl(correlatedUnions.ts, 73, 2))
+>data : Symbol(data, Decl(correlatedUnions.ts, 69, 5))
+
+process([{ type: 'foo', data: 'abc' }]);
+>process : Symbol(process, Decl(correlatedUnions.ts, 73, 2))
+>type : Symbol(type, Decl(correlatedUnions.ts, 84, 10))
+>data : Symbol(data, Decl(correlatedUnions.ts, 84, 23))
+
+// --------
+
+type LetterMap = { A: string, B: number }
+>LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
+>A : Symbol(A, Decl(correlatedUnions.ts, 88, 18))
+>B : Symbol(B, Decl(correlatedUnions.ts, 88, 29))
+
+type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: Record<P, LetterMap[P]>) => void } }[K];
+>LetterCaller : Symbol(LetterCaller, Decl(correlatedUnions.ts, 88, 41))
+>K : Symbol(K, Decl(correlatedUnions.ts, 89, 18))
+>LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
+>P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
+>K : Symbol(K, Decl(correlatedUnions.ts, 89, 18))
+>letter : Symbol(letter, Decl(correlatedUnions.ts, 89, 60))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
+>LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
+>P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
+>caller : Symbol(caller, Decl(correlatedUnions.ts, 89, 93))
+>x : Symbol(x, Decl(correlatedUnions.ts, 89, 103))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
+>LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
+>P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
+>K : Symbol(K, Decl(correlatedUnions.ts, 89, 18))
+
+function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void {
+>call : Symbol(call, Decl(correlatedUnions.ts, 89, 146))
+>K : Symbol(K, Decl(correlatedUnions.ts, 91, 14))
+>LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
+>letter : Symbol(letter, Decl(correlatedUnions.ts, 91, 42))
+>caller : Symbol(caller, Decl(correlatedUnions.ts, 91, 50))
+>LetterCaller : Symbol(LetterCaller, Decl(correlatedUnions.ts, 88, 41))
+>K : Symbol(K, Decl(correlatedUnions.ts, 91, 14))
+
+  caller(letter);
+>caller : Symbol(caller, Decl(correlatedUnions.ts, 91, 50))
+>letter : Symbol(letter, Decl(correlatedUnions.ts, 91, 42))
+}
+
+type A = { A: string };
+>A : Symbol(A, Decl(correlatedUnions.ts, 93, 1))
+>A : Symbol(A, Decl(correlatedUnions.ts, 95, 10))
+
+type B = { B: number };
+>B : Symbol(B, Decl(correlatedUnions.ts, 95, 23))
+>B : Symbol(B, Decl(correlatedUnions.ts, 96, 10))
+
+type ACaller = (a: A) => void;
+>ACaller : Symbol(ACaller, Decl(correlatedUnions.ts, 96, 23))
+>a : Symbol(a, Decl(correlatedUnions.ts, 97, 16))
+>A : Symbol(A, Decl(correlatedUnions.ts, 93, 1))
+
+type BCaller = (b: B) => void;
+>BCaller : Symbol(BCaller, Decl(correlatedUnions.ts, 97, 30))
+>b : Symbol(b, Decl(correlatedUnions.ts, 98, 16))
+>B : Symbol(B, Decl(correlatedUnions.ts, 95, 23))
+
+declare const xx: { letter: A, caller: ACaller } | { letter: B, caller: BCaller };
+>xx : Symbol(xx, Decl(correlatedUnions.ts, 100, 13))
+>letter : Symbol(letter, Decl(correlatedUnions.ts, 100, 19))
+>A : Symbol(A, Decl(correlatedUnions.ts, 93, 1))
+>caller : Symbol(caller, Decl(correlatedUnions.ts, 100, 30))
+>ACaller : Symbol(ACaller, Decl(correlatedUnions.ts, 96, 23))
+>letter : Symbol(letter, Decl(correlatedUnions.ts, 100, 52))
+>B : Symbol(B, Decl(correlatedUnions.ts, 95, 23))
+>caller : Symbol(caller, Decl(correlatedUnions.ts, 100, 63))
+>BCaller : Symbol(BCaller, Decl(correlatedUnions.ts, 97, 30))
+
+call(xx);
+>call : Symbol(call, Decl(correlatedUnions.ts, 89, 146))
+>xx : Symbol(xx, Decl(correlatedUnions.ts, 100, 13))
+
+// --------
+
+type Ev<K extends keyof DocumentEventMap> = { [P in K]: {
+>Ev : Symbol(Ev, Decl(correlatedUnions.ts, 102, 9))
+>K : Symbol(K, Decl(correlatedUnions.ts, 106, 8))
+>DocumentEventMap : Symbol(DocumentEventMap, Decl(lib.dom.d.ts, --, --))
+>P : Symbol(P, Decl(correlatedUnions.ts, 106, 47))
+>K : Symbol(K, Decl(correlatedUnions.ts, 106, 8))
+
+    readonly name: P;
+>name : Symbol(name, Decl(correlatedUnions.ts, 106, 57))
+>P : Symbol(P, Decl(correlatedUnions.ts, 106, 47))
+
+    readonly once?: boolean;
+>once : Symbol(once, Decl(correlatedUnions.ts, 107, 21))
+
+    readonly callback: (ev: DocumentEventMap[P]) => void;
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 108, 28))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 109, 24))
+>DocumentEventMap : Symbol(DocumentEventMap, Decl(lib.dom.d.ts, --, --))
+>P : Symbol(P, Decl(correlatedUnions.ts, 106, 47))
+
+}}[K];
+>K : Symbol(K, Decl(correlatedUnions.ts, 106, 8))
+
+function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
+>processEvents : Symbol(processEvents, Decl(correlatedUnions.ts, 110, 6))
+>K : Symbol(K, Decl(correlatedUnions.ts, 112, 23))
+>DocumentEventMap : Symbol(DocumentEventMap, Decl(lib.dom.d.ts, --, --))
+>events : Symbol(events, Decl(correlatedUnions.ts, 112, 57))
+>Ev : Symbol(Ev, Decl(correlatedUnions.ts, 102, 9))
+>K : Symbol(K, Decl(correlatedUnions.ts, 112, 23))
+
+    for (const event of events) {
+>event : Symbol(event, Decl(correlatedUnions.ts, 113, 14))
+>events : Symbol(events, Decl(correlatedUnions.ts, 112, 57))
+
+        document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
+>document.addEventListener : Symbol(Document.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>addEventListener : Symbol(Document.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event.name : Symbol(name, Decl(correlatedUnions.ts, 106, 57))
+>event : Symbol(event, Decl(correlatedUnions.ts, 113, 14))
+>name : Symbol(name, Decl(correlatedUnions.ts, 106, 57))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 114, 47))
+>event.callback : Symbol(callback, Decl(correlatedUnions.ts, 108, 28))
+>event : Symbol(event, Decl(correlatedUnions.ts, 113, 14))
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 108, 28))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 114, 47))
+>once : Symbol(once, Decl(correlatedUnions.ts, 114, 75))
+>event.once : Symbol(once, Decl(correlatedUnions.ts, 107, 21))
+>event : Symbol(event, Decl(correlatedUnions.ts, 113, 14))
+>once : Symbol(once, Decl(correlatedUnions.ts, 107, 21))
+    }
+}
+
+function createEventListener<K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>): Ev<K> {
+>createEventListener : Symbol(createEventListener, Decl(correlatedUnions.ts, 116, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 118, 29))
+>DocumentEventMap : Symbol(DocumentEventMap, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(correlatedUnions.ts, 118, 64))
+>once : Symbol(once, Decl(correlatedUnions.ts, 118, 70))
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 118, 84))
+>Ev : Symbol(Ev, Decl(correlatedUnions.ts, 102, 9))
+>K : Symbol(K, Decl(correlatedUnions.ts, 118, 29))
+>Ev : Symbol(Ev, Decl(correlatedUnions.ts, 102, 9))
+>K : Symbol(K, Decl(correlatedUnions.ts, 118, 29))
+
+    return { name, once, callback };
+>name : Symbol(name, Decl(correlatedUnions.ts, 119, 12))
+>once : Symbol(once, Decl(correlatedUnions.ts, 119, 18))
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 119, 24))
+}
+
+const clickEvent = createEventListener({
+>clickEvent : Symbol(clickEvent, Decl(correlatedUnions.ts, 122, 5))
+>createEventListener : Symbol(createEventListener, Decl(correlatedUnions.ts, 116, 1))
+
+    name: "click",
+>name : Symbol(name, Decl(correlatedUnions.ts, 122, 40))
+
+    callback: ev => console.log(ev),
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 123, 18))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 124, 13))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 124, 13))
+
+});
+
+const scrollEvent = createEventListener({
+>scrollEvent : Symbol(scrollEvent, Decl(correlatedUnions.ts, 127, 5))
+>createEventListener : Symbol(createEventListener, Decl(correlatedUnions.ts, 116, 1))
+
+    name: "scroll",
+>name : Symbol(name, Decl(correlatedUnions.ts, 127, 41))
+
+    callback: ev => console.log(ev),
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 128, 19))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 129, 13))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 129, 13))
+
+});
+
+processEvents([clickEvent, scrollEvent]);
+>processEvents : Symbol(processEvents, Decl(correlatedUnions.ts, 110, 6))
+>clickEvent : Symbol(clickEvent, Decl(correlatedUnions.ts, 122, 5))
+>scrollEvent : Symbol(scrollEvent, Decl(correlatedUnions.ts, 127, 5))
+
+processEvents([
+>processEvents : Symbol(processEvents, Decl(correlatedUnions.ts, 110, 6))
+
+    { name: "click", callback: ev => console.log(ev) },
+>name : Symbol(name, Decl(correlatedUnions.ts, 135, 5))
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 135, 20))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 135, 30))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 135, 30))
+
+    { name: "scroll", callback: ev => console.log(ev) },
+>name : Symbol(name, Decl(correlatedUnions.ts, 136, 5))
+>callback : Symbol(callback, Decl(correlatedUnions.ts, 136, 21))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 136, 31))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ev : Symbol(ev, Decl(correlatedUnions.ts, 136, 31))
+
+]);
+
+// --------
+
+function ff1() {
+>ff1 : Symbol(ff1, Decl(correlatedUnions.ts, 137, 3))
+
+    type ArgMap = {
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 141, 16))
+
+        sum: [a: number, b: number],
+>sum : Symbol(sum, Decl(correlatedUnions.ts, 142, 19))
+
+        concat: [a: string, b: string, c: string]
+>concat : Symbol(concat, Decl(correlatedUnions.ts, 143, 36))
+    }
+    type Keys = keyof ArgMap;
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 145, 5))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 141, 16))
+
+    const funs: { [P in Keys]: (...args: ArgMap[P]) => void } = {
+>funs : Symbol(funs, Decl(correlatedUnions.ts, 147, 9))
+>P : Symbol(P, Decl(correlatedUnions.ts, 147, 19))
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 145, 5))
+>args : Symbol(args, Decl(correlatedUnions.ts, 147, 32))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 141, 16))
+>P : Symbol(P, Decl(correlatedUnions.ts, 147, 19))
+
+        sum: (a, b) => a + b,
+>sum : Symbol(sum, Decl(correlatedUnions.ts, 147, 65))
+>a : Symbol(a, Decl(correlatedUnions.ts, 148, 14))
+>b : Symbol(b, Decl(correlatedUnions.ts, 148, 16))
+>a : Symbol(a, Decl(correlatedUnions.ts, 148, 14))
+>b : Symbol(b, Decl(correlatedUnions.ts, 148, 16))
+
+        concat: (a, b, c) => a + b + c
+>concat : Symbol(concat, Decl(correlatedUnions.ts, 148, 29))
+>a : Symbol(a, Decl(correlatedUnions.ts, 149, 17))
+>b : Symbol(b, Decl(correlatedUnions.ts, 149, 19))
+>c : Symbol(c, Decl(correlatedUnions.ts, 149, 22))
+>a : Symbol(a, Decl(correlatedUnions.ts, 149, 17))
+>b : Symbol(b, Decl(correlatedUnions.ts, 149, 19))
+>c : Symbol(c, Decl(correlatedUnions.ts, 149, 22))
+    }
+    function apply<K extends Keys>(funKey: K, ...args: ArgMap[K]) {
+>apply : Symbol(apply, Decl(correlatedUnions.ts, 150, 5))
+>K : Symbol(K, Decl(correlatedUnions.ts, 151, 19))
+>Keys : Symbol(Keys, Decl(correlatedUnions.ts, 145, 5))
+>funKey : Symbol(funKey, Decl(correlatedUnions.ts, 151, 35))
+>K : Symbol(K, Decl(correlatedUnions.ts, 151, 19))
+>args : Symbol(args, Decl(correlatedUnions.ts, 151, 45))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 141, 16))
+>K : Symbol(K, Decl(correlatedUnions.ts, 151, 19))
+
+        const fn = funs[funKey];
+>fn : Symbol(fn, Decl(correlatedUnions.ts, 152, 13))
+>funs : Symbol(funs, Decl(correlatedUnions.ts, 147, 9))
+>funKey : Symbol(funKey, Decl(correlatedUnions.ts, 151, 35))
+
+        fn(...args);
+>fn : Symbol(fn, Decl(correlatedUnions.ts, 152, 13))
+>args : Symbol(args, Decl(correlatedUnions.ts, 151, 45))
+    }
+    const x1 = apply('sum', 1, 2)
+>x1 : Symbol(x1, Decl(correlatedUnions.ts, 155, 9))
+>apply : Symbol(apply, Decl(correlatedUnions.ts, 150, 5))
+
+    const x2 = apply('concat', 'str1', 'str2', 'str3' )
+>x2 : Symbol(x2, Decl(correlatedUnions.ts, 156, 9))
+>apply : Symbol(apply, Decl(correlatedUnions.ts, 150, 5))
+}
+
