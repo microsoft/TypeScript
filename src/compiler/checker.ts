@@ -26124,6 +26124,7 @@ namespace ts {
         // Don't do this for assignment declarations unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
         function getContextualTypeForAssignmentDeclaration(binaryExpression: BinaryExpression): Type | undefined {
             const kind = getAssignmentDeclarationKind(binaryExpression);
+            let valueDeclaration;
             switch (kind) {
                 case AssignmentDeclarationKind.None:
                 case AssignmentDeclarationKind.ThisProperty:
@@ -26178,7 +26179,7 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
-                    let valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
+                    valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
                     // falls through
                 case AssignmentDeclarationKind.ModuleExports:
                     valueDeclaration ||= binaryExpression.symbol?.valueDeclaration;
