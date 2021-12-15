@@ -25262,7 +25262,7 @@ namespace ts {
                 if (usageCaseClause) {
                     // Walk up until we're at the same level as the declaring block
                     while (usageCaseClause.parent !== container) {
-                        usageCaseClause = usageCaseClause!.parent;
+                        usageCaseClause = usageCaseClause.parent;
                     }
 
                     if (usageCaseClause.pos > symbol.valueDeclaration.pos) {
