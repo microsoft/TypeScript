@@ -2125,7 +2125,7 @@ namespace ts {
         }
 
         // @api
-        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: NodeArray<TypeElement> | undefined): MappedTypeNode {
+        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
                 || node.nameType !== nameType
@@ -4007,16 +4007,16 @@ namespace ts {
         }
 
         // @api
-        function createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause {
+        function createAssertClause(elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
             const node = createBaseNode<AssertClause>(SyntaxKind.AssertClause);
-            node.elements = elements;
+            node.elements = createNodeArray(elements);
             node.multiLine = multiLine;
             node.transformFlags |= TransformFlags.ContainsESNext;
             return node;
         }
 
         // @api
-        function updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause {
+        function updateAssertClause(node: AssertClause, elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
             return node.elements !== elements
                 || node.multiLine !== multiLine
                 ? update(createAssertClause(elements, multiLine), node)

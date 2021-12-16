@@ -38,6 +38,7 @@ class C extends B {
     z = super.f();
 }
 
+
 //// [thisAndSuperInStaticMembers2.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};

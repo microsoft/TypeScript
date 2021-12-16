@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers12.ts, 0, 0))
+
+    static readonly c: "foo" = "foo"
+>c : Symbol(C.c, Decl(typeOfThisInStaticMembers12.ts, 0, 9))
+
+    static bar =  class Inner {
+>bar : Symbol(C.bar, Decl(typeOfThisInStaticMembers12.ts, 1, 36))
+>Inner : Symbol(Inner, Decl(typeOfThisInStaticMembers12.ts, 2, 16))
+
+        static [this.c] = 123;
+>[this.c] : Symbol(Inner[this.c], Decl(typeOfThisInStaticMembers12.ts, 2, 31))
+
+        [this.c] = 123;
+>[this.c] : Symbol(Inner[this.c], Decl(typeOfThisInStaticMembers12.ts, 3, 30))
+    }
+}
+
