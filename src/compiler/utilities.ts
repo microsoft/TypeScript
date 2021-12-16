@@ -6239,7 +6239,7 @@ namespace ts {
     }
 
     export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
-        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 : compilerOptions.useDefineForClassFields;
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {

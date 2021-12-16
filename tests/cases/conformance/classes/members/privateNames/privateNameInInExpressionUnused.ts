@@ -1,6 +1,6 @@
 // @strict: true
 // @noUnusedLocals: true
-// @target: esnext
+// @target: esnext, es2022
 
 class Foo {
     #unused: undefined; // expect unused error
