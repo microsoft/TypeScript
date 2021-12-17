@@ -12737,6 +12737,9 @@ namespace ts {
                     case SyntaxKind.ElementAccessExpression:
                         return traverse((node as PropertyAccessExpression | ElementAccessExpression).expression);
 
+                    case SyntaxKind.PropertyAssignment:
+                        return traverse((node as PropertyAssignment).initializer);
+
                     default:
                         return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && !!forEachChild(node, traverse);
                 }
@@ -28235,12 +28238,18 @@ namespace ts {
             if (!getContainingClass(privId)) {
                 return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
             }
-            if (!isExpressionNode(privId)) {
-                return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+
+            if (!isForInStatement(privId.parent)) {
+                if (!isExpressionNode(privId)) {
+                    return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+                }
+
+                const isInOperation = isBinaryExpression(privId.parent) && privId.parent.operatorToken.kind === SyntaxKind.InKeyword;
+                if (!getSymbolForPrivateIdentifierExpression(privId) && !isInOperation) {
+                    return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
+                }
             }
-            if (!getSymbolForPrivateIdentifierExpression(privId)) {
-                return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
-            }
+
             return false;
         }
 
@@ -43083,7 +43092,7 @@ namespace ts {
                 if (prop.kind === SyntaxKind.ShorthandPropertyAssignment && !inDestructuring && prop.objectAssignmentInitializer) {
                     // having objectAssignmentInitializer is only valid in ObjectAssignmentPattern
                     // outside of destructuring it is a syntax error
-                    return grammarErrorOnNode(prop.equalsToken!, Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern);
+                    grammarErrorOnNode(prop.equalsToken!, Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern);
                 }
 
                 if (name.kind === SyntaxKind.PrivateIdentifier) {

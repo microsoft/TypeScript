@@ -27,6 +27,7 @@ class C2 {
     }
 }
 
+
 //// [classStaticBlock10.js]
 var a1 = 1;
 var a2 = 1;
