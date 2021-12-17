@@ -9900,7 +9900,8 @@ namespace ts {
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments | undefined {
-            return getEffectiveBaseTypeNode(type.symbol.valueDeclaration as ClassLikeDeclaration);
+            const decl = getClassLikeDeclarationOfSymbol(type.symbol);
+            return decl && getEffectiveBaseTypeNode(decl);
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: readonly TypeNode[] | undefined, location: Node): readonly Signature[] {
@@ -9926,8 +9927,8 @@ namespace ts {
          */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
             if (!type.resolvedBaseConstructorType) {
-                const decl = type.symbol.valueDeclaration as ClassLikeDeclaration;
-                const extended = getEffectiveBaseTypeNode(decl);
+                const decl = getClassLikeDeclarationOfSymbol(type.symbol);
+                const extended = decl && getEffectiveBaseTypeNode(decl);
                 const baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
