@@ -12360,7 +12360,7 @@ namespace ts {
                         return symbol;
                     }
                 }
-                return getPropertyOfObjectType(globalObjectType, name);
+                return globalObjectType === undefined ? undefined : getPropertyOfObjectType(globalObjectType, name);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
                 return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
