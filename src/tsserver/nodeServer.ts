@@ -715,42 +715,6 @@ namespace ts.server {
                 this.constructed = true;
             }
 
-            public send(msg: protocol.Message) {
-                if (useNodeIpc) {
-                    if (msg.type === "event" && !this.canUseEvents) {
-                        if (this.logger.hasLevel(LogLevel.verbose)) {
-                            this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
-                        }
-                        return;
-                    }
-
-                    const verboseLogging = logger.hasLevel(LogLevel.verbose);
-                    if (verboseLogging) {
-                        const json = JSON.stringify(msg);
-                        logger.info(`${msg.type}:${indent(json)}`);
-                    }
-
-                    process.send!(msg);
-                }
-                else {
-                    super.send(msg);
-                }
-            }
-
-            protected parseMessage(message: any): protocol.Request {
-                if (useNodeIpc) {
-                    return message as protocol.Request;
-                }
-                return super.parseMessage(message);
-            }
-
-            protected toStringMessage(message: any) {
-                if (useNodeIpc) {
-                    return JSON.stringify(message, undefined, 2);
-                }
-                return super.toStringMessage(message);
-            }
-
             event<T extends object>(body: T, eventName: string): void {
                 Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
 
@@ -784,21 +748,48 @@ namespace ts.server {
             }
 
             listen() {
-                if (useNodeIpc) {
-                    process.on("message", (e: any) => {
-                        this.onMessage(e);
-                    });
-                }
-                else {
-                    rl.on("line", (input: string) => {
-                        const message = input.trim();
-                        this.onMessage(message);
-                    });
+                rl.on("line", (input: string) => {
+                    const message = input.trim();
+                    this.onMessage(message);
+                });
 
-                    rl.on("close", () => {
-                        this.exit();
-                    });
+                rl.on("close", () => {
+                    this.exit();
+                });
+            }
+        }
+
+        class IpcIOSession extends IOSession {
+
+            public send(msg: protocol.Message) {
+                if (msg.type === "event" && !this.canUseEvents) {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                    }
+                    return;
                 }
+
+                const verboseLogging = logger.hasLevel(LogLevel.verbose);
+                if (verboseLogging) {
+                    const json = JSON.stringify(msg);
+                    logger.info(`${msg.type}:${indent(json)}`);
+                }
+
+                process.send!(msg);
+            }
+
+            protected parseMessage(message: any): protocol.Request {
+                return message as protocol.Request;
+            }
+
+            protected toStringMessage(message: any) {
+                return JSON.stringify(message, undefined, 2);
+            }
+
+            listen() {
+                process.on("message", (e: any) => {
+                    this.onMessage(e);
+                });
             }
         }
 
@@ -818,7 +809,7 @@ namespace ts.server {
             startTracing("server", traceDir);
         }
 
-        const ioSession = new IOSession();
+        const ioSession = useNodeIpc ? new IpcIOSession() : new IOSession();
         process.on("uncaughtException", err => {
             ioSession.logError(err, "unknown");
         });
