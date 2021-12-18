@@ -471,3 +471,209 @@ if (!done) {
 >value : number
 }
 
+// Repro from #46658
+
+declare function f50(cb: (...args: Args) => void): void
+>f50 : (cb: (...args: Args) => void) => void
+>cb : (...args: Args) => void
+>args : Args
+
+f50((kind, data) => {
+>f50((kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }}) : void
+>f50 : (cb: (...args: Args) => void) => void
+>(kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }} : (kind: "A" | "B", data: string | number) => void
+>kind : "A" | "B"
+>data : string | number
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        data.toFixed();
+>data.toFixed() : string
+>data.toFixed : (fractionDigits?: number | undefined) => string
+>data : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        data.toUpperCase();
+>data.toUpperCase() : string
+>data.toUpperCase : () => string
+>data : string
+>toUpperCase : () => string
+    }
+});
+
+const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
+>f51 : (...args: ['A', number] | ['B', string]) => void
+>args : ["A", number] | ["B", string]
+>(kind, payload) => {    if (kind === 'A') {        payload.toFixed();    }    if (kind === 'B') {        payload.toUpperCase();    }} : (kind: "A" | "B", payload: string | number) => void
+>kind : "A" | "B"
+>payload : string | number
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+};
+
+const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
+>f52 : (...args: ['A', number] | ['B']) => void
+>args : ["A", number] | ["B"]
+>(kind, payload?) => {    if (kind === 'A') {        payload.toFixed();    }    else {        payload;  // undefined    }} : (kind: "A" | "B", payload?: number | undefined) => void
+>kind : "A" | "B"
+>payload : number | undefined
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    else {
+        payload;  // undefined
+>payload : undefined
+    }
+};
+
+declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
+>readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
+>path : string
+>callback : (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void
+>args : [err: null, data: unknown[]] | [err: Error, data: undefined]
+>null : null
+
+readFile('hello', (err, data) => {
+>readFile('hello', (err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }}) : void
+>readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
+>'hello' : "hello"
+>(err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }} : (err: Error | null, data: unknown[] | undefined) => void
+>err : Error | null
+>data : unknown[] | undefined
+
+    if (err === null) {
+>err === null : boolean
+>err : Error | null
+>null : null
+
+        data.length;
+>data.length : number
+>data : unknown[]
+>length : number
+    }
+    else {
+        err.message;
+>err.message : string
+>err : Error
+>message : string
+    }
+});
+
+type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: any[], secondArr: any[] }];
+>ReducerArgs : ReducerArgs
+>a : number
+>b : number
+>firstArr : any[]
+>secondArr : any[]
+
+const reducer: (...args: ReducerArgs) => void = (op, args) => {
+>reducer : (...args: ReducerArgs) => void
+>args : ReducerArgs
+>(op, args) => {    switch (op) {        case "add":            console.log(args.a + args.b);            break;        case "concat":            console.log(args.firstArr.concat(args.secondArr));            break;    }} : (op: "add" | "concat", args: { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }) => void
+>op : "add" | "concat"
+>args : { a: number; b: number; } | { firstArr: any[]; secondArr: any[]; }
+
+    switch (op) {
+>op : "add" | "concat"
+
+        case "add":
+>"add" : "add"
+
+            console.log(args.a + args.b);
+>console.log(args.a + args.b) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>args.a + args.b : number
+>args.a : number
+>args : { a: number; b: number; }
+>a : number
+>args.b : number
+>args : { a: number; b: number; }
+>b : number
+
+            break;
+        case "concat":
+>"concat" : "concat"
+
+            console.log(args.firstArr.concat(args.secondArr));
+>console.log(args.firstArr.concat(args.secondArr)) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>args.firstArr.concat(args.secondArr) : any[]
+>args.firstArr.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>args.firstArr : any[]
+>args : { firstArr: any[]; secondArr: any[]; }
+>firstArr : any[]
+>concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
+>args.secondArr : any[]
+>args : { firstArr: any[]; secondArr: any[]; }
+>secondArr : any[]
+
+            break;
+    }
+}
+
+reducer("add", { a: 1, b: 3 });
+>reducer("add", { a: 1, b: 3 }) : void
+>reducer : (...args: ReducerArgs) => void
+>"add" : "add"
+>{ a: 1, b: 3 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>3 : 3
+
+reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+>reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] }) : void
+>reducer : (...args: ReducerArgs) => void
+>"concat" : "concat"
+>{ firstArr: [1, 2], secondArr: [3, 4] } : { firstArr: number[]; secondArr: number[]; }
+>firstArr : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+>secondArr : number[]
+>[3, 4] : number[]
+>3 : 3
+>4 : 4
+
