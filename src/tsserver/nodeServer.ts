@@ -761,14 +761,7 @@ namespace ts.server {
 
         class IpcIOSession extends IOSession {
 
-            public send(msg: protocol.Message) {
-                if (msg.type === "event" && !this.canUseEvents) {
-                    if (this.logger.hasLevel(LogLevel.verbose)) {
-                        this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
-                    }
-                    return;
-                }
-
+            protected writeMessage(msg: protocol.Message): void {
                 const verboseLogging = logger.hasLevel(LogLevel.verbose);
                 if (verboseLogging) {
                     const json = JSON.stringify(msg);
@@ -786,7 +779,7 @@ namespace ts.server {
                 return JSON.stringify(message, undefined, 2);
             }
 
-            listen() {
+            public listen() {
                 process.on("message", (e: any) => {
                     this.onMessage(e);
                 });
