@@ -30,6 +30,39 @@ texts.push("100");
 >push : (...items: string[]) => number
 >"100" : "100"
 
+/**
+ @ts-ignore-start */
+texts.push(100);
+>texts.push(100) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>100 : 100
+
+texts.push(100);
+>texts.push(100) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>100 : 100
+
+texts.push(100);
+>texts.push(100) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>100 : 100
+
+/**
+ @ts-ignore-end */
+
+texts.push("100");
+>texts.push("100") : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>"100" : "100"
+
 === tests/cases/conformance/directives/b.tsx ===
 import * as React from "react";
 >React : typeof React
@@ -46,10 +79,10 @@ export function MyComponent(props: { foo: string }) {
 
 let x = (
 >x : JSX.Element
->(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div>) : JSX.Element
+>(  <div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />    {/* @ts-ignore-start */}    <MyComponent foo={100} />    <MyComponent foo={100} />    <MyComponent foo={100} />    {/* @ts-ignore-end */}    <MyComponent foo={"works!"} />    {/*    @ts-ignore-start */}    <MyComponent foo={100} />    <MyComponent foo={100} />    <MyComponent foo={100} />    {/*    @ts-ignore-end */}    <MyComponent foo={"works!"} />  </div>) : JSX.Element
 
   <div>
-><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />  </div> : JSX.Element
+><div>    {/*   @ts-ignore */}    <MyComponent foo={100} />    {/*@ts-ignore*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={100} />    {/*   // @ts-expect-error */}    <MyComponent foo={100} />    {/*   * @ts-expect-error */}    <MyComponent foo={100} />    {/*@ts-expect-error*/}    <MyComponent foo={100} />    {/*   @ts-expect-error */}    <MyComponent foo={"hooray"} />    {/* @ts-ignore-start */}    <MyComponent foo={100} />    <MyComponent foo={100} />    <MyComponent foo={100} />    {/* @ts-ignore-end */}    <MyComponent foo={"works!"} />    {/*    @ts-ignore-start */}    <MyComponent foo={100} />    <MyComponent foo={100} />    <MyComponent foo={100} />    {/*    @ts-ignore-end */}    <MyComponent foo={"works!"} />  </div> : JSX.Element
 >div : any
 
     {/*
@@ -105,6 +138,60 @@ let x = (
 >MyComponent : (props: { foo: string; }) => JSX.Element
 >foo : string
 >"hooray" : "hooray"
+
+    {/* @ts-ignore-start */}
+    <MyComponent foo={100} />
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+    <MyComponent foo={100} />
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+    <MyComponent foo={100} />
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+    {/* @ts-ignore-end */}
+    <MyComponent foo={"works!"} />
+><MyComponent foo={"works!"} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : string
+>"works!" : "works!"
+
+    {/*
+    @ts-ignore-start */}
+    <MyComponent foo={100} />
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+    <MyComponent foo={100} />
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+    <MyComponent foo={100} />
+><MyComponent foo={100} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : number
+>100 : 100
+
+    {/*
+    @ts-ignore-end */}
+    <MyComponent foo={"works!"} />
+><MyComponent foo={"works!"} /> : JSX.Element
+>MyComponent : (props: { foo: string; }) => JSX.Element
+>foo : string
+>"works!" : "works!"
 
   </div>
 >div : any

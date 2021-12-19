@@ -1,0 +1,70 @@
+=== tests/cases/conformance/directives/ts-ignore-start-ts-ignore-end.ts ===
+export const texts: string[] = [];
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+
+// @ts-ignore-start
+texts.push(1);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+texts.push(2);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+texts.push(3);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+// @ts-ignore-end
+
+// @ts-ignore-start some comment on start
+texts.push(4);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+// @ts-ignore-end some comment on end
+
+
+/**
+  @ts-ignore-start */
+texts.push(4);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+texts.push(5);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+texts.push(6);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+/** @ts-ignore-end */
+
+// @ts-ignore-start single line comment
+texts.push(7);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+/* @ts-ignore-end  multiline comment */
+
+// error
+texts.push(8);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+// @ts-ignore-end that was not started
+texts.push(9);
+>texts.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>texts : Symbol(texts, Decl(ts-ignore-start-ts-ignore-end.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+

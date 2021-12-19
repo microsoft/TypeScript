@@ -23,5 +23,8 @@ texts.push(6);
 texts.push(7);
 /* @ts-ignore-end  multiline comment */
 
+// error
+texts.push(8);
 
-
+// @ts-ignore-end that was not started
+texts.push(9);

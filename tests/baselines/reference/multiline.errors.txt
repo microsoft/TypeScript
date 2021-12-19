@@ -19,6 +19,16 @@ tests/cases/conformance/directives/b.tsx(32,1): error TS2578: Unused '@ts-expect
 !!! error TS2578: Unused '@ts-expect-error' directive.
     texts.push("100");
     
+    /**
+     @ts-ignore-start */
+    texts.push(100);
+    texts.push(100);
+    texts.push(100);
+    /**
+     @ts-ignore-end */
+    
+    texts.push("100");
+    
 ==== tests/cases/conformance/directives/b.tsx (1 errors) ====
     import * as React from "react";
     
@@ -55,6 +65,22 @@ tests/cases/conformance/directives/b.tsx(32,1): error TS2578: Unused '@ts-expect
     ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2578: Unused '@ts-expect-error' directive.
         <MyComponent foo={"hooray"} />
+    
+        {/* @ts-ignore-start */}
+        <MyComponent foo={100} />
+        <MyComponent foo={100} />
+        <MyComponent foo={100} />
+        {/* @ts-ignore-end */}
+        <MyComponent foo={"works!"} />
+    
+        {/*
+        @ts-ignore-start */}
+        <MyComponent foo={100} />
+        <MyComponent foo={100} />
+        <MyComponent foo={100} />
+        {/*
+        @ts-ignore-end */}
+        <MyComponent foo={"works!"} />
       </div>
     );
     

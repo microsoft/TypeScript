@@ -1,0 +1,91 @@
+=== tests/cases/conformance/directives/ts-ignore-start-ts-ignore-end.ts ===
+export const texts: string[] = [];
+>texts : string[]
+>[] : undefined[]
+
+// @ts-ignore-start
+texts.push(1);
+>texts.push(1) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>1 : 1
+
+texts.push(2);
+>texts.push(2) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>2 : 2
+
+texts.push(3);
+>texts.push(3) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>3 : 3
+
+// @ts-ignore-end
+
+// @ts-ignore-start some comment on start
+texts.push(4);
+>texts.push(4) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>4 : 4
+
+// @ts-ignore-end some comment on end
+
+
+/**
+  @ts-ignore-start */
+texts.push(4);
+>texts.push(4) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>4 : 4
+
+texts.push(5);
+>texts.push(5) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>5 : 5
+
+texts.push(6);
+>texts.push(6) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>6 : 6
+
+/** @ts-ignore-end */
+
+// @ts-ignore-start single line comment
+texts.push(7);
+>texts.push(7) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>7 : 7
+
+/* @ts-ignore-end  multiline comment */
+
+// error
+texts.push(8);
+>texts.push(8) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>8 : 8
+
+// @ts-ignore-end that was not started
+texts.push(9);
+>texts.push(9) : number
+>texts.push : (...items: string[]) => number
+>texts : string[]
+>push : (...items: string[]) => number
+>9 : 9
+

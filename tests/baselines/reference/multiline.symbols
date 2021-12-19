@@ -23,6 +23,31 @@ texts.push("100");
 >texts : Symbol(texts, Decl(a.ts, 0, 12))
 >push : Symbol(Array.push, Decl(lib.d.ts, --, --))
 
+/**
+ @ts-ignore-start */
+texts.push(100);
+>texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>texts : Symbol(texts, Decl(a.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+texts.push(100);
+>texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>texts : Symbol(texts, Decl(a.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+texts.push(100);
+>texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>texts : Symbol(texts, Decl(a.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
+/**
+ @ts-ignore-end */
+
+texts.push("100");
+>texts.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>texts : Symbol(texts, Decl(a.ts, 0, 12))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+
 === tests/cases/conformance/directives/b.tsx ===
 import * as React from "react";
 >React : Symbol(React, Decl(b.tsx, 0, 6))
@@ -81,6 +106,44 @@ let x = (
     <MyComponent foo={"hooray"} />
 >MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
 >foo : Symbol(foo, Decl(b.tsx, 32, 16))
+
+    {/* @ts-ignore-start */}
+    <MyComponent foo={100} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 35, 16))
+
+    <MyComponent foo={100} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 36, 16))
+
+    <MyComponent foo={100} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 37, 16))
+
+    {/* @ts-ignore-end */}
+    <MyComponent foo={"works!"} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 39, 16))
+
+    {/*
+    @ts-ignore-start */}
+    <MyComponent foo={100} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 43, 16))
+
+    <MyComponent foo={100} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 44, 16))
+
+    <MyComponent foo={100} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 45, 16))
+
+    {/*
+    @ts-ignore-end */}
+    <MyComponent foo={"works!"} />
+>MyComponent : Symbol(MyComponent, Decl(b.tsx, 0, 31))
+>foo : Symbol(foo, Decl(b.tsx, 48, 16))
 
   </div>
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
