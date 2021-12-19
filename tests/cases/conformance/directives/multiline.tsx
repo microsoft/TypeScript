@@ -13,6 +13,16 @@ texts.push(100);
  @ts-expect-error */
 texts.push("100");
 
+/**
+ @ts-ignore-start */
+texts.push(100);
+texts.push(100);
+texts.push(100);
+/**
+ @ts-ignore-end */
+
+texts.push("100");
+
 // @filename: b.tsx
 // @jsx: react
 // @libFiles: react.d.ts,lib.d.ts
@@ -49,5 +59,21 @@ let x = (
     {/*
    @ts-expect-error */}
     <MyComponent foo={"hooray"} />
+
+    {/* @ts-ignore-start */}
+    <MyComponent foo={100} />
+    <MyComponent foo={100} />
+    <MyComponent foo={100} />
+    {/* @ts-ignore-end */}
+    <MyComponent foo={"works!"} />
+
+    {/*
+    @ts-ignore-start */}
+    <MyComponent foo={100} />
+    <MyComponent foo={100} />
+    <MyComponent foo={100} />
+    {/*
+    @ts-ignore-end */}
+    <MyComponent foo={"works!"} />
   </div>
 );

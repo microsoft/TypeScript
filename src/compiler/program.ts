@@ -2130,8 +2130,13 @@ namespace ts {
 
             const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
-            for (const errorExpectation of directives.getUnusedExpectations()) {
-                diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+            for (const erroneousCommentDirectives of directives.getErroneousCommentDirectives()) {
+                if (erroneousCommentDirectives.type === CommentDirectiveType.ExpectError) {
+                    diagnostics.push(createDiagnosticForRange(sourceFile, erroneousCommentDirectives.range, Diagnostics.Unused_ts_expect_error_directive));
+                }
+                if (erroneousCommentDirectives.type === CommentDirectiveType.IgnoreEnd) {
+                    diagnostics.push(createDiagnosticForRange(sourceFile, erroneousCommentDirectives.range, Diagnostics.A_ts_ignore_end_directive_must_be_used_with_a_matching_ts_ignore_start_directive));
+                }
             }
 
             return diagnostics;

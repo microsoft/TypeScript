@@ -3672,6 +3672,8 @@ namespace ts {
     export const enum CommentDirectiveType {
         ExpectError,
         Ignore,
+        IgnoreStart,
+        IgnoreEnd,
     }
 
     /*@internal*/
@@ -8654,7 +8656,7 @@ namespace ts {
 
     /* @internal */
     export interface CommentDirectivesMap {
-        getUnusedExpectations(): CommentDirective[];
+        getErroneousCommentDirectives(): CommentDirective[];
         markUsed(matchedLine: number): boolean;
     }
 

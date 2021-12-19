@@ -2475,6 +2475,10 @@
         "category": "Error",
         "code": 2578
     },
+    "A '@ts-ignore-end' directive must be used with a matching '@ts-ignore-start' directive": {
+        "category": "Error",
+        "code": 2579
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -4161,7 +4165,7 @@
         "category": "Message",
         "code": 6041
     },
-    
+
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4941,7 +4945,7 @@
         "category": "Error",
         "code": 6258
     },
-      "Found 1 error in {1}": {
+    "Found 1 error in {1}": {
         "category": "Message",
         "code": 6259
     },
@@ -5820,7 +5824,6 @@
         "category": "Message",
         "code": 6930
     },
-
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

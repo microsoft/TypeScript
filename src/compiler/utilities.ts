@@ -433,15 +433,53 @@ namespace ts {
                 commentDirective,
             ]))
         );
+        const unMatchedTsIgnoreEndCommentDirectives: CommentDirective[] = [];
+
+        // Add lines in ts-ignore-start and ts-ignore-end ranges to the directivesByLine map
+        let currentTsIgnoreDirective: CommentDirective | undefined;
+
+        for (const commentDirective of commentDirectives) {
+            if (commentDirective.type === CommentDirectiveType.IgnoreStart) {
+              currentTsIgnoreDirective = commentDirective;
+            }
+
+            if (commentDirective.type === CommentDirectiveType.IgnoreEnd) {
+                if (!currentTsIgnoreDirective) {
+                    unMatchedTsIgnoreEndCommentDirectives.push(commentDirective);
+                    continue;
+                }
+                const ignoreStartLine = getLineAndCharacterOfPosition(sourceFile, currentTsIgnoreDirective.range.pos).line;
+                const ignoreEndLine = getLineAndCharacterOfPosition(sourceFile, commentDirective.range.end).line;
+
+                for (let lineNumber = ignoreStartLine; lineNumber <= ignoreEndLine; lineNumber++) {
+                    directivesByLine.set(`${lineNumber}`, commentDirective);
+                }
+
+                currentTsIgnoreDirective = undefined;
+            }
+        }
+
+        // if a ts-ignore-start is not closed, add all lines after to the directivesByLine map
+        if (currentTsIgnoreDirective) {
+            const startLineNumber = getLineAndCharacterOfPosition(sourceFile, currentTsIgnoreDirective.range.pos).line;
+            const lastLine = getLineAndCharacterOfPosition(sourceFile, sourceFile.text.length).line;
+
+            for (let lineNumber = startLineNumber; lineNumber <= lastLine; lineNumber++) {
+                directivesByLine.set(`${lineNumber}`, currentTsIgnoreDirective);
+            }
+        }
+
 
         const usedLines = new Map<string, boolean>();
 
-        return { getUnusedExpectations, markUsed };
+        return { getErroneousCommentDirectives, markUsed };
 
-        function getUnusedExpectations() {
-            return arrayFrom(directivesByLine.entries())
-                .filter(([line, directive]) => directive.type === CommentDirectiveType.ExpectError && !usedLines.get(line))
+        function getErroneousCommentDirectives() {
+            const unUsedTsExpectErrorCommentDirectives = arrayFrom(directivesByLine.entries())
+                .filter(([line, directive]) => directive.type === CommentDirectiveType.ExpectError && !usedLines.has(line))
                 .map(([_, directive]) => directive);
+
+            return unMatchedTsIgnoreEndCommentDirectives.concat(unUsedTsExpectErrorCommentDirectives);
         }
 
         function markUsed(line: number) {

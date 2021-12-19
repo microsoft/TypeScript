@@ -287,12 +287,12 @@ namespace ts {
     /**
      * Test for whether a single line comment with leading whitespace trimmed's text contains a directive.
      */
-    const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-ignore-start|ts-ignore-end|ts-expect-error|ts-ignore)/;
 
     /**
      * Test for whether a multi-line comment with leading whitespace trimmed's last line contains a directive.
      */
-    const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-ignore-start|ts-ignore-end|ts-expect-error|ts-ignore)/;
 
     function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
         // Bail out quickly if it couldn't possibly be in the map.
@@ -2216,6 +2216,11 @@ namespace ts {
             }
 
             switch (match[1]) {
+                case "ts-ignore-start":
+                    return CommentDirectiveType.IgnoreStart;
+
+                case "ts-ignore-end":
+                    return CommentDirectiveType.IgnoreEnd;
                 case "ts-expect-error":
                     return CommentDirectiveType.ExpectError;
 
