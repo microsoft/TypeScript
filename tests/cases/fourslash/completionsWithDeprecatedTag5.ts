@@ -8,7 +8,7 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.functionMembersPlus([
         {
             name: "prototype",
             sortText: completion.SortText.LocationPriority
@@ -19,6 +19,5 @@ verify.completions({
             kindModifiers: "static,deprecated",
             sortText: completion.SortText.DeprecatedLocalDeclarationPriority
         },
-        ...completion.functionMembers
-    ]
+    ])
 });

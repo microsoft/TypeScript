@@ -1609,7 +1609,7 @@ namespace ts {
     export interface TypePredicateNode extends TypeNode {
         readonly kind: SyntaxKind.TypePredicate;
         readonly parent: SignatureDeclaration | JSDocTypeExpression;
-        readonly assertsModifier?: AssertsToken;
+        readonly assertsModifier?: AssertsKeyword;
         readonly parameterName: Identifier | ThisTypeNode;
         readonly type?: TypeNode;
     }
@@ -1702,11 +1702,13 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         readonly kind: SyntaxKind.MappedType;
-        readonly readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
+        readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
         readonly nameType?: TypeNode;
         readonly questionToken?: QuestionToken | PlusToken | MinusToken;
         readonly type?: TypeNode;
+        /** Used only to produce grammar errors */
+        readonly members?: NodeArray<TypeElement>;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -2754,7 +2756,7 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         readonly kind: SyntaxKind.ForOfStatement;
-        readonly awaitModifier?: AwaitKeywordToken;
+        readonly awaitModifier?: AwaitKeyword;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
@@ -4160,6 +4162,7 @@ namespace ts {
         getIndexInfosOfType(type: Type): readonly IndexInfo[];
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
+        /* @internal */ getIndexType(type: Type): Type;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
         getWidenedType(type: Type): Type;
@@ -4412,6 +4415,14 @@ namespace ts {
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
         /* @internal */ getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined;
+        /* @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement): MemberOverrideStatus;
+    }
+
+    /* @internal */
+    export const enum MemberOverrideStatus {
+        Ok,
+        NeedsOverride,
+        HasInvalidOverride
     }
 
     /* @internal */
@@ -5073,6 +5084,7 @@ namespace ts {
         ConstructorReferenceInClass              = 0x02000000,  // Binding to a class constructor inside of the class's body.
         ContainsClassWithPrivateIdentifiers      = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
         ContainsSuperPropertyInStaticInitializer = 0x08000000,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
+        InCheckIdentifier                        = 0x10000000,
     }
 
     /* @internal */
@@ -5096,7 +5108,7 @@ namespace ts {
         jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
         jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
         contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-        deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
+        deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
         isExhaustive?: boolean;             // Is node an exhaustive switch statement
@@ -5177,8 +5189,6 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
-        /* @internal */
-        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | Instantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
         IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral,
@@ -5191,6 +5201,10 @@ namespace ts {
         IncludesWildcard = IndexedAccess,
         /* @internal */
         IncludesEmptyObject = Conditional,
+        /* @internal */
+        IncludesInstantiable = Substitution,
+        /* @internal */
+        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | IncludesInstantiable,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -5577,6 +5591,7 @@ namespace ts {
     /* @internal */
     export interface SyntheticDefaultModuleType extends Type {
         syntheticType?: Type;
+        defaultOnlyType?: Type;
     }
 
     export interface InstantiableType extends Type {
@@ -5981,7 +5996,7 @@ namespace ts {
     export enum ModuleResolutionKind {
         Classic  = 1,
         NodeJs   = 2,
-        // Starting with node12, node's module resolver has significant departures from tranditional cjs resolution
+        // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
         // to better support ecmascript modules and their use within node - more features are still being added, so
         // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
         // version-anchored resolution target
@@ -6254,6 +6269,7 @@ namespace ts {
         ES2019 = 6,
         ES2020 = 7,
         ES2021 = 8,
+        ES2022 = 9,
         ESNext = 99,
         JSON = 100,
         Latest = ESNext,
@@ -6320,7 +6336,7 @@ namespace ts {
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does.
-        defaultValueDescription?: string | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
+        defaultValueDescription?: string | number | boolean | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
         isCommandLineOnly?: boolean;
@@ -6338,13 +6354,27 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
-        type: "string" | "number" | "boolean";
+    export interface CommandLineOptionOfStringType extends CommandLineOptionBase {
+        type: "string";
+        defaultValueDescription?: string | undefined | DiagnosticMessage;
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfNumberType extends CommandLineOptionBase {
+        type: "number";
+        defaultValueDescription: number | undefined | DiagnosticMessage;
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
+        type: "boolean";
+        defaultValueDescription: boolean | undefined | DiagnosticMessage;
     }
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
         type: ESMap<string, number | string>;  // an object literal mapping named values to actual values
+        defaultValueDescription: number | string | undefined | DiagnosticMessage;
     }
 
     /* @internal */
@@ -6371,11 +6401,11 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
-        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -6699,15 +6729,16 @@ namespace ts {
         ContainsTypeScript = 1 << 0,
         ContainsJsx = 1 << 1,
         ContainsESNext = 1 << 2,
-        ContainsES2021 = 1 << 3,
-        ContainsES2020 = 1 << 4,
-        ContainsES2019 = 1 << 5,
-        ContainsES2018 = 1 << 6,
-        ContainsES2017 = 1 << 7,
-        ContainsES2016 = 1 << 8,
-        ContainsES2015 = 1 << 9,
-        ContainsGenerator = 1 << 10,
-        ContainsDestructuringAssignment = 1 << 11,
+        ContainsES2022 = 1 << 3,
+        ContainsES2021 = 1 << 4,
+        ContainsES2020 = 1 << 5,
+        ContainsES2019 = 1 << 6,
+        ContainsES2018 = 1 << 7,
+        ContainsES2017 = 1 << 8,
+        ContainsES2016 = 1 << 9,
+        ContainsES2015 = 1 << 10,
+        ContainsGenerator = 1 << 11,
+        ContainsDestructuringAssignment = 1 << 12,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
@@ -6736,6 +6767,7 @@ namespace ts {
         AssertTypeScript = ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2022 = ContainsES2022,
         AssertES2021 = ContainsES2021,
         AssertES2020 = ContainsES2020,
         AssertES2019 = ContainsES2019,
@@ -6801,6 +6833,31 @@ namespace ts {
         externalHelpers?: boolean;
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
+        snippetElement?: SnippetElement;         // Snippet element of the node
+    }
+
+    /* @internal */
+    export type SnippetElement = TabStop | Placeholder;
+
+    /* @internal */
+    export interface TabStop {
+        kind: SnippetKind.TabStop;
+        order: number;
+    }
+
+    /* @internal */
+    export interface Placeholder {
+        kind: SnippetKind.Placeholder;
+        order: number;
+    }
+
+    // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
+    /* @internal */
+    export const enum SnippetKind {
+        TabStop,                                // `$1`, `$2`
+        Placeholder,                            // `${1:foo}`
+        Choice,                                 // `${1|one,two,three|}`
+        Variable,                               // `$name`, `${name:default}`
     }
 
     export const enum EmitFlags {
@@ -7212,8 +7269,8 @@ namespace ts {
         updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
         createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
         updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: NodeArray<TypeElement> | undefined): MappedTypeNode;
+        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: NodeArray<TypeElement> | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
@@ -8263,6 +8320,7 @@ namespace ts {
         hasTrailingComment(): boolean;
         hasTrailingWhitespace(): boolean;
         getTextPosWithWriteLine?(): number;
+        nonEscapingWrite?(text: string): void;
     }
 
     export interface GetEffectiveTypeRootsHost {
@@ -8608,6 +8666,7 @@ namespace ts {
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */

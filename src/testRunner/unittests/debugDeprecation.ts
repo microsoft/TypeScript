@@ -1,10 +1,12 @@
 namespace ts {
     describe("unittests:: debugDeprecation", () => {
+        let loggingHost: LoggingHost | undefined;
         beforeEach(() => {
-            const loggingHost = Debug.loggingHost;
-            afterEach(() => {
-                Debug.loggingHost = loggingHost;
-            });
+            loggingHost = Debug.loggingHost;
+        });
+        afterEach(() => {
+            Debug.loggingHost = loggingHost;
+            loggingHost = undefined;
         });
         describe("deprecateFunction", () => {
             it("silent deprecation", () => {

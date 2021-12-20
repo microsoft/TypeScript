@@ -28,6 +28,7 @@
         "evaluatorImpl.ts",
         "fakesHosts.ts",
         "client.ts",
+        "findUpDir.ts",
 
         "runnerbase.ts",
         "sourceMapRecorder.ts",

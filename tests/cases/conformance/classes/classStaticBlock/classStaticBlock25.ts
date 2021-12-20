@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: esnext, es2022
 // @declaration: true
 // @declarationMap: true
 // @sourceMap: true

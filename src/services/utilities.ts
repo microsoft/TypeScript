@@ -99,13 +99,6 @@ namespace ts {
             || isImportSpecifier(parent)
             || isImportClause(parent)
             || isImportEqualsDeclaration(parent) && node === parent.name) {
-            let decl: Node = parent;
-            while (decl) {
-                if (isImportEqualsDeclaration(decl) || isImportClause(decl) || isExportDeclaration(decl)) {
-                    return decl.isTypeOnly ? SemanticMeaning.Type : SemanticMeaning.All;
-                }
-                decl = decl.parent;
-            }
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -1897,10 +1890,10 @@ namespace ts {
     export function programContainsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
     }
-    export function programContainsEs6Modules(program: Program): boolean {
+    export function programContainsEsModules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
-    export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
+    export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
         return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
@@ -2290,9 +2283,9 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.linkText);
     }
 
-    export function linkNamePart(name: EntityName | JSDocMemberName, target: Declaration): JSDocLinkDisplayPart {
+    export function linkNamePart(text: string, target: Declaration): JSDocLinkDisplayPart {
         return {
-            text: getTextOfNode(name),
+            text,
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
             target: {
                 fileName: getSourceFileOfNode(target).fileName,
@@ -2315,17 +2308,34 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
+            const suffix = findLinkNameEnd(link.text);
+            const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
+            const text = link.text.slice(suffix);
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
-                parts.push(linkNamePart(link.name, decl));
-                if (link.text) parts.push(linkTextPart(link.text));
+                parts.push(linkNamePart(name, decl));
+                if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
+                parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
         return parts;
+    }
+
+    function findLinkNameEnd(text: string) {
+        if (text.indexOf("()") === 0) return 2;
+        if (text[0] !== "<") return 0;
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
+        return 0;
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -2709,7 +2719,7 @@ namespace ts {
         return typeIsAccessible ? res : undefined;
     }
 
-    export function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.ConstructSignature
             || kind === SyntaxKind.IndexSignature
@@ -2717,7 +2727,7 @@ namespace ts {
             || kind === SyntaxKind.MethodSignature;
     }
 
-    export function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.FunctionDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.MethodDeclaration
@@ -2725,7 +2735,7 @@ namespace ts {
             || kind === SyntaxKind.SetAccessor;
     }
 
-    export function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.ModuleDeclaration;
     }
 
@@ -2814,13 +2824,29 @@ namespace ts {
         forEachChild(sourceFile, function visit(node): boolean | undefined {
             if (syntaxRequiresTrailingSemicolonOrASI(node.kind)) {
                 const lastToken = node.getLastToken(sourceFile);
-                if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+                if (lastToken?.kind === SyntaxKind.SemicolonToken) {
                     withSemicolon++;
                 }
                 else {
                     withoutSemicolon++;
                 }
             }
+            else if (syntaxRequiresTrailingCommaOrSemicolonOrASI(node.kind)) {
+                const lastToken = node.getLastToken(sourceFile);
+                if (lastToken?.kind === SyntaxKind.SemicolonToken) {
+                    withSemicolon++;
+                }
+                else if (lastToken && lastToken.kind !== SyntaxKind.CommaToken) {
+                    const lastTokenLine = getLineAndCharacterOfPosition(sourceFile, lastToken.getStart(sourceFile)).line;
+                    const nextTokenLine = getLineAndCharacterOfPosition(sourceFile, getSpanOfTokenAtPosition(sourceFile, lastToken.end).start).line;
+                    // Avoid counting missing semicolon in single-line objects:
+                    // `function f(p: { x: string /*no semicolon here is insignificant*/ }) {`
+                    if (lastTokenLine !== nextTokenLine) {
+                        withoutSemicolon++;
+                    }
+                }
+            }
+
             if (withSemicolon + withoutSemicolon >= nStatementsToObserve) {
                 return true;
             }
@@ -2828,7 +2854,7 @@ namespace ts {
             return forEachChild(node, visit);
         });
 
-        // One statement missing a semicolon isn’t sufficient evidence to say the user
+        // One statement missing a semicolon isn't sufficient evidence to say the user
         // doesn’t want semicolons, because they may not even be done writing that statement.
         if (withSemicolon === 0 && withoutSemicolon <= 1) {
             return true;
@@ -3260,6 +3286,17 @@ namespace ts {
             }
         });
         return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
+    }
+
+    export function getNewLineKind(newLineCharacter: string): NewLineKind {
+        return newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+    }
+
+    export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
+    export function diagnosticToString(diag: DiagnosticAndArguments): string {
+        return isArray(diag)
+            ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
+            : getLocaleSpecificMessage(diag);
     }
 
     // #endregion

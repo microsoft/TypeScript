@@ -20,21 +20,6 @@ namespace ts {
         return undefined;
     }
 
-    /**
-     * Create a new escaped identifier map.
-     * @deprecated Use `new Map<__String, T>()` instead.
-     */
-    export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<__String, T>();
-    }
-
-    /**
-     * @deprecated Use `!!map?.size` instead
-     */
-    export function hasEntries(map: ReadonlyCollection<any> | undefined): map is ReadonlyCollection<any> {
-        return !!map && !!map.size;
-    }
-
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
         const result = new Map<__String, Symbol>();
         if (symbols) {
@@ -606,6 +591,7 @@ namespace ts {
                 AsyncIterableIterator: emptyArray,
                 AsyncGenerator: emptyArray,
                 AsyncGeneratorFunction: emptyArray,
+                NumberFormat: ["formatToParts"]
             },
             es2019: {
                 Array: ["flat", "flatMap"],
@@ -627,8 +613,21 @@ namespace ts {
                 PromiseConstructor: ["any"],
                 String: ["replaceAll"]
             },
-            esnext: {
-                NumberFormat: ["formatToParts"]
+            es2022: {
+                Array: ["at"],
+                String: ["at"],
+                Int8Array: ["at"],
+                Uint8Array: ["at"],
+                Uint8ClampedArray: ["at"],
+                Int16Array: ["at"],
+                Uint16Array: ["at"],
+                Int32Array: ["at"],
+                Uint32Array: ["at"],
+                Float32Array: ["at"],
+                Float64Array: ["at"],
+                BigInt64Array: ["at"],
+                BigUint64Array: ["at"],
+                ObjectConstructor: ["hasOwn"]
             }
         };
     }
@@ -3161,7 +3160,7 @@ namespace ts {
         return undefined;
     }
 
-    export function isKeyword(token: SyntaxKind): boolean {
+    export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
@@ -3346,7 +3345,7 @@ namespace ts {
         return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
-    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+    export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }
@@ -6168,6 +6167,8 @@ namespace ts {
             case ModuleKind.ES2020:
             case ModuleKind.ES2022:
             case ModuleKind.ESNext:
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
                 return true;
             default:
                 return false;
@@ -6238,7 +6239,7 @@ namespace ts {
     }
 
     export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
-        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 : compilerOptions.useDefineForClassFields;
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
@@ -6622,7 +6623,7 @@ namespace ts {
     }
 
     /** @param path directory of the tsconfig.json */
-    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string, directoryExists: (path: string) => boolean): string[] {
+    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
@@ -6638,9 +6639,7 @@ namespace ts {
         const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
-            if (directoryExists(basePath)) {
-                visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
-            }
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
 
         return flatten(results);
@@ -6979,18 +6978,6 @@ namespace ts {
         }
         return { min, max };
     }
-
-    /** @deprecated Use `ReadonlySet<TNode>` instead. */
-    export type ReadonlyNodeSet<TNode extends Node> = ReadonlySet<TNode>;
-
-    /** @deprecated Use `Set<TNode>` instead. */
-    export type NodeSet<TNode extends Node> = Set<TNode>;
-
-    /** @deprecated Use `ReadonlyMap<TNode, TValue>` instead. */
-    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyESMap<TNode, TValue>;
-
-    /** @deprecated Use `Map<TNode, TValue>` instead. */
-    export type NodeMap<TNode extends Node, TValue> = ESMap<TNode, TValue>;
 
     export function rangeOfNode(node: Node): TextRange {
         return { pos: getTokenPosOfNode(node), end: node.end };
@@ -7422,5 +7409,13 @@ namespace ts {
 
     export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
+    }
+
+    export function escapeSnippetText(text: string): string {
+        return text.replace(/\$/gm, "\\$");
+    }
+
+    export function isThisTypeParameter(type: Type): boolean {
+        return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
     }
 }

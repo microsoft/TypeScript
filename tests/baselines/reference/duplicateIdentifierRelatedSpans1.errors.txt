@@ -92,5 +92,9 @@
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
 !!! related TS6203 tests/cases/compiler/file1.ts:2:7: 'Bar' was also declared here.
     
-Found 6 errors.
+Found 6 errors in 3 files.
 
+Errors  Files
+     2  tests/cases/compiler/file1.ts:1
+     2  tests/cases/compiler/file2.ts:1
+     2  tests/cases/compiler/file3.ts:1

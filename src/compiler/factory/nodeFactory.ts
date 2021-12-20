@@ -2112,25 +2112,27 @@ namespace ts {
         }
 
         // @api
-        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
             const node = createBaseNode<MappedTypeNode>(SyntaxKind.MappedType);
             node.readonlyToken = readonlyToken;
             node.typeParameter = typeParameter;
             node.nameType = nameType;
             node.questionToken = questionToken;
             node.type = type;
+            node.members = members && createNodeArray(members);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
         // @api
-        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
                 || node.nameType !== nameType
                 || node.questionToken !== questionToken
                 || node.type !== type
-                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), node)
+                || node.members !== members
+                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), node)
                 : node;
         }
 
@@ -4005,16 +4007,16 @@ namespace ts {
         }
 
         // @api
-        function createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause {
+        function createAssertClause(elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
             const node = createBaseNode<AssertClause>(SyntaxKind.AssertClause);
-            node.elements = elements;
+            node.elements = createNodeArray(elements);
             node.multiLine = multiLine;
             node.transformFlags |= TransformFlags.ContainsESNext;
             return node;
         }
 
         // @api
-        function updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause {
+        function updateAssertClause(node: AssertClause, elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
             return node.elements !== elements
                 || node.multiLine !== multiLine
                 ? update(createAssertClause(elements, multiLine), node)
@@ -6385,7 +6387,7 @@ namespace ts {
             sourceMapText = mapTextOrStripInternal as string;
         }
         const node = oldFileOfCurrentEmit ?
-            parseOldFileOfCurrentEmit(Debug.assertDefined(bundleFileInfo)) :
+            parseOldFileOfCurrentEmit(Debug.checkDefined(bundleFileInfo)) :
             parseUnparsedSourceFile(bundleFileInfo, stripInternal, length);
         node.fileName = fileName;
         node.sourceMapPath = sourceMapPath;
@@ -6585,13 +6587,13 @@ namespace ts {
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
-            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationPath = Debug.checkDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
             node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
-                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationText: { get() { return definedTextGetter(Debug.checkDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
                 buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });

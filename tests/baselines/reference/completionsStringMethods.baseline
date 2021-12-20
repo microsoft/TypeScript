@@ -11,68 +11,6 @@
       "isNewIdentifierLocation": false,
       "entries": [
         {
-          "name": "toString",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "String",
-              "kind": "localName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "toString",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Returns a string representation of a string.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "charAt",
           "kind": "method",
           "kindModifiers": "declare",
@@ -656,6 +594,60 @@
                   "kind": "text"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "length",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "String",
+              "kind": "localName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "length",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Returns the length of a String object.",
+              "kind": "text"
             }
           ]
         },
@@ -1647,68 +1639,6 @@
           ]
         },
         {
-          "name": "toLowerCase",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "String",
-              "kind": "localName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "toLowerCase",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Converts all the alphabetic characters in a string to lowercase.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "toLocaleLowerCase",
           "kind": "method",
           "kindModifiers": "declare",
@@ -1810,68 +1740,6 @@
           "documentation": [
             {
               "text": "Converts all alphabetic characters to lowercase, taking into account the host environment's current locale.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "toUpperCase",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "String",
-              "kind": "localName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "toUpperCase",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Converts all the alphabetic characters in a string to uppercase.",
               "kind": "text"
             }
           ]
@@ -1983,6 +1851,192 @@
           ]
         },
         {
+          "name": "toLowerCase",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "String",
+              "kind": "localName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "toLowerCase",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Converts all the alphabetic characters in a string to lowercase.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "toString",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "String",
+              "kind": "localName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "toString",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Returns a string representation of a string.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "toUpperCase",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "String",
+              "kind": "localName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "toUpperCase",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Converts all the alphabetic characters in a string to uppercase.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "trim",
           "kind": "method",
           "kindModifiers": "declare",
@@ -2045,8 +2099,8 @@
           ]
         },
         {
-          "name": "length",
-          "kind": "property",
+          "name": "valueOf",
+          "kind": "method",
           "kindModifiers": "declare",
           "sortText": "11",
           "displayParts": [
@@ -2055,7 +2109,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "property",
+              "text": "method",
               "kind": "text"
             },
             {
@@ -2075,8 +2129,16 @@
               "kind": "punctuation"
             },
             {
-              "text": "length",
-              "kind": "propertyName"
+              "text": "valueOf",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -2087,13 +2149,13 @@
               "kind": "space"
             },
             {
-              "text": "number",
+              "text": "string",
               "kind": "keyword"
             }
           ],
           "documentation": [
             {
-              "text": "Returns the length of a String object.",
+              "text": "Returns the primitive value of the specified object.",
               "kind": "text"
             }
           ]
@@ -2246,68 +2308,6 @@
                   "kind": "text"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "name": "valueOf",
-          "kind": "method",
-          "kindModifiers": "declare",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "method",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "String",
-              "kind": "localName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "valueOf",
-              "kind": "methodName"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Returns the primitive value of the specified object.",
-              "kind": "text"
             }
           ]
         }

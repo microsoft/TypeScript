@@ -574,3 +574,55 @@ class SqlTable<T> {
     }
 }
 
+// Repro from #46495
+
+interface Button {
+>Button : Symbol(Button, Decl(controlFlowGenericTypes.ts, 190, 1))
+
+    type: "button";
+>type : Symbol(Button.type, Decl(controlFlowGenericTypes.ts, 194, 18))
+
+    text: string;
+>text : Symbol(Button.text, Decl(controlFlowGenericTypes.ts, 195, 19))
+}
+
+interface Checkbox {
+>Checkbox : Symbol(Checkbox, Decl(controlFlowGenericTypes.ts, 197, 1))
+
+    type: "checkbox";
+>type : Symbol(Checkbox.type, Decl(controlFlowGenericTypes.ts, 199, 20))
+
+    isChecked: boolean;
+>isChecked : Symbol(Checkbox.isChecked, Decl(controlFlowGenericTypes.ts, 200, 21))
+}
+
+type Control = Button | Checkbox;
+>Control : Symbol(Control, Decl(controlFlowGenericTypes.ts, 202, 1))
+>Button : Symbol(Button, Decl(controlFlowGenericTypes.ts, 190, 1))
+>Checkbox : Symbol(Checkbox, Decl(controlFlowGenericTypes.ts, 197, 1))
+
+function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
+>update : Symbol(update, Decl(controlFlowGenericTypes.ts, 204, 33))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
+>Control : Symbol(Control, Decl(controlFlowGenericTypes.ts, 202, 1))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 206, 34))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
+>control : Symbol(control, Decl(controlFlowGenericTypes.ts, 206, 54))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 206, 78))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 206, 34))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 206, 86))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 206, 16))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 206, 34))
+
+    if (control !== undefined) {
+>control : Symbol(control, Decl(controlFlowGenericTypes.ts, 206, 54))
+>undefined : Symbol(undefined)
+
+        control[key] = value;
+>control : Symbol(control, Decl(controlFlowGenericTypes.ts, 206, 54))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 206, 78))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 206, 86))
+    }
+}
+
