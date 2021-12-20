@@ -12360,7 +12360,9 @@ namespace ts {
                         return symbol;
                     }
                 }
-                return globalObjectType === undefined ? undefined : getPropertyOfObjectType(globalObjectType, name);
+                // TODO: In some cases, the containing function may be called before global types have been initialized.
+                // This simple guard avoids issues with those cases, but in the future we may need to reconsider how these steps are ordered.
+                return globalObjectType && getPropertyOfObjectType(globalObjectType, name);
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
                 return getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name, skipObjectFunctionPropertyAugment);
