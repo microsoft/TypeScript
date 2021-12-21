@@ -2071,7 +2071,7 @@ namespace ts {
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
                 // TODO: Do I need to emit source maps v4 stuff here?
-                debugger;
+                // debugger;
             }
         }
 
@@ -2099,27 +2099,24 @@ namespace ts {
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
                 const functionName = getNameForScope(node.name, node);
                 let containerName;
-                if (node.parent && isClassDeclaration(node.parent)) {
+                if (node.parent && (isClassDeclaration(node.parent) || isClassExpression(node.parent))) {
                     containerName = computeClassNameForScopeMap(node.parent, /* classNameOnly */ true);
                 }
-                else if (node.original?.parent && isClassDeclaration(node.original.parent)) {
+                else if (node.original?.parent && (isClassDeclaration(node.original.parent) || isClassExpression(node.original.parent))) {
                     containerName = computeClassNameForScopeMap(node.original.parent, /* classNameOnly */ true);
                 }
-                else if (isObjectLiteralExpression(node.parent)) {
+                else if (node.parent && isObjectLiteralExpression(node.parent)) {
                     containerName = computeClassNameForObjectLiteral(node.parent);
                 }
                 else if (node.original?.parent && isObjectLiteralExpression(node.original.parent)) {
                     containerName = computeClassNameForObjectLiteral(node.original.parent);
                 }
                 else {
-                    debugger;
+                    // debugger;
                     containerName = "[Object]";
                 }
 
                 let scopeName = `${containerName}.${functionName}`;
-                if (functionName === "bar") {
-                    debugger;
-                }
                 if (node.modifierFlagsCache & ModifierFlags.Static) {
                     scopeName = `static ${scopeName}`;
                 }
@@ -2138,7 +2135,7 @@ namespace ts {
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
                 // TODO: Do I need to emit source maps v4 stuff here?
-                debugger;
+                // debugger;
             }
         }
 
@@ -2148,6 +2145,10 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                if (!node.body || node.body.pos === -1) {
+                    // Implicit constructor, don't emit anything
+                    return;
+                }
                 let parentScope = node.parent;
                 if (!parentScope) {
                     parentScope = node.original?.parent as ClassLikeDeclaration;
@@ -2160,9 +2161,14 @@ namespace ts {
             }
         }
 
+        function computeClassNameForScopeMap(node: ClassExpression, classNameOnly?: boolean): string;
+        function computeClassNameForScopeMap(node: ClassLikeDeclaration, classNameOnly?: boolean): string;
         function computeClassNameForScopeMap(node: ClassLikeDeclaration, classNameOnly = false): string {
             if (!node) {
-                debugger;
+                if (classNameOnly) {
+                    return "(anonymous class)";
+                }
+                return "anonymous class";
             }
             if (node.name) {
                 if (!classNameOnly) {
@@ -2215,7 +2221,7 @@ namespace ts {
                     scopeName = computeClassNameForObjectLiteral(parentScope);
                 }
                 else {
-                    debugger;
+                    // debugger;
                     scopeName = "[Object]";
                 }
 
@@ -2743,7 +2749,7 @@ namespace ts {
                     name = getNameForAssignmentExpression(node.original.parent);
                 }
                 else if(isCallExpression(node.original.parent)) {
-                    name = getNameForCallExpression(node.parent);
+                    name = getNameForCallExpression(node.original.parent);
                     name = `anonymous callback to ${name}`;
                 }
                 else if (isPropertyDeclaration(node.original.parent)) {
@@ -2758,7 +2764,7 @@ namespace ts {
             }
 
             if (!name) {
-                debugger;
+                // debugger;
                 name = "(anonymous arrow function)";
             }
 
@@ -3325,6 +3331,10 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                if (node.pos === -1) {
+                    // There is no valid source mapping here
+                    return;
+                }
                 const scopeName = getNameForScope(node.name!, node);
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
                 const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
@@ -3335,6 +3345,10 @@ namespace ts {
 
         function getNameForScope(name: Node, func: FunctionLikeDeclaration): string {
             let result: string | undefined;
+
+            if (!name) {
+                return "(anonymous function)";
+            }
 
             if (isPropertyName(name)) {
                 switch (name.kind) {
