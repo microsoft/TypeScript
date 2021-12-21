@@ -169,7 +169,7 @@ namespace ts.SymbolDisplay {
             // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
             if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
                 const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration)[]), declaration => declaration.name === location);
-                if (!!declaration) {
+                if (declaration) {
                     switch(declaration.kind){
                         case SyntaxKind.GetAccessor:
                             symbolKind = ScriptElementKind.memberGetAccessorElement;

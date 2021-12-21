@@ -346,13 +346,11 @@ namespace ts {
             switch (context?.kind) {
                 case SyntaxKind.GetAccessor:
                     if (!this.contextualGetAccessorDocumentationComment) {
-                        this.contextualGetAccessorDocumentationComment = emptyArray;
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
                     return this.contextualGetAccessorDocumentationComment;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorDocumentationComment) {
-                        this.contextualSetAccessorDocumentationComment = emptyArray;
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
                     return this.contextualSetAccessorDocumentationComment;
@@ -373,13 +371,11 @@ namespace ts {
             switch (context?.kind) {
                 case SyntaxKind.GetAccessor:
                     if (!this.contextualGetAccessorTags) {
-                        this.contextualGetAccessorTags = emptyArray;
                         this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                     }
                     return this.contextualGetAccessorTags;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorTags) {
-                        this.contextualSetAccessorTags = emptyArray;
                         this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                     }
                     return this.contextualSetAccessorTags;
