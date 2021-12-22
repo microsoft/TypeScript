@@ -1,0 +1,67 @@
+=== tests/cases/compiler/scopeClassDeclarations.ts ===
+declare const condition: boolean;
+>condition : boolean
+
+if (condition)
+>condition : boolean
+
+    class C {} // runtime error if transpiled to ES2015 or above: Unexpected token class.
+>C : C
+
+new C(); // runtime error if transpiled to ES5, because 'C' is undefined.
+>new C() : C
+>C : typeof C
+
+if (condition) 
+>condition : boolean
+
+    console.log(); 
+>console.log() : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+else
+    class X {}
+>X : X
+
+function foo() {
+>foo : () => typeof X
+
+	return class X {}; // Not an error.
+>class X {} : typeof X
+>X : typeof X
+}
+
+while (class C {}) {  // Not an error.
+>class C {} : typeof C
+>C : typeof C
+
+    break;
+}
+
+switch (condition) {
+>condition : boolean
+
+    case true:
+>true : true
+
+        class C {} // Not an error.
+>C : C
+
+        break;
+    case false: {
+>false : false
+
+        class C {} // Not an error.
+>C : C
+
+        break;
+    }
+    default:
+        class X {} // Not an error.
+>X : X
+
+        break;
+}
+

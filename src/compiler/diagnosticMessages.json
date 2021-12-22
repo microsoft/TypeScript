@@ -1469,7 +1469,10 @@
         "category": "Message",
         "code": 1476
     },
-
+    "A class declaration can only be used in a scope where other statements can reference it." : {
+        "category": "Error",
+        "code": 1477
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200

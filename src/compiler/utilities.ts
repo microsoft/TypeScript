@@ -734,6 +734,19 @@ namespace ts {
         return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
+    export function isBlockLike(node: Node): node is BlockLike {
+        switch (node.kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.SourceFile:
+            case SyntaxKind.ModuleBlock:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     export function isBlockOrCatchScoped(declaration: Declaration) {
         return (getCombinedNodeFlags(declaration) & NodeFlags.BlockScoped) !== 0 ||
             isCatchClauseVariableDeclarationOrBindingElement(declaration);

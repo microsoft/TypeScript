@@ -1990,18 +1990,6 @@ namespace ts.refactor.extractSymbol {
         return true;
     }
 
-    function isBlockLike(node: Node): node is BlockLike {
-        switch (node.kind) {
-            case SyntaxKind.Block:
-            case SyntaxKind.SourceFile:
-            case SyntaxKind.ModuleBlock:
-            case SyntaxKind.CaseClause:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     function isInJSXContent(node: Node) {
         return isStringLiteralJsxAttribute(node) ||
             (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));

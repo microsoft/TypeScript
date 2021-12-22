@@ -1,0 +1,59 @@
+=== tests/cases/compiler/scopeClassDeclarations.ts ===
+declare const condition: boolean;
+>condition : Symbol(condition, Decl(scopeClassDeclarations.ts, 0, 13))
+
+if (condition)
+>condition : Symbol(condition, Decl(scopeClassDeclarations.ts, 0, 13))
+
+    class C {} // runtime error if transpiled to ES2015 or above: Unexpected token class.
+>C : Symbol(C, Decl(scopeClassDeclarations.ts, 2, 14))
+
+new C(); // runtime error if transpiled to ES5, because 'C' is undefined.
+>C : Symbol(C, Decl(scopeClassDeclarations.ts, 2, 14))
+
+if (condition) 
+>condition : Symbol(condition, Decl(scopeClassDeclarations.ts, 0, 13))
+
+    console.log(); 
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+else
+    class X {}
+>X : Symbol(X, Decl(scopeClassDeclarations.ts, 9, 4))
+
+function foo() {
+>foo : Symbol(foo, Decl(scopeClassDeclarations.ts, 10, 14))
+
+	return class X {}; // Not an error.
+>X : Symbol(X, Decl(scopeClassDeclarations.ts, 13, 7))
+}
+
+while (class C {}) {  // Not an error.
+>C : Symbol(C, Decl(scopeClassDeclarations.ts, 16, 7))
+
+    break;
+}
+
+switch (condition) {
+>condition : Symbol(condition, Decl(scopeClassDeclarations.ts, 0, 13))
+
+    case true:
+        class C {} // Not an error.
+>C : Symbol(C, Decl(scopeClassDeclarations.ts, 21, 14))
+
+        break;
+    case false: {
+        class C {} // Not an error.
+>C : Symbol(C, Decl(scopeClassDeclarations.ts, 24, 17))
+
+        break;
+    }
+    default:
+        class X {} // Not an error.
+>X : Symbol(X, Decl(scopeClassDeclarations.ts, 28, 12))
+
+        break;
+}
+
