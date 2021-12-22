@@ -22,10 +22,8 @@
 ////    }
 ////}
 
-// const ranges = test.ranges();
-// const symbols = test.symbolsInScope(ranges[0]);
-// const res = symbols.find(s => s.name === "result");
-// verify.typeOfSymbolAtLocation(ranges[0], res, "number");
-
 const ranges = test.ranges();
+const symbols = test.symbolsInScope(ranges[0]);
+const res = symbols.find(s => s.name === "result");
+verify.typeOfSymbolAtLocation(ranges[0], res, "number");
 verify.typeAtLocation(ranges[0],"number");
