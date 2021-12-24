@@ -1075,7 +1075,7 @@ namespace ts {
             if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
             if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
             if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
-            return result;
+            return result.length ? result : undefined;
         }
 
         //
@@ -6080,32 +6080,36 @@ namespace ts {
 
         function updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
         function updateModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
+            let modifierArray;
             if (typeof modifiers === "number") {
-                modifiers = createModifiersFromModifierFlags(modifiers);
+                modifierArray = createModifiersFromModifierFlags(modifiers);
             }
-            return isParameter(node) ? updateParameterDeclaration(node, node.decorators, modifiers, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
-                isPropertySignature(node) ? updatePropertySignature(node, modifiers, node.name, node.questionToken, node.type) :
-                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, node.decorators, modifiers, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
-                isMethodSignature(node) ? updateMethodSignature(node, modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
-                isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
-                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifiers, node.parameters, node.body) :
-                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.type, node.body) :
-                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.body) :
-                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type) :
-                isFunctionExpression(node) ? updateFunctionExpression(node, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isArrowFunction(node) ? updateArrowFunction(node, modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
-                isClassExpression(node) ? updateClassExpression(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isVariableStatement(node) ? updateVariableStatement(node, modifiers, node.declarationList) :
-                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isClassDeclaration(node) ? updateClassDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
-                isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
-                isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.name, node.moduleReference) :
-                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier, node.assertClause) :
-                isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
-                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
+            else {
+                modifierArray = modifiers;
+            }
+            return isParameter(node) ? updateParameterDeclaration(node, node.decorators, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+                isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :
+                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, node.decorators, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+                isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
+                isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifierArray, node.parameters, node.body) :
+                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.type, node.body) :
+                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.body) :
+                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifierArray, node.parameters, node.type) :
+                isFunctionExpression(node) ? updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
+                isClassExpression(node) ? updateClassExpression(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
+                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isClassDeclaration(node) ? updateClassDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.type) :
+                isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifierArray, node.name, node.members) :
+                isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifierArray, node.name, node.body) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
+                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
+                isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifierArray, node.expression) :
+                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
                 Debug.assertNever(node);
         }
 

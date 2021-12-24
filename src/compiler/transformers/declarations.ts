@@ -1610,7 +1610,7 @@ namespace ts {
     }
 
     // Elide "public" modifier, as it is the default
-    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] {
+    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
         return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
     }
 

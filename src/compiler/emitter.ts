@@ -4161,13 +4161,9 @@ namespace ts {
         }
 
         function emitModifiers(node: Node, modifiers: NodeArray<Modifier> | undefined) {
-            if (modifiers) {
-                onBeforeEmitNodeArray?.(modifiers);
-                if (modifiers.length) {
-                    emitList(node, modifiers, ListFormat.Modifiers);
-                    writeSpace();
-                }
-                onAfterEmitNodeArray?.(modifiers);
+            if (modifiers && modifiers.length) {
+                emitList(node, modifiers, ListFormat.Modifiers);
+                writeSpace();
             }
         }
 
