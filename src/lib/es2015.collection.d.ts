@@ -2,7 +2,7 @@ interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
-    get(key: K): V | undefined;
+    get<T extends V>(key: K): T | undefined;
     has(key: K): boolean;
     set(key: K, value: V): this;
     readonly size: number;
@@ -17,14 +17,14 @@ declare var Map: MapConstructor;
 
 interface ReadonlyMap<K, V> {
     forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
-    get(key: K): V | undefined;
+    get<T extends V>(key: K): T | undefined;
     has(key: K): boolean;
     readonly size: number;
 }
 
 interface WeakMap<K extends object, V> {
     delete(key: K): boolean;
-    get(key: K): V | undefined;
+    get<T extends V>(key: K): T | undefined;
     has(key: K): boolean;
     set(key: K, value: V): this;
 }
