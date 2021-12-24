@@ -1,0 +1,79 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts ===
+class C {
+>C : C
+
+    a = 123;
+>a : number
+>123 : 123
+
+    #a = 10;
+>#a : number
+>10 : 10
+
+    c = "hello";
+>c : string
+>"hello" : "hello"
+
+    #b;
+>#b : any
+
+    method() {
+>method : () => void
+
+        console.log(this.#a);
+>console.log(this.#a) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#a : number
+>this : this
+
+        this.#a = "hello";
+>this.#a = "hello" : "hello"
+>this.#a : number
+>this : this
+>"hello" : "hello"
+
+        console.log(this.#b);
+>console.log(this.#b) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#b : any
+>this : this
+    }
+    static #m = "test";
+>#m : string
+>"test" : "test"
+
+    static #x;
+>#x : any
+
+    static test() {
+>test : () => void
+
+        console.log(this.#m);
+>console.log(this.#m) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#m : string
+>this : typeof C
+
+        console.log(this.#x = "test");
+>console.log(this.#x = "test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#x = "test" : "test"
+>this.#x : any
+>this : typeof C
+>"test" : "test"
+    }
+    #something = () => 1234;
+>#something : () => number
+>() => 1234 : () => number
+>1234 : 1234
+}
+
+

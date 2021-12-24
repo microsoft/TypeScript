@@ -323,6 +323,38 @@ function f30({ kind, isA }: Foo) {
     }
 }
 
+type Args = ['A', number] | ['B', string]
+>Args : Args
+
+function f40(...[kind, data]: Args) {
+>f40 : (...[kind, data]: Args) => void
+>kind : "A" | "B"
+>data : string | number
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        data.toFixed();
+>data.toFixed() : string
+>data.toFixed : (fractionDigits?: number | undefined) => string
+>data : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        data.toUpperCase();
+>data.toUpperCase() : string
+>data.toUpperCase : () => string
+>data : string
+>toUpperCase : () => string
+    }
+}
+
 // Repro from #35283
 
 interface A<T> { variant: 'a', value: T }

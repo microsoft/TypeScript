@@ -335,7 +335,7 @@
         "category": "Error",
         "code": 1116
     },
-    "An object literal cannot have multiple properties with the same name in strict mode.": {
+    "An object literal cannot have multiple properties with the same name.": {
         "category": "Error",
         "code": 1117
     },
@@ -1490,6 +1490,10 @@
     "Type '{0}' recursively references itself as a base type.": {
         "category": "Error",
         "code": 2310
+    },
+    "Cannot find name '{0}'. Did you mean to write this in an async function?": {
+        "category": "Error",
+        "code": 2311
     },
     "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
@@ -4152,6 +4156,12 @@
         "category": "Message",
         "code": 6040
     },
+    "Errors  Files": {
+        "_locale_notes": "There is a double space, and the order cannot be changed (they're table headings) ^",
+        "category": "Message",
+        "code": 6041
+    },
+    
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4930,6 +4940,18 @@
     "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
         "category": "Error",
         "code": 6258
+    },
+      "Found 1 error in {1}": {
+        "category": "Message",
+        "code": 6259
+    },
+    "Found {0} errors in 1 file.": {
+        "category": "Message",
+        "code": 6260
+    },
+    "Found {0} errors in {1} files.": {
+        "category": "Message",
+        "code": 6261
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {

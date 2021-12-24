@@ -4,7 +4,7 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    unsorted: [
         completion.globalThisEntry,
         ...completion.globalsVars,
         completion.undefinedVarEntry

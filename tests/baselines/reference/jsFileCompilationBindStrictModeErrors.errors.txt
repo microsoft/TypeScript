@@ -1,5 +1,4 @@
-tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
-tests/cases/compiler/a.js(5,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/compiler/a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 tests/cases/compiler/a.js(8,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 tests/cases/compiler/a.js(8,8): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -11,20 +10,17 @@ tests/cases/compiler/b.js(3,7): error TS1210: Code contained in a class is evalu
 tests/cases/compiler/b.js(6,13): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/c.js(1,12): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
 tests/cases/compiler/c.js(2,5): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
-tests/cases/compiler/d.js(2,9): error TS1121: Octal literals are not allowed in strict mode.
 tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/a.js (9 errors) ====
+==== tests/cases/compiler/a.js (8 errors) ====
     "use strict";
     var a = {
         a: "hello", // error
         b: 10,
         a: 10 // error
         ~
-!!! error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
-        ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     };
     var let = 10; // error
         ~~~
@@ -75,10 +71,8 @@ tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
 !!! error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
     };
     
-==== tests/cases/compiler/d.js (2 errors) ====
+==== tests/cases/compiler/d.js (1 errors) ====
     "use strict";
     var x = 009; // error
-            ~~
-!!! error TS1121: Octal literals are not allowed in strict mode.
               ~
 !!! error TS1005: ',' expected.

@@ -703,8 +703,7 @@ namespace ts.projectSystem {
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
             let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, emptyOptions);
-            assert(completions && completions.entries[1].name === "hello", `expected entry hello to be in completion list`);
-            assert(completions && completions.entries[0].name === "globalThis", `first entry should be globalThis (not strictly relevant for this test).`);
+            assert(completions && some(completions.entries, e => e.name === "hello"), `expected entry hello to be in completion list`);
 
             // Close HTML file
             projectService.applyChangesInOpenFiles(

@@ -25,16 +25,16 @@ verify.completions({
     marker: ["1", "2"],
     exact: [
         {
-            name: "foo",
-            text: "(JSX attribute) foo: string",
-            documentation: "Doc",
+            name: "aria-label",
+            text: "(JSX attribute) \"aria-label\": string",
+            documentation: "Label docs",
             kind: "JSX attribute",
             kindModifiers: "declare",
         },
         {
-            name: "aria-label",
-            text: "(JSX attribute) \"aria-label\": string",
-            documentation: "Label docs",
+            name: "foo",
+            text: "(JSX attribute) foo: string",
+            documentation: "Doc",
             kind: "JSX attribute",
             kindModifiers: "declare",
         },

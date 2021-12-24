@@ -124,6 +124,13 @@
           ]
         },
         {
+          "name": "a",
+          "kind": "warning",
+          "kindModifiers": "",
+          "sortText": "17",
+          "isFromUncheckedFile": true
+        },
+        {
           "name": "C",
           "kind": "warning",
           "kindModifiers": "",
@@ -132,13 +139,6 @@
         },
         {
           "name": "f",
-          "kind": "warning",
-          "kindModifiers": "",
-          "sortText": "17",
-          "isFromUncheckedFile": true
-        },
-        {
-          "name": "a",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "17",

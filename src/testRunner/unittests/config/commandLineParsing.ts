@@ -534,7 +534,7 @@ namespace ts {
                                 isTSConfigOnly: true,
                                 category: Diagnostics.Backwards_Compatibility,
                                 description: Diagnostics.Enable_project_compilation,
-                                defaultValueDescription: "undefined",
+                                defaultValueDescription: undefined,
                             }
                         ];
                         return {

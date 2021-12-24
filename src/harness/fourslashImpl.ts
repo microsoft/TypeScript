@@ -914,9 +914,26 @@ namespace FourSlash {
             }
 
             if (ts.hasProperty(options, "exact")) {
-                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes"));
+                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes") && !ts.hasProperty(options, "unsorted"));
                 if (options.exact === undefined) throw this.raiseError("Expected no completions");
-                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact), options.marker);
+                this.verifyCompletionsAreExactly(actualCompletions.entries, options.exact, options.marker);
+            }
+            else if (options.unsorted) {
+                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes"));
+                for (const expectedEntry of options.unsorted) {
+                    const name = typeof expectedEntry === "string" ? expectedEntry : expectedEntry.name;
+                    const found = nameToEntries.get(name);
+                    if (!found) throw this.raiseError(`Unsorted: completion '${name}' not found.`);
+                    if (!found.length) throw this.raiseError(`Unsorted: no completions with name '${name}' remain unmatched.`);
+                    this.verifyCompletionEntry(found.shift()!, expectedEntry);
+                }
+                if (actualCompletions.entries.length !== options.unsorted.length) {
+                    const unmatched: string[] = [];
+                    nameToEntries.forEach(entries => {
+                        unmatched.push(...entries.map(e => e.name));
+                    });
+                    this.raiseError(`Additional completions found not included in 'unsorted': ${unmatched.join("\n")}`);
+                }
             }
             else {
                 if (options.includes) {
@@ -993,7 +1010,11 @@ namespace FourSlash {
             }
         }
 
-        private verifyCompletionsAreExactly(actual: readonly ts.CompletionEntry[], expected: readonly FourSlashInterface.ExpectedCompletionEntry[], marker?: ArrayOrSingle<string | Marker>) {
+        private verifyCompletionsAreExactly(actual: readonly ts.CompletionEntry[], expected: ArrayOrSingle<FourSlashInterface.ExpectedCompletionEntry> | FourSlashInterface.ExpectedExactCompletionsPlus, marker?: ArrayOrSingle<string | Marker>) {
+            if (!ts.isArray(expected)) {
+                expected = [expected];
+            }
+
             // First pass: test that names are right. Then we'll test details.
             assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name), marker ? "At marker " + JSON.stringify(marker) : undefined);
 
@@ -1004,6 +1025,16 @@ namespace FourSlash {
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
+
+            // All completions were correct in the sort order given. If that order was produced by a function
+            // like `completion.globalsPlus`, ensure the "plus" array was sorted in the same way.
+            const { plusArgument, plusFunctionName } = expected as FourSlashInterface.ExpectedExactCompletionsPlus;
+            if (plusArgument) {
+                assert.deepEqual(
+                    plusArgument,
+                    expected.filter(entry => plusArgument.includes(entry)),
+                    `At marker ${JSON.stringify(marker)}: Argument to '${plusFunctionName}' was incorrectly sorted.`);
+            }
         }
 
         /** Use `getProgram` instead of accessing this directly. */
