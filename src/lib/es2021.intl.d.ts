@@ -78,7 +78,7 @@ declare namespace Intl {
          *
          * @throws `TypeError` if `list` includes something other than the possible values.
          *
-         * @returns {string} An Array of components which contains the formatted parts from the list.
+         * @returns {{ type: "element" | "literal", value: string; }[]} An Array of components which contains the formatted parts from the list.
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/formatToParts).
          */
