@@ -134,6 +134,94 @@ namespace ts {
         EmptyObjectStrictFacts = All & ~(EQUndefined | EQNull | EQUndefinedOrNull),
         AllTypeofNE = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined,
         EmptyObjectFacts = All,
+        // Facts that are always true or always false (i.e. for all values of that type), to be used in `getIntersectionTypeFacts`.
+        // String
+        StringAlwaysTrue = TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject,
+        StringStrictAlwaysTrue = StringAlwaysTrue | TypeofEQString | NEUndefined | NENull | NEUndefinedOrNull,
+        StringAlwaysFalse = TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject,
+        StringStrictAlwaysFalse = StringAlwaysFalse | TypeofNEString | EQUndefined | EQNull | EQUndefinedOrNull,
+        // Empty string
+        EmptyStringAlwaysTrue = StringAlwaysTrue,
+        EmptyStringStrictAlwaysTrue = StringStrictAlwaysTrue | Falsy,
+        EmptyStringAlwaysFalse = StringAlwaysFalse,
+        EmptyStringStrictAlwaysFalse = StringStrictAlwaysFalse | Truthy,
+        // Non-empty string
+        NonEmptyStringAlwaysTrue = StringAlwaysTrue,
+        NonEmptyStringStrictAlwaysTrue = StringStrictAlwaysTrue | Truthy,
+        NonEmptyStringAlwaysFalse = StringAlwaysFalse,
+        NonEmptyStringStrictAlwaysFalse = StringStrictAlwaysFalse | Falsy,
+        // Number
+        NumberAlwaysTrue = TypeofNEString | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject,
+        NumberStrictAlwaysTrue = NumberAlwaysTrue | TypeofEQNumber | NEUndefined | NENull | NEUndefinedOrNull,
+        NumberAlwaysFalse = TypeofEQString | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject,
+        NumberStrictAlwaysFalse = NumberAlwaysFalse | TypeofNENumber | EQUndefined | EQNull | EQUndefinedOrNull,
+        // Zero number
+        ZeroNumberAlwaysTrue = NumberAlwaysTrue,
+        ZeroNumberStrictAlwaysTrue = NumberStrictAlwaysTrue | Falsy,
+        ZeroNumberAlwaysFalse = NumberAlwaysFalse,
+        ZeroNumberStrictAlwaysFalse = NumberStrictAlwaysFalse | Truthy,
+        // Non-zero number
+        NonZeroNumberAlwaysTrue = NumberAlwaysTrue,
+        NonZeroNumberStrictAlwaysTrue = NumberStrictAlwaysTrue | Truthy,
+        NonZeroNumberAlwaysFalse = NumberAlwaysFalse,
+        NonZeroNumberStrictAlwaysFalse = NumberStrictAlwaysFalse | Falsy,
+        // Big int
+        BigIntAlwaysTrue = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject,
+        BigIntStrictAlwaysTrue = BigIntAlwaysTrue | TypeofEQBigInt | NEUndefined | NENull | NEUndefinedOrNull,
+        BigIntAlwaysFalse = TypeofEQString | TypeofEQNumber | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject,
+        BigIntStrictAlwaysFalse = BigIntAlwaysFalse | TypeofNEBigInt | EQUndefined | EQNull | EQUndefinedOrNull,
+        // Zero big int
+        ZeroBigIntAlwaysTrue = BigIntAlwaysTrue,
+        ZeroBigIntStrictAlwaysTrue = BigIntStrictAlwaysTrue | Falsy,
+        ZeroBigIntAlwaysFalse = BigIntAlwaysFalse,
+        ZeroBigIntStrictAlwaysFalse = BigIntStrictAlwaysFalse | Truthy,
+        // Non-zero big int
+        NonZeroBigIntAlwaysTrue = BigIntAlwaysTrue,
+        NonZeroBigIntStrictAlwaysTrue = BigIntStrictAlwaysTrue | Truthy,
+        NonZeroBigIntAlwaysFalse = BigIntAlwaysFalse,
+        NonZeroBigIntStrictAlwaysFalse = BigIntStrictAlwaysFalse | Falsy,
+        // Boolean
+        BooleanAlwaysTrue = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject,
+        BooleanStrictAlwaysTrue = BooleanAlwaysTrue | TypeofEQBoolean | NEUndefined | NENull | NEUndefinedOrNull,
+        BooleanAlwaysFalse = TypeofEQString | TypeofEQNumber | TypeofEQBigInt | TypeofEQSymbol | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject,
+        BooleanStrictAlwaysFalse = BooleanAlwaysFalse | TypeofNEBoolean | EQUndefined | EQNull | EQUndefinedOrNull,
+        // Boolean-like
+        // False
+        FalseAlwaysTrue = BooleanAlwaysTrue,
+        FalseStrictAlwaysTrue = BooleanStrictAlwaysTrue | Falsy,
+        FalseAlwaysFalse = BooleanAlwaysFalse,
+        FalseStrictAlwaysFalse = BooleanStrictAlwaysFalse | Truthy,
+        // True
+        TrueAlwaysTrue = BooleanAlwaysTrue,
+        TrueStrictAlwaysTrue = BooleanStrictAlwaysTrue | Truthy,
+        TrueAlwaysFalse = BooleanAlwaysFalse,
+        TrueStrictAlwaysFalse = BooleanStrictAlwaysFalse | Falsy,
+        // Undefined
+        UndefinedAlwaysTrue = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
+        UndefinedAlwaysFalse = TypeofEQSymbol | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject | NEUndefined | NEUndefinedOrNull | EQNull | Truthy,
+        // Null
+        NullAlwaysTrue = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
+        NullAlwaysFalse = TypeofNEObject | TypeofEQString | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQFunction | TypeofEQHostObject | NENull | NEUndefinedOrNull | EQUndefined | Truthy,
+        // Symbol
+        SymbolAlwaysTrue = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject,
+        SymbolStrictAlwaysTrue = SymbolAlwaysTrue | TypeofEQSymbol | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
+        SymbolAlwaysFalse = TypeofEQString | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject,
+        SymbolStrictAlwaysFalse = SymbolAlwaysFalse | TypeofNESymbol | EQUndefined | EQNull | EQUndefinedOrNull,
+        // Function
+        FunctionAlwaysTrue = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject,
+        FunctionStrictAlwaysTrue = FunctionAlwaysTrue | TypeofEQFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy, // >> TODO: what about `TypeofEQHostObject`?
+        FunctionAlwaysFalse = TypeofEQSymbol | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject,
+        FunctionStrictAlwaysFalse = FunctionAlwaysFalse | TypeofNEFunction | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+        // Object
+        ObjectAlwaysTrue = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol, // could it still be e.g. a symbol?
+        ObjectStrictAlwaysTrue = ObjectAlwaysTrue | NEUndefined | NENull | NEUndefinedOrNull | Truthy, // >> TODO: what about `TypeofEQHostObject`
+        ObjectAlwaysFalse = TypeofEQSymbol | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol,
+        ObjectStrictAlwaysFalse = ObjectAlwaysFalse | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+        // Empty object
+        EmptyObjectAlwaysTrue = None,
+        EmptyObjectStrictAlwaysTrue = NEUndefined | NENull | NEUndefinedOrNull,
+        EmptyObjectAlwaysFalse = None,
+        EmptyObjectStrictAlwaysFalse = EQUndefined | EQNull | EQUndefinedOrNull,
     }
 
     const typeofEQFacts: ReadonlyESMap<string, TypeFacts> = new Map(getEntries({
@@ -22965,12 +23053,178 @@ namespace ts {
                 return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFacts(t, ignoreObjects), TypeFacts.None);
             }
             if (flags & TypeFlags.Intersection) {
+                // // When an intersection contains a primitive type we ignore object type constituents as they are
+                // // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
+                // const hasPrimitive = maybeTypeOfKind(type, TypeFlags.Primitive);
+                // ignoreObjects ||= hasPrimitive;
+                // if (hasPrimitive) {
+                //     return reduceLeft((type as IntersectionType).types, (facts, t) => facts & getTypeFacts(t, ignoreObjects), TypeFacts.All);
+                // }
+                // else {
+                //     return reduceLeft((type as IntersectionType).types, (facts, t) => facts | getTypeFacts(t, ignoreObjects), TypeFacts.None);
+                // }
+                return getIntersectionTypeFacts(type as IntersectionType, ignoreObjects);
+            }
+            return TypeFacts.All;
+        }
+
+        function getIntersectionTypeFacts(type: IntersectionType, ignoreObjects: boolean): TypeFacts {
+            ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
+            let alwaysTrue = TypeFacts.None;
+            let alwaysFalse = TypeFacts.None;
+            let facts = TypeFacts.None;
+            for (const t of type.types) {
+                facts |= getTypeFacts(t, ignoreObjects);
+                const { alwaysTrue: tTrue, alwaysFalse: tFalse } = getAlwaysTypeFacts(t, ignoreObjects);
+                alwaysTrue |= tTrue;
+                alwaysFalse |= tFalse;
+            }
+
+            if (alwaysTrue & alwaysFalse) {
+                // Contradiction
+                return TypeFacts.None;
+            }
+
+            return (facts | alwaysTrue) & (~alwaysFalse);
+        }
+
+        function getAlwaysTypeFacts(type: Type, ignoreObjects: boolean): { alwaysTrue: TypeFacts, alwaysFalse: TypeFacts } {
+            const flags = type.flags;
+            if (flags & TypeFlags.String) {
+                return {
+                    alwaysTrue: strictNullChecks ? TypeFacts.StringStrictAlwaysTrue : TypeFacts.StringAlwaysTrue,
+                    alwaysFalse: strictNullChecks ?
+                        TypeFacts.StringStrictAlwaysFalse : TypeFacts.StringAlwaysFalse,
+                };
+            }
+            if (flags & TypeFlags.StringLiteral) {
+                const isEmpty = (type as StringLiteralType).value === "";
+                return strictNullChecks
+                    ? isEmpty
+                        ? { alwaysTrue: TypeFacts.EmptyStringStrictAlwaysTrue, alwaysFalse: TypeFacts.EmptyStringStrictAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.NonEmptyStringStrictAlwaysTrue, alwaysFalse: TypeFacts.NonEmptyStringStrictAlwaysFalse }
+                    : isEmpty
+                    ? { alwaysTrue: TypeFacts.EmptyStringAlwaysTrue, alwaysFalse: TypeFacts.EmptyStringAlwaysFalse }
+                    : { alwaysTrue: TypeFacts.NonEmptyStringAlwaysTrue, alwaysFalse: TypeFacts.NonEmptyStringAlwaysFalse };
+            }
+            if (flags & (TypeFlags.Number | TypeFlags.Enum)) {
+                return {
+                    alwaysTrue: strictNullChecks ? TypeFacts.NumberStrictAlwaysTrue : TypeFacts.NumberAlwaysTrue,
+                    alwaysFalse: strictNullChecks ? TypeFacts.NumberStrictAlwaysFalse : TypeFacts.NumberAlwaysFalse,
+                };
+            }
+            if (flags & TypeFlags.NumberLiteral) {
+                const isZero = (type as NumberLiteralType).value === 0;
+                return strictNullChecks
+                    ? isZero
+                        ? { alwaysTrue: TypeFacts.ZeroNumberStrictAlwaysTrue, alwaysFalse: TypeFacts.ZeroNumberStrictAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.NonZeroNumberStrictAlwaysTrue, alwaysFalse: TypeFacts.NonZeroNumberStrictAlwaysFalse }
+                    : isZero
+                        ? { alwaysTrue: TypeFacts.ZeroNumberAlwaysTrue, alwaysFalse: TypeFacts.ZeroNumberAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.NonZeroNumberAlwaysTrue, alwaysFalse: TypeFacts.NonZeroNumberAlwaysFalse };
+            }
+            if (flags & TypeFlags.BigInt) {
+                return {
+                    alwaysTrue: strictNullChecks ? TypeFacts.BigIntStrictAlwaysTrue : TypeFacts.BigIntAlwaysTrue,
+                    alwaysFalse: strictNullChecks ? TypeFacts.BigIntStrictAlwaysFalse : TypeFacts.BigIntAlwaysFalse,
+                };
+            }
+            if (flags & TypeFlags.BigIntLiteral) {
+                const isZero = isZeroBigInt(type as BigIntLiteralType);
+                 return strictNullChecks
+                    ? isZero
+                        ? { alwaysTrue: TypeFacts.ZeroBigIntStrictAlwaysTrue, alwaysFalse: TypeFacts.ZeroBigIntStrictAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.NonZeroBigIntStrictAlwaysTrue, alwaysFalse: TypeFacts.NonZeroBigIntStrictAlwaysFalse }
+                    : isZero
+                        ? { alwaysTrue: TypeFacts.ZeroBigIntAlwaysTrue, alwaysFalse: TypeFacts.ZeroBigIntAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.NonZeroBigIntAlwaysTrue, alwaysFalse: TypeFacts.NonZeroBigIntAlwaysFalse };
+            }
+            if (flags & TypeFlags.Boolean) {
+                return {
+                    alwaysTrue: strictNullChecks ? TypeFacts.BooleanStrictAlwaysTrue : TypeFacts.BooleanAlwaysTrue,
+                    alwaysFalse: strictNullChecks ?
+                        TypeFacts.BooleanStrictAlwaysFalse : TypeFacts.BooleanAlwaysFalse,
+                };
+            }
+            if (flags & TypeFlags.BooleanLike) {
+                return strictNullChecks
+                    ? (type === falseType || type === regularFalseType)
+                        ? { alwaysTrue: TypeFacts.FalseStrictAlwaysTrue, alwaysFalse: TypeFacts.FalseStrictAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.TrueStrictAlwaysTrue, alwaysFalse: TypeFacts.TrueStrictAlwaysFalse }
+                    : (type === falseType || type === regularFalseType)
+                        ? { alwaysTrue: TypeFacts.FalseAlwaysTrue, alwaysFalse: TypeFacts.FalseAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.TrueAlwaysTrue, alwaysFalse: TypeFacts.TrueAlwaysFalse };
+            }
+            if (flags & TypeFlags.Object && !ignoreObjects) {
+                return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType)
+                    ? strictNullChecks
+                        ? { alwaysTrue: TypeFacts.EmptyObjectStrictAlwaysTrue, alwaysFalse: TypeFacts.EmptyObjectStrictAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.EmptyObjectAlwaysTrue, alwaysFalse: TypeFacts.EmptyObjectAlwaysFalse }
+                    : isFunctionObjectType(type as ObjectType)
+                        ? strictNullChecks
+                            ? { alwaysTrue: TypeFacts.FunctionStrictAlwaysTrue, alwaysFalse: TypeFacts.FunctionStrictAlwaysFalse }
+                            : { alwaysTrue: TypeFacts.FunctionAlwaysTrue, alwaysFalse: TypeFacts.FunctionAlwaysFalse }
+                        : strictNullChecks
+                            ? { alwaysTrue: TypeFacts.ObjectStrictAlwaysTrue, alwaysFalse: TypeFacts.ObjectStrictAlwaysFalse }
+                            : { alwaysTrue: TypeFacts.ObjectAlwaysTrue, alwaysFalse: TypeFacts.ObjectAlwaysFalse };
+            }
+            if (flags & (TypeFlags.Void | TypeFlags.Undefined)) {
+                return { alwaysTrue: TypeFacts.UndefinedAlwaysTrue, alwaysFalse: TypeFacts.UndefinedAlwaysFalse };
+            }
+            if (flags & TypeFlags.Null) {
+                return { alwaysTrue: TypeFacts.NullAlwaysTrue, alwaysFalse: TypeFacts.NullAlwaysFalse };
+            }
+            if (flags & TypeFlags.ESSymbolLike) {
+                return {
+                    alwaysTrue: strictNullChecks ? TypeFacts.SymbolStrictAlwaysTrue : TypeFacts.SymbolAlwaysTrue,
+                    alwaysFalse: strictNullChecks ? TypeFacts.SymbolStrictAlwaysFalse : TypeFacts.SymbolAlwaysFalse,
+                };
+            }
+            if (flags & TypeFlags.NonPrimitive) {
+                return strictNullChecks ?
+                    { alwaysTrue: TypeFacts.ObjectStrictAlwaysTrue, alwaysFalse: TypeFacts.ObjectStrictAlwaysFalse } :
+                    { alwaysTrue: TypeFacts.ObjectAlwaysTrue, alwaysFalse: TypeFacts.ObjectAlwaysFalse };
+            }
+            if (flags & TypeFlags.Never) {
+                return {
+                    alwaysTrue: TypeFacts.None,
+                    alwaysFalse: TypeFacts.None,
+                };
+            }
+            if (flags & TypeFlags.Instantiable) {
+                return !isPatternLiteralType(type)
+                    ? getAlwaysTypeFacts(getBaseConstraintOfType(type) || unknownType, ignoreObjects)
+                    : strictNullChecks
+                        ? { alwaysTrue: TypeFacts.NonEmptyStringStrictAlwaysTrue, alwaysFalse: TypeFacts.NonEmptyStringStrictAlwaysFalse }
+                        : { alwaysTrue: TypeFacts.NonEmptyStringAlwaysTrue, alwaysFalse: TypeFacts.NonEmptyStringAlwaysFalse };
+            }
+            if (flags & TypeFlags.Union) {
+                const types = (type as UnionType).types;
+                if (types.length) {
+                    return reduceLeft(types, (facts, t) => {
+                        const { alwaysTrue, alwaysFalse } = getAlwaysTypeFacts(t, ignoreObjects);
+                        return { alwaysTrue: facts.alwaysTrue & alwaysTrue, alwaysFalse: facts.alwaysFalse & alwaysFalse };
+                    }, { alwaysTrue: TypeFacts.All, alwaysFalse: TypeFacts.All }); // >> TODO: that's assuming union will never be empty; check that
+                }
+                return {
+                    alwaysTrue: TypeFacts.None,
+                    alwaysFalse: TypeFacts.None,
+                };
+            }
+            if (flags & TypeFlags.Intersection) {
                 // When an intersection contains a primitive type we ignore object type constituents as they are
                 // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
                 ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
-                return reduceLeft((type as UnionType).types, (facts, t) => facts & getTypeFacts(t, ignoreObjects), TypeFacts.All);
+                return reduceLeft((type as IntersectionType).types, (facts, t) => {
+                    const { alwaysTrue, alwaysFalse } = getAlwaysTypeFacts(t, ignoreObjects);
+                    return { alwaysTrue: facts.alwaysTrue | alwaysTrue, alwaysFalse: facts.alwaysFalse | alwaysFalse };
+                }, { alwaysTrue: TypeFacts.None, alwaysFalse: TypeFacts.None });
             }
-            return TypeFacts.All;
+
+            return {
+                alwaysTrue: TypeFacts.None,
+                alwaysFalse: TypeFacts.None,
+            };
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {

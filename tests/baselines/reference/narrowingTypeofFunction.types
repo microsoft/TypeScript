@@ -1,0 +1,28 @@
+=== tests/cases/compiler/narrowingTypeofFunction.ts ===
+type Meta = { foo: string }
+>Meta : Meta
+>foo : string
+
+interface F { (): string }
+
+const x = (a: (F & Meta) | string) => {
+>x : (a: (F & Meta) | string) => void
+>(a: (F & Meta) | string) => {    if (typeof a === "function") {        // ts.version >= 4.3.5: never -- unexpected        // ts.version <= 4.2.3: F & Meta -- expected        a;    }    else {        a;    }} : (a: (F & Meta) | string) => void
+>a : string | (F & Meta)
+
+    if (typeof a === "function") {
+>typeof a === "function" : boolean
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>a : string | (F & Meta)
+>"function" : "function"
+
+        // ts.version >= 4.3.5: never -- unexpected
+        // ts.version <= 4.2.3: F & Meta -- expected
+        a;
+>a : F & Meta
+    }
+    else {
+        a;
+>a : string
+    }
+}
