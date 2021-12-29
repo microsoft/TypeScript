@@ -90,7 +90,7 @@ namespace ts {
     }
 
     function createColors(sys: System) {
-        const showColors = defaultIsPretty(sys);
+        const showColors = shouldBePretty(sys);
         if (!showColors) {
             return {
                 bold: (str: string) => str,
