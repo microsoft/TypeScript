@@ -1,0 +1,29 @@
+=== tests/cases/compiler/narrowingTypeof.ts ===
+type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void });
+>__String : __String
+>__escapedIdentifier : void
+>__escapedIdentifier : void
+
+declare const s: __String;
+>s : __String
+
+declare let t: string | number | undefined;
+>t : string | number
+
+declare function assert(e: unknown): asserts e;
+>assert : (e: unknown) => asserts e
+>e : unknown
+
+assert(typeof s === "string");
+>assert(typeof s === "string") : void
+>assert : (e: unknown) => asserts e
+>typeof s === "string" : boolean
+>typeof s : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>s : __String
+>"string" : "string"
+
+t = s;
+>t = s : string & { __escapedIdentifier: void; }
+>t : string | number
+>s : string & { __escapedIdentifier: void; }
+

@@ -23023,7 +23023,10 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.Object && !ignoreObjects) {
+            if (flags & TypeFlags.Object) {
+                if (ignoreObjects) {
+                    return TypeFacts.None;
+                }
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                     isFunctionObjectType(type as ObjectType) ?
@@ -23055,21 +23058,13 @@ namespace ts {
             if (flags & TypeFlags.Intersection) {
                 // // When an intersection contains a primitive type we ignore object type constituents as they are
                 // // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
-                // const hasPrimitive = maybeTypeOfKind(type, TypeFlags.Primitive);
-                // ignoreObjects ||= hasPrimitive;
-                // if (hasPrimitive) {
-                //     return reduceLeft((type as IntersectionType).types, (facts, t) => facts & getTypeFacts(t, ignoreObjects), TypeFacts.All);
-                // }
-                // else {
-                //     return reduceLeft((type as IntersectionType).types, (facts, t) => facts | getTypeFacts(t, ignoreObjects), TypeFacts.None);
-                // }
+                ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
                 return getIntersectionTypeFacts(type as IntersectionType, ignoreObjects);
             }
             return TypeFacts.All;
         }
 
         function getIntersectionTypeFacts(type: IntersectionType, ignoreObjects: boolean): TypeFacts {
-            ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
             let alwaysTrue = TypeFacts.None;
             let alwaysFalse = TypeFacts.None;
             let facts = TypeFacts.None;
@@ -23155,7 +23150,13 @@ namespace ts {
                         ? { alwaysTrue: TypeFacts.FalseAlwaysTrue, alwaysFalse: TypeFacts.FalseAlwaysFalse }
                         : { alwaysTrue: TypeFacts.TrueAlwaysTrue, alwaysFalse: TypeFacts.TrueAlwaysFalse };
             }
-            if (flags & TypeFlags.Object && !ignoreObjects) {
+            if (flags & TypeFlags.Object) {
+                if (ignoreObjects) {
+                    return {
+                        alwaysTrue: TypeFacts.None,
+                        alwaysFalse: TypeFacts.None,
+                    };
+                }
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType)
                     ? strictNullChecks
                         ? { alwaysTrue: TypeFacts.EmptyObjectStrictAlwaysTrue, alwaysFalse: TypeFacts.EmptyObjectStrictAlwaysFalse }
