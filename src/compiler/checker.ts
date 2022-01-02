@@ -39394,16 +39394,15 @@ namespace ts {
                         return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), identifier.escapedText);
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
-                        const ex = expr as AccessExpression;
-                        if (isConstantMemberAccess(ex)) {
-                            const type = getTypeOfExpression(ex.expression);
+                        if (isConstantMemberAccess(expr)) {
+                            const type = getTypeOfExpression(expr.expression);
                             if (type.symbol && type.symbol.flags & SymbolFlags.Enum) {
                                 let name: __String;
-                                if (ex.kind === SyntaxKind.PropertyAccessExpression) {
-                                    name = ex.name.escapedText;
+                                if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                                    name = expr.name.escapedText;
                                 }
                                 else {
-                                    name = escapeLeadingUnderscores(cast(ex.argumentExpression, isLiteralExpression).text);
+                                    name = escapeLeadingUnderscores(cast(expr.argumentExpression, isLiteralExpression).text);
                                 }
                                 return evaluateEnumMember(expr, type.symbol, name);
                             }
@@ -39432,11 +39431,33 @@ namespace ts {
             }
         }
 
-        function isConstantMemberAccess(node: Expression): boolean {
-            return node.kind === SyntaxKind.Identifier ||
-                node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((node as PropertyAccessExpression).expression) ||
-                node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((node as ElementAccessExpression).expression) &&
-                    isStringLiteralLike((node as ElementAccessExpression).argumentExpression);
+        function isConstantMemberAccess(node: Expression): node is ElementAccessExpression | PropertyAccessExpression {
+            const type = getTypeOfExpression(node);
+            if(!type.symbol) {
+                return false;
+            }
+
+            if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                const expr = node as PropertyAccessExpression;
+
+                if (expr.expression.kind === SyntaxKind.Identifier) {
+                    return true;
+                }
+
+                return isConstantMemberAccess(expr.expression);
+            }
+
+            if (node.kind === SyntaxKind.ElementAccessExpression) {
+                const expr = node as ElementAccessExpression;
+
+                if (expr.expression.kind === SyntaxKind.Identifier && isStringLiteralLike(expr.argumentExpression)) {
+                    return true;
+                }
+
+                return isConstantMemberAccess(expr.expression);
+            }
+
+            return false;
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
