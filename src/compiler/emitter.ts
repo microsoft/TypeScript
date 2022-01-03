@@ -2097,6 +2097,12 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                const startLoc = getFunctionLoc(node, "pos");
+                if (startLoc === -1) {
+                    // This is a synthetic or implied function
+                    return;
+                }
+
                 const functionName = getNameForScope(node.name, node);
                 let containerName;
                 if (node.parent && (isClassDeclaration(node.parent) || isClassExpression(node.parent))) {
@@ -2121,8 +2127,8 @@ namespace ts {
                     scopeName = `static ${scopeName}`;
                 }
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
-                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
-                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, startLoc);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, getFunctionLoc(node, "end"));
                 sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
             }
         }
@@ -2132,11 +2138,6 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             writeKeyword("static");
             emitBlockFunctionBody(node.body);
-
-            if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
-                // TODO: Do I need to emit source maps v4 stuff here?
-                // debugger;
-            }
         }
 
         function emitConstructor(node: ConstructorDeclaration) {
@@ -2145,6 +2146,12 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                const startLoc = getFunctionLoc(node, "pos");
+                if (startLoc === -1) {
+                    // This is a synthetic or implied function
+                    return;
+                }
+
                 if (!node.body || node.body.pos === -1) {
                     // Implicit constructor, don't emit anything
                     return;
@@ -2155,8 +2162,8 @@ namespace ts {
                 }
                 const scopeName = "constructor for " + computeClassNameForScopeMap(parentScope, /* classNameOnly: */ true);
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
-                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
-                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, startLoc);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, getFunctionLoc(node, "end"));
                 sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
             }
         }
@@ -2204,9 +2211,16 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
-                let parentScope = node.parent as ClassLikeDeclaration | ObjectLiteralExpression;
-                if (!parentScope && node.original && node.original.parent) {
-                    parentScope = node.original?.parent as ClassLikeDeclaration | ObjectLiteralExpression;
+                const startLoc = getFunctionLoc(node, "pos");
+                if (startLoc === -1) {
+                    // This is a synthetic or implied function
+                    return;
+                }
+
+                const parentScope = tryLocateParentOfNode<ClassLikeDeclaration | ObjectLiteralExpression>(node);
+                if(!parentScope) {
+                    // Couldn't locate a parent, so don't emit this scope
+                    return;
                 }
 
                 if (isInterfaceDeclaration(parentScope)) {
@@ -2233,10 +2247,31 @@ namespace ts {
                 }
 
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
-                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
-                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, startLoc);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, getFunctionLoc(node, "end"));
                 sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
             }
+        }
+
+        function tryLocateParentOfNode<TResult extends Node>(node: Node): TResult | undefined {
+            function walkNodeOriginalChain(node: Node, remainingSteps: number): TResult | undefined {
+                if (node.parent) {
+                    return node.parent as TResult;
+                }
+
+                if (remainingSteps === 0) {
+                    return undefined;
+                }
+
+                if (node.original) {
+                    return walkNodeOriginalChain(node.original, remainingSteps - 1);
+                }
+
+                return undefined;
+            }
+            const result = walkNodeOriginalChain(node, 5);
+
+            return result;
         }
 
         function emitCallSignature(node: CallSignatureDeclaration) {
@@ -2702,12 +2737,32 @@ namespace ts {
             emitSignatureAndBody(node, emitArrowFunctionHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
+                const startLoc = getFunctionLoc(node, "pos");
+                if (startLoc === -1) {
+                    // This is a synthetic or implied function
+                    return;
+                }
+
                 const scopeName = getNameForArrowScope(node);
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
-                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
-                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, startLoc);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, getFunctionLoc(node, "end"));
                 sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
             }
+        }
+
+        function getFunctionLoc(node: ArrowFunction | FunctionExpression | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration, locationKind: "pos" | "end") {
+            if (node.body) {
+                if (typeof node.body?.[locationKind] !== "undefined" && node.body[locationKind] !== -1) {
+                    return node.body[locationKind];
+                }
+            }
+
+            if (node[locationKind] !== -1) {
+                return node[locationKind];
+            }
+
+            return -1;
         }
 
         function computeTextOfNodeForScopeMapping(node: Node): string {
@@ -3331,14 +3386,16 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
 
             if (!sourceMapsDisabled && !!sourceMapGenerator && sourceMapsCollectFunctionNames) {
-                if (node.pos === -1) {
-                    // There is no valid source mapping here
+                const startLoc = getFunctionLoc(node, "pos");
+                if (startLoc === -1) {
+                    // This is a synthetic or implied function
                     return;
                 }
+
                 const scopeName = getNameForScope(node.name!, node);
                 const sourceMapScopeIndex = sourceMapGenerator.addScopeName(scopeName);
-                const startPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.pos || node.pos);
-                const endPos = getLineAndCharacterOfPosition(sourceMapSource, node.body?.end || node.end);
+                const startPos = getLineAndCharacterOfPosition(sourceMapSource, startLoc);
+                const endPos = getLineAndCharacterOfPosition(sourceMapSource, getFunctionLoc(node, "end"));
                 sourceMapGenerator.addScopeMapping(0, startPos, endPos, sourceMapScopeIndex);
             }
         }
