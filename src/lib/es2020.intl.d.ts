@@ -277,6 +277,7 @@ declare namespace Intl {
     };
 
      interface DisplayNamesOptions {
+        locale: UnicodeBCP47LocaleIdentifier;
         localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
         type: "language" | "region" | "script" | "currency";
