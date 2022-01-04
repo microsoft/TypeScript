@@ -7169,7 +7169,7 @@ namespace ts {
         //
 
         createModifier<T extends ModifierSyntaxKind>(kind: T): ModifierToken<T>;
-        createModifiersFromModifierFlags(flags: ModifierFlags): Modifier[];
+        createModifiersFromModifierFlags(flags: ModifierFlags): Modifier[] | undefined;
 
         //
         // Names
@@ -7841,7 +7841,7 @@ namespace ts {
          * - *DO NOT USE THIS* if a more appropriate function is available.
          */
         /* @internal */ cloneNode<T extends Node | undefined>(node: T): T;
-        /* @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
+        /* @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
     }
 
     /* @internal */

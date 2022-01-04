@@ -1348,7 +1348,11 @@ namespace FourSlash {
             if (options) {
                 this.configure(options);
             }
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
+            return this.languageService.getCompletionsAtPosition(
+                this.activeFile.fileName,
+                this.currentCaretPosition,
+                options,
+                this.formatCodeSettings);
         }
 
         private getCompletionEntryDetails(entryName: string, source: string | undefined, data: ts.CompletionEntryData | undefined, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
