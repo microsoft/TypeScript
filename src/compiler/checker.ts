@@ -22694,11 +22694,12 @@ namespace ts {
             return false;
         }
 
-        function getAccessedPropertyName(access: AccessExpression | BindingElement): __String | undefined {
+        function getAccessedPropertyName(access: AccessExpression | BindingElement | ParameterDeclaration): __String | undefined {
             let propertyName;
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
                 access.kind === SyntaxKind.ElementAccessExpression && isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 access.kind === SyntaxKind.BindingElement && (propertyName = getDestructuringPropertyName(access)) ? escapeLeadingUnderscores(propertyName) :
+                access.kind === SyntaxKind.Parameter ? ("" + access.parent.parameters.indexOf(access)) as __String :
                 undefined;
         }
 
@@ -24120,13 +24121,14 @@ namespace ts {
             }
 
             function getCandidateDiscriminantPropertyAccess(expr: Expression) {
-                if (isBindingPattern(reference)) {
-                    // When the reference is a binding pattern, we are narrowing a pesudo-reference in getNarrowedTypeOfSymbol.
-                    // An identifier for a destructuring variable declared in the same binding pattern is a candidate.
+                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference)) {
+                    // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
+                    // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
+                    // parameter declared in the same parameter list is a candidate.
                     if (isIdentifier(expr)) {
                         const symbol = getResolvedSymbol(expr);
                         const declaration = symbol.valueDeclaration;
-                        if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && reference === declaration.parent) {
+                        if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
                             return declaration;
                         }
                     }
@@ -24173,7 +24175,7 @@ namespace ts {
                 return undefined;
             }
 
-            function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement, narrowType: (t: Type) => Type): Type {
+            function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, narrowType: (t: Type) => Type): Type {
                 const propName = getAccessedPropertyName(access);
                 if (propName === undefined) {
                     return type;
@@ -24191,7 +24193,7 @@ namespace ts {
                 });
             }
 
-            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression | BindingElement, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
+            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
                 if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union) {
                     const keyPropertyName = getKeyPropertyName(type as UnionType);
                     if (keyPropertyName && keyPropertyName === getAccessedPropertyName(access)) {
@@ -24206,7 +24208,7 @@ namespace ts {
                 return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
             }
 
-            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression | BindingElement, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
                 if (clauseStart < clauseEnd && type.flags & TypeFlags.Union && getKeyPropertyName(type as UnionType) === getAccessedPropertyName(access)) {
                     const clauseTypes = getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd);
                     const candidate = getUnionType(map(clauseTypes, t => getConstituentTypeForKeyType(type as UnionType, t) || unknownType));
@@ -24984,42 +24986,78 @@ namespace ts {
         }
 
         function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
-            // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
-            // parameter (a parameter for which there are no assignments in the function body), and if the parent type
-            // for the destructuring is a union type, one or more of the binding elements may represent discriminant
-            // properties, and we want the effects of conditional checks on such discriminants to affect the types of
-            // other binding elements from the same destructuring. Consider:
-            //
-            //   type Action =
-            //       | { kind: 'A', payload: number }
-            //       | { kind: 'B', payload: string };
-            //
-            //   function f1({ kind, payload }: Action) {
-            //       if (kind === 'A') {
-            //           payload.toFixed();
-            //       }
-            //       if (kind === 'B') {
-            //           payload.toUpperCase();
-            //       }
-            //   }
-            //
-            // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
-            // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
-            // as if it occurred in the specified location. We then recompute the narrowed binding element type by
-            // destructuring from the narrowed parent type.
             const declaration = symbol.valueDeclaration;
-            if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
-                const parent = declaration.parent.parent;
-                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
-                    const links = getNodeLinks(location);
-                    if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
-                        links.flags |= NodeCheckFlags.InCheckIdentifier;
-                        const parentType = getTypeForBindingElementParent(parent);
-                        links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
-                            const pattern = declaration.parent;
-                            const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
-                            return getBindingElementTypeFromParentType(declaration, narrowedType);
+            if (declaration) {
+                // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+                // parameter (a parameter for which there are no assignments in the function body), and if the parent type
+                // for the destructuring is a union type, one or more of the binding elements may represent discriminant
+                // properties, and we want the effects of conditional checks on such discriminants to affect the types of
+                // other binding elements from the same destructuring. Consider:
+                //
+                //   type Action =
+                //       | { kind: 'A', payload: number }
+                //       | { kind: 'B', payload: string };
+                //
+                //   function f({ kind, payload }: Action) {
+                //       if (kind === 'A') {
+                //           payload.toFixed();
+                //       }
+                //       if (kind === 'B') {
+                //           payload.toUpperCase();
+                //       }
+                //   }
+                //
+                // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+                // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
+                // as if it occurred in the specified location. We then recompute the narrowed binding element type by
+                // destructuring from the narrowed parent type.
+                if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+                    const parent = declaration.parent.parent;
+                    if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
+                        const links = getNodeLinks(location);
+                        if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
+                            links.flags |= NodeCheckFlags.InCheckIdentifier;
+                            const parentType = getTypeForBindingElementParent(parent);
+                            links.flags &= ~NodeCheckFlags.InCheckIdentifier;
+                            if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                                const pattern = declaration.parent;
+                                const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                                return getBindingElementTypeFromParentType(declaration, narrowedType);
+                            }
+                        }
+                    }
+                }
+                // If we have a const-like parameter with no type annotation or initializer, and if the parameter is contextually
+                // typed by a signature with a single rest parameter of a union of tuple types, one or more of the parameters may
+                // represent discriminant tuple elements, and we want the effects of conditional checks on such discriminants to
+                // affect the types of other parameters in the same parameter list. Consider:
+                //
+                //   type Action = [kind: 'A', payload: number] | [kind: 'B', payload: string];
+                //
+                //   const f: (...args: Action) => void = (kind, payload) => {
+                //       if (kind === 'A') {
+                //           payload.toFixed();
+                //       }
+                //       if (kind === 'B') {
+                //           payload.toUpperCase();
+                //       }
+                //   }
+                //
+                // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+                // the arrow function AST node for '(kind, payload) => ...' as a pseudo-reference and narrow this reference as
+                // if it occurred in the specified location. We then recompute the narrowed parameter type by indexing into the
+                // narrowed tuple type.
+                if (isParameter(declaration) && !declaration.type && !declaration.initializer && !declaration.dotDotDotToken) {
+                    const func = declaration.parent;
+                    if (func.parameters.length >= 2 && isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+                        const contextualSignature = getContextualSignature(func);
+                        if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
+                            const restType = getTypeOfSymbol(contextualSignature.parameters[0]);
+                            if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
+                                const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
+                                const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
+                                return getIndexedAccessType(narrowedType, getNumberLiteralType(index));
+                            }
                         }
                     }
                 }
