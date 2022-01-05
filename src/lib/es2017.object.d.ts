@@ -10,6 +10,12 @@ interface ObjectConstructor {
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
     values(o: {}): any[];
+    
+    /**
+     * Returns an array of key/values of the enumerable properties of an object
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
+    entries<EntriesObject extends {[key: string]: any}, Key extends string & keyof EntriesObject>(object: EntriesObject): [key: Key, value: EntriesObject[Key]][];
 
     /**
      * Returns an array of key/values of the enumerable properties of an object
