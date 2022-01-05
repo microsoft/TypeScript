@@ -434,3 +434,164 @@ if (!done) {
 >value : Symbol(value, Decl(dependentDestructuredVariables.ts, 164, 7))
 }
 
+// Repro from #46658
+
+declare function f50(cb: (...args: Args) => void): void
+>f50 : Symbol(f50, Decl(dependentDestructuredVariables.ts, 167, 1))
+>cb : Symbol(cb, Decl(dependentDestructuredVariables.ts, 171, 21))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 171, 26))
+>Args : Symbol(Args, Decl(dependentDestructuredVariables.ts, 111, 1))
+
+f50((kind, data) => {
+>f50 : Symbol(f50, Decl(dependentDestructuredVariables.ts, 167, 1))
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 173, 5))
+>data : Symbol(data, Decl(dependentDestructuredVariables.ts, 173, 10))
+
+    if (kind === 'A') {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 173, 5))
+
+        data.toFixed();
+>data.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(dependentDestructuredVariables.ts, 173, 10))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+    }
+    if (kind === 'B') {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 173, 5))
+
+        data.toUpperCase();
+>data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(dependentDestructuredVariables.ts, 173, 10))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+});
+
+const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
+>f51 : Symbol(f51, Decl(dependentDestructuredVariables.ts, 182, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 182, 12))
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 182, 63))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 182, 68))
+
+    if (kind === 'A') {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 182, 63))
+
+        payload.toFixed();
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 182, 68))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+    }
+    if (kind === 'B') {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 182, 63))
+
+        payload.toUpperCase();
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 182, 68))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+};
+
+const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
+>f52 : Symbol(f52, Decl(dependentDestructuredVariables.ts, 191, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 191, 12))
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 191, 55))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 191, 60))
+
+    if (kind === 'A') {
+>kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 191, 55))
+
+        payload.toFixed();
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 191, 60))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        payload;  // undefined
+>payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 191, 60))
+    }
+};
+
+declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
+>readFile : Symbol(readFile, Decl(dependentDestructuredVariables.ts, 198, 2))
+>path : Symbol(path, Decl(dependentDestructuredVariables.ts, 200, 26))
+>callback : Symbol(callback, Decl(dependentDestructuredVariables.ts, 200, 39))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 200, 51))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+readFile('hello', (err, data) => {
+>readFile : Symbol(readFile, Decl(dependentDestructuredVariables.ts, 198, 2))
+>err : Symbol(err, Decl(dependentDestructuredVariables.ts, 202, 19))
+>data : Symbol(data, Decl(dependentDestructuredVariables.ts, 202, 23))
+
+    if (err === null) {
+>err : Symbol(err, Decl(dependentDestructuredVariables.ts, 202, 19))
+
+        data.length;
+>data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(dependentDestructuredVariables.ts, 202, 23))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+    }
+    else {
+        err.message;
+>err.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>err : Symbol(err, Decl(dependentDestructuredVariables.ts, 202, 19))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+    }
+});
+
+type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: any[], secondArr: any[] }];
+>ReducerArgs : Symbol(ReducerArgs, Decl(dependentDestructuredVariables.ts, 209, 3))
+>a : Symbol(a, Decl(dependentDestructuredVariables.ts, 211, 28))
+>b : Symbol(b, Decl(dependentDestructuredVariables.ts, 211, 39))
+>firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 211, 67))
+>secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 211, 84))
+
+const reducer: (...args: ReducerArgs) => void = (op, args) => {
+>reducer : Symbol(reducer, Decl(dependentDestructuredVariables.ts, 213, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 16))
+>ReducerArgs : Symbol(ReducerArgs, Decl(dependentDestructuredVariables.ts, 209, 3))
+>op : Symbol(op, Decl(dependentDestructuredVariables.ts, 213, 49))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
+
+    switch (op) {
+>op : Symbol(op, Decl(dependentDestructuredVariables.ts, 213, 49))
+
+        case "add":
+            console.log(args.a + args.b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>args.a : Symbol(a, Decl(dependentDestructuredVariables.ts, 211, 28))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
+>a : Symbol(a, Decl(dependentDestructuredVariables.ts, 211, 28))
+>args.b : Symbol(b, Decl(dependentDestructuredVariables.ts, 211, 39))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
+>b : Symbol(b, Decl(dependentDestructuredVariables.ts, 211, 39))
+
+            break;
+        case "concat":
+            console.log(args.firstArr.concat(args.secondArr));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>args.firstArr.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>args.firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 211, 67))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
+>firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 211, 67))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>args.secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 211, 84))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
+>secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 211, 84))
+
+            break;
+    }
+}
+
+reducer("add", { a: 1, b: 3 });
+>reducer : Symbol(reducer, Decl(dependentDestructuredVariables.ts, 213, 5))
+>a : Symbol(a, Decl(dependentDestructuredVariables.ts, 224, 16))
+>b : Symbol(b, Decl(dependentDestructuredVariables.ts, 224, 22))
+
+reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+>reducer : Symbol(reducer, Decl(dependentDestructuredVariables.ts, 213, 5))
+>firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 225, 19))
+>secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 225, 37))
+
