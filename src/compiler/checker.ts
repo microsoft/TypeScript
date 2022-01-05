@@ -180,7 +180,7 @@ namespace ts {
         SymbolAlwaysFalse = TypeofEQString | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQObject | TypeofEQFunction | TypeofEQHostObject,
         SymbolStrictAlwaysFalse = SymbolAlwaysFalse | TypeofNESymbol | EQUndefined | EQNull | EQUndefinedOrNull,
         // Function
-        FunctionAlwaysFalse = TypeofEQSymbol | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject,
+        FunctionAlwaysFalse = TypeofEQSymbol | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol | TypeofEQObject | TypeofEQHostObject,
         FunctionStrictAlwaysFalse = FunctionAlwaysFalse | TypeofNEFunction | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
         // Object
         ObjectAlwaysFalse = TypeofEQSymbol | TypeofEQNumber | TypeofEQBigInt | TypeofEQBoolean | TypeofEQSymbol,
