@@ -25,11 +25,18 @@
 verify.completions(
     {
         marker: ["1", "2", "5"],
-        exact: ["propx", "propString", { name: "optional", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember }]
+        exact: [
+            "propString",
+            "propx",
+            { name: "optional", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        ]
     },
     {
         marker: "3",
-        exact: ["propString", { name: "optional", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember }]
+        exact: [
+            "propString",
+            { name: "optional", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        ]
     },
     { marker: "4", exact: "propString" },
 );

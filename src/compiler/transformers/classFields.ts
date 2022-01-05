@@ -133,7 +133,7 @@ namespace ts {
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
 
-        const shouldTransformPrivateElementsOrClassStaticBlocks = languageVersion < ScriptTarget.ESNext;
+        const shouldTransformPrivateElementsOrClassStaticBlocks = languageVersion < ScriptTarget.ES2022;
 
         // We don't need to transform `super` property access when targeting ES5, ES3 because
         // the es2015 transformation handles those.
@@ -172,7 +172,7 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             const options = context.getCompilerOptions();
             if (node.isDeclarationFile
-                || useDefineForClassFields && getEmitScriptTarget(options) === ScriptTarget.ESNext) {
+                || useDefineForClassFields && getEmitScriptTarget(options) >= ScriptTarget.ES2022) {
                 return node;
             }
             const visited = visitEachChild(node, visitor, context);
@@ -1201,7 +1201,7 @@ namespace ts {
             if (useDefineForClassFields) {
                 // If we are using define semantics and targeting ESNext or higher,
                 // then we don't need to transform any class properties.
-                return languageVersion < ScriptTarget.ESNext;
+                return languageVersion < ScriptTarget.ES2022;
             }
             return isInitializedProperty(member) || shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifierClassElementDeclaration(member);
         }

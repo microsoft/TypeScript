@@ -7,14 +7,14 @@ namespace ts.codefix {
     const fixId = "fixClassDoesntImplementInheritedAbstractMember";
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixClassNotImplementingInheritedMembers(context) {
             const { sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
                 addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
             return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => {
+        getAllCodeActions: function getAllCodeActionsToFixClassDoesntImplementInheritedAbstractMember(context) {
             const seenClassDeclarations = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);

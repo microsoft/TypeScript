@@ -6,7 +6,7 @@
 ////abstract class Ab {
 ////    abstract met(n: string): void;
 ////    met2(n: number): void {
-////        
+////        return;
 ////    }
 ////}
 ////

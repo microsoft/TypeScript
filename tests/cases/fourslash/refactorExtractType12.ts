@@ -11,7 +11,7 @@ edit.applyRefactor({
     refactorName: "Extract type",
     actionName: "Extract to type alias",
     actionDescription: "Extract to type alias",
-    newContent: `type /*RENAME*/NewType = string;
+    newContent: `type /*RENAME*/NewType = string
 
 interface A<T = NewType> {
     a: boolean

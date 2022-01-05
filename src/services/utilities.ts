@@ -99,13 +99,6 @@ namespace ts {
             || isImportSpecifier(parent)
             || isImportClause(parent)
             || isImportEqualsDeclaration(parent) && node === parent.name) {
-            let decl: Node = parent;
-            while (decl) {
-                if (isImportEqualsDeclaration(decl) || isImportClause(decl) || isExportDeclaration(decl)) {
-                    return decl.isTypeOnly ? SemanticMeaning.Type : SemanticMeaning.All;
-                }
-                decl = decl.parent;
-            }
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -2726,7 +2719,7 @@ namespace ts {
         return typeIsAccessible ? res : undefined;
     }
 
-    export function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingCommaOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.CallSignature
             || kind === SyntaxKind.ConstructSignature
             || kind === SyntaxKind.IndexSignature
@@ -2734,7 +2727,7 @@ namespace ts {
             || kind === SyntaxKind.MethodSignature;
     }
 
-    export function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.FunctionDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.MethodDeclaration
@@ -2742,7 +2735,7 @@ namespace ts {
             || kind === SyntaxKind.SetAccessor;
     }
 
-    export function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
+    function syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind: SyntaxKind) {
         return kind === SyntaxKind.ModuleDeclaration;
     }
 
@@ -2831,13 +2824,29 @@ namespace ts {
         forEachChild(sourceFile, function visit(node): boolean | undefined {
             if (syntaxRequiresTrailingSemicolonOrASI(node.kind)) {
                 const lastToken = node.getLastToken(sourceFile);
-                if (lastToken && lastToken.kind === SyntaxKind.SemicolonToken) {
+                if (lastToken?.kind === SyntaxKind.SemicolonToken) {
                     withSemicolon++;
                 }
                 else {
                     withoutSemicolon++;
                 }
             }
+            else if (syntaxRequiresTrailingCommaOrSemicolonOrASI(node.kind)) {
+                const lastToken = node.getLastToken(sourceFile);
+                if (lastToken?.kind === SyntaxKind.SemicolonToken) {
+                    withSemicolon++;
+                }
+                else if (lastToken && lastToken.kind !== SyntaxKind.CommaToken) {
+                    const lastTokenLine = getLineAndCharacterOfPosition(sourceFile, lastToken.getStart(sourceFile)).line;
+                    const nextTokenLine = getLineAndCharacterOfPosition(sourceFile, getSpanOfTokenAtPosition(sourceFile, lastToken.end).start).line;
+                    // Avoid counting missing semicolon in single-line objects:
+                    // `function f(p: { x: string /*no semicolon here is insignificant*/ }) {`
+                    if (lastTokenLine !== nextTokenLine) {
+                        withoutSemicolon++;
+                    }
+                }
+            }
+
             if (withSemicolon + withoutSemicolon >= nStatementsToObserve) {
                 return true;
             }
@@ -2845,7 +2854,7 @@ namespace ts {
             return forEachChild(node, visit);
         });
 
-        // One statement missing a semicolon isn’t sufficient evidence to say the user
+        // One statement missing a semicolon isn't sufficient evidence to say the user
         // doesn’t want semicolons, because they may not even be done writing that statement.
         if (withSemicolon === 0 && withoutSemicolon <= 1) {
             return true;
@@ -3288,6 +3297,18 @@ namespace ts {
         return isArray(diag)
             ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
             : getLocaleSpecificMessage(diag);
+    }
+
+    /**
+     * Get format code settings for a code writing context (e.g. when formatting text changes or completions code).
+     */
+    export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+        const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+        const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+        return {
+            ...options,
+            semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
+        };
     }
 
     // #endregion

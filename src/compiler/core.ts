@@ -770,7 +770,11 @@ namespace ts {
         return deduplicated as any as SortedReadonlyArray<T>;
     }
 
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+    export function createSortedArray<T>(): SortedArray<T> {
+        return [] as any as SortedArray<T>; // TODO: GH#19873
+    }
+
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): void {
         if (array.length === 0) {
             array.push(insert);
             return;
@@ -779,6 +783,9 @@ namespace ts {
         const insertIndex = binarySearch(array, insert, identity, compare);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
+        }
+        else if (allowDuplicates) {
+            array.splice(insertIndex, 0, insert);
         }
     }
 

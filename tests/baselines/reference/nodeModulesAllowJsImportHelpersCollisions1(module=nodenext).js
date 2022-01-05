@@ -34,9 +34,9 @@ declare module "tslib" {
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 // cjs format file
-const fs_1 = (0, tslib_1.__importDefault)(require("fs"));
+const fs_1 = tslib_1.__importDefault(require("fs"));
 fs_1.default.readFile;
-const fs = (0, tslib_1.__importStar)(require("fs"));
+const fs = tslib_1.__importStar(require("fs"));
 fs.readFile;
 //// [index.js]
 // esm format file

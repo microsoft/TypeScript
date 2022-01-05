@@ -19,8 +19,7 @@
 goTo.marker("");
 verify.completions({
     marker: "",
-    exact: [
-        completion.globalThisEntry,
+    exact: completion.globalsPlus([
         {
             name: "foo",
             text: "var foo: number",
@@ -28,7 +27,6 @@ verify.completions({
             kindModifiers: "declare",
             sortText: completion.SortText.GlobalsOrKeywords
         },
-        completion.undefinedVarEntry,
         {
             name: "foo",
             source: "/a",
@@ -49,8 +47,7 @@ verify.completions({
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
-        ...completion.statementKeywordsWithTypes,
-    ],
+    ], { noLib: true }),
     preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {
