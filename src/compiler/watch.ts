@@ -64,7 +64,7 @@ namespace ts {
     }
 
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
@@ -133,7 +133,8 @@ namespace ts {
     export function getErrorSummaryText(
         errorCount: number,
         filesInError: readonly (ReportFileInError | undefined)[],
-        newLine: string
+        newLine: string,
+        host: HasCurrentDirectory
     ) {
         if (errorCount === 0) return "";
         const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
@@ -154,10 +155,10 @@ namespace ts {
                         Diagnostics.Found_0_errors_in_1_files,
                 errorCount,
                 distinctFileNamesWithLines.length);
-        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles) : ""}`;
+        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : ""}`;
     }
 
-    function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[]) {
+    function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[], host: HasCurrentDirectory) {
         const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
         if (distinctFiles.length === 0) return "";
 
@@ -178,7 +179,9 @@ namespace ts {
             const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
                 " ".repeat(leftPaddingGoal - errorCountDigitsLength)
                 : "";
-            tabularData += `${leftPadding}${errorCount}  ${file!.fileName}:${file!.line}\n`;
+
+            const relativePath = getRelativePathFromDirectory(host.getCurrentDirectory(), file!.fileName, /* ignoreCase */ false);
+            tabularData += `${leftPadding}${errorCount}  ${relativePath}:${file!.line}\n`;
         });
 
         return tabularData;
@@ -727,7 +730,7 @@ namespace ts {
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
-            input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine)) : undefined
+            input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined
         );
         if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
         return exitStatus;
