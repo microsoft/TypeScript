@@ -12,7 +12,7 @@ class Foo {
 >v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 44))
 
             throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
         }
     }
     m1(v: unknown) {
@@ -41,7 +41,7 @@ class Foo2 {
 >v : Symbol(v, Decl(privateNamesAssertion.ts, 13, 8))
 
             throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
         }
     }
     m1(v: unknown) {

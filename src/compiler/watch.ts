@@ -157,6 +157,7 @@ namespace ts {
                         Diagnostics.Found_0_errors_in_1_files,
                 errorCount,
                 distinctFileNamesWithLines.length === 1 ? firstFileRelative : distinctFileNamesWithLines.length);
+
         const suffix = distinctFileNamesWithLines.length > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : "";
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${suffix}`;
     }

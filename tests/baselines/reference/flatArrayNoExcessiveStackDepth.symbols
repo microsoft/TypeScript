@@ -27,7 +27,7 @@ const repro_43249 = (value: unknown) => {
 >value : Symbol(value, Decl(flatArrayNoExcessiveStackDepth.ts, 9, 21))
 
         throw new Error("No");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
     }
     const match = value.match(/anything/) || [];
 >match : Symbol(match, Decl(flatArrayNoExcessiveStackDepth.ts, 13, 9))
