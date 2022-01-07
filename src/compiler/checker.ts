@@ -21036,9 +21036,14 @@ namespace ts {
          * with no call or construct signatures.
          */
         function isObjectTypeWithInferableIndex(type: Type): boolean {
-            return type.flags & TypeFlags.Intersection ? every((type as IntersectionType).types, isObjectTypeWithInferableIndex) :
-                !!(type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0 &&
-                !typeHasCallOrConstructSignatures(type)) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
+            return type.flags & TypeFlags.Intersection
+                ? every((type as IntersectionType).types, isObjectTypeWithInferableIndex)
+                : !!(
+                    type.symbol
+                    && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0
+                    && !(type.symbol.flags & SymbolFlags.Class)
+                    && !typeHasCallOrConstructSignatures(type)
+                ) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
 
         function createSymbolWithType(source: Symbol, type: Type | undefined) {
