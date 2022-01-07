@@ -8589,7 +8589,7 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-            const checkMode = declaration.dotDotDotToken ? CheckMode.SpreadBindingElement : CheckMode.Normal; // >> TODO: should do it like this? or just pass undefined?
+            const checkMode = declaration.dotDotDotToken ? CheckMode.SpreadBindingElement : CheckMode.Normal;
             const parentType = getTypeForBindingElementParent(declaration.parent.parent, checkMode);
             return parentType && getBindingElementTypeFromParentType(declaration, parentType);
         }
@@ -8663,9 +8663,9 @@ namespace ts {
             if (getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration))) {
                 // In strict null checking mode, if a default value of a non-undefined type is specified, remove
                 // undefined from the final type.
-                return strictNullChecks && !(getFalsyFlags(checkDeclarationInitializer(declaration, /* checkMode */ undefined)) & TypeFlags.Undefined) ? getNonUndefinedType(type) : type; // >> TODO: should checkmode be undefined?
+                return strictNullChecks && !(getFalsyFlags(checkDeclarationInitializer(declaration, /* checkMode */ undefined)) & TypeFlags.Undefined) ? getNonUndefinedType(type) : type;
             }
-            return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, /* checkMode */ undefined)], UnionReduction.Subtype));  // >> TODO: should checkmode be undefined?
+            return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, /* checkMode */ undefined)], UnionReduction.Subtype));
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -8699,7 +8699,7 @@ namespace ts {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                const indexType = getIndexType(getNonNullableTypeIfNeeded(checkExpression(declaration.parent.parent.expression)));
+                const indexType = getIndexType(getNonNullableTypeIfNeeded(checkExpression(declaration.parent.parent.expression, /*checkMode*/ checkMode)));
                 return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? getExtractStringType(indexType) : stringType;
             }
 
@@ -8713,7 +8713,7 @@ namespace ts {
             }
 
             if (isBindingPattern(declaration.parent)) {
-                return getTypeForBindingElement(declaration as BindingElement); // >> Possibly receive check mode?
+                return getTypeForBindingElement(declaration as BindingElement);
             }
 
             const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
@@ -9177,7 +9177,7 @@ namespace ts {
                 // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
                 // pattern.
                 const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, /*checkMode*/ undefined, contextualType)));  // >> TODO: should checkmode be undefined?
+                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, /*checkMode*/ undefined, contextualType)));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -9269,7 +9269,7 @@ namespace ts {
         // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
         // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
         function getWidenedTypeForVariableLikeDeclaration(declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | JSDocPropertyLikeTag, reportErrors?: boolean): Type {
-            return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, /*checkMode*/ undefined), declaration, reportErrors);  // >> TODO: should checkmode be undefined?
+            return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, /*checkMode*/ undefined), declaration, reportErrors);
         }
 
         function isGlobalSymbolConstructor(node: Node) {
@@ -25212,7 +25212,7 @@ namespace ts {
                 return type;
             }
 
-            type = getNarrowableTypeForReference(type, node, checkMode); // >> change here too
+            type = getNarrowableTypeForReference(type, node, checkMode);
 
             // The declaration container is the innermost function that encloses the declaration of the variable
             // or parameter. The flow container is the innermost function starting with which we analyze the control
@@ -25967,7 +25967,7 @@ namespace ts {
             const parent = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
             const parentType = getContextualTypeForVariableLikeDeclaration(parent) ||
-                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken ? CheckMode.SpreadBindingElement : undefined); // >> TODO: should checkmode be defined?
+                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken ? CheckMode.SpreadBindingElement : CheckMode.Normal);
             if (!parentType || isBindingPattern(name) || isComputedNonLiteralName(name)) return undefined;
             if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
                 const index = indexOfNode(declaration.parent.elements, declaration);
@@ -31771,7 +31771,7 @@ namespace ts {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
                 const declaration = parameter.valueDeclaration as ParameterDeclaration;
-                links.type = type || getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
+                links.type = type || getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true);
                 if (declaration.name.kind !== SyntaxKind.Identifier) {
                     // if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
                     if (links.type === unknownType) {
@@ -33722,7 +33722,7 @@ namespace ts {
             const initializer = getEffectiveInitializer(declaration)!;
             const type = getQuickTypeOfExpression(initializer) ||
                 (contextualType ?
-                    checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, CheckMode.Normal) // >> should be checkmode.normal?
+                    checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal)
                     : checkExpressionCached(initializer, checkMode));
             return isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
                 isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
@@ -36959,8 +36959,7 @@ namespace ts {
                 // check private/protected variable access
                 const parent = node.parent.parent;
                 const parentCheckMode = node.dotDotDotToken ? CheckMode.SpreadBindingElement : CheckMode.Normal;
-                const parentType = getTypeForBindingElementParent(parent, parentCheckMode); // >> Issue here: returns `T` and not narrowed type
-                // TODO: pass correct checkmode things, because it's different if binding element has rest
+                const parentType = getTypeForBindingElementParent(parent, parentCheckMode);
                 const name = node.propertyName || node.name;
                 if (parentType && !isBindingPattern(name)) {
                     const exprType = getLiteralTypeFromPropertyName(name);
