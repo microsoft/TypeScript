@@ -21005,7 +21005,7 @@ namespace ts {
                 : !!(
                     type.symbol
                     && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0
-                    && !((type.symbol.flags & SymbolFlags.Class) && (type.symbol.flags & SymbolFlags.ValueModule))
+                    && !(type.symbol.flags & SymbolFlags.Class)
                     && !typeHasCallOrConstructSignatures(type)
                 ) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
