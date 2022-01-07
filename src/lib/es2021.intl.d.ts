@@ -61,7 +61,7 @@ declare namespace Intl {
         /**
          * Returns a string with a language-specific representation of the list.
          *
-         * @param list - An iterable object, such as an Array.
+         * @param list - An iterable object, such as an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
          *
          * @throws `TypeError` if `list` includes something other than the possible values.
          *
@@ -74,7 +74,7 @@ declare namespace Intl {
         /**
          * Returns an Array of objects representing the different components that can be used to format a list of values in a locale-aware fashion.
          *
-         * @param list - An Array of values to be formatted according to a locale.
+         * @param list - An iterable object, such as an [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), to be formatted according to a locale.
          *
          * @throws `TypeError` if `list` includes something other than the possible values.
          *
@@ -82,7 +82,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/formatToParts).
          */
-        formatToParts(list: string[]): { type: "element" | "literal", value: string; }[];
+        formatToParts(list: Iterable<string>): { type: "element" | "literal", value: string; }[];
     }
 
     const ListFormat: {
