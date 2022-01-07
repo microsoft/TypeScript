@@ -19292,7 +19292,7 @@ namespace ts {
                     else {
                         // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
                         // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
-                        const distributiveConstraint = getConstraintOfDistributiveConditionalType(source as ConditionalType);
+                        const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
                         if (distributiveConstraint) {
                             if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
                                 resetErrorInfo(saveErrorInfo);
@@ -19920,7 +19920,8 @@ namespace ts {
                 const incompatibleReporter = kind === SignatureKind.Construct ? reportIncompatibleConstructSignatureReturn : reportIncompatibleCallSignatureReturn;
                 const sourceObjectFlags = getObjectFlags(source);
                 const targetObjectFlags = getObjectFlags(target);
-                if (sourceObjectFlags & ObjectFlags.Instantiated && targetObjectFlags & ObjectFlags.Instantiated && source.symbol === target.symbol) {
+                if (sourceObjectFlags & ObjectFlags.Instantiated && targetObjectFlags & ObjectFlags.Instantiated && source.symbol === target.symbol ||
+                    sourceObjectFlags & ObjectFlags.Reference && targetObjectFlags & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target) {
                     // We have instantiations of the same anonymous type (which typically will be the type of a
                     // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
                     // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
