@@ -140,22 +140,25 @@ namespace ts {
         const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
         const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
             .filter((value, index, self) => self.indexOf(value) === index);
+
+        const firstFileRelative = nonNilFiles[0] && getRelativePathFromDirectory(host.getCurrentDirectory(), nonNilFiles[0].fileName, /* ignoreCase */ false) + ":" + nonNilFiles[0].line;
         const d = errorCount === 1 ?
             createCompilerDiagnostic(
                 filesInError[0] !== undefined ?
                     Diagnostics.Found_1_error_in_1 :
                     Diagnostics.Found_1_error,
                 errorCount,
-                distinctFileNamesWithLines[0]) :
+                firstFileRelative) :
             createCompilerDiagnostic(
                 distinctFileNamesWithLines.length === 0 ?
                     Diagnostics.Found_0_errors :
                     distinctFileNamesWithLines.length === 1 ?
-                        Diagnostics.Found_0_errors_in_1_file :
+                        Diagnostics.Found_0_errors_in_1_file_Colon_1 :
                         Diagnostics.Found_0_errors_in_1_files,
                 errorCount,
-                distinctFileNamesWithLines.length);
-        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : ""}`;
+                distinctFileNamesWithLines.length === 1 ? firstFileRelative : distinctFileNamesWithLines.length);
+        const suffix = distinctFileNamesWithLines.length > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : "";
+        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${suffix}`;
     }
 
     function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[], host: HasCurrentDirectory) {

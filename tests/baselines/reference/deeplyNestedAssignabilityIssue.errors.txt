@@ -65,7 +65,6 @@
         }
     }
     
-Found 2 errors in 1 file.
+Found 2 errors in 1 file: tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:22
 
-Errors  Files
-     2  tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:22
+w

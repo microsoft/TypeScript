@@ -195,7 +195,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -713,7 +713,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
+Found 1 error in src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

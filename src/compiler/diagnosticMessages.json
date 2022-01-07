@@ -4161,7 +4161,6 @@
         "category": "Message",
         "code": 6041
     },
-    
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4945,7 +4944,7 @@
         "category": "Message",
         "code": 6259
     },
-    "Found {0} errors in 1 file.": {
+    "Found {0} errors in 1 file: {1}": {
         "category": "Message",
         "code": 6260
     },
