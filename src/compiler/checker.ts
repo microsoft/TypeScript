@@ -3675,7 +3675,7 @@ namespace ts {
                         if (!sigs || !sigs.length) {
                             sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
                         }
-                        if ((sigs && sigs.length) || getPropertyOfType(type, InternalSymbolName.Default)) {
+                        if ((sigs && sigs.length) || getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true)) {
                             const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference);
                             return cloneTypeAsModuleType(symbol, moduleType, referenceParent);
                         }
