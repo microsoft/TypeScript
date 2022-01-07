@@ -773,7 +773,7 @@ namespace ts {
 
     function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
         return shouldBePretty(sys, options) ?
-            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine)) :
+            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
             undefined;
     }
 

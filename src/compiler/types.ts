@@ -8328,6 +8328,11 @@ namespace ts {
         getCurrentDirectory?(): string;
     }
 
+    /* @internal */
+    export interface HasCurrentDirectory {
+        getCurrentDirectory(): string;
+    }
+
     /*@internal*/
     export interface ModuleSpecifierResolutionHost {
         useCaseSensitiveFileNames?(): boolean;

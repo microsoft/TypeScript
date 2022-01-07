@@ -440,9 +440,9 @@ Output::
 Found 3 errors in 3 files.
 
 Errors  Files
-     1  /src/project/src/directUse.ts:2
-     1  /src/project/src/indirectUse.ts:2
-     1  /src/project/src/noChangeFileWithEmitSpecificError.ts:1
+     1  src/project/src/directUse.ts:2
+     1  src/project/src/indirectUse.ts:2
+     1  src/project/src/noChangeFileWithEmitSpecificError.ts:1
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
