@@ -99,13 +99,6 @@ namespace ts {
             || isImportSpecifier(parent)
             || isImportClause(parent)
             || isImportEqualsDeclaration(parent) && node === parent.name) {
-            let decl: Node = parent;
-            while (decl) {
-                if (isImportEqualsDeclaration(decl) || isImportClause(decl) || isExportDeclaration(decl)) {
-                    return decl.isTypeOnly ? SemanticMeaning.Type : SemanticMeaning.All;
-                }
-                decl = decl.parent;
-            }
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -3304,6 +3297,18 @@ namespace ts {
         return isArray(diag)
             ? formatStringFromArgs(getLocaleSpecificMessage(diag[0]), diag.slice(1) as readonly string[])
             : getLocaleSpecificMessage(diag);
+    }
+
+    /**
+     * Get format code settings for a code writing context (e.g. when formatting text changes or completions code).
+     */
+    export function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
+        const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
+        const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
+        return {
+            ...options,
+            semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
+        };
     }
 
     // #endregion

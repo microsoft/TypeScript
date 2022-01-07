@@ -9900,7 +9900,8 @@ namespace ts {
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments | undefined {
-            return getEffectiveBaseTypeNode(type.symbol.valueDeclaration as ClassLikeDeclaration);
+            const decl = getClassLikeDeclarationOfSymbol(type.symbol);
+            return decl && getEffectiveBaseTypeNode(decl);
         }
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: readonly TypeNode[] | undefined, location: Node): readonly Signature[] {
@@ -9926,8 +9927,8 @@ namespace ts {
          */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
             if (!type.resolvedBaseConstructorType) {
-                const decl = type.symbol.valueDeclaration as ClassLikeDeclaration;
-                const extended = getEffectiveBaseTypeNode(decl);
+                const decl = getClassLikeDeclarationOfSymbol(type.symbol);
+                const extended = decl && getEffectiveBaseTypeNode(decl);
                 const baseTypeNode = getBaseTypeNodeOfClass(type);
                 if (!baseTypeNode) {
                     return type.resolvedBaseConstructorType = undefinedType;
@@ -12048,13 +12049,24 @@ namespace ts {
             return type;
         }
 
+        function isMappedTypeGenericIndexedAccess(type: Type) {
+            return type.flags & TypeFlags.IndexedAccess && getObjectFlags((type as IndexedAccessType).objectType) & ObjectFlags.Mapped &&
+                !isGenericMappedType((type as IndexedAccessType).objectType) && isGenericIndexType((type as IndexedAccessType).indexType);
+        }
+
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || unknownType : type;
+            // We obtain the base constraint for all instantiable types, except indexed access types of the form
+            // { [P in K]: E }[X], where K is non-generic and X is generic. For those types, we instead substitute an
+            // instantiation of E where P is replaced with X. We do this because getBaseConstraintOfType directly
+            // lowers to an instantiation where X's constraint is substituted for X, which isn't always desirable.
+            const t = !(type.flags & TypeFlags.Instantiable) ? type :
+                isMappedTypeGenericIndexedAccess(type) ? substituteIndexedMappedType((type as IndexedAccessType).objectType as MappedType, (type as IndexedAccessType).indexType) :
+                getBaseConstraintOfType(type) || unknownType;
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(t as MappedType) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(t as IntersectionType) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
@@ -12725,6 +12737,9 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                         return traverse((node as PropertyAccessExpression | ElementAccessExpression).expression);
+
+                    case SyntaxKind.PropertyAssignment:
+                        return traverse((node as PropertyAssignment).initializer);
 
                     default:
                         return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && !!forEachChild(node, traverse);
@@ -20893,7 +20908,7 @@ namespace ts {
         // flags for the string, number, boolean, "", 0, false, void, undefined, or null types respectively. Returns
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
-            return type.flags & TypeFlags.UnionOrIntersection ? getFalsyFlagsOfTypes((type as UnionType).types) :
+            return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((type as UnionType).types) :
                 type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value === "" ? TypeFlags.StringLiteral : 0 :
                 type.flags & TypeFlags.NumberLiteral ? (type as NumberLiteralType).value === 0 ? TypeFlags.NumberLiteral : 0 :
                 type.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(type as BigIntLiteralType) ? TypeFlags.BigIntLiteral : 0 :
@@ -21845,12 +21860,14 @@ namespace ts {
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
                     // when constructing types from type parameters that had no inference candidates).
-                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType || source === silentNeverType ||
-                        (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
+                    if (source === nonInferrableAnyType || source === silentNeverType || (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
+                        if (getObjectFlags(source) & ObjectFlags.NonInferrableType) {
+                            return;
+                        }
                         if (!inference.isFixed) {
                             if (inference.priority === undefined || priority < inference.priority) {
                                 inference.candidates = undefined;
@@ -21881,21 +21898,19 @@ namespace ts {
                         inferencePriority = Math.min(inferencePriority, priority);
                         return;
                     }
-                    else {
-                        // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
-                        const simplified = getSimplifiedType(target, /*writing*/ false);
-                        if (simplified !== target) {
-                            invokeOnce(source, simplified, inferFromTypes);
-                        }
-                        else if (target.flags & TypeFlags.IndexedAccess) {
-                            const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
-                            // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
-                            // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
-                            if (indexType.flags & TypeFlags.Instantiable) {
-                                const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
-                                if (simplified && simplified !== target) {
-                                    invokeOnce(source, simplified, inferFromTypes);
-                                }
+                    // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
+                    const simplified = getSimplifiedType(target, /*writing*/ false);
+                    if (simplified !== target) {
+                        inferFromTypes(source, simplified);
+                    }
+                    else if (target.flags & TypeFlags.IndexedAccess) {
+                        const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
+                        // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
+                        // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
+                        if (indexType.flags & TypeFlags.Instantiable) {
+                            const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
+                            if (simplified && simplified !== target) {
+                                inferFromTypes(source, simplified);
                             }
                         }
                     }
@@ -22679,11 +22694,12 @@ namespace ts {
             return false;
         }
 
-        function getAccessedPropertyName(access: AccessExpression | BindingElement): __String | undefined {
+        function getAccessedPropertyName(access: AccessExpression | BindingElement | ParameterDeclaration): __String | undefined {
             let propertyName;
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
                 access.kind === SyntaxKind.ElementAccessExpression && isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 access.kind === SyntaxKind.BindingElement && (propertyName = getDestructuringPropertyName(access)) ? escapeLeadingUnderscores(propertyName) :
+                access.kind === SyntaxKind.Parameter ? ("" + access.parent.parameters.indexOf(access)) as __String :
                 undefined;
         }
 
@@ -24105,13 +24121,14 @@ namespace ts {
             }
 
             function getCandidateDiscriminantPropertyAccess(expr: Expression) {
-                if (isBindingPattern(reference)) {
-                    // When the reference is a binding pattern, we are narrowing a pesudo-reference in getNarrowedTypeOfSymbol.
-                    // An identifier for a destructuring variable declared in the same binding pattern is a candidate.
+                if (isBindingPattern(reference) || isFunctionExpressionOrArrowFunction(reference)) {
+                    // When the reference is a binding pattern or function or arrow expression, we are narrowing a pesudo-reference in
+                    // getNarrowedTypeOfSymbol. An identifier for a destructuring variable declared in the same binding pattern or
+                    // parameter declared in the same parameter list is a candidate.
                     if (isIdentifier(expr)) {
                         const symbol = getResolvedSymbol(expr);
                         const declaration = symbol.valueDeclaration;
-                        if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && reference === declaration.parent) {
+                        if (declaration && (isBindingElement(declaration) || isParameter(declaration)) && reference === declaration.parent && !declaration.initializer && !declaration.dotDotDotToken) {
                             return declaration;
                         }
                     }
@@ -24158,7 +24175,7 @@ namespace ts {
                 return undefined;
             }
 
-            function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement, narrowType: (t: Type) => Type): Type {
+            function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, narrowType: (t: Type) => Type): Type {
                 const propName = getAccessedPropertyName(access);
                 if (propName === undefined) {
                     return type;
@@ -24176,7 +24193,7 @@ namespace ts {
                 });
             }
 
-            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression | BindingElement, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
+            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
                 if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union) {
                     const keyPropertyName = getKeyPropertyName(type as UnionType);
                     if (keyPropertyName && keyPropertyName === getAccessedPropertyName(access)) {
@@ -24191,7 +24208,7 @@ namespace ts {
                 return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
             }
 
-            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression | BindingElement, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
                 if (clauseStart < clauseEnd && type.flags & TypeFlags.Union && getKeyPropertyName(type as UnionType) === getAccessedPropertyName(access)) {
                     const clauseTypes = getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd);
                     const candidate = getUnionType(map(clauseTypes, t => getConstituentTypeForKeyType(type as UnionType, t) || unknownType));
@@ -24929,7 +24946,7 @@ namespace ts {
             const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
                 someType(type, isGenericTypeWithUnionConstraint) &&
                 (isConstraintPosition(type, reference) || hasNonBindingPatternContextualTypeWithNoGenericTypes(reference));
-            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
+            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable && !isMappedTypeGenericIndexedAccess(t) ? getBaseConstraintOrType(t) : t) : type;
         }
 
         function isExportOrExportExpression(location: Node) {
@@ -24969,42 +24986,78 @@ namespace ts {
         }
 
         function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
-            // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
-            // parameter (a parameter for which there are no assignments in the function body), and if the parent type
-            // for the destructuring is a union type, one or more of the binding elements may represent discriminant
-            // properties, and we want the effects of conditional checks on such discriminants to affect the types of
-            // other binding elements from the same destructuring. Consider:
-            //
-            //   type Action =
-            //       | { kind: 'A', payload: number }
-            //       | { kind: 'B', payload: string };
-            //
-            //   function f1({ kind, payload }: Action) {
-            //       if (kind === 'A') {
-            //           payload.toFixed();
-            //       }
-            //       if (kind === 'B') {
-            //           payload.toUpperCase();
-            //       }
-            //   }
-            //
-            // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
-            // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
-            // as if it occurred in the specified location. We then recompute the narrowed binding element type by
-            // destructuring from the narrowed parent type.
             const declaration = symbol.valueDeclaration;
-            if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
-                const parent = declaration.parent.parent;
-                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
-                    const links = getNodeLinks(location);
-                    if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
-                        links.flags |= NodeCheckFlags.InCheckIdentifier;
-                        const parentType = getTypeForBindingElementParent(parent);
-                        links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
-                            const pattern = declaration.parent;
-                            const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
-                            return getBindingElementTypeFromParentType(declaration, narrowedType);
+            if (declaration) {
+                // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
+                // parameter (a parameter for which there are no assignments in the function body), and if the parent type
+                // for the destructuring is a union type, one or more of the binding elements may represent discriminant
+                // properties, and we want the effects of conditional checks on such discriminants to affect the types of
+                // other binding elements from the same destructuring. Consider:
+                //
+                //   type Action =
+                //       | { kind: 'A', payload: number }
+                //       | { kind: 'B', payload: string };
+                //
+                //   function f({ kind, payload }: Action) {
+                //       if (kind === 'A') {
+                //           payload.toFixed();
+                //       }
+                //       if (kind === 'B') {
+                //           payload.toUpperCase();
+                //       }
+                //   }
+                //
+                // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+                // the binding pattern AST instance for '{ kind, payload }' as a pseudo-reference and narrow this reference
+                // as if it occurred in the specified location. We then recompute the narrowed binding element type by
+                // destructuring from the narrowed parent type.
+                if (isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
+                    const parent = declaration.parent.parent;
+                    if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) & NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
+                        const links = getNodeLinks(location);
+                        if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
+                            links.flags |= NodeCheckFlags.InCheckIdentifier;
+                            const parentType = getTypeForBindingElementParent(parent);
+                            links.flags &= ~NodeCheckFlags.InCheckIdentifier;
+                            if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                                const pattern = declaration.parent;
+                                const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                                return getBindingElementTypeFromParentType(declaration, narrowedType);
+                            }
+                        }
+                    }
+                }
+                // If we have a const-like parameter with no type annotation or initializer, and if the parameter is contextually
+                // typed by a signature with a single rest parameter of a union of tuple types, one or more of the parameters may
+                // represent discriminant tuple elements, and we want the effects of conditional checks on such discriminants to
+                // affect the types of other parameters in the same parameter list. Consider:
+                //
+                //   type Action = [kind: 'A', payload: number] | [kind: 'B', payload: string];
+                //
+                //   const f: (...args: Action) => void = (kind, payload) => {
+                //       if (kind === 'A') {
+                //           payload.toFixed();
+                //       }
+                //       if (kind === 'B') {
+                //           payload.toUpperCase();
+                //       }
+                //   }
+                //
+                // Above, we want the conditional checks on 'kind' to affect the type of 'payload'. To facilitate this, we use
+                // the arrow function AST node for '(kind, payload) => ...' as a pseudo-reference and narrow this reference as
+                // if it occurred in the specified location. We then recompute the narrowed parameter type by indexing into the
+                // narrowed tuple type.
+                if (isParameter(declaration) && !declaration.type && !declaration.initializer && !declaration.dotDotDotToken) {
+                    const func = declaration.parent;
+                    if (func.parameters.length >= 2 && isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+                        const contextualSignature = getContextualSignature(func);
+                        if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
+                            const restType = getTypeOfSymbol(contextualSignature.parameters[0]);
+                            if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
+                                const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
+                                const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
+                                return getIndexedAccessType(narrowedType, getNumberLiteralType(index));
+                            }
                         }
                     }
                 }
@@ -28224,12 +28277,18 @@ namespace ts {
             if (!getContainingClass(privId)) {
                 return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
             }
-            if (!isExpressionNode(privId)) {
-                return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+
+            if (!isForInStatement(privId.parent)) {
+                if (!isExpressionNode(privId)) {
+                    return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+                }
+
+                const isInOperation = isBinaryExpression(privId.parent) && privId.parent.operatorToken.kind === SyntaxKind.InKeyword;
+                if (!getSymbolForPrivateIdentifierExpression(privId) && !isInOperation) {
+                    return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
+                }
             }
-            if (!getSymbolForPrivateIdentifierExpression(privId)) {
-                return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
-            }
+
             return false;
         }
 
@@ -39397,7 +39456,7 @@ namespace ts {
                 if (memberSymbol) {
                     const declaration = memberSymbol.valueDeclaration;
                     if (declaration !== member) {
-                        if (declaration && isBlockScopedNameDeclaredBeforeUse(declaration, member)) {
+                        if (declaration && isBlockScopedNameDeclaredBeforeUse(declaration, member) && isEnumDeclaration(declaration.parent)) {
                             return getEnumMemberValue(declaration as EnumMember);
                         }
                         error(expr, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
@@ -43072,7 +43131,7 @@ namespace ts {
                 if (prop.kind === SyntaxKind.ShorthandPropertyAssignment && !inDestructuring && prop.objectAssignmentInitializer) {
                     // having objectAssignmentInitializer is only valid in ObjectAssignmentPattern
                     // outside of destructuring it is a syntax error
-                    return grammarErrorOnNode(prop.equalsToken!, Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern);
+                    grammarErrorOnNode(prop.equalsToken!, Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern);
                 }
 
                 if (name.kind === SyntaxKind.PrivateIdentifier) {

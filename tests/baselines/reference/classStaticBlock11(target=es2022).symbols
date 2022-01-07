@@ -1,0 +1,30 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts ===
+let getX;
+>getX : Symbol(getX, Decl(classStaticBlock11.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock11.ts, 0, 9))
+
+  #x = 1
+>#x : Symbol(C.#x, Decl(classStaticBlock11.ts, 1, 9))
+
+  constructor(x: number) {
+>x : Symbol(x, Decl(classStaticBlock11.ts, 3, 14))
+
+    this.#x = x;
+>this.#x : Symbol(C.#x, Decl(classStaticBlock11.ts, 1, 9))
+>this : Symbol(C, Decl(classStaticBlock11.ts, 0, 9))
+>x : Symbol(x, Decl(classStaticBlock11.ts, 3, 14))
+  }
+
+  static {
+    // getX has privileged access to #x
+    getX = (obj: C) => obj.#x;
+>getX : Symbol(getX, Decl(classStaticBlock11.ts, 0, 3))
+>obj : Symbol(obj, Decl(classStaticBlock11.ts, 9, 12))
+>C : Symbol(C, Decl(classStaticBlock11.ts, 0, 9))
+>obj.#x : Symbol(C.#x, Decl(classStaticBlock11.ts, 1, 9))
+>obj : Symbol(obj, Decl(classStaticBlock11.ts, 9, 12))
+  }
+}
+
