@@ -190,7 +190,7 @@ class Api<D = {}> {
 >D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 47, 15))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >D : Symbol(D, Decl(awaitedTypeStrictNull.ts, 47, 15))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 declare const api: Api;
