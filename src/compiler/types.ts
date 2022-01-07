@@ -4153,6 +4153,7 @@ namespace ts {
 
     export interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+        /* @internal */ getTypeOfSymbol(symbol: Symbol): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
