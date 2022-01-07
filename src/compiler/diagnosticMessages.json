@@ -2965,7 +2965,7 @@
         "category": "Error",
         "code": 2727
     },
-    "'{0}' is declared here.": {
+    "'{0}' is declared here:": {
         "category": "Message",
         "code": 2728
     },
@@ -2985,7 +2985,7 @@
         "category": "Error",
         "code": 2732
     },
-    "Property '{0}' was also declared here.": {
+    "Property '{0}' was also declared here:": {
         "category": "Error",
         "code": 2733
     },
@@ -4161,7 +4161,7 @@
         "category": "Message",
         "code": 6041
     },
-    
+
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4720,7 +4720,7 @@
         "category": "Error",
         "code": 6202
     },
-    "'{0}' was also declared here.": {
+    "'{0}' was also declared here:": {
         "category": "Message",
         "code": 6203
     },

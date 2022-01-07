@@ -1358,7 +1358,7 @@ namespace ts {
                 const adjustedNode = (getExpandoInitializer(relatedNode, /*isPrototypeAssignment*/ false) ? getNameOfExpando(relatedNode) : getNameOfDeclaration(relatedNode)) || relatedNode;
                 if (adjustedNode === errorNode) continue;
                 err.relatedInformation = err.relatedInformation || [];
-                const leadingMessage = createDiagnosticForNode(adjustedNode, Diagnostics._0_was_also_declared_here, symbolName);
+                const leadingMessage = createDiagnosticForNode(adjustedNode, Diagnostics._0_was_also_declared_here_Colon, symbolName);
                 const followOnMessage = createDiagnosticForNode(adjustedNode, Diagnostics.and_here);
                 if (length(err.relatedInformation) >= 5 || some(err.relatedInformation, r => compareDiagnostics(r, followOnMessage) === Comparison.EqualTo || compareDiagnostics(r, leadingMessage) === Comparison.EqualTo)) continue;
                 addRelatedInfo(err, !length(err.relatedInformation) ? leadingMessage : followOnMessage);
@@ -2152,7 +2152,7 @@ namespace ts {
                                 if (suggestion.valueDeclaration) {
                                     addRelatedInfo(
                                         diagnostic,
-                                        createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
+                                        createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here_Colon, suggestionName)
                                     );
                                 }
                             }
@@ -2528,7 +2528,7 @@ namespace ts {
 
                 if (diagnosticMessage) {
                     addRelatedInfo(diagnosticMessage,
-                        createDiagnosticForNode(declaration, Diagnostics._0_is_declared_here, declarationName)
+                        createDiagnosticForNode(declaration, Diagnostics._0_is_declared_here_Colon, declarationName)
                     );
                 }
             }
@@ -2885,7 +2885,7 @@ namespace ts {
                             const diagnostic = error(name, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, moduleName, declarationName, suggestionName);
                             if (suggestion.valueDeclaration) {
                                 addRelatedInfo(diagnostic,
-                                    createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
+                                    createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here_Colon, suggestionName)
                                 );
                             }
                         }
@@ -2924,7 +2924,7 @@ namespace ts {
                     if (localSymbol.declarations) {
                         addRelatedInfo(diagnostic,
                             ...map(localSymbol.declarations, (decl, index) =>
-                                createDiagnosticForNode(decl, index === 0 ? Diagnostics._0_is_declared_here : Diagnostics.and_here, declarationName)));
+                                createDiagnosticForNode(decl, index === 0 ? Diagnostics._0_is_declared_here_Colon : Diagnostics.and_here, declarationName)));
                     }
                 }
             }
@@ -9095,10 +9095,10 @@ namespace ts {
                                 const exportedMemberName = tryCast(exportedMember.valueDeclaration, isNamedDeclaration)?.name || exportedMember.valueDeclaration;
                                 addRelatedInfo(
                                     error(s.valueDeclaration, Diagnostics.Duplicate_identifier_0, unescapedName),
-                                    createDiagnosticForNode(exportedMemberName, Diagnostics._0_was_also_declared_here, unescapedName));
+                                    createDiagnosticForNode(exportedMemberName, Diagnostics._0_was_also_declared_here_Colon, unescapedName));
                                 addRelatedInfo(
                                     error(exportedMemberName, Diagnostics.Duplicate_identifier_0, unescapedName),
-                                    createDiagnosticForNode(s.valueDeclaration, Diagnostics._0_was_also_declared_here, unescapedName));
+                                    createDiagnosticForNode(s.valueDeclaration, Diagnostics._0_was_also_declared_here_Colon, unescapedName));
                             }
                             const union = createSymbol(s.flags | exportedMember.flags, name);
                             union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
@@ -10655,7 +10655,7 @@ namespace ts {
                         // report an error at each declaration.
                         const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
                         const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(declName);
-                        forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Property_0_was_also_declared_here, name));
+                        forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Property_0_was_also_declared_here_Colon, name));
                         error(declName || decl, Diagnostics.Duplicate_property_0, name);
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
@@ -19695,7 +19695,7 @@ namespace ts {
                     const propName = symbolToString(unmatchedProperty);
                     reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
                     if (length(unmatchedProperty.declarations)) {
-                        associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations![0], Diagnostics._0_is_declared_here, propName));
+                        associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations![0], Diagnostics._0_is_declared_here_Colon, propName));
                     }
                     if (shouldSkipElaboration && errorInfo) {
                         overrideNextErrorInfo++;
@@ -28610,7 +28610,7 @@ namespace ts {
 
             if (diagnosticMessage) {
                 addRelatedInfo(diagnosticMessage,
-                    createDiagnosticForNode(valueDeclaration, Diagnostics._0_is_declared_here, declarationName)
+                    createDiagnosticForNode(valueDeclaration, Diagnostics._0_is_declared_here_Colon, declarationName)
                 );
             }
         }
@@ -28708,7 +28708,7 @@ namespace ts {
                             const suggestedName = symbolName(suggestion);
                             const message = isUncheckedJS ? Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2 : Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2;
                             errorInfo = chainDiagnosticMessages(errorInfo, message, missingProperty, container, suggestedName);
-                            relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
+                            relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here_Colon, suggestedName);
                         }
                         else {
                             const diagnostic = containerSeemsToBeEmptyDomElement(containingType)
@@ -29598,7 +29598,7 @@ namespace ts {
                     const diag = createDiagnosticForNode(node.tagName, Diagnostics.Tag_0_expects_at_least_1_arguments_but_the_JSX_factory_2_provides_at_most_3, entityNameToString(node.tagName), absoluteMinArgCount, entityNameToString(factory), maxParamCount);
                     const tagNameDeclaration = getSymbolAtLocation(node.tagName)?.valueDeclaration;
                     if (tagNameDeclaration) {
-                        addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here, entityNameToString(node.tagName)));
+                        addRelatedInfo(diag, createDiagnosticForNode(tagNameDeclaration, Diagnostics._0_is_declared_here_Colon, entityNameToString(node.tagName)));
                     }
                     if (errorOutputContainer && errorOutputContainer.skipLogging) {
                         (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
@@ -37060,7 +37060,7 @@ namespace ts {
             );
             if (firstDeclaration) {
                 addRelatedInfo(err,
-                    createDiagnosticForNode(firstDeclaration, Diagnostics._0_was_also_declared_here, declName)
+                    createDiagnosticForNode(firstDeclaration, Diagnostics._0_was_also_declared_here_Colon, declName)
                 );
             }
         }

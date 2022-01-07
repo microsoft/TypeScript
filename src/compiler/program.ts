@@ -387,10 +387,20 @@ namespace ts {
         const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
         const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
 
+        const gutterWidth = 1;
         const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
-        let gutterWidth = (lastLine + 1 + "").length;
-        if (hasMoreThanFiveLines) {
-            gutterWidth = Math.max(ellipsis.length, gutterWidth);
+
+        // Dedent all of the code lines consistently
+        let whitespaceToTrim = Number.MAX_VALUE;
+        for (let i = firstLine; i <= lastLine; i++) {
+            if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
+                i = lastLine - 1;
+            }
+
+            const lineStart = getPositionOfLineAndCharacter(file, i, 0);
+            const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
+            const lineContent = file.text.slice(lineStart, lineEnd);
+            whitespaceToTrim = Math.min(whitespaceToTrim, startWhitespaceCount(lineContent));
         }
 
         let context = "";
@@ -407,10 +417,15 @@ namespace ts {
             const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
             let lineContent = file.text.slice(lineStart, lineEnd);
             lineContent = trimStringEnd(lineContent);  // trim from end
+            lineContent = lineContent.slice(whitespaceToTrim); // remove preceding whitespaces
             lineContent = lineContent.replace(/\t/g, " ");   // convert tabs to single spaces
 
+            // TODO: the extra characters for the grey bar has confusing issues
+            // const gutterLine = ForegroundColorEscapeSequences.Grey + "|" + resetEscapeSequence;
+
             // Output the gutter and the actual contents of the line.
-            context += indent + padLeft("|", gutterWidth) + gutterSeparator;
+            const gutterLine = "|";
+            context += indent + padLeft(gutterLine, gutterWidth) + gutterSeparator;
             context += lineContent + host.getNewLine();
 
             // Output the gutter and the error span for the line using underlines.
@@ -421,8 +436,9 @@ namespace ts {
                 // Otherwise, we'll just underline the rest of the line, giving 'slice' no end position.
                 const lastCharForLine = i === lastLine ? lastLineChar : undefined;
 
-                context += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                context += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "▔");
+                context += lineContent.slice(0, firstLineChar - whitespaceToTrim).replace(/\S/g, " ");
+                const amendedLastChar = lastCharForLine ? lastCharForLine - whitespaceToTrim : undefined;
+                context += lineContent.slice(firstLineChar - whitespaceToTrim, amendedLastChar).replace(/./g, "▔");
             }
             else if (i === lastLine) {
                 context += lineContent.slice(0, lastLineChar).replace(/./g, "▔");
@@ -480,14 +496,14 @@ namespace ts {
             output += host.getNewLine();
 
             if (diagnostic.relatedInformation) {
+                output += host.getNewLine();
                 for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
-                    output += host.getNewLine();
-                    output += indent + flattenDiagnosticMessageText(messageText, host.getNewLine(), 0, /*pretty*/ true);
-                    output += host.getNewLine();
+                    output += trimStringStart(flattenDiagnosticMessageText(messageText, host.getNewLine(), 0, /*pretty*/ true));
+                    // output += host.getNewLine();
                     if (file) {
-                        output += indent + formatLocation(file, start!, host); // TODO: GH#18217
+                        output += " " + formatLocation(file, start!, host); // TODO: GH#18217
                         output += host.getNewLine();
-                        output += formatCodeSpan(file, start!, length!, indent, ForegroundColorEscapeSequences.Cyan, host); // TODO: GH#18217
+                        output += formatCodeSpan(file, start!, length!, indent + "  ", ForegroundColorEscapeSequences.Cyan, host); // TODO: GH#18217
                     }
                 }
             }
