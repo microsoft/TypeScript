@@ -12,6 +12,7 @@
     "files": [
         "corePublic.ts",
         "core.ts",
+        "output.ts",
         "debug.ts",
         "semver.ts",
         "performanceCore.ts",

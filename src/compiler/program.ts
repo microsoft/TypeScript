@@ -354,14 +354,6 @@ namespace ts {
         return errorMessage;
     }
 
-    /** @internal */
-    export enum ForegroundColorEscapeSequences {
-        Grey = "\u001b[90m",
-        Red = "\u001b[91m",
-        Yellow = "\u001b[93m",
-        Blue = "\u001b[94m",
-        Cyan = "\u001b[96m"
-    }
     const gutterStyleSequence = "\u001b[7m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";

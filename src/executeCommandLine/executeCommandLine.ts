@@ -60,22 +60,9 @@ namespace ts {
     function updateReportDiagnostic(
         sys: System,
         existing: DiagnosticReporter,
-        options: CompilerOptions | BuildOptions
+        pretty: boolean
     ): DiagnosticReporter {
-        return shouldBePretty(sys, options) ?
-            createDiagnosticReporter(sys, /*pretty*/ true) :
-            existing;
-    }
-
-    function defaultIsPretty(sys: System) {
-        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
-    }
-
-    function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
-        if (!options || typeof options.pretty === "undefined") {
-            return defaultIsPretty(sys);
-        }
-        return options.pretty;
+        return pretty ? createDiagnosticReporter(sys, pretty) : existing;
     }
 
     function getOptionsForHelp(commandLine: ParsedCommandLine) {
@@ -87,58 +74,6 @@ namespace ts {
 
     function printVersion(sys: System) {
         sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
-    }
-
-    function createColors(sys: System) {
-        const showColors = defaultIsPretty(sys);
-        if (!showColors) {
-            return {
-                bold: (str: string) => str,
-                blue: (str: string) => str,
-                blueBackground: (str: string) => str,
-                brightWhite: (str: string) => str
-            };
-        }
-
-        function bold(str: string) {
-            return `\x1b[1m${str}\x1b[22m`;
-        }
-
-        const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
-        const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
-        const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
-
-        function blue(str: string) {
-            // Effectively Powershell and Command prompt users use cyan instead
-            // of blue because the default theme doesn't show blue with enough contrast.
-            if (isWindows && !isWindowsTerminal && !isVSCode) {
-                return brightWhite(str);
-            }
-
-            return `\x1b[94m${str}\x1b[39m`;
-        }
-
-        // There are ~3 types of terminal color support: 16 colors, 256 and 16m colors
-        // If there is richer color support, e.g. 256+ we can use extended ANSI codes which are not just generic 'blue'
-        // but a 'lighter blue' which is closer to the blue in the TS logo.
-        const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color";
-        function blueBackground(str: string) {
-            if (supportsRicherColors) {
-                return `\x1B[48;5;68m${str}\x1B[39;49m`;
-            }
-            else {
-                return `\x1b[44m${str}\x1B[39;49m`;
-            }
-        }
-        function brightWhite(str: string) {
-            return `\x1b[97m${str}\x1b[39m`;
-        }
-        return {
-            bold,
-            blue,
-            brightWhite,
-            blueBackground
-        };
     }
 
     function getDisplayNameTextOfOption(option: CommandLineOption) {
@@ -153,7 +88,7 @@ namespace ts {
         }
 
         const text: string[] = [];
-        const colors = createColors(sys);
+        const output = createOutputUtils(sys);
 
         // name and description
         const name = getDisplayNameTextOfOption(option);
@@ -187,7 +122,7 @@ namespace ts {
             text.push(sys.newLine);
         }
         else {
-            text.push(colors.blue(name), sys.newLine);
+            text.push(output.tsBrandingBlueString(name), sys.newLine);
             if (option.description) {
                 const description = getDiagnosticText(option.description);
                 text.push(description);
@@ -244,7 +179,7 @@ namespace ts {
                 if (isFirstLine) {
                     curLeft = padLeft(left, rightAlignOfLeft);
                     curLeft = padRight(curLeft, leftAlignOfRight);
-                    curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
+                    curLeft = colorLeft ? output.tsBrandingBlueString(curLeft) : curLeft;
                 }
                 else {
                     curLeft = padLeft("", leftAlignOfRight);
@@ -346,7 +281,7 @@ namespace ts {
 
     function generateSectionOptionsOutput(sys: System, sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
         let res: string[] = [];
-        res.push(createColors(sys).bold(sectionName) + sys.newLine + sys.newLine);
+        res.push(createOutputUtils(sys).bold(sectionName) + sys.newLine + sys.newLine);
         if (beforeOptionsDescription) {
             res.push(beforeOptionsDescription + sys.newLine + sys.newLine);
         }
@@ -378,9 +313,9 @@ namespace ts {
     }
 
     function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
-        const colors = createColors(sys);
+        const outputUtils = createOutputUtils(sys);
         let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-        output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
+        output.push(outputUtils.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
 
         example("tsc", Diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory);
         example("tsc app.ts util.ts", Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
@@ -406,7 +341,7 @@ namespace ts {
         function example(ex: string | string[], desc: DiagnosticMessage) {
             const examples = typeof ex === "string" ? [ex] : ex;
             for (const example of examples) {
-                output.push("  " + colors.blue(example) + sys.newLine);
+                output.push("  " + outputUtils.tsBrandingBlueString(example) + sys.newLine);
             }
             output.push("  " + getDiagnosticText(desc) + sys.newLine + sys.newLine);
         }
@@ -431,13 +366,13 @@ namespace ts {
     }
 
     function getHeader(sys: System, message: string) {
-        const colors = createColors(sys);
+        const output = createOutputUtils(sys);
         const header: string[] = [];
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;;
         const tsIconLength = 5;
 
-        const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
+        const tsIconFirstLine = output.tsBrandingBlueBackground(padLeft("", tsIconLength));
+        const tsIconSecondLine = output.tsBrandingBlueString(output.brightWhite(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
         if (terminalWidth >= message.length + tsIconLength) {
             // right align of the icon is 120 at most.
@@ -468,6 +403,9 @@ namespace ts {
         commandLine: ParsedCommandLine,
     ) {
         let reportDiagnostic = createDiagnosticReporter(sys);
+        const outputUtils = createOutputUtils(sys, commandLine.options);
+        const pretty = outputUtils.pretty();
+
         if (commandLine.options.build) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -557,7 +495,7 @@ namespace ts {
                     reportDiagnostic = updateReportDiagnostic(
                         sys,
                         reportDiagnostic,
-                        configParseResult.options
+                        pretty
                     );
                     configParseResult.errors.forEach(reportDiagnostic);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -569,7 +507,7 @@ namespace ts {
             reportDiagnostic = updateReportDiagnostic(
                 sys,
                 reportDiagnostic,
-                configParseResult.options
+                pretty
             );
             if (isWatchSet(configParseResult.options)) {
                 if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
@@ -609,7 +547,7 @@ namespace ts {
             reportDiagnostic = updateReportDiagnostic(
                 sys,
                 reportDiagnostic,
-                commandLineOptions
+                pretty
             );
             if (isWatchSet(commandLineOptions)) {
                 if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
@@ -709,11 +647,14 @@ namespace ts {
         projects: string[],
         errors: Diagnostic[]
     ) {
+        const outputUtils = createOutputUtils(sys, buildOptions);
+        const pretty = outputUtils.pretty();
+
         // Update to pretty if host supports it
         const reportDiagnostic = updateReportDiagnostic(
             sys,
             createDiagnosticReporter(sys),
-            buildOptions
+            pretty
         );
 
         if (buildOptions.locale) {
@@ -748,8 +689,8 @@ namespace ts {
                 sys,
                 /*createProgram*/ undefined,
                 reportDiagnostic,
-                createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
-                createWatchStatusReporter(sys, buildOptions)
+                createBuilderStatusReporter(sys, pretty),
+                createWatchStatusReporter(sys, pretty)
             );
             updateSolutionBuilderHost(sys, cb, buildHost);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
@@ -761,8 +702,8 @@ namespace ts {
             sys,
             /*createProgram*/ undefined,
             reportDiagnostic,
-            createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
-            createReportErrorSummary(sys, buildOptions)
+            createBuilderStatusReporter(sys, pretty),
+            createReportErrorSummary(sys, pretty)
         );
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -771,8 +712,8 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
-        return shouldBePretty(sys, options) ?
+    function createReportErrorSummary(sys: System, pretty: boolean): ReportEmitErrorSummary | undefined {
+        return pretty ?
             (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine)) :
             undefined;
     }
@@ -784,6 +725,8 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { fileNames, options, projectReferences } = config;
+        const outputUtils = createOutputUtils(sys, options);
+
         const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -802,7 +745,7 @@ namespace ts {
             program,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
-            createReportErrorSummary(sys, options)
+            createReportErrorSummary(sys, outputUtils.pretty())
         );
         reportStatistics(sys, program);
         cb(program);
@@ -816,6 +759,7 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
+        const outputUtils = createOutputUtils(sys, options);
         enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
         const host = createIncrementalCompilerHost(options, sys);
         const exitStatus = ts.performIncrementalCompilation({
@@ -826,7 +770,7 @@ namespace ts {
             configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
             projectReferences,
             reportDiagnostic,
-            reportErrorSummary: createReportErrorSummary(sys, options),
+            reportErrorSummary: createReportErrorSummary(sys, outputUtils.pretty()),
             afterProgramEmitAndDiagnostics: builderProgram => {
                 reportStatistics(sys, builderProgram.getProgram());
                 cb(builderProgram);
@@ -873,8 +817,8 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(sys: System, options: CompilerOptions | BuildOptions) {
-        return ts.createWatchStatusReporter(sys, shouldBePretty(sys, options));
+    function createWatchStatusReporter(sys: System, pretty: boolean) {
+        return ts.createWatchStatusReporter(sys, pretty);
     }
 
     function createWatchOfConfigFile(
@@ -886,13 +830,14 @@ namespace ts {
         watchOptionsToExtend: WatchOptions | undefined,
         extendedConfigCache: Map<ExtendedConfigCacheEntry>,
     ) {
+        const pretty = createOutputUtils(system, configParseResult.options).pretty();
         const watchCompilerHost = createWatchCompilerHostOfConfigFile({
             configFileName: configParseResult.options.configFilePath!,
             optionsToExtend,
             watchOptionsToExtend,
             system,
             reportDiagnostic,
-            reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
+            reportWatchStatus: createWatchStatusReporter(system, pretty)
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
@@ -908,13 +853,14 @@ namespace ts {
         options: CompilerOptions,
         watchOptions: WatchOptions | undefined,
     ) {
+        const pretty = createOutputUtils(system, options).pretty();
         const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions({
             rootFiles,
             options,
             watchOptions,
             system,
             reportDiagnostic,
-            reportWatchStatus: createWatchStatusReporter(system, options)
+            reportWatchStatus: createWatchStatusReporter(system, pretty)
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         return createWatchProgram(watchCompilerHost);
