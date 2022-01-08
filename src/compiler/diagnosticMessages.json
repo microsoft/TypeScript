@@ -4944,7 +4944,7 @@
         "category": "Message",
         "code": 6259
     },
-    "Found {0} errors in 1 file: {1}": {
+    "Found {0} errors in the same file, starting at: {1}": {
         "category": "Message",
         "code": 6260
     },

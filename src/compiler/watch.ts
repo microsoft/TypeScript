@@ -141,7 +141,7 @@ namespace ts {
         const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
             .filter((value, index, self) => self.indexOf(value) === index);
 
-        const firstFileRelative = nonNilFiles[0] && getRelativePathFromDirectory(host.getCurrentDirectory(), nonNilFiles[0].fileName, /* ignoreCase */ false) + ":" + nonNilFiles[0].line;
+        const firstFileRelative = nonNilFiles[0] && (pathIsAbsolute(nonNilFiles[0].fileName) ? getRelativePathFromDirectory(host.getCurrentDirectory(), nonNilFiles[0].fileName, /* ignoreCase */ false) + ":" + nonNilFiles[0].line : nonNilFiles[0].fileName);
         const d = errorCount === 1 ?
             createCompilerDiagnostic(
                 filesInError[0] !== undefined ?
@@ -153,7 +153,7 @@ namespace ts {
                 distinctFileNamesWithLines.length === 0 ?
                     Diagnostics.Found_0_errors :
                     distinctFileNamesWithLines.length === 1 ?
-                        Diagnostics.Found_0_errors_in_1_file_Colon_1 :
+                        Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1 :
                         Diagnostics.Found_0_errors_in_1_files,
                 errorCount,
                 distinctFileNamesWithLines.length === 1 ? firstFileRelative : distinctFileNamesWithLines.length);
