@@ -4153,6 +4153,7 @@ namespace ts {
 
     export interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+        /* @internal */ getTypeOfSymbol(symbol: Symbol): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
@@ -8326,6 +8327,11 @@ namespace ts {
     export interface GetEffectiveTypeRootsHost {
         directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
+    }
+
+    /* @internal */
+    export interface HasCurrentDirectory {
+        getCurrentDirectory(): string;
     }
 
     /*@internal*/
