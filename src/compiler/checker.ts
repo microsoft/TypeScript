@@ -178,7 +178,7 @@ namespace ts {
         SkipContextSensitive = 1 << 2,  // Skip context sensitive function expressions
         SkipGenericFunctions = 1 << 3,  // Skip single signature generic functions
         IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
-        RestBindingElement = 1 << 5,    // Checking a type that is going to be used to determine the type of a rest binding element
+        ObjectRestBindingElement = 1 << 5,    // Checking a type that is going to be used to determine the type of a rest binding element
                                         //  e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                         //  we need to preserve generic types instead of substituting them for constraints
         IncludeOptionality = 1 << 6,    // TODO: description, replace bool param with flag
@@ -8586,7 +8586,7 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-            const checkMode = declaration.dotDotDotToken && declaration.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.RestBindingElement : CheckMode.Normal;
+            const checkMode = declaration.dotDotDotToken && declaration.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.ObjectRestBindingElement : CheckMode.Normal;
             const parentType = getTypeForBindingElementParent(declaration.parent.parent, checkMode);
             return parentType && getBindingElementTypeFromParentType(declaration, parentType);
         }
@@ -24949,7 +24949,7 @@ namespace ts {
             // as we want the type of a rest element to be generic when possible.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
-                (checkMode && checkMode & CheckMode.RestBindingElement ?
+                (checkMode && checkMode & CheckMode.ObjectRestBindingElement ?
                     getContextualType(node, ContextFlags.SkipBindingPatterns)
                     : getContextualType(node));
             return contextualType && !isGenericType(contextualType);
@@ -25970,7 +25970,7 @@ namespace ts {
             const parent = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
             const parentType = getContextualTypeForVariableLikeDeclaration(parent) ||
-                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken && declaration.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.RestBindingElement : CheckMode.Normal);
+                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken && declaration.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.ObjectRestBindingElement : CheckMode.Normal);
             if (!parentType || isBindingPattern(name) || isComputedNonLiteralName(name)) return undefined;
             if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
                 const index = indexOfNode(declaration.parent.elements, declaration);
@@ -36936,7 +36936,7 @@ namespace ts {
 
                 // check private/protected variable access
                 const parent = node.parent.parent;
-                const parentCheckMode = node.dotDotDotToken && node.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.RestBindingElement : CheckMode.Normal;
+                const parentCheckMode = node.dotDotDotToken && node.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.ObjectRestBindingElement : CheckMode.Normal;
                 const parentType = getTypeForBindingElementParent(parent, parentCheckMode);
                 const name = node.propertyName || node.name;
                 if (parentType && !isBindingPattern(name)) {
