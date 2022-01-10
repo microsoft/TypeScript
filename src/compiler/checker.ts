@@ -172,16 +172,16 @@ namespace ts {
     }
 
     const enum CheckMode {
-        Normal = 0,                     // Normal type checking
-        Contextual = 1 << 0,            // Explicitly assigned contextual type, therefore not cacheable
-        Inferential = 1 << 1,           // Inferential typing
-        SkipContextSensitive = 1 << 2,  // Skip context sensitive function expressions
-        SkipGenericFunctions = 1 << 3,  // Skip single signature generic functions
-        IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
-        ObjectRestBindingElement = 1 << 5,    // Checking a type that is going to be used to determine the type of a rest binding element
-                                        //  e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
-                                        //  we need to preserve generic types instead of substituting them for constraints
-        IncludeOptionality = 1 << 6,    // TODO: description, replace bool param with flag
+        Normal = 0,                        // Normal type checking
+        Contextual = 1 << 0,               // Explicitly assigned contextual type, therefore not cacheable
+        Inferential = 1 << 1,              // Inferential typing
+        SkipContextSensitive = 1 << 2,     // Skip context sensitive function expressions
+        SkipGenericFunctions = 1 << 3,     // Skip single signature generic functions
+        IsForSignatureHelp = 1 << 4,       // Call resolution for purposes of signature help
+        ObjectRestBindingElement = 1 << 5, // Checking a type that is going to be used to determine the type of a rest binding element
+                                           //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
+                                           //   we need to preserve generic types instead of substituting them for constraints
+        IncludeOptionality = 1 << 6,       // >> TODO: description, replace bool param with flag
     }
 
     const enum SignatureCheckMode {
@@ -24939,13 +24939,10 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
-        /**
-         * If check mode has `CheckMode.RestBindingElement`, we skip binding pattern contextual types.
-         */
         function hasContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
-            // If check mode has `CheckMode.RestBindingElement`, we skip binding pattern contextual types,
+            // If check mode has `CheckMode.ObjectRestBindingElement`, we skip binding pattern contextual types,
             // as we want the type of a rest element to be generic when possible.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
