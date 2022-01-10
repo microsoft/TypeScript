@@ -10487,6 +10487,7 @@ declare namespace ts.server {
         logError(err: Error, cmd: string): void;
         private logErrorWorker;
         send(msg: protocol.Message): void;
+        protected writeMessage(msg: protocol.Message): void;
         event<T extends object>(body: T, eventName: string): void;
         /** @deprecated */
         output(info: any, cmdName: string, reqSeq?: number, errorMsg?: string): void;
