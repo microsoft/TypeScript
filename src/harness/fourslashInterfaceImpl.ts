@@ -348,10 +348,6 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
-        public typeAtLocation(range: FourSlash.Range, expected: string): void {
-            this.state.verifyTypeAtLocation(range, expected);
-        }
-
         public baselineFindAllReferences(...markerNames: string[]) {
             this.state.verifyBaselineFindAllReferences(...markerNames);
         }
