@@ -1641,22 +1641,31 @@ namespace ts {
         }
         return entrypoints;
 
-        function loadEntrypointsFromTargetExports(target: unknown) {
+        function loadEntrypointsFromTargetExports(target: unknown): boolean | undefined {
             if (typeof target === "string" && startsWith(target, "./") && target.indexOf("*") === -1) {
                 const partsAfterFirst = getPathComponents(target).slice(2);
                 if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
-                    return;
+                    return false;
                 }
                 const resolvedTarget = combinePaths(scope.packageDirectory, target);
                 const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
                 const result = loadJSOrExactTSFileName(extensions, finalPath, /*recordOnlyFailures*/ false, state);
                 if (result) {
                     entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
+                    return true;
+                }
+            }
+            else if (Array.isArray(target)) {
+                for (const t of target) {
+                    const success = loadEntrypointsFromTargetExports(t);
+                    if (success) {
+                        return true;
+                    }
                 }
             }
             // eslint-disable-next-line no-null/no-null
-            else if (typeof target === "object" && target !== null && !Array.isArray(target)) {
-                forEach(getOwnKeys(target as MapLike<unknown>), key => {
+            else if (typeof target === "object" && target !== null) {
+                return forEach(getOwnKeys(target as MapLike<unknown>), key => {
                     if (key === "default" || contains(state.conditions, key) || isApplicableVersionedTypesKey(state.conditions, key)) {
                         loadEntrypointsFromTargetExports((target as MapLike<unknown>)[key]);
                         return true;
