@@ -8591,7 +8591,7 @@ namespace ts {
 
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
-            const checkMode = declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
+            const checkMode = declaration.dotDotDotToken && declaration.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.RestBindingElement : CheckMode.Normal;
             const parentType = getTypeForBindingElementParent(declaration.parent.parent, checkMode);
             return parentType && getBindingElementTypeFromParentType(declaration, parentType);
         }
@@ -25969,7 +25969,7 @@ namespace ts {
             const parent = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
             const parentType = getContextualTypeForVariableLikeDeclaration(parent) ||
-                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal);
+                parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken && declaration.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.RestBindingElement : CheckMode.Normal);
             if (!parentType || isBindingPattern(name) || isComputedNonLiteralName(name)) return undefined;
             if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
                 const index = indexOfNode(declaration.parent.elements, declaration);
@@ -36960,7 +36960,7 @@ namespace ts {
 
                 // check private/protected variable access
                 const parent = node.parent.parent;
-                const parentCheckMode = node.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal;
+                const parentCheckMode = node.dotDotDotToken && node.parent.kind !== SyntaxKind.ArrayBindingPattern ? CheckMode.RestBindingElement : CheckMode.Normal;
                 const parentType = getTypeForBindingElementParent(parent, parentCheckMode);
                 const name = node.propertyName || node.name;
                 if (parentType && !isBindingPattern(name)) {
