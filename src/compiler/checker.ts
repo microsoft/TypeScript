@@ -19229,6 +19229,17 @@ namespace ts {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
+                        if (isMappedTypeGenericIndexedAccess(source)) {
+                            // For an indexed access type { [P in K]: E}[X], above we have already explored an instantiation of E with X
+                            // substituted for P. We also want to explore type { [P in K]: E }[C], where C is the constraint of X.
+                            const indexConstraint = getConstraintOfType((source as IndexedAccessType).indexType);
+                            if (indexConstraint) {
+                                if (result = isRelatedTo(getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint), target, RecursionFlags.Source, reportErrors)) {
+                                    resetErrorInfo(saveErrorInfo);
+                                    return result;
+                                }
+                            }
+                        }
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
