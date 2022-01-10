@@ -179,3 +179,7 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
     const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
     func(arg);
 }
+
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+    x = y;
+}

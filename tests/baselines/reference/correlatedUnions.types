@@ -613,3 +613,14 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >arg : ArgMap[K]
 }
 
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+>f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
+>x : Func<"b"> | Func<"a">
+>y : Funcs[K]
+
+    x = y;
+>x = y : Funcs[K]
+>x : Func<"b"> | Func<"a">
+>y : Funcs[K]
+}
+

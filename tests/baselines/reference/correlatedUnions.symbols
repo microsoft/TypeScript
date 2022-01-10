@@ -659,3 +659,19 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 >arg : Symbol(arg, Decl(correlatedUnions.ts, 174, 57))
 }
 
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+>f4 : Symbol(f4, Decl(correlatedUnions.ts, 177, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 179, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>x : Symbol(x, Decl(correlatedUnions.ts, 179, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>K : Symbol(K, Decl(correlatedUnions.ts, 179, 12))
+
+    x = y;
+>x : Symbol(x, Decl(correlatedUnions.ts, 179, 36))
+>y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
+}
+

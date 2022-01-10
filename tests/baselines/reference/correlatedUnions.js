@@ -178,6 +178,10 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
     func(arg);
 }
 
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+    x = y;
+}
+
 
 //// [correlatedUnions.js]
 "use strict";
@@ -274,6 +278,9 @@ function f2(funcs, key, arg) {
 function f3(funcs, key, arg) {
     var func = funcs[key]; // Error, Funcs[K] not assignable to Func<K>
     func(arg);
+}
+function f4(x, y) {
+    x = y;
 }
 
 
@@ -390,3 +397,4 @@ declare type Funcs = {
 declare function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
 declare function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
 declare function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
+declare function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]): void;
