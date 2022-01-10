@@ -1,0 +1,148 @@
+=== tests/cases/compiler/narrowingDestructuring.ts ===
+type X = { kind: "a", a: string } | { kind: "b", b: string }
+>X : Symbol(X, Decl(narrowingDestructuring.ts, 0, 0))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 0, 10))
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 0, 21))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 0, 37))
+>b : Symbol(b, Decl(narrowingDestructuring.ts, 0, 48))
+
+function func<T extends X>(value: T) {
+>func : Symbol(func, Decl(narrowingDestructuring.ts, 0, 60))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 2, 14))
+>X : Symbol(X, Decl(narrowingDestructuring.ts, 0, 0))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 2, 27))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 2, 14))
+
+    if (value.kind === "a") {
+>value.kind : Symbol(kind, Decl(narrowingDestructuring.ts, 0, 10), Decl(narrowingDestructuring.ts, 0, 37))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 2, 27))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 0, 10), Decl(narrowingDestructuring.ts, 0, 37))
+
+        value.a;
+>value.a : Symbol(a, Decl(narrowingDestructuring.ts, 0, 21))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 2, 27))
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 0, 21))
+
+        const { a } = value;
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 5, 15))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 2, 27))
+
+    } else {
+        value.b;
+>value.b : Symbol(b, Decl(narrowingDestructuring.ts, 0, 48))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 2, 27))
+>b : Symbol(b, Decl(narrowingDestructuring.ts, 0, 48))
+
+        const { b } = value;
+>b : Symbol(b, Decl(narrowingDestructuring.ts, 8, 15))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 2, 27))
+    }
+}
+
+type Z = { kind: "f", f: { a: number, b: string, c: number } }
+>Z : Symbol(Z, Decl(narrowingDestructuring.ts, 10, 1))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 12, 10))
+>f : Symbol(f, Decl(narrowingDestructuring.ts, 12, 21))
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 12, 26))
+>b : Symbol(b, Decl(narrowingDestructuring.ts, 12, 37))
+>c : Symbol(c, Decl(narrowingDestructuring.ts, 12, 48))
+
+    | { kind: "g", g: { a: string, b: number, c: string }};
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 13, 7))
+>g : Symbol(g, Decl(narrowingDestructuring.ts, 13, 18))
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 13, 23))
+>b : Symbol(b, Decl(narrowingDestructuring.ts, 13, 34))
+>c : Symbol(c, Decl(narrowingDestructuring.ts, 13, 45))
+
+function func2<T extends Z>(value: T) {
+>func2 : Symbol(func2, Decl(narrowingDestructuring.ts, 13, 59))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 15, 15))
+>Z : Symbol(Z, Decl(narrowingDestructuring.ts, 10, 1))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 15, 15))
+
+    if (value.kind === "f") {
+>value.kind : Symbol(kind, Decl(narrowingDestructuring.ts, 12, 10), Decl(narrowingDestructuring.ts, 13, 7))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 12, 10), Decl(narrowingDestructuring.ts, 13, 7))
+
+        const { f: f1 } = value;
+>f : Symbol(f, Decl(narrowingDestructuring.ts, 12, 21))
+>f1 : Symbol(f1, Decl(narrowingDestructuring.ts, 17, 15))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+
+        const { f: { a, ...spread } } = value;
+>f : Symbol(f, Decl(narrowingDestructuring.ts, 12, 21))
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 18, 20))
+>spread : Symbol(spread, Decl(narrowingDestructuring.ts, 18, 23))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+
+        value.f;
+>value.f : Symbol(f, Decl(narrowingDestructuring.ts, 12, 21))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+>f : Symbol(f, Decl(narrowingDestructuring.ts, 12, 21))
+
+    } else {
+        const { g: { c, ...spread } } = value;
+>g : Symbol(g, Decl(narrowingDestructuring.ts, 13, 18))
+>c : Symbol(c, Decl(narrowingDestructuring.ts, 21, 20))
+>spread : Symbol(spread, Decl(narrowingDestructuring.ts, 21, 23))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+
+        value.g;
+>value.g : Symbol(g, Decl(narrowingDestructuring.ts, 13, 18))
+>value : Symbol(value, Decl(narrowingDestructuring.ts, 15, 28))
+>g : Symbol(g, Decl(narrowingDestructuring.ts, 13, 18))
+    }
+}
+
+function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t: T) {
+>func3 : Symbol(func3, Decl(narrowingDestructuring.ts, 24, 1))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 26, 15))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 26, 26))
+>a : Symbol(a, Decl(narrowingDestructuring.ts, 26, 37))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 26, 53))
+>b : Symbol(b, Decl(narrowingDestructuring.ts, 26, 64))
+>t : Symbol(t, Decl(narrowingDestructuring.ts, 26, 78))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 26, 15))
+
+    if (t.kind === "a") {
+>t.kind : Symbol(kind, Decl(narrowingDestructuring.ts, 26, 26), Decl(narrowingDestructuring.ts, 26, 53))
+>t : Symbol(t, Decl(narrowingDestructuring.ts, 26, 78))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 26, 26), Decl(narrowingDestructuring.ts, 26, 53))
+
+        const { kind, ...r1 } = t;
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 28, 15))
+>r1 : Symbol(r1, Decl(narrowingDestructuring.ts, 28, 21))
+>t : Symbol(t, Decl(narrowingDestructuring.ts, 26, 78))
+
+        const r2 = (({ kind, ...rest }) => rest)(t);
+>r2 : Symbol(r2, Decl(narrowingDestructuring.ts, 29, 13))
+>kind : Symbol(kind, Decl(narrowingDestructuring.ts, 29, 22))
+>rest : Symbol(rest, Decl(narrowingDestructuring.ts, 29, 28))
+>rest : Symbol(rest, Decl(narrowingDestructuring.ts, 29, 28))
+>t : Symbol(t, Decl(narrowingDestructuring.ts, 26, 78))
+    }
+}
+
+function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
+>farr : Symbol(farr, Decl(narrowingDestructuring.ts, 31, 1))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 33, 14))
+>x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
+>T : Symbol(T, Decl(narrowingDestructuring.ts, 33, 14))
+
+    const [head, ...tail] = x;
+>head : Symbol(head, Decl(narrowingDestructuring.ts, 34, 11))
+>tail : Symbol(tail, Decl(narrowingDestructuring.ts, 34, 16))
+>x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
+
+    if (x[0] === 'number') {
+>x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
+>0 : Symbol(0)
+
+        const [head, ...tail] = x;
+>head : Symbol(head, Decl(narrowingDestructuring.ts, 36, 15))
+>tail : Symbol(tail, Decl(narrowingDestructuring.ts, 36, 20))
+>x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
+    }
+}
