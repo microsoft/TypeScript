@@ -11754,6 +11754,11 @@ namespace ts {
         }
 
         function getConstraintFromIndexedAccess(type: IndexedAccessType) {
+            if (isMappedTypeGenericIndexedAccess(type)) {
+                // For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
+                // we substitute an instantiation of E where P is replaced with X.
+                return substituteIndexedMappedType(type.objectType as MappedType, type.indexType);
+            }
             const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
             if (indexConstraint && indexConstraint !== type.indexType) {
                 const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.accessFlags);
@@ -11967,6 +11972,11 @@ namespace ts {
                     return constraint ? getStringMappingType((t as StringMappingType).symbol, constraint) : stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
+                    if (isMappedTypeGenericIndexedAccess(t)) {
+                        // For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
+                        // we substitute an instantiation of E where P is replaced with X.
+                        return getBaseConstraint(substituteIndexedMappedType((t as IndexedAccessType).objectType as MappedType, (t as IndexedAccessType).indexType));
+                    }
                     const baseObjectType = getBaseConstraint((t as IndexedAccessType).objectType);
                     const baseIndexType = getBaseConstraint((t as IndexedAccessType).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (t as IndexedAccessType).accessFlags);
@@ -12060,13 +12070,7 @@ namespace ts {
          * type itself.
          */
         function getApparentType(type: Type): Type {
-            // We obtain the base constraint for all instantiable types, except indexed access types of the form
-            // { [P in K]: E }[X], where K is non-generic and X is generic. For those types, we instead substitute an
-            // instantiation of E where P is replaced with X. We do this because getBaseConstraintOfType directly
-            // lowers to an instantiation where X's constraint is substituted for X, which isn't always desirable.
-            const t = !(type.flags & TypeFlags.Instantiable) ? type :
-                isMappedTypeGenericIndexedAccess(type) ? substituteIndexedMappedType((type as IndexedAccessType).objectType as MappedType, (type as IndexedAccessType).indexType) :
-                getBaseConstraintOfType(type) || unknownType;
+            const t = !(type.flags & TypeFlags.Instantiable) ? type : getBaseConstraintOfType(type) || unknownType;
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(t as MappedType) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(t as IntersectionType) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
