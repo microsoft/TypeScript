@@ -43,8 +43,8 @@ namespace ts.server {
             args,
             logger: createLogger(),
             cancellationToken: nullCancellationToken,
-            // Webserver defaults to partial semantic mode
-            serverMode: serverMode ?? LanguageServiceMode.PartialSemantic,
+            // Webserver defaults to semantic mode similar to how a fs based TS server does
+            serverMode: serverMode ?? LanguageServiceMode.Semantic,
             unknownServerMode,
             startSession: startWebSession
         };
