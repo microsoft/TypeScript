@@ -24,8 +24,8 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             toNamedFunctionAction.kind,
             toArrowFunctionAction.kind
         ],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertFunctionExpressions,
+        getAvailableActions: getRefactorActionsToConvertFunctionExpressions
     });
 
     interface FunctionInfo {
@@ -40,7 +40,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         readonly name: Identifier;
     }
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program, kind } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
@@ -88,7 +88,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertFunctionExpressions(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition, program } = context;
         const info = getFunctionInfo(file, startPosition, program);
 

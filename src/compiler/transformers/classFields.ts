@@ -1335,6 +1335,11 @@ namespace ts {
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 setOriginalNode(statement, property);
+                // `setOriginalNode` *copies* the `emitNode` from `property`, so now both
+                // `statement` and `expression` have a copy of the synthesized comments.
+                // Drop the comments from expression to avoid printing them twice.
+                setSyntheticLeadingComments(expression, undefined);
+                setSyntheticTrailingComments(expression, undefined);
                 statements.push(statement);
             }
         }

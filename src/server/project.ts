@@ -1925,34 +1925,55 @@ namespace ts.server {
             }
 
             if (dependencyNames) {
-                const resolutions = mapDefined(arrayFrom(dependencyNames.keys()), name => {
-                    const types = resolveTypeReferenceDirective(
-                        name,
-                        rootFileName,
-                        compilerOptions,
-                        moduleResolutionHost);
-
-                    if (types.resolvedTypeReferenceDirective) {
-                        return types.resolvedTypeReferenceDirective;
-                    }
-                    if (compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
-                        return tryResolveJSModule(name, hostProject.currentDirectory, moduleResolutionHost);
-                    }
-                });
-
+                let dependenciesAdded = 0;
                 const symlinkCache = hostProject.getSymlinkCache();
-                for (const resolution of resolutions) {
-                    if (!resolution.resolvedFileName) continue;
-                    const { resolvedFileName, originalPath } = resolution;
-                    if (originalPath) {
-                        symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalPath, resolvedFileName);
+                for (const name of arrayFrom(dependencyNames.keys())) {
+                    // Avoid creating a large project that would significantly slow down time to editor interactivity
+                    if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
+                        hostProject.log(`Auto-import provider attempted to add more than ${this.maxDependencies} dependencies.`);
+                        return ts.emptyArray;
                     }
-                    if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
-                        rootNames = append(rootNames, resolvedFileName);
-                        // Avoid creating a large project that would significantly slow down time to editor interactivity
-                        if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
-                            return ts.emptyArray;
+
+                    // 1. Try to load from the implementation package. For many dependencies, the
+                    //    package.json will exist, but the package will not contain any typings,
+                    //    so `entrypoints` will be undefined. In that case, or if the dependency
+                    //    is missing altogether, we will move on to trying the @types package (2).
+                    const packageJson = resolvePackageNameToPackageJson(
+                        name,
+                        hostProject.currentDirectory,
+                        compilerOptions,
+                        moduleResolutionHost,
+                        program.getModuleResolutionCache());
+                    if (packageJson) {
+                        const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache);
+                        if (entrypoints) {
+                            rootNames = concatenate(rootNames, entrypoints);
+                            dependenciesAdded += entrypoints.length ? 1 : 0;
+                            continue;
                         }
+                    }
+
+                    // 2. Try to load from the @types package.
+                    const typesPackageJson = resolvePackageNameToPackageJson(
+                        `@types/${name}`,
+                        hostProject.currentDirectory,
+                        compilerOptions,
+                        moduleResolutionHost,
+                        program.getModuleResolutionCache());
+                    if (typesPackageJson) {
+                        const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
+                        rootNames = concatenate(rootNames, entrypoints);
+                        dependenciesAdded += entrypoints?.length ? 1 : 0;
+                        continue;
+                    }
+
+                    // 3. If the @types package did not exist and the user has settings that
+                    //    allow processing JS from node_modules, go back to the implementation
+                    //    package and load the JS.
+                    if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
+                        const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*allowJs*/ true);
+                        rootNames = concatenate(rootNames, entrypoints);
+                        dependenciesAdded += entrypoints?.length ? 1 : 0;
                     }
                 }
             }
@@ -1962,6 +1983,33 @@ namespace ts.server {
             function addDependency(dependency: string) {
                 if (!startsWith(dependency, "@types/")) {
                     (dependencyNames || (dependencyNames = new Set())).add(dependency);
+                }
+            }
+
+            type PackageJsonInfo = NonNullable<ReturnType<typeof resolvePackageNameToPackageJson>>;
+            function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
+                const entrypoints = getEntrypointsFromPackageJsonInfo(
+                    packageJson,
+                    compilerOptions,
+                    moduleResolutionHost,
+                    program.getModuleResolutionCache(),
+                    resolveJs);
+                if (entrypoints) {
+                    const real = moduleResolutionHost.realpath?.(packageJson.packageDirectory);
+                    const isSymlink = real && real !== packageJson.packageDirectory;
+                    if (isSymlink) {
+                        symlinkCache.setSymlinkedDirectory(packageJson.packageDirectory, {
+                            real,
+                            realPath: hostProject.toPath(real),
+                        });
+                    }
+
+                    return mapDefined(entrypoints, entrypoint => {
+                        const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real) : entrypoint;
+                        if (!program.getSourceFile(resolvedFileName) && !(isSymlink && program.getSourceFile(entrypoint))) {
+                            return resolvedFileName;
+                        }
+                    });
                 }
             }
         }

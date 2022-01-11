@@ -10,7 +10,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     };
     registerRefactor(actionName, {
         kinds: [generateGetSetAction.kind],
-        getEditsForAction(context, actionName) {
+        getEditsForAction: function getRefactorActionsToGenerateGetAndSetAccessors(context, actionName) {
             if (!context.endPosition) return undefined;
             const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
