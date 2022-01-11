@@ -45,7 +45,7 @@ namespace ts.moduleSpecifiers {
         && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
             return false;
         }
-        return getImpliedNodeFormatForFile(importingSourceFileName, /*packageJsonInfoCache*/ undefined, getModuleResolutionHost(host), compilerOptions) !== ModuleKind.CommonJS;
+        return getImpliedNodeFormatForFile(importingSourceFileName, host.getPackageJsonInfoCache?.(), getModuleResolutionHost(host), compilerOptions) !== ModuleKind.CommonJS;
     }
 
     function getModuleResolutionHost(host: ModuleSpecifierResolutionHost): ModuleResolutionHost {
