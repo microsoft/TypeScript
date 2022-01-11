@@ -605,7 +605,7 @@ module MyModule {
                 return visitNode(sourceFile, rootTransform, isSourceFile);
             };
             function rootTransform<T extends Node>(node: T): Node {
-                if (isClassDeclaration(node) || isClassExpression(node)) {
+                if (isClassLike(node)) {
                     const newMembers = [factory.createPropertyDeclaration(/* decorators */ undefined, [factory.createModifier(SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, factory.createStringLiteral("x"))];
                     setSyntheticLeadingComments(newMembers[0], [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
                     return isClassDeclaration(node) ?
