@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { createServerHost, createProjectService, toExternalFile } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: import helpers", () => {
     it("should not crash in tsserver", () => {
         const f1 = {
@@ -15,4 +15,3 @@ describe("unittests:: tsserver:: import helpers", () => {
         service.checkNumberOfProjects({ externalProjects: 1 });
     });
 });
-}

@@ -1,5 +1,5 @@
+import { SourceFile, getTokenAtPosition, findPrecedingToken, NodeFlags, Node, skipTrivia, createTextSpanFromBounds, TextSpan, findNextToken, NodeArray, SyntaxKind, VariableStatement, VariableDeclaration, PropertyDeclaration, PropertySignature, ParameterDeclaration, FunctionLikeDeclaration, isFunctionBlock, Block, CatchClause, ExpressionStatement, ReturnStatement, WhileStatement, DoStatement, IfStatement, LabeledStatement, BreakOrContinueStatement, ForStatement, ForInStatement, ForOfStatement, SwitchStatement, CaseOrDefaultClause, TryStatement, ThrowStatement, ExportAssignment, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, getModuleInstanceState, ModuleDeclaration, ModuleInstanceState, WithStatement, BindingPattern, isArrayLiteralOrObjectLiteralDestructuringPattern, DestructuringPattern, BinaryExpression, ArrayLiteralExpression, ObjectLiteralExpression, isExpressionNode, PropertyAssignment, TypeAssertion, isAssignmentOperator, isFunctionLike, isVariableDeclarationList, isBindingPattern, hasSyntacticModifier, ModifierFlags, Debug, VariableDeclarationList, forEach, Expression, ObjectLiteralElement, EnumDeclaration, ClassDeclaration, CaseBlock, lastOrUndefined } from "./ts";
 /* @internal */
-namespace ts.BreakpointResolver {
 /**
  * Get the breakpoint span in given sourceFile
  */
@@ -276,8 +276,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
                         // [a, b, c] = expression or
                         // {a, b, c} = expression
                         if (isArrayLiteralOrObjectLiteralDestructuringPattern(left)) {
-                            return spanInArrayLiteralOrObjectLiteralDestructuringPattern(
-                                left as ArrayLiteralExpression | ObjectLiteralExpression);
+                            return spanInArrayLiteralOrObjectLiteralDestructuringPattern(left as ArrayLiteralExpression | ObjectLiteralExpression);
                         }
 
                         if (operatorToken.kind === SyntaxKind.EqualsToken && isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
@@ -518,8 +517,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
 
         function spanInBindingPattern(bindingPattern: BindingPattern): TextSpan | undefined {
             // Set breakpoint in first binding element
-            const firstBindingElement = forEach(bindingPattern.elements,
-                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(bindingPattern.elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -538,8 +536,7 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             Debug.assert(node.kind !== SyntaxKind.ArrayBindingPattern && node.kind !== SyntaxKind.ObjectBindingPattern);
             const elements: NodeArray<Expression | ObjectLiteralElement> = node.kind === SyntaxKind.ArrayLiteralExpression ? node.elements : node.properties;
 
-            const firstBindingElement = forEach(elements,
-                element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+            const firstBindingElement = forEach(elements, element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
 
             if (firstBindingElement) {
                 return spanInNode(firstBindingElement);
@@ -719,5 +716,4 @@ export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: num
             return spanInNode(node.parent);
         }
     }
-}
 }

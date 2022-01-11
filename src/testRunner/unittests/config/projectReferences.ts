@@ -1,9 +1,16 @@
-namespace ts {
+import { ProjectReference, CompilerOptions, Diagnostic, DiagnosticMessage, combinePaths, Program, TestFSWithWatch, getDirectoryPath, readConfigFile, flattenDiagnosticMessageText, parseJsonConfigFileContent, parseConfigHostFromCompilerHostLike, createProgram, Diagnostics } from "../../ts";
+import { CompilerHost, System } from "../../fakes";
+import { FileSystem } from "../../vfs";
+import * as ts from "../../ts";
 interface TestProjectSpecification {
     configFileName?: string;
     references?: readonly (string | ProjectReference)[];
-    files: { [fileName: string]: string };
-    outputFiles?: { [fileName: string]: string };
+    files: {
+        [fileName: string]: string;
+    };
+    outputFiles?: {
+        [fileName: string]: string;
+    };
     config?: object;
     options?: Partial<CompilerOptions>;
 }
@@ -42,8 +49,8 @@ function moduleImporting(...names: string[]) {
     return names.map((n, i) => `import * as mod_${i} from ${n}`).join("\r\n");
 }
 
-function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: fakes.CompilerHost) => void) {
-    const files = new Map<string, string>();
+function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: CompilerHost) => void) {
+    const files = new ts.Map<string, string>();
     for (const key in spec) {
         const sp = spec[key];
         const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");
@@ -74,12 +81,12 @@ function testProjectReferences(spec: TestSpecification, entryPointConfigFileName
         }
     }
 
-    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": TestFSWithWatch.libFile.content } });
+    const vfsys = new FileSystem(false, { files: { "/lib.d.ts": TestFSWithWatch.libFile.content } });
     files.forEach((v, k) => {
         vfsys.mkdirpSync(getDirectoryPath(k));
         vfsys.writeFileSync(k, v);
     });
-    const host = new fakes.CompilerHost(new fakes.System(vfsys));
+    const host = new CompilerHost(new System(vfsys));
 
     const { config, error } = readConfigFile(entryPointConfigFileName, name => host.readFile(name));
 
@@ -349,4 +356,3 @@ describe("unittests:: config:: project-references errors when a file in a compos
         });
     });
 });
-}

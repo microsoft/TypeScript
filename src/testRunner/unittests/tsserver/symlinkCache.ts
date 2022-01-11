@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, SymLink, openFilesForSession, createServerHost, createSession } from "../../ts.projectSystem";
+import { Path, createSymlinkCache, createGetCanonicalFileName } from "../../ts";
 const appTsconfigJson: File = {
     path: "/packages/app/tsconfig.json",
     content: `
@@ -52,10 +53,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
         const { session, projectService } = setup();
         openFilesForSession([appSrcIndexTs], session);
         const project = projectService.configuredProjects.get(appTsconfigJson.path)!;
-        assert.deepEqual(
-            project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as Path),
-            { real: "/packages/dep/", realPath: "/packages/dep/" as Path }
-        );
+        assert.deepEqual(project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as Path), { real: "/packages/dep/", realPath: "/packages/dep/" as Path });
     });
 
     it("works for paths close to the root", () => {
@@ -81,5 +79,4 @@ function setup() {
         projectService,
         session,
     };
-}
 }

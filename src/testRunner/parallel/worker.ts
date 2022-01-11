@@ -1,4 +1,7 @@
-namespace Harness.Parallel.Worker {
+import { Task, TaskResult, UnitTestTask, RunnerTask, ErrorInfo, TestInfo, ParallelHostMessage, ParallelClientMessage, shimNoopTestInterface } from "../Harness.Parallel";
+import { globalTimeout, createRunner, RunnerBase, runUnitTests } from "../Harness";
+import { ESMap } from "../ts";
+import * as ts from "../ts";
 export function start() {
     function hookUncaughtExceptions() {
         if (!exceptionsHooked) {
@@ -59,7 +62,9 @@ export function start() {
      * Mixes in an override for `clone` to support parallel test execution in a worker.
      */
     function Clone<T extends typeof Mocha.Suite | typeof Mocha.Test>(base: T) {
-        return class extends (base as new (...args: any[]) => { clone(): any; }) {
+        return class extends (base as new (...args: any[]) => {
+            clone(): any;
+        }) {
             clone() {
                 const cloned = super.clone();
                 Object.setPrototypeOf(cloned, this.constructor.prototype);
@@ -169,7 +174,7 @@ export function start() {
         }
 
         const root = new Suite("", new Mocha.Context());
-        root.timeout(globalTimeout || 40_000);
+        root.timeout(globalTimeout || 40000);
         if (suite) {
             root.addSuite(suite);
             Object.setPrototypeOf(suite.ctx, root.ctx);
@@ -193,11 +198,12 @@ export function start() {
 
     function runFileTests(task: RunnerTask, fn: (result: TaskResult) => void) {
         let instance = runners.get(task.runner);
-        if (!instance) runners.set(task.runner, instance = createRunner(task.runner));
+        if (!instance)
+            runners.set(task.runner, instance = createRunner(task.runner));
         instance.tests = [task.file];
 
         const suite = new Suite("", new Mocha.Context());
-        suite.timeout(globalTimeout || 40_000);
+        suite.timeout(globalTimeout || 40000);
 
         shimTestInterface(suite, global);
         instance.initializeTests();
@@ -272,15 +278,18 @@ export function start() {
     function processTest(task: Task, last: boolean, fn?: () => void) {
         runTests(task, payload => {
             sendMessage(last ? { type: "result", payload } : { type: "progress", payload });
-            if (fn) fn();
+            if (fn)
+                fn();
         });
     }
 
     function processBatch(tasks: Task[], fn?: () => void) {
         const next = () => {
             const task = tasks.shift();
-            if (task) return processTest(task, tasks.length === 0, next);
-            if (fn) fn();
+            if (task)
+                return processTest(task, tasks.length === 0, next);
+            if (fn)
+                fn();
         };
         next();
     }
@@ -299,13 +308,13 @@ export function start() {
 
     // The root suite for all unit tests.
     let unitTestSuite: Suite;
-    let unitTestSuiteMap: ts.ESMap<string, Mocha.Suite>;
+    let unitTestSuiteMap: ESMap<string, Mocha.Suite>;
     // (Unit) Tests directly within the root suite
-    let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
+    let unitTestTestMap: ESMap<string, Mocha.Test>;
 
     if (runUnitTests) {
         unitTestSuite = new Suite("", new Mocha.Context());
-        unitTestSuite.timeout(globalTimeout || 40_000);
+        unitTestSuite.timeout(globalTimeout || 40000);
         shimTestInterface(unitTestSuite, global);
     }
     else {
@@ -314,5 +323,4 @@ export function start() {
     }
 
     process.on("message", processHostMessage);
-}
 }

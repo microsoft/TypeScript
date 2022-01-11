@@ -1,4 +1,6 @@
-namespace ts {
+import { TscIncremental, BuildKind, noop, noChangeRun, VerifyTsBuildInput, verifyTscSerializedIncrementalEdits, TscCompileSystem, getOutputFileNames, parseConfigFileWithSystem, loadProjectFromFiles, CleanBuildDescrepancy } from "../../ts";
+import { System } from "../../fakes";
+import * as ts from "../../ts";
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TscIncremental = {
         buildKind: BuildKind.NoChangeRun,
@@ -19,16 +21,10 @@ describe("unittests:: tsbuild - output file paths", () => {
         });
 
         it("verify getOutputFileNames", () => {
-            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+            const sys = new System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
             ;
-            assert.deepEqual(
-                getOutputFileNames(
-                    parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, noop)!,
-                    "/src/src/index.ts",
-                    /*ignoreCase*/ false
-                ),
-                expectedOuptutNames
-            );
+            assert.deepEqual(getOutputFileNames(parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, noop)!, "/src/src/index.ts", 
+            /*ignoreCase*/ false), expectedOuptutNames);
         });
     }
 
@@ -60,8 +56,8 @@ describe("unittests:: tsbuild - output file paths", () => {
             noChangeRun,
             {
                 ...noChangeProject,
-                cleanBuildDiscrepancies: () => new Map([
-                    ["/src/dist/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent], // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
+                cleanBuildDiscrepancies: () => new ts.Map([
+                    ["/src/dist/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent],
                     ["/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt", CleanBuildDescrepancy.CleanFileTextDifferent] // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
                 ]),
             }
@@ -113,4 +109,3 @@ describe("unittests:: tsbuild - output file paths", () => {
         incrementalScenarios,
     }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
 });
-}

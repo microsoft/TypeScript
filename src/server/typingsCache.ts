@@ -1,4 +1,6 @@
-namespace ts.server {
+import { InstallPackageOptions, Path, ApplyCodeActionCommandResult, TypeAcquisition, SortedReadonlyArray, returnFalse, notImplemented, noop, CompilerOptions, getAllowJSCompilerOption, arrayIsEqualTo, sort } from "./ts";
+import { Project, ProjectService, emptyArray } from "./ts.server";
+import * as ts from "./ts";
 export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
     projectName: string;
     projectRootPath: Path;
@@ -41,7 +43,7 @@ function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): b
     if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
         return true;
     }
-    const set = new Map<string, boolean>();
+    const set = new ts.Map<string, boolean>();
     let unique = 0;
 
     for (const v of arr1!) {
@@ -83,7 +85,7 @@ function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefi
 
 /*@internal*/
 export class TypingsCache {
-    private readonly perProjectCache = new Map<string, TypingsCacheEntry>();
+    private readonly perProjectCache = new ts.Map<string, TypingsCacheEntry>();
 
     constructor(private readonly installer: ITypingsInstaller) {
     }
@@ -139,5 +141,4 @@ export class TypingsCache {
         this.perProjectCache.delete(project.getProjectName());
         this.installer.onProjectClosed(project);
     }
-}
 }

@@ -1,4 +1,4 @@
-namespace ts {
+import { verifyTsc, loadProjectFromFiles } from "../../ts";
 describe("unittests:: tsc:: runWithoutArgs::", () => {
     verifyTsc({
         scenario: "runWithoutArgs",
@@ -24,4 +24,3 @@ describe("unittests:: tsc:: runWithoutArgs::", () => {
     });
 
 });
-}

@@ -1,16 +1,18 @@
-namespace ts.projectSystem {
+import { File, TestProjectService, checkProjectActualFiles, libFile, createServerHost, createProjectService } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
+import { singleIterator } from "../../ts";
 describe("unittests:: tsserver:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;
     const file: File = {
-        path: `${tscWatch.projectRoot}/index.ts`,
+        path: `${projectRoot}/index.ts`,
         content: importModuleContent
     };
     const moduleFile: File = {
-        path: `${tscWatch.projectRoot}/module1.d.ts`,
+        path: `${projectRoot}/module1.d.ts`,
         content: "export const a: number;"
     };
     const configFile: File = {
-        path: `${tscWatch.projectRoot}/tsconfig.json`,
+        path: `${projectRoot}/tsconfig.json`,
         content: JSON.stringify({ files: ["index.ts"] })
     };
 
@@ -90,4 +92,3 @@ describe("unittests:: tsserver:: document registry in project service", () => {
         assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
     });
 });
-}

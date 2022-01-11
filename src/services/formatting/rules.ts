@@ -1,11 +1,13 @@
+import { TokenRange, Rule, anyContext, RuleAction, RuleFlags, ContextPredicate, FormattingContext, FormattingRequestKind, TextRangeWithKind } from "../ts.formatting";
+import { SyntaxKind, typeKeywords, SemicolonPreference, isArray, contains, FormatCodeSettings, BinaryExpression, isFunctionLikeKind, Node, isExpressionNode, YieldExpression, isTrivia, findNextToken, findAncestor, isPropertySignature, isPropertyDeclaration, positionIsASICandidate } from "../ts";
 /* @internal */
-namespace ts.formatting {
 export interface RuleSpec {
     readonly leftTokenRange: TokenRange;
     readonly rightTokenRange: TokenRange;
     readonly rule: Rule;
 }
 
+/* @internal */
 export function getAllRules(): RuleSpec[] {
     const allTokens: SyntaxKind[] = [];
     for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
@@ -26,7 +28,8 @@ export function getAllRules(): RuleSpec[] {
     const unaryPrefixOperators = [SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken];
     const unaryPrefixExpressions = [
         SyntaxKind.NumericLiteral, SyntaxKind.BigIntLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken,
-        SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
+        SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword
+    ];
     const unaryPreincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
     const unaryPostincrementExpressions = [SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword];
     const unaryPredecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
@@ -145,9 +148,7 @@ export function getAllRules(): RuleSpec[] {
         // Use of module as a function call. e.g.: import m2 = module("m2");
         rule("NoSpaceAfterModuleImport", [SyntaxKind.ModuleKeyword, SyntaxKind.RequireKeyword], SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         // Add a space around certain TypeScript keywords
-        rule(
-            "SpaceAfterCertainTypeScriptKeywords",
-            [
+        rule("SpaceAfterCertainTypeScriptKeywords", [
                 SyntaxKind.AbstractKeyword,
                 SyntaxKind.ClassKeyword,
                 SyntaxKind.DeclareKeyword,
@@ -171,16 +172,8 @@ export function getAllRules(): RuleSpec[] {
                 SyntaxKind.FromKeyword,
                 SyntaxKind.KeyOfKeyword,
                 SyntaxKind.InferKeyword,
-            ],
-            anyToken,
-            [isNonJsxSameLineTokenContext],
-            RuleAction.InsertSpace),
-        rule(
-            "SpaceBeforeCertainTypeScriptKeywords",
-            anyToken,
-            [SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword],
-            [isNonJsxSameLineTokenContext],
-            RuleAction.InsertSpace),
+        ], anyToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+        rule("SpaceBeforeCertainTypeScriptKeywords", anyToken, [SyntaxKind.ExtendsKeyword, SyntaxKind.ImplementsKeyword, SyntaxKind.FromKeyword], [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
         // Treat string literals in module names as identifiers, and add a space between the literal and the opening Brace braces, e.g.: module "m2" {
         rule("SpaceAfterModuleName", SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken, [isModuleDeclContext], RuleAction.InsertSpace),
 
@@ -200,19 +193,13 @@ export function getAllRules(): RuleSpec[] {
         rule("NoSpaceBetweenCloseParenAndAngularBracket", SyntaxKind.CloseParenToken, SyntaxKind.LessThanToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterOpenAngularBracket", SyntaxKind.LessThanToken, anyToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceBeforeCloseAngularBracket", anyToken, SyntaxKind.GreaterThanToken, [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext], RuleAction.DeleteSpace),
-        rule("NoSpaceAfterCloseAngularBracket",
-            SyntaxKind.GreaterThanToken,
-            [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken],
-            [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/],
-            RuleAction.DeleteSpace),
+        rule("NoSpaceAfterCloseAngularBracket", SyntaxKind.GreaterThanToken, [SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.GreaterThanToken, SyntaxKind.CommaToken], [isNonJsxSameLineTokenContext, isTypeArgumentOrParameterOrAssertionContext, isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/], RuleAction.DeleteSpace),
 
         // decorators
         rule("SpaceBeforeAt", [SyntaxKind.CloseParenToken, SyntaxKind.Identifier], SyntaxKind.AtToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
         rule("NoSpaceAfterAt", SyntaxKind.AtToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
         // Insert space after @ in decorator
-        rule("SpaceAfterDecorator",
-            anyToken,
-            [
+        rule("SpaceAfterDecorator", anyToken, [
                 SyntaxKind.AbstractKeyword,
                 SyntaxKind.Identifier,
                 SyntaxKind.ExportKeyword,
@@ -226,9 +213,7 @@ export function getAllRules(): RuleSpec[] {
                 SyntaxKind.SetKeyword,
                 SyntaxKind.OpenBracketToken,
                 SyntaxKind.AsteriskToken,
-            ],
-            [isEndOfDecoratorContextOnSameLine],
-            RuleAction.InsertSpace),
+        ], [isEndOfDecoratorContextOnSameLine], RuleAction.InsertSpace),
 
         rule("NoSpaceBeforeNonNullAssertionOperator", anyToken, SyntaxKind.ExclamationToken, [isNonJsxSameLineTokenContext, isNonNullAssertionContext], RuleAction.DeleteSpace),
         rule("NoSpaceAfterNewKeywordOnConstructorSignature", SyntaxKind.NewKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isConstructorSignatureContext], RuleAction.DeleteSpace),
@@ -343,12 +328,7 @@ export function getAllRules(): RuleSpec[] {
 
         // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
         // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
-        rule(
-            "SpaceBetweenStatements",
-            [SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword],
-            anyToken,
-            [isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNotForContext],
-            RuleAction.InsertSpace),
+        rule("SpaceBetweenStatements", [SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword], anyToken, [isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNotForContext], RuleAction.InsertSpace),
         // This low-pri rule takes care of "try {", "catch {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
         rule("SpaceAfterTryCatchFinally", [SyntaxKind.TryKeyword, SyntaxKind.CatchKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
     ];
@@ -372,25 +352,22 @@ export function getAllRules(): RuleSpec[] {
  * @param action a declaration of the expected whitespace
  * @param flags whether the rule deletes a line or not, defaults to no-op
  */
-function rule(
-    debugName: string,
-    left: SyntaxKind | readonly SyntaxKind[] | TokenRange,
-    right: SyntaxKind | readonly SyntaxKind[] | TokenRange,
-    context: readonly ContextPredicate[],
-    action: RuleAction,
-    flags: RuleFlags = RuleFlags.None,
-): RuleSpec {
+/* @internal */
+function rule(debugName: string, left: SyntaxKind | readonly SyntaxKind[] | TokenRange, right: SyntaxKind | readonly SyntaxKind[] | TokenRange, context: readonly ContextPredicate[], action: RuleAction, flags: RuleFlags = RuleFlags.None): RuleSpec {
     return { leftTokenRange: toTokenRange(left), rightTokenRange: toTokenRange(right), rule: { debugName, context, action, flags } };
 }
 
+/* @internal */
 function tokenRangeFrom(tokens: readonly SyntaxKind[]): TokenRange {
     return { tokens, isSpecific: true };
 }
 
+/* @internal */
 function toTokenRange(arg: SyntaxKind | readonly SyntaxKind[] | TokenRange): TokenRange {
     return typeof arg === "number" ? tokenRangeFrom([arg]) : isArray(arg) ? tokenRangeFrom(arg) : arg;
 }
 
+/* @internal */
 function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: readonly SyntaxKind[] = []): TokenRange {
     const tokens: SyntaxKind[] = [];
     for (let token = from; token <= to; token++) {
@@ -405,38 +382,47 @@ function tokenRangeFromRange(from: SyntaxKind, to: SyntaxKind, except: readonly 
 /// Contexts
 ///
 
+/* @internal */
 function optionEquals<K extends keyof FormatCodeSettings>(optionName: K, optionValue: FormatCodeSettings[K]): (context: FormattingContext) => boolean {
     return (context) => context.options && context.options[optionName] === optionValue;
 }
 
+/* @internal */
 function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
     return (context) => context.options && context.options.hasOwnProperty(optionName) && !!context.options[optionName];
 }
 
+/* @internal */
 function isOptionDisabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
     return (context) => context.options && context.options.hasOwnProperty(optionName) && !context.options[optionName];
 }
 
+/* @internal */
 function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
     return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName];
 }
 
+/* @internal */
 function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
     return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
 }
 
+/* @internal */
 function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
     return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !!context.options[optionName];
 }
 
+/* @internal */
 function isForContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ForStatement;
 }
 
+/* @internal */
 function isNotForContext(context: FormattingContext): boolean {
     return !isForContext(context);
 }
 
+/* @internal */
 function isBinaryOpContext(context: FormattingContext): boolean {
     switch (context.contextNode.kind) {
         case SyntaxKind.BinaryExpression:
@@ -485,14 +471,17 @@ function isBinaryOpContext(context: FormattingContext): boolean {
     return false;
 }
 
+/* @internal */
 function isNotBinaryOpContext(context: FormattingContext): boolean {
     return !isBinaryOpContext(context);
 }
 
+/* @internal */
 function isNotTypeAnnotationContext(context: FormattingContext): boolean {
     return !isTypeAnnotationContext(context);
 }
 
+/* @internal */
 function isTypeAnnotationContext(context: FormattingContext): boolean {
     const contextKind = context.contextNode.kind;
     return contextKind === SyntaxKind.PropertyDeclaration ||
@@ -502,15 +491,18 @@ function isTypeAnnotationContext(context: FormattingContext): boolean {
         isFunctionLikeKind(contextKind);
 }
 
+/* @internal */
 function isConditionalOperatorContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ConditionalExpression ||
             context.contextNode.kind === SyntaxKind.ConditionalType;
 }
 
+/* @internal */
 function isSameLineTokenOrBeforeBlockContext(context: FormattingContext): boolean {
     return context.TokensAreOnSameLine() || isBeforeBlockContext(context);
 }
 
+/* @internal */
 function isBraceWrappedContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ObjectBindingPattern ||
         context.contextNode.kind === SyntaxKind.MappedType ||
@@ -518,27 +510,33 @@ function isBraceWrappedContext(context: FormattingContext): boolean {
 }
 
 // This check is done before an open brace in a control construct, a function, or a typescript block declaration
+/* @internal */
 function isBeforeMultilineBlockContext(context: FormattingContext): boolean {
     return isBeforeBlockContext(context) && !(context.NextNodeAllOnSameLine() || context.NextNodeBlockIsOnOneLine());
 }
 
+/* @internal */
 function isMultilineBlockContext(context: FormattingContext): boolean {
     return isBlockContext(context) && !(context.ContextNodeAllOnSameLine() || context.ContextNodeBlockIsOnOneLine());
 }
 
+/* @internal */
 function isSingleLineBlockContext(context: FormattingContext): boolean {
     return isBlockContext(context) && (context.ContextNodeAllOnSameLine() || context.ContextNodeBlockIsOnOneLine());
 }
 
+/* @internal */
 function isBlockContext(context: FormattingContext): boolean {
     return nodeIsBlockContext(context.contextNode);
 }
 
+/* @internal */
 function isBeforeBlockContext(context: FormattingContext): boolean {
     return nodeIsBlockContext(context.nextTokenParent);
 }
 
 // IMPORTANT!!! This method must return true ONLY for nodes with open and close braces as immediate children
+/* @internal */
 function nodeIsBlockContext(node: Node): boolean {
     if (nodeIsTypeScriptDeclWithBlockContext(node)) {
         // This means we are in a context that looks like a block to the user, but in the grammar is actually not a node (it's a class, module, enum, object type literal, etc).
@@ -556,6 +554,7 @@ function nodeIsBlockContext(node: Node): boolean {
     return false;
 }
 
+/* @internal */
 function isFunctionDeclContext(context: FormattingContext): boolean {
     switch (context.contextNode.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -582,18 +581,22 @@ function isFunctionDeclContext(context: FormattingContext): boolean {
     return false;
 }
 
+/* @internal */
 function isNotFunctionDeclContext(context: FormattingContext): boolean {
     return !isFunctionDeclContext(context);
 }
 
+/* @internal */
 function isFunctionDeclarationOrFunctionExpressionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.FunctionDeclaration || context.contextNode.kind === SyntaxKind.FunctionExpression;
 }
 
+/* @internal */
 function isTypeScriptDeclWithBlockContext(context: FormattingContext): boolean {
     return nodeIsTypeScriptDeclWithBlockContext(context.contextNode);
 }
 
+/* @internal */
 function nodeIsTypeScriptDeclWithBlockContext(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.ClassDeclaration:
@@ -612,6 +615,7 @@ function nodeIsTypeScriptDeclWithBlockContext(node: Node): boolean {
     return false;
 }
 
+/* @internal */
 function isAfterCodeBlockContext(context: FormattingContext): boolean {
     switch (context.currentTokenParent.kind) {
         case SyntaxKind.ClassDeclaration:
@@ -632,6 +636,7 @@ function isAfterCodeBlockContext(context: FormattingContext): boolean {
     return false;
 }
 
+/* @internal */
 function isControlDeclContext(context: FormattingContext): boolean {
     switch (context.contextNode.kind) {
         case SyntaxKind.IfStatement:
@@ -654,74 +659,92 @@ function isControlDeclContext(context: FormattingContext): boolean {
     }
 }
 
+/* @internal */
 function isObjectContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ObjectLiteralExpression;
 }
 
+/* @internal */
 function isFunctionCallContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.CallExpression;
 }
 
+/* @internal */
 function isNewContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.NewExpression;
 }
 
+/* @internal */
 function isFunctionCallOrNewContext(context: FormattingContext): boolean {
     return isFunctionCallContext(context) || isNewContext(context);
 }
 
+/* @internal */
 function isPreviousTokenNotComma(context: FormattingContext): boolean {
     return context.currentTokenSpan.kind !== SyntaxKind.CommaToken;
 }
 
+/* @internal */
 function isNextTokenNotCloseBracket(context: FormattingContext): boolean {
     return context.nextTokenSpan.kind !== SyntaxKind.CloseBracketToken;
 }
 
+/* @internal */
 function isNextTokenNotCloseParen(context: FormattingContext): boolean {
     return context.nextTokenSpan.kind !== SyntaxKind.CloseParenToken;
 }
 
+/* @internal */
 function isArrowFunctionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ArrowFunction;
 }
 
+/* @internal */
 function isImportTypeContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ImportType;
 }
 
+/* @internal */
 function isNonJsxSameLineTokenContext(context: FormattingContext): boolean {
     return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
 }
 
+/* @internal */
 function isNonJsxTextContext(context: FormattingContext): boolean {
     return context.contextNode.kind !== SyntaxKind.JsxText;
 }
 
+/* @internal */
 function isNonJsxElementOrFragmentContext(context: FormattingContext): boolean {
     return context.contextNode.kind !== SyntaxKind.JsxElement && context.contextNode.kind !== SyntaxKind.JsxFragment;
 }
 
+/* @internal */
 function isJsxExpressionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.JsxExpression || context.contextNode.kind === SyntaxKind.JsxSpreadAttribute;
 }
 
+/* @internal */
 function isNextTokenParentJsxAttribute(context: FormattingContext): boolean {
     return context.nextTokenParent.kind === SyntaxKind.JsxAttribute;
 }
 
+/* @internal */
 function isJsxAttributeContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.JsxAttribute;
 }
 
+/* @internal */
 function isJsxSelfClosingElementContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.JsxSelfClosingElement;
 }
 
+/* @internal */
 function isNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext): boolean {
     return !isFunctionDeclContext(context) && !isBeforeBlockContext(context);
 }
 
+/* @internal */
 function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
     return context.TokensAreOnSameLine() &&
         !!context.contextNode.decorators &&
@@ -729,6 +752,7 @@ function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean 
         !nodeIsInDecoratorContext(context.nextTokenParent);
 }
 
+/* @internal */
 function nodeIsInDecoratorContext(node: Node): boolean {
     while (isExpressionNode(node)) {
         node = node.parent;
@@ -736,27 +760,33 @@ function nodeIsInDecoratorContext(node: Node): boolean {
     return node.kind === SyntaxKind.Decorator;
 }
 
+/* @internal */
 function isStartOfVariableDeclarationList(context: FormattingContext): boolean {
     return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList &&
         context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
 }
 
+/* @internal */
 function isNotFormatOnEnter(context: FormattingContext): boolean {
     return context.formattingRequestKind !== FormattingRequestKind.FormatOnEnter;
 }
 
+/* @internal */
 function isModuleDeclContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ModuleDeclaration;
 }
 
+/* @internal */
 function isObjectTypeContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.TypeLiteral; // && context.contextNode.parent.kind !== SyntaxKind.InterfaceDeclaration;
 }
 
+/* @internal */
 function isConstructorSignatureContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.ConstructSignature;
 }
 
+/* @internal */
 function isTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: Node): boolean {
     if (token.kind !== SyntaxKind.LessThanToken && token.kind !== SyntaxKind.GreaterThanToken) {
         return false;
@@ -785,31 +815,38 @@ function isTypeArgumentOrParameterOrAssertion(token: TextRangeWithKind, parent: 
     }
 }
 
+/* @internal */
 function isTypeArgumentOrParameterOrAssertionContext(context: FormattingContext): boolean {
     return isTypeArgumentOrParameterOrAssertion(context.currentTokenSpan, context.currentTokenParent) ||
         isTypeArgumentOrParameterOrAssertion(context.nextTokenSpan, context.nextTokenParent);
 }
 
+/* @internal */
 function isTypeAssertionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.TypeAssertionExpression;
 }
 
+/* @internal */
 function isVoidOpContext(context: FormattingContext): boolean {
     return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.VoidExpression;
 }
 
+/* @internal */
 function isYieldOrYieldStarWithOperand(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.YieldExpression && (context.contextNode as YieldExpression).expression !== undefined;
 }
 
+/* @internal */
 function isNonNullAssertionContext(context: FormattingContext): boolean {
     return context.contextNode.kind === SyntaxKind.NonNullExpression;
 }
 
+/* @internal */
 function isNotStatementConditionContext(context: FormattingContext): boolean {
     return !isStatementConditionContext(context);
 }
 
+/* @internal */
 function isStatementConditionContext(context: FormattingContext): boolean {
     switch (context.contextNode.kind) {
         case SyntaxKind.IfStatement:
@@ -825,15 +862,13 @@ function isStatementConditionContext(context: FormattingContext): boolean {
     }
 }
 
+/* @internal */
 function isSemicolonDeletionContext(context: FormattingContext): boolean {
     let nextTokenKind = context.nextTokenSpan.kind;
     let nextTokenStart = context.nextTokenSpan.pos;
     if (isTrivia(nextTokenKind)) {
         const nextRealToken = context.nextTokenParent === context.currentTokenParent
-            ? findNextToken(
-                context.currentTokenParent,
-                findAncestor(context.currentTokenParent, a => !a.parent)!,
-                context.sourceFile)
+            ? findNextToken(context.currentTokenParent, findAncestor(context.currentTokenParent, a => !a.parent)!, context.sourceFile)
             : context.nextTokenParent.getFirstToken(context.sourceFile);
         if (!nextRealToken) {
             return true;
@@ -850,14 +885,12 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
     }
 
     if (nextTokenKind === SyntaxKind.SemicolonClassElement ||
-        nextTokenKind === SyntaxKind.SemicolonToken
-    ) {
+        nextTokenKind === SyntaxKind.SemicolonToken) {
         return false;
     }
 
     if (context.contextNode.kind === SyntaxKind.InterfaceDeclaration ||
-        context.contextNode.kind === SyntaxKind.TypeAliasDeclaration
-    ) {
+        context.contextNode.kind === SyntaxKind.TypeAliasDeclaration) {
         // Can’t remove semicolon after `foo`; it would parse as a method declaration:
         //
         // interface I {
@@ -889,7 +922,7 @@ function isSemicolonDeletionContext(context: FormattingContext): boolean {
         && nextTokenKind !== SyntaxKind.DotToken;
 }
 
+/* @internal */
 function isSemicolonInsertionContext(context: FormattingContext): boolean {
     return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
-}
 }

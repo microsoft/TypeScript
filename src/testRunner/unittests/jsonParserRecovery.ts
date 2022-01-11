@@ -1,12 +1,11 @@
-namespace ts {
+import { parseJsonText } from "../ts";
+import { Baseline, Compiler } from "../Harness";
 describe("unittests:: jsonParserRecovery", () => {
     function parsesToValidSourceFileWithErrors(name: string, text: string) {
         it(name, () => {
             const file = parseJsonText(name, text);
             assert(file.parseDiagnostics.length, "Should have parse errors");
-            Harness.Baseline.runBaseline(
-                `jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`,
-                Harness.Compiler.getErrorBaseline([{
+            Baseline.runBaseline(`jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`, Compiler.getErrorBaseline([{
                     content: text,
                     unitName: name
                 }], file.parseDiagnostics));
@@ -36,4 +35,3 @@ describe("unittests:: jsonParserRecovery", () => {
           </div>
         )`);
 });
-}

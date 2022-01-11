@@ -1,4 +1,6 @@
-namespace ts.server {
+import { SortedReadonlyArray, TypeAcquisition, Path, normalizePath, isRootedDiskPath, getNormalizedAbsolutePath, SortedArray } from "./ts";
+import { Project, DiscoverTypings } from "./ts.server";
+import * as ts from "./ts";
 export enum LogLevel {
     terse,
     normal,
@@ -24,7 +26,7 @@ export interface Logger {
 export enum Msg {
     Err = "Err",
     Info = "Info",
-    Perf = "Perf",
+    Perf = "Perf"
 }
 export namespace Msg {
     /** @deprecated Only here for backwards-compatibility. Prefer just `Msg`. */
@@ -57,7 +59,9 @@ export namespace Errors {
     }
 }
 
-export type NormalizedPath = string & { __normalizedPathTag: any };
+export type NormalizedPath = string & {
+    __normalizedPathTag: any;
+};
 
 export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;
@@ -80,7 +84,7 @@ export interface NormalizedPathMap<T> {
 }
 
 export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-    const map = new Map<string, T>();
+    const map = new ts.Map<string, T>();
     return {
         get(path) {
             return map.get(path);
@@ -124,5 +128,4 @@ export function makeAutoImportProviderProjectName(counter: number): string {
 
 export function createSortedArray<T>(): SortedArray<T> {
     return [] as any as SortedArray<T>; // TODO: GH#19873
-}
 }

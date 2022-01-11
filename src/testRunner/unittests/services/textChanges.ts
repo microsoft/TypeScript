@@ -1,6 +1,7 @@
+import { Node, isDeclaration, isIdentifier, forEachChild, NewLineKind, getNewLineCharacter, formatting, testFormatSettings, notImplementedHost, createSourceFile, ScriptTarget, zipWith, Debug, NodeArray, isArray, forEach, SourceFile, textChanges, FunctionDeclaration, factory, emptyArray, SyntaxKind, last, VariableStatement, cast, isVariableStatement, VariableDeclaration, isVariableDeclaration, ConstructorDeclaration, ClassDeclaration, find, ClassElement, isConstructorDeclaration } from "../../ts";
+import { Baseline } from "../../Harness";
 // Some tests have trailing whitespace
 
-namespace ts {
 describe("unittests:: services:: textChanges", () => {
     function findChild(name: string, n: Node) {
         return find(n)!;
@@ -54,7 +55,7 @@ describe("unittests:: services:: textChanges", () => {
             assert.equal(changes.length, 1);
             assert.equal(changes[0].fileName, sourceFile.fileName);
             const modified = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-            Harness.Baseline.runBaseline(`textChanges/${caption}.js`, `===ORIGINAL===${newLineCharacter}${text}${newLineCharacter}===MODIFIED===${newLineCharacter}${modified}`);
+            Baseline.runBaseline(`textChanges/${caption}.js`, `===ORIGINAL===${newLineCharacter}${text}${newLineCharacter}===MODIFIED===${newLineCharacter}${modified}`);
         });
     }
 
@@ -87,21 +88,16 @@ namespace M
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ "bar",
-                /*typeParameters*/ undefined,
-                /*parameters*/ emptyArray,
+            /*typeParameters*/ undefined, emptyArray, 
                 /*type*/ factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
-                /*body */ factory.createBlock(statements)
-            );
+            /*body */ factory.createBlock(statements));
 
             changeTracker.insertNodeBefore(sourceFile, /*before*/findChild("M2", sourceFile), newFunction);
 
             // replace statements with return statement
-            const newStatement = factory.createReturnStatement(
-                factory.createCallExpression(
+            const newStatement = factory.createReturnStatement(factory.createCallExpression(
                     /*expression*/ newFunction.name!,
-                    /*typeArguments*/ undefined,
-                    /*argumentsArray*/ emptyArray
-                ));
+            /*typeArguments*/ undefined, emptyArray));
             changeTracker.replaceNodeRange(sourceFile, statements[0], last(statements), newStatement, { suffix: newLineCharacter });
         });
     }
@@ -165,16 +161,13 @@ var a = 4; // comment 7
             changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile));
         });
         runSingleFileTest("deleteNodeRange2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile),
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude });
+            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude });
         });
         runSingleFileTest("deleteNodeRange3", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile),
-                { trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude });
+            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), { trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude });
         });
         runSingleFileTest("deleteNodeRange4", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile),
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude });
+            changeTracker.deleteNodeRange(sourceFile, findVariableStatementContaining("y", sourceFile), findVariableStatementContaining("z", sourceFile), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude });
         });
     }
     function createTestVariableDeclaration(name: string) {
@@ -182,31 +175,20 @@ var a = 4; // comment 7
     }
     function createTestClass() {
         return factory.createClassDeclaration(
-            /*decorators*/ undefined,
-            [
+        /*decorators*/ undefined, [
                 factory.createToken(SyntaxKind.PublicKeyword)
-            ],
-            "class1",
-            /*typeParameters*/ undefined,
-            [
-                factory.createHeritageClause(
-                    SyntaxKind.ImplementsKeyword,
-                    [
+        ], "class1", 
+        /*typeParameters*/ undefined, [
+            factory.createHeritageClause(SyntaxKind.ImplementsKeyword, [
                         factory.createExpressionWithTypeArguments(factory.createIdentifier("interface1"), /*typeArguments*/ undefined)
-                    ]
-                )
-            ],
-            [
+            ])
+        ], [
                 factory.createPropertyDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
-                    "property1",
-                    /*questionToken*/ undefined,
-                    factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword),
-                    /*initializer*/ undefined
-                )
-            ]
-        );
+            /*modifiers*/ undefined, "property1", 
+            /*questionToken*/ undefined, factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword), 
+            /*initializer*/ undefined)
+        ]);
     }
     {
         const text = `
@@ -333,11 +315,8 @@ namespace M {
         return find<ClassElement, ConstructorDeclaration>(classDecl.members, (m): m is ConstructorDeclaration => isConstructorDeclaration(m) && !!m.body)!;
     }
     function createTestSuperCall() {
-        const superCall = factory.createCallExpression(
-            factory.createSuper(),
-            /*typeArguments*/ undefined,
-            /*argumentsArray*/ emptyArray
-        );
+        const superCall = factory.createCallExpression(factory.createSuper(), 
+        /*typeArguments*/ undefined, emptyArray);
         return factory.createExpressionStatement(superCall);
     }
 
@@ -704,10 +683,8 @@ class A {
         runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             const newNode = factory.createPropertyDeclaration(
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                factory.createComputedPropertyName(factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
-                factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            /*modifiers*/ undefined, factory.createComputedPropertyName(factory.createNumericLiteral(1)), 
+            /*questionToken*/ undefined, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), 
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
         });
@@ -722,10 +699,8 @@ class A {
         runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             const newNode = factory.createPropertyDeclaration(
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                factory.createComputedPropertyName(factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
-                factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            /*modifiers*/ undefined, factory.createComputedPropertyName(factory.createNumericLiteral(1)), 
+            /*questionToken*/ undefined, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), 
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
         });
@@ -739,10 +714,8 @@ interface A {
         runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             const newNode = factory.createPropertyDeclaration(
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                factory.createComputedPropertyName(factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
-                factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            /*modifiers*/ undefined, factory.createComputedPropertyName(factory.createNumericLiteral(1)), 
+            /*questionToken*/ undefined, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), 
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
         });
@@ -756,10 +729,8 @@ interface A {
         runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
             const newNode = factory.createPropertyDeclaration(
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                factory.createComputedPropertyName(factory.createNumericLiteral(1)),
-                /*questionToken*/ undefined,
-                factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            /*modifiers*/ undefined, factory.createComputedPropertyName(factory.createNumericLiteral(1)), 
+            /*questionToken*/ undefined, factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), 
                 /*initializer*/ undefined);
             changeTracker.insertNodeAfter(sourceFile, findChild("x", sourceFile), newNode);
         });
@@ -774,4 +745,3 @@ let x = foo
         });
     }
 });
-}

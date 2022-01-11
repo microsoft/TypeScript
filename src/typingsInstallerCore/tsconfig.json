@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/typingsInstallerCore.js",
+        "outDir": "../../built/local",
         "types": [
             "node"
         ],
@@ -15,6 +15,9 @@
         { "path": "../jsTyping" }
     ],
     "files": [
-        "typingsInstaller.ts"
+        "typingsInstaller.ts",
+        "./ts.server.typingsInstaller.ts",
+        "./ts.ts",
+        "./ts.server.ts"
     ]
 }

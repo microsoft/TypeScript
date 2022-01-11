@@ -1,4 +1,4 @@
-namespace ts {
+import { MatchingKeys, ShimCollections, getIterator } from "./ts";
 // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
 // If changing the text in this section, be sure to test `configurePrerelease` too.
 export const versionMajorMinor = "4.6";
@@ -41,7 +41,10 @@ export interface Collection<K> extends ReadonlyCollection<K> {
 export interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
     get(key: K): V | undefined;
     values(): Iterator<V>;
-    entries(): Iterator<[K, V]>;
+    entries(): Iterator<[
+        K,
+        V
+    ]>;
     forEach(action: (value: V, key: K) => void): void;
 }
 
@@ -65,14 +68,20 @@ export interface Map<T> extends ESMap<string, T> {
 /* @internal */
 export interface MapConstructor {
     // eslint-disable-next-line @typescript-eslint/prefer-function-type
-    new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyESMap<K, V>): ESMap<K, V>;
+    new <K, V>(iterable?: readonly (readonly [
+        K,
+        V
+    ])[] | ReadonlyESMap<K, V>): ESMap<K, V>;
 }
 
 /** ES6 Set interface, only read methods included. */
 export interface ReadonlySet<T> extends ReadonlyCollection<T> {
     has(value: T): boolean;
     values(): Iterator<T>;
-    entries(): Iterator<[T, T]>;
+    entries(): Iterator<[
+        T,
+        T
+    ]>;
     forEach(action: (value: T, key: T) => void): void;
 }
 
@@ -90,7 +99,13 @@ export interface SetConstructor {
 
 /** ES6 Iterator type. */
 export interface Iterator<T> {
-    next(): { value: T, done?: false } | { value: void, done: true };
+    next(): {
+        value: T;
+        done?: false;
+    } | {
+        value: void;
+        done: true;
+    };
 }
 
 /** Array that is only intended to be pushed to, never read. */
@@ -142,21 +157,16 @@ export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "create
 export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
 
 /* @internal */
-type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
-    I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
-    I extends ReadonlySet<infer T> ? T :
-    I extends readonly (infer T)[] ? T :
-    I extends undefined ? undefined :
-    never>;
+type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<I extends ReadonlyESMap<infer K, infer V> ? [
+    K,
+    V
+] : I extends ReadonlySet<infer T> ? T : I extends readonly (infer T)[] ? T : I extends undefined ? undefined : never>;
 
 /* @internal */
-function getCollectionImplementation<
-    K1 extends MatchingKeys<typeof NativeCollections, () => any>,
-    K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
->(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
+function getCollectionImplementation<K1 extends MatchingKeys<typeof NativeCollections, () => any>, K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>>(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
     // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
     const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
-    if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
+    if (constructor)
+        return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
     throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
-}
 }

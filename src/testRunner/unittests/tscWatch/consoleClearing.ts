@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { File, TscWatchCompileChange, runQueuedTimeoutCallbacks, verifyTscWatch, createWatchedSystem, libFile, createBaseline, createWatchOfConfigFile, runWatchBaseline } from "../../ts.tscWatch";
+import { emptyArray, CompilerOptions } from "../../ts";
 describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
     const file: File = {
@@ -59,4 +60,3 @@ describe("unittests:: tsc-watch:: console clearing", () => {
         });
     });
 });
-}

@@ -1,7 +1,12 @@
-namespace ts {
+import { SolutionBuilderHost } from "../../fakes";
+import { FileSystem } from "../../vfs";
+import { createSolutionBuilder, isCircularBuildOrder, getBuildOrderFromAnyBuildOrder, ResolvedConfigFileName } from "../../ts";
 describe("unittests:: tsbuild - graph-ordering", () => {
-    let host: fakes.SolutionBuilderHost | undefined;
-    const deps: [string, string][] = [
+    let host: SolutionBuilderHost | undefined;
+    const deps: [
+        string,
+        string
+    ][] = [
         ["A", "B"],
         ["B", "C"],
         ["A", "C"],
@@ -16,8 +21,8 @@ describe("unittests:: tsbuild - graph-ordering", () => {
     ];
 
     before(() => {
-        const fs = new vfs.FileSystem(false);
-        host = fakes.SolutionBuilderHost.create(fs);
+        const fs = new FileSystem(false);
+        host = SolutionBuilderHost.create(fs);
         writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], deps);
     });
 
@@ -56,7 +61,8 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         if (!circular) {
             for (const dep of deps) {
                 const child = getProjectFileName(dep[0]);
-                if (buildQueue.indexOf(child) < 0) continue;
+                if (buildQueue.indexOf(child) < 0)
+                    continue;
                 const parent = getProjectFileName(dep[1]);
                 assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
             }
@@ -67,11 +73,16 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         return `/project/${proj}/tsconfig.json` as ResolvedConfigFileName;
     }
 
-    function writeProjects(fileSystem: vfs.FileSystem, projectNames: string[], deps: [string, string][]): string[] {
+    function writeProjects(fileSystem: FileSystem, projectNames: string[], deps: [
+        string,
+        string
+    ][]): string[] {
         const projFileNames: string[] = [];
         for (const dep of deps) {
-            if (projectNames.indexOf(dep[0]) < 0) throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
-            if (projectNames.indexOf(dep[1]) < 0) throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
+            if (projectNames.indexOf(dep[0]) < 0)
+                throw new Error(`Invalid dependency - project ${dep[0]} does not exist`);
+            if (projectNames.indexOf(dep[1]) < 0)
+                throw new Error(`Invalid dependency - project ${dep[1]} does not exist`);
         }
         for (const proj of projectNames) {
             fileSystem.mkdirpSync(`/project/${proj}`);
@@ -88,4 +99,3 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         return projFileNames;
     }
 });
-}

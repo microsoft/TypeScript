@@ -1,18 +1,21 @@
-namespace ts.tscWatch {
+import { TestFSWithWatch, Program, WatchOfConfigFile, EmitAndSemanticDiagnosticsBuilderProgram, WatchOfFilesAndCompilerOptions, CompilerOptions, WatchOptions, createWatchCompilerHostOfConfigFile, createWatchProgram, createWatchCompilerHostOfFilesAndCompilerOptions, Diagnostic, forEach, Debug, formatDiagnostic, isString, contains, screenStartingMessageCodes, endsWith, flattenDiagnosticMessageText, createCompilerDiagnostic, Diagnostics, map, emptyArray, ExitStatus, ReportFileInError, getErrorSummaryText, DiagnosticMessage, DiagnosticMessageChain, getLocaleSpecificMessage, formatStringFromArgs, SourceFile, toPath, CommandLineProgram, executeCommandLine, noop, commandLineCallbacks, isBuild, CharacterCodes, generateSourceMapBaselineFiles, BuilderState, Path, BuildOptions, createSolutionBuilderHost } from "../../ts";
+import { patchHostForBuildInfoReadWrite } from "../../fakes";
+import * as ts from "../../ts";
+import * as Harness from "../../Harness";
 export const projects = `/user/username/projects`;
 export const projectRoot = `${projects}/myproject`;
-export import WatchedSystem = TestFSWithWatch.TestServerHost;
+export import WatchedSystem = ts.TestFSWithWatch.TestServerHost;
 export type File = TestFSWithWatch.File;
 export type SymLink = TestFSWithWatch.SymLink;
-export import libFile = TestFSWithWatch.libFile;
-export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
-export import checkArray = TestFSWithWatch.checkArray;
-export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
-export import checkOutputContains = TestFSWithWatch.checkOutputContains;
-export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+export import libFile = ts.TestFSWithWatch.libFile;
+export import createWatchedSystem = ts.TestFSWithWatch.createWatchedSystem;
+export import checkArray = ts.TestFSWithWatch.checkArray;
+export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
+export import checkWatchedFilesDetailed = ts.TestFSWithWatch.checkWatchedFilesDetailed;
+export import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
+export import checkWatchedDirectoriesDetailed = ts.TestFSWithWatch.checkWatchedDirectoriesDetailed;
+export import checkOutputContains = ts.TestFSWithWatch.checkOutputContains;
+export import checkOutputDoesNotContain = ts.TestFSWithWatch.checkOutputDoesNotContain;
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -69,11 +72,7 @@ export interface HostOutputWatchDiagnostic {
 
 export type HostOutput = HostOutputLog | HostOutputDiagnostic | HostOutputWatchDiagnostic;
 
-export function checkOutputErrors(
-    host: WatchedSystem,
-    expected: readonly HostOutput[],
-    disableConsoleClears?: boolean | undefined
-) {
+export function checkOutputErrors(host: WatchedSystem, expected: readonly HostOutput[], disableConsoleClears?: boolean | undefined) {
     let screenClears = 0;
     const outputs = host.getOutput();
     assert.equal(outputs.length, expected.length, JSON.stringify(outputs));
@@ -156,69 +155,47 @@ export function startingCompilationInWatchMode() {
 export function foundErrorsWatching(errors: readonly any[]) {
     return hostOutputWatchDiagnostic(errors.length === 1 ?
         createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes) :
-        createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length)
-    );
+        createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length));
 }
 export function fileChangeDetected() {
     return hostOutputWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
 }
 
 export function checkOutputErrorsInitial(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
-    checkOutputErrors(
-        host,
-        [
+    checkOutputErrors(host, [
             startingCompilationInWatchMode(),
             ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
             ...map(errors, hostOutputDiagnostic),
             foundErrorsWatching(errors)
-        ],
-        disableConsoleClears
-    );
+    ], disableConsoleClears);
 }
 
 export function checkOutputErrorsIncremental(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
-    checkOutputErrors(
-        host,
-        [
+    checkOutputErrors(host, [
             ...map(logsBeforeWatchDiagnostic || emptyArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
             fileChangeDetected(),
             ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
             ...map(errors, hostOutputDiagnostic),
             foundErrorsWatching(errors)
-        ],
-        disableConsoleClears
-    );
+    ], disableConsoleClears);
 }
 
 export function checkOutputErrorsIncrementalWithExit(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], expectedExitCode: ExitStatus, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
-    checkOutputErrors(
-        host,
-        [
+    checkOutputErrors(host, [
             ...map(logsBeforeWatchDiagnostic || emptyArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
             fileChangeDetected(),
             ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
             ...map(errors, hostOutputDiagnostic),
-        ],
-        disableConsoleClears
-    );
+    ], disableConsoleClears);
     assert.equal(host.exitCode, expectedExitCode);
 }
 
-export function checkNormalBuildErrors(
-    host: WatchedSystem,
-    errors: readonly Diagnostic[] | readonly string[],
-    files: readonly ReportFileInError[],
-    reportErrorSummary?: boolean
-) {
-    checkOutputErrors(
-        host,
-        [
+export function checkNormalBuildErrors(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], files: readonly ReportFileInError[], reportErrorSummary?: boolean) {
+    checkOutputErrors(host, [
             ...map(errors, hostOutputDiagnostic),
             ...reportErrorSummary ?
-                [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, files, host.newLine, host))] :
-                emptyArray
-        ]
-    );
+            [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, files, host.newLine, host))] : emptyArray
+    ]);
 }
 
 export function getDiagnosticMessageChain(message: DiagnosticMessage, args?: (string | number)[], next?: DiagnosticMessageChain[]): DiagnosticMessageChain {
@@ -261,8 +238,7 @@ export function getDiagnosticOfFile(file: SourceFile, start: number, length: num
 }
 
 export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
-    return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
-        start, length, message, ...args);
+    return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())), start, length, message, ...args);
 }
 
 export function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
@@ -296,11 +272,7 @@ export function checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout(sys: Watch
 export interface TscWatchCompileChange {
     caption: string;
     change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void;
-    timeouts: (
-        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
-        programs: readonly CommandLineProgram[],
-        watchOrSolution: ReturnType<typeof executeCommandLine>
-    ) => void;
+    timeouts: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles, programs: readonly CommandLineProgram[], watchOrSolution: ReturnType<typeof executeCommandLine>) => void;
 }
 export interface TscWatchCheckOptions {
     baselineSourceMap?: boolean;
@@ -326,19 +298,11 @@ export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
 function tscWatchCompile(input: TscWatchCompile) {
     it("tsc-watch:: Generates files matching the baseline", () => {
         const { sys, baseline, oldSnap } = createBaseline(input.sys());
-        const {
-            scenario, subScenario,
-            commandLineArgs, changes,
-            baselineSourceMap, baselineDependencies
-        } = input;
-
-        if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
+        const { scenario, subScenario, commandLineArgs, changes, baselineSourceMap, baselineDependencies } = input;
+        if (!isWatch(commandLineArgs))
+            sys.exit = exitCode => sys.exitCode = exitCode;
         const { cb, getPrograms } = commandLineCallbacks(sys);
-        const watchOrSolution = executeCommandLine(
-            sys,
-            cb,
-            commandLineArgs,
-        );
+        const watchOrSolution = executeCommandLine(sys, cb, commandLineArgs);
         runWatchBaseline({
             scenario,
             subScenario,
@@ -362,9 +326,7 @@ export interface Baseline {
 }
 
 export function createBaseline(system: WatchedSystem): Baseline {
-    const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(
-        fakes.patchHostForBuildInfoReadWrite(system)
-    );
+    const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(patchHostForBuildInfoReadWrite(system));
     const baseline: string[] = [];
     baseline.push("Input::");
     sys.diff(baseline);
@@ -385,12 +347,7 @@ export interface RunWatchBaseline extends Baseline, TscWatchCompileBase {
     getPrograms: () => readonly CommandLineProgram[];
     watchOrSolution: ReturnType<typeof executeCommandLine>;
 }
-export function runWatchBaseline({
-    scenario, subScenario, commandLineArgs,
-    getPrograms, sys, baseline, oldSnap,
-    baselineSourceMap, baselineDependencies,
-    changes, watchOrSolution
-}: RunWatchBaseline) {
+export function runWatchBaseline({ scenario, subScenario, commandLineArgs, getPrograms, sys, baseline, oldSnap, baselineSourceMap, baselineDependencies, changes, watchOrSolution }: RunWatchBaseline) {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
     let programs = watchBaseline({
         baseline,
@@ -422,7 +379,8 @@ export function runWatchBaseline({
 
 function isWatch(commandLineArgs: readonly string[]) {
     return forEach(commandLineArgs, arg => {
-        if (arg.charCodeAt(0) !== CharacterCodes.minus) return false;
+        if (arg.charCodeAt(0) !== CharacterCodes.minus)
+            return false;
         const option = arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
         return option === "watch" || option === "w";
     });
@@ -433,7 +391,8 @@ export interface WatchBaseline extends Baseline, TscWatchCheckOptions {
     getPrograms: () => readonly CommandLineProgram[];
 }
 export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
-    if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
+    if (baselineSourceMap)
+        generateSourceMapBaselineFiles(sys);
     sys.serializeOutput(baseline);
     const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
     sys.serializeWatches(baseline);
@@ -470,7 +429,8 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
     }
     baseline.push("");
 
-    if (!builderProgram) return;
+    if (!builderProgram)
+        return;
     if (builderProgram !== oldProgram?.[1]) {
         const state = builderProgram.getState();
         const internalState = state as unknown as BuilderState;
@@ -504,7 +464,8 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
             }
         }
         baseline.push("");
-        if (!baselineDependencies) return;
+        if (!baselineDependencies)
+            return;
         baseline.push("Dependencies for::");
         for (const file of builderProgram.getSourceFiles()) {
             baseline.push(`${file.fileName}:`);
@@ -561,13 +522,10 @@ export function createSystemWithSolutionBuild(solutionRoots: readonly string[], 
     const originalReadFile = sys.readFile;
     const originalWrite = sys.write;
     const originalWriteFile = sys.writeFile;
-    const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
-        fakes.patchHostForBuildInfoReadWrite(sys)
-    ), solutionRoots, {});
+    const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(patchHostForBuildInfoReadWrite(sys)), solutionRoots, {});
     solutionBuilder.build();
     sys.readFile = originalReadFile;
     sys.write = originalWrite;
     sys.writeFile = originalWriteFile;
     return sys;
-}
 }

@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { File, openFilesForSession, createServerHost, createSession, protocol } from "../../ts.projectSystem";
+import { fill, removeFileExtension, convertToRelativePath, identity, Completions, Debug, getLineAndCharacterOfPosition } from "../../ts";
+import { toNormalizedPath } from "../../ts.server";
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
     return {
         path,
@@ -7,10 +9,7 @@ function createExportingModuleFile(path: string, exportPrefix: string, exportCou
 }
 
 function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    return fill(fileCount, fileIndex => createExportingModuleFile(
-        `${pathPrefix}_${fileIndex}.ts`,
-        getExportPrefix(fileIndex),
-        exportCount));
+    return fill(fileCount, fileIndex => createExportingModuleFile(`${pathPrefix}_${fileIndex}.ts`, getExportPrefix(fileIndex), exportCount));
 }
 
 function createNodeModulesPackage(packageName: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
@@ -114,9 +113,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             .continueTyping("_", completions => {
                 assert(!completions.isIncomplete);
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")), 50);
-                assertCompletionDetailsOk(
-                    indexFile.path,
-                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
+            assertCompletionDetailsOk(indexFile.path, completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
             });
     });
 
@@ -164,7 +161,7 @@ function setup(files: File[]) {
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
 
     function typeToTriggerCompletions(fileName: string, typedCharacters: string, cb?: (completions: protocol.CompletionInfo) => void) {
-        const project = projectService.getDefaultProjectForFile(server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
+        const project = projectService.getDefaultProjectForFile(toNormalizedPath(fileName), /*ensureProject*/ true)!;
         return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
 
         function type(typedCharacters: string, cb: ((completions: protocol.CompletionInfo) => void) | undefined, isIncompleteContinuation: boolean) {
@@ -236,7 +233,7 @@ function setup(files: File[]) {
     }
 
     function assertCompletionDetailsOk(fileName: string, entry: protocol.CompletionEntry) {
-        const project = projectService.getDefaultProjectForFile(server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
+        const project = projectService.getDefaultProjectForFile(toNormalizedPath(fileName), /*ensureProject*/ true)!;
         const file = Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
         const { line, character } = getLineAndCharacterOfPosition(file, file.text.length - 1);
         const details = session.executeCommandSeq<protocol.CompletionDetailsRequest>({
@@ -258,5 +255,4 @@ function setup(files: File[]) {
         assert(details[0].codeActions![0].changes[0].textChanges[0].newText.includes(`"${(entry.data as any).moduleSpecifier}"`));
         return details;
     }
-}
 }

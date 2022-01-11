@@ -1,7 +1,14 @@
+import { FileSystem } from "./vfs";
+import { removeByteOrderMark, addUTF8ByteOrderMark, assertInvariants } from "./Utils";
+import { dirname, combine, resolve } from "./vpath";
+import { matchFiles, FileSystemEntries, notImplemented, generateDjb2Hash, SourceFile, getDefaultCompilerOptions, getNewLineCharacter, CompilerOptions, getDefaultLibFileName, createSourceFile, DiagnosticMessage, Diagnostic, getLocaleSpecificMessage, formatStringFromArgs, isArray, DiagnosticMessageChain, DiagnosticRelatedInformation, isBuildInfoFile, getBuildInfo, Debug, getBuildInfoText, BuilderProgram, CreateProgram, createEmitAndSemanticDiagnosticsBuilderProgram, createDiagnosticReporter, sys } from "./ts";
+import { TextDocument } from "./documents";
+import { SortedMap } from "./collections";
+import { lightMode } from "./Harness";
+import * as ts from "./ts";
 /**
  * Fake implementations of various compiler dependencies.
  */
-namespace fakes {
 const processExitSentinel = new Error("System exit");
 
 export interface SystemOptions {
@@ -14,7 +21,7 @@ export interface SystemOptions {
  * A fake `ts.System` that leverages a virtual file system.
  */
 export class System implements ts.System {
-    public readonly vfs: vfs.FileSystem;
+    public readonly vfs: FileSystem;
     public readonly args: string[] = [];
     public readonly output: string[] = [];
     public readonly newLine: string;
@@ -24,7 +31,7 @@ export class System implements ts.System {
     private readonly _executingFilePath: string | undefined;
     private readonly _env: Record<string, string> | undefined;
 
-    constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
+    constructor(vfs: FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
         this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
         this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
         this.newLine = newLine;
@@ -47,7 +54,7 @@ export class System implements ts.System {
     public readFile(path: string) {
         try {
             const content = this.vfs.readFileSync(path, "utf8");
-            return content === undefined ? undefined : Utils.removeByteOrderMark(content);
+            return content === undefined ? undefined : removeByteOrderMark(content);
         }
         catch {
             return undefined;
@@ -55,8 +62,8 @@ export class System implements ts.System {
     }
 
     public writeFile(path: string, data: string, writeByteOrderMark?: boolean): void {
-        this.vfs.mkdirpSync(vpath.dirname(path));
-        this.vfs.writeFileSync(path, writeByteOrderMark ? Utils.addUTF8ByteOrderMark(data) : data);
+        this.vfs.mkdirpSync(dirname(path));
+        this.vfs.writeFileSync(path, writeByteOrderMark ? addUTF8ByteOrderMark(data) : data);
     }
 
     public deleteFile(path: string) {
@@ -85,7 +92,7 @@ export class System implements ts.System {
         const result: string[] = [];
         try {
             for (const file of this.vfs.readdirSync(path)) {
-                if (this.vfs.statSync(vpath.combine(path, file)).isDirectory()) {
+                if (this.vfs.statSync(combine(path, file)).isDirectory()) {
                     result.push(file);
                 }
             }
@@ -95,16 +102,16 @@ export class System implements ts.System {
     }
 
     public readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[] {
-        return ts.matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
+        return matchFiles(path, extensions, exclude, include, this.useCaseSensitiveFileNames, this.getCurrentDirectory(), depth, path => this.getAccessibleFileSystemEntries(path), path => this.realpath(path));
     }
 
-    public getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries {
+    public getAccessibleFileSystemEntries(path: string): FileSystemEntries {
         const files: string[] = [];
         const directories: string[] = [];
         try {
             for (const file of this.vfs.readdirSync(path)) {
                 try {
-                    const stats = this.vfs.statSync(vpath.combine(path, file));
+                    const stats = this.vfs.statSync(combine(path, file));
                     if (stats.isFile()) {
                         files.push(file);
                     }
@@ -130,11 +137,12 @@ export class System implements ts.System {
     }
 
     public resolvePath(path: string) {
-        return vpath.resolve(this.vfs.cwd(), path);
+        return resolve(this.vfs.cwd(), path);
     }
 
     public getExecutingFilePath() {
-        if (this._executingFilePath === undefined) return ts.notImplemented();
+        if (this._executingFilePath === undefined)
+            return notImplemented();
         return this._executingFilePath;
     }
 
@@ -148,7 +156,7 @@ export class System implements ts.System {
     }
 
     public createHash(data: string): string {
-        return `${ts.generateDjb2Hash(data)}-${data}`;
+        return `${generateDjb2Hash(data)}-${data}`;
     }
 
     public realpath(path: string) {
@@ -184,8 +192,9 @@ export class System implements ts.System {
 export class ParseConfigHost implements ts.ParseConfigHost {
     public readonly sys: System;
 
-    constructor(sys: System | vfs.FileSystem) {
-        if (sys instanceof vfs.FileSystem) sys = new System(sys);
+    constructor(sys: System | FileSystem) {
+        if (sys instanceof FileSystem)
+            sys = new System(sys);
         this.sys = sys;
     }
 
@@ -220,24 +229,25 @@ export class ParseConfigHost implements ts.ParseConfigHost {
 export class CompilerHost implements ts.CompilerHost {
     public readonly sys: System;
     public readonly defaultLibLocation: string;
-    public readonly outputs: documents.TextDocument[] = [];
-    private readonly _outputsMap: collections.SortedMap<string, number>;
+    public readonly outputs: TextDocument[] = [];
+    private readonly _outputsMap: SortedMap<string, number>;
     public readonly traces: string[] = [];
-    public readonly shouldAssertInvariants = !Harness.lightMode;
+    public readonly shouldAssertInvariants = !lightMode;
 
     private _setParentNodes: boolean;
-    private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
+    private _sourceFiles: SortedMap<string, SourceFile>;
     private _parseConfigHost: ParseConfigHost | undefined;
     private _newLine: string;
 
-    constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
-        if (sys instanceof vfs.FileSystem) sys = new System(sys);
+    constructor(sys: System | FileSystem, options = getDefaultCompilerOptions(), setParentNodes = false) {
+        if (sys instanceof FileSystem)
+            sys = new System(sys);
         this.sys = sys;
         this.defaultLibLocation = sys.vfs.meta.get("defaultLibLocation") || "";
-        this._newLine = ts.getNewLineCharacter(options, () => this.sys.newLine);
-        this._sourceFiles = new collections.SortedMap<string, ts.SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
+        this._newLine = getNewLineCharacter(options, () => this.sys.newLine);
+        this._sourceFiles = new SortedMap<string, SourceFile>({ comparer: sys.vfs.stringComparer, sort: "insertion" });
         this._setParentNodes = setParentNodes;
-        this._outputsMap = new collections.SortedMap(this.vfs.stringComparer);
+        this._outputsMap = new SortedMap(this.vfs.stringComparer);
     }
 
     public get vfs() {
@@ -297,10 +307,11 @@ export class CompilerHost implements ts.CompilerHost {
     }
 
     public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
-        if (writeByteOrderMark) content = Utils.addUTF8ByteOrderMark(content);
+        if (writeByteOrderMark)
+            content = addUTF8ByteOrderMark(content);
         this.sys.writeFile(fileName, content);
 
-        const document = new documents.TextDocument(fileName, content);
+        const document = new TextDocument(fileName, content);
         document.meta.set("fileName", fileName);
         this.vfs.filemeta(fileName).set("document", document);
         if (!this._outputsMap.has(document.file)) {
@@ -319,20 +330,22 @@ export class CompilerHost implements ts.CompilerHost {
     }
 
     public getDefaultLibLocation(): string {
-        return vpath.resolve(this.getCurrentDirectory(), this.defaultLibLocation);
+        return resolve(this.getCurrentDirectory(), this.defaultLibLocation);
     }
 
-    public getDefaultLibFileName(options: ts.CompilerOptions): string {
-        return vpath.resolve(this.getDefaultLibLocation(), ts.getDefaultLibFileName(options));
+    public getDefaultLibFileName(options: CompilerOptions): string {
+        return resolve(this.getDefaultLibLocation(), getDefaultLibFileName(options));
     }
 
-    public getSourceFile(fileName: string, languageVersion: number): ts.SourceFile | undefined {
-        const canonicalFileName = this.getCanonicalFileName(vpath.resolve(this.getCurrentDirectory(), fileName));
+    public getSourceFile(fileName: string, languageVersion: number): SourceFile | undefined {
+        const canonicalFileName = this.getCanonicalFileName(resolve(this.getCurrentDirectory(), fileName));
         const existing = this._sourceFiles.get(canonicalFileName);
-        if (existing) return existing;
+        if (existing)
+            return existing;
 
         const content = this.readFile(canonicalFileName);
-        if (content === undefined) return undefined;
+        if (content === undefined)
+            return undefined;
 
         // A virtual file system may shadow another existing virtual file system. This
         // allows us to reuse a common virtual file system structure across multiple
@@ -343,16 +356,16 @@ export class CompilerHost implements ts.CompilerHost {
         const cacheKey = this.vfs.shadowRoot && `SourceFile[languageVersion=${languageVersion},setParentNodes=${this._setParentNodes}]`;
         if (cacheKey) {
             const meta = this.vfs.filemeta(canonicalFileName);
-            const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
+            const sourceFileFromMetadata = meta.get(cacheKey) as SourceFile | undefined;
             if (sourceFileFromMetadata && sourceFileFromMetadata.getFullText() === content) {
                 this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
                 return sourceFileFromMetadata;
             }
         }
 
-        const parsed = ts.createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
+        const parsed = createSourceFile(fileName, content, languageVersion, this._setParentNodes || this.shouldAssertInvariants);
         if (this.shouldAssertInvariants) {
-            Utils.assertInvariants(parsed, /*parent*/ undefined);
+            assertInvariants(parsed, /*parent*/ undefined);
         }
 
         this._sourceFiles.set(canonicalFileName, parsed);
@@ -387,7 +400,10 @@ export class CompilerHost implements ts.CompilerHost {
     }
 }
 
-export type ExpectedDiagnosticMessage = [ts.DiagnosticMessage, ...(string | number)[]];
+export type ExpectedDiagnosticMessage = [
+    DiagnosticMessage,
+    ...(string | number)[]
+];
 export interface ExpectedDiagnosticMessageChain {
     message: ExpectedDiagnosticMessage;
     next?: ExpectedDiagnosticMessageChain[];
@@ -414,11 +430,12 @@ export type ExpectedDiagnostic = ExpectedDiagnosticMessage | ExpectedErrorDiagno
 
 interface SolutionBuilderDiagnostic {
     kind: DiagnosticKind;
-    diagnostic: ts.Diagnostic;
+    diagnostic: Diagnostic;
 }
 
 function indentedText(indent: number, text: string) {
-    if (!indent) return text;
+    if (!indent)
+        return text;
     let indentText = "";
     for (let i = 0; i < indent; i++) {
         indentText += "  ";
@@ -428,9 +445,9 @@ ${indentText}${text}`;
 }
 
 function expectedDiagnosticMessageToText([message, ...args]: ExpectedDiagnosticMessage) {
-    let text = ts.getLocaleSpecificMessage(message);
+    let text = getLocaleSpecificMessage(message);
     if (args.length) {
-        text = ts.formatStringFromArgs(text, args);
+        text = formatStringFromArgs(text, args);
     }
     return text;
 }
@@ -465,12 +482,12 @@ function expectedErrorDiagnosticToText({ relatedInformation, ...diagnosticRelate
 }
 
 function expectedDiagnosticToText(errorOrStatus: ExpectedDiagnostic) {
-    return ts.isArray(errorOrStatus) ?
+    return isArray(errorOrStatus) ?
         `${DiagnosticKind.Status}!: ${expectedDiagnosticMessageToText(errorOrStatus)}` :
         expectedErrorDiagnosticToText(errorOrStatus);
 }
 
-function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessageChain, indent = 0) {
+function diagnosticMessageChainToText({ messageText, next }: DiagnosticMessageChain, indent = 0) {
     let text = indentedText(indent, messageText);
     if (next) {
         indent++;
@@ -479,7 +496,7 @@ function diagnosticMessageChainToText({ messageText, next}: ts.DiagnosticMessage
     return text;
 }
 
-function diagnosticRelatedInformationToText({ file, start, length, messageText }: ts.DiagnosticRelatedInformation) {
+function diagnosticRelatedInformationToText({ file, start, length, messageText }: DiagnosticRelatedInformation) {
     const text = typeof messageText === "string" ?
         messageText :
         diagnosticMessageChainToText(messageText);
@@ -505,11 +522,12 @@ export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
     const originalReadFile = sys.readFile;
     sys.readFile = (path, encoding) => {
         const value = originalReadFile.call(sys, path, encoding);
-        if (!value || !ts.isBuildInfoFile(path)) return value;
-        const buildInfo = ts.getBuildInfo(value);
-        ts.Debug.assert(buildInfo.version === version);
+        if (!value || !isBuildInfoFile(path))
+            return value;
+        const buildInfo = getBuildInfo(value);
+        Debug.assert(buildInfo.version === version);
         buildInfo.version = ts.version;
-        return ts.getBuildInfoText(buildInfo);
+        return getBuildInfoText(buildInfo);
     };
     const originalWrite = sys.write;
     sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
@@ -517,40 +535,40 @@ export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
     if (sys.writeFile) {
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
-            if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-            const buildInfo = ts.getBuildInfo(content);
+            if (!isBuildInfoFile(fileName))
+                return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
+            const buildInfo = getBuildInfo(content);
             buildInfo.version = version;
-            originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+            originalWriteFile.call(sys, fileName, getBuildInfoText(buildInfo), writeByteOrderMark);
         };
     }
     return sys;
 }
 
-export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-    createProgram: ts.CreateProgram<ts.BuilderProgram>;
-
-    private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<BuilderProgram> {
+    createProgram: CreateProgram<BuilderProgram>;
+    private constructor(sys: System | FileSystem, options?: CompilerOptions, setParentNodes?: boolean, createProgram?: CreateProgram<BuilderProgram>) {
         super(sys, options, setParentNodes);
-        this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        this.createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram;
     }
 
-    static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+    static create(sys: System | FileSystem, options?: CompilerOptions, setParentNodes?: boolean, createProgram?: CreateProgram<BuilderProgram>) {
         const host = new SolutionBuilderHost(sys, options, setParentNodes, createProgram);
         patchHostForBuildInfoReadWrite(host.sys);
         return host;
     }
 
     createHash(data: string) {
-        return `${ts.generateDjb2Hash(data)}-${data}`;
+        return `${generateDjb2Hash(data)}-${data}`;
     }
 
     diagnostics: SolutionBuilderDiagnostic[] = [];
 
-    reportDiagnostic(diagnostic: ts.Diagnostic) {
+    reportDiagnostic(diagnostic: Diagnostic) {
         this.diagnostics.push({ kind: DiagnosticKind.Error, diagnostic });
     }
 
-    reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
+    reportSolutionBuilderStatus(diagnostic: Diagnostic) {
         this.diagnostics.push({ kind: DiagnosticKind.Status, diagnostic });
     }
 
@@ -576,8 +594,8 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
     }
 
     printDiagnostics(header = "== Diagnostics ==") {
-        const out = ts.createDiagnosticReporter(ts.sys);
-        ts.sys.write(header + "\r\n");
+        const out = createDiagnosticReporter(sys);
+        sys.write(header + "\r\n");
         for (const { diagnostic } of this.diagnostics) {
             out(diagnostic);
         }
@@ -586,6 +604,5 @@ Actual All:: ${JSON.stringify(this.diagnostics.slice().map(diagnosticToText), /*
     now() {
         return this.sys.now();
     }
-}
 }
 

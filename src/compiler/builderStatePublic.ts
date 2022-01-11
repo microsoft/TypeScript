@@ -1,4 +1,4 @@
-namespace ts {
+import { Diagnostic, ExportedModulesFromDeclarationEmit } from "./ts";
 export interface EmitOutput {
     outputFiles: OutputFile[];
     emitSkipped: boolean;
@@ -10,5 +10,4 @@ export interface OutputFile {
     name: string;
     writeByteOrderMark: boolean;
     text: string;
-}
 }

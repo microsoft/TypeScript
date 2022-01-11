@@ -1,5 +1,10 @@
-namespace ts {
-interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
+import { TypeAcquisition, Diagnostic, convertTypeAcquisitionFromJson, parseJsonText, ParseConfigHost, parseJsonSourceFileConfigFileContent, filter, Diagnostics } from "../../ts";
+import { FileSystem } from "../../vfs";
+import * as fakes from "../../fakes";
+interface ExpectedResult {
+    typeAcquisition: TypeAcquisition;
+    errors: Diagnostic[];
+}
 describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
         assertTypeAcquisitionWithJson(json, configFileName, expectedResult);
@@ -40,7 +45,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         const result = parseJsonText(configFileName, fileText);
         assert(!result.parseDiagnostics.length);
         assert(!!result.endOfFileToken);
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
+        const host: ParseConfigHost = new fakes.ParseConfigHost(new FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
         const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
         verifyAcquisition(actualTypeAcquisition, expectedResult);
 
@@ -50,42 +55,31 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
 
     // tsconfig.json
     it("Convert deprecated typingOptions.enableAutoDiscovery format tsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typingOptions:
-                {
+        assertTypeAcquisition({
+            typingOptions: {
                     enableAutoDiscovery: true,
                     include: ["0.d.ts", "1.d.ts"],
                     exclude: ["0.js", "1.js"]
                 }
-            },
-            "tsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "tsconfig.json", {
+            typeAcquisition: {
                     enable: true,
                     include: ["0.d.ts", "1.d.ts"],
                     exclude: ["0.js", "1.js"]
                 },
                 errors: [] as Diagnostic[]
-            }
-        );
     });
 
+    });
     it("Convert correctly format tsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({
+            typeAcquisition: {
                     enable: true,
                     include: ["0.d.ts", "1.d.ts"],
                     exclude: ["0.js", "1.js"]
                 }
-            },
-            "tsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "tsconfig.json", {
+            typeAcquisition: {
                     enable: true,
                     include: ["0.d.ts", "1.d.ts"],
                     exclude: ["0.js", "1.js"]
@@ -95,16 +89,12 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     });
 
     it("Convert incorrect format tsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({
+            typeAcquisition: {
                     enableAutoDiscovy: true,
                 }
-            }, "tsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "tsconfig.json", {
+            typeAcquisition: {
                     enable: false,
                     include: [],
                     exclude: []
@@ -123,10 +113,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     });
 
     it("Convert default tsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition({}, "tsconfig.json",
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({}, "tsconfig.json", {
+            typeAcquisition: {
                     enable: false,
                     include: [],
                     exclude: []
@@ -136,16 +124,12 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     });
 
     it("Convert tsconfig.json with only enable property to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({
+            typeAcquisition: {
                     enable: true
                 }
-            }, "tsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "tsconfig.json", {
+            typeAcquisition: {
                     enable: true,
                     include: [],
                     exclude: []
@@ -156,18 +140,14 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
 
     // jsconfig.json
     it("Convert jsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({
+            typeAcquisition: {
                     enable: false,
                     include: ["0.d.ts"],
                     exclude: ["0.js"]
                 }
-            }, "jsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "jsconfig.json", {
+            typeAcquisition: {
                     enable: false,
                     include: ["0.d.ts"],
                     exclude: ["0.js"]
@@ -177,10 +157,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     });
 
     it("Convert default jsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition({ }, "jsconfig.json",
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({}, "jsconfig.json", {
+            typeAcquisition: {
                     enable: true,
                     include: [],
                     exclude: []
@@ -190,16 +168,12 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     });
 
     it("Convert incorrect format jsconfig.json to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({
+            typeAcquisition: {
                     enableAutoDiscovy: true,
                 }
-            }, "jsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "jsconfig.json", {
+            typeAcquisition: {
                     enable: true,
                     include: [],
                     exclude: []
@@ -218,16 +192,12 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     });
 
     it("Convert jsconfig.json with only enable property to typeAcquisition ", () => {
-        assertTypeAcquisition(
-            {
-                typeAcquisition:
-                {
+        assertTypeAcquisition({
+            typeAcquisition: {
                     enable: false
                 }
-            }, "jsconfig.json",
-            {
-                typeAcquisition:
-                {
+        }, "jsconfig.json", {
+            typeAcquisition: {
                     enable: false,
                     include: [],
                     exclude: []
@@ -236,4 +206,3 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             });
     });
 });
-}

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { createServerHost, createSessionWithEventTracking, protocol, checkNumberOfProjects, configuredProjectAt, File, libFile, createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "../../../ts.projectSystem";
+import { maxProgramSizeForNonTsFiles, ProjectLanguageServiceStateEvent } from "../../../ts.server";
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
     it("language service disabled events are triggered", () => {
         const f1 = {
@@ -19,10 +20,8 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
-
-        const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        const { session, events } = createSessionWithEventTracking<ProjectLanguageServiceStateEvent>(host, ProjectLanguageServiceStateEvent);
         session.executeCommand({
             seq: 0,
             type: "request",
@@ -56,12 +55,12 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         const f2: File = {
             path: "/a/largefile.js",
             content: "",
-            fileSize: server.maxProgramSizeForNonTsFiles + 1
+            fileSize: maxProgramSizeForNonTsFiles + 1
         };
         const f3: File = {
             path: "/a/extremlylarge.d.ts",
             content: "",
-            fileSize: server.maxProgramSizeForNonTsFiles + 100
+            fileSize: maxProgramSizeForNonTsFiles + 100
         };
         const config = {
             path: "/a/jsconfig.json",
@@ -76,4 +75,3 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
         baselineTsserverLogs("projectLanguageServiceStateEvent", "large file size is determined correctly", service);
     });
 });
-}

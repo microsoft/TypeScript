@@ -1,4 +1,5 @@
-namespace ts {
+import { SourceFile, Program, CompilerHost, IScriptSnapshot, Debug, TextChangeRange, TextSpan, createTextSpan, createTextChangeRange, ScriptTarget, createSourceFile, arrayToMap, sys, createGetCanonicalFileName, notImplemented, mapEntries, toPath, CompilerOptions, createProgram, find, ResolvedTypeReferenceDirective, ESMap, ModeAwareCache, forEachEntry, ResolvedModule, checkResolvedModule, StructureIsReused, noop, ModuleKind, emptyArray, getEntries, createResolvedModule, updateSourceFile, ModuleResolutionKind, TestFSWithWatch, isProgramUptoDate, returnFalse, returnUndefined, System, createWatchProgram, createWatchCompilerHostOfFilesAndCompilerOptions, createWatchCompilerHostOfConfigFile, parseConfigFileWithSystem } from "../ts";
+import * as ts from "../ts";
 
 const enum ChangedPart {
     references = 1 << 0,
@@ -29,11 +30,7 @@ interface TestCompilerHost extends CompilerHost {
 export class SourceText implements IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string,
-        private importsAndExports: string,
-        private program: string,
-        private changedPart: ChangedPart = 0,
-        private version = 0) {
+    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart: ChangedPart = 0, private version = 0) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
@@ -190,14 +187,18 @@ function checkCache<T>(caption: string, program: Program, fileName: string, expe
 
 /** True if the maps have the same keys and values. */
 function mapEqualToCache<T>(left: ESMap<string, T>, right: ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
-    if (left as any === right) return true; // given the type mismatch (the tests never pass a cache), this'll never be true
-    if (!left || !right) return false;
+    if (left as any === right)
+        return true; // given the type mismatch (the tests never pass a cache), this'll never be true
+    if (!left || !right)
+        return false;
     const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
-        if (!right.has(leftKey, /*mode*/ undefined)) return true;
+        if (!right.has(leftKey, /*mode*/ undefined))
+            return true;
         const rightValue = right.get(leftKey, /*mode*/ undefined)!;
         return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
     });
-    if (someInLeftHasNoMatch) return false;
+    if (someInLeftHasNoMatch)
+        return false;
     let someInRightHasNoMatch = false;
     right.forEach((_, rightKey) => someInRightHasNoMatch = someInRightHasNoMatch || !left.has(rightKey));
     return !someInRightHasNoMatch;
@@ -215,8 +216,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     const target = ScriptTarget.Latest;
     const files: NamedSourceText[] = [
         {
-            name: "a.ts", text: SourceText.New(
-                `
+            name: "a.ts", text: SourceText.New(`
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
 /// <reference types="typerefs" />
@@ -319,7 +319,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const program2 = updateProgram(program1, ["a.ts"], options, noop);
         assert.deepEqual(program1.getMissingFilePaths(), program2.getMissingFilePaths());
 
-        assert.equal(program2.structureIsReused, StructureIsReused.Completely,);
+        assert.equal(program2.structureIsReused, StructureIsReused.Completely);
     });
 
     it("fails if missing file is created", () => {
@@ -345,7 +345,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const options: CompilerOptions = { target };
 
         const program1 = newProgram(files, ["a.ts"], options);
-        checkResolvedModulesCache(program1, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts") })));
+        checkResolvedModulesCache(program1, "a.ts", new ts.Map(getEntries({ b: createResolvedModule("b.ts") })));
         checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
         const program2 = updateProgram(program1, ["a.ts"], options, files => {
@@ -354,7 +354,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         assert.equal(program2.structureIsReused, StructureIsReused.Completely);
 
         // content of resolution cache should not change
-        checkResolvedModulesCache(program1, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts") })));
+        checkResolvedModulesCache(program1, "a.ts", new ts.Map(getEntries({ b: createResolvedModule("b.ts") })));
         checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
         // imports has changed - program is not reused
@@ -371,7 +371,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             files[0].text = files[0].text.updateImportsAndExports(newImports);
         });
         assert.equal(program4.structureIsReused, StructureIsReused.SafeModules);
-        checkResolvedModulesCache(program4, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts"), c: undefined })));
+        checkResolvedModulesCache(program4, "a.ts", new ts.Map(getEntries({ b: createResolvedModule("b.ts"), c: undefined })));
     });
 
     it("set the resolvedImports after re-using an ambient external module declaration", () => {
@@ -419,7 +419,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
         const program1 = newProgram(files, ["/a.ts"], options);
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
         const program2 = updateProgram(program1, ["/a.ts"], options, files => {
@@ -428,7 +428,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         assert.equal(program2.structureIsReused, StructureIsReused.Completely);
 
         // content of resolution cache should not change
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
         // type reference directives has changed - program is not reused
@@ -446,7 +446,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             files[0].text = files[0].text.updateReferences(newReferences);
         });
         assert.equal(program4.structureIsReused, StructureIsReused.SafeModules);
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
     });
 
     it("fetches imports after npm install", () => {
@@ -459,8 +459,7 @@ describe("unittests:: Reuse program structure:: General", () => {
 
         const initialProgram = newProgram(rootFiles, rootFiles.map(f => f.name), options);
         {
-            assert.deepEqual(initialProgram.host.getTrace(),
-                [
+            assert.deepEqual(initialProgram.host.getTrace(), [
                     "======== Resolving module 'a' from 'file1.ts'. ========",
                     "Explicitly specified module resolution kind: 'NodeJs'.",
                     "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
@@ -481,8 +480,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                     "File 'node_modules/a/index.js' does not exist.",
                     "File 'node_modules/a/index.jsx' does not exist.",
                     "======== Module name 'a' was not resolved. ========"
-                ],
-                "initialProgram: execute module resolution normally.");
+            ], "initialProgram: execute module resolution normally.");
 
             const initialProgramDiagnostics = initialProgram.getSemanticDiagnostics(initialProgram.getSourceFile("file1.ts"));
             assert.lengthOf(initialProgramDiagnostics, 1, `initialProgram: import should fail.`);
@@ -492,8 +490,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             f[1].text = f[1].text.updateReferences(`/// <reference no-default-lib="true"/>`);
         }, filesAfterNpmInstall);
         {
-            assert.deepEqual(afterNpmInstallProgram.host.getTrace(),
-                [
+            assert.deepEqual(afterNpmInstallProgram.host.getTrace(), [
                     "======== Resolving module 'a' from 'file1.ts'. ========",
                     "Explicitly specified module resolution kind: 'NodeJs'.",
                     "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
@@ -505,8 +502,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                     "File 'node_modules/a/index.tsx' does not exist.",
                     "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
                     "======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========"
-                ],
-                "afterNpmInstallProgram: execute module resolution normally.");
+            ], "afterNpmInstallProgram: execute module resolution normally.");
 
             const afterNpmInstallProgramDiagnostics = afterNpmInstallProgram.getSemanticDiagnostics(afterNpmInstallProgram.getSourceFile("file1.ts"));
             assert.lengthOf(afterNpmInstallProgramDiagnostics, 0, `afterNpmInstallProgram: program is well-formed with import.`);
@@ -520,8 +516,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         ];
         const options = { target: ScriptTarget.ES2015, traceResolution: true };
         const program = newProgram(files, files.map(f => f.name), options);
-        assert.deepEqual(program.host.getTrace(),
-            [
+        assert.deepEqual(program.host.getTrace(), [
                 "======== Resolving module 'fs' from '/a/b/app.ts'. ========",
                 "Module resolution kind is not specified, using 'Classic'.",
                 "File '/a/b/fs.ts' does not exist.",
@@ -562,8 +557,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             f[0].text = f[0].text.updateProgram("var y = 1;");
             f[1].text = f[1].text.updateProgram("declare var process: any");
         });
-        assert.deepEqual(program3.host.getTrace(),
-            [
+        assert.deepEqual(program3.host.getTrace(), [
                 "======== Resolving module 'fs' from '/a/b/app.ts'. ========",
                 "Module resolution kind is not specified, using 'Classic'.",
                 "File '/a/b/fs.ts' does not exist.",
@@ -604,18 +598,11 @@ describe("unittests:: Reuse program structure:: General", () => {
             { name: "node_modules/@types/typerefs2/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
             {
                 name: "f1.ts",
-                text:
-                SourceText.New(
-                    `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
-                    `import { B } from './b1';${newLine}export let BB = B;`,
-                    "declare module './b1' { interface B { y: string; } }")
+                text: SourceText.New(`/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`, `import { B } from './b1';${newLine}export let BB = B;`, "declare module './b1' { interface B { y: string; } }")
             },
             {
                 name: "f2.ts",
-                text: SourceText.New(
-                    `/// <reference path="a2.ts"/>${newLine}/// <reference types="typerefs2"/>`,
-                    `import { B } from './b2';${newLine}import { BB } from './f1';`,
-                    "(new BB).x; (new BB).y;")
+                text: SourceText.New(`/// <reference path="a2.ts"/>${newLine}/// <reference types="typerefs2"/>`, `import { B } from './b2';${newLine}import { BB } from './f1';`, "(new BB).x; (new BB).y;")
             },
         ];
 
@@ -623,8 +610,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const program1 = newProgram(files, files.map(f => f.name), options);
         let expectedErrors = 0;
         {
-            assert.deepEqual(program1.host.getTrace(),
-                [
+            assert.deepEqual(program1.host.getTrace(), [
                     "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
                     "Resolving with primary search path 'node_modules/@types'.",
                     "File 'node_modules/@types/typerefs1/package.json' does not exist.",
@@ -647,8 +633,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                     "Explicitly specified module resolution kind: 'Classic'.",
                     "File 'f1.ts' exist - use it as a name resolution result.",
                     "======== Module name './f1' was successfully resolved to 'f1.ts'. ========"
-                ],
-                "program1: execute module resolution normally.");
+            ], "program1: execute module resolution normally.");
 
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("f2.ts"));
             assert.lengthOf(program1Diagnostics, expectedErrors, `initial program should be well-formed`);
@@ -802,7 +787,10 @@ describe("unittests:: Reuse program structure:: General", () => {
         const root = "/a.ts";
         const compilerOptions = { target, moduleResolution: ModuleResolutionKind.NodeJs };
 
-        function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string, bVersion: string }): ProgramWithSourceTexts {
+        function createRedirectProgram(useGetSourceFileByPath: boolean, options?: {
+            bText: string;
+            bVersion: string;
+        }): ProgramWithSourceTexts {
             const files: NamedSourceText[] = [
                 {
                     name: "/node_modules/a/index.d.ts",
@@ -903,23 +891,14 @@ describe("unittests:: Reuse program structure:: host is optional", () => {
 });
 
 type File = TestFSWithWatch.File;
-import createTestSystem = TestFSWithWatch.createWatchedSystem;
-import libFile = TestFSWithWatch.libFile;
+import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
+import libFile = ts.TestFSWithWatch.libFile;
 
 describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
-    function getWhetherProgramIsUptoDate(
-        program: Program,
-        newRootFileNames: string[],
-        newOptions: CompilerOptions
-    ) {
-        return isProgramUptoDate(
-            program, newRootFileNames, newOptions,
-            path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
-            /*hasInvalidatedResolution*/ returnFalse,
-            /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
-            /*getParsedCommandLine*/ returnUndefined,
-            /*projectReferences*/ undefined
-        );
+    function getWhetherProgramIsUptoDate(program: Program, newRootFileNames: string[], newOptions: CompilerOptions) {
+        return isProgramUptoDate(program, newRootFileNames, newOptions, path => program.getSourceFileByPath(path)!.version, returnFalse, returnFalse, 
+        /*hasChangedAutomaticTypeDirectiveNames*/ undefined, returnUndefined, 
+        /*projectReferences*/ undefined);
     }
 
     function duplicate(options: CompilerOptions): CompilerOptions;
@@ -929,11 +908,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
     }
 
     describe("should return true when there is no change in compiler options and", () => {
-        function verifyProgramIsUptoDate(
-            program: Program,
-            newRootFileNames: string[],
-            newOptions: CompilerOptions
-        ) {
+        function verifyProgramIsUptoDate(program: Program, newRootFileNames: string[], newOptions: CompilerOptions) {
             const actual = getWhetherProgramIsUptoDate(program, newRootFileNames, newOptions);
             assert.isTrue(actual);
         }
@@ -1102,11 +1077,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
 
     });
     describe("should return false when there is no change in compiler options but", () => {
-        function verifyProgramIsNotUptoDate(
-            program: Program,
-            newRootFileNames: string[],
-            newOptions: CompilerOptions
-        ) {
+        function verifyProgramIsNotUptoDate(program: Program, newRootFileNames: string[], newOptions: CompilerOptions) {
             const actual = getWhetherProgramIsUptoDate(program, newRootFileNames, newOptions);
             assert.isFalse(actual);
         }
@@ -1162,4 +1133,3 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
         });
     });
 });
-}

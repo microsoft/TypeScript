@@ -1,7 +1,7 @@
-namespace ts {
+import { PreProcessedFileInfo, PragmaContext, ScriptTarget, FileReference, SyntaxKind, scanner, isKeyword, processCommentPragmas, processPragmasIntoFields, noop } from "./ts";
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
     const pragmaContext: PragmaContext = {
-        languageVersion: ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
+        languageVersion: ScriptTarget.ES5,
         pragmas: undefined,
         checkJsDirective: undefined,
         referencedFiles: [],
@@ -12,7 +12,10 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         moduleName: undefined
     };
     const importedFiles: FileReference[] = [];
-    let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;
+    let ambientExternalModules: {
+        ref: FileReference;
+        depth: number;
+    }[] | undefined;
     let lastToken: SyntaxKind;
     let currentToken: SyntaxKind;
     let braceNesting = 0;
@@ -104,12 +107,10 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                 if (token === SyntaxKind.TypeKeyword) {
                     const skipTypeKeyword = scanner.lookAhead(() => {
                         const token = scanner.scan();
-                        return token !== SyntaxKind.FromKeyword && (
-                            token === SyntaxKind.AsteriskToken ||
+                        return token !== SyntaxKind.FromKeyword && (token === SyntaxKind.AsteriskToken ||
                             token === SyntaxKind.OpenBraceToken ||
                             token === SyntaxKind.Identifier ||
-                            isKeyword(token)
-                        );
+                            isKeyword(token));
                     });
                     if (skipTypeKeyword) {
                         token = nextToken();
@@ -349,10 +350,8 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             if (tryConsumeDeclare() ||
                 tryConsumeImport() ||
                 tryConsumeExport() ||
-                (detectJavaScriptImports && (
-                    tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true) ||
-                    tryConsumeDefine()
-                ))) {
+                (detectJavaScriptImports && (tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true) ||
+                    tryConsumeDefine()))) {
                 continue;
             }
             else {
@@ -396,5 +395,4 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         }
         return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
     }
-}
 }

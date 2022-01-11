@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { WatchedSystem, verifyTscWatch, createWatchedSystem, projectRoot, libFile, replaceFileText } from "../../ts.tscWatch";
+import { dedent } from "../../Utils";
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
     function build(sys: WatchedSystem) {
         sys.checkTimeoutQueueLengthAndRun(1); // build the project
@@ -7,13 +8,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
     verifyTscWatch({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
-        sys: () => createWatchedSystem(
-            [
+        sys: () => createWatchedSystem([
                 { path: `${projectRoot}/a.ts`, content: "export function foo() { }" },
                 { path: `${projectRoot}/b.ts`, content: "export function bar() { }" },
                 {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: Utils.dedent`
+                content: dedent `
 {
     "compilerOptions": {
         "composite": true,
@@ -25,9 +25,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
 }`
                 },
                 libFile
-            ],
-            { currentDirectory: projectRoot }
-        ),
+        ], { currentDirectory: projectRoot }),
         commandLineArgs: ["--b", "-w"],
         changes: [
             {
@@ -57,4 +55,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
         ]
     });
 });
-}

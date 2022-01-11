@@ -1,4 +1,4 @@
-namespace ts {
+import { verifyTscSerializedIncrementalEdits, loadProjectFromDisk, noChangeOnlyRuns } from "../../ts";
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     verifyTscSerializedIncrementalEdits({
         scenario: "containerOnlyReferenced",
@@ -8,4 +8,3 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         incrementalScenarios: noChangeOnlyRuns
     });
 });
-}

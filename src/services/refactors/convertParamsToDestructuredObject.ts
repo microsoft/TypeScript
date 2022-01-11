@@ -1,26 +1,36 @@
+import { getLocaleSpecificMessage, Diagnostics, RefactorContext, ApplicableRefactorInfo, isSourceFileJS, emptyArray, RefactorEditInfo, Debug, SourceFile, Program, LanguageServiceHost, map, getSynthesizedDeepClone, sortAndDeduplicate, compareValues, getSourceFileOfNode, first, last, ParameterDeclaration, CancellationToken, isConstructorDeclaration, deduplicate, equateValues, flatMap, every, contains, isNewExpressionTarget, isClassDeclaration, Node, getSymbolTarget, TypeChecker, Symbol, getContainingObjectLiteralElement, ObjectLiteralElementLike, getCheckFlags, CheckFlags, isImportSpecifier, isImportClause, isImportEqualsDeclaration, isNamespaceImport, isExportSpecifier, isExportAssignment, isDeclaration, CallExpression, NewExpression, SyntaxKind, tryCast, isCallOrNewExpression, isPropertyAccessExpression, isElementAccessExpression, ElementAccessExpression, PropertyAccessExpression, getMeaningFromLocation, SemanticMeaning, isExpressionWithTypeArgumentsInClassExtendsClause, getTouchingToken, getContainingFunctionDeclaration, rangeContainsRange, findAncestor, isJSDocNode, isFunctionLikeDeclaration, isMethodSignature, isInterfaceDeclaration, isTypeLiteralNode, FunctionLikeDeclaration, isObjectLiteralExpression, FunctionDeclaration, ClassDeclaration, findModifier, NodeArray, isRestParameter, isIdentifier, isVariableDeclaration, isVarConst, isThis, factory, Expression, PropertyAssignment, ShorthandPropertyAssignment, getTextOfIdentifierOrLiteral, ObjectLiteralExpression, suppressLeadingAndTrailingTrivia, isPropertyAssignment, copyComments, BindingElement, TypeLiteralNode, addEmitFlags, EmitFlags, PropertySignature, TypeNode, getTypeNodeIfAccessible, Identifier, Modifier, findChildOfKind, VariableDeclaration, ConstructorDeclaration, ClassExpression, FunctionBody, MethodDeclaration, FunctionExpression, ArrowFunction, MethodSignature } from "../ts";
+import { registerRefactor } from "../ts.refactor";
+import { ChangeTracker, LeadingTriviaOption, TrailingTriviaOption } from "../ts.textChanges";
+import { getReferenceEntriesForNode, Entry, EntryKind, NodeEntry } from "../ts.FindAllReferences";
 /* @internal */
-namespace ts.refactor.convertParamsToDestructuredObject {
 const refactorName = "Convert parameters to destructured object";
+/* @internal */
 const minimumParameterLength = 2;
+/* @internal */
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
 
+/* @internal */
 const toDestructuredAction = {
     name: refactorName,
     description: refactorDescription,
     kind: "refactor.rewrite.parameters.toDestructured"
 };
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [toDestructuredAction.kind],
     getEditsForAction,
     getAvailableActions
 });
 
+/* @internal */
 function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const { file, startPosition } = context;
     const isJSFile = isSourceFileJS(file);
-    if (isJSFile) return emptyArray; // TODO: GH#30113
+    if (isJSFile)
+        return emptyArray; // TODO: GH#30113
     const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
-    if (!functionDeclaration) return emptyArray;
+    if (!functionDeclaration)
+        return emptyArray;
 
     return [{
         name: refactorName,
@@ -29,28 +39,25 @@ function getAvailableActions(context: RefactorContext): readonly ApplicableRefac
     }];
 }
 
+/* @internal */
 function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     Debug.assert(actionName === refactorName, "Unexpected action name");
     const { file, startPosition, program, cancellationToken, host } = context;
     const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
-    if (!functionDeclaration || !cancellationToken) return undefined;
+    if (!functionDeclaration || !cancellationToken)
+        return undefined;
 
     const groupedReferences = getGroupedReferences(functionDeclaration, program, cancellationToken);
     if (groupedReferences.valid) {
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
+        const edits = ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
     return { edits: [] }; // TODO: GH#30113
 }
 
-function doChange(
-    sourceFile: SourceFile,
-    program: Program,
-    host: LanguageServiceHost,
-    changes: textChanges.ChangeTracker,
-    functionDeclaration: ValidFunctionDeclaration,
-    groupedReferences: GroupedReferences): void {
+/* @internal */
+function doChange(sourceFile: SourceFile, program: Program, host: LanguageServiceHost, changes: ChangeTracker, functionDeclaration: ValidFunctionDeclaration, groupedReferences: GroupedReferences): void {
     const signature = groupedReferences.signature;
     const newFunctionDeclarationParams = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
 
@@ -64,47 +71,38 @@ function doChange(
     for (const call of functionCalls) {
         if (call.arguments && call.arguments.length) {
             const newArgument = getSynthesizedDeepClone(createNewArgument(functionDeclaration, call.arguments), /*includeTrivia*/ true);
-            changes.replaceNodeRange(
-                getSourceFileOfNode(call),
-                first(call.arguments),
-                last(call.arguments),
-                newArgument,
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
+            changes.replaceNodeRange(getSourceFileOfNode(call), first(call.arguments), last(call.arguments), newArgument, { leadingTriviaOption: LeadingTriviaOption.IncludeAll, trailingTriviaOption: TrailingTriviaOption.Include });
         }
     }
 
     function replaceParameters(declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature, parameterDeclarations: ParameterDeclaration[]) {
-        changes.replaceNodeRangeWithNodes(
-            sourceFile,
-            first(declarationOrSignature.parameters),
-            last(declarationOrSignature.parameters),
-            parameterDeclarations,
-            {
+        changes.replaceNodeRangeWithNodes(sourceFile, first(declarationOrSignature.parameters), last(declarationOrSignature.parameters), parameterDeclarations, {
                 joiner: ", ",
                 // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
                 indentation: 0,
-                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
+            leadingTriviaOption: LeadingTriviaOption.IncludeAll,
+            trailingTriviaOption: TrailingTriviaOption.Include
             });
     }
 }
 
+/* @internal */
 function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, program: Program, cancellationToken: CancellationToken): GroupedReferences {
     const functionNames = getFunctionNames(functionDeclaration);
     const classNames = isConstructorDeclaration(functionDeclaration) ? getClassNames(functionDeclaration) : [];
     const names = deduplicate([...functionNames, ...classNames], equateValues);
     const checker = program.getTypeChecker();
 
-    const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+    const references = flatMap(names, /*mapfn*/ /*mapfn*/ /*mapfn*/ /*mapfn*/ /*mapfn*/ /*mapfn*/ /*mapfn*/ /*mapfn*/ name => getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
     const groupedReferences = groupReferences(references);
 
-    if (!every(groupedReferences.declarations, /*callback*/ decl => contains(names, decl))) {
+    if (!every(groupedReferences.declarations, /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ decl => contains(names, decl))) {
         groupedReferences.valid = false;
     }
 
     return groupedReferences;
 
-    function groupReferences(referenceEntries: readonly FindAllReferences.Entry[]): GroupedReferences {
+    function groupReferences(referenceEntries: readonly Entry[]): GroupedReferences {
         const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
         const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
         const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
@@ -113,7 +111,7 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
         const contextualSymbols = map(functionNames, name => getSymbolForContextualType(name, checker));
 
         for (const entry of referenceEntries) {
-            if (entry.kind === FindAllReferences.EntryKind.Span) {
+            if (entry.kind === EntryKind.Span) {
                 groupedReferences.valid = false;
                 continue;
             }
@@ -217,6 +215,7 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
 /**
  * Gets the symbol for the contextual type of the node if it is not a union or intersection.
  */
+/* @internal */
 function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | undefined {
     const element = getContainingObjectLiteralElement(node);
     if (element) {
@@ -228,7 +227,8 @@ function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | 
     }
 }
 
-function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undefined {
+/* @internal */
+function entryToImportOrExport(entry: NodeEntry): Node | undefined {
     const node = entry.node;
 
     if (isImportSpecifier(node.parent)
@@ -244,14 +244,16 @@ function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undef
     return undefined;
 }
 
-function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
+/* @internal */
+function entryToDeclaration(entry: NodeEntry): Node | undefined {
     if (isDeclaration(entry.node.parent)) {
         return entry.node;
     }
     return undefined;
 }
 
-function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | undefined {
+/* @internal */
+function entryToFunctionCall(entry: NodeEntry): CallExpression | NewExpression | undefined {
     if (entry.node.parent) {
         const functionReference = entry.node;
         const parent = functionReference.parent;
@@ -289,7 +291,8 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
     return undefined;
 }
 
-function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
+/* @internal */
+function entryToAccessExpression(entry: NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
     if (entry.node.parent) {
         const reference = entry.node;
         const parent = reference.parent;
@@ -313,7 +316,8 @@ function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAcc
     return undefined;
 }
 
-function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
+/* @internal */
+function entryToType(entry: NodeEntry): Node | undefined {
     const reference = entry.node;
     if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
         return reference;
@@ -321,21 +325,25 @@ function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
     return undefined;
 }
 
+/* @internal */
 function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
     const node = getTouchingToken(file, startPosition);
     const functionDeclaration = getContainingFunctionDeclaration(node);
 
     // don't offer refactor on top-level JSDoc
-    if (isTopLevelJSDoc(node)) return undefined;
+    if (isTopLevelJSDoc(node))
+        return undefined;
 
     if (functionDeclaration
         && isValidFunctionDeclaration(functionDeclaration, checker)
         && rangeContainsRange(functionDeclaration, node)
-        && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return functionDeclaration;
+        && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node)))
+        return functionDeclaration;
 
     return undefined;
 }
 
+/* @internal */
 function isTopLevelJSDoc(node: Node): boolean {
     const containingJSDoc = findAncestor(node, isJSDocNode);
     if (containingJSDoc) {
@@ -345,14 +353,15 @@ function isTopLevelJSDoc(node: Node): boolean {
     return false;
 }
 
+/* @internal */
 function isValidMethodSignature(node: Node): node is ValidMethodSignature {
     return isMethodSignature(node) && (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent));
 }
 
-function isValidFunctionDeclaration(
-    functionDeclaration: FunctionLikeDeclaration,
-    checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
-    if (!isValidParameterNodeArray(functionDeclaration.parameters, checker)) return false;
+/* @internal */
+function isValidFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration, checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
+    if (!isValidParameterNodeArray(functionDeclaration.parameters, checker))
+        return false;
     switch (functionDeclaration.kind) {
         case SyntaxKind.FunctionDeclaration:
             return hasNameOrDefault(functionDeclaration) && isSingleImplementation(functionDeclaration, checker);
@@ -378,10 +387,12 @@ function isValidFunctionDeclaration(
     return false;
 }
 
+/* @internal */
 function isSingleImplementation(functionDeclaration: FunctionLikeDeclaration, checker: TypeChecker): boolean {
     return !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
 }
 
+/* @internal */
 function hasNameOrDefault(functionOrClassDeclaration: FunctionDeclaration | ClassDeclaration): boolean {
     if (!functionOrClassDeclaration.name) {
         const defaultKeyword = findModifier(functionOrClassDeclaration, SyntaxKind.DefaultKeyword);
@@ -390,31 +401,33 @@ function hasNameOrDefault(functionOrClassDeclaration: FunctionDeclaration | Clas
     return true;
 }
 
-function isValidParameterNodeArray(
-    parameters: NodeArray<ParameterDeclaration>,
-    checker: TypeChecker): parameters is ValidParameterNodeArray {
+/* @internal */
+function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>, checker: TypeChecker): parameters is ValidParameterNodeArray {
     return getRefactorableParametersLength(parameters) >= minimumParameterLength
-        && every(parameters, /*callback*/ paramDecl => isValidParameterDeclaration(paramDecl, checker));
+        && every(parameters, /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ /*callback*/ paramDecl => isValidParameterDeclaration(paramDecl, checker));
 }
 
-function isValidParameterDeclaration(
-    parameterDeclaration: ParameterDeclaration,
-    checker: TypeChecker): parameterDeclaration is ValidParameterDeclaration {
+/* @internal */
+function isValidParameterDeclaration(parameterDeclaration: ParameterDeclaration, checker: TypeChecker): parameterDeclaration is ValidParameterDeclaration {
     if (isRestParameter(parameterDeclaration)) {
         const type = checker.getTypeAtLocation(parameterDeclaration);
-        if (!checker.isArrayType(type) && !checker.isTupleType(type)) return false;
+        if (!checker.isArrayType(type) && !checker.isTupleType(type))
+            return false;
     }
     return !parameterDeclaration.modifiers && !parameterDeclaration.decorators && isIdentifier(parameterDeclaration.name);
 }
 
+/* @internal */
 function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
     return isVariableDeclaration(node) && isVarConst(node) && isIdentifier(node.name) && !node.type; // TODO: GH#30113
 }
 
+/* @internal */
 function hasThisParameter(parameters: NodeArray<ParameterDeclaration>): boolean {
     return parameters.length > 0 && isThis(parameters[0].name);
 }
 
+/* @internal */
 function getRefactorableParametersLength(parameters: NodeArray<ParameterDeclaration>): number {
     if (hasThisParameter(parameters)) {
         return parameters.length - 1;
@@ -422,6 +435,7 @@ function getRefactorableParametersLength(parameters: NodeArray<ParameterDeclarat
     return parameters.length;
 }
 
+/* @internal */
 function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclaration>): NodeArray<ValidParameterDeclaration> {
     if (hasThisParameter(parameters)) {
         parameters = factory.createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
@@ -429,6 +443,7 @@ function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclarati
     return parameters;
 }
 
+/* @internal */
 function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
     if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
         return factory.createShorthandPropertyAssignment(name);
@@ -436,6 +451,7 @@ function createPropertyOrShorthandAssignment(name: string, initializer: Expressi
     return factory.createPropertyAssignment(name, initializer);
 }
 
+/* @internal */
 function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
     const parameters = getRefactorableParameters(functionDeclaration.parameters);
     const hasRestParameter = isRestParameter(last(parameters));
@@ -445,7 +461,8 @@ function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functi
         const property = createPropertyOrShorthandAssignment(parameterName, arg);
 
         suppressLeadingAndTrailingTrivia(property.name);
-        if (isPropertyAssignment(property)) suppressLeadingAndTrailingTrivia(property.initializer);
+        if (isPropertyAssignment(property))
+            suppressLeadingAndTrailingTrivia(property.initializer);
         copyComments(arg, property);
         return property;
     });
@@ -460,6 +477,7 @@ function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functi
     return objectLiteral;
 }
 
+/* @internal */
 function createNewParameters(functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
     const checker = program.getTypeChecker();
     const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
@@ -476,21 +494,16 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
     const objectParameter = factory.createParameterDeclaration(
         /*decorators*/ undefined,
         /*modifiers*/ undefined,
-        /*dotDotDotToken*/ undefined,
-        objectParameterName,
-        /*questionToken*/ undefined,
-        objectParameterType,
-        objectInitializer);
+    /*dotDotDotToken*/ undefined, objectParameterName, 
+    /*questionToken*/ undefined, objectParameterType, objectInitializer);
 
     if (hasThisParameter(functionDeclaration.parameters)) {
         const thisParameter = functionDeclaration.parameters[0];
         const newThisParameter = factory.createParameterDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
-            /*dotDotDotToken*/ undefined,
-            thisParameter.name,
-            /*questionToken*/ undefined,
-            thisParameter.type);
+        /*dotDotDotToken*/ undefined, thisParameter.name, 
+        /*questionToken*/ undefined, thisParameter.type);
 
         suppressLeadingAndTrailingTrivia(newThisParameter.name);
         copyComments(thisParameter.name, newThisParameter.name);
@@ -506,9 +519,7 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
     function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
         const element = factory.createBindingElement(
             /*dotDotDotToken*/ undefined,
-            /*propertyName*/ undefined,
-            getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer);
+        /*propertyName*/ undefined, getParameterName(parameterDeclaration), isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer);
 
         suppressLeadingAndTrailingTrivia(element);
         if (parameterDeclaration.initializer && element.initializer) {
@@ -530,10 +541,7 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
         }
 
         const propertySignature = factory.createPropertySignature(
-            /*modifiers*/ undefined,
-            getParameterName(parameterDeclaration),
-            isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
-            parameterType);
+        /*modifiers*/ undefined, getParameterName(parameterDeclaration), isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken, parameterType);
 
         suppressLeadingAndTrailingTrivia(propertySignature);
         copyComments(parameterDeclaration.name, propertySignature.name);
@@ -558,46 +566,46 @@ function createNewParameters(functionDeclaration: ValidFunctionDeclaration | Val
     }
 }
 
+/* @internal */
 function getParameterName(paramDeclaration: ValidParameterDeclaration) {
     return getTextOfIdentifierOrLiteral(paramDeclaration.name);
 }
 
+/* @internal */
 function getClassNames(constructorDeclaration: ValidConstructor): (Identifier | Modifier)[] {
     switch (constructorDeclaration.parent.kind) {
         case SyntaxKind.ClassDeclaration:
             const classDeclaration = constructorDeclaration.parent;
-            if (classDeclaration.name) return [classDeclaration.name];
+            if (classDeclaration.name)
+                return [classDeclaration.name];
             // If the class declaration doesn't have a name, it should have a default modifier.
             // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
-            const defaultModifier = Debug.checkDefined(
-                findModifier(classDeclaration, SyntaxKind.DefaultKeyword),
-                "Nameless class declaration should be a default export");
+            const defaultModifier = Debug.checkDefined(findModifier(classDeclaration, SyntaxKind.DefaultKeyword), "Nameless class declaration should be a default export");
             return [defaultModifier];
         case SyntaxKind.ClassExpression:
             const classExpression = constructorDeclaration.parent;
             const variableDeclaration = constructorDeclaration.parent.parent;
             const className = classExpression.name;
-            if (className) return [className, variableDeclaration.name];
+            if (className)
+                return [className, variableDeclaration.name];
             return [variableDeclaration.name];
     }
 }
 
+/* @internal */
 function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[] {
     switch (functionDeclaration.kind) {
         case SyntaxKind.FunctionDeclaration:
-            if (functionDeclaration.name) return [functionDeclaration.name];
+            if (functionDeclaration.name)
+                return [functionDeclaration.name];
             // If the function declaration doesn't have a name, it should have a default modifier.
             // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
-            const defaultModifier = Debug.checkDefined(
-                findModifier(functionDeclaration, SyntaxKind.DefaultKeyword),
-                "Nameless function declaration should be a default export");
+            const defaultModifier = Debug.checkDefined(findModifier(functionDeclaration, SyntaxKind.DefaultKeyword), "Nameless function declaration should be a default export");
             return [defaultModifier];
         case SyntaxKind.MethodDeclaration:
             return [functionDeclaration.name];
         case SyntaxKind.Constructor:
-            const ctrKeyword = Debug.checkDefined(
-                findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
-                "Constructor declaration should have constructor keyword");
+            const ctrKeyword = Debug.checkDefined(findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()), "Constructor declaration should have constructor keyword");
             if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
                 const variableDeclaration = functionDeclaration.parent.parent;
                 return [variableDeclaration.name, ctrKeyword];
@@ -606,58 +614,72 @@ function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[]
         case SyntaxKind.ArrowFunction:
             return [functionDeclaration.parent.name];
         case SyntaxKind.FunctionExpression:
-            if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
+            if (functionDeclaration.name)
+                return [functionDeclaration.name, functionDeclaration.parent.name];
             return [functionDeclaration.parent.name];
         default:
             return Debug.assertNever(functionDeclaration, `Unexpected function declaration kind ${(functionDeclaration as ValidFunctionDeclaration).kind}`);
     }
 }
 
+/* @internal */
 type ValidParameterNodeArray = NodeArray<ValidParameterDeclaration>;
 
+/* @internal */
 interface ValidVariableDeclaration extends VariableDeclaration {
     name: Identifier;
     type: undefined;
 }
 
+/* @internal */
 interface ValidConstructor extends ConstructorDeclaration {
-    parent: ClassDeclaration | (ClassExpression & { parent: ValidVariableDeclaration });
+    parent: ClassDeclaration | (ClassExpression & {
+        parent: ValidVariableDeclaration;
+    });
     parameters: NodeArray<ValidParameterDeclaration>;
     body: FunctionBody;
 }
 
+/* @internal */
 interface ValidFunction extends FunctionDeclaration {
     parameters: NodeArray<ValidParameterDeclaration>;
     body: FunctionBody;
 }
 
+/* @internal */
 interface ValidMethod extends MethodDeclaration {
     parameters: NodeArray<ValidParameterDeclaration>;
     body: FunctionBody;
 }
 
+/* @internal */
 interface ValidFunctionExpression extends FunctionExpression {
     parent: ValidVariableDeclaration;
     parameters: NodeArray<ValidParameterDeclaration>;
 }
 
+/* @internal */
 interface ValidArrowFunction extends ArrowFunction {
     parent: ValidVariableDeclaration;
     parameters: NodeArray<ValidParameterDeclaration>;
 }
 
+/* @internal */
 interface ValidMethodSignature extends MethodSignature {
     parameters: NodeArray<ValidParameterDeclaration>;
 }
 
+/* @internal */
 type ValidFunctionDeclaration = ValidConstructor | ValidFunction | ValidMethod | ValidArrowFunction | ValidFunctionExpression;
 
+/* @internal */
 interface ValidParameterDeclaration extends ParameterDeclaration {
     name: Identifier;
     modifiers: undefined;
     decorators: undefined;
 }
 
+/* @internal */
 interface GroupedReferences {
     functionCalls: (CallExpression | NewExpression)[];
     declarations: Node[];
@@ -665,8 +687,8 @@ interface GroupedReferences {
     classReferences?: ClassReferences;
     valid: boolean;
 }
+/* @internal */
 interface ClassReferences {
     accessExpressions: Node[];
     typeUsages: Node[];
-}
 }

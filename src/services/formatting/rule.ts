@@ -1,5 +1,6 @@
+import { FormattingContext } from "../ts.formatting";
+import { emptyArray, SyntaxKind } from "../ts";
 /* @internal */
-namespace ts.formatting {
 export interface Rule {
     // Used for debugging to identify each rule based on the property name it's assigned to.
     readonly debugName: string;
@@ -8,9 +9,12 @@ export interface Rule {
     readonly flags: RuleFlags;
 }
 
+/* @internal */
 export type ContextPredicate = (context: FormattingContext) => boolean;
+/* @internal */
 export const anyContext: readonly ContextPredicate[] = emptyArray;
 
+/* @internal */
 export const enum RuleAction {
     StopProcessingSpaceActions = 1 << 0,
     StopProcessingTokenActions = 1 << 1,
@@ -22,16 +26,17 @@ export const enum RuleAction {
 
     StopAction = StopProcessingSpaceActions | StopProcessingTokenActions,
     ModifySpaceAction = InsertSpace | InsertNewLine | DeleteSpace,
-    ModifyTokenAction = DeleteToken | InsertTrailingSemicolon,
+    ModifyTokenAction = DeleteToken | InsertTrailingSemicolon
 }
 
+/* @internal */
 export const enum RuleFlags {
     None,
-    CanDeleteNewLines,
+    CanDeleteNewLines
 }
 
+/* @internal */
 export interface TokenRange {
     readonly tokens: readonly SyntaxKind[];
     readonly isSpecific: boolean;
-}
 }

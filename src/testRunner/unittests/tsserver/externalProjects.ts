@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { createServerHost, createProjectService, toExternalFiles, protocol, checkProjectActualFiles, toExternalFile, createSession, checkNumberOfProjects, File, checkNumberOfExternalProjects, checkNumberOfInferredProjects, verifyDynamic, libFile, checkProjectRootFiles, configuredProjectAt } from "../../ts.projectSystem";
+import { combinePaths, getDirectoryPath, getBaseFileName, ConfigFileProgramReloadLevel, emptyArray, SourceFile, toPath, createGetCanonicalFileName, DiagnosticCategory, arrayIterator, ModuleResolutionKind, map, singleIterator, ScriptKind } from "../../ts";
+import { PluginCreateInfo, maxProgramSizeForNonTsFiles } from "../../ts.server";
+import { LanguageService } from "../../Harness";
+import { projectRoot } from "../../ts.tscWatch";
 describe("unittests:: tsserver:: ExternalProjects", () => {
     describe("can handle tsconfig file name with difference casing", () => {
         function verifyConfigFileCasing(lazyConfiguredProjectsFromExternalProject: boolean) {
@@ -62,8 +66,8 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             assert.equal(moduleName, "myplugin");
             return {
                 module: () => ({
-                    create(info: server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                    create(info: PluginCreateInfo) {
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         proxy.getSemanticDiagnostics = filename => {
                             const prev = info.languageService.getSemanticDiagnostics(filename);
                             const sourceFile: SourceFile = info.project.getSourceFile(toPath(filename, /*basePath*/ undefined, createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
@@ -229,17 +233,17 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
 
     it("when file name starts with ^", () => {
         const file: File = {
-            path: `${tscWatch.projectRoot}/file.ts`,
+            path: `${projectRoot}/file.ts`,
             content: "const x = 10;"
         };
         const app: File = {
-            path: `${tscWatch.projectRoot}/^app.ts`,
+            path: `${projectRoot}/^app.ts`,
             content: "const y = 10;"
         };
         const host = createServerHost([file, app, libFile]);
         const service = createProjectService(host);
         service.openExternalProjects([{
-            projectFileName: `${tscWatch.projectRoot}/myproject.njsproj`,
+                projectFileName: `${projectRoot}/myproject.njsproj`,
             rootFiles: [
                 toExternalFile(file.path),
                 toExternalFile(app.path)
@@ -255,12 +259,10 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         };
         const config1 = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify(
-                {
+            content: JSON.stringify({
                     compilerOptions: {},
                     files: ["f1.ts"]
-                }
-            )
+            })
         };
         const file2 = {
             path: "/a/c/f2.ts",
@@ -268,12 +270,10 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         };
         const config2 = {
             path: "/a/c/tsconfig.json",
-            content: JSON.stringify(
-                {
+            content: JSON.stringify({
                     compilerOptions: {},
                     files: ["f2.ts"]
-                }
-            )
+            })
         };
         const file3 = {
             path: "/a/d/f3.ts",
@@ -465,8 +465,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         };
         const host = createServerHost([f1, f2]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const service = createProjectService(host);
         const projectFileName = "/a/proj.csproj";
@@ -524,8 +523,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             checkNumberOfProjects(projectService, { configuredProjects: 1, externalProjects: 0, inferredProjects: 0 });
 
             const configProject = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(configProject, lazyConfiguredProjectsFromExternalProject ?
-                emptyArray : // Since no files opened from this project, its not loaded
+            checkProjectActualFiles(configProject, lazyConfiguredProjectsFromExternalProject ? emptyArray : // Since no files opened from this project, its not loaded
                 [configFile.path]);
 
             host.deleteFile(configFile.path);
@@ -725,8 +723,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         };
         const config1 = {
             path: "/src/tsconfig.json",
-            content: JSON.stringify(
-                {
+            content: JSON.stringify({
                     compilerOptions: {
                         module: "commonjs",
                         target: "es5",
@@ -740,8 +737,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         };
         const config2 = {
             path: config1.path,
-            content: JSON.stringify(
-                {
+            content: JSON.stringify({
                     compilerOptions: {
                         module: "commonjs",
                         target: "es5",
@@ -845,9 +841,9 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
     });
 
     it("handles creation of external project with jsconfig before jsconfig creation watcher is invoked", () => {
-        const projectFileName = `${tscWatch.projectRoot}/WebApplication36.csproj`;
+        const projectFileName = `${projectRoot}/WebApplication36.csproj`;
         const tsconfig: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const files = [libFile, tsconfig];
@@ -865,7 +861,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         checkProjectActualFiles(configProject, [tsconfig.path]);
 
         // write js file, open external project and open it for edit
-        const jsFilePath = `${tscWatch.projectRoot}/javascript.js`;
+        const jsFilePath = `${projectRoot}/javascript.js`;
         host.writeFile(jsFilePath, "");
         service.openExternalProjects([{
             projectFileName,
@@ -880,7 +876,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
 
         // write jsconfig file
         const jsConfig: File = {
-            path: `${tscWatch.projectRoot}/jsconfig.json`,
+            path: `${projectRoot}/jsconfig.json`,
             content: "{}"
         };
         // Dont invoke file creation watchers as the repro suggests
@@ -915,8 +911,8 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             assert.equal(moduleName, "myplugin");
             return {
                 module: () => ({
-                    create(info: server.PluginCreateInfo) {
-                        return Harness.LanguageService.makeDefaultProxy(info);
+                    create(info: PluginCreateInfo) {
+                        return LanguageService.makeDefaultProxy(info);
                     },
                     getExternalFiles() {
                         return ["/does/not/exist"];
@@ -938,4 +934,3 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
         checkNumberOfProjects(projectService, { externalProjects: 1 });
     });
 });
-}

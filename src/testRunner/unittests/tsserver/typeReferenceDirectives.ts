@@ -1,7 +1,8 @@
-namespace ts.projectSystem {
+import { projectRoot } from "../../ts.tscWatch";
+import { File, libFile, createServerHost, createProjectService, checkNumberOfProjects, checkProjectActualFiles } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
-        const libProjectLocation = `${tscWatch.projectRoot}/lib`;
+        const libProjectLocation = `${projectRoot}/lib`;
         const typeLib: File = {
             path: `${libProjectLocation}/@types/UpperCasePackage/index.d.ts`,
             content: `declare class BrokenTest {
@@ -19,7 +20,7 @@ declare class TestLib {
     test(): void;
 }`
         };
-        const testProjectLocation = `${tscWatch.projectRoot}/test`;
+        const testProjectLocation = `${projectRoot}/test`;
         const testFile: File = {
             path: `${testProjectLocation}/test.ts`,
             content: `class TestClass1 {
@@ -57,7 +58,7 @@ declare class TestLib {
     });
 
     it("when typeReferenceDirective is relative path and in a sibling folder", () => {
-        const projectPath = `${tscWatch.projectRoot}/background`;
+        const projectPath = `${projectRoot}/background`;
         const file: File = {
             path: `${projectPath}/a.ts`,
             content: "let x = 10;"
@@ -73,7 +74,7 @@ declare class TestLib {
             })
         };
         const filesystem: File = {
-            path: `${tscWatch.projectRoot}/typedefs/filesystem.d.ts`,
+            path: `${projectRoot}/typedefs/filesystem.d.ts`,
             content: `interface LocalFileSystem { someProperty: string; }`
         };
         const files = [file, tsconfig, filesystem, libFile];
@@ -82,4 +83,3 @@ declare class TestLib {
         service.openClientFile(file.path);
     });
 });
-}

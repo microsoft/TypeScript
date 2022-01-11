@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createSession, createLoggerWithInMemoryLogs, openFilesForSession, makeSessionRequest, commonFile2, baselineTsserverLogs, commonFile1, createProjectService, configuredProjectAt, checkProjectRootFiles, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, toExternalFiles, checkNumberOfProjects, checkProjectActualFiles, customTypesMap, checkWatchedFiles, toExternalFile, closeFilesForSession, verifyGetErrRequest } from "../../ts.projectSystem";
+import { protocol, CommandNames, ITypingsInstaller, createInstallTypingsRequest, emptyArray, NormalizedPath, asNormalizedPath } from "../../ts.server";
+import { noop, singleIterator, emptyOptions, returnFalse, notImplemented, removeMinAndVersionNumbers, ScriptKind, projectSystem, some, combinePaths, getDirectoryPath, createTextSpan, getSnapshotText, ScriptElementKind, ScriptTarget, normalizePath, Debug, Path } from "../../ts";
+import { projectRoot } from "../../ts.tscWatch";
+import * as ts from "../../ts";
 describe("unittests:: tsserver:: Projects", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {
         const file1: File = {
@@ -10,10 +14,7 @@ describe("unittests:: tsserver:: Projects", () => {
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
         openFilesForSession([file1], session);
 
-        const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            server.CommandNames.SemanticDiagnosticsSync,
-            { file: file1.path }
-        );
+        const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(CommandNames.SemanticDiagnosticsSync, { file: file1.path });
 
         // Two errors: CommonFile2 not found and cannot find name y
         session.executeCommand(getErrRequest);
@@ -122,12 +123,10 @@ describe("unittests:: tsserver:: Projects", () => {
             };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
-                    {
+                content: JSON.stringify({
                         compilerOptions: {},
                         files: ["f1.ts"]
-                    }
-                )
+                })
             };
 
             const externalProjectName = "externalproject";
@@ -153,12 +152,10 @@ describe("unittests:: tsserver:: Projects", () => {
             };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
-                    {
+                content: JSON.stringify({
                         compilerOptions: {},
                         files: ["f1.ts"]
-                    }
-                )
+                })
             };
 
             const host = createServerHost([file1, config1]);
@@ -179,12 +176,10 @@ describe("unittests:: tsserver:: Projects", () => {
             };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
-                    {
+                content: JSON.stringify({
                         compilerOptions: {},
                         files: ["f1.ts"]
-                    }
-                )
+                })
             };
 
             const host = createServerHost([file1, config1]);
@@ -370,12 +365,12 @@ describe("unittests:: tsserver:: Projects", () => {
         const host = createServerHost([file1, libFile, constructorFile, bliss, customTypesMap]);
         let request: string | undefined;
         const cachePath = "/a/data";
-        const typingsInstaller: server.ITypingsInstaller = {
+        const typingsInstaller: ITypingsInstaller = {
             isKnownTypesPackageName: returnFalse,
             installPackage: notImplemented,
             enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                 assert.isUndefined(request);
-                request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
+                request = JSON.stringify(createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || emptyArray, cachePath));
             },
             attach: noop,
             onProjectClosed: noop,
@@ -402,7 +397,7 @@ describe("unittests:: tsserver:: Projects", () => {
             projectName: response.projectName,
             typeAcquisition: response.typeAcquisition,
             compilerOptions: response.compilerOptions,
-            typings: emptyArray,
+            typings: ts.emptyArray,
             unresolvedImports: response.unresolvedImports,
         });
 
@@ -454,7 +449,10 @@ describe("unittests:: tsserver:: Projects", () => {
     });
 
     it("removes version numbers correctly", () => {
-        const testData: [string, string][] = [
+        const testData: [
+            string,
+            string
+        ][] = [
             ["jquery-max", "jquery-max"],
             ["jquery.min", "jquery"],
             ["jquery-min.4.2.3", "jquery"],
@@ -681,7 +679,7 @@ describe("unittests:: tsserver:: Projects", () => {
 
         // Specify .html extension as mixed content
         const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
-        const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+        const configureHostRequest = makeSessionRequest<projectSystem.protocol.ConfigureRequestArguments>(projectSystem.CommandNames.Configure, { extraFileExtensions });
         session.executeCommand(configureHostRequest);
 
         // The configured project should now be updated to include html file
@@ -741,7 +739,7 @@ describe("unittests:: tsserver:: Projects", () => {
 
         // Specify .html extension as mixed content in a configure host request
         const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
-        const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+        const configureHostRequest = makeSessionRequest<projectSystem.protocol.ConfigureRequestArguments>(projectSystem.CommandNames.Configure, { extraFileExtensions });
         session.executeCommand(configureHostRequest);
 
         openFilesForSession([file1], session);
@@ -1008,24 +1006,24 @@ describe("unittests:: tsserver:: Projects", () => {
         const host = createServerHost([f1, libFile, config]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
         session.executeCommandSeq({
-            command: server.CommandNames.Open,
+            command: CommandNames.Open,
             arguments: {
                 file: f1.path
             }
-        } as protocol.OpenRequest);
+        } as projectSystem.protocol.OpenRequest);
         session.executeCommandSeq({
-            command: server.CommandNames.Close,
+            command: CommandNames.Close,
             arguments: {
                 file: f1.path
             }
-        } as protocol.CloseRequest);
+        } as projectSystem.protocol.CloseRequest);
         session.executeCommandSeq({
-            command: server.CommandNames.Geterr,
+            command: CommandNames.Geterr,
             arguments: {
                 delay: 0,
                 files: [f1.path]
             }
-        } as protocol.GeterrRequest);
+        } as projectSystem.protocol.GeterrRequest);
         baselineTsserverLogs("projects", "getting errors from closed script info does not throw exception because of getting project from orphan script info", session);
     });
 
@@ -1077,8 +1075,8 @@ describe("unittests:: tsserver:: Projects", () => {
         const host = createServerHost(files);
         const session = createSession(host);
         // Create configured project
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+            command: projectSystem.protocol.CommandTypes.Open,
             arguments: {
                 file: file.path
             }
@@ -1089,8 +1087,8 @@ describe("unittests:: tsserver:: Projects", () => {
         verifyConfiguredProject();
 
         // open files/file1 = should not create another project
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+            command: projectSystem.protocol.CommandTypes.Open,
             arguments: {
                 file: filesFile1.path
             }
@@ -1098,8 +1096,8 @@ describe("unittests:: tsserver:: Projects", () => {
         verifyConfiguredProject();
 
         // Close the file = should still have project
-        session.executeCommandSeq<protocol.CloseRequest>({
-            command: protocol.CommandTypes.Close,
+        session.executeCommandSeq<projectSystem.protocol.CloseRequest>({
+            command: projectSystem.protocol.CommandTypes.Close,
             arguments: {
                 file: file.path
             }
@@ -1107,8 +1105,8 @@ describe("unittests:: tsserver:: Projects", () => {
         verifyConfiguredProject();
 
         // Open files/file2 - should create inferred project and close configured project
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+            command: projectSystem.protocol.CommandTypes.Open,
             arguments: {
                 file: filesFile2.path
             }
@@ -1117,8 +1115,8 @@ describe("unittests:: tsserver:: Projects", () => {
         checkProjectActualFiles(projectService.inferredProjects[0], [libFile.path, filesFile2.path]);
 
         // Actions on file1 would result in assert
-        session.executeCommandSeq<protocol.OccurrencesRequest>({
-            command: protocol.CommandTypes.Occurrences,
+        session.executeCommandSeq<projectSystem.protocol.OccurrencesRequest>({
+            command: projectSystem.protocol.CommandTypes.Occurrences,
             arguments: {
                 file: filesFile1.path,
                 line: 1,
@@ -1134,30 +1132,30 @@ describe("unittests:: tsserver:: Projects", () => {
 
     it("requests are done on file on pendingReload but has svc for previous version", () => {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/src/file1.ts`,
+            path: `${projectRoot}/src/file1.ts`,
             content: `import { y } from "./file2"; let x = 10;`
         };
         const file2: File = {
-            path: `${tscWatch.projectRoot}/src/file2.ts`,
+            path: `${projectRoot}/src/file2.ts`,
             content: "export let y = 10;"
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const files = [file1, file2, libFile, config];
         const host = createServerHost(files);
         const session = createSession(host);
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+            command: projectSystem.protocol.CommandTypes.Open,
             arguments: { file: file2.path, fileContent: file2.content }
         });
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+            command: projectSystem.protocol.CommandTypes.Open,
             arguments: { file: file1.path }
         });
-        session.executeCommandSeq<protocol.CloseRequest>({
-            command: protocol.CommandTypes.Close,
+        session.executeCommandSeq<projectSystem.protocol.CloseRequest>({
+            command: projectSystem.protocol.CommandTypes.Close,
             arguments: { file: file2.path }
         });
 
@@ -1165,8 +1163,8 @@ describe("unittests:: tsserver:: Projects", () => {
         host.writeFile(file2.path, file2.content);
         // Do not let the timeout runs, before executing command
         const startOffset = file2.content.indexOf("y") + 1;
-        session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
-            command: protocol.CommandTypes.GetApplicableRefactors,
+        session.executeCommandSeq<projectSystem.protocol.GetApplicableRefactorsRequest>({
+            command: projectSystem.protocol.CommandTypes.GetApplicableRefactors,
             arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
         });
     });
@@ -1190,14 +1188,14 @@ describe("unittests:: tsserver:: Projects", () => {
             const host = createServerHost([file1, file2, tsconfig]);
             const session = createSession(host);
             const projectService = session.getProjectService();
-            session.executeCommandSeq<protocol.ConfigureRequest>({
-                command: protocol.CommandTypes.Configure,
+            session.executeCommandSeq<projectSystem.protocol.ConfigureRequest>({
+                command: projectSystem.protocol.CommandTypes.Configure,
                 arguments: { preferences: { lazyConfiguredProjectsFromExternalProject } }
             });
 
             // Configure the deferred extension.
             const extraFileExtensions = [{ extension: ".deferred", scriptKind: ScriptKind.Deferred, isMixedContent: true }];
-            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            const configureHostRequest = makeSessionRequest<projectSystem.protocol.ConfigureRequestArguments>(projectSystem.CommandNames.Configure, { extraFileExtensions });
             session.executeCommand(configureHostRequest);
 
             // Open external project
@@ -1214,7 +1212,7 @@ describe("unittests:: tsserver:: Projects", () => {
             const configuredProject = configuredProjectAt(projectService, 0);
             if (lazyConfiguredProjectsFromExternalProject) {
                 // configured project is just created and not yet loaded
-                checkProjectActualFiles(configuredProject, emptyArray);
+                checkProjectActualFiles(configuredProject, ts.emptyArray);
                 projectService.ensureInferredProjectsUpToDate_TestOnly();
             }
             checkProjectActualFiles(configuredProject, [file1.path, tsconfig.path]);
@@ -1233,18 +1231,18 @@ describe("unittests:: tsserver:: Projects", () => {
 
     it("Orphan source files are handled correctly on watch trigger", () => {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/src/file1.ts`,
+            path: `${projectRoot}/src/file1.ts`,
             content: `export let x = 10;`
         };
         const file2: File = {
-            path: `${tscWatch.projectRoot}/src/file2.ts`,
+            path: `${projectRoot}/src/file2.ts`,
             content: "export let y = 10;"
         };
         const configContent1 = JSON.stringify({
             files: ["src/file1.ts", "src/file2.ts"]
         });
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: configContent1
         };
         const files = [file1, file2, libFile, config];
@@ -1468,11 +1466,11 @@ describe("unittests:: tsserver:: Projects", () => {
 
     it("synchronizeProjectList returns correct information when base configuration file cannot be resolved", () => {
         const file: File = {
-            path: `${tscWatch.projectRoot}/index.ts`,
+            path: `${projectRoot}/index.ts`,
             content: "export const foo = 5;"
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({ extends: "./tsconfig_base.json" })
         };
         const host = createServerHost([file, config, libFile]);
@@ -1483,17 +1481,17 @@ describe("unittests:: tsserver:: Projects", () => {
             libFile.path,
             file.path,
             config.path,
-            `${tscWatch.projectRoot}/tsconfig_base.json`,
+            `${projectRoot}/tsconfig_base.json`,
         ]);
     });
 
     it("synchronizeProjectList returns correct information when base configuration file cannot be resolved and redirect info is requested", () => {
         const file: File = {
-            path: `${tscWatch.projectRoot}/index.ts`,
+            path: `${projectRoot}/index.ts`,
             content: "export const foo = 5;"
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({ extends: "./tsconfig_base.json" })
         };
         const host = createServerHost([file, config, libFile]);
@@ -1504,7 +1502,7 @@ describe("unittests:: tsserver:: Projects", () => {
             { fileName: libFile.path, isSourceOfProjectReferenceRedirect: false },
             { fileName: file.path, isSourceOfProjectReferenceRedirect: false },
             { fileName: config.path, isSourceOfProjectReferenceRedirect: false },
-            { fileName: `${tscWatch.projectRoot}/tsconfig_base.json`, isSourceOfProjectReferenceRedirect: false },
+            { fileName: `${projectRoot}/tsconfig_base.json`, isSourceOfProjectReferenceRedirect: false },
         ]);
     });
 
@@ -1583,7 +1581,7 @@ describe("unittests:: tsserver:: Projects", () => {
         const project = service.inferredProjects[0];
         checkProjectActualFiles(project, [commonFile1.path, libFile.path]);
         // Intentionally create scriptinfo and attach it to project
-        const info = service.getOrCreateScriptInfoForNormalizedPath(commonFile2.path as server.NormalizedPath, /*openedByClient*/ false)!;
+        const info = service.getOrCreateScriptInfoForNormalizedPath(commonFile2.path as NormalizedPath, /*openedByClient*/ false)!;
         info.attachToProject(project);
         try {
             service.applyChangesInOpenFiles(/*openFiles*/ undefined, /*changedFiles*/ undefined, [commonFile1.path]);
@@ -1593,11 +1591,11 @@ describe("unittests:: tsserver:: Projects", () => {
         }
     });
     it("does not look beyond node_modules folders for default configured projects", () => {
-        const rootFilePath = server.asNormalizedPath("/project/index.ts");
-        const rootProjectPath = server.asNormalizedPath("/project/tsconfig.json");
-        const nodeModulesFilePath1 = server.asNormalizedPath("/project/node_modules/@types/a/index.d.ts");
-        const nodeModulesProjectPath1 = server.asNormalizedPath("/project/node_modules/@types/a/tsconfig.json");
-        const nodeModulesFilePath2 = server.asNormalizedPath("/project/node_modules/@types/b/index.d.ts");
+        const rootFilePath = asNormalizedPath("/project/index.ts");
+        const rootProjectPath = asNormalizedPath("/project/tsconfig.json");
+        const nodeModulesFilePath1 = asNormalizedPath("/project/node_modules/@types/a/index.d.ts");
+        const nodeModulesProjectPath1 = asNormalizedPath("/project/node_modules/@types/a/tsconfig.json");
+        const nodeModulesFilePath2 = asNormalizedPath("/project/node_modules/@types/b/index.d.ts");
         const serverHost = createServerHost([
             { path: rootFilePath, content: "import 'a'; import 'b';" },
             { path: rootProjectPath, content: "{}" },
@@ -1622,4 +1620,3 @@ describe("unittests:: tsserver:: Projects", () => {
         checkNumberOfInferredProjects(projectService, 0);
     });
 });
-}

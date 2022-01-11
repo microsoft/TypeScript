@@ -1,4 +1,6 @@
-namespace ts {
+import { parseJSDocTypeExpressionForTests, parseIsolatedJSDocComment, Debug, createSourceFile, ScriptTarget, SyntaxKind, JSDocTemplateTag } from "../ts";
+import { Baseline } from "../Harness";
+import { sourceFileToJSON } from "../Utils";
 describe("unittests:: JSDocParsing", () => {
     describe("TypeExpressions", () => {
         function parsesCorrectly(name: string, content: string) {
@@ -6,8 +8,7 @@ describe("unittests:: JSDocParsing", () => {
                 const typeAndDiagnostics = parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
-                Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
-                    Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
+                Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json", sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
             });
         }
 
@@ -96,9 +97,7 @@ describe("unittests:: JSDocParsing", () => {
                     Debug.fail("Comment has at least one diagnostic: " + comment.diagnostics[0].messageText);
                 }
 
-                Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
-                    JSON.stringify(comment.jsDoc,
-                        (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
+                Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json", JSON.stringify(comment.jsDoc, (_, v) => v && v.pos !== undefined ? JSON.parse(sourceFileToJSON(v)) : v, 4));
             });
         }
 
@@ -110,40 +109,32 @@ describe("unittests:: JSDocParsing", () => {
         }
 
         describe("parsesIncorrectly", () => {
-            parsesIncorrectly("multipleTypes",
-                `/**
+            parsesIncorrectly("multipleTypes", `/**
   * @type {number}
   * @type {string}
   */`);
-            parsesIncorrectly("multipleReturnTypes",
-                `/**
+            parsesIncorrectly("multipleReturnTypes", `/**
   * @return {number}
   * @return {string}
   */`);
-            parsesIncorrectly("noTypeParameters",
-                `/**
+            parsesIncorrectly("noTypeParameters", `/**
   * @template
   */`);
-            parsesIncorrectly("trailingTypeParameterComma",
-                `/**
+            parsesIncorrectly("trailingTypeParameterComma", `/**
   * @template T,
   */`);
-            parsesIncorrectly("paramWithoutName",
-                `/**
+            parsesIncorrectly("paramWithoutName", `/**
   * @param {number}
   */`);
-            parsesIncorrectly("paramWithoutTypeOrName",
-                `/**
+            parsesIncorrectly("paramWithoutTypeOrName", `/**
   * @param
   */`);
 
-            parsesIncorrectly("noType",
-                `/**
+            parsesIncorrectly("noType", `/**
 * @type
 */`);
 
-            parsesIncorrectly("@augments with no type",
-                `/**
+            parsesIncorrectly("@augments with no type", `/**
  * @augments
  */`);
         });
@@ -151,167 +142,139 @@ describe("unittests:: JSDocParsing", () => {
         describe("parsesCorrectly", () => {
             parsesCorrectly("threeAsterisks", "/*** */");
             parsesCorrectly("emptyComment", "/***/");
-            parsesCorrectly("noLeadingAsterisk",
-                `/**
+            parsesCorrectly("noLeadingAsterisk", `/**
     @type {number}
   */`);
 
 
-            parsesCorrectly("noReturnType",
-                `/**
+            parsesCorrectly("noReturnType", `/**
   * @return
   */`);
 
-            parsesCorrectly("leadingAsterisk",
-                `/**
+            parsesCorrectly("leadingAsterisk", `/**
   * @type {number}
   */`);
 
             parsesCorrectly("asteriskAfterPreamble", "/** * @type {number} */");
 
-            parsesCorrectly("typeTag",
-                `/**
+            parsesCorrectly("typeTag", `/**
   * @type {number}
   */`);
 
 
-            parsesCorrectly("returnTag1",
-                `/**
+            parsesCorrectly("returnTag1", `/**
   * @return {number}
   */`);
 
 
-            parsesCorrectly("returnTag2",
-                `/**
+            parsesCorrectly("returnTag2", `/**
   * @return {number} Description text follows
   */`);
 
 
-            parsesCorrectly("returnsTag1",
-                `/**
+            parsesCorrectly("returnsTag1", `/**
   * @returns {number}
   */`);
 
 
-            parsesCorrectly("oneParamTag",
-                `/**
+            parsesCorrectly("oneParamTag", `/**
   * @param {number} name1
   */`);
 
 
-            parsesCorrectly("twoParamTag2",
-                `/**
+            parsesCorrectly("twoParamTag2", `/**
   * @param {number} name1
   * @param {number} name2
   */`);
 
 
-            parsesCorrectly("paramTag1",
-                `/**
+            parsesCorrectly("paramTag1", `/**
   * @param {number} name1 Description text follows
   */`);
 
 
-            parsesCorrectly("paramTagBracketedName1",
-                `/**
+            parsesCorrectly("paramTagBracketedName1", `/**
   * @param {number} [name1] Description text follows
   */`);
 
 
-            parsesCorrectly("paramTagBracketedName2",
-                `/**
+            parsesCorrectly("paramTagBracketedName2", `/**
   * @param {number} [ name1 = 1] Description text follows
   */`);
 
 
-            parsesCorrectly("twoParamTagOnSameLine",
-                `/**
+            parsesCorrectly("twoParamTagOnSameLine", `/**
   * @param {number} name1 @param {number} name2
   */`);
 
 
-            parsesCorrectly("paramTagNameThenType1",
-                `/**
+            parsesCorrectly("paramTagNameThenType1", `/**
   * @param name1 {number}
   */`);
 
 
-            parsesCorrectly("paramTagNameThenType2",
-                `/**
+            parsesCorrectly("paramTagNameThenType2", `/**
   * @param name1 {number} Description
   */`);
 
 
-            parsesCorrectly("argSynonymForParamTag",
-                `/**
+            parsesCorrectly("argSynonymForParamTag", `/**
   * @arg {number} name1 Description
   */`);
 
 
-            parsesCorrectly("argumentSynonymForParamTag",
-                `/**
+            parsesCorrectly("argumentSynonymForParamTag", `/**
   * @argument {number} name1 Description
   */`);
 
 
-            parsesCorrectly("templateTag",
-                `/**
+            parsesCorrectly("templateTag", `/**
   * @template T
   */`);
 
 
-            parsesCorrectly("templateTag2",
-                `/**
+            parsesCorrectly("templateTag2", `/**
   * @template K,V
   */`);
 
 
-            parsesCorrectly("templateTag3",
-                `/**
+            parsesCorrectly("templateTag3", `/**
   * @template K ,V
   */`);
 
 
-            parsesCorrectly("templateTag4",
-                `/**
+            parsesCorrectly("templateTag4", `/**
   * @template K, V
   */`);
 
 
-            parsesCorrectly("templateTag5",
-                `/**
+            parsesCorrectly("templateTag5", `/**
   * @template K , V
   */`);
 
-            parsesCorrectly("templateTag6",
-                `/**
+            parsesCorrectly("templateTag6", `/**
   * @template K , V Description of type parameters.
   */`);
 
-            parsesCorrectly("paramWithoutType",
-                `/**
+            parsesCorrectly("paramWithoutType", `/**
   * @param foo
   */`);
-            parsesCorrectly("typedefTagWithChildrenTags",
-                `/**
+            parsesCorrectly("typedefTagWithChildrenTags", `/**
   * @typedef People
   * @type {Object}
   * @property {number} age
   * @property {string} name
   */`);
-            parsesCorrectly("less-than and greater-than characters",
-                `/**
+            parsesCorrectly("less-than and greater-than characters", `/**
  * @param x hi
 < > still part of the previous comment
  */`);
 
-            parsesCorrectly("Nested @param tags",
-                `/**
+            parsesCorrectly("Nested @param tags", `/**
 * @param {object} o Doc doc
 * @param {string} o.f Doc for f
 */`);
-            parsesCorrectly("@link tags",
-                `/**
+            parsesCorrectly("@link tags", `/**
  * {@link first }
  * Inside {@link link text} thing
  * @param foo See also {@link A.Reference}
@@ -330,8 +293,7 @@ oh.no
  * }, because of the intermediate asterisks.
  * @author Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}
  */`);
-            parsesCorrectly("authorTag",
-                `/**
+            parsesCorrectly("authorTag", `/**
  * @author John Doe <john.doe@example.com>
  * @author John Doe <john.doe@example.com> unexpected comment
  * @author 108 <108@actionbutton.net> Video Games Forever
@@ -351,8 +313,7 @@ oh.no
  *  want to keep commenting down here, I dunno.
  */`);
 
-            parsesCorrectly("consecutive newline tokens",
-                `/**
+            parsesCorrectly("consecutive newline tokens", `/**
  * @example
  * Some\n\n * text\r\n * with newlines.
  */`);
@@ -360,16 +321,14 @@ oh.no
             parsesCorrectly("Initial star is not a tag", `/***@a*/`);
             parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
             parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);
-            parsesCorrectly("no space before @ is not a new tag",
-                `/**
+            parsesCorrectly("no space before @ is not a new tag", `/**
  * @param this (@is@)
  * @param fine its@fine
 @zerowidth
 *@singlestar
 **@doublestar
  */`);
-            parsesCorrectly("@@ does not start a new tag",
-                `/**
+            parsesCorrectly("@@ does not start a new tag", `/**
  * @param this is (@@fine@@and) is one comment
  */`);
         });
@@ -402,4 +361,3 @@ oh.no
         assert.equal((doc?.jsDoc.tags?.[0] as JSDocTemplateTag).typeParameters.length, 0);
     });
 });
-}

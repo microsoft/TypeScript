@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { File, SymLink, libFile, createServerHost, createSession, createLoggerWithInMemoryLogs, openFilesForSession, executeSessionRequest, protocol, protocolLocationFromSubstring, baselineTsserverLogs, TestServerHost, verifyGetErrRequest } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: symLinks", () => {
     it("rename in common file renames all project", () => {
         const projects = "/users/username/projects";
@@ -41,14 +41,12 @@ describe("unittests:: tsserver:: symLinks", () => {
         const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
         const host = createServerHost(files);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
-        openFilesForSession(
-            [
+        openFilesForSession([
                 { file: aFile, projectRootPath: folderA },
                 { file: bFile, projectRootPath: folderB },
                 { file: aFc, projectRootPath: folderA },
                 { file: bFc, projectRootPath: folderB },
-            ],
-            session);
+        ], session);
         executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
         baselineTsserverLogs("symLinks", "rename in common file renames all project", session);
     });
@@ -173,4 +171,3 @@ new C();`
         verifyModuleResolution(/*withPathMapping*/ true);
     });
 });
-}

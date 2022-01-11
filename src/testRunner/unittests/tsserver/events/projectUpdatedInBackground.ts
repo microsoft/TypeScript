@@ -1,8 +1,11 @@
-namespace ts.projectSystem {
+import { forEach, contains, CompilerOptions, map, find } from "../../../ts";
+import { TestSession, File, protocol, TestServerHost, createServerHost, libFile, checkNumberOfProjects, checkProjectActualFiles, checkWatchedDirectories, createSessionWithEventTracking, createSessionWithDefaultEventHandler } from "../../../ts.projectSystem";
+import { ProjectsUpdatedInBackgroundEvent, CommandNames } from "../../../ts.server";
+import * as ts from "../../../ts";
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
         assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
-        const seen = new Map<string, true>();
+        const seen = new ts.Map<string, true>();
         forEach(actual, f => {
             assert.isFalse(seen.has(f), `${caption}: Found duplicate ${f}. Actual: ${actual} Expected: ${expected}`);
             seen.set(f, true);
@@ -10,10 +13,10 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         });
     }
 
-    function createVerifyInitialOpen(session: TestSession, verifyProjectsUpdatedInBackgroundEventHandler: (events: server.ProjectsUpdatedInBackgroundEvent[]) => void) {
+    function createVerifyInitialOpen(session: TestSession, verifyProjectsUpdatedInBackgroundEventHandler: (events: ProjectsUpdatedInBackgroundEvent[]) => void) {
         return (file: File) => {
             session.executeCommandSeq({
-                command: server.CommandNames.Open,
+                command: CommandNames.Open,
                 arguments: {
                     file: file.path
                 }
@@ -24,7 +27,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
     interface ProjectsUpdatedInBackgroundEventVerifier {
         session: TestSession;
-        verifyProjectsUpdatedInBackgroundEventHandler(events: server.ProjectsUpdatedInBackgroundEvent[]): void;
+        verifyProjectsUpdatedInBackgroundEventHandler(events: ProjectsUpdatedInBackgroundEvent[]): void;
         verifyInitialOpen(file: File): void;
     }
 
@@ -54,7 +57,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             host.writeFile(commonFile2.path, commonFile2.content);
             host.runQueuedTimeoutCallbacks();
             verifyProjectsUpdatedInBackgroundEventHandler([{
-                eventName: server.ProjectsUpdatedInBackgroundEvent,
+                    eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
                     openFiles
                 }
@@ -63,7 +66,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             host.writeFile(commonFile3.path, commonFile3.content);
             host.runQueuedTimeoutCallbacks();
             verifyProjectsUpdatedInBackgroundEventHandler([{
-                eventName: server.ProjectsUpdatedInBackgroundEvent,
+                    eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
                     openFiles
                 }
@@ -98,7 +101,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 host.runQueuedTimeoutCallbacks();
 
                 verifyProjectsUpdatedInBackgroundEventHandler([{
-                    eventName: server.ProjectsUpdatedInBackgroundEvent,
+                        eventName: ProjectsUpdatedInBackgroundEvent,
                     data: {
                         openFiles
                     }
@@ -107,7 +110,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 host.writeFile(f2.path, "export let x = 11");
                 host.runQueuedTimeoutCallbacks();
                 verifyProjectsUpdatedInBackgroundEventHandler([{
-                    eventName: server.ProjectsUpdatedInBackgroundEvent,
+                        eventName: ProjectsUpdatedInBackgroundEvent,
                     data: {
                         openFiles
                     }
@@ -185,7 +188,8 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 // Since this is first event, it will have all the files
                 filesToReload.forEach(f => host.ensureFileOrFolder(f));
-                if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
+                if (!firstReloadFileList)
+                    host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
                 verifyProjectsUpdatedInBackgroundEvent();
 
                 return {
@@ -212,7 +216,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 function verifyProjectsUpdatedInBackgroundEvent() {
                     host.runQueuedTimeoutCallbacks();
                     verifyProjectsUpdatedInBackgroundEventHandler([{
-                        eventName: server.ProjectsUpdatedInBackgroundEvent,
+                            eventName: ProjectsUpdatedInBackgroundEvent,
                         data: {
                             openFiles
                         }
@@ -221,7 +225,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
                 function updateContentOfOpenFile(file: File, newContent: string) {
                     session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: server.CommandNames.Change,
+                        command: CommandNames.Change,
                         arguments: {
                             file: file.path,
                             insertString: newContent,
@@ -456,7 +460,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 // Since this is first event
                 verifyProject();
                 verifyProjectsUpdatedInBackgroundEventHandler([{
-                    eventName: server.ProjectsUpdatedInBackgroundEvent,
+                        eventName: ProjectsUpdatedInBackgroundEvent,
                     data: {
                         openFiles
                     }
@@ -477,7 +481,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 verifyProject();
 
                 verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
-                    eventName: server.ProjectsUpdatedInBackgroundEvent,
+                        eventName: ProjectsUpdatedInBackgroundEvent,
                     data: {
                         openFiles
                     }
@@ -504,22 +508,22 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         verifyProjectsUpdatedInBackgroundEvent(createSessionWithProjectChangedEventHandler);
 
         function createSessionWithProjectChangedEventHandler(host: TestServerHost): ProjectsUpdatedInBackgroundEventVerifier {
-            const { session, events: projectChangedEvents } = createSessionWithEventTracking<server.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent);
+            const { session, events: projectChangedEvents } = createSessionWithEventTracking<ProjectsUpdatedInBackgroundEvent>(host, ProjectsUpdatedInBackgroundEvent);
             return {
                 session,
                 verifyProjectsUpdatedInBackgroundEventHandler,
                 verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectsUpdatedInBackgroundEventHandler)
             };
 
-            function eventToString(event: server.ProjectsUpdatedInBackgroundEvent) {
+            function eventToString(event: ProjectsUpdatedInBackgroundEvent) {
                 return JSON.stringify(event && { eventName: event.eventName, data: event.data });
             }
 
-            function eventsToString(events: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
+            function eventsToString(events: readonly ProjectsUpdatedInBackgroundEvent[]) {
                 return "[" + map(events, eventToString).join(",") + "]";
             }
 
-            function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
+            function verifyProjectsUpdatedInBackgroundEventHandler(expectedEvents: readonly ProjectsUpdatedInBackgroundEvent[]) {
                 assert.equal(projectChangedEvents.length, expectedEvents.length, `Incorrect number of events Actual: ${eventsToString(projectChangedEvents)} Expected: ${eventsToString(expectedEvents)}`);
                 forEach(projectChangedEvents, (actualEvent, i) => {
                     const expectedEvent = expectedEvents[i];
@@ -544,7 +548,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
 
         function createSessionThatUsesEvents(host: TestServerHost, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
-            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent, { noGetErrOnBackgroundUpdate });
+            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(host, ProjectsUpdatedInBackgroundEvent, { noGetErrOnBackgroundUpdate });
 
             return {
                 session,
@@ -552,7 +556,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 verifyInitialOpen: createVerifyInitialOpen(session, verifyProjectsUpdatedInBackgroundEventHandler)
             };
 
-            function verifyProjectsUpdatedInBackgroundEventHandler(expected: readonly server.ProjectsUpdatedInBackgroundEvent[]) {
+            function verifyProjectsUpdatedInBackgroundEventHandler(expected: readonly ProjectsUpdatedInBackgroundEvent[]) {
                 const expectedEvents: protocol.ProjectsUpdatedInBackgroundEventBody[] = map(expected, e => {
                     return {
                         openFiles: e.data.openFiles
@@ -575,4 +579,3 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         }
     });
 });
-}

@@ -1,13 +1,16 @@
+import { Logger, LogLevel, Msg, nowString, ServerHost, SessionOptions, Session, ServerCancellationToken, nullTypingsInstaller, protocol, indent } from "./ts.server";
+import { perfLogger, Debug, memoize, ensureTrailingDirectorySeparator, getDirectoryPath, startsWith, directorySeparator, returnNoopFileWatcher, notImplemented, returnFalse, identity } from "./ts";
 /*@internal*/
-namespace ts.server {
 export interface HostWithWriteMessage {
     writeMessage(s: any): void;
 }
+/* @internal */
 export interface WebHost extends HostWithWriteMessage {
     readFile(path: string): string | undefined;
     fileExists(path: string): boolean;
 }
 
+/* @internal */
 export class BaseLogger implements Logger {
     private seq = 0;
     private inGroup = false;
@@ -57,7 +60,8 @@ export class BaseLogger implements Logger {
                 break;
         }
 
-        if (!this.canWrite()) return;
+        if (!this.canWrite())
+            return;
 
         s = `[${nowString()}] ${s}\n`;
         if (!this.inGroup || this.firstInGroup) {
@@ -76,12 +80,15 @@ export class BaseLogger implements Logger {
     }
 }
 
+/* @internal */
 export type MessageLogLevel = "info" | "perf" | "error";
+/* @internal */
 export interface LoggingMessage {
     readonly type: "log";
     readonly level: MessageLogLevel;
-    readonly body: string
+    readonly body: string;
 }
+/* @internal */
 export class MainProcessLogger extends BaseLogger {
     constructor(level: LogLevel, private host: HostWithWriteMessage) {
         super(level);
@@ -109,6 +116,7 @@ export class MainProcessLogger extends BaseLogger {
     }
 }
 
+/* @internal */
 export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {
     const returnEmptyString = () => "";
     const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
@@ -116,8 +124,8 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
     const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
     return {
         args,
-        newLine: "\r\n", // This can be configured by clients
-        useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
+        newLine: "\r\n",
+        useCaseSensitiveFileNames: false,
         readFile: path => {
             const webPath = getWebPath(path);
             return webPath && host.readFile(webPath);
@@ -127,7 +135,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
         watchDirectory: returnNoopFileWatcher,
 
         getExecutingFilePath: () => directorySeparator,
-        getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
+        getCurrentDirectory: returnEmptyString,
 
         /* eslint-disable no-restricted-globals */
         setTimeout: (cb, ms, ...args) => setTimeout(cb, ms, ...args),
@@ -140,7 +148,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
         exit: notImplemented,
 
         // Debugging related
-        getEnvironmentVariable: returnEmptyString, // TODO:: Used to enable debugging info
+        getEnvironmentVariable: returnEmptyString,
         // tryEnableSourceMapsForHost?(): void;
         // debugMode?: boolean;
 
@@ -149,11 +157,11 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
             const webPath = getWebPath(path);
             return !!webPath && host.fileExists(webPath);
         },
-        directoryExists: returnFalse, // Module resolution
-        readDirectory: notImplemented, // Configured project, typing installer
-        getDirectories: () => [], // For automatic type reference directives
-        createDirectory: notImplemented, // compile On save
-        writeFile: notImplemented, // compile on save
+        directoryExists: returnFalse,
+        readDirectory: notImplemented,
+        getDirectories: () => [],
+        createDirectory: notImplemented,
+        writeFile: notImplemented,
         resolvePath: identity, // Plugins
         // realpath? // Module resolution, symlinks
         // getModifiedTime // File watching
@@ -166,6 +174,7 @@ export function createWebSystem(host: WebHost, args: string[], getExecutingFileP
     };
 }
 
+/* @internal */
 export interface StartSessionOptions {
     globalPlugins: SessionOptions["globalPlugins"];
     pluginProbeLocations: SessionOptions["pluginProbeLocations"];
@@ -177,6 +186,7 @@ export interface StartSessionOptions {
     syntaxOnly: SessionOptions["syntaxOnly"];
     serverMode: SessionOptions["serverMode"];
 }
+/* @internal */
 export class WorkerSession extends Session<{}> {
     constructor(host: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
         super({
@@ -184,7 +194,7 @@ export class WorkerSession extends Session<{}> {
             cancellationToken,
             ...options,
             typingsInstaller: nullTypingsInstaller,
-            byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
+            byteLength: notImplemented,
             hrtime,
             logger,
             canUseEvents: true,
@@ -211,5 +221,4 @@ export class WorkerSession extends Session<{}> {
     protected toStringMessage(message: {}) {
         return JSON.stringify(message, undefined, 2);
     }
-}
 }

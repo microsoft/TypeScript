@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createSession, openFilesForSession, executeSessionRequest, protocol, makeReferenceItem } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: getFileReferences", () => {
     const importA = `import "./a";`;
     const importCurlyFromA = `import {} from "./a";`;
@@ -36,11 +36,7 @@ describe("unittests:: tsserver:: getFileReferences", () => {
     it("should get file references", () => {
         const session = makeSampleSession();
 
-        const response = executeSessionRequest<protocol.FileReferencesRequest, protocol.FileReferencesResponse>(
-            session,
-            protocol.CommandTypes.FileReferences,
-            { file: aTs.path },
-        );
+        const response = executeSessionRequest<protocol.FileReferencesRequest, protocol.FileReferencesResponse>(session, protocol.CommandTypes.FileReferences, { file: aTs.path });
 
         const expectResponse: protocol.FileReferencesResponseBody = {
             refs: [
@@ -55,4 +51,3 @@ describe("unittests:: tsserver:: getFileReferences", () => {
         assert.deepEqual(response, expectResponse);
     });
 });
-}

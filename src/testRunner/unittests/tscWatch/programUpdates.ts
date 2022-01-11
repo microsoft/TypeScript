@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { File, verifyTscWatch, createWatchedSystem, libFile, commonFile1, commonFile2, checkSingleTimeoutQueueLengthAndRun, createWatchOfFilesAndCompilerOptions, checkProgramActualFiles, projectRoot, WatchedSystem, TscWatchCompileChange, runQueuedTimeoutCallbacks, noopChange, replaceFileText, SymLink } from "../../ts.tscWatch";
+import { emptyArray, getDirectoryPath, CompilerOptions, generateTSConfig, ModuleKind } from "../../ts";
 describe("unittests:: tsc-watch:: program updates", () => {
     const scenario = "programUpdates";
     const configFilePath = "/a/b/tsconfig.json";
@@ -700,8 +701,7 @@ declare const eval: any`
             };
             const config1 = {
                 path: "/src/tsconfig.json",
-                content: JSON.stringify(
-                    {
+                content: JSON.stringify({
                         compilerOptions: {
                             module: "commonjs",
                             target: "es5",
@@ -718,8 +718,7 @@ declare const eval: any`
         changes: [
             {
                 caption: "Change the lib in config",
-                change: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify(
-                    {
+                change: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify({
                         compilerOptions: {
                             module: "commonjs",
                             target: "es5",
@@ -730,8 +729,7 @@ declare const eval: any`
                                 "es2015.promise"
                             ]
                         }
-                    })
-                ),
+                })),
                 timeouts: checkSingleTimeoutQueueLengthAndRun,
             }
         ]
@@ -1073,35 +1071,12 @@ declare const eval: any`
             });
         }
 
-        verifyWithOptions(
-            "without outDir or outFile is specified",
-            { module: ModuleKind.AMD }
-        );
-
-        verifyWithOptions(
-            "with outFile",
-            { module: ModuleKind.AMD, outFile: "build/outFile.js" }
-        );
-
-        verifyWithOptions(
-            "when outDir is specified",
-            { module: ModuleKind.AMD, outDir: "build" }
-        );
-
-        verifyWithOptions(
-            "without outDir or outFile is specified with declaration enabled",
-            { module: ModuleKind.AMD, declaration: true }
-        );
-
-        verifyWithOptions(
-            "when outDir and declarationDir is specified",
-            { module: ModuleKind.AMD, outDir: "build", declaration: true, declarationDir: "decls" }
-        );
-
-        verifyWithOptions(
-            "declarationDir is specified",
-            { module: ModuleKind.AMD, declaration: true, declarationDir: "decls" }
-        );
+        verifyWithOptions("without outDir or outFile is specified", { module: ModuleKind.AMD });
+        verifyWithOptions("with outFile", { module: ModuleKind.AMD, outFile: "build/outFile.js" });
+        verifyWithOptions("when outDir is specified", { module: ModuleKind.AMD, outDir: "build" });
+        verifyWithOptions("without outDir or outFile is specified with declaration enabled", { module: ModuleKind.AMD, declaration: true });
+        verifyWithOptions("when outDir and declarationDir is specified", { module: ModuleKind.AMD, outDir: "build", declaration: true, declarationDir: "decls" });
+        verifyWithOptions("declarationDir is specified", { module: ModuleKind.AMD, declaration: true, declarationDir: "decls" });
     });
 
     verifyTscWatch({
@@ -1229,7 +1204,7 @@ foo().hello`
             },
             {
                 caption: "Set always strict false",
-                change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })),
                 timeouts: runQueuedTimeoutCallbacks,
             },
             {
@@ -1664,7 +1639,10 @@ import { x } from "../b";`),
                 })
             };
             return createWatchedSystem([
-                libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
+                libFile,
+                commonFile1,
+                commonFile2,
+                configFile, firstExtendedConfigFile, secondExtendedConfigFile
             ]);
         },
         changes: [
@@ -1816,4 +1794,3 @@ import { x } from "../b";`),
         ]
     });
 });
-}

@@ -1,8 +1,9 @@
-namespace ts {
+import { SourceFile, TypeChecker, forEach, getSourceFileOfNode } from "../../../ts";
+import { Compiler } from "../../../Harness";
 describe("unittests:: services:: extract:: Symbol Walker", () => {
     function test(description: string, source: string, verifier: (file: SourceFile, checker: TypeChecker) => void) {
         it(description, () => {
-            const result = Harness.Compiler.compileFiles([{
+            const result = Compiler.compileFiles([{
                 unitName: "main.ts",
                 content: source
             }], [], {}, {}, "/");
@@ -42,4 +43,3 @@ export default function foo(a: number, b: Bar): void {}`, (file, checker) => {
         assert.equal(stdLibRefSymbols, 1); // Expect 1 stdlib entry symbol - the implicit Array referenced by Bar.history
     });
 });
-}

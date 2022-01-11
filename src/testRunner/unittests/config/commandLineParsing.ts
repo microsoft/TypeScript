@@ -1,4 +1,5 @@
-namespace ts {
+import { ParsedCommandLine, ParseCommandLineWorkerDiagnostics, parseCommandLineWorker, compilerOptionsDidYouMeanDiagnostics, Diagnostics, ScriptTarget, ModuleKind, DiagnosticMessage, formatStringFromArgs, ESMap, CommandLineOption, createOptionNameMap, getEntries, ModuleResolutionKind, WatchFileKind, WatchDirectoryKind, PollingWatchKind, ParsedBuildCommand, parseBuildCommand, BuildOptions } from "../../ts";
+import * as ts from "../../ts";
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine, workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
@@ -36,8 +37,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse single option of library flag ", () => {
         // --lib es6 0.ts
-        assertParseResult(["--lib", "es6", "0.ts"],
-            {
+        assertParseResult(["--lib", "es6", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -92,8 +92,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse multiple options of library flags ", () => {
         // --lib es5,es2015.symbol.wellknown 0.ts
-        assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "0.ts"],
-            {
+        assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -104,8 +103,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse invalid option of library flags ", () => {
         // --lib es5,invalidOption 0.ts
-        assertParseResult(["--lib", "es5,invalidOption", "0.ts"],
-            {
+        assertParseResult(["--lib", "es5,invalidOption", "0.ts"], {
                 errors: [{
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6' [...]",
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
@@ -122,8 +120,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     });
     it("Parse empty options of --jsx ", () => {
         // 0.ts --jsx
-        assertParseResult(["0.ts", "--jsx"],
-            {
+        assertParseResult(["0.ts", "--jsx"], {
                 errors: [{
                     messageText: "Compiler option 'jsx' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -148,8 +145,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse empty options of --module ", () => {
         // 0.ts --
-        assertParseResult(["0.ts", "--module"],
-            {
+        assertParseResult(["0.ts", "--module"], {
                 errors: [{
                     messageText: "Compiler option 'module' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -174,8 +170,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse empty options of --newLine ", () => {
         // 0.ts --newLine
-        assertParseResult(["0.ts", "--newLine"],
-            {
+        assertParseResult(["0.ts", "--newLine"], {
                 errors: [{
                     messageText: "Compiler option 'newLine' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -200,8 +195,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse empty options of --target ", () => {
         // 0.ts --target
-        assertParseResult(["0.ts", "--target"],
-            {
+        assertParseResult(["0.ts", "--target"], {
                 errors: [{
                     messageText: "Compiler option 'target' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -226,8 +220,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse empty options of --moduleResolution ", () => {
         // 0.ts --moduleResolution
-        assertParseResult(["0.ts", "--moduleResolution"],
-            {
+        assertParseResult(["0.ts", "--moduleResolution"], {
                 errors: [{
                     messageText: "Compiler option 'moduleResolution' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -252,8 +245,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse empty options of --lib ", () => {
         // 0.ts --lib
-        assertParseResult(["0.ts", "--lib"],
-            {
+        assertParseResult(["0.ts", "--lib"], {
                 errors: [{
                     messageText: "Compiler option 'lib' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -273,8 +265,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     it("Parse empty string of --lib ", () => {
         // 0.ts --lib
         // This test is an error because the empty string is falsey
-        assertParseResult(["0.ts", "--lib", ""],
-            {
+        assertParseResult(["0.ts", "--lib", ""], {
                 errors: [{
                     messageText: "Compiler option 'lib' expects an argument.",
                     category: Diagnostics.Compiler_option_0_expects_an_argument.category,
@@ -293,8 +284,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse immediately following command line argument of --lib ", () => {
         // 0.ts --lib
-        assertParseResult(["0.ts", "--lib", "--sourcemap"],
-            {
+        assertParseResult(["0.ts", "--lib", "--sourcemap"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -306,8 +296,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse --lib option with extra comma ", () => {
         // --lib es5, es7 0.ts
-        assertParseResult(["--lib", "es5,", "es7", "0.ts"],
-            {
+        assertParseResult(["--lib", "es5,", "es7", "0.ts"], {
                 errors: [{
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6' [...].",
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
@@ -325,8 +314,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse --lib option with trailing white-space ", () => {
         // --lib es5, es7 0.ts
-        assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
-            {
+        assertParseResult(["--lib", "es5, ", "es7", "0.ts"], {
                 errors: [{
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6', [...]",
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
@@ -344,8 +332,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse multiple compiler flags with input files at the end", () => {
         // --lib es5,es2015.symbol.wellknown --target es5 0.ts
-        assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "--target", "es5", "0.ts"],
-            {
+        assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "--target", "es5", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -357,8 +344,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse multiple compiler flags with input files in the middle", () => {
         // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
-        assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,es2015.symbol.wellknown"],
-            {
+        assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,es2015.symbol.wellknown"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -371,8 +357,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("Parse multiple library compiler flags ", () => {
         // --module commonjs --target es5 --lib es5 0.ts --library es2015.array,es2015.symbol.wellknown
-        assertParseResult(["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es2015.core, es2015.symbol.wellknown "],
-            {
+        assertParseResult(["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es2015.core, es2015.symbol.wellknown "], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -384,8 +369,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     });
 
     it("Parse explicit boolean flag value", () => {
-        assertParseResult(["--strictNullChecks", "false", "0.ts"],
-            {
+        assertParseResult(["--strictNullChecks", "false", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: {
@@ -395,8 +379,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     });
 
     it("Parse non boolean argument after boolean flag", () => {
-        assertParseResult(["--noImplicitAny", "t", "0.ts"],
-            {
+        assertParseResult(["--noImplicitAny", "t", "0.ts"], {
                 errors: [],
                 fileNames: ["t", "0.ts"],
                 options: {
@@ -406,8 +389,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     });
 
     it("Parse implicit boolean flag value", () => {
-        assertParseResult(["--strictNullChecks"],
-            {
+        assertParseResult(["--strictNullChecks"], {
                 errors: [],
                 fileNames: [],
                 options: {
@@ -418,8 +400,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("parse --incremental", () => {
         // --lib es6 0.ts
-        assertParseResult(["--incremental", "0.ts"],
-            {
+        assertParseResult(["--incremental", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: { incremental: true }
@@ -428,8 +409,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     it("parse --tsBuildInfoFile", () => {
         // --lib es6 0.ts
-        assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "0.ts"],
-            {
+        assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: { tsBuildInfoFile: "build.tsbuildinfo" }
@@ -445,22 +425,16 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         }
         function verifyNull({ optionName, nonNullValue, workerDiagnostic, diagnosticMessage }: VerifyNull) {
             it("allows setting it to null", () => {
-                assertParseResult(
-                    [`--${optionName}`, "null", "0.ts"],
-                    {
+                assertParseResult([`--${optionName}`, "null", "0.ts"], {
                         errors: [],
                         fileNames: ["0.ts"],
                         options: { [optionName]: undefined }
-                    },
-                    workerDiagnostic
-                );
+                }, workerDiagnostic);
             });
 
             if (nonNullValue) {
                 it("errors if non null value is passed", () => {
-                    assertParseResult(
-                        [`--${optionName}`, nonNullValue, "0.ts"],
-                        {
+                    assertParseResult([`--${optionName}`, nonNullValue, "0.ts"], {
                             errors: [{
                                 messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
                                 category: diagnosticMessage.category,
@@ -471,16 +445,12 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                             }],
                             fileNames: ["0.ts"],
                             options: {}
-                        },
-                        workerDiagnostic
-                    );
+                    }, workerDiagnostic);
                 });
             }
 
             it("errors if its followed by another option", () => {
-                assertParseResult(
-                    ["0.ts", "--strictNullChecks", `--${optionName}`],
-                    {
+                assertParseResult(["0.ts", "--strictNullChecks", `--${optionName}`], {
                         errors: [{
                             messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
                             category: diagnosticMessage.category,
@@ -491,15 +461,11 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                         }],
                         fileNames: ["0.ts"],
                         options: { strictNullChecks: true }
-                    },
-                    workerDiagnostic
-                );
+                }, workerDiagnostic);
             });
 
             it("errors if its last option", () => {
-                assertParseResult(
-                    ["0.ts", `--${optionName}`],
-                    {
+                assertParseResult(["0.ts", `--${optionName}`], {
                         errors: [{
                             messageText: formatStringFromArgs(diagnosticMessage.message, [optionName]),
                             category: diagnosticMessage.category,
@@ -510,9 +476,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                         }],
                         fileNames: ["0.ts"],
                         options: {}
-                    },
-                    workerDiagnostic
-                );
+                }, workerDiagnostic);
             });
         }
 
@@ -548,16 +512,13 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         describe("option of type boolean", () => {
             it("allows setting it to false", () => {
-                assertParseResult(
-                    ["--composite", "false", "0.ts"],
-                    {
+                assertParseResult(["--composite", "false", "0.ts"], {
                         errors: [],
                         fileNames: ["0.ts"],
                         options: { composite: false }
-                    }
-                );
             });
 
+            });
             verifyNull({
                 optionName: "composite",
                 nonNullValue: "true",
@@ -596,7 +557,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         describe("option of type Map<number | string>", () => {
             verifyNullNonIncludedOption({
-                type: () => new Map(getEntries({
+                type: () => new ts.Map(getEntries({
                     node: ModuleResolutionKind.NodeJs,
                     classic: ModuleResolutionKind.Classic,
                 })),
@@ -606,8 +567,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     });
 
     it("allows tsconfig only option to be set to null", () => {
-        assertParseResult(["--composite", "null", "-tsBuildInfoFile", "null", "0.ts"],
-            {
+        assertParseResult(["--composite", "null", "-tsBuildInfoFile", "null", "0.ts"], {
                 errors: [],
                 fileNames: ["0.ts"],
                 options: { composite: undefined, tsBuildInfoFile: undefined }
@@ -616,8 +576,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     describe("Watch options", () => {
         it("parse --watchFile", () => {
-            assertParseResult(["--watchFile", "UseFsEvents", "0.ts"],
-                {
+            assertParseResult(["--watchFile", "UseFsEvents", "0.ts"], {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
@@ -626,8 +585,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("parse --watchDirectory", () => {
-            assertParseResult(["--watchDirectory", "FixedPollingInterval", "0.ts"],
-                {
+            assertParseResult(["--watchDirectory", "FixedPollingInterval", "0.ts"], {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
@@ -636,8 +594,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("parse --fallbackPolling", () => {
-            assertParseResult(["--fallbackPolling", "PriorityInterval", "0.ts"],
-                {
+            assertParseResult(["--fallbackPolling", "PriorityInterval", "0.ts"], {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
@@ -646,8 +603,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("parse --synchronousWatchDirectory", () => {
-            assertParseResult(["--synchronousWatchDirectory", "0.ts"],
-                {
+            assertParseResult(["--synchronousWatchDirectory", "0.ts"], {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
@@ -656,8 +612,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("errors on missing argument to --fallbackPolling", () => {
-            assertParseResult(["0.ts", "--fallbackPolling"],
-                {
+            assertParseResult(["0.ts", "--fallbackPolling"], {
                     errors: [
                         {
                             messageText: "Watch option 'fallbackPolling' requires a value of type string.",
@@ -683,8 +638,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("parse --excludeDirectories", () => {
-            assertParseResult(["--excludeDirectories", "**/temp", "0.ts"],
-                {
+            assertParseResult(["--excludeDirectories", "**/temp", "0.ts"], {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
@@ -693,8 +647,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("errors on invalid excludeDirectories", () => {
-            assertParseResult(["--excludeDirectories", "**/../*", "0.ts"],
-                {
+            assertParseResult(["--excludeDirectories", "**/../*", "0.ts"], {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
@@ -712,8 +665,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("parse --excludeFiles", () => {
-            assertParseResult(["--excludeFiles", "**/temp/*.ts", "0.ts"],
-                {
+            assertParseResult(["--excludeFiles", "**/temp/*.ts", "0.ts"], {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {},
@@ -722,8 +674,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         });
 
         it("errors on invalid excludeFiles", () => {
-            assertParseResult(["--excludeFiles", "**/../*", "0.ts"],
-                {
+            assertParseResult(["--excludeFiles", "**/../*", "0.ts"], {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
@@ -765,8 +716,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
     }
     it("parse build without any options ", () => {
         // --lib es6 0.ts
-        assertParseResult([],
-            {
+        assertParseResult([], {
                 errors: [],
                 projects: ["."],
                 buildOptions: {},
@@ -776,8 +726,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("Parse multiple options", () => {
         // --lib es5,es2015.symbol.wellknown 0.ts
-        assertParseResult(["--verbose", "--force", "tests"],
-            {
+        assertParseResult(["--verbose", "--force", "tests"], {
                 errors: [],
                 projects: ["tests"],
                 buildOptions: { verbose: true, force: true },
@@ -787,8 +736,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("Parse option with invalid option ", () => {
         // --lib es5,invalidOption 0.ts
-        assertParseResult(["--verbose", "--invalidOption"],
-            {
+        assertParseResult(["--verbose", "--invalidOption"], {
                 errors: [{
                     messageText: "Unknown build option '--invalidOption'.",
                     category: Diagnostics.Unknown_build_option_0.category,
@@ -805,8 +753,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("parse build with listFilesOnly ", () => {
         // --lib es6 0.ts
-        assertParseResult(["--listFilesOnly"],
-            {
+        assertParseResult(["--listFilesOnly"], {
                 errors: [{
                     messageText: "Compiler option '--listFilesOnly' may not be used with '--build'.",
                     category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
@@ -823,8 +770,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("Parse multiple flags with input projects at the end", () => {
         // --lib es5,es2015.symbol.wellknown --target es5 0.ts
-        assertParseResult(["--force", "--verbose", "src", "tests"],
-            {
+        assertParseResult(["--force", "--verbose", "src", "tests"], {
                 errors: [],
                 projects: ["src", "tests"],
                 buildOptions: { force: true, verbose: true },
@@ -834,8 +780,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("Parse multiple flags with input projects in the middle", () => {
         // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
-        assertParseResult(["--force", "src", "tests", "--verbose"],
-            {
+        assertParseResult(["--force", "src", "tests", "--verbose"], {
                 errors: [],
                 projects: ["src", "tests"],
                 buildOptions: { force: true, verbose: true },
@@ -845,8 +790,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("Parse multiple flags with input projects in the beginning", () => {
         // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
-        assertParseResult(["src", "tests", "--force", "--verbose"],
-            {
+        assertParseResult(["src", "tests", "--force", "--verbose"], {
                 errors: [],
                 projects: ["src", "tests"],
                 buildOptions: { force: true, verbose: true },
@@ -856,8 +800,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("parse build with --incremental", () => {
         // --lib es6 0.ts
-        assertParseResult(["--incremental", "tests"],
-            {
+        assertParseResult(["--incremental", "tests"], {
                 errors: [],
                 projects: ["tests"],
                 buildOptions: { incremental: true },
@@ -867,8 +810,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("parse build with --locale en-us", () => {
         // --lib es6 0.ts
-        assertParseResult(["--locale", "en-us", "src"],
-            {
+        assertParseResult(["--locale", "en-us", "src"], {
                 errors: [],
                 projects: ["src"],
                 buildOptions: { locale: "en-us" },
@@ -878,8 +820,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     it("parse build with --tsBuildInfoFile", () => {
         // --lib es6 0.ts
-        assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"],
-            {
+        assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"], {
                 errors: [{
                     messageText: "Compiler option '--tsBuildInfoFile' may not be used with '--build'.",
                     category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
@@ -916,8 +857,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         function verifyInvalidCombination(flag1: keyof BuildOptions, flag2: keyof BuildOptions) {
             it(`--${flag1} and --${flag2} together is invalid`, () => {
                 // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
-                assertParseResult([`--${flag1}`, `--${flag2}`],
-                    {
+                assertParseResult([`--${flag1}`, `--${flag2}`], {
                         errors: [{
                             messageText: `Options '${flag1}' and '${flag2}' cannot be combined.`,
                             category: Diagnostics.Options_0_and_1_cannot_be_combined.category,
@@ -941,8 +881,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
 
     describe("Watch options", () => {
         it("parse --watchFile", () => {
-            assertParseResult(["--watchFile", "UseFsEvents", "--verbose"],
-                {
+            assertParseResult(["--watchFile", "UseFsEvents", "--verbose"], {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
@@ -951,8 +890,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("parse --watchDirectory", () => {
-            assertParseResult(["--watchDirectory", "FixedPollingInterval", "--verbose"],
-                {
+            assertParseResult(["--watchDirectory", "FixedPollingInterval", "--verbose"], {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
@@ -961,8 +899,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("parse --fallbackPolling", () => {
-            assertParseResult(["--fallbackPolling", "PriorityInterval", "--verbose"],
-                {
+            assertParseResult(["--fallbackPolling", "PriorityInterval", "--verbose"], {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
@@ -971,8 +908,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("parse --synchronousWatchDirectory", () => {
-            assertParseResult(["--synchronousWatchDirectory", "--verbose"],
-                {
+            assertParseResult(["--synchronousWatchDirectory", "--verbose"], {
                     errors: [],
                     projects: ["."],
                     buildOptions: { verbose: true },
@@ -981,8 +917,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("errors on missing argument", () => {
-            assertParseResult(["--verbose", "--fallbackPolling"],
-                {
+            assertParseResult(["--verbose", "--fallbackPolling"], {
                     errors: [
                         {
                             messageText: "Watch option 'fallbackPolling' requires a value of type string.",
@@ -1008,8 +943,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("errors on invalid excludeDirectories", () => {
-            assertParseResult(["--excludeDirectories", "**/../*"],
-                {
+            assertParseResult(["--excludeDirectories", "**/../*"], {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
@@ -1027,8 +961,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("parse --excludeFiles", () => {
-            assertParseResult(["--excludeFiles", "**/temp/*.ts"],
-                {
+            assertParseResult(["--excludeFiles", "**/temp/*.ts"], {
                     errors: [],
                     projects: ["."],
                     buildOptions: {},
@@ -1037,8 +970,7 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
 
         it("errors on invalid excludeFiles", () => {
-            assertParseResult(["--excludeFiles", "**/../*"],
-                {
+            assertParseResult(["--excludeFiles", "**/../*"], {
                     errors: [
                         {
                             messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
@@ -1056,4 +988,3 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         });
     });
 });
-}

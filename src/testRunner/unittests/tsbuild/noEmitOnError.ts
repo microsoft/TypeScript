@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, TscIncremental, verifyTscSerializedIncrementalEdits, noChangeRun, BuildKind } from "../../ts";
 describe("unittests:: tsbuild - with noEmitOnError", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
     });
@@ -29,20 +30,11 @@ describe("unittests:: tsbuild - with noEmitOnError", () => {
         });
     }
 
-    verifyNoEmitOnError(
-        "syntax errors",
-        fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+    verifyNoEmitOnError("syntax errors", fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`, "utf-8")
-    );
-
-    verifyNoEmitOnError(
-        "semantic errors",
-        fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = "hello";`, "utf-8"),
-        fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = 10;`, "utf-8")
-    );
+};`, "utf-8"));
+    verifyNoEmitOnError("semantic errors", fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8"), fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8"));
 });
-}

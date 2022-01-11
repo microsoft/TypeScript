@@ -1,4 +1,4 @@
-namespace ts {
+import { factory, Debug } from "../ts";
 describe("unittests:: assert", () => {
     it("deepEqual", () => {
         assert.throws(() => assert.deepEqual(factory.createNodeArray([factory.createIdentifier("A")]), factory.createNodeArray([factory.createIdentifier("B")])));
@@ -9,4 +9,3 @@ describe("unittests:: assert", () => {
         assert.throws(() => Debug.assertNever("hi" as never), "Debug Failure. Illegal value: \"hi\"");
     });
 });
-}

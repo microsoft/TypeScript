@@ -1,18 +1,21 @@
+import { EmitHost, SourceMapGenerator, ESMap, getRelativePathToDirectoryOrUrl, Debug, RawSourceMap, LineAndCharacter, combinePaths, getDirectoryPath, CharacterCodes, trimStringEnd, isArray, every, isString, compareValues, DocumentPositionMapperHost, DocumentPositionMapper, getNormalizedAbsolutePath, SortedReadonlyArray, getPositionOfLineAndCharacter, arrayFrom, emptyArray, sortAndDeduplicate, DocumentPosition, some, binarySearchKey, identity } from "./ts";
+import { createTimer, nullTimer } from "./ts.performance";
+import * as ts from "./ts";
 /* @internal */
-namespace ts {
 export interface SourceMapGeneratorOptions {
     extendedDiagnostics?: boolean;
 }
 
+/* @internal */
 export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
     const { enter, exit } = generatorOptions.extendedDiagnostics
-        ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
-        : performance.nullTimer;
+        ? createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
+        : nullTimer;
 
     // Current source map file and its index in the sources list
     const rawSources: string[] = [];
     const sources: string[] = [];
-    const sourceToSourceIndexMap = new Map<string, number>();
+    const sourceToSourceIndexMap = new ts.Map<string, number>();
     let sourcesContent: (string | null)[] | undefined;
 
     const names: string[] = [];
@@ -52,10 +55,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
     function addSource(fileName: string) {
         enter();
-        const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-            fileName,
-            host.getCurrentDirectory(),
-            host.getCanonicalFileName,
+        const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath, fileName, host.getCurrentDirectory(), host.getCanonicalFileName, 
             /*isAbsolutePathAnUrl*/ true);
 
         let sourceIndex = sourceToSourceIndexMap.get(source);
@@ -73,7 +73,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     function setSourceContent(sourceIndex: number, content: string | null) {
         enter();
         if (content !== null) {
-            if (!sourcesContent) sourcesContent = [];
+            if (!sourcesContent)
+                sourcesContent = [];
             while (sourcesContent.length < sourceIndex) {
                 sourcesContent.push(null);
             }
@@ -85,7 +86,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 
     function addName(name: string) {
         enter();
-        if (!nameToNameIndexMap) nameToNameIndexMap = new Map();
+        if (!nameToNameIndexMap)
+            nameToNameIndexMap = new ts.Map();
         let nameIndex = nameToNameIndexMap.get(name);
         if (nameIndex === undefined) {
             nameIndex = names.length;
@@ -152,14 +154,12 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         const mappingIterator = decodeMappings(map.mappings);
         for (let iterResult = mappingIterator.next(); !iterResult.done; iterResult = mappingIterator.next()) {
             const raw = iterResult.value;
-            if (end && (
-                raw.generatedLine > end.line ||
+            if (end && (raw.generatedLine > end.line ||
                 (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
                 break;
             }
 
-            if (start && (
-                raw.generatedLine < start.line ||
+            if (start && (raw.generatedLine < start.line ||
                 (start.line === raw.generatedLine && raw.generatedCharacter < start.character))) {
                 continue;
             }
@@ -184,7 +184,8 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
                 newSourceLine = raw.sourceLine;
                 newSourceCharacter = raw.sourceCharacter;
                 if (map.names && raw.nameIndex !== undefined) {
-                    if (!nameIndexToNewNameIndexMap) nameIndexToNewNameIndexMap = [];
+                    if (!nameIndexToNewNameIndexMap)
+                        nameIndexToNewNameIndexMap = [];
                     newNameIndex = nameIndexToNewNameIndexMap[raw.nameIndex];
                     if (newNameIndex === undefined) {
                         nameIndexToNewNameIndexMap[raw.nameIndex] = newNameIndex = addName(map.names[raw.nameIndex]);
@@ -233,8 +234,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
             do {
                 appendMappingCharCode(CharacterCodes.semicolon);
                 lastGeneratedLine++;
-            }
-            while (lastGeneratedLine < pendingGeneratedLine);
+            } while (lastGeneratedLine < pendingGeneratedLine);
             // Only need to set this once
             lastGeneratedCharacter = 0;
         }
@@ -322,15 +322,19 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
 }
 
 // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
+/* @internal */
 const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
 
+/* @internal */
 const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
+/* @internal */
 export interface LineInfo {
     getLineCount(): number;
     getLineText(line: number): string;
 }
 
+/* @internal */
 export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
     return {
         getLineCount: () => lineStarts.length,
@@ -341,6 +345,7 @@ export function getLineInfo(text: string, lineStarts: readonly number[]): LineIn
 /**
  * Tries to find the sourceMappingURL comment at the end of a file.
  */
+/* @internal */
 export function tryGetSourceMappingURL(lineInfo: LineInfo) {
     for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {
         const line = lineInfo.getLineText(index);
@@ -356,10 +361,12 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
 }
 
 /* eslint-disable no-null/no-null */
+/* @internal */
 function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
+/* @internal */
 export function isRawSourceMap(x: any): x is RawSourceMap {
     return x !== null
         && typeof x === "object"
@@ -373,6 +380,7 @@ export function isRawSourceMap(x: any): x is RawSourceMap {
 }
 /* eslint-enable no-null/no-null */
 
+/* @internal */
 export function tryParseRawSourceMap(text: string) {
     try {
         const parsed = JSON.parse(text);
@@ -387,12 +395,14 @@ export function tryParseRawSourceMap(text: string) {
     return undefined;
 }
 
-export interface MappingsDecoder extends Iterator<Mapping> {
+/* @internal */
+export interface MappingsDecoder extends ts.Iterator<Mapping> {
     readonly pos: number;
     readonly error: string | undefined;
     readonly state: Required<Mapping>;
 }
 
+/* @internal */
 export interface Mapping {
     generatedLine: number;
     generatedCharacter: number;
@@ -402,12 +412,14 @@ export interface Mapping {
     nameIndex?: number;
 }
 
+/* @internal */
 export interface SourceMapping extends Mapping {
     sourceIndex: number;
     sourceLine: number;
     sourceCharacter: number;
 }
 
+/* @internal */
 export function decodeMappings(mappings: string): MappingsDecoder {
     let done = false;
     let pos = 0;
@@ -444,33 +456,45 @@ export function decodeMappings(mappings: string): MappingsDecoder {
                 let hasName = false;
 
                 generatedCharacter += base64VLQFormatDecode();
-                if (hasReportedError()) return stopIterating();
-                if (generatedCharacter < 0) return setErrorAndStopIterating("Invalid generatedCharacter found");
+                if (hasReportedError())
+                    return stopIterating();
+                if (generatedCharacter < 0)
+                    return setErrorAndStopIterating("Invalid generatedCharacter found");
 
                 if (!isSourceMappingSegmentEnd()) {
                     hasSource = true;
 
                     sourceIndex += base64VLQFormatDecode();
-                    if (hasReportedError()) return stopIterating();
-                    if (sourceIndex < 0) return setErrorAndStopIterating("Invalid sourceIndex found");
-                    if (isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Format: No entries after sourceIndex");
+                    if (hasReportedError())
+                        return stopIterating();
+                    if (sourceIndex < 0)
+                        return setErrorAndStopIterating("Invalid sourceIndex found");
+                    if (isSourceMappingSegmentEnd())
+                        return setErrorAndStopIterating("Unsupported Format: No entries after sourceIndex");
 
                     sourceLine += base64VLQFormatDecode();
-                    if (hasReportedError()) return stopIterating();
-                    if (sourceLine < 0) return setErrorAndStopIterating("Invalid sourceLine found");
-                    if (isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Format: No entries after sourceLine");
+                    if (hasReportedError())
+                        return stopIterating();
+                    if (sourceLine < 0)
+                        return setErrorAndStopIterating("Invalid sourceLine found");
+                    if (isSourceMappingSegmentEnd())
+                        return setErrorAndStopIterating("Unsupported Format: No entries after sourceLine");
 
                     sourceCharacter += base64VLQFormatDecode();
-                    if (hasReportedError()) return stopIterating();
-                    if (sourceCharacter < 0) return setErrorAndStopIterating("Invalid sourceCharacter found");
+                    if (hasReportedError())
+                        return stopIterating();
+                    if (sourceCharacter < 0)
+                        return setErrorAndStopIterating("Invalid sourceCharacter found");
 
                     if (!isSourceMappingSegmentEnd()) {
                         hasName = true;
                         nameIndex += base64VLQFormatDecode();
-                        if (hasReportedError()) return stopIterating();
-                        if (nameIndex < 0) return setErrorAndStopIterating("Invalid nameIndex found");
-
-                        if (!isSourceMappingSegmentEnd()) return setErrorAndStopIterating("Unsupported Error Format: Entries after nameIndex");
+                        if (hasReportedError())
+                            return stopIterating();
+                        if (nameIndex < 0)
+                            return setErrorAndStopIterating("Invalid nameIndex found");
+                        if (!isSourceMappingSegmentEnd())
+                            return setErrorAndStopIterating("Unsupported Error Format: Entries after nameIndex");
                     }
                 }
 
@@ -494,7 +518,10 @@ export function decodeMappings(mappings: string): MappingsDecoder {
         };
     }
 
-    function stopIterating(): { value: never, done: true } {
+    function stopIterating(): {
+        value: never;
+        done: true;
+    } {
         done = true;
         return { value: undefined!, done: true };
     }
@@ -526,11 +553,13 @@ export function decodeMappings(mappings: string): MappingsDecoder {
         let value = 0;
 
         for (; moreDigits; pos++) {
-            if (pos >= mappings.length) return setError("Error in decoding base64VLQFormatDecode, past the mapping string"), -1;
+            if (pos >= mappings.length)
+                return setError("Error in decoding base64VLQFormatDecode, past the mapping string"), -1;
 
             // 6 digit number
             const currentByte = base64FormatDecode(mappings.charCodeAt(pos));
-            if (currentByte === -1) return setError("Invalid character in VLQ"), -1;
+            if (currentByte === -1)
+                return setError("Invalid character in VLQ"), -1;
 
             // If msb is set, we still have more bits to continue
             moreDigits = (currentByte & 32) !== 0;
@@ -555,6 +584,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
     }
 }
 
+/* @internal */
 export function sameMapping<T extends Mapping>(left: T, right: T) {
     return left === right
         || left.generatedLine === right.generatedLine
@@ -565,12 +595,14 @@ export function sameMapping<T extends Mapping>(left: T, right: T) {
         && left.nameIndex === right.nameIndex;
 }
 
+/* @internal */
 export function isSourceMapping(mapping: Mapping): mapping is SourceMapping {
     return mapping.sourceIndex !== undefined
         && mapping.sourceLine !== undefined
         && mapping.sourceCharacter !== undefined;
 }
 
+/* @internal */
 function base64FormatEncode(value: number) {
     return value >= 0 && value < 26 ? CharacterCodes.A + value :
         value >= 26 && value < 52 ? CharacterCodes.a + value - 26 :
@@ -580,6 +612,7 @@ function base64FormatEncode(value: number) {
         Debug.fail(`${value}: not a base64 value`);
 }
 
+/* @internal */
 function base64FormatDecode(ch: number) {
     return ch >= CharacterCodes.A && ch <= CharacterCodes.Z ? ch - CharacterCodes.A :
         ch >= CharacterCodes.a && ch <= CharacterCodes.z ? ch - CharacterCodes.a + 26 :
@@ -589,6 +622,7 @@ function base64FormatDecode(ch: number) {
         -1;
 }
 
+/* @internal */
 interface MappedPosition {
     generatedPosition: number;
     source: string | undefined;
@@ -597,23 +631,27 @@ interface MappedPosition {
     nameIndex: number | undefined;
 }
 
+/* @internal */
 interface SourceMappedPosition extends MappedPosition {
     source: string;
     sourceIndex: number;
     sourcePosition: number;
 }
 
+/* @internal */
 function isSourceMappedPosition(value: MappedPosition): value is SourceMappedPosition {
     return value.sourceIndex !== undefined
         && value.sourcePosition !== undefined;
 }
 
+/* @internal */
 function sameMappedPosition(left: MappedPosition, right: MappedPosition) {
     return left.generatedPosition === right.generatedPosition
         && left.sourceIndex === right.sourceIndex
         && left.sourcePosition === right.sourcePosition;
 }
 
+/* @internal */
 function compareSourcePositions(left: SourceMappedPosition, right: SourceMappedPosition) {
     // Compares sourcePosition without comparing sourceIndex
     // since the mappings are grouped by sourceIndex
@@ -621,25 +659,29 @@ function compareSourcePositions(left: SourceMappedPosition, right: SourceMappedP
     return compareValues(left.sourcePosition, right.sourcePosition);
 }
 
+/* @internal */
 function compareGeneratedPositions(left: MappedPosition, right: MappedPosition) {
     return compareValues(left.generatedPosition, right.generatedPosition);
 }
 
+/* @internal */
 function getSourcePositionOfMapping(value: SourceMappedPosition) {
     return value.sourcePosition;
 }
 
+/* @internal */
 function getGeneratedPositionOfMapping(value: MappedPosition) {
     return value.generatedPosition;
 }
 
+/* @internal */
 export function createDocumentPositionMapper(host: DocumentPositionMapperHost, map: RawSourceMap, mapPath: string): DocumentPositionMapper {
     const mapDirectory = getDirectoryPath(mapPath);
     const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
     const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
     const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
     const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-    const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
+    const sourceToSourceIndexMap = new ts.Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
     let decodedMappings: readonly MappedPosition[] | undefined;
     let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
     let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;
@@ -692,9 +734,11 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
         if (sourceMappings === undefined) {
             const lists: SourceMappedPosition[][] = [];
             for (const mapping of getDecodedMappings()) {
-                if (!isSourceMappedPosition(mapping)) continue;
+                if (!isSourceMappedPosition(mapping))
+                    continue;
                 let list = lists[mapping.sourceIndex];
-                if (!list) lists[mapping.sourceIndex] = list = [];
+                if (!list)
+                    lists[mapping.sourceIndex] = list = [];
                 list.push(mapping);
             }
             sourceMappings = lists.map(list => sortAndDeduplicate<SourceMappedPosition>(list, compareSourcePositions, sameMappedPosition));
@@ -715,10 +759,12 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 
     function getGeneratedPosition(loc: DocumentPosition): DocumentPosition {
         const sourceIndex = sourceToSourceIndexMap.get(host.getCanonicalFileName(loc.fileName));
-        if (sourceIndex === undefined) return loc;
+        if (sourceIndex === undefined)
+            return loc;
 
         const sourceMappings = getSourceMappings(sourceIndex);
-        if (!some(sourceMappings)) return loc;
+        if (!some(sourceMappings))
+            return loc;
 
         let targetIndex = binarySearchKey(sourceMappings, loc.pos, getSourcePositionOfMapping, compareValues);
         if (targetIndex < 0) {
@@ -736,7 +782,8 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 
     function getSourcePosition(loc: DocumentPosition): DocumentPosition {
         const generatedMappings = getGeneratedMappings();
-        if (!some(generatedMappings)) return loc;
+        if (!some(generatedMappings))
+            return loc;
 
         let targetIndex = binarySearchKey(generatedMappings, loc.pos, getGeneratedPositionOfMapping, compareValues);
         if (targetIndex < 0) {
@@ -753,8 +800,8 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
     }
 }
 
+/* @internal */
 export const identitySourceMapConsumer: DocumentPositionMapper = {
     getSourcePosition: identity,
     getGeneratedPosition: identity
 };
-}

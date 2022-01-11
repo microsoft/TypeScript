@@ -1,5 +1,5 @@
+import { ResolvedConfigFileName, fileExtensionIs, Extension, combinePaths } from "./ts";
 /*@internal*/
-namespace ts {
 export enum UpToDateStatusType {
     Unbuildable,
     UpToDate,
@@ -29,18 +29,9 @@ export enum UpToDateStatusType {
     ContainerOnly
 }
 
-export type UpToDateStatus =
-    | Status.Unbuildable
-    | Status.UpToDate
-    | Status.OutOfDateWithPrepend
-    | Status.OutputMissing
-    | Status.OutOfDateWithSelf
-    | Status.OutOfDateWithUpstream
-    | Status.UpstreamOutOfDate
-    | Status.UpstreamBlocked
-    | Status.ComputingUpstream
-    | Status.TsVersionOutOfDate
-    | Status.ContainerOnly;
+/* @internal */
+export type UpToDateStatus = Status.Unbuildable | Status.UpToDate | Status.OutOfDateWithPrepend | Status.OutputMissing | Status.OutOfDateWithSelf | Status.OutOfDateWithUpstream | Status.UpstreamOutOfDate | Status.UpstreamBlocked | Status.ComputingUpstream | Status.TsVersionOutOfDate | Status.ContainerOnly;
+/* @internal */
 
 export namespace Status {
     /**
@@ -142,11 +133,11 @@ export namespace Status {
     }
 }
 
+/* @internal */
 export function resolveConfigFileProjectName(project: string): ResolvedConfigFileName {
     if (fileExtensionIs(project, Extension.Json)) {
         return project as ResolvedConfigFileName;
     }
 
     return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
-}
 }

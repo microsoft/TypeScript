@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import { File, projectRoot, libFile, createWatchedSystem, checkProgramActualFiles, checkSingleTimeoutQueueLengthAndRun, createBaseline, runWatchBaseline } from "../../ts.tscWatch";
+import { createWatchCompilerHostOfConfigFile, parseJsonConfigFileContent, resolveModuleName, createWatchProgram, WatchStatusReporter, createWatchCompilerHost, ScriptKind, BuilderProgram, CompilerOptions, System, CreateProgram, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, getParsedCommandLineOfConfigFile, noop, returnTrue } from "../../ts";
+import * as ts from "../../ts";
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
     const configFileJson: any = {
         compilerOptions: { module: "commonjs", resolveJsonModule: true },
@@ -109,16 +111,11 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             content: ""
         };
         const sys = createWatchedSystem([config, mainFile, otherFile, libFile]);
-        const watchCompilerHost = createWatchCompilerHost(
-            config.path,
-            { allowNonTsExtensions: true },
-            sys,
+        const watchCompilerHost = createWatchCompilerHost(config.path, { allowNonTsExtensions: true }, sys, 
             /*createProgram*/ undefined,
             /*reportDiagnostics*/ undefined,
             /*reportWatchStatus*/ undefined,
-            /*watchOptionsToExtend*/ undefined,
-            [{ extension: ".vue", isMixedContent: true, scriptKind: ScriptKind.Deferred }]
-        );
+        /*watchOptionsToExtend*/ undefined, [{ extension: ".vue", isMixedContent: true, scriptKind: ScriptKind.Deferred }]);
         const watch = createWatchProgram(watchCompilerHost);
         checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
 
@@ -288,7 +285,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             optionsToExtend: { extendedDiagnostics: true }
         });
         compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
-        const calledGetParsedCommandLine = new Set<string>();
+        const calledGetParsedCommandLine = new ts.Set<string>();
         compilerHost.getParsedCommandLine = fileName => {
             assert.isFalse(calledGetParsedCommandLine.has(fileName), `Already called on ${fileName}`);
             calledGetParsedCommandLine.add(fileName);
@@ -379,4 +376,3 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
         });
     });
 });
-}

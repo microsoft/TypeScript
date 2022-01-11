@@ -1,6 +1,8 @@
-namespace ts {
+import { FileSet } from "../../vfs";
+import { dedent } from "../../Utils";
+import { verifyTsc, loadProjectFromFiles } from "../../ts";
 describe("unittests:: tsbuild:: declarationEmit", () => {
-    function getFiles(): vfs.FileSet {
+    function getFiles(): FileSet {
         return {
             "/src/solution/tsconfig.base.json": JSON.stringify({
                 compilerOptions: {
@@ -24,7 +26,7 @@ describe("unittests:: tsbuild:: declarationEmit", () => {
                 references: [{ path: "../common" }],
                 include: ["./index.ts"]
             }),
-            "/src/solution/src/subProject/index.ts": Utils.dedent`
+            "/src/solution/src/subProject/index.ts": dedent `
 import { Nominal } from '../common/nominal';
 export type MyNominal = Nominal<string, 'MyNominal'>;`,
             "/src/solution/src/subProject2/tsconfig.json": JSON.stringify({
@@ -33,7 +35,7 @@ export type MyNominal = Nominal<string, 'MyNominal'>;`,
                 references: [{ path: "../subProject" }],
                 include: ["./index.ts"]
             }),
-            "/src/solution/src/subProject2/index.ts": Utils.dedent`
+            "/src/solution/src/subProject2/index.ts": dedent `
 import { MyNominal } from '../subProject/index';
 const variable = {
     key: 'value' as MyNominal,
@@ -46,10 +48,10 @@ export function getVar(): keyof typeof variable {
                 compilerOptions: { composite: true },
                 include: ["./nominal.ts"]
             }),
-            "/src/solution/src/common/nominal.ts": Utils.dedent`
+            "/src/solution/src/common/nominal.ts": dedent `
 /// <reference path="./types.d.ts" />
 export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;`,
-            "/src/solution/src/common/types.d.ts": Utils.dedent`
+            "/src/solution/src/common/types.d.ts": dedent `
 declare type MyNominal<T, Name extends string> = T & {
     specialKey: Name;
 };`,
@@ -87,7 +89,7 @@ declare type MyNominal<T, Name extends string> = T & {
                     paths: { "@fluentui/*": ["packages/*/src"] }
                 }
             }),
-            "/src/packages/pkg1/src/index.ts": Utils.dedent`
+            "/src/packages/pkg1/src/index.ts": dedent `
 export interface IThing {
   a: string;
 }
@@ -99,7 +101,7 @@ export interface IThings {
                 compilerOptions: { outDir: "lib" },
                 include: ["src"]
             }),
-            "/src/packages/pkg2/src/index.ts": Utils.dedent`
+            "/src/packages/pkg2/src/index.ts": dedent `
 import { IThings } from '@fluentui/pkg1';
 export function fn4() {
   const a: IThings = { thing1: { a: 'b' } };
@@ -115,4 +117,3 @@ export function fn4() {
         commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"]
     });
 });
-}

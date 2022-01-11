@@ -1,37 +1,47 @@
+import { Diagnostics, CodeFixAllContext, SourceFile, TextSpan, Program, ParameterDeclaration, getTokenAtPosition, isIdentifier, isCallExpression, isParameter, isNewExpression, some, isUnionTypeNode, isParenthesizedTypeNode, factory, SyntaxKind, isInJSFile, TypeFlags, skipTrivia, NewExpression, isParenthesizedExpression, getJSDocTypeTag, isTypeReferenceNode, idText } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
 const fixName = "addVoidToPromise";
+/* @internal */
 const fixId = "addVoidToPromise";
+/* @internal */
 const errorCodes = [
     Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise.code
 ];
+/* @internal */
 registerCodeFix({
     errorCodes,
     fixIds: [fixId],
     getCodeActions(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span, context.program));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span, context.program));
         if (changes.length > 0) {
             return [createCodeFixAction(fixName, changes, Diagnostics.Add_void_to_Promise_resolved_without_a_value, fixId, Diagnostics.Add_void_to_all_Promises_resolved_without_a_value)];
         }
     },
     getAllCodeActions(context: CodeFixAllContext) {
-        return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag, context.program, new Set()));
+        return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag, context.program, new ts.Set()));
     }
 });
 
-function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan, program: Program, seen?: Set<ParameterDeclaration>) {
+/* @internal */
+function makeChange(changes: ChangeTracker, sourceFile: SourceFile, span: TextSpan, program: Program, seen?: ts.Set<ParameterDeclaration>) {
     const node = getTokenAtPosition(sourceFile, span.start);
-    if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node || node.parent.arguments.length !== 0) return;
+    if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node || node.parent.arguments.length !== 0)
+        return;
 
     const checker = program.getTypeChecker();
     const symbol = checker.getSymbolAtLocation(node);
 
     // decl should be `new Promise((<decl>) => {})`
     const decl = symbol?.valueDeclaration;
-    if (!decl || !isParameter(decl) || !isNewExpression(decl.parent.parent)) return;
+    if (!decl || !isParameter(decl) || !isNewExpression(decl.parent.parent))
+        return;
 
     // no need to make this change if we have already seen this parameter.
-    if (seen?.has(decl)) return;
+    if (seen?.has(decl))
+        return;
     seen?.add(decl);
 
     const typeArguments = getEffectiveTypeArguments(decl.parent.parent);
@@ -66,6 +76,7 @@ function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, 
     }
 }
 
+/* @internal */
 function getEffectiveTypeArguments(node: NewExpression) {
     if (isInJSFile(node)) {
         if (isParenthesizedExpression(node.parent)) {
@@ -78,5 +89,4 @@ function getEffectiveTypeArguments(node: NewExpression) {
     else {
         return node.typeArguments;
     }
-}
 }

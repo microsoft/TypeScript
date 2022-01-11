@@ -1,23 +1,30 @@
+import { getLocaleSpecificMessage, Diagnostics, ApplicableRefactorInfo, emptyArray, append, RefactorEditInfo, Debug, getUniqueName, getRenameLocation, TypeNode, Statement, TypeParameterDeclaration, TypeElement, RefactorContext, isSourceFileJS, getTokenAtPosition, createTextRangeFromSpan, getRefactorContextSpan, findAncestor, isTypeNode, nodeOverlapsWithStartEnd, isStatement, TypeChecker, isIntersectionTypeNode, addToSeen, getNameFromPropertyName, addRange, isParenthesizedTypeNode, isTypeLiteralNode, TextRange, Node, SourceFile, rangeContainsStartEnd, skipTrivia, isTypeReferenceNode, isIdentifier, SymbolFlags, tryCast, isTypeParameterDeclaration, pushIfUnique, isInferTypeNode, isConditionalTypeNode, isTypePredicateNode, isThisTypeNode, isFunctionLike, isTypeQueryNode, isThisIdentifier, isTupleTypeNode, getLineAndCharacterOfPosition, setEmitFlags, EmitFlags, forEachChild, factory, ignoreSourceNewlines, setTextRange, JSDocTemplateTag, forEach, getEffectiveConstraintOfTypeParameter, cast, isJSDocTypeExpression, concatenate, JSDocTag } from "../ts";
+import { registerRefactor, isRefactorErrorInfo, RefactorErrorInfo } from "../ts.refactor";
+import { ChangeTracker, LeadingTriviaOption, TrailingTriviaOption } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.refactor {
 const refactorName = "Extract type";
 
+/* @internal */
 const extractToTypeAliasAction = {
     name: "Extract to type alias",
     description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias),
     kind: "refactor.extract.type",
 };
+/* @internal */
 const extractToInterfaceAction = {
     name: "Extract to interface",
     description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface),
     kind: "refactor.extract.interface",
 };
+/* @internal */
 const extractToTypeDefAction = {
     name: "Extract to typedef",
     description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef),
     kind: "refactor.extract.typedef"
 };
 
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [
         extractToTypeAliasAction.kind,
@@ -26,7 +33,8 @@ registerRefactor(refactorName, {
     ],
     getAvailableActions(context): readonly ApplicableRefactorInfo[] {
         const info = getRangeToExtract(context, context.triggerReason === "invoked");
-        if (!info) return emptyArray;
+        if (!info)
+            return emptyArray;
 
         if (!isRefactorErrorInfo(info)) {
             return [{
@@ -57,7 +65,7 @@ registerRefactor(refactorName, {
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");
 
         const name = getUniqueName("NewType", file);
-        const edits = textChanges.ChangeTracker.with(context, changes => {
+        const edits = ChangeTracker.with(context, changes => {
             switch (actionName) {
                 case extractToTypeAliasAction.name:
                     Debug.assert(!info.isJS, "Invalid actionName/JS combo");
@@ -79,16 +87,28 @@ registerRefactor(refactorName, {
     }
 });
 
+/* @internal */
 interface TypeAliasInfo {
-    isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements?: readonly TypeElement[];
+    isJS: boolean;
+    selection: TypeNode;
+    firstStatement: Statement;
+    typeParameters: readonly TypeParameterDeclaration[];
+    typeElements?: readonly TypeElement[];
 }
 
+/* @internal */
 interface InterfaceInfo {
-    isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements: readonly TypeElement[];
+    isJS: boolean;
+    selection: TypeNode;
+    firstStatement: Statement;
+    typeParameters: readonly TypeParameterDeclaration[];
+    typeElements: readonly TypeElement[];
 }
 
+/* @internal */
 type ExtractInfo = TypeAliasInfo | InterfaceInfo;
 
+/* @internal */
 function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): ExtractInfo | RefactorErrorInfo | undefined {
     const { file, startPosition } = context;
     const isJS = isSourceFileJS(file);
@@ -98,22 +118,26 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
 
     const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
         (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
-    if (!selection || !isTypeNode(selection)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    if (!selection || !isTypeNode(selection))
+        return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
 
     const checker = context.program.getTypeChecker();
     const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
     const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
-    if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    if (!typeParameters)
+        return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
 
     const typeElements = flattenTypeLiteralNodeReference(checker, selection);
     return { isJS, selection, firstStatement, typeParameters, typeElements };
 }
 
+/* @internal */
 function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): readonly TypeElement[] | undefined {
-    if (!node) return undefined;
+    if (!node)
+        return undefined;
     if (isIntersectionTypeNode(node)) {
         const result: TypeElement[] = [];
-        const seen = new Map<string, true>();
+        const seen = new ts.Map<string, true>();
         for (const type of node.types) {
             const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
             if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {
@@ -133,10 +157,12 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | 
     return undefined;
 }
 
+/* @internal */
 function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
     return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
 }
 
+/* @internal */
 function collectTypeParameters(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): TypeParameterDeclaration[] | undefined {
     const result: TypeParameterDeclaration[] = [];
     return visitor(selection) ? undefined : result;
@@ -187,57 +213,44 @@ function collectTypeParameters(checker: TypeChecker, selection: TypeNode, statem
     }
 }
 
-function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
+/* @internal */
+function doTypeAliasChange(changes: ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
     const { firstStatement, selection, typeParameters } = info;
 
     const newTypeNode = factory.createTypeAliasDeclaration(
         /* decorators */ undefined,
-        /* modifiers */ undefined,
-        name,
-        typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
-        selection
-    );
+    /* modifiers */ undefined, name, typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)), selection);
     changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: LeadingTriviaOption.Exclude, trailingTriviaOption: TrailingTriviaOption.ExcludeWhitespace });
 }
 
-function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
+/* @internal */
+function doInterfaceChange(changes: ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
     const { firstStatement, selection, typeParameters, typeElements } = info;
 
     const newTypeNode = factory.createInterfaceDeclaration(
         /* decorators */ undefined,
-        /* modifiers */ undefined,
-        name,
-        typeParameters,
-        /* heritageClauses */ undefined,
-        typeElements
-    );
+    /* modifiers */ undefined, name, typeParameters, 
+    /* heritageClauses */ undefined, typeElements);
     setTextRange(newTypeNode, typeElements[0]?.parent);
     changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
+    changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: LeadingTriviaOption.Exclude, trailingTriviaOption: TrailingTriviaOption.ExcludeWhitespace });
 }
 
-function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
+/* @internal */
+function doTypedefChange(changes: ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
     const { firstStatement, selection, typeParameters } = info;
 
-    const node = factory.createJSDocTypedefTag(
-        factory.createIdentifier("typedef"),
-        factory.createJSDocTypeExpression(selection),
-        factory.createIdentifier(name));
+    const node = factory.createJSDocTypedefTag(factory.createIdentifier("typedef"), factory.createJSDocTypeExpression(selection), factory.createIdentifier(name));
 
     const templates: JSDocTemplateTag[] = [];
     forEach(typeParameters, typeParameter => {
         const constraint = getEffectiveConstraintOfTypeParameter(typeParameter);
         const parameter = factory.createTypeParameterDeclaration(typeParameter.name);
-        const template = factory.createJSDocTemplateTag(
-            factory.createIdentifier("template"),
-            constraint && cast(constraint, isJSDocTypeExpression),
-            [parameter]
-        );
+        const template = factory.createJSDocTemplateTag(factory.createIdentifier("template"), constraint && cast(constraint, isJSDocTypeExpression), [parameter]);
         templates.push(template);
     });
 
     changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
     changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
-}
 }

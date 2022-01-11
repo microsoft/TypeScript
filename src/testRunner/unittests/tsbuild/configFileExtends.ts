@@ -1,4 +1,4 @@
-namespace ts {
+import { loadProjectFromFiles, verifyTsc } from "../../ts";
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
     function getConfigExtendsWithIncludeFs() {
         return loadProjectFromFiles({
@@ -49,4 +49,3 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
         commandLineArgs: ["--b", "/src/webpack/tsconfig.json", "--v", "--listFiles"],
     });
 });
-}

@@ -1,16 +1,19 @@
+import { FileWatcher, ModuleSpecifierCache, ESMap, Path, ResolvedModuleSpecifierInfo, nodeModulesPathPart, Debug, UserPreferences, ModulePath } from "./ts";
+import * as ts from "./ts";
 /*@internal*/
-namespace ts.server {
 export interface ModuleSpecifierResolutionCacheHost {
     watchNodeModulesForPackageJsonChanges(directoryPath: string): FileWatcher;
 }
 
+/* @internal */
 export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
     let containedNodeModulesWatchers: ESMap<string, FileWatcher> | undefined;
     let cache: ESMap<Path, ResolvedModuleSpecifierInfo> | undefined;
     let currentKey: string | undefined;
     const result: ModuleSpecifierCache = {
         get(fromFileName, toFileName, preferences) {
-            if (!cache || currentKey !== key(fromFileName, preferences)) return undefined;
+            if (!cache || currentKey !== key(fromFileName, preferences))
+                return undefined;
             return cache.get(toFileName);
         },
         set(fromFileName, toFileName, preferences, modulePaths, moduleSpecifiers) {
@@ -27,10 +30,7 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                         // No trailing slash
                         const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
                         if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
-                            (containedNodeModulesWatchers ||= new Map()).set(
-                                nodeModulesPath,
-                                host.watchNodeModulesForPackageJsonChanges(nodeModulesPath),
-                            );
+                            (containedNodeModulesWatchers ||= new ts.Map()).set(nodeModulesPath, host.watchNodeModulesForPackageJsonChanges(nodeModulesPath));
                         }
                     }
                 }
@@ -77,19 +77,14 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             result.clear();
         }
         currentKey = newKey;
-        return cache ||= new Map();
+        return cache ||= new ts.Map();
     }
 
     function key(fromFileName: Path, preferences: UserPreferences) {
         return `${fromFileName},${preferences.importModuleSpecifierEnding},${preferences.importModuleSpecifierPreference}`;
     }
 
-    function createInfo(
-        modulePaths: readonly ModulePath[] | undefined,
-        moduleSpecifiers: readonly string[] | undefined,
-        isAutoImportable: boolean | undefined,
-    ): ResolvedModuleSpecifierInfo {
+    function createInfo(modulePaths: readonly ModulePath[] | undefined, moduleSpecifiers: readonly string[] | undefined, isAutoImportable: boolean | undefined): ResolvedModuleSpecifierInfo {
         return { modulePaths, moduleSpecifiers, isAutoImportable };
     }
-}
 }

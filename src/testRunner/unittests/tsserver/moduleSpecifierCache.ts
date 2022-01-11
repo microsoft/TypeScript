@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, SymLink, checkWatchedDirectories, executeSessionRequest, protocol, createServerHost, createSession, openFilesForSession, configuredProjectAt } from "../../ts.projectSystem";
+import { Path, UserPreferences } from "../../ts";
 const packageJson: File = {
     path: "/package.json",
     content: `{ "dependencies": { "mobx": "*" } }`
@@ -142,5 +143,4 @@ function setup() {
             ...requestLocation,
         });
     }
-}
 }

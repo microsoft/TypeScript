@@ -1,6 +1,8 @@
-namespace Utils {
+import { sys, AnyFunction, createGetCanonicalFileName, Node, forEachChild, Diagnostic, flattenDiagnosticMessageText, diagnosticCategoryName, isString, forEach, containsParseError, SourceFile, Identifier, NodeFlags, SyntaxKind, NodeArray } from "./ts";
+import { IO, userSpecifiedRoot } from "./Harness";
+import * as ts from "./ts";
 export function encodeString(s: string): string {
-    return ts.sys.bufferFrom!(s).toString("utf8");
+    return sys.bufferFrom!(s).toString("utf8");
 }
 
 export function byteLength(s: string, encoding?: string): number {
@@ -42,7 +44,7 @@ export function readTestFile(path: string) {
 
     let content: string | undefined;
     try {
-        content = Harness.IO.readFile(Harness.userSpecifiedRoot + path);
+        content = IO.readFile(userSpecifiedRoot + path);
     }
     catch (err) {
         return undefined;
@@ -51,7 +53,7 @@ export function readTestFile(path: string) {
     return content;
 }
 
-export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
+export function memoize<T extends AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
     const cache = new ts.Map<string, any>();
 
     return (function (this: any, ...args: any[]) {
@@ -67,15 +69,17 @@ export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: a
     } as any);
 }
 
-export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
-
-export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | undefined) {
-    const queue: [ts.Node | undefined, ts.Node | undefined][] = [[node, parent]];
+export const canonicalizeForHarness = createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+export function assertInvariants(node: Node | undefined, parent: Node | undefined) {
+    const queue: [
+        Node | undefined,
+        Node | undefined
+    ][] = [[node, parent]];
     for (const [node, parent] of queue) {
         assertInvariantsWorker(node, parent);
     }
 
-    function assertInvariantsWorker(node: ts.Node | undefined, parent: ts.Node | undefined): void {
+    function assertInvariantsWorker(node: Node | undefined, parent: Node | undefined): void {
         if (node) {
             assert.isFalse(node.pos < 0, "node.pos < 0");
             assert.isFalse(node.end < 0, "node.end < 0");
@@ -88,18 +92,16 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                 assert.isFalse(node.end > parent.end, "node.end > parent.end");
             }
 
-            ts.forEachChild(node, child => {
+            forEachChild(node, child => {
                 queue.push([child, node]);
             });
 
             // Make sure each of the children is in order.
             let currentPos = 0;
-            ts.forEachChild(node,
-                child => {
+            forEachChild(node, child => {
                     assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
                     currentPos = child.end;
-                },
-                array => {
+            }, array => {
                     assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
                     assert.isFalse(array.end > node.end, "array.end > node.end");
                     assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
@@ -113,7 +115,7 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                 });
 
             const childNodesAndArrays: any[] = [];
-            ts.forEachChild(node, child => {
+            forEachChild(node, child => {
                 childNodesAndArrays.push(child);
             }, array => {
                 childNodesAndArrays.push(array);
@@ -127,8 +129,7 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                 }
                 const child = (node as any)[childName];
                 if (isNodeOrArray(child)) {
-                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
-                        "Missing child when forEach'ing over node: " + (ts as any).SyntaxKind[node.kind] + "-" + childName);
+                    assert.isFalse(childNodesAndArrays.indexOf(child) < 0, "Missing child when forEach'ing over node: " + (ts as any).SyntaxKind[node.kind] + "-" + childName);
                 }
             }
         }
@@ -139,25 +140,25 @@ function isNodeOrArray(a: any): boolean {
     return a !== undefined && typeof a.pos === "number";
 }
 
-export function convertDiagnostics(diagnostics: readonly ts.Diagnostic[]) {
+export function convertDiagnostics(diagnostics: readonly Diagnostic[]) {
     return diagnostics.map(convertDiagnostic);
 }
 
-function convertDiagnostic(diagnostic: ts.Diagnostic) {
+function convertDiagnostic(diagnostic: Diagnostic) {
     return {
         start: diagnostic.start,
         length: diagnostic.length,
-        messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()),
-        category: ts.diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
+        messageText: flattenDiagnosticMessageText(diagnostic.messageText, IO.newLine()),
+        category: diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
         code: diagnostic.code
     };
 }
 
-export function sourceFileToJSON(file: ts.Node): string {
+export function sourceFileToJSON(file: Node): string {
     return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
 
     function getKindName(k: number | string): string {
-        if (ts.isString(k)) {
+        if (isString(k)) {
             return k;
         }
 
@@ -183,7 +184,7 @@ export function sourceFileToJSON(file: ts.Node): string {
         }
 
         let result = "";
-        ts.forEach(Object.getOwnPropertyNames(flags), (v: any) => {
+        forEach(Object.getOwnPropertyNames(flags), (v: any) => {
             if (isFinite(v)) {
                 v = +v;
                 if (f === +v) {
@@ -206,13 +207,13 @@ export function sourceFileToJSON(file: ts.Node): string {
         return getFlagName((ts as any).NodeFlags, f);
     }
 
-    function serializeNode(n: ts.Node): any {
+    function serializeNode(n: Node): any {
         const o: any = { kind: getKindName(n.kind) };
-        if (ts.containsParseError(n)) {
+        if (containsParseError(n)) {
             o.containsParseError = true;
         }
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier)[]) {
+        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof SourceFile | keyof Identifier)[]) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":
@@ -235,7 +236,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                     // Clear the flags that are produced by aggregating child values. That is ephemeral
                     // data we don't care about in the dump. We only care what the parser set directly
                     // on the AST.
-                    const flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                    const flags = n.flags & ~(NodeFlags.JavaScriptFile | NodeFlags.HasAggregatedChildData);
                     if (flags) {
                         o[propertyName] = getNodeFlagName(flags);
                     }
@@ -253,7 +254,7 @@ export function sourceFileToJSON(file: ts.Node): string {
 
                 case "text":
                     // Include 'text' field for identifiers/literals, but not for source files.
-                    if (n.kind !== ts.SyntaxKind.SourceFile) {
+                    if (n.kind !== SyntaxKind.SourceFile) {
                         o[propertyName] = (n as any)[propertyName];
                     }
                     break;
@@ -267,7 +268,7 @@ export function sourceFileToJSON(file: ts.Node): string {
     }
 }
 
-export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2: readonly ts.Diagnostic[]) {
+export function assertDiagnosticsEquals(array1: readonly Diagnostic[], array2: readonly Diagnostic[]) {
     if (array1 === array2) {
         return;
     }
@@ -283,15 +284,13 @@ export function assertDiagnosticsEquals(array1: readonly ts.Diagnostic[], array2
 
         assert.equal(d1.start, d2.start, "d1.start !== d2.start");
         assert.equal(d1.length, d2.length, "d1.length !== d2.length");
-        assert.equal(
-            ts.flattenDiagnosticMessageText(d1.messageText, Harness.IO.newLine()),
-            ts.flattenDiagnosticMessageText(d2.messageText, Harness.IO.newLine()), "d1.messageText !== d2.messageText");
+        assert.equal(flattenDiagnosticMessageText(d1.messageText, IO.newLine()), flattenDiagnosticMessageText(d2.messageText, IO.newLine()), "d1.messageText !== d2.messageText");
         assert.equal(d1.category, d2.category, "d1.category !== d2.category");
         assert.equal(d1.code, d2.code, "d1.code !== d2.code");
     }
 }
 
-export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
+export function assertStructuralEquals(node1: Node, node2: Node) {
     if (node1 === node2) {
         return;
     }
@@ -304,25 +303,22 @@ export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
 
     // call this on both nodes to ensure all propagated flags have been set (and thus can be
     // compared).
-    assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-    assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
-
-    ts.forEachChild(node1,
-        child1 => {
+    assert.equal(containsParseError(node1), containsParseError(node2));
+    assert.equal(node1.flags & ~NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
+    forEachChild(node1, child1 => {
             const childName = findChildName(node1, child1);
-            const child2: ts.Node = (node2 as any)[childName];
+        const child2: Node = (node2 as any)[childName];
 
             assertStructuralEquals(child1, child2);
-        },
-        array1 => {
+    }, array1 => {
             const childName = findChildName(node1, array1);
-            const array2: ts.NodeArray<ts.Node> = (node2 as any)[childName];
+        const array2: NodeArray<Node> = (node2 as any)[childName];
 
             assertArrayStructuralEquals(array1, array2);
         });
 }
 
-function assertArrayStructuralEquals(array1: ts.NodeArray<ts.Node>, array2: ts.NodeArray<ts.Node>) {
+function assertArrayStructuralEquals(array1: NodeArray<Node>, array2: NodeArray<Node>) {
     if (array1 === array2) {
         return;
     }
@@ -373,14 +369,14 @@ export function filterStack(error: Error, stackTraceLimit = Infinity) {
                     harnessFrameCount++;
                 }
 
-                line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => ts.sys.resolvePath(path));
+                line = line.replace(/\bfile:\/\/\/(.*?)(?=(:\d+)*($|\)))/, (_, path) => sys.resolvePath(path));
                 frameCount++;
             }
 
             filtered.push(line);
         }
 
-        (error as any).stack = filtered.join(Harness.IO.newLine());
+        (error as any).stack = filtered.join(IO.newLine());
     }
 
     return error;
@@ -400,5 +396,4 @@ function isNode(line: string) {
 
 function isHarness(line: string) {
     return /[\\/]src[\\/]harness[\\/]|[\\/]run\.js/.test(line);
-}
 }

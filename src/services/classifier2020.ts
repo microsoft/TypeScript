@@ -1,20 +1,40 @@
+import { Program, CancellationToken, SourceFile, TextSpan, ClassifiedSpan2020, Debug, createTextSpan, Classifications, EndOfLineState, Node, SyntaxKind, textSpanIntersectsWith, isJsxElement, isJsxSelfClosingElement, isJsxExpression, isIdentifier, isInfinityOrNaNString, SymbolFlags, getMeaningFromLocation, isBindingElement, NamedDeclaration, getCombinedModifierFlags, getCombinedNodeFlags, ModifierFlags, NodeFlags, forEachChild, Symbol, SemanticMeaning, TypeChecker, Type, Declaration, isVariableDeclaration, isSourceFile, isCatchClause, isFunctionDeclaration, BindingElement, VariableDeclaration, ParameterDeclaration, isImportClause, isImportSpecifier, isNamespaceImport, isCallExpression, isQualifiedName, isPropertyAccessExpression } from "./ts";
+import * as ts from "./ts";
 /** @internal */
-namespace ts.classifier.v2020 {
 
 export const enum TokenEncodingConsts {
     typeOffset = 8,
     modifierMask = (1 << typeOffset) - 1
 }
 
+/* @internal */
 export const enum TokenType {
-    class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member
+    class,
+    enum,
+    interface,
+    namespace,
+    typeParameter,
+    type,
+    parameter,
+    variable,
+    enumMember,
+    property,
+    function,
+    member
 }
 
+/* @internal */
 export const enum TokenModifier {
-    declaration, static, async, readonly, defaultLibrary, local
+    declaration,
+    static,
+    async,
+    readonly,
+    defaultLibrary,
+    local
 }
 
 /** This is mainly used internally for testing */
+/* @internal */
 export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
     const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 
@@ -31,6 +51,7 @@ export function getSemanticClassifications(program: Program, cancellationToken: 
     return result;
 }
 
+/* @internal */
 export function getEncodedSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
     return {
         spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
@@ -38,6 +59,7 @@ export function getEncodedSemanticClassifications(program: Program, cancellation
     };
 }
 
+/* @internal */
 function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan, cancellationToken: CancellationToken): number[] {
     const resultTokens: number[] = [];
 
@@ -51,6 +73,7 @@ function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextS
     return resultTokens;
 }
 
+/* @internal */
 function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan, collector: (node: Node, tokenType: number, tokenModifier: number) => void, cancellationToken: CancellationToken) {
     const typeChecker = program.getTypeChecker();
 
@@ -140,6 +163,7 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
     visit(sourceFile);
 }
 
+/* @internal */
 function classifySymbol(symbol: Symbol, meaning: SemanticMeaning): TokenType | undefined {
     const flags = symbol.getFlags();
     if (flags & SymbolFlags.Class) {
@@ -166,6 +190,7 @@ function classifySymbol(symbol: Symbol, meaning: SemanticMeaning): TokenType | u
     return decl && tokenFromDeclarationMapping.get(decl.kind);
 }
 
+/* @internal */
 function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenType): TokenType {
     // type based classifications
     if (typeIdx === TokenType.variable || typeIdx === TokenType.property || typeIdx === TokenType.parameter) {
@@ -185,6 +210,7 @@ function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenTy
     return typeIdx;
 }
 
+/* @internal */
 function isLocalDeclaration(decl: Declaration, sourceFile: SourceFile): boolean {
     if (isBindingElement(decl)) {
         decl = getDeclarationForBindingElement(decl);
@@ -198,6 +224,7 @@ function isLocalDeclaration(decl: Declaration, sourceFile: SourceFile): boolean 
     return false;
 }
 
+/* @internal */
 function getDeclarationForBindingElement(element: BindingElement): VariableDeclaration | ParameterDeclaration {
     while (true) {
         if (isBindingElement(element.parent.parent)) {
@@ -209,11 +236,13 @@ function getDeclarationForBindingElement(element: BindingElement): VariableDecla
     }
 }
 
+/* @internal */
 function inImportClause(node: Node): boolean {
     const parent = node.parent;
     return parent && (isImportClause(parent) || isImportSpecifier(parent) || isNamespaceImport(parent));
 }
 
+/* @internal */
 function isExpressionInCallExpression(node: Node): boolean {
     while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
         node = node.parent;
@@ -221,11 +250,13 @@ function isExpressionInCallExpression(node: Node): boolean {
     return isCallExpression(node.parent) && node.parent.expression === node;
 }
 
+/* @internal */
 function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
     return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
 }
 
-const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
+/* @internal */
+const tokenFromDeclarationMapping = new ts.Map<SyntaxKind, TokenType>([
     [SyntaxKind.VariableDeclaration, TokenType.variable],
     [SyntaxKind.Parameter, TokenType.parameter],
     [SyntaxKind.PropertyDeclaration, TokenType.property],
@@ -246,4 +277,3 @@ const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
     [SyntaxKind.PropertyAssignment, TokenType.property],
     [SyntaxKind.ShorthandPropertyAssignment, TokenType.property]
 ]);
-}

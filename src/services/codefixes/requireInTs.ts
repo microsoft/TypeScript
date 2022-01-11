@@ -1,7 +1,11 @@
+import { Diagnostics, SourceFile, factory, Identifier, NamedImports, VariableStatement, StringLiteralLike, Program, getTokenAtPosition, isRequireCall, Debug, cast, isVariableDeclaration, tryCast, isIdentifier, isObjectBindingPattern, getAllowSyntheticDefaultImports, isVariableStatement, first, ObjectBindingPattern, ImportSpecifier } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "requireInTs";
+/* @internal */
 const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
@@ -9,7 +13,7 @@ registerCodeFix({
         if (!info) {
             return undefined;
         }
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
     },
     fixIds: [fixId],
@@ -21,13 +25,15 @@ registerCodeFix({
     }),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, info: Info) {
     const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
     changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
         ? factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
         : factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
 }
 
+/* @internal */
 interface Info {
     readonly allowSyntheticDefaults: boolean;
     readonly defaultImportName: Identifier | undefined;
@@ -36,6 +42,7 @@ interface Info {
     readonly required: StringLiteralLike;
 }
 
+/* @internal */
 function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | undefined {
     const { parent } = getTokenAtPosition(sourceFile, pos);
     if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) {
@@ -56,6 +63,7 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | 
     }
 }
 
+/* @internal */
 function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPattern): NamedImports | undefined {
     const importSpecifiers: ImportSpecifier[] = [];
     for (const element of node.elements) {
@@ -68,5 +76,4 @@ function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPatter
     if (importSpecifiers.length) {
         return factory.createNamedImports(importSpecifiers);
     }
-}
 }

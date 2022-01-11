@@ -1,5 +1,5 @@
+import { SourceFile, SelectionRange, createTextSpanFromBounds, Node, getTokenPosOfNode, singleOrUndefined, getTrailingCommentRanges, SyntaxKind, isBlock, isTemplateSpan, isTemplateHead, isTemplateTail, isVariableDeclarationList, isVariableStatement, isSyntaxList, isVariableDeclaration, isJSDocTypeExpression, isJSDocSignature, isJSDocTypeLiteral, isTemplateMiddleOrTemplateTail, positionsAreOnSameLine, hasJSDocNodes, first, isStringLiteral, isTemplateLiteral, textSpansEqual, textSpanIntersectsWithPosition, CharacterCodes, Debug, getTouchingPropertyName, or, isImportDeclaration, isImportEqualsDeclaration, isSourceFile, isMappedTypeNode, isPropertySignature, contains, isParameter, isBindingElement, findIndex, last, compact, SyntaxList, setTextRangePosEnd, parseNodeFactory } from "./ts";
 /* @internal */
-namespace ts.SmartSelectionRange {
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
     let selectionRange: SelectionRange = {
         textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
@@ -8,7 +8,8 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
     let parentNode: Node = sourceFile;
     outer: while (true) {
         const children = getSelectionChildren(parentNode);
-        if (!children.length) break;
+        if (!children.length)
+            break;
         for (let i = 0; i < children.length; i++) {
             const prevNode: Node | undefined = children[i - 1];
             const node: Node = children[i];
@@ -89,8 +90,7 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
                 // Skip ranges that are identical to the parent
                 !textSpansEqual(textSpan, selectionRange.textSpan) &&
                 // Skip ranges that don’t contain the original position
-                textSpanIntersectsWithPosition(textSpan, pos)
-            )) {
+                textSpanIntersectsWithPosition(textSpan, pos))) {
                 selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
             }
         }
@@ -116,6 +116,7 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
  * @param pos The position to check.
  * @param node The candidate node to snap to.
  */
+/* @internal */
 function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Node) {
     // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
     // for missing nodes, which can’t really be considered when deciding what
@@ -131,6 +132,7 @@ function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Nod
     return false;
 }
 
+/* @internal */
 const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
 
 /**
@@ -141,6 +143,7 @@ const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
  * selected all together, even though in the AST they’re just siblings of each
  * other as well as of other top-level statements and declarations.
  */
+/* @internal */
 function getSelectionChildren(node: Node): readonly Node[] {
     // Group top-level imports
     if (isSourceFile(node)) {
@@ -163,15 +166,12 @@ function getSelectionChildren(node: Node): readonly Node[] {
         Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
         Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
         // Group `-/+readonly` and `-/+?`
-        const groupedWithPlusMinusTokens = groupChildren(children, child =>
-            child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
+        const groupedWithPlusMinusTokens = groupChildren(children, child => child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
             child === node.questionToken || child.kind === SyntaxKind.QuestionToken);
         // Group type parameter with surrounding brackets
-        const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
-            kind === SyntaxKind.OpenBracketToken ||
+        const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) => kind === SyntaxKind.OpenBracketToken ||
             kind === SyntaxKind.TypeParameter ||
-            kind === SyntaxKind.CloseBracketToken
-        );
+            kind === SyntaxKind.CloseBracketToken);
         return [
             openBraceToken,
             // Pivot on `:`
@@ -182,17 +182,14 @@ function getSelectionChildren(node: Node): readonly Node[] {
 
     // Group modifiers and property name, then pivot on `:`.
     if (isPropertySignature(node)) {
-        const children = groupChildren(node.getChildren(), child =>
-            child === node.name || contains(node.modifiers, child));
+        const children = groupChildren(node.getChildren(), child => child === node.name || contains(node.modifiers, child));
         return splitChildren(children, ({ kind }) => kind === SyntaxKind.ColonToken);
     }
 
     // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
     if (isParameter(node)) {
-        const groupedDotDotDotAndName = groupChildren(node.getChildren(), child =>
-            child === node.dotDotDotToken || child === node.name);
-        const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child =>
-            child === groupedDotDotDotAndName[0] || child === node.questionToken);
+        const groupedDotDotDotAndName = groupChildren(node.getChildren(), child => child === node.dotDotDotToken || child === node.name);
+        const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child => child === groupedDotDotDotAndName[0] || child === node.questionToken);
         return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);
     }
 
@@ -208,6 +205,7 @@ function getSelectionChildren(node: Node): readonly Node[] {
  * Groups sibling nodes together into their own SyntaxList if they
  * a) are adjacent, AND b) match a predicate function.
  */
+/* @internal */
 function groupChildren(children: Node[], groupOn: (child: Node) => boolean): Node[] {
     const result: Node[] = [];
     let group: Node[] | undefined;
@@ -244,6 +242,7 @@ function groupChildren(children: Node[], groupOn: (child: Node) => boolean): Nod
  * @param separateTrailingSemicolon If the last token is a semicolon, it will be returned as a separate
  * child rather than be included in the right-hand group.
  */
+/* @internal */
 function splitChildren(children: Node[], pivotOn: (child: Node) => boolean, separateTrailingSemicolon = true): Node[] {
     if (children.length < 2) {
         return children;
@@ -265,11 +264,13 @@ function splitChildren(children: Node[], pivotOn: (child: Node) => boolean, sepa
     return separateLastToken ? result.concat(lastToken) : result;
 }
 
+/* @internal */
 function createSyntaxList(children: Node[]): SyntaxList {
     Debug.assertGreaterThanOrEqual(children.length, 1);
     return setTextRangePosEnd(parseNodeFactory.createSyntaxList(children), children[0].pos, last(children).end);
 }
 
+/* @internal */
 function isListOpener(token: Node | undefined): token is Node {
     const kind = token && token.kind;
     return kind === SyntaxKind.OpenBraceToken
@@ -278,6 +279,7 @@ function isListOpener(token: Node | undefined): token is Node {
         || kind === SyntaxKind.JsxOpeningElement;
 }
 
+/* @internal */
 function isListCloser(token: Node | undefined): token is Node {
     const kind = token && token.kind;
     return kind === SyntaxKind.CloseBraceToken
@@ -286,6 +288,7 @@ function isListCloser(token: Node | undefined): token is Node {
         || kind === SyntaxKind.JsxClosingElement;
 }
 
+/* @internal */
 function getEndPos(sourceFile: SourceFile, node: Node): number {
     switch (node.kind) {
         case SyntaxKind.JSDocParameterTag:
@@ -297,5 +300,4 @@ function getEndPos(sourceFile: SourceFile, node: Node): number {
         default:
             return node.getEnd();
     }
-}
 }

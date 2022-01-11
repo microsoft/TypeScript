@@ -1,5 +1,5 @@
+import { PatternMatchKind, Declaration, SourceFile, TypeChecker, CancellationToken, NavigateToItem, createPatternMatcher, emptyArray, PatternMatcher, Push, SyntaxKind, ImportClause, ImportSpecifier, ImportEqualsDeclaration, getNameOfDeclaration, Expression, isPropertyAccessExpression, Node, isPropertyNameLiteral, getTextOfIdentifierOrLiteral, getContainerNode, compareValues, compareStringsCaseSensitiveUI, getNodeKind, getNodeModifiers, createTextSpanFromNode, Identifier, ScriptElementKind } from "./ts";
 /* @internal */
-namespace ts.NavigateTo {
 interface RawNavigateToItem {
     readonly name: string;
     readonly fileName: string;
@@ -8,9 +8,11 @@ interface RawNavigateToItem {
     readonly declaration: Declaration;
 }
 
+/* @internal */
 export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
     const patternMatcher = createPatternMatcher(searchValue);
-    if (!patternMatcher) return emptyArray;
+    if (!patternMatcher)
+        return emptyArray;
     const rawItems: RawNavigateToItem[] = [];
 
     // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
@@ -30,6 +32,7 @@ export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: 
     return (maxResultCount === undefined ? rawItems : rawItems.slice(0, maxResultCount)).map(createNavigateToItem);
 }
 
+/* @internal */
 function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: readonly Declaration[], checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
     // First do a quick check to see if the name of the declaration matches the
     // last portion of the (possibly) dotted name they're searching for.
@@ -39,7 +42,8 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 
     for (const declaration of declarations) {
-        if (!shouldKeepItem(declaration, checker)) continue;
+        if (!shouldKeepItem(declaration, checker))
+            continue;
 
         if (patternMatcher.patternContainsDots) {
             // If the pattern has dots in it, then also see if the declaration container matches as well.
@@ -54,6 +58,7 @@ function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: stri
     }
 }
 
+/* @internal */
 function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean {
     switch (declaration.kind) {
         case SyntaxKind.ImportClause:
@@ -67,6 +72,7 @@ function shouldKeepItem(declaration: Declaration, checker: TypeChecker): boolean
     }
 }
 
+/* @internal */
 function tryAddSingleDeclarationName(declaration: Declaration, containers: Push<string>): boolean {
     const name = getNameOfDeclaration(declaration);
     return !!name && (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
@@ -75,15 +81,18 @@ function tryAddSingleDeclarationName(declaration: Declaration, containers: Push<
 // Only added the names of computed properties if they're simple dotted expressions, like:
 //
 //      [X.Y.Z]() { }
+/* @internal */
 function tryAddComputedPropertyName(expression: Expression, containers: Push<string>): boolean {
     return pushLiteral(expression, containers)
         || isPropertyAccessExpression(expression) && (containers.push(expression.name.text), true) && tryAddComputedPropertyName(expression.expression, containers);
 }
 
+/* @internal */
 function pushLiteral(node: Node, containers: Push<string>): boolean {
     return isPropertyNameLiteral(node) && (containers.push(getTextOfIdentifierOrLiteral(node)), true);
 }
 
+/* @internal */
 function getContainers(declaration: Declaration): readonly string[] {
     const containers: string[] = [];
 
@@ -110,12 +119,14 @@ function getContainers(declaration: Declaration): readonly string[] {
     return containers.reverse();
 }
 
+/* @internal */
 function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
     // TODO(cyrusn): get the gamut of comparisons that VS already uses here.
     return compareValues(i1.matchKind, i2.matchKind)
         || compareStringsCaseSensitiveUI(i1.name, i2.name);
 }
 
+/* @internal */
 function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
     const declaration = rawItem.declaration;
     const container = getContainerNode(declaration);
@@ -132,5 +143,4 @@ function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
         containerName: containerName ? (containerName as Identifier).text : "",
         containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown, // TODO: GH#18217 Just use `container ? ...`
     };
-}
 }

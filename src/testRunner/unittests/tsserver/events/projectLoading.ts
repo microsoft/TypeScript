@@ -1,22 +1,27 @@
-namespace ts.projectSystem {
+import { File, libFile, TestServerHost, TestSession, createServerHost, openFilesForSession, checkNumberOfProjects, protocol, protocolLocationFromSubstring, toExternalFiles, createSessionWithEventTracking, createSessionWithDefaultEventHandler } from "../../../ts.projectSystem";
+import { projects } from "../../../ts.tscWatch";
+import { ProjectLoadingStartEvent, ProjectLoadingFinishEvent, Project } from "../../../ts.server";
 describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
     const aTs: File = {
-        path: `${tscWatch.projects}/a/a.ts`,
+        path: `${projects}/a/a.ts`,
         content: "export class A { }"
     };
     const configA: File = {
-        path: `${tscWatch.projects}/a/tsconfig.json`,
+        path: `${projects}/a/tsconfig.json`,
         content: "{}"
     };
-    const bTsPath = `${tscWatch.projects}/b/b.ts`;
-    const configBPath = `${tscWatch.projects}/b/tsconfig.json`;
+    const bTsPath = `${projects}/b/b.ts`;
+    const configBPath = `${projects}/b/tsconfig.json`;
     const files = [libFile, aTs, configA];
 
     function verifyProjectLoadingStartAndFinish(createSession: (host: TestServerHost) => {
         session: TestSession;
         getNumberOfEvents: () => number;
         clearEvents: () => void;
-        verifyProjectLoadEvents: (expected: [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]) => void;
+        verifyProjectLoadEvents: (expected: [
+            ProjectLoadingStartEvent,
+            ProjectLoadingFinishEvent
+        ]) => void;
     }) {
         function createSessionToVerifyEvent(files: readonly File[]) {
             const host = createServerHost(files);
@@ -31,10 +36,10 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
             const service = session.getProjectService();
             return { host, session, verifyEvent, verifyEventWithOpenTs, service, getNumberOfEvents };
 
-            function verifyEvent(project: server.Project, reason: string) {
+            function verifyEvent(project: Project, reason: string) {
                 verifyProjectLoadEvents([
-                    { eventName: server.ProjectLoadingStartEvent, data: { project, reason } },
-                    { eventName: server.ProjectLoadingFinishEvent, data: { project } }
+                    { eventName: ProjectLoadingStartEvent, data: { project, reason } },
+                    { eventName: ProjectLoadingFinishEvent, data: { project } }
                 ]);
                 clearEvents();
             }
@@ -103,14 +108,14 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
             function verify(disableSourceOfProjectReferenceRedirect?: true) {
                 const aDTs: File = {
-                    path: `${tscWatch.projects}/a/a.d.ts`,
+                    path: `${projects}/a/a.d.ts`,
                     content: `export declare class A {
 }
 //# sourceMappingURL=a.d.ts.map
 `
                 };
                 const aDTsMap: File = {
-                    path: `${tscWatch.projects}/a/a.d.ts.map`,
+                    path: `${projects}/a/a.d.ts.map`,
                     content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
                 };
                 const bTs: File = {
@@ -143,17 +148,14 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 checkNumberOfProjects(service, { configuredProjects: 2 });
                 const project = service.configuredProjects.get(configA.path)!;
                 assert.isDefined(project);
-                verifyEvent(
-                    project,
-                    disableSourceOfProjectReferenceRedirect ?
+                verifyEvent(project, disableSourceOfProjectReferenceRedirect ?
                         `Creating project for original file: ${aTs.path} for location: ${aDTs.path}` :
-                        `Creating project for original file: ${aTs.path}`
-                );
+                    `Creating project for original file: ${aTs.path}`);
             }
         });
 
         describe("with external projects and config files ", () => {
-            const projectFileName = `${tscWatch.projects}/a/project.csproj`;
+            const projectFileName = `${projects}/a/project.csproj`;
 
             function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
                 const { session, service, verifyEvent: verifyEventWorker, getNumberOfEvents } = createSessionToVerifyEvent(files);
@@ -198,7 +200,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
     describe("when using event handler", () => {
         verifyProjectLoadingStartAndFinish(host => {
-            const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent | server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
+            const { session, events } = createSessionWithEventTracking<ProjectLoadingStartEvent | ProjectLoadingFinishEvent>(host, ProjectLoadingStartEvent, ProjectLoadingFinishEvent);
             return {
                 session,
                 getNumberOfEvents: () => events.length,
@@ -210,7 +212,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
     describe("when using default event handler", () => {
         verifyProjectLoadingStartAndFinish(host => {
-            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectLoadingStartEvent | protocol.ProjectLoadingFinishEvent>(host, [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]);
+            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectLoadingStartEvent | protocol.ProjectLoadingFinishEvent>(host, [ProjectLoadingStartEvent, ProjectLoadingFinishEvent]);
             return {
                 session,
                 getNumberOfEvents: () => getEvents().length,
@@ -218,7 +220,10 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 verifyProjectLoadEvents
             };
 
-            function verifyProjectLoadEvents(expected: [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]) {
+            function verifyProjectLoadEvents(expected: [
+                ProjectLoadingStartEvent,
+                ProjectLoadingFinishEvent
+            ]) {
                 const actual = getEvents().map(e => ({ eventName: e.event, data: e.body }));
                 const mappedExpected = expected.map(e => {
                     const { project, ...rest } = e.data;
@@ -229,4 +234,3 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
         });
     });
 });
-}

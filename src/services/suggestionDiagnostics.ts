@@ -1,6 +1,9 @@
+import { SourceFile, Program, CancellationToken, DiagnosticWithLocation, ModuleKind, fileExtensionIsOneOf, Extension, programContainsEsModules, compilerOptionsIndicateEsModules, createDiagnosticForNode, Diagnostics, isSourceFileJS, getAllowSyntheticDefaultImports, importFromModuleSpecifier, getResolvedModule, getModeForUsageLocation, isExportAssignment, addRange, Node, isVariableDeclaration, isVariableStatement, NodeFlags, isRequireCall, SyntaxKind, VariableStatement, ExpressionStatement, isBinaryExpression, getAssignmentDeclarationKind, AssignmentDeclarationKind, Expression, isPropertyAccessExpression, AnyValidImportOrReExport, Identifier, isStringLiteral, FunctionLikeDeclaration, TypeChecker, Push, isIdentifier, isAsyncFunction, isBlock, Block, forEachReturnStatement, ReturnStatement, CallExpression, isReturnStatement, isCallExpression, PropertyAccessExpression, hasPropertyAccessExpressionWithName, some, getFunctionFlags, FunctionDeclaration, FunctionExpression, FunctionFlags, skipAlias, isFunctionLike, hasInitializer, MethodDeclaration, ArrowFunction } from "./ts";
+import { parameterShouldGetTypeFromJSDoc } from "./ts.codefix";
+import * as ts from "./ts";
 /* @internal */
-namespace ts {
-const visitedNestedConvertibleFunctions = new Map<string, true>();
+const visitedNestedConvertibleFunctions = new ts.Map<string, true>();
+/* @internal */
 
 export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
     program.getSemanticDiagnostics(sourceFile, cancellationToken);
@@ -24,7 +27,8 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
         for (const moduleSpecifier of sourceFile.imports) {
             const importNode = importFromModuleSpecifier(moduleSpecifier);
             const name = importNameForConvertToDefaultImport(importNode);
-            if (!name) continue;
+            if (!name)
+                continue;
             const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
             const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
             if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
@@ -54,7 +58,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
-            if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
+            if (parameterShouldGetTypeFromJSDoc(node)) {
                 diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
         }
@@ -67,15 +71,16 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
 }
 
 // convertToEsModule only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+/* @internal */
 function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
     return sourceFile.statements.some(statement => {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
-                return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                    !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
+                return (statement as VariableStatement).declarationList.declarations.some(decl => !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
+                if (!isBinaryExpression(expression))
+                    return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
                 const kind = getAssignmentDeclarationKind(expression);
                 return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
             }
@@ -85,10 +90,12 @@ function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
     });
 }
 
+/* @internal */
 function propertyAccessLeftHandSide(node: Expression): Expression {
     return isPropertyAccessExpression(node) ? propertyAccessLeftHandSide(node.expression) : node;
 }
 
+/* @internal */
 function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Identifier | undefined {
     switch (node.kind) {
         case SyntaxKind.ImportDeclaration:
@@ -103,15 +110,15 @@ function importNameForConvertToDefaultImport(node: AnyValidImportOrReExport): Id
     }
 }
 
+/* @internal */
 function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
     // need to check function before checking map so that deeper levels of nested callbacks are checked
     if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
-        diags.push(createDiagnosticForNode(
-            !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
-            Diagnostics.This_may_be_converted_to_an_async_function));
+        diags.push(createDiagnosticForNode(!node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
     }
 }
 
+/* @internal */
 function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
     return !isAsyncFunction(node) &&
         node.body &&
@@ -120,25 +127,32 @@ function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeCheck
         returnsPromise(node, checker);
 }
 
+/* @internal */
 export function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
     const signature = checker.getSignatureFromDeclaration(node);
     const returnType = signature ? checker.getReturnTypeOfSignature(signature) : undefined;
     return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
 }
 
+/* @internal */
 function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
     return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
 }
 
+/* @internal */
 function hasReturnStatementWithPromiseHandler(body: Block, checker: TypeChecker): boolean {
     return !!forEachReturnStatement(body, statement => isReturnStatementWithFixablePromiseHandler(statement, checker));
 }
 
-export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & { expression: CallExpression } {
+/* @internal */
+export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & {
+    expression: CallExpression;
+} {
     return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
 }
 
 // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
+/* @internal */
 export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
     // ensure outermost call exists and is a promise handler
     if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
@@ -161,24 +175,32 @@ export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boole
     return true;
 }
 
-function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression } {
-    return isCallExpression(node) && (
-        hasPropertyAccessExpressionWithName(node, "then") ||
+/* @internal */
+function isPromiseHandler(node: Node): node is CallExpression & {
+    readonly expression: PropertyAccessExpression;
+} {
+    return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") ||
         hasPropertyAccessExpressionWithName(node, "catch") ||
         hasPropertyAccessExpressionWithName(node, "finally"));
 }
 
-function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression }) {
+/* @internal */
+function hasSupportedNumberOfArguments(node: CallExpression & {
+    readonly expression: PropertyAccessExpression;
+}) {
     const name = node.expression.name.text;
     const maxArguments = name === "then" ? 2 : name === "catch" ? 1 : name === "finally" ? 1 : 0;
-    if (node.arguments.length > maxArguments) return false;
-    if (node.arguments.length < maxArguments) return true;
+    if (node.arguments.length > maxArguments)
+        return false;
+    if (node.arguments.length < maxArguments)
+        return true;
     return maxArguments === 1 || some(node.arguments, arg => {
         return arg.kind === SyntaxKind.NullKeyword || isIdentifier(arg) && arg.text === "undefined";
     });
 }
 
 // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
+/* @internal */
 function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolean {
     switch (arg.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -207,10 +229,12 @@ function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolea
     }
 }
 
+/* @internal */
 function getKeyFromNode(exp: FunctionLikeDeclaration) {
     return `${exp.pos.toString()}:${exp.end.toString()}`;
 }
 
+/* @internal */
 function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
     if (node.kind === SyntaxKind.FunctionExpression) {
         if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
@@ -228,6 +252,7 @@ function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
     return false;
 }
 
+/* @internal */
 export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -238,5 +263,4 @@ export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration |
         default:
             return false;
     }
-}
 }

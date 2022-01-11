@@ -1,5 +1,5 @@
+import { TransformationContext, Expression, ParameterDeclaration, ModuleKind, SourceFile, getEmitScriptTarget, getEmitModuleKind, SyntaxKind, ExternalModuleInfo, Statement, chainBundle, isEffectiveExternalModule, TransformFlags, isJsonSourceFile, hasJsonModuleEmitEnabled, outFile, collectExternalModuleInfo, getOriginalNodeId, isExternalModule, getStrictOptionValue, append, length, reduceLeft, idText, visitNode, isStatement, addRange, visitNodes, insertStatementsAfterStandardPrologue, setTextRange, addEmitHelpers, tryGetModuleNameFromFile, emptyArray, setEmitFlags, EmitFlags, getExternalModuleNameLiteral, getLocalNameForExternalImport, ImportDeclaration, ExportDeclaration, ImportEqualsDeclaration, isImportEqualsDeclaration, isExportDeclaration, mapDefined, addEmitHelper, Node, VisitResult, ExportAssignment, VariableStatement, FunctionDeclaration, ClassDeclaration, MergeDeclarationMarker, EndOfDeclarationMarker, ForStatement, ExpressionStatement, ParenthesizedExpression, PartiallyEmittedExpression, isImportCall, isDestructuringAssignment, PrefixUnaryExpression, PostfixUnaryExpression, visitEachChild, isObjectLiteralExpression, Debug, isArrayLiteralExpression, isSpreadElement, isIdentifier, isExportName, DestructuringAssignment, flattenDestructuringAssignment, FlattenLevel, isForInitializer, isExpression, visitIterationBody, isGeneratedIdentifier, isLocalName, isDeclarationNameOfEnumOrNamespace, Identifier, isPrefixUnaryExpression, getNodeId, ImportCall, firstOrUndefined, isStringLiteral, isSimpleCopiableExpression, FunctionExpression, ArrowFunction, ScriptTarget, getESModuleInterop, getEmitFlags, getExportNeedsImportStarHelper, getImportNeedsImportStarHelper, getImportNeedsImportDefaultHelper, getNamespaceDeclarationNode, setOriginalNode, VariableDeclaration, isDefaultImport, NodeFlags, singleOrMany, isExternalModuleImportEqualsDeclaration, hasSyntacticModifier, ModifierFlags, isNamedExports, isExportNamespaceAsDefaultDeclaration, isModifier, NodeArray, Modifier, isBindingPattern, isArrowFunction, isFunctionExpression, isClassExpression, getTextOfIdentifierOrLiteral, InitializedVariableDeclaration, removeAllComments, TextRange, BindingElement, isOmittedExpression, Declaration, startOnNewLine, EmitHint, isShorthandPropertyAssignment, ShorthandPropertyAssignment, ObjectLiteralElementLike, CallExpression, TaggedTemplateExpression, BinaryExpression, addEmitFlags, getExternalHelpersModuleName, GeneratedIdentifierFlags, isImportClause, isImportSpecifier, isAssignmentOperator, EmitHelper } from "../../ts";
 /*@internal*/
-namespace ts {
 
 export function transformModule(context: TransformationContext) {
     interface AsynchronousDependencies {
@@ -16,13 +16,7 @@ export function transformModule(context: TransformationContext) {
         }
     }
 
-    const {
-        factory,
-        getEmitHelperFactory: emitHelpers,
-        startLexicalEnvironment,
-        endLexicalEnvironment,
-        hoistVariableDeclaration
-    } = context;
+    const { factory, getEmitHelperFactory: emitHelpers, startLexicalEnvironment, endLexicalEnvironment, hoistVariableDeclaration } = context;
 
     const compilerOptions = context.getCompilerOptions();
     const resolver = context.getEmitResolver();
@@ -102,16 +96,7 @@ export function transformModule(context: TransformationContext) {
         if (length(currentModuleInfo.exportedNames)) {
             const chunkSize = 50;
             for (let i=0; i<currentModuleInfo.exportedNames!.length; i += chunkSize) {
-                append(
-                    statements,
-                    factory.createExpressionStatement(
-                        reduceLeft(
-                            currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
-                            (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
-                            factory.createVoidZero() as Expression
-                        )
-                    )
-                );
+                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames!.slice(i, i + chunkSize), (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
             }
         }
 
@@ -161,14 +146,9 @@ export function transformModule(context: TransformationContext) {
         // Create an updated SourceFile:
         //
         //     define(mofactory.updateSourceFile", "module2"], function ...
-        const updated = factory.updateSourceFile(node,
-            setTextRange(
-                factory.createNodeArray([
-                    factory.createExpressionStatement(
-                        factory.createCallExpression(
-                            define,
-                            /*typeArguments*/ undefined,
-                            [
+        const updated = factory.updateSourceFile(node, setTextRange(factory.createNodeArray([
+            factory.createExpressionStatement(factory.createCallExpression(define, 
+            /*typeArguments*/ undefined, [
                                 // Add the module name (if provided).
                                 ...(moduleName ? [moduleName] : []),
 
@@ -191,22 +171,15 @@ export function transformModule(context: TransformationContext) {
                                         /*modifiers*/ undefined,
                                         /*asteriskToken*/ undefined,
                                         /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        [
+                    /*typeParameters*/ undefined, [
                                             factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
                                             factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                             ...importAliasNames
                                         ],
-                                        /*type*/ undefined,
-                                        transformAsynchronousModuleBody(node)
-                                    )
-                            ]
-                        )
-                    )
+                    /*type*/ undefined, transformAsynchronousModuleBody(node))
+            ]))
                 ]),
-                /*location*/ node.statements
-            )
-        );
+        /*location*/ node.statements));
 
         addEmitHelpers(updated, context.readEmitHelpers());
         return updated;
@@ -224,63 +197,23 @@ export function transformModule(context: TransformationContext) {
             /*modifiers*/ undefined,
             /*asteriskToken*/ undefined,
             /*name*/ undefined,
-            /*typeParameters*/ undefined,
-            [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
-            /*type*/ undefined,
-            setTextRange(
-                factory.createBlock(
-                    [
-                        factory.createIfStatement(
-                            factory.createLogicalAnd(
-                                factory.createTypeCheck(factory.createIdentifier("module"), "object"),
-                                factory.createTypeCheck(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), "object")
-                            ),
-                            factory.createBlock([
+        /*typeParameters*/ undefined, [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")], 
+        /*type*/ undefined, setTextRange(factory.createBlock([
+            factory.createIfStatement(factory.createLogicalAnd(factory.createTypeCheck(factory.createIdentifier("module"), "object"), factory.createTypeCheck(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), "object")), factory.createBlock([
                                 factory.createVariableStatement(
-                                    /*modifiers*/ undefined,
-                                    [
-                                        factory.createVariableDeclaration(
-                                            "v",
+                /*modifiers*/ undefined, [
+                    factory.createVariableDeclaration("v", 
                                             /*exclamationToken*/ undefined,
-                                            /*type*/ undefined,
-                                            factory.createCallExpression(
-                                                factory.createIdentifier("factory"),
-                                                /*typeArguments*/ undefined,
-                                                [
+                    /*type*/ undefined, factory.createCallExpression(factory.createIdentifier("factory"), 
+                    /*typeArguments*/ undefined, [
                                                     factory.createIdentifier("require"),
                                                     factory.createIdentifier("exports")
-                                                ]
-                                            )
-                                        )
-                                    ]
-                                ),
-                                setEmitFlags(
-                                    factory.createIfStatement(
-                                        factory.createStrictInequality(
-                                            factory.createIdentifier("v"),
-                                            factory.createIdentifier("undefined")
-                                        ),
-                                        factory.createExpressionStatement(
-                                            factory.createAssignment(
-                                                factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"),
-                                                factory.createIdentifier("v")
-                                            )
-                                        )
-                                    ),
-                                    EmitFlags.SingleLine
-                                )
+                    ]))
                             ]),
-                            factory.createIfStatement(
-                                factory.createLogicalAnd(
-                                    factory.createTypeCheck(factory.createIdentifier("define"), "function"),
-                                    factory.createPropertyAccessExpression(factory.createIdentifier("define"), "amd")
-                                ),
-                                factory.createBlock([
-                                    factory.createExpressionStatement(
-                                        factory.createCallExpression(
-                                            factory.createIdentifier("define"),
-                                            /*typeArguments*/ undefined,
-                                            [
+                setEmitFlags(factory.createIfStatement(factory.createStrictInequality(factory.createIdentifier("v"), factory.createIdentifier("undefined")), factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), factory.createIdentifier("v")))), EmitFlags.SingleLine)
+            ]), factory.createIfStatement(factory.createLogicalAnd(factory.createTypeCheck(factory.createIdentifier("define"), "function"), factory.createPropertyAccessExpression(factory.createIdentifier("define"), "amd")), factory.createBlock([
+                factory.createExpressionStatement(factory.createCallExpression(factory.createIdentifier("define"), 
+                /*typeArguments*/ undefined, [
                                                 // Add the module name (if provided).
                                                 ...(moduleName ? [moduleName] : []),
                                                 factory.createArrayLiteralExpression([
@@ -290,18 +223,11 @@ export function transformModule(context: TransformationContext) {
                                                     ...unaliasedModuleNames
                                                 ]),
                                                 factory.createIdentifier("factory")
-                                            ]
-                                        )
-                                    )
-                                ])
-                            )
-                        )
+                ]))
+            ])))
                     ],
-                    /*multiLine*/ true
-                ),
-                /*location*/ undefined
-            )
-        );
+        /*multiLine*/ true), 
+        /*location*/ undefined));
 
         // Create an updated SourceFile:
         //
@@ -315,15 +241,9 @@ export function transformModule(context: TransformationContext) {
         //      }
         //  })(function ...)
 
-        const updated = factory.updateSourceFile(
-            node,
-            setTextRange(
-                factory.createNodeArray([
-                    factory.createExpressionStatement(
-                        factory.createCallExpression(
-                            umdHeader,
-                            /*typeArguments*/ undefined,
-                            [
+        const updated = factory.updateSourceFile(node, setTextRange(factory.createNodeArray([
+            factory.createExpressionStatement(factory.createCallExpression(umdHeader, 
+            /*typeArguments*/ undefined, [
                                 // Add the module body function argument:
                                 //
                                 //     function (require, exports) ...
@@ -331,22 +251,15 @@ export function transformModule(context: TransformationContext) {
                                     /*modifiers*/ undefined,
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
-                                    /*typeParameters*/ undefined,
-                                    [
+                /*typeParameters*/ undefined, [
                                         factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
                                         factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                         ...importAliasNames
                                     ],
-                                    /*type*/ undefined,
-                                    transformAsynchronousModuleBody(node)
-                                )
-                            ]
-                        )
-                    )
+                /*type*/ undefined, transformAsynchronousModuleBody(node))
+            ]))
                 ]),
-                /*location*/ node.statements
-            )
-        );
+        /*location*/ node.statements));
 
         addEmitHelpers(updated, context.readEmitHelpers());
         return updated;
@@ -478,15 +391,7 @@ export function transformModule(context: TransformationContext) {
                     statements.push(statement);
                 }
                 else {
-                    const statement = factory.createExpressionStatement(
-                        factory.createAssignment(
-                            factory.createPropertyAccessExpression(
-                                factory.createIdentifier("module"),
-                                "exports"
-                            ),
-                            expressionResult
-                        )
-                    );
+                    const statement = factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), expressionResult));
 
                     setTextRange(statement, currentModuleInfo.exportEquals);
                     setEmitFlags(statement, EmitFlags.NoComments);
@@ -634,20 +539,11 @@ export function transformModule(context: TransformationContext) {
     }
 
     function visitForStatement(node: ForStatement) {
-        return factory.updateForStatement(
-            node,
-            visitNode(node.initializer, discardedValueVisitor, isForInitializer),
-            visitNode(node.condition, visitor, isExpression),
-            visitNode(node.incrementor, discardedValueVisitor, isExpression),
-            visitIterationBody(node.statement, visitor, context)
-        );
+        return factory.updateForStatement(node, visitNode(node.initializer, discardedValueVisitor, isForInitializer), visitNode(node.condition, visitor, isExpression), visitNode(node.incrementor, discardedValueVisitor, isExpression), visitIterationBody(node.statement, visitor, context));
     }
 
     function visitExpressionStatement(node: ExpressionStatement) {
-        return factory.updateExpressionStatement(
-            node,
-            visitNode(node.expression, discardedValueVisitor, isExpression)
-        );
+        return factory.updateExpressionStatement(node, visitNode(node.expression, discardedValueVisitor, isExpression));
     }
 
     function visitParenthesizedExpression(node: ParenthesizedExpression, valueIsDiscarded: boolean) {
@@ -747,8 +643,7 @@ export function transformModule(context: TransformationContext) {
                 /*questionToken*/ undefined,
                 /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
                 /*colonToken*/ undefined,
-                /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
-            );
+            /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis));
         }
         else {
             const temp = factory.createTempVariable(hoistVariableDeclaration);
@@ -757,8 +652,7 @@ export function transformModule(context: TransformationContext) {
                 /*questionToken*/ undefined,
                 /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
                 /*colonToken*/ undefined,
-                /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
-            ));
+            /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)));
         }
     }
 
@@ -776,34 +670,25 @@ export function transformModule(context: TransformationContext) {
             factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
         ];
         const body = factory.createBlock([
-            factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createIdentifier("require"),
-                    /*typeArguments*/ undefined,
-                    [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject]
-                )
-            )
+            factory.createExpressionStatement(factory.createCallExpression(factory.createIdentifier("require"), 
+            /*typeArguments*/ undefined, [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject]))
         ]);
 
         let func: FunctionExpression | ArrowFunction;
         if (languageVersion >= ScriptTarget.ES2015) {
             func = factory.createArrowFunction(
                 /*modifiers*/ undefined,
-                /*typeParameters*/ undefined,
-                parameters,
+            /*typeParameters*/ undefined, parameters, 
                 /*type*/ undefined,
-                /*equalsGreaterThanToken*/ undefined,
-                body);
+            /*equalsGreaterThanToken*/ undefined, body);
         }
         else {
             func = factory.createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
-                /*typeParameters*/ undefined,
-                parameters,
-                /*type*/ undefined,
-                body);
+            /*typeParameters*/ undefined, parameters, 
+            /*type*/ undefined, body);
 
             // if there is a lexical 'this' in the import call arguments, ensure we indicate
             // that this new function expression indicates it captures 'this' so that the
@@ -839,8 +724,7 @@ export function transformModule(context: TransformationContext) {
                 /*typeParameters*/ undefined,
                 /*parameters*/ [],
                 /*type*/ undefined,
-                /*equalsGreaterThanToken*/ undefined,
-                requireCall);
+            /*equalsGreaterThanToken*/ undefined, requireCall);
         }
         else {
             func = factory.createFunctionExpression(
@@ -849,8 +733,7 @@ export function transformModule(context: TransformationContext) {
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
                 /*parameters*/ [],
-                /*type*/ undefined,
-                factory.createBlock([factory.createReturnStatement(requireCall)]));
+            /*type*/ undefined, factory.createBlock([factory.createReturnStatement(requireCall)]));
 
             // if there is a lexical 'this' in the import call arguments, ensure we indicate
             // that this new function expression indicates it captures 'this' so that the
@@ -903,80 +786,42 @@ export function transformModule(context: TransformationContext) {
                 const variables: VariableDeclaration[] = [];
                 if (namespaceDeclaration && !isDefaultImport(node)) {
                     // import * as n from "mod";
-                    variables.push(
-                        factory.createVariableDeclaration(
-                            factory.cloneNode(namespaceDeclaration.name),
+                    variables.push(factory.createVariableDeclaration(factory.cloneNode(namespaceDeclaration.name), 
                             /*exclamationToken*/ undefined,
-                            /*type*/ undefined,
-                            getHelperExpressionForImport(node, createRequireCall(node))
-                        )
-                    );
+                    /*type*/ undefined, getHelperExpressionForImport(node, createRequireCall(node))));
                 }
                 else {
                     // import d from "mod";
                     // import { x, y } from "mod";
                     // import d, { x, y } from "mod";
                     // import d, * as n from "mod";
-                    variables.push(
-                        factory.createVariableDeclaration(
-                            factory.getGeneratedNameForNode(node),
+                    variables.push(factory.createVariableDeclaration(factory.getGeneratedNameForNode(node), 
                             /*exclamationToken*/ undefined,
-                            /*type*/ undefined,
-                            getHelperExpressionForImport(node, createRequireCall(node))
-                        )
-                    );
+                    /*type*/ undefined, getHelperExpressionForImport(node, createRequireCall(node))));
 
                     if (namespaceDeclaration && isDefaultImport(node)) {
-                        variables.push(
-                            factory.createVariableDeclaration(
-                                factory.cloneNode(namespaceDeclaration.name),
+                        variables.push(factory.createVariableDeclaration(factory.cloneNode(namespaceDeclaration.name), 
                                 /*exclamationToken*/ undefined,
-                                /*type*/ undefined,
-                                factory.getGeneratedNameForNode(node)
-                            )
-                        );
+                        /*type*/ undefined, factory.getGeneratedNameForNode(node)));
                     }
                 }
 
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
-                            factory.createVariableStatement(
-                                /*modifiers*/ undefined,
-                                factory.createVariableDeclarationList(
-                                    variables,
-                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
-                            ),
+                statements = append(statements, setOriginalNode(setTextRange(factory.createVariableStatement(
+                /*modifiers*/ undefined, factory.createVariableDeclarationList(variables, languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None)), 
                             /*location*/ node),
-                        /*original*/ node
-                    )
-                );
+                /*original*/ node));
             }
         }
         else if (namespaceDeclaration && isDefaultImport(node)) {
             // import d, * as n from "mod";
-            statements = append(statements,
-                factory.createVariableStatement(
-                    /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(
-                        [
-                            setOriginalNode(
-                                setTextRange(
-                                    factory.createVariableDeclaration(
-                                        factory.cloneNode(namespaceDeclaration.name),
+            statements = append(statements, factory.createVariableStatement(
+            /*modifiers*/ undefined, factory.createVariableDeclarationList([
+                setOriginalNode(setTextRange(factory.createVariableDeclaration(factory.cloneNode(namespaceDeclaration.name), 
                                         /*exclamationToken*/ undefined,
-                                        /*type*/ undefined,
-                                        factory.getGeneratedNameForNode(node)
-                                    ),
+                /*type*/ undefined, factory.getGeneratedNameForNode(node)), 
                                     /*location*/ node),
-                                /*original*/ node
-                            )
-                        ],
-                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                    )
-                )
-            );
+                /*original*/ node)
+            ], languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None)));
         }
 
         if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -1017,56 +862,21 @@ export function transformModule(context: TransformationContext) {
         let statements: Statement[] | undefined;
         if (moduleKind !== ModuleKind.AMD) {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
-                            factory.createExpressionStatement(
-                                createExportExpression(
-                                    node.name,
-                                    createRequireCall(node)
-                                )
-                            ),
-                            node),
-                        node
-                    )
-                );
+                statements = append(statements, setOriginalNode(setTextRange(factory.createExpressionStatement(createExportExpression(node.name, createRequireCall(node))), node), node));
             }
             else {
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
-                            factory.createVariableStatement(
-                                /*modifiers*/ undefined,
-                                factory.createVariableDeclarationList(
-                                    [
-                                        factory.createVariableDeclaration(
-                                            factory.cloneNode(node.name),
+                statements = append(statements, setOriginalNode(setTextRange(factory.createVariableStatement(
+                /*modifiers*/ undefined, factory.createVariableDeclarationList([
+                    factory.createVariableDeclaration(factory.cloneNode(node.name), 
                                             /*exclamationToken*/ undefined,
-                                            /*type*/ undefined,
-                                            createRequireCall(node)
-                                        )
+                    /*type*/ undefined, createRequireCall(node))
                                     ],
-                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
-                            ),
-                            node),
-                        node
-                    )
-                );
+                /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None)), node), node));
             }
         }
         else {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
-                            factory.createExpressionStatement(
-                                createExportExpression(factory.getExportName(node), factory.getLocalName(node))
-                            ),
-                            node),
-                        node
-                    )
-                );
+                statements = append(statements, setOriginalNode(setTextRange(factory.createExpressionStatement(createExportExpression(factory.getExportName(node), factory.getLocalName(node))), node), node));
             }
         }
 
@@ -1100,56 +910,25 @@ export function transformModule(context: TransformationContext) {
             const statements: Statement[] = [];
             // export { x, y } from "mod";
             if (moduleKind !== ModuleKind.AMD) {
-                statements.push(
-                    setOriginalNode(
-                        setTextRange(
-                            factory.createVariableStatement(
-                                /*modifiers*/ undefined,
-                                factory.createVariableDeclarationList([
-                                    factory.createVariableDeclaration(
-                                        generatedName,
+                statements.push(setOriginalNode(setTextRange(factory.createVariableStatement(
+                /*modifiers*/ undefined, factory.createVariableDeclarationList([
+                    factory.createVariableDeclaration(generatedName, 
                                         /*exclamationToken*/ undefined,
-                                        /*type*/ undefined,
-                                        createRequireCall(node)
-                                    )
-                                ])
-                            ),
+                    /*type*/ undefined, createRequireCall(node))
+                ])), 
                             /*location*/ node),
-                        /* original */ node
-                    )
-                );
+                /* original */ node));
             }
             for (const specifier of node.exportClause.elements) {
                 if (languageVersion === ScriptTarget.ES3) {
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
+                    statements.push(setOriginalNode(setTextRange(factory.createExpressionStatement(emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)), specifier), specifier));
                 }
                 else {
-                    const exportNeedsImportDefault =
-                        !!getESModuleInterop(compilerOptions) &&
+                    const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
                         !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
                         idText(specifier.propertyName || specifier.name) === "default";
-                    const exportedValue = factory.createPropertyAccessExpression(
-                        exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                        specifier.propertyName || specifier.name);
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
+                    const exportedValue = factory.createPropertyAccessExpression(exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName, specifier.propertyName || specifier.name);
+                    statements.push(setOriginalNode(setTextRange(factory.createExpressionStatement(createExportExpression(factory.getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)), specifier), specifier));
                 }
             }
 
@@ -1159,36 +938,16 @@ export function transformModule(context: TransformationContext) {
             const statements: Statement[] = [];
             // export * as ns from "mod";
             // export * as default from "mod";
-            statements.push(
-                setOriginalNode(
-                    setTextRange(
-                        factory.createExpressionStatement(
-                            createExportExpression(
-                                factory.cloneNode(node.exportClause.name),
-                                getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
+            statements.push(setOriginalNode(setTextRange(factory.createExpressionStatement(createExportExpression(factory.cloneNode(node.exportClause.name), getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
                                     createRequireCall(node) :
                                     isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
-                            )
-                        ),
-                        node
-                    ),
-                    node
-                )
-            );
+                    factory.createIdentifier(idText(node.exportClause.name))))), node), node));
 
             return singleOrMany(statements);
         }
         else {
             // export * from "mod";
-            return setOriginalNode(
-                setTextRange(
-                    factory.createExpressionStatement(
-                        emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
-                    ),
-                    node),
-                node
-            );
+            return setOriginalNode(setTextRange(factory.createExpressionStatement(emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)), node), node);
         }
     }
 
@@ -1224,24 +983,12 @@ export function transformModule(context: TransformationContext) {
     function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements,
-                setOriginalNode(
-                    setTextRange(
-                        factory.createFunctionDeclaration(
-                            /*decorators*/ undefined,
-                            visitNodes(node.modifiers, modifierVisitor, isModifier),
-                            node.asteriskToken,
-                            factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
-                            /*typeParameters*/ undefined,
-                            visitNodes(node.parameters, visitor),
-                            /*type*/ undefined,
-                            visitEachChild(node.body, visitor, context)
-                        ),
-                        /*location*/ node
-                    ),
-                    /*original*/ node
-                )
-            );
+            statements = append(statements, setOriginalNode(setTextRange(factory.createFunctionDeclaration(
+            /*decorators*/ undefined, visitNodes(node.modifiers, modifierVisitor, isModifier), node.asteriskToken, factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true), 
+            /*typeParameters*/ undefined, visitNodes(node.parameters, visitor), 
+            /*type*/ undefined, visitEachChild(node.body, visitor, context)), 
+            /*location*/ node), 
+            /*original*/ node));
         }
         else {
             statements = append(statements, visitEachChild(node, visitor, context));
@@ -1267,22 +1014,9 @@ export function transformModule(context: TransformationContext) {
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements,
-                setOriginalNode(
-                    setTextRange(
-                        factory.createClassDeclaration(
-                            /*decorators*/ undefined,
-                            visitNodes(node.modifiers, modifierVisitor, isModifier),
-                            factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
-                            /*typeParameters*/ undefined,
-                            visitNodes(node.heritageClauses, visitor),
-                            visitNodes(node.members, visitor)
-                        ),
-                        node
-                    ),
-                    node
-                )
-            );
+            statements = append(statements, setOriginalNode(setTextRange(factory.createClassDeclaration(
+            /*decorators*/ undefined, visitNodes(node.modifiers, modifierVisitor, isModifier), factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true), 
+            /*typeParameters*/ undefined, visitNodes(node.heritageClauses, visitor), visitNodes(node.members, visitor)), node), node));
         }
         else {
             statements = append(statements, visitEachChild(node, visitor, context));
@@ -1325,22 +1059,9 @@ export function transformModule(context: TransformationContext) {
                 }
                 else if (variable.initializer) {
                     if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {
-                        const expression = factory.createAssignment(
-                            setTextRange(
-                                factory.createPropertyAccessExpression(
-                                    factory.createIdentifier("exports"),
-                                    variable.name
-                                ),
-                                /*location*/ variable.name
-                            ),
-                            factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name))
-                        );
-                        const updatedVariable = factory.createVariableDeclaration(
-                            variable.name,
-                            variable.exclamationToken,
-                            variable.type,
-                            visitNode(variable.initializer, visitor)
-                        );
+                        const expression = factory.createAssignment(setTextRange(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), variable.name), 
+                        /*location*/ variable.name), factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name)));
+                        const updatedVariable = factory.createVariableDeclaration(variable.name, variable.exclamationToken, variable.type, visitNode(variable.initializer, visitor));
 
                         variables = append(variables, updatedVariable);
                         expressions = append(expressions, expression);
@@ -1403,26 +1124,13 @@ export function transformModule(context: TransformationContext) {
      */
     function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
         if (isBindingPattern(node.name)) {
-            return flattenDestructuringAssignment(
-                visitNode(node, visitor),
-                /*visitor*/ undefined,
-                context,
-                FlattenLevel.All,
-                /*needsValue*/ false,
-                createAllExportExpressions
-            );
+            return flattenDestructuringAssignment(visitNode(node, visitor), 
+            /*visitor*/ undefined, context, FlattenLevel.All, 
+            /*needsValue*/ false, createAllExportExpressions);
         }
         else {
-            return factory.createAssignment(
-                setTextRange(
-                    factory.createPropertyAccessExpression(
-                        factory.createIdentifier("exports"),
-                        node.name
-                    ),
-                    /*location*/ node.name
-                ),
-                node.initializer ? visitNode(node.initializer, visitor) : factory.createVoidZero()
-            );
+            return factory.createAssignment(setTextRange(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), node.name), 
+            /*location*/ node.name), node.initializer ? visitNode(node.initializer, visitor) : factory.createVoidZero());
         }
     }
 
@@ -1650,27 +1358,17 @@ export function transformModule(context: TransformationContext) {
     function createUnderscoreUnderscoreESModule() {
         let statement: Statement;
         if (languageVersion === ScriptTarget.ES3) {
-            statement = factory.createExpressionStatement(
-                createExportExpression(
-                    factory.createIdentifier("__esModule"),
-                    factory.createTrue()
-                )
-            );
+            statement = factory.createExpressionStatement(createExportExpression(factory.createIdentifier("__esModule"), factory.createTrue()));
         }
         else {
-            statement = factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
-                    /*typeArguments*/ undefined,
-                    [
+            statement = factory.createExpressionStatement(factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"), 
+            /*typeArguments*/ undefined, [
                         factory.createIdentifier("exports"),
                         factory.createStringLiteral("__esModule"),
                         factory.createObjectLiteralExpression([
                             factory.createPropertyAssignment("value", factory.createTrue())
                         ])
-                    ]
-                )
-            );
+            ]));
         }
         setEmitFlags(statement, EmitFlags.CustomPrologue);
         return statement;
@@ -1702,14 +1400,8 @@ export function transformModule(context: TransformationContext) {
      * @param location The location to use for source maps and comments for the export.
      */
     function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
-        return setTextRange(
-            liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
-                factory.createPropertyAccessExpression(
-                    factory.createIdentifier("Object"),
-                    "defineProperty"
-                ),
-                /*typeArguments*/ undefined,
-                [
+        return setTextRange(liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"), 
+        /*typeArguments*/ undefined, [
                     factory.createIdentifier("exports"),
                     factory.createStringLiteralFromNode(name),
                     factory.createObjectLiteralExpression([
@@ -1720,20 +1412,9 @@ export function transformModule(context: TransformationContext) {
                             /*name*/ undefined,
                             /*typeParameters*/ undefined,
                             /*parameters*/ [],
-                            /*type*/ undefined,
-                            factory.createBlock([factory.createReturnStatement(value)])
-                        ))
+                /*type*/ undefined, factory.createBlock([factory.createReturnStatement(value)])))
                     ])
-                ]
-            ) : factory.createAssignment(
-                factory.createPropertyAccessExpression(
-                    factory.createIdentifier("exports"),
-                    factory.cloneNode(name)
-                ),
-                value
-            ),
-            location
-        );
+        ]) : factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.cloneNode(name)), value), location);
     }
 
     //
@@ -1854,14 +1535,8 @@ export function transformModule(context: TransformationContext) {
             const expression = substituteExpressionIdentifier(node.expression);
             noSubstitution[getNodeId(expression)] = true;
             if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
-                return addEmitFlags(
-                    factory.updateCallExpression(node,
-                        expression,
-                        /*typeArguments*/ undefined,
-                        node.arguments
-                    ),
-                    EmitFlags.IndirectCall
-                );
+                return addEmitFlags(factory.updateCallExpression(node, expression, 
+                /*typeArguments*/ undefined, node.arguments), EmitFlags.IndirectCall);
 
             }
         }
@@ -1873,14 +1548,8 @@ export function transformModule(context: TransformationContext) {
             const tag = substituteExpressionIdentifier(node.tag);
             noSubstitution[getNodeId(tag)] = true;
             if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
-                return addEmitFlags(
-                    factory.updateTaggedTemplateExpression(node,
-                        tag,
-                        /*typeArguments*/ undefined,
-                        node.template
-                    ),
-                    EmitFlags.IndirectCall
-                );
+                return addEmitFlags(factory.updateTaggedTemplateExpression(node, tag, 
+                /*typeArguments*/ undefined, node.template), EmitFlags.IndirectCall);
             }
         }
         return node;
@@ -1903,34 +1572,19 @@ export function transformModule(context: TransformationContext) {
         else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
             const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
             if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
-                return setTextRange(
-                    factory.createPropertyAccessExpression(
-                        factory.createIdentifier("exports"),
-                        factory.cloneNode(node)
-                    ),
-                    /*location*/ node
-                );
+                return setTextRange(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.cloneNode(node)), 
+                /*location*/ node);
             }
             const importDeclaration = resolver.getReferencedImportDeclaration(node);
             if (importDeclaration) {
                 if (isImportClause(importDeclaration)) {
-                    return setTextRange(
-                        factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(importDeclaration.parent),
-                            factory.createIdentifier("default")
-                        ),
-                        /*location*/ node
-                    );
+                    return setTextRange(factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(importDeclaration.parent), factory.createIdentifier("default")), 
+                    /*location*/ node);
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     const name = importDeclaration.propertyName || importDeclaration.name;
-                    return setTextRange(
-                        factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                            factory.cloneNode(name)
-                        ),
-                        /*location*/ node
-                    );
+                    return setTextRange(factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration), factory.cloneNode(name)), 
+                    /*location*/ node);
                 }
             }
         }
@@ -1991,10 +1645,10 @@ export function transformModule(context: TransformationContext) {
 }
 
 // emit helper for dynamic import
+/* @internal */
 const dynamicImportUMDHelper: EmitHelper = {
     name: "typescript:dynamicimport-sync-require",
     scoped: true,
     text: `
             var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
 };
-}

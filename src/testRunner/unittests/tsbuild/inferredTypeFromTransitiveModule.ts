@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTscSerializedIncrementalEdits, BuildKind, appendText, replaceText } from "../../ts";
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
     });
@@ -76,15 +77,14 @@ bar("hello");`);
     });
 });
 
-function changeToIsolatedModules(fs: vfs.FileSystem) {
+function changeToIsolatedModules(fs: FileSystem) {
     replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
 }
 
-function changeBarParam(fs: vfs.FileSystem) {
+function changeBarParam(fs: FileSystem) {
     replaceText(fs, "/src/bar.ts", "param: string", "");
 }
 
-function changeBarParamBack(fs: vfs.FileSystem) {
+function changeBarParamBack(fs: FileSystem) {
     replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
-}
 }

@@ -1,10 +1,12 @@
+import { Node, getOriginalNode, getNodeId, ImportDeclaration, ImportEqualsDeclaration, ExportDeclaration, ESMap, ExportSpecifier, Identifier, ExportAssignment, NamedImportBindings, isNamedImports, some, ImportSpecifier, InternalSymbolName, CoreTransformationContext, SourceFile, Bundle, SyntaxKind, map, getNamespaceDeclarationNode, isDefaultImport, TransformationContext, EmitResolver, CompilerOptions, createMultiMap, isNamedExports, NamespaceExport, idText, append, hasSyntacticModifier, ModifierFlags, VariableStatement, FunctionDeclaration, ClassDeclaration, createExternalHelpersImportDeclarationIfNeeded, cast, VariableDeclaration, BindingElement, isBindingPattern, isOmittedExpression, isGeneratedIdentifier, Expression, isStringLiteralLike, isKeyword, isIdentifier, BinaryOperator, CompoundAssignmentOperator, LogicalOperatorOrHigher, NodeFactory, ConstructorDeclaration, Statement, Visitor, findIndex, isExpressionStatement, isSuperCall, visitNode, isStatement, ClassExpression, InitializedPropertyDeclaration, PropertyDeclaration, filter, ClassElement, ClassStaticBlockDeclaration, isClassStaticBlockDeclaration, isPropertyDeclaration, hasStaticModifier, PrivateIdentifierMethodDeclaration, PrivateIdentifierAccessorDeclaration, isStatic, isMethodOrAccessor, isPrivateIdentifier } from "../ts";
+import * as ts from "../ts";
 /* @internal */
-namespace ts {
 export function getOriginalNodeId(node: Node) {
     node = getOriginalNode(node);
     return node ? getNodeId(node) : 0;
 }
 
+/* @internal */
 export interface ExternalModuleInfo {
     externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
@@ -15,16 +17,21 @@ export interface ExternalModuleInfo {
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
 
+/* @internal */
 function containsDefaultReference(node: NamedImportBindings | undefined) {
-    if (!node) return false;
-    if (!isNamedImports(node)) return false;
+    if (!node)
+        return false;
+    if (!isNamedImports(node))
+        return false;
     return some(node.elements, isNamedDefaultReference);
 }
 
+/* @internal */
 function isNamedDefaultReference(e: ImportSpecifier): boolean {
     return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
 }
 
+/* @internal */
 export function chainBundle(context: CoreTransformationContext, transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
     return transformSourceFileOrBundle;
 
@@ -37,10 +44,12 @@ export function chainBundle(context: CoreTransformationContext, transformSourceF
     }
 }
 
+/* @internal */
 export function getExportNeedsImportStarHelper(node: ExportDeclaration): boolean {
     return !!getNamespaceDeclarationNode(node);
 }
 
+/* @internal */
 export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean {
     if (!!getNamespaceDeclarationNode(node)) {
         return true;
@@ -49,7 +58,8 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
     if (!bindings) {
         return false;
     }
-    if (!isNamedImports(bindings)) return false;
+    if (!isNamedImports(bindings))
+        return false;
     let defaultRefCount = 0;
     for (const binding of bindings.elements) {
         if (isNamedDefaultReference(binding)) {
@@ -60,16 +70,18 @@ export function getImportNeedsImportStarHelper(node: ImportDeclaration): boolean
     return (defaultRefCount > 0 && defaultRefCount !== bindings.elements.length) || (!!(bindings.elements.length - defaultRefCount) && isDefaultImport(node));
 }
 
+/* @internal */
 export function getImportNeedsImportDefaultHelper(node: ImportDeclaration): boolean {
     // Import default is needed if there's a default import or a default ref and no other refs (meaning an import star helper wasn't requested)
     return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
 }
 
+/* @internal */
 export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
     const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
     const exportSpecifiers = createMultiMap<ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
-    const uniqueExports = new Map<string, boolean>();
+    const uniqueExports = new ts.Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
@@ -221,6 +233,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
+/* @internal */
 function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: ESMap<string, boolean>, exportedNames: Identifier[] | undefined) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
@@ -240,6 +253,7 @@ function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement,
 }
 
 /** Use a sparse array as a multi-map. */
+/* @internal */
 function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
     let values = map[key];
     if (values) {
@@ -256,6 +270,7 @@ function multiMapSparseArrayAdd<V>(map: V[][], key: number, value: V): V[] {
  *  and thus better to copy into multiple places rather than to cache in a temporary variable
  *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
  */
+/* @internal */
 export function isSimpleCopiableExpression(expression: Expression) {
     return isStringLiteralLike(expression) ||
         expression.kind === SyntaxKind.NumericLiteral ||
@@ -268,15 +283,18 @@ export function isSimpleCopiableExpression(expression: Expression) {
  * without risk of repeating any sideeffects and whose value could not possibly change between
  * any such locations
  */
+/* @internal */
 export function isSimpleInlineableExpression(expression: Expression) {
     return !isIdentifier(expression) && isSimpleCopiableExpression(expression);
 }
 
+/* @internal */
 export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
     return kind >= SyntaxKind.FirstCompoundAssignment
         && kind <= SyntaxKind.LastCompoundAssignment;
 }
 
+/* @internal */
 export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
     switch (kind) {
         case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
@@ -306,6 +324,7 @@ export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssi
  * @param visitor The visitor to apply to each node added to the result array.
  * @returns index of the statement that follows super call
  */
+/* @internal */
 export function addPrologueDirectivesAndInitialSuperCall(factory: NodeFactory, ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
     if (ctor.body) {
         const statements = ctor.body.statements;
@@ -336,18 +355,25 @@ export function addPrologueDirectivesAndInitialSuperCall(factory: NodeFactory, c
  * @param node The class node.
  * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
  */
+/* @internal */
 export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
+/* @internal */
 export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[];
+/* @internal */
 export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
     return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
 }
 
+/* @internal */
 function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: ClassElement): element is PropertyDeclaration | ClassStaticBlockDeclaration {
     return isStaticPropertyDeclaration(element) || isClassStaticBlockDeclaration(element);
 }
 
+/* @internal */
 export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+/* @internal */
 export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+/* @internal */
 export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
     return filter(node.members, isStaticPropertyDeclarationOrClassStaticBlockDeclaration);
 }
@@ -358,12 +384,14 @@ export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | C
  * @param member The class element node.
  * @param isStatic A value indicating whether the member should be a static or instance member.
  */
+/* @internal */
 function isInitializedOrStaticProperty(member: ClassElement, requireInitializer: boolean, isStatic: boolean) {
     return isPropertyDeclaration(member)
         && (!!member.initializer || !requireInitializer)
         && hasStaticModifier(member) === isStatic;
 }
 
+/* @internal */
 function isStaticPropertyDeclaration(member: ClassElement) {
     return isPropertyDeclaration(member) && hasStaticModifier(member);
 }
@@ -374,7 +402,10 @@ function isStaticPropertyDeclaration(member: ClassElement) {
  * @param member The class element node.
  * @param isStatic A value indicating whether the member should be a static or instance member.
  */
-export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
+/* @internal */
+export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & {
+    initializer: Expression;
+} {
     return member.kind === SyntaxKind.PropertyDeclaration
         && (member as PropertyDeclaration).initializer !== undefined;
 }
@@ -384,7 +415,7 @@ export function isInitializedProperty(member: ClassElement): member is PropertyD
  *
  * @param member The class element node.
  */
+/* @internal */
 export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration {
     return !isStatic(member) && isMethodOrAccessor(member) && isPrivateIdentifier(member.name);
-}
 }

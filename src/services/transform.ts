@@ -1,4 +1,4 @@
-namespace ts {
+import { Node, TransformerFactory, CompilerOptions, DiagnosticWithLocation, fixupCompilerOptions, isArray, transformNodes, factory, concatenate } from "./ts";
 /**
  * Transform one or more nodes using the supplied transformers.
  * @param source A single `Node` or an array of `Node` objects.
@@ -12,5 +12,4 @@ export function transform<T extends Node>(source: T | T[], transformers: Transfo
     const result = transformNodes(/*resolver*/ undefined, /*emitHost*/ undefined, factory, compilerOptions, nodes, transformers, /*allowDtsFiles*/ true);
     result.diagnostics = concatenate(result.diagnostics, diagnostics);
     return result;
-}
 }

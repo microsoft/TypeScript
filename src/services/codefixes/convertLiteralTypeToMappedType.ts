@@ -1,8 +1,12 @@
+import { Diagnostics, TypeLiteralNode, TypeNode, SourceFile, getTokenAtPosition, isIdentifier, cast, isPropertySignature, isTypeLiteralNode, factory } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "convertLiteralTypeToMappedType";
+/* @internal */
 const errorCodes = [Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0.code];
 
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertLiteralTypeToMappedType(context) {
@@ -12,7 +16,7 @@ registerCodeFix({
             return undefined;
         }
         const { name, constraint } = info;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, info));
         return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_1_in_0, constraint, name], fixId, Diagnostics.Convert_all_type_literals_to_mapped_type)];
     },
     fixIds: [fixId],
@@ -24,13 +28,15 @@ registerCodeFix({
     })
 });
 
+/* @internal */
 interface Info {
-    container: TypeLiteralNode,
+    container: TypeLiteralNode;
     typeNode: TypeNode | undefined;
     constraint: string;
     name: string;
 }
 
+/* @internal */
 function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     if (isIdentifier(token)) {
@@ -46,13 +52,11 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     return undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, { container, typeNode, constraint, name }: Info): void {
     changes.replaceNode(sourceFile, container, factory.createMappedTypeNode(
-        /*readonlyToken*/ undefined,
-        factory.createTypeParameterDeclaration(name, factory.createTypeReferenceNode(constraint)),
+    /*readonlyToken*/ undefined, factory.createTypeParameterDeclaration(name, factory.createTypeReferenceNode(constraint)), 
         /*nameType*/ undefined,
-        /*questionToken*/ undefined,
-        typeNode,
+    /*questionToken*/ undefined, typeNode, 
         /*members*/ undefined));
-}
 }

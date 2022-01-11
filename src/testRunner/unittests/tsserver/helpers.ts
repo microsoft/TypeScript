@@ -1,29 +1,28 @@
-namespace ts.projectSystem {
-export import TI = server.typingsInstaller;
-export import protocol = server.protocol;
-export import CommandNames = server.CommandNames;
-
-export import TestServerHost = TestFSWithWatch.TestServerHost;
+import { TestFSWithWatch, convertToObject, parseJsonText, Path, server, noop, returnFalse, returnUndefined, Debug, returnTrue, version, MapLike, notImplemented, TypeAcquisition, SortedReadonlyArray, isString, ESMap, map, filterMutate, sys, clear, mapDefined, isArray, HostCancellationToken, arrayFrom, mapDefinedIterator, normalizePath, forEachAncestorDirectory, combinePaths, directorySeparator, computeLineStarts, computeLineAndCharacterOfPosition, textSpanEnd, TextSpan, createTextSpan } from "../../ts";
+import { Baseline } from "../../Harness";
+import { ProjectService, Project, ITypingsInstaller, ServerHost, SetTypings, InvalidateCachedTypings, createInstallTypingsRequest, FileStats, ProjectServiceEvent, ProjectInfoTelemetryEventData, ProjectInfoTelemetryEvent, OpenFileInfo, OpenFileInfoTelemetryEventData, OpenFileInfoTelemetryEvent, SessionOptions, Session, LogLevel, toEvent, nullCancellationToken, ProjectServiceOptions, nullTypingsInstaller, ProjectKind, ServerCancellationToken } from "../../ts.server";
+import { byteLength } from "../../Utils";
+import * as ts from "../../ts";
+export import TI = ts.server.typingsInstaller;
+export import protocol = ts.server.protocol;
+export import CommandNames = ts.server.CommandNames;
+export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
 export type File = TestFSWithWatch.File;
 export type SymLink = TestFSWithWatch.SymLink;
 export type Folder = TestFSWithWatch.Folder;
-export import createServerHost = TestFSWithWatch.createServerHost;
-export import checkArray = TestFSWithWatch.checkArray;
-export import libFile = TestFSWithWatch.libFile;
-export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
-
-export import commonFile1 = tscWatch.commonFile1;
-export import commonFile2 = tscWatch.commonFile2;
+export import createServerHost = ts.TestFSWithWatch.createServerHost;
+export import checkArray = ts.TestFSWithWatch.checkArray;
+export import libFile = ts.TestFSWithWatch.libFile;
+export import checkWatchedFiles = ts.TestFSWithWatch.checkWatchedFiles;
+export import checkWatchedFilesDetailed = ts.TestFSWithWatch.checkWatchedFilesDetailed;
+export import checkWatchedDirectories = ts.TestFSWithWatch.checkWatchedDirectories;
+export import checkWatchedDirectoriesDetailed = ts.TestFSWithWatch.checkWatchedDirectoriesDetailed;
+export import commonFile1 = ts.tscWatch.commonFile1;
+export import commonFile2 = ts.tscWatch.commonFile2;
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {
-    return convertToObject(
-        parseJsonText("json.json", s.replace(outputEventRegex, "")),
-        []
-    );
+    return convertToObject(parseJsonText("json.json", s.replace(outputEventRegex, "")), []);
 }
 
 export const customTypesMap = {
@@ -98,28 +97,26 @@ export function createLoggerWithInMemoryLogs(): Logger {
         ...logger,
         hasLevel: returnTrue,
         loggingEnabled: returnTrue,
-        info: s => logger.logs.push(
-            s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+        info: s => logger.logs.push(s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
                 .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
                 .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
-                .replace(`"version":"${version}"`, `"version":"FakeVersion"`)
-        )
+            .replace(`"version":"${version}"`, `"version":"FakeVersion"`))
     };
 }
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: TestSession | TestProjectService) {
     Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
-    Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+    Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
 }
 
-export function appendAllScriptInfos(service: server.ProjectService, logs: string[]) {
+export function appendAllScriptInfos(service: ProjectService, logs: string[]) {
     logs.push("");
     logs.push(`ScriptInfos:`);
     service.filenameToScriptInfo.forEach(info => logs.push(`path: ${info.path} fileName: ${info.fileName}`));
     logs.push("");
 }
 
-export function appendProjectFileText(project: server.Project, logs: string[]) {
+export function appendProjectFileText(project: Project, logs: string[]) {
     logs.push("");
     logs.push(`Project: ${project.getProjectName()}`);
     project.getCurrentProgram()?.getSourceFiles().forEach(f => {
@@ -130,14 +127,9 @@ export function appendProjectFileText(project: server.Project, logs: string[]) {
     logs.push("");
 }
 
-export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
-    protected projectService!: server.ProjectService;
-    constructor(
-        readonly globalTypingsCacheLocation: string,
-        throttleLimit: number,
-        installTypingHost: server.ServerHost,
-        readonly typesRegistry = new Map<string, MapLike<string>>(),
-        log?: TI.Log) {
+export class TestTypingsInstaller extends TI.TypingsInstaller implements ITypingsInstaller {
+    protected projectService!: ProjectService;
+    constructor(readonly globalTypingsCacheLocation: string, throttleLimit: number, installTypingHost: ServerHost, readonly typesRegistry = new ts.Map<string, MapLike<string>>(), log?: TI.Log) {
         super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
     }
 
@@ -161,7 +153,7 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements server.
 
     onProjectClosed = noop;
 
-    attach(projectService: server.ProjectService) {
+    attach(projectService: ProjectService) {
         this.projectService = projectService;
     }
 
@@ -173,12 +165,12 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements server.
         this.addPostExecAction("success", cb);
     }
 
-    sendResponse(response: server.SetTypings | server.InvalidateCachedTypings) {
+    sendResponse(response: SetTypings | InvalidateCachedTypings) {
         this.projectService.updateTypingsForProject(response);
     }
 
-    enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
-        const request = server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
+    enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+        const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
         this.install(request);
     }
 
@@ -212,7 +204,7 @@ export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<st
         "ts2.6": "1.3.0",
         "ts2.7": "1.3.0"
     };
-    const map = new Map<string, MapLike<string>>();
+    const map = new ts.Map<string, MapLike<string>>();
     for (const l of list) {
         map.set(l, versionMap);
     }
@@ -227,14 +219,14 @@ export function toExternalFiles(fileNames: string[]) {
     return map(fileNames, toExternalFile);
 }
 
-export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
+export function fileStats(nonZeroStats: Partial<FileStats>): FileStats {
     return { ts: 0, tsSize: 0, tsx: 0, tsxSize: 0, dts: 0, dtsSize: 0, js: 0, jsSize: 0, jsx: 0, jsxSize: 0, deferred: 0, deferredSize: 0, ...nonZeroStats };
 }
 
 export class TestServerEventManager {
-    private events: server.ProjectServiceEvent[] = [];
+    private events: ProjectServiceEvent[] = [];
     readonly session: TestSession;
-    readonly service: server.ProjectService;
+    readonly service: ProjectService;
     readonly host: TestServerHost;
     constructor(files: File[], suppressDiagnosticEvents?: boolean) {
         this.host = createServerHost(files);
@@ -246,13 +238,13 @@ export class TestServerEventManager {
         this.service = this.session.getProjectService();
     }
 
-    getEvents(): readonly server.ProjectServiceEvent[] {
+    getEvents(): readonly ProjectServiceEvent[] {
         const events = this.events;
         this.events = [];
         return events;
     }
 
-    getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
+    getEvent<T extends ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
         let eventData: T["data"] | undefined;
         filterMutate(this.events, e => {
             if (e.eventName === eventName) {
@@ -267,12 +259,12 @@ export class TestServerEventManager {
         return Debug.checkDefined(eventData);
     }
 
-    hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
+    hasZeroEvent<T extends ProjectServiceEvent>(eventName: T["eventName"]) {
         this.events.forEach(event => assert.notEqual(event.eventName, eventName));
     }
 
-    assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
-        assert.deepEqual<server.ProjectInfoTelemetryEventData>(this.getEvent<server.ProjectInfoTelemetryEvent>(server.ProjectInfoTelemetryEvent), {
+    assertProjectInfoTelemetryEvent(partial: Partial<ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
+        assert.deepEqual<ProjectInfoTelemetryEventData>(this.getEvent<ProjectInfoTelemetryEvent>(ProjectInfoTelemetryEvent), {
             projectId: sys.createSHA256Hash!(configFile),
             fileStats: fileStats({ ts: 1 }),
             compilerOptions: {},
@@ -289,24 +281,24 @@ export class TestServerEventManager {
             configFileName: "tsconfig.json",
             projectType: "configured",
             languageServiceEnabled: true,
-            version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            version: version,
             ...partial,
         });
     }
 
-    assertOpenFileTelemetryEvent(info: server.OpenFileInfo): void {
-        assert.deepEqual<server.OpenFileInfoTelemetryEventData>(this.getEvent<server.OpenFileInfoTelemetryEvent>(server.OpenFileInfoTelemetryEvent), { info });
+    assertOpenFileTelemetryEvent(info: OpenFileInfo): void {
+        assert.deepEqual<OpenFileInfoTelemetryEventData>(this.getEvent<OpenFileInfoTelemetryEvent>(OpenFileInfoTelemetryEvent), { info });
     }
     assertNoOpenFilesTelemetryEvent(): void {
-        this.hasZeroEvent<server.OpenFileInfoTelemetryEvent>(server.OpenFileInfoTelemetryEvent);
+        this.hasZeroEvent<OpenFileInfoTelemetryEvent>(OpenFileInfoTelemetryEvent);
     }
 }
 
-export interface TestSessionOptions extends server.SessionOptions {
+export interface TestSessionOptions extends SessionOptions {
     logger: Logger;
 }
 
-export class TestSession extends server.Session {
+export class TestSession extends Session {
     private seq = 0;
     public events: protocol.Event[] = [];
     public testhost: TestServerHost = this.host as TestServerHost;
@@ -330,10 +322,12 @@ export class TestSession extends server.Session {
     }
 
     public executeCommand(request: protocol.Request) {
-        const verboseLogging = this.logger.hasLevel(server.LogLevel.verbose);
-        if (verboseLogging) this.logger.info(`request:${JSON.stringify(request)}`);
+        const verboseLogging = this.logger.hasLevel(LogLevel.verbose);
+        if (verboseLogging)
+            this.logger.info(`request:${JSON.stringify(request)}`);
         const result = super.executeCommand(request);
-        if (verboseLogging) this.logger.info(`response:${JSON.stringify(result)}`);
+        if (verboseLogging)
+            this.logger.info(`response:${JSON.stringify(result)}`);
         return result;
     }
 
@@ -345,7 +339,7 @@ export class TestSession extends server.Session {
     }
 
     public event<T extends object>(body: T, eventName: string) {
-        this.events.push(server.toEvent(eventName, body));
+        this.events.push(toEvent(eventName, body));
         super.event(body, eventName);
     }
 
@@ -355,7 +349,7 @@ export class TestSession extends server.Session {
     }
 }
 
-export function createSession(host: server.ServerHost, opts: Partial<TestSessionOptions> = {}) {
+export function createSession(host: ServerHost, opts: Partial<TestSessionOptions> = {}) {
     if (opts.typingsInstaller === undefined) {
         opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
     }
@@ -366,11 +360,11 @@ export function createSession(host: server.ServerHost, opts: Partial<TestSession
 
     const sessionOptions: TestSessionOptions = {
         host,
-        cancellationToken: server.nullCancellationToken,
+        cancellationToken: nullCancellationToken,
         useSingleInferredProject: false,
         useInferredProjectPerProjectRoot: false,
-        typingsInstaller: undefined!, // TODO: GH#18217
-        byteLength: Utils.byteLength,
+        typingsInstaller: undefined!,
+        byteLength: byteLength,
         hrtime: process.hrtime,
         logger: opts.logger || createHasErrorMessageLogger(),
         canUseEvents: false
@@ -379,7 +373,7 @@ export function createSession(host: server.ServerHost, opts: Partial<TestSession
     return new TestSession({ ...sessionOptions, ...opts });
 }
 
-export function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
+export function createSessionWithEventTracking<T extends ProjectServiceEvent>(host: ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
     const events: T[] = [];
     const session = createSession(host, {
         eventHandler: e => {
@@ -413,13 +407,12 @@ export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent
     }
 }
 
-export interface TestProjectServiceOptions extends server.ProjectServiceOptions {
+export interface TestProjectServiceOptions extends ProjectServiceOptions {
     logger: Logger;
 }
 
-export class TestProjectService extends server.ProjectService {
-    constructor(host: server.ServerHost, public logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-        typingsInstaller: server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
+export class TestProjectService extends ProjectService {
+    constructor(host: ServerHost, public logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
         super({
             host,
             logger,
@@ -433,61 +426,68 @@ export class TestProjectService extends server.ProjectService {
         });
     }
 
-    checkNumberOfProjects(count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
+    checkNumberOfProjects(count: {
+        inferredProjects?: number;
+        configuredProjects?: number;
+        externalProjects?: number;
+    }) {
         checkNumberOfProjects(this, count);
     }
 }
 
-export function createProjectService(host: server.ServerHost, options?: Partial<TestProjectServiceOptions>) {
-    const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
+export function createProjectService(host: ServerHost, options?: Partial<TestProjectServiceOptions>) {
+    const cancellationToken = options?.cancellationToken || nullCancellationToken;
     const logger = options?.logger || createHasErrorMessageLogger();
     const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
-    return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
+    return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || nullTypingsInstaller, options);
 }
 
-export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
+export function checkNumberOfConfiguredProjects(projectService: ProjectService, expected: number) {
     assert.equal(projectService.configuredProjects.size, expected, `expected ${expected} configured project(s)`);
 }
 
-export function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
+export function checkNumberOfExternalProjects(projectService: ProjectService, expected: number) {
     assert.equal(projectService.externalProjects.length, expected, `expected ${expected} external project(s)`);
 }
 
-export function checkNumberOfInferredProjects(projectService: server.ProjectService, expected: number) {
+export function checkNumberOfInferredProjects(projectService: ProjectService, expected: number) {
     assert.equal(projectService.inferredProjects.length, expected, `expected ${expected} inferred project(s)`);
 }
 
-export function checkNumberOfProjects(projectService: server.ProjectService, count: { inferredProjects?: number, configuredProjects?: number, externalProjects?: number }) {
+export function checkNumberOfProjects(projectService: ProjectService, count: {
+    inferredProjects?: number;
+    configuredProjects?: number;
+    externalProjects?: number;
+}) {
     checkNumberOfConfiguredProjects(projectService, count.configuredProjects || 0);
     checkNumberOfExternalProjects(projectService, count.externalProjects || 0);
     checkNumberOfInferredProjects(projectService, count.inferredProjects || 0);
 }
 
-export function configuredProjectAt(projectService: server.ProjectService, index: number) {
+export function configuredProjectAt(projectService: ProjectService, index: number) {
     const values = projectService.configuredProjects.values();
     while (index > 0) {
         const iterResult = values.next();
-        if (iterResult.done) return Debug.fail("Expected a result.");
+        if (iterResult.done)
+            return Debug.fail("Expected a result.");
         index--;
     }
     const iterResult = values.next();
-    if (iterResult.done) return Debug.fail("Expected a result.");
+    if (iterResult.done)
+        return Debug.fail("Expected a result.");
     return iterResult.value;
 }
 
-export function checkOrphanScriptInfos(service: server.ProjectService, expectedFiles: readonly string[]) {
-    checkArray("Orphan ScriptInfos:", arrayFrom(mapDefinedIterator(
-        service.filenameToScriptInfo.values(),
-        v => v.containingProjects.length === 0 ? v.fileName : undefined
-    )), expectedFiles);
+export function checkOrphanScriptInfos(service: ProjectService, expectedFiles: readonly string[]) {
+    checkArray("Orphan ScriptInfos:", arrayFrom(mapDefinedIterator(service.filenameToScriptInfo.values(), v => v.containingProjects.length === 0 ? v.fileName : undefined)), expectedFiles);
 }
 
-export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
-    checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
+export function checkProjectActualFiles(project: Project, expectedFiles: readonly string[]) {
+    checkArray(`${ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
 }
 
-export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
-    checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
+export function checkProjectRootFiles(project: Project, expectedFiles: readonly string[]) {
+    checkArray(`${ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
 }
 
 export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -522,11 +522,11 @@ export function getConfigFilesToWatch(folder: string) {
     ];
 }
 
-export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
+export function checkOpenFiles(projectService: ProjectService, expectedFiles: File[]) {
     checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
 }
 
-export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
+export function checkScriptInfos(projectService: ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
     checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
 }
 
@@ -634,7 +634,8 @@ function nthIndexOf(str: string, substr: string, n: number): number {
     let index = -1;
     for (; n >= 0; n--) {
         index = str.indexOf(substr, index + 1);
-        if (index === -1) return -1;
+        if (index === -1)
+            return -1;
     }
     return index;
 }
@@ -645,7 +646,7 @@ function nthIndexOf(str: string, substr: string, n: number): number {
  * should be made before canceling the token. The id of the request to cancel should be set with
  * setRequestToCancel();
  */
-export class TestServerCancellationToken implements server.ServerCancellationToken {
+export class TestServerCancellationToken implements ServerCancellationToken {
     private currentId: number | undefined = -1;
     private requestToCancel = -1;
     private isCancellationRequestedCount = 0;
@@ -691,22 +692,25 @@ export function makeSessionRequest<T>(command: string, args: T): protocol.Reques
     };
 }
 
-export function executeSessionRequest<TRequest extends protocol.Request, TResponse extends protocol.Response>(session: server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
+export function executeSessionRequest<TRequest extends protocol.Request, TResponse extends protocol.Response>(session: Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
     return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
 }
 
-export function executeSessionRequestNoResponse<TRequest extends protocol.Request>(session: server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
+export function executeSessionRequestNoResponse<TRequest extends protocol.Request>(session: Session, command: TRequest["command"], args: TRequest["arguments"]): void {
     session.executeCommand(makeSessionRequest(command, args));
 }
 
-export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
+export function openFilesForSession(files: readonly (File | {
+    readonly file: File | string;
+    readonly projectRootPath: string;
+    content?: string;
+})[], session: Session): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
-            "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
+        session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open, "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
     }
 }
 
-export function closeFilesForSession(files: readonly File[], session: server.Session): void {
+export function closeFilesForSession(files: readonly File[], session: Session): void {
     for (const file of files) {
         session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
     }
@@ -745,7 +749,11 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     checkAllErrors(request);
 }
 
-interface SkipErrors { semantic?: true; suggestion?: true };
+interface SkipErrors {
+    semantic?: true;
+    suggestion?: true;
+}
+;
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
     skip?: readonly (SkipErrors | undefined)[];
@@ -760,8 +768,10 @@ function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckA
         else {
             host.checkTimeoutQueueLengthAndRun(1);
         }
-        if (!skip?.[i]?.semantic) host.runQueuedImmediateCallbacks(1);
-        if (!skip?.[i]?.suggestion) host.runQueuedImmediateCallbacks(1);
+        if (!skip?.[i]?.semantic)
+            host.runQueuedImmediateCallbacks(1);
+        if (!skip?.[i]?.suggestion)
+            host.runQueuedImmediateCallbacks(1);
     }
 }
 
@@ -843,5 +853,4 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingGeterr(scenario);
     verifyErrorsUsingGeterrForProject(scenario);
     verifyErrorsUsingSyncMethods(scenario);
-}
 }

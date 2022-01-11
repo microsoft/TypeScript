@@ -1,4 +1,7 @@
-namespace Harness {
+import { RunnerBase, Compiler, IO, Baseline, TestCaseParser, TestRunnerKind } from "./Harness";
+import { CompilerOptions, ScriptTarget, ModuleKind, removeFileExtension, map, normalizePath } from "./ts";
+import { CompilationResult } from "./compiler";
+import { assertInvariants, sourceFileToJSON } from "./Utils";
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
 export class Test262BaselineRunner extends RunnerBase {
     private static readonly basePath = "internal/cases/test262";
@@ -8,10 +11,10 @@ export class Test262BaselineRunner extends RunnerBase {
         content: IO.readFile(Test262BaselineRunner.helpersFilePath)!,
     };
     private static readonly testFileExtensionRegex = /\.js$/;
-    private static readonly options: ts.CompilerOptions = {
+    private static readonly options: CompilerOptions = {
         allowNonTsExtensions: true,
-        target: ts.ScriptTarget.Latest,
-        module: ts.ModuleKind.CommonJS
+        target: ScriptTarget.Latest,
+        module: ModuleKind.CommonJS
     };
     private static readonly baselineOptions: Baseline.BaselineOptions = {
         Subfolder: "test262",
@@ -28,13 +31,13 @@ export class Test262BaselineRunner extends RunnerBase {
             // Everything declared here should be cleared out in the "after" callback.
             let testState: {
                 filename: string;
-                compilerResult: compiler.CompilationResult;
+                compilerResult: CompilationResult;
                 inputFiles: Compiler.TestFile[];
             };
 
             before(() => {
                 const content = IO.readFile(filePath)!;
-                const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
+                const testFilename = removeFileExtension(filePath).replace(/\//g, "_") + ".test";
                 const testCaseContent = TestCaseParser.makeUnitsFromTest(content, testFilename);
 
                 const inputFiles: Compiler.TestFile[] = testCaseContent.testUnitData.map(unit => {
@@ -49,11 +52,9 @@ export class Test262BaselineRunner extends RunnerBase {
                     compilerResult: undefined!, // TODO: GH#18217
                 };
 
-                testState.compilerResult = Compiler.compileFiles(
-                    [Test262BaselineRunner.helperFile].concat(inputFiles),
+                testState.compilerResult = Compiler.compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), 
                     /*otherFiles*/ [],
-                    /* harnessOptions */ undefined,
-                    Test262BaselineRunner.options,
+                /* harnessOptions */ undefined, Test262BaselineRunner.options, 
                     /* currentDirectory */ undefined);
             });
 
@@ -75,12 +76,12 @@ export class Test262BaselineRunner extends RunnerBase {
 
             it("satisfies invariants", () => {
                 const sourceFile = testState.compilerResult.program!.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
-                Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
+                assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it("has the expected AST", () => {
                 const sourceFile = testState.compilerResult.program!.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename))!;
-                Baseline.runBaseline(testState.filename + ".AST.txt", Utils.sourceFileToJSON(sourceFile), Test262BaselineRunner.baselineOptions);
+                Baseline.runBaseline(testState.filename + ".AST.txt", sourceFileToJSON(sourceFile), Test262BaselineRunner.baselineOptions);
             });
         });
     }
@@ -91,7 +92,7 @@ export class Test262BaselineRunner extends RunnerBase {
 
     public enumerateTestFiles() {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
-        return ts.map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), ts.normalizePath);
+        return map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), normalizePath);
     }
 
     public initializeTests() {
@@ -106,5 +107,4 @@ export class Test262BaselineRunner extends RunnerBase {
             this.tests.forEach(test => this.runTest(typeof test === "string" ? test : test.file));
         }
     }
-}
 }

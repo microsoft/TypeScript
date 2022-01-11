@@ -1,4 +1,4 @@
-namespace ts {
+import { Node, SyntaxKind, Debug, Expression, factory, ConciseBody, BinaryOperator } from "../ts";
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: Node, expected: SyntaxKind) {
         assert.strictEqual(node.kind, expected, `Actual: ${Debug.formatSyntaxKind(node.kind)} Expected: ${Debug.formatSyntaxKind(expected)}`);
@@ -9,9 +9,7 @@ describe("unittests:: FactoryAPI", () => {
                 const node = factory.createExportAssignment(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    /*isExportEquals*/ false,
-                    expression,
-                );
+                /*isExportEquals*/ false, expression);
                 assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);
             }
 
@@ -36,12 +34,9 @@ describe("unittests:: FactoryAPI", () => {
             function checkBody(body: ConciseBody) {
                 const node = factory.createArrowFunction(
                     /*modifiers*/ undefined,
-                    /*typeParameters*/ undefined,
-                    [],
+                /*typeParameters*/ undefined, [], 
                     /*type*/ undefined,
-                    /*equalsGreaterThanToken*/ undefined,
-                    body,
-                );
+                /*equalsGreaterThanToken*/ undefined, body);
                 assertSyntaxKind(node.body, SyntaxKind.ParenthesizedExpression);
             }
 
@@ -59,12 +54,9 @@ describe("unittests:: FactoryAPI", () => {
             const lhs = factory.createIdentifier("foo");
             const rhs = factory.createArrowFunction(
                 /*modifiers*/ undefined,
-                /*typeParameters*/ undefined,
-                [],
+            /*typeParameters*/ undefined, [], 
                 /*type*/ undefined,
-                /*equalsGreaterThanToken*/ undefined,
-                factory.createBlock([]),
-            );
+            /*equalsGreaterThanToken*/ undefined, factory.createBlock([]));
             function checkRhs(operator: BinaryOperator, expectParens: boolean) {
                 const node = factory.createBinaryExpression(lhs, operator, rhs);
                 assertSyntaxKind(node.right, expectParens ? SyntaxKind.ParenthesizedExpression : SyntaxKind.ArrowFunction);
@@ -83,4 +75,3 @@ describe("unittests:: FactoryAPI", () => {
         });
     });
 });
-}

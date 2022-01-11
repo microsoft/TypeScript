@@ -1,6 +1,11 @@
-namespace ts {
+import { Diagnostic, parseConfigFileTextToJson, parseJsonConfigFileContent, sys, Diagnostics, parseJsonText, parseJsonSourceFileConfigFileContent, ParseConfigHost, arrayIsEqualTo, createCompilerDiagnostic, convertToObject } from "../../ts";
+import { FileSet, FileSystem } from "../../vfs";
+import * as fakes from "../../fakes";
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
-    function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic[] }) {
+    function assertParseResult(jsonText: string, expectedConfigObject: {
+        config?: any;
+        error?: Diagnostic[];
+    }) {
         const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
         assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));
     }
@@ -22,15 +27,15 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
 
     function getParsedCommandJson(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
         const parsed = parseConfigFileTextToJson(configFileName, jsonText);
-        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
+        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as FileSet);
+        const host: ParseConfigHost = new fakes.ParseConfigHost(new FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
         return parseJsonConfigFileContent(parsed.config, host, basePath, /*existingOptions*/ undefined, configFileName);
     }
 
     function getParsedCommandJsonNode(jsonText: string, configFileName: string, basePath: string, allFileList: string[]) {
         const parsed = parseJsonText(configFileName, jsonText);
-        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
+        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as FileSet);
+        const host: ParseConfigHost = new fakes.ParseConfigHost(new FileSystem(/*ignoreCase*/ false, { cwd: basePath, files: { "/": {}, ...files } }));
         return parseJsonSourceFileConfigFileContent(parsed, host, basePath, /*existingOptions*/ undefined, configFileName);
     }
 
@@ -89,16 +94,14 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("returns config object without comments", () => {
-        assertParseResult(
-            `{ // Excluded files
+        assertParseResult(`{ // Excluded files
                     "exclude": [
                         // Exclude d.ts
                         "file.d.ts"
                     ]
                 }`, { config: { exclude: ["file.d.ts"] } });
 
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     /* Excluded
                          Files
                     */
@@ -109,14 +112,12 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("keeps string content untouched", () => {
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     "exclude": [
                         "xx//file.d.ts"
                     ]
                 }`, { config: { exclude: ["xx//file.d.ts"] } });
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     "exclude": [
                         "xx/*file.d.ts*/"
                     ]
@@ -124,15 +125,13 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("handles escaped characters in strings correctly", () => {
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     "exclude": [
                         "xx\\"//files"
                     ]
                 }`, { config: { exclude: ["xx\"//files"] } });
 
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     "exclude": [
                         "xx\\\\" // end of line comment
                     ]
@@ -152,8 +151,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("returns object when users correctly specify library", () => {
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     "compilerOptions": {
                         "lib": ["es5"]
                     }
@@ -161,8 +159,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 config: { compilerOptions: { lib: ["es5"] } }
             });
 
-        assertParseResult(
-            `{
+        assertParseResult(`{
                     "compilerOptions": {
                         "lib": ["es5", "es6"]
                     }
@@ -172,8 +169,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("returns error when tsconfig have excludes", () => {
-        assertParseErrorWithExcludesKeyword(
-            `{
+        assertParseErrorWithExcludesKeyword(`{
                     "compilerOptions": {
                         "lib": ["es5"]
                     },
@@ -184,36 +180,22 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("ignore dotted files and folders", () => {
-        assertParseFileList(
-            `{}`,
-            "tsconfig.json",
-            "/apath",
-            ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
-            ["/apath/test.ts"]
-        );
+        assertParseFileList(`{}`, "tsconfig.json", "/apath", ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"], ["/apath/test.ts"]);
     });
 
     it("allow dotted files and folders when explicitly requested", () => {
-        assertParseFileList(
-            `{
+        assertParseFileList(`{
                     "files": ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
-                }`,
-            "tsconfig.json",
-            "/apath",
-            ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
-            ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
-        );
+                }`, "tsconfig.json", "/apath", ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"], ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]);
     });
 
     it("exclude outDir unless overridden", () => {
-        const tsconfigWithoutExclude =
-        `{
+        const tsconfigWithoutExclude = `{
                 "compilerOptions": {
                     "outDir": "bin"
                 }
             }`;
-        const tsconfigWithExclude =
-        `{
+        const tsconfigWithExclude = `{
                 "compilerOptions": {
                     "outDir": "bin"
                 },
@@ -227,14 +209,12 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("exclude declarationDir unless overridden", () => {
-        const tsconfigWithoutExclude =
-        `{
+        const tsconfigWithoutExclude = `{
                 "compilerOptions": {
                     "declarationDir": "declarations"
                 }
             }`;
-        const tsconfigWithExclude =
-        `{
+        const tsconfigWithExclude = `{
                 "compilerOptions": {
                     "declarationDir": "declarations"
                 },
@@ -250,13 +230,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("implicitly exclude common package folders", () => {
-        assertParseFileList(
-            `{}`,
-            "tsconfig.json",
-            "/",
-            ["/node_modules/a.ts", "/bower_components/b.ts", "/jspm_packages/c.ts", "/d.ts", "/folder/e.ts"],
-            ["/d.ts", "/folder/e.ts"]
-        );
+        assertParseFileList(`{}`, "tsconfig.json", "/", ["/node_modules/a.ts", "/bower_components/b.ts", "/jspm_packages/c.ts", "/d.ts", "/folder/e.ts"], ["/d.ts", "/folder/e.ts"]);
     });
 
     it("parse and re-emit tsconfig.json file with diagnostics", () => {
@@ -286,11 +260,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         const content = `{
                 "files": []
             }`;
-        assertParseFileDiagnostics(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        assertParseFileDiagnostics(content, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("generates errors for empty files list when no references are provided", () => {
@@ -298,11 +268,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "files": [],
                 "references": []
             }`;
-        assertParseFileDiagnostics(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        assertParseFileDiagnostics(content, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("does not generate errors for empty files list when one or more references are provided", () => {
@@ -310,21 +276,13 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "files": [],
                 "references": [{ "path": "/apath" }]
             }`;
-        assertParseFileDiagnosticsExclusion(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        assertParseFileDiagnosticsExclusion(content, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("generates errors for directory with no .ts files", () => {
         const content = `{
             }`;
-        assertParseFileDiagnostics(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.js"],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+        assertParseFileDiagnostics(content, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.js"], Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code, 
             /*noLocation*/ true);
     });
 
@@ -334,11 +292,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                     "allowJs": true
                 }
             }`;
-        assertParseFileDiagnostics(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            [],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+        assertParseFileDiagnostics(content, "/apath/tsconfig.json", "tests/cases/unittests", [], Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code, 
             /*noLocation*/ true);
     });
 
@@ -346,11 +300,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         const content = `{
                 "include": []
             }`;
-        assertParseFileDiagnostics(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+        assertParseFileDiagnostics(content, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code, 
             /*noLocation*/ true);
     });
 
@@ -361,11 +311,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 },
                 "include": ["**/*"]
             }`;
-        assertParseFileDiagnostics(content,
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+        assertParseFileDiagnostics(content, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code, 
             /*noLocation*/ true);
     });
 
@@ -383,34 +329,23 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     });
 
     it("generates errors when files is not string", () => {
-        assertParseFileDiagnostics(
-            JSON.stringify({
+        assertParseFileDiagnostics(JSON.stringify({
                 files: [{
                     compilerOptions: {
                         experimentalDecorators: true,
                         allowJs: true
                     }
                 }]
-            }),
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+        }), "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code, 
             /*noLocation*/ true);
     });
 
     it("generates errors when include is not string", () => {
-        assertParseFileDiagnostics(
-            JSON.stringify({
+        assertParseFileDiagnostics(JSON.stringify({
                 include: [
                     ["./**/*.ts"]
                 ]
-            }),
-            "/apath/tsconfig.json",
-            "tests/cases/unittests",
-            ["/apath/a.ts"],
-            Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+        }), "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"], Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code, 
             /*noLocation*/ true);
     });
 });
-}

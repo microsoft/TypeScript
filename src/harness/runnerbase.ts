@@ -1,4 +1,5 @@
-namespace Harness {
+import { FileBasedTest, IO, userSpecifiedRoot } from "./Harness";
+import { map, normalizeSlashes, getBaseFileName } from "./ts";
 export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
@@ -25,8 +26,10 @@ export abstract class RunnerBase {
         this.tests.push(fileName);
     }
 
-    public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
-        return ts.map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
+    public enumerateFiles(folder: string, regex?: RegExp, options?: {
+        recursive: boolean;
+    }): string[] {
+        return map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), normalizeSlashes);
     }
 
     abstract kind(): TestRunnerKind;
@@ -52,12 +55,11 @@ export abstract class RunnerBase {
     /** Replaces instances of full paths with fileNames only */
     static removeFullPaths(path: string) {
         // If its a full path (starts with "C:" or "/") replace with just the filename
-        let fixedPath = /^(\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
+        let fixedPath = /^(\w:|\/)/.test(path) ? getBaseFileName(path) : path;
 
         // when running in the browser the 'full path' is the host name, shows up in error baselines
         const localHost = /http:\/localhost:\d+/g;
         fixedPath = fixedPath.replace(localHost, "");
         return fixedPath;
     }
-}
 }

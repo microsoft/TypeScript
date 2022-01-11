@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { createServerHost, createProjectService } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: Language service", () => {
     it("should work correctly on case-sensitive file systems", () => {
         const lib = {
@@ -16,4 +16,3 @@ describe("unittests:: tsserver:: Language service", () => {
         projectService.inferredProjects[0].getLanguageService().getProgram();
     });
 });
-}

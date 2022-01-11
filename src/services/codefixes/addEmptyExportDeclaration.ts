@@ -1,5 +1,7 @@
+import { registerCodeFix, createCodeFixActionWithoutFixAll } from "../ts.codefix";
+import { Diagnostics, factory } from "../ts";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 registerCodeFix({
     errorCodes: [
         Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module.code,
@@ -7,17 +9,14 @@ registerCodeFix({
     ],
     getCodeActions: function getCodeActionsToAddEmptyExportDeclaration(context) {
         const { sourceFile } = context;
-        const changes = textChanges.ChangeTracker.with(context, changes => {
+        const changes = ChangeTracker.with(context, changes => {
             const exportDeclaration = factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                /*isTypeOnly*/ false,
-                factory.createNamedExports([]),
-                /*moduleSpecifier*/ undefined
-            );
+            /*isTypeOnly*/ false, factory.createNamedExports([]), 
+            /*moduleSpecifier*/ undefined);
             changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
         });
         return [createCodeFixActionWithoutFixAll("addEmptyExportDeclaration", changes, Diagnostics.Add_export_to_make_this_file_into_a_module)];
     },
 });
-}

@@ -1,28 +1,31 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createSession, TestSession, openFilesForSession, checkNumberOfProjects, checkProjectActualFiles, closeFilesForSession, checkWatchedFiles, checkWatchedDirectories, protocolFileLocationFromSubstring } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
+import { protocol } from "../../ts.server";
+import { emptyArray, projectSystem } from "../../ts";
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
     function setup() {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/a.ts`,
+            path: `${projectRoot}/a.ts`,
             content: `import { y, cc } from "./b";
 import { something } from "something";
 class c { prop = "hello"; foo() { return this.prop; } }`
         };
         const file2: File = {
-            path: `${tscWatch.projectRoot}/b.ts`,
+            path: `${projectRoot}/b.ts`,
             content: `export { cc } from "./c";
 import { something } from "something";
                 export const y = 10;`
         };
         const file3: File = {
-            path: `${tscWatch.projectRoot}/c.ts`,
+            path: `${projectRoot}/c.ts`,
             content: `export const cc = 10;`
         };
         const something: File = {
-            path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+            path: `${projectRoot}/node_modules/something/index.d.ts`,
             content: "export const something = 10;"
         };
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
@@ -30,7 +33,7 @@ import { something } from "something";
         return { host, session, file1, file2, file3, something, configFile };
     }
 
-    function verifySessionException<T extends server.protocol.Request>(session: TestSession, request: Partial<T>) {
+    function verifySessionException<T extends protocol.Request>(session: TestSession, request: Partial<T>) {
         let hasException = false;
         try {
             session.executeCommandSeq(request);
@@ -81,22 +84,22 @@ import { something } from "something";
             checkWatchedFiles(host, emptyArray);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            verifySessionException<protocol.CompletionsRequest>(session, {
-                command: protocol.CommandTypes.Completions,
+            verifySessionException<projectSystem.protocol.CompletionsRequest>(session, {
+                command: projectSystem.protocol.CommandTypes.Completions,
                 arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
             });
         }
 
         function verifyGoToDefToB() {
-            verifySessionException<protocol.DefinitionAndBoundSpanRequest>(session, {
-                command: protocol.CommandTypes.DefinitionAndBoundSpan,
+            verifySessionException<projectSystem.protocol.DefinitionAndBoundSpanRequest>(session, {
+                command: projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan,
                 arguments: protocolFileLocationFromSubstring(file1, "y")
             });
         }
 
         function verifyGoToDefToC() {
-            verifySessionException<protocol.DefinitionAndBoundSpanRequest>(session, {
-                command: protocol.CommandTypes.DefinitionAndBoundSpan,
+            verifySessionException<projectSystem.protocol.DefinitionAndBoundSpanRequest>(session, {
+                command: projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan,
                 arguments: protocolFileLocationFromSubstring(file1, "cc")
             });
         }
@@ -106,10 +109,10 @@ import { something } from "something";
         const { session, file1 } = setup();
         const service = session.getProjectService();
         openFilesForSession([file1], session);
-        verifySessionException<protocol.SemanticDiagnosticsSyncRequest>(session, {
+        verifySessionException<projectSystem.protocol.SemanticDiagnosticsSyncRequest>(session, {
             type: "request",
             seq: 1,
-            command: protocol.CommandTypes.SemanticDiagnosticsSync,
+            command: projectSystem.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         });
 
@@ -141,27 +144,27 @@ import { something } from "something";
 
     it("should not include referenced files from unopened files", () => {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/a.ts`,
+            path: `${projectRoot}/a.ts`,
             content: `///<reference path="b.ts"/>
-///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+///<reference path="${projectRoot}/node_modules/something/index.d.ts"/>
 function fooA() { }`
         };
         const file2: File = {
-            path: `${tscWatch.projectRoot}/b.ts`,
+            path: `${projectRoot}/b.ts`,
             content: `///<reference path="./c.ts"/>
-///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+///<reference path="${projectRoot}/node_modules/something/index.d.ts"/>
 function fooB() { }`
         };
         const file3: File = {
-            path: `${tscWatch.projectRoot}/c.ts`,
+            path: `${projectRoot}/c.ts`,
             content: `function fooC() { }`
         };
         const something: File = {
-            path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+            path: `${projectRoot}/node_modules/something/index.d.ts`,
             content: "function something() {}"
         };
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
@@ -184,4 +187,3 @@ function fooB() { }`
         checkProjectActualFiles(project, emptyArray);
     });
 });
-}

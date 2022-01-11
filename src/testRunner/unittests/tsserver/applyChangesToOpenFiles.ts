@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, TestSession, createServerHost, commonFile1, commonFile2, libFile, createSession, protocol } from "../../ts.projectSystem";
+import { ProjectService, Project } from "../../ts.server";
 describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
     const configFile: File = {
         path: "/a/b/tsconfig.json",
@@ -18,14 +19,14 @@ describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
 ${file.content}`;
     }
 
-    function verifyText(service: server.ProjectService, file: string, expected: string) {
+    function verifyText(service: ProjectService, file: string, expected: string) {
         const info = service.getScriptInfo(file)!;
         const snap = info.getSnapshot();
         // Verified applied in reverse order
         assert.equal(snap.getText(0, snap.getLength()), expected, `Text of changed file: ${file}`);
     }
 
-    function verifyProjectVersion(project: server.Project, expected: number) {
+    function verifyProjectVersion(project: Project, expected: number) {
         assert.equal(Number(project.getProjectVersion()), expected);
     }
 
@@ -178,4 +179,3 @@ ${file.content}`;
         });
     });
 });
-}

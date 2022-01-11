@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createServerHost, commonFile1, commonFile2, libFile, createSession, protocol, TestSession } from "../../ts.projectSystem";
+import { UserPreferences, Debug } from "../../ts";
 describe("unittests:: tsserver:: inlayHints", () => {
     const configFile: File = {
         path: "/a/b/tsconfig.json",
@@ -60,4 +61,3 @@ describe("unittests:: tsserver:: inlayHints", () => {
         }
     });
 });
-}

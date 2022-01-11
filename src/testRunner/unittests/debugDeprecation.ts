@@ -1,4 +1,4 @@
-namespace ts {
+import { LoggingHost, Debug, noop } from "../ts";
 describe("unittests:: debugDeprecation", () => {
     let loggingHost: LoggingHost | undefined;
     beforeEach(() => {
@@ -94,4 +94,3 @@ describe("unittests:: debugDeprecation", () => {
         });
     });
 });
-}

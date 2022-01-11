@@ -1,9 +1,8 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/loggedIO.js",
-        "types": [
-        ],
+        "outDir": "../../built/local",
+        "types": [],
         "lib": [
             "es6",
             "scripthost"
@@ -19,6 +18,10 @@
     ],
 
     "files": [
-        "loggedIO.ts"
+        "loggedIO.ts",
+        "./Playback.ts",
+        "./ts.server.ts",
+        "./ts.ts",
+        "./Harness.ts"
     ]
 }

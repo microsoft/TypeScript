@@ -1,23 +1,28 @@
+import { Diagnostics, mapDefined, ExpressionWithTypeArguments, CodeFixAction, getEffectiveImplementsTypeNodes, addToSeen, getNodeId, SourceFile, ClassLikeDeclaration, Debug, getContainingClass, getTokenAtPosition, Symbol, getEffectiveModifierFlags, ModifierFlags, UserPreferences, InterfaceType, and, find, isConstructorDeclaration, IndexKind, ClassElement, InterfaceDeclaration, TypeChecker, SymbolTable, getEffectiveBaseTypeNode, createSymbolTable } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll, TypeConstructionContext, createImportAdder, createMissingMemberNodes, getNoopSymbolTrackerWithResolver } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,
     Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
 ];
+/* @internal */
 const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile, span } = context;
         const classDeclaration = getClass(sourceFile, span.start);
         return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
-            const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
+            const changes = ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
             return changes.length === 0 ? undefined : createCodeFixAction(fixId, changes, [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)], fixId, Diagnostics.Implement_all_unimplemented_interfaces);
         });
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
-        const seenClassDeclarations = new Map<number, true>();
+        const seenClassDeclarations = new ts.Map<number, true>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const classDeclaration = getClass(diag.file, diag.start);
             if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
@@ -29,22 +34,18 @@ registerCodeFix({
     },
 });
 
+/* @internal */
 function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
     return Debug.checkDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
 }
 
+/* @internal */
 function symbolPointsToNonPrivateMember(symbol: Symbol) {
     return !symbol.valueDeclaration || !(getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
 }
 
-function addMissingDeclarations(
-    context: TypeConstructionContext,
-    implementedTypeNode: ExpressionWithTypeArguments,
-    sourceFile: SourceFile,
-    classDeclaration: ClassLikeDeclaration,
-    changeTracker: textChanges.ChangeTracker,
-    preferences: UserPreferences,
-): void {
+/* @internal */
+function addMissingDeclarations(context: TypeConstructionContext, implementedTypeNode: ExpressionWithTypeArguments, sourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, changeTracker: ChangeTracker, preferences: UserPreferences): void {
     const checker = context.program.getTypeChecker();
     const maybeHeritageClauseSymbol = getHeritageClauseSymbolTable(classDeclaration, checker);
     // Note that this is ultimately derived from a map indexed by symbol names,
@@ -85,11 +86,12 @@ function addMissingDeclarations(
     }
 }
 
+/* @internal */
 function getHeritageClauseSymbolTable(classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
     const heritageClauseNode = getEffectiveBaseTypeNode(classDeclaration);
-    if (!heritageClauseNode) return createSymbolTable();
+    if (!heritageClauseNode)
+        return createSymbolTable();
     const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;
     const heritageClauseTypeSymbols = checker.getPropertiesOfType(heritageClauseType);
     return createSymbolTable(heritageClauseTypeSymbols.filter(symbolPointsToNonPrivateMember));
-}
 }

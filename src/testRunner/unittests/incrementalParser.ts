@@ -1,16 +1,26 @@
-namespace ts {
-function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
+import { IScriptSnapshot, TextChangeRange, getSnapshotText, ScriptSnapshot, createTextChangeRange, createTextSpan, createLanguageServiceSourceFile, ScriptTarget, SourceFile, updateLanguageServiceSourceFile, filter, contains, Node, forEachChild, bindSourceFile } from "../ts";
+import { assertInvariants, assertStructuralEquals } from "../Utils";
+function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): {
+    text: IScriptSnapshot;
+    textChangeRange: TextChangeRange;
+} {
     const contents = getSnapshotText(text);
     const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
 
     return { text: ScriptSnapshot.fromString(newContents), textChangeRange: createTextChangeRange(createTextSpan(start, length), newText.length) };
 }
 
-function withInsert(text: IScriptSnapshot, start: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
+function withInsert(text: IScriptSnapshot, start: number, newText: string): {
+    text: IScriptSnapshot;
+    textChangeRange: TextChangeRange;
+} {
     return withChange(text, start, 0, newText);
 }
 
-function withDelete(text: IScriptSnapshot, start: number, length: number): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
+function withDelete(text: IScriptSnapshot, start: number, length: number): {
+    text: IScriptSnapshot;
+    textChangeRange: TextChangeRange;
+} {
     return withChange(text, start, length, "");
 }
 
@@ -44,18 +54,18 @@ function assertSameDiagnostics(file1: SourceFile, file2: SourceFile) {
 // are still ok and we're still appropriately reusing most of the tree.
 function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number, oldTree?: SourceFile) {
     oldTree = oldTree || createTree(oldText, /*version:*/ ".");
-    Utils.assertInvariants(oldTree, /*parent:*/ undefined);
+    assertInvariants(oldTree, /*parent:*/ undefined);
 
     // Create a tree for the new text, in a non-incremental fashion.
     const newTree = createTree(newText, oldTree.version + ".");
-    Utils.assertInvariants(newTree, /*parent:*/ undefined);
+    assertInvariants(newTree, /*parent:*/ undefined);
 
     // Create a tree for the new text, in an incremental fashion.
     const incrementalNewTree = updateLanguageServiceSourceFile(oldTree, newText, oldTree.version + ".", textChangeRange);
-    Utils.assertInvariants(incrementalNewTree, /*parent:*/ undefined);
+    assertInvariants(incrementalNewTree, /*parent:*/ undefined);
 
     // We should get the same tree when doign a full or incremental parse.
-    Utils.assertStructuralEquals(newTree, incrementalNewTree);
+    assertStructuralEquals(newTree, incrementalNewTree);
 
     // We should also get the exact same set of diagnostics.
     assertSameDiagnostics(newTree, incrementalNewTree);
@@ -547,8 +557,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Modifier added to accessor", () => {
-        const source =
-            "class C {\
+        const source = "class C {\
     set Bar(bar:string) {}\
 }\
 var o2 = { set Foo(val:number) { } };";
@@ -561,8 +570,7 @@ var o2 = { set Foo(val:number) { } };";
     });
 
     it("Insert parameter ahead of parameter", () => {
-        const source =
-            "alert(100);\
+        const source = "alert(100);\
 \
 class OverloadedMonster {\
 constructor();\
@@ -577,8 +585,7 @@ constructor(name) { }\
     });
 
     it("Insert declare modifier before module", () => {
-        const source =
-            "module mAmbient {\
+        const source = "module mAmbient {\
 module m3 { }\
 }";
 
@@ -590,8 +597,7 @@ module m3 { }\
     });
 
     it("Insert function above arrow function with comment", () => {
-        const source =
-            "\
+        const source = "\
 () =>\
    // do something\
 0;";
@@ -865,7 +871,10 @@ module m3 { }\
             verifyScenario("when changing text that adds another comment", verifyChangeDirectiveType);
             verifyScenario("when changing text that keeps the comment but adds more nodes", verifyReuseChange);
 
-            function verifyCommentDirectives(oldText: IScriptSnapshot, newTextAndChange: { text: IScriptSnapshot; textChangeRange: TextChangeRange; }) {
+            function verifyCommentDirectives(oldText: IScriptSnapshot, newTextAndChange: {
+                text: IScriptSnapshot;
+                textChangeRange: TextChangeRange;
+            }) {
                 const { incrementalNewTree, newTree } = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
                 assert.deepEqual(incrementalNewTree.commentDirectives, newTree.commentDirectives);
             }
@@ -894,7 +903,8 @@ module m3 { }\
             }
 
             function textWithIgnoreCommentFrom(text: string, singleIgnore: true | undefined) {
-                if (!singleIgnore) return text;
+                if (!singleIgnore)
+                    return text;
                 const splits = text.split(tsIgnoreComment);
                 if (splits.length > 2) {
                     const tail = splits[splits.length - 2] + splits[splits.length - 1];
@@ -990,4 +1000,3 @@ module m3 { }\
         });
     }
 });
-}

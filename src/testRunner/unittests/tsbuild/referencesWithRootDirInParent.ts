@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTsc, replaceText } from "../../ts";
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
     });
@@ -58,4 +59,3 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         },
     });
 });
-}

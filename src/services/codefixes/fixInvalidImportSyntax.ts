@@ -1,7 +1,10 @@
+import { CodeFixContext, ImportDeclaration, CodeFixAction, getSourceFileOfNode, getNamespaceDeclarationNode, NamespaceImport, makeImport, getQuotePreference, getEmitModuleKind, ModuleKind, factory, SourceFile, Node, Diagnostics, SyntaxKind, findAncestor, getTokenAtPosition, CallExpression, NewExpression, TransientSymbol, isImportCall, addRange, isExpression, isNamedDeclaration } from "../ts";
+import { ChangeTracker } from "../ts.textChanges";
+import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../ts.codefix";
 /* @internal */
-namespace ts.codefix {
 const fixName = "invalidImportSyntax";
 
+/* @internal */
 function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration): CodeFixAction[] {
     const sourceFile = getSourceFileOfNode(node);
     const namespace = getNamespaceDeclarationNode(node) as NamespaceImport;
@@ -16,20 +19,19 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
         variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
-            /*isTypeOnly*/ false,
-            namespace.name,
-            factory.createExternalModuleReference(node.moduleSpecifier)
-        )));
+        /*isTypeOnly*/ false, namespace.name, factory.createExternalModuleReference(node.moduleSpecifier))));
     }
 
     return variations;
 }
 
+/* @internal */
 function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
-    const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
+    const changes = ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
     return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
 }
 
+/* @internal */
 registerCodeFix({
     errorCodes: [
         Diagnostics.This_expression_is_not_callable.code,
@@ -38,6 +40,7 @@ registerCodeFix({
     getCodeActions: getActionsForUsageOfInvalidImport
 });
 
+/* @internal */
 function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
     const sourceFile = context.sourceFile;
     const targetKind = Diagnostics.This_expression_is_not_callable.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
@@ -49,6 +52,7 @@ function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixActi
     return getImportCodeFixesForExpression(context, expr);
 }
 
+/* @internal */
 registerCodeFix({
     errorCodes: [
         // The following error codes cover pretty much all assignability errors that could involve an expression
@@ -67,6 +71,7 @@ registerCodeFix({
     getCodeActions: getActionsForInvalidImportLocation
 });
 
+/* @internal */
 function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAction[] | undefined {
     const sourceFile = context.sourceFile;
     const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length));
@@ -76,6 +81,7 @@ function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAct
     return getImportCodeFixesForExpression(context, node);
 }
 
+/* @internal */
 function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
     const type = context.program.getTypeChecker().getTypeAtLocation(expr);
     if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
@@ -88,9 +94,8 @@ function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): C
     }
     if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
         const sourceFile = context.sourceFile;
-        const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
+        const changes = ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
         fixes.push(createCodeFixActionWithoutFixAll(fixName, changes, Diagnostics.Use_synthetic_default_member));
     }
     return fixes;
-}
 }

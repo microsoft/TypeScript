@@ -1,20 +1,23 @@
+import { Diagnostics, CodeFixContext, SourceFile, TypeChecker, UserPreferences, CompilerOptions, getTokenAtPosition, SymbolFlags, isFunctionDeclaration, isVariableDeclaration, isVariableDeclarationList, Symbol, ClassElement, isPropertyAccessExpression, isBinaryExpression, SyntaxKind, isObjectLiteralExpression, factory, AccessExpression, ObjectLiteralExpression, Expression, isAccessExpression, isFunctionLike, every, isMethodDeclaration, isGetOrSetAccessorDeclaration, isPropertyAssignment, isFunctionExpression, Modifier, BinaryExpression, isArrowFunction, getQuotePreference, flatMap, isSourceFileJS, copyLeadingComments, FunctionExpression, ArrowFunction, PropertyName, concatenate, Block, VariableDeclaration, ClassDeclaration, isIdentifier, FunctionDeclaration, Node, filter, ObjectLiteralElementLike, PropertyAccessExpression, QuotePreference, isNumericLiteral, isStringLiteralLike, isIdentifierText, getEmitScriptTarget, isNoSubstitutionTemplateLiteral } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "convertFunctionToEs6Class";
+/* @internal */
 const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
-        const changes = textChanges.ChangeTracker.with(context, t =>
-            doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) =>
-        doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
     const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
     if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
         // Bad input
@@ -68,8 +71,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                         isPropertyAccessExpression(firstDeclaration) &&
                         isBinaryExpression(firstDeclaration.parent) &&
                         firstDeclaration.parent.operatorToken.kind === SyntaxKind.EqualsToken &&
-                        isObjectLiteralExpression(firstDeclaration.parent.right)
-                    ) {
+                        isObjectLiteralExpression(firstDeclaration.parent.right)) {
                         const prototypes = firstDeclaration.parent.right;
                         const memberElement = createClassElement(prototypes.symbol, /** modifiers */ undefined);
                         if (memberElement) {
@@ -93,17 +95,21 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             // other values like normal value fields ({a: 1}) shouldn't get transformed.
             // We can update this once ES public class properties are available.
             if (isAccessExpression(_target)) {
-                if (isPropertyAccessExpression(_target) && isConstructorAssignment(_target)) return true;
+                if (isPropertyAccessExpression(_target) && isConstructorAssignment(_target))
+                    return true;
                 return isFunctionLike(source);
             }
             else {
                 return every(_target.properties, property => {
                     // a() {}
-                    if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) return true;
+                    if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property))
+                        return true;
                     // a: function() {}
-                    if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name) return true;
+                    if (isPropertyAssignment(property) && isFunctionExpression(property.initializer) && !!property.name)
+                        return true;
                     // x.prototype.constructor = fn
-                    if (isConstructorAssignment(property)) return true;
+                    if (isConstructorAssignment(property))
+                        return true;
                     return false;
                 });
             }
@@ -146,9 +152,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             }
             // f.prototype = { ... }
             else if (isObjectLiteralExpression(assignmentExpr)) {
-                return flatMap(
-                    assignmentExpr.properties,
-                    property => {
+                return flatMap(assignmentExpr.properties, property => {
                         if (isMethodDeclaration(property) || isGetOrSetAccessorDeclaration(property)) {
                             // MethodDeclaration and AccessorDeclaration can appear in a class directly
                             return members.concat(property);
@@ -157,15 +161,17 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
                             return createFunctionLikeExpressionMember(members, property.initializer, property.name);
                         }
                         // Drop constructor assignments
-                        if (isConstructorAssignment(property)) return members;
+                    if (isConstructorAssignment(property))
+                        return members;
                         return [];
-                    }
-                );
+                });
             }
             else {
                 // Don't try to declare members in JavaScript files
-                if (isSourceFileJS(sourceFile)) return members;
-                if (!isPropertyAccessExpression(memberDeclaration)) return members;
+                if (isSourceFileJS(sourceFile))
+                    return members;
+                if (!isPropertyAccessExpression(memberDeclaration))
+                    return members;
                 const prop = factory.createPropertyDeclaration(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined, /*type*/ undefined, assignmentExpr);
                 copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                 members.push(prop);
@@ -173,8 +179,10 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             }
 
             function createFunctionLikeExpressionMember(members: readonly ClassElement[], expression: FunctionExpression | ArrowFunction, name: PropertyName) {
-                if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
-                else return createArrowFunctionExpressionMember(members, expression, name);
+                if (isFunctionExpression(expression))
+                    return createFunctionExpressionMember(members, expression, name);
+                else
+                    return createArrowFunctionExpressionMember(members, expression, name);
             }
 
             function createFunctionExpressionMember(members: readonly ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
@@ -238,16 +246,21 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
     }
 }
 
+/* @internal */
 function getModifierKindFromSource(source: Node, kind: SyntaxKind): readonly Modifier[] | undefined {
     return filter(source.modifiers, modifier => modifier.kind === kind);
 }
 
+/* @internal */
 function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExpression) {
-    if (!x.name) return false;
-    if (isIdentifier(x.name) && x.name.text === "constructor") return true;
+    if (!x.name)
+        return false;
+    if (isIdentifier(x.name) && x.name.text === "constructor")
+        return true;
     return false;
 }
 
+/* @internal */
 function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOptions, quotePreference: QuotePreference): PropertyName | undefined {
     if (isPropertyAccessExpression(node)) {
         return node.name;
@@ -265,5 +278,4 @@ function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOpt
     }
 
     return undefined;
-}
 }

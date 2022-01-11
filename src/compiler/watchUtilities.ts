@@ -1,5 +1,6 @@
+import { Path, FileWatcherEventKind, createGetCanonicalFileName, ensureTrailingDirectorySeparator, getDirectoryPath, getBaseFileName, normalizePath, map, Debug, some, filterMutate, FileSystemEntries, matchFiles, emptyFileSystemEntries, emptyArray, FileWatcher, CompilerOptions, ESMap, arrayToMap, ExtendedConfigCacheEntry, mutateMap, closeFileWatcher, Program, identity, returnTrue, WatchDirectoryFlags, BuilderProgram, FileExtensionInfo, removeIgnoredPath, hasExtension, isSupportedSourceFileName, isExcludedFile, getNormalizedAbsolutePath, outFile, fileExtensionIs, Extension, fileExtensionIsOneOf, supportedJSExtensionsFlat, removeFileExtension, isArray, find, FileWatcherCallback, WatchOptions, DirectoryWatcherCallback, PollingInterval, setSysLog, noop, returnNoopFileWatcher, matchesExclude, timestamp, WatchFileKind } from "./ts";
+import * as ts from "./ts";
 /* @internal */
-namespace ts {
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
  */
@@ -17,11 +18,13 @@ export interface DirectoryStructureHost {
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
 }
 
+/* @internal */
 interface FileAndDirectoryExistence {
     fileExists: boolean;
     directoryExists: boolean;
 }
 
+/* @internal */
 export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
     useCaseSensitiveFileNames: boolean;
 
@@ -34,17 +37,19 @@ export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
     clearCache(): void;
 }
 
+/* @internal */
 interface MutableFileSystemEntries {
     readonly files: string[];
     readonly directories: string[];
 }
 
+/* @internal */
 export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, currentDirectory: string, useCaseSensitiveFileNames: boolean): CachedDirectoryStructureHost | undefined {
     if (!host.getDirectories || !host.readDirectory) {
         return undefined;
     }
 
-    const cachedReadDirectoryResult = new Map<string, MutableFileSystemEntries | false>();
+    const cachedReadDirectoryResult = new ts.Map<string, MutableFileSystemEntries | false>();
     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     return {
         useCaseSensitiveFileNames,
@@ -195,17 +200,18 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
             }
             const result = tryReadDirectory(dir, path);
             return result !== undefined ?
-                result || getFileSystemEntriesFromHost(dir, path) :
-                emptyFileSystemEntries;
+                result || getFileSystemEntriesFromHost(dir, path) : emptyFileSystemEntries;
         }
 
         function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
-            if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
+            if (rootSymLinkResult && path === rootDirPath)
+                return rootSymLinkResult;
             const result: FileSystemEntries = {
                 files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || emptyArray,
                 directories: host.getDirectories!(dir) || emptyArray
             };
-            if (path === rootDirPath) rootSymLinkResult = result;
+            if (path === rootDirPath)
+                rootSymLinkResult = result;
             return result;
         }
     }
@@ -274,6 +280,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 }
 
+/* @internal */
 export enum ConfigFileProgramReloadLevel {
     None,
     /** Update the file name list from the disk */
@@ -282,21 +289,17 @@ export enum ConfigFileProgramReloadLevel {
     Full
 }
 
+/* @internal */
 export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
     watcher: FileWatcher;
-    projects: Set<T>;
+    projects: ts.Set<T>;
 }
 
 /**
  * Updates the map of shared extended config file watches with a new set of extended config files from a base config file of the project
  */
-export function updateSharedExtendedConfigFileWatcher<T>(
-    projectPath: T,
-    options: CompilerOptions | undefined,
-    extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
-    createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
-    toPath: (fileName: string) => Path,
-) {
+/* @internal */
+export function updateSharedExtendedConfigFileWatcher<T>(projectPath: T, options: CompilerOptions | undefined, extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>, createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher, toPath: (fileName: string) => Path) {
     const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
     // remove project from all unrelated watchers
     extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
@@ -314,11 +317,12 @@ export function updateSharedExtendedConfigFileWatcher<T>(
         else {
             // start watching previously unseen extended config
             extendedConfigFilesMap.set(extendedConfigFilePath, {
-                projects: new Set([projectPath]),
+                projects: new ts.Set([projectPath]),
                 watcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
                 close: () => {
                     const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
-                    if (!existing || existing.projects.size !== 0) return;
+                    if (!existing || existing.projects.size !== 0)
+                        return;
                     existing.watcher.close();
                     extendedConfigFilesMap.delete(extendedConfigFilePath);
                 },
@@ -330,24 +334,21 @@ export function updateSharedExtendedConfigFileWatcher<T>(
 /**
  * Remove the project from the extended config file watchers and close not needed watches
  */
-export function clearSharedExtendedConfigFileWatcher<T>(
-    projectPath: T,
-    extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
-) {
+/* @internal */
+export function clearSharedExtendedConfigFileWatcher<T>(projectPath: T, extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>) {
     extendedConfigFilesMap.forEach(watcher => {
-        if (watcher.projects.delete(projectPath)) watcher.close();
+        if (watcher.projects.delete(projectPath))
+            watcher.close();
     });
 }
 
 /**
  * Clean the extendsConfigCache when extended config file has changed
  */
-export function cleanExtendedConfigCache(
-    extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
-    extendedConfigFilePath: Path,
-    toPath: (fileName: string) => Path,
-) {
-    if (!extendedConfigCache.delete(extendedConfigFilePath)) return;
+/* @internal */
+export function cleanExtendedConfigCache(extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>, extendedConfigFilePath: Path, toPath: (fileName: string) => Path) {
+    if (!extendedConfigCache.delete(extendedConfigFilePath))
+        return;
     extendedConfigCache.forEach(({ extendedResult }, key) => {
         if (extendedResult.extendedSourceFiles?.some(extendedFile => toPath(extendedFile) === extendedConfigFilePath)) {
             cleanExtendedConfigCache(extendedConfigCache, key as Path, toPath);
@@ -358,46 +359,36 @@ export function cleanExtendedConfigCache(
 /**
  * Updates watchers based on the package json files used in module resolution
  */
-export function updatePackageJsonWatch(
-    lookups: readonly (readonly [Path, object | boolean])[],
-    packageJsonWatches: ESMap<Path, FileWatcher>,
-    createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
-) {
-    const newMap = new Map(lookups);
-    mutateMap(
-        packageJsonWatches,
-        newMap,
-        {
+/* @internal */
+export function updatePackageJsonWatch(lookups: readonly (readonly [
+    Path,
+    object | boolean
+])[], packageJsonWatches: ESMap<Path, FileWatcher>, createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher) {
+    const newMap = new ts.Map(lookups);
+    mutateMap(packageJsonWatches, newMap, {
             createNewValue: createPackageJsonWatch,
             onDeleteValue: closeFileWatcher
+    });
         }
-    );
-}
 
 /**
  * Updates the existing missing file watches with the new set of missing files after new program is created
  */
-export function updateMissingFilePathsWatch(
-    program: Program,
-    missingFileWatches: ESMap<Path, FileWatcher>,
-    createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
-) {
+/* @internal */
+export function updateMissingFilePathsWatch(program: Program, missingFileWatches: ESMap<Path, FileWatcher>, createMissingFileWatch: (missingFilePath: Path) => FileWatcher) {
     const missingFilePaths = program.getMissingFilePaths();
     // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
     const newMissingFilePathMap = arrayToMap(missingFilePaths, identity, returnTrue);
     // Update the missing file paths watcher
-    mutateMap(
-        missingFileWatches,
-        newMissingFilePathMap,
-        {
+    mutateMap(missingFileWatches, newMissingFilePathMap, {
             // Watch the missing files
             createNewValue: createMissingFileWatch,
             // Files that are no longer missing (e.g. because they are no longer required)
             // should no longer be watched.
             onDeleteValue: closeFileWatcher
+    });
         }
-    );
-}
+/* @internal */
 
 export interface WildcardDirectoryWatcher {
     watcher: FileWatcher;
@@ -410,23 +401,16 @@ export interface WildcardDirectoryWatcher {
  * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
  * as wildcard directories wont change unless reloading config file
  */
-export function updateWatchingWildcardDirectories(
-    existingWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher>,
-    wildcardDirectories: ESMap<string, WatchDirectoryFlags>,
-    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
-) {
-    mutateMap(
-        existingWatchedForWildcards,
-        wildcardDirectories,
-        {
+/* @internal */
+export function updateWatchingWildcardDirectories(existingWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher>, wildcardDirectories: ESMap<string, WatchDirectoryFlags>, watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher) {
+    mutateMap(existingWatchedForWildcards, wildcardDirectories, {
             // Create new watch and recursive info
             createNewValue: createWildcardDirectoryWatcher,
             // Close existing watch thats not needed any more
             onDeleteValue: closeFileWatcherOf,
             // Close existing watch that doesnt match in the flags
             onExistingValue: updateWildcardDirectoryWatcher
-        }
-    );
+    });
 
     function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
         // Create new watch and recursive info
@@ -447,6 +431,7 @@ export function updateWatchingWildcardDirectories(
     }
 }
 
+/* @internal */
 export interface IsIgnoredFileFromWildCardWatchingInput {
     watchedDirPath: Path;
     fileOrDirectory: string;
@@ -461,12 +446,8 @@ export interface IsIgnoredFileFromWildCardWatchingInput {
     toPath: (fileName: string) => Path;
 }
 /* @internal */
-export function isIgnoredFileFromWildCardWatching({
-    watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
-    configFileName, options, program, extraFileExtensions,
-    currentDirectory, useCaseSensitiveFileNames,
-    writeLog, toPath,
-}: IsIgnoredFileFromWildCardWatchingInput): boolean {
+/* @internal */
+export function isIgnoredFileFromWildCardWatching({ watchedDirPath, fileOrDirectory, fileOrDirectoryPath, configFileName, options, program, extraFileExtensions, currentDirectory, useCaseSensitiveFileNames, writeLog, toPath, }: IsIgnoredFileFromWildCardWatchingInput): boolean {
     const newPath = removeIgnoredPath(fileOrDirectoryPath);
     if (!newPath) {
         writeLog(`Project: ${configFileName} Detected ignored path: ${fileOrDirectory}`);
@@ -474,7 +455,8 @@ export function isIgnoredFileFromWildCardWatching({
     }
 
     fileOrDirectoryPath = newPath;
-    if (fileOrDirectoryPath === watchedDirPath) return false;
+    if (fileOrDirectoryPath === watchedDirPath)
+        return false;
 
     // If the the added or created file or directory is not supported file name, ignore the file
     // But when watched directory is added/removed, we need to reload the file list
@@ -488,16 +470,19 @@ export function isIgnoredFileFromWildCardWatching({
         return true;
     }
 
-    if (!program) return false;
+    if (!program)
+        return false;
 
     // We want to ignore emit file check if file is not going to be emitted next to source file
     // In that case we follow config file inclusion rules
-    if (outFile(options) || options.outDir) return false;
+    if (outFile(options) || options.outDir)
+        return false;
 
     // File if emitted next to input needs to be ignored
     if (fileExtensionIs(fileOrDirectoryPath, Extension.Dts)) {
         // If its declaration directory: its not ignored if not excluded by config
-        if (options.declarationDir) return false;
+        if (options.declarationDir)
+            return false;
     }
     else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensionsFlat)) {
         return false;
@@ -523,10 +508,12 @@ export function isIgnoredFileFromWildCardWatching({
     }
 }
 
+/* @internal */
 function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
     return !!(program as T).getState;
 }
 
+/* @internal */
 export function isEmittedFileOfProgram(program: Program | undefined, file: string) {
     if (!program) {
         return false;
@@ -535,12 +522,14 @@ export function isEmittedFileOfProgram(program: Program | undefined, file: strin
     return program.isEmittedFile(file);
 }
 
+/* @internal */
 export enum WatchLogLevel {
     None,
     TriggerOnly,
     Verbose
 }
 
+/* @internal */
 export interface WatchFactoryHost {
     watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
     watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -548,12 +537,15 @@ export interface WatchFactoryHost {
     useCaseSensitiveFileNames: boolean | (() => boolean);
 }
 
+/* @internal */
 export interface WatchFactory<X, Y = undefined> {
     watchFile: (file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
     watchDirectory: (directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
 }
 
+/* @internal */
 export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
+/* @internal */
 export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
     setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : noop);
     const plainInvokeFactory: WatchFactory<X, Y> = {
@@ -573,8 +565,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         } :
         triggerInvokingFactory || plainInvokeFactory;
     const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
-        createExcludeWatcherWithLogging :
-        returnNoopFileWatcher;
+        createExcludeWatcherWithLogging : returnNoopFileWatcher;
 
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
@@ -582,14 +573,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     };
 
     function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
-        return (
-            file: string,
-            cb: FileWatcherCallback | DirectoryWatcherCallback,
-            flags: PollingInterval | WatchDirectoryFlags,
-            options: WatchOptions | undefined,
-            detailInfo1: X,
-            detailInfo2?: Y
-        ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
+        return (file: string, cb: FileWatcherCallback | DirectoryWatcherCallback, flags: PollingInterval | WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
                 factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
                 excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
     }
@@ -600,27 +584,14 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             host.useCaseSensitiveFileNames();
     }
 
-    function createExcludeWatcherWithLogging(
-        file: string,
-        flags: PollingInterval | WatchDirectoryFlags,
-        options: WatchOptions | undefined,
-        detailInfo1: X,
-        detailInfo2?: Y
-    ) {
+    function createExcludeWatcherWithLogging(file: string, flags: PollingInterval | WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) {
         log(`ExcludeWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         return {
             close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`)
         };
     }
 
-    function createFileWatcherWithLogging(
-        file: string,
-        cb: FileWatcherCallback,
-        flags: PollingInterval,
-        options: WatchOptions | undefined,
-        detailInfo1: X,
-        detailInfo2?: Y
-    ): FileWatcher {
+    function createFileWatcherWithLogging(file: string, cb: FileWatcherCallback, flags: PollingInterval, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y): FileWatcher {
         log(`FileWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         const watcher = triggerInvokingFactory!.watchFile(file, cb, flags, options, detailInfo1, detailInfo2);
         return {
@@ -631,14 +602,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
         };
     }
 
-    function createDirectoryWatcherWithLogging(
-        file: string,
-        cb: DirectoryWatcherCallback,
-        flags: WatchDirectoryFlags,
-        options: WatchOptions | undefined,
-        detailInfo1: X,
-        detailInfo2?: Y
-    ): FileWatcher {
+    function createDirectoryWatcherWithLogging(file: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y): FileWatcher {
         const watchInfo = `DirectoryWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
         log(watchInfo);
         const start = timestamp();
@@ -658,14 +622,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     }
 
     function createTriggerLoggingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
-        return (
-            file: string,
-            cb: FileWatcherCallback | DirectoryWatcherCallback,
-            flags: PollingInterval | WatchDirectoryFlags,
-            options: WatchOptions | undefined,
-            detailInfo1: X,
-            detailInfo2?: Y
-        ) => plainInvokeFactory[key].call(/*thisArgs*/ undefined, file, (...args: any[]) => {
+        return (file: string, cb: FileWatcherCallback | DirectoryWatcherCallback, flags: PollingInterval | WatchDirectoryFlags, options: WatchOptions | undefined, detailInfo1: X, detailInfo2?: Y) => plainInvokeFactory[key].call(/*thisArgs*/ undefined, file, (...args: any[]) => {
             const triggerredInfo = `${key === "watchFile" ? "FileWatcher" : "DirectoryWatcher"}:: Triggered with ${args[0]} ${args[1] !== undefined ? args[1] : ""}:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
             log(triggerredInfo);
             const start = timestamp();
@@ -680,6 +637,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     }
 }
 
+/* @internal */
 export function getFallbackOptions(options: WatchOptions | undefined): WatchOptions {
     const fallbackPolling = options?.fallbackPolling;
     return {
@@ -689,7 +647,9 @@ export function getFallbackOptions(options: WatchOptions | undefined): WatchOpti
     };
 }
 
-export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
+/* @internal */
+export function closeFileWatcherOf<T extends {
+    watcher: FileWatcher;
+}>(objWithWatcher: T) {
     objWithWatcher.watcher.close();
-}
 }

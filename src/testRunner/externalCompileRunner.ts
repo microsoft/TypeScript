@@ -1,4 +1,5 @@
-namespace Harness {
+import { RunnerBase, IO, isWorker, Baseline, TestRunnerKind } from "./Harness";
+import { Debug, Version, flatten, comparePathsCaseSensitive, compareValues, compareStringsCaseSensitive, stringContains } from "./ts";
 const fs: typeof import("fs") = require("fs");
 const path: typeof import("path") = require("path");
 const del: typeof import("del") = require("del");
@@ -31,7 +32,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
         describe(`${this.kind()} code samples`, function (this: Mocha.Suite) {
-            this.timeout(600_000); // 10 minutes
+            this.timeout(600000); // 10 minutes
             for (const test of testList) {
                 cls.runTest(typeof test === "string" ? test : test.file);
             }
@@ -40,7 +41,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
     private runTest(directoryName: string) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const cls = this;
-        const timeout = 600_000; // 10 minutes
+        const timeout = 600000; // 10 minutes
         describe(directoryName, function (this: Mocha.Suite) {
             this.timeout(timeout);
             const cp: typeof import("child_process") = require("child_process");
@@ -52,8 +53,8 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 let types: string[] | undefined;
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
-                    ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
-                    ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
+                    Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
+                    Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
                     const submoduleDir = path.join(cwd, directoryName);
                     if (!fs.existsSync(submoduleDir)) {
                         exec("git", ["--work-tree", submoduleDir, "clone", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
@@ -69,7 +70,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
                 }
                 const npmVersionText = exec("npm", ["--version"], { cwd, stdio: "pipe" })?.trim();
-                const npmVersion = npmVersionText ? ts.Version.tryParse(npmVersionText.trim()) : undefined;
+                const npmVersion = npmVersionText ? Version.tryParse(npmVersionText.trim()) : undefined;
                 const isV7OrLater = !!npmVersion && npmVersion.major >= 7;
                 if (fs.existsSync(path.join(cwd, "package.json"))) {
                     if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
@@ -91,7 +92,11 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 args.push("--noEmit");
                 Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
 
-                function exec(command: string, args: string[], options: { cwd: string, timeout?: number, stdio?: import("child_process").StdioOptions }): string | undefined {
+                function exec(command: string, args: string[], options: {
+                    cwd: string;
+                    timeout?: number;
+                    stdio?: import("child_process").StdioOptions;
+                }): string | undefined {
                     const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
                     if (res.status !== 0) {
                         throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stdout && res.stdout.toString()}`);
@@ -149,8 +154,10 @@ export class DockerfileRunner extends ExternalCompileRunnerBase {
         });
     }
 
-    private timeout = 1_200_000; // 20 minutes;
-    private exec(command: string, args: string[], options: { cwd: string }): void {
+    private timeout = 1200000; // 20 minutes;
+    private exec(command: string, args: string[], options: {
+        cwd: string;
+    }): void {
         const cp: typeof import("child_process") = require("child_process");
         const stdio = isWorker ? "pipe" : "inherit";
         const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { timeout: this.timeout, shell: true, stdio, ...options });
@@ -249,13 +256,13 @@ function stripAbsoluteImportPaths(result: string) {
 }
 
 function sortErrors(result: string) {
-    return ts.flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
+    return flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
 }
 
 const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\)(: error TS.*)/;
 function compareErrorStrings(a: string[], b: string[]) {
-    ts.Debug.assertGreaterThanOrEqual(a.length, 1);
-    ts.Debug.assertGreaterThanOrEqual(b.length, 1);
+    Debug.assertGreaterThanOrEqual(a.length, 1);
+    Debug.assertGreaterThanOrEqual(b.length, 1);
     const matchA = a[0].match(errorRegexp);
     if (!matchA) {
         return -1;
@@ -266,11 +273,11 @@ function compareErrorStrings(a: string[], b: string[]) {
     }
     const [, errorFileA, lineNumberStringA, columnNumberStringA, remainderA] = matchA;
     const [, errorFileB, lineNumberStringB, columnNumberStringB, remainderB] = matchB;
-    return ts.comparePathsCaseSensitive(errorFileA, errorFileB) ||
-        ts.compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
-        ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
-        ts.compareStringsCaseSensitive(remainderA, remainderB) ||
-        ts.compareStringsCaseSensitive(a.slice(1).join("\n"), b.slice(1).join("\n"));
+    return comparePathsCaseSensitive(errorFileA, errorFileB) ||
+        compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
+        compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
+        compareStringsCaseSensitive(remainderA, remainderB) ||
+        compareStringsCaseSensitive(a.slice(1).join("\n"), b.slice(1).join("\n"));
 }
 
 export class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
@@ -295,7 +302,7 @@ ${stderr.replace(/\r\n/g, "\n")}`;
 }
 
 function removeExpectedErrors(errors: string, cwd: string): string {
-    return ts.flatten(splitBy(errors.split("\n"), s => /^\S+/.test(s)).filter(isUnexpectedError(cwd))).join("\n");
+    return flatten(splitBy(errors.split("\n"), s => /^\S+/.test(s)).filter(isUnexpectedError(cwd))).join("\n");
 }
 /**
  * Returns true if the line that caused the error contains '$ExpectError',
@@ -305,7 +312,7 @@ function removeExpectedErrors(errors: string, cwd: string): string {
  */
 function isUnexpectedError(cwd: string) {
     return (error: string[]) => {
-        ts.Debug.assertGreaterThanOrEqual(error.length, 1);
+        Debug.assertGreaterThanOrEqual(error.length, 1);
         const match = error[0].match(/(.+\.tsx?)\((\d+),\d+\): error TS/);
         if (!match) {
             return true;
@@ -313,10 +320,10 @@ function isUnexpectedError(cwd: string) {
         const [, errorFile, lineNumberString] = match;
         const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
         const lineNumber = parseInt(lineNumberString) - 1;
-        ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
-        ts.Debug.assertLessThan(lineNumber, lines.length);
+        Debug.assertGreaterThanOrEqual(lineNumber, 0);
+        Debug.assertLessThan(lineNumber, lines.length);
         const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";
-        return !ts.stringContains(lines[lineNumber], "$ExpectError") && !ts.stringContains(previousLine, "$ExpectError");
+        return !stringContains(lines[lineNumber], "$ExpectError") && !stringContains(previousLine, "$ExpectError");
     };
 }
 /**
@@ -345,5 +352,4 @@ function splitBy<T>(xs: T[], isStart: (x: T) => boolean): T[][] {
         result.push(group);
     }
     return result;
-}
 }

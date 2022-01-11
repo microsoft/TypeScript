@@ -1,4 +1,6 @@
-namespace vpath {
+import { createIOError } from "./vfs";
+import { fileExtensionIsOneOf, Extension } from "./ts";
+import * as ts from "./ts";
 export import sep = ts.directorySeparator;
 export import normalizeSeparators = ts.normalizeSlashes;
 export import isAbsolute = ts.isRootedDiskPath;
@@ -58,7 +60,7 @@ export const enum ValidationFlags {
     RelativeOrAbsolute = AllowRoot | AllowDirname | AllowBasename | AllowExtname | AllowTrailingSeparator | AllowNavigation,
 
     /** Path may only be a filename */
-    Basename = RequireBasename | AllowExtname,
+    Basename = RequireBasename | AllowExtname
 }
 
 function validateComponents(components: string[], flags: ValidationFlags, hasTrailingSeparator: boolean) {
@@ -71,30 +73,47 @@ function validateComponents(components: string[], flags: ValidationFlags, hasTra
         : flags & ValidationFlags.AllowWildcard ? invalidNonNavigableComponentWithWildcardsRegExp : invalidNonNavigableComponentRegExp;
 
     // Validate required components
-    if (flags & ValidationFlags.RequireRoot && !hasRoot) return false;
-    if (flags & ValidationFlags.RequireDirname && !hasDirname) return false;
-    if (flags & ValidationFlags.RequireBasename && !hasBasename) return false;
-    if (flags & ValidationFlags.RequireExtname && !hasExtname) return false;
-    if (flags & ValidationFlags.RequireTrailingSeparator && !hasTrailingSeparator) return false;
+    if (flags & ValidationFlags.RequireRoot && !hasRoot)
+        return false;
+    if (flags & ValidationFlags.RequireDirname && !hasDirname)
+        return false;
+    if (flags & ValidationFlags.RequireBasename && !hasBasename)
+        return false;
+    if (flags & ValidationFlags.RequireExtname && !hasExtname)
+        return false;
+    if (flags & ValidationFlags.RequireTrailingSeparator && !hasTrailingSeparator)
+        return false;
 
     // Required components indicate allowed components
-    if (flags & ValidationFlags.RequireRoot) flags |= ValidationFlags.AllowRoot;
-    if (flags & ValidationFlags.RequireDirname) flags |= ValidationFlags.AllowDirname;
-    if (flags & ValidationFlags.RequireBasename) flags |= ValidationFlags.AllowBasename;
-    if (flags & ValidationFlags.RequireExtname) flags |= ValidationFlags.AllowExtname;
-    if (flags & ValidationFlags.RequireTrailingSeparator) flags |= ValidationFlags.AllowTrailingSeparator;
+    if (flags & ValidationFlags.RequireRoot)
+        flags |= ValidationFlags.AllowRoot;
+    if (flags & ValidationFlags.RequireDirname)
+        flags |= ValidationFlags.AllowDirname;
+    if (flags & ValidationFlags.RequireBasename)
+        flags |= ValidationFlags.AllowBasename;
+    if (flags & ValidationFlags.RequireExtname)
+        flags |= ValidationFlags.AllowExtname;
+    if (flags & ValidationFlags.RequireTrailingSeparator)
+        flags |= ValidationFlags.AllowTrailingSeparator;
 
     // Validate disallowed components
-    if (~flags & ValidationFlags.AllowRoot && hasRoot) return false;
-    if (~flags & ValidationFlags.AllowDirname && hasDirname) return false;
-    if (~flags & ValidationFlags.AllowBasename && hasBasename) return false;
-    if (~flags & ValidationFlags.AllowExtname && hasExtname) return false;
-    if (~flags & ValidationFlags.AllowTrailingSeparator && hasTrailingSeparator) return false;
+    if (~flags & ValidationFlags.AllowRoot && hasRoot)
+        return false;
+    if (~flags & ValidationFlags.AllowDirname && hasDirname)
+        return false;
+    if (~flags & ValidationFlags.AllowBasename && hasBasename)
+        return false;
+    if (~flags & ValidationFlags.AllowExtname && hasExtname)
+        return false;
+    if (~flags & ValidationFlags.AllowTrailingSeparator && hasTrailingSeparator)
+        return false;
 
     // Validate component strings
-    if (invalidRootComponentRegExp.test(components[0])) return false;
+    if (invalidRootComponentRegExp.test(components[0]))
+        return false;
     for (let i = 1; i < components.length; i++) {
-        if (invalidComponentRegExp.test(components[i])) return false;
+        if (invalidComponentRegExp.test(components[i]))
+            return false;
     }
 
     return true;
@@ -103,12 +122,13 @@ function validateComponents(components: string[], flags: ValidationFlags, hasTra
 export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
     const components = parse(path);
     const trailing = hasTrailingSeparator(path);
-    if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
+    if (!validateComponents(components, flags, trailing))
+        throw createIOError("ENOENT");
     return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
 }
 
 export function isDeclaration(path: string) {
-    return ts.fileExtensionIsOneOf(path, [ts.Extension.Dmts, ts.Extension.Dcts, ts.Extension.Dts]);
+    return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Dcts, Extension.Dts]);
 }
 
 export function isSourceMap(path: string) {
@@ -132,5 +152,4 @@ export function isDefaultLibrary(path: string) {
 
 export function isTsConfigFile(path: string): boolean {
     return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
-}
 }

@@ -1,13 +1,26 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTscIncrementalEdits, BuildKind, appendText, emptyArray, enableStrict, addTestPrologue, addShebang, addSpread, addRest, removeRest, addTripleSlashRef, replaceText, verifyTsc } from "../../ts";
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
-    let outFileFs: vfs.FileSystem;
-    const enum Project { lib, app }
+    let outFileFs: FileSystem;
+    const enum Project {
+        lib,
+        app
+    }
     function relName(path: string) {
         return path.slice(1);
     }
-    type Sources = [string, readonly string[]];
-    const enum Source { config, ts }
-    const sources: [Sources, Sources] = [
+    type Sources = [
+        string,
+        readonly string[]
+    ];
+    const enum Source {
+        config,
+        ts
+    }
+    const sources: [
+        Sources,
+        Sources
+    ] = [
         [
             "/src/lib/tsconfig.json",
             [
@@ -34,15 +47,11 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
 
     interface VerifyOutFileScenarioInput {
         subScenario: string;
-        modifyFs?: (fs: vfs.FileSystem) => void;
-        modifyAgainFs?: (fs: vfs.FileSystem) => void;
+        modifyFs?: (fs: FileSystem) => void;
+        modifyAgainFs?: (fs: FileSystem) => void;
     }
 
-    function verifyOutFileScenario({
-        subScenario,
-        modifyFs,
-        modifyAgainFs
-    }: VerifyOutFileScenarioInput) {
+    function verifyOutFileScenario({ subScenario, modifyFs, modifyAgainFs }: VerifyOutFileScenarioInput) {
         verifyTscIncrementalEdits({
             scenario: "amdModulesWithOut",
             subScenario,
@@ -125,7 +134,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         });
 
         describe("stripInternal", () => {
-            function stripInternalScenario(fs: vfs.FileSystem) {
+            function stripInternalScenario(fs: FileSystem) {
                 const internal = "/*@internal*/";
                 replaceText(fs, sources[Project.app][Source.config], `"composite": true,`, `"composite": true,
 "stripInternal": true,`);
@@ -167,7 +176,7 @@ ${internal} export enum internalEnum { a, b, c }`);
         });
 
         describe("when the module resolution finds original source file", () => {
-            function modifyFs(fs: vfs.FileSystem) {
+            function modifyFs(fs: FileSystem) {
                 // Make lib to output to parent dir
                 replaceText(fs, sources[Project.lib][Source.config], `"outFile": "module.js"`, `"outFile": "../module.js", "rootDir": "../"`);
                 // Change reference to file1 module to resolve to lib/file1
@@ -185,4 +194,3 @@ ${internal} export enum internalEnum { a, b, c }`);
         });
     });
 });
-}

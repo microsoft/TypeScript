@@ -1,13 +1,19 @@
+import { ChangeTracker } from "../ts.textChanges";
+import { FileTextChanges, Diagnostics, find, TextSpan, ArrowFunction, FunctionDeclaration, FunctionExpression, MethodDeclaration, CodeFixContext, CodeFixAllContext, SourceFile, getNodeId, factory, getSynthesizedDeepClone, getSyntacticModifierFlags, ModifierFlags, getTokenAtPosition, findAncestor, textSpanEnd, isArrowFunction, isMethodDeclaration, isFunctionExpression, isFunctionDeclaration, textSpansEqual, createTextSpanFromNode, Diagnostic, isNumber, some } from "../ts";
+import { registerCodeFix, codeFixAll, createCodeFixAction } from "../ts.codefix";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
-type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
+type ContextualTrackChangesFunction = (cb: (changeTracker: ChangeTracker) => void) => FileTextChanges[];
+/* @internal */
 const fixId = "addMissingAsync";
+/* @internal */
 const errorCodes = [
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
     Diagnostics.Type_0_is_not_comparable_to_type_1.code
 ];
 
+/* @internal */
 registerCodeFix({
     fixIds: [fixId],
     errorCodes,
@@ -21,12 +27,12 @@ registerCodeFix({
             return;
         }
 
-        const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
+        const trackChanges: ContextualTrackChangesFunction = cb => ChangeTracker.with(context, cb);
         return [getFix(context, decl, trackChanges)];
     },
     getAllCodeActions: context => {
         const { sourceFile } = context;
-        const fixedDeclarations = new Set<number>();
+        const fixedDeclarations = new ts.Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
             const span = diagnostic.relatedInformation && find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as TextSpan | undefined;
             const decl = getFixableErrorSpanDeclaration(sourceFile, span);
@@ -39,30 +45,30 @@ registerCodeFix({
     },
 });
 
+/* @internal */
 type FixableDeclaration = ArrowFunction | FunctionDeclaration | FunctionExpression | MethodDeclaration;
-function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclaration, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+/* @internal */
+function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclaration, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: ts.Set<number>) {
     const changes = trackChanges(t => makeChange(t, context.sourceFile, decl, fixedDeclarations));
     return createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers);
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Set<number>) {
+/* @internal */
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: ts.Set<number>) {
     if (fixedDeclarations) {
         if (fixedDeclarations.has(getNodeId(insertionSite))) {
             return;
         }
     }
     fixedDeclarations?.add(getNodeId(insertionSite));
-    const cloneWithModifier = factory.updateModifiers(
-        getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
-        factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)));
-    changeTracker.replaceNode(
-        sourceFile,
-        insertionSite,
-        cloneWithModifier);
+    const cloneWithModifier = factory.updateModifiers(getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true), factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)));
+    changeTracker.replaceNode(sourceFile, insertionSite, cloneWithModifier);
 }
 
+/* @internal */
 function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan | undefined): FixableDeclaration | undefined {
-    if (!span) return undefined;
+    if (!span)
+        return undefined;
     const token = getTokenAtPosition(sourceFile, span.start);
     // Checker has already done work to determine that async might be possible, and has attached
     // related info to the node, so start by finding the signature that exactly matches up
@@ -77,11 +83,10 @@ function getFixableErrorSpanDeclaration(sourceFile: SourceFile, span: TextSpan |
     return decl;
 }
 
+/* @internal */
 function getIsMatchingAsyncError(span: TextSpan, errorCode: number) {
-    return ({ start, length, relatedInformation, code }: Diagnostic) =>
-        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
+    return ({ start, length, relatedInformation, code }: Diagnostic) => isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
         code === errorCode &&
         !!relatedInformation &&
         some(relatedInformation, related => related.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code);
-}
 }

@@ -1,7 +1,10 @@
+import { findArgument, emptyArray, LogLevel, Logger, ServerCancellationToken, StartSessionOptions, hasArgument, Msg, initializeNodeSystem, initializeWebSystem } from "./ts.server";
+import { LanguageServiceMode, version, getNodeMajorVersion, sys, setStackTraceLimit, Debug } from "./ts";
 /*@internal*/
-namespace ts.server {
 declare const addEventListener: any;
+/* @internal */
 declare const removeEventListener: any;
+/* @internal */
 function findArgumentStringArray(argName: string): readonly string[] {
     const arg = findArgument(argName);
     if (arg === undefined) {
@@ -10,6 +13,7 @@ function findArgumentStringArray(argName: string): readonly string[] {
     return arg.split(",").filter(name => name !== "");
 }
 
+/* @internal */
 export function getLogLevel(level: string | undefined) {
     if (level) {
         const l = level.toLowerCase();
@@ -22,6 +26,7 @@ export function getLogLevel(level: string | undefined) {
     return undefined;
 }
 
+/* @internal */
 export interface StartInput {
     args: readonly string[];
     logger: Logger;
@@ -30,6 +35,7 @@ export interface StartInput {
     unknownServerMode?: string;
     startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) => void;
 }
+/* @internal */
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
     const syntaxOnly = hasArgument("--syntaxOnly");
 
@@ -57,8 +63,7 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
     console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
     console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 
-    startServer(
-        {
+    startServer({
             globalPlugins: findArgumentStringArray("--globalPlugins"),
             pluginProbeLocations: findArgumentStringArray("--pluginProbeLocations"),
             allowLocalPluginLoads: hasArgument("--allowLocalPluginLoads"),
@@ -68,14 +73,13 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
             noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
             syntaxOnly,
             serverMode
-        },
-        logger,
-        cancellationToken
-    );
+    }, logger, cancellationToken);
 }
 
+/* @internal */
 setStackTraceLimit();
 // Cannot check process var directory in webworker so has to be typeof check here
+/* @internal */
 if (typeof process !== "undefined") {
     start(initializeNodeSystem(), require("os").platform());
 }
@@ -87,5 +91,4 @@ else {
         start(initializeWebSystem(args), "web");
     };
     addEventListener("message", listener);
-}
 }

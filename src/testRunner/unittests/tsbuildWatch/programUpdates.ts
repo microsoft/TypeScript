@@ -1,15 +1,19 @@
-namespace ts.tscWatch {
-import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
+import { TestFSWithWatch, isString, emptyArray, createSolutionBuilderWithWatchHost, createSolutionBuilderWithWatch, noop } from "../../ts";
+import { createWatchedSystem, File, TscWatchCompileChange, checkSingleTimeoutQueueLengthAndRun, libFile, verifyTscWatch, checkWatchedFiles, checkWatchedDirectories, checkOutputErrorsInitial, checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout, WatchedSystem, projectRoot, runQueuedTimeoutCallbacks, noopChange, commonFile1, commonFile2 } from "../../ts.tscWatch";
+import * as ts from "../../ts";
+import projectsLocation = ts.TestFSWithWatch.tsbuildProjectsLocation;
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     type TsBuildWatchSystem = TestFSWithWatch.TestServerHostTrackingWrittenFiles;
 
     function createTsBuildWatchSystem(fileOrFolderList: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
-        return TestFSWithWatch.changeToHostTrackingWrittenFiles(
-            createWatchedSystem(fileOrFolderList, params)
-        );
+        return TestFSWithWatch.changeToHostTrackingWrittenFiles(createWatchedSystem(fileOrFolderList, params));
     }
 
-    type OutputFileStamp = [string, Date | undefined, boolean];
+    type OutputFileStamp = [
+        string,
+        Date | undefined,
+        boolean
+    ];
     function transformOutputToOutputFileStamp(f: string, host: TsBuildWatchSystem): OutputFileStamp {
         return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;
     }
@@ -24,7 +28,15 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     }
     type ReadonlyFile = Readonly<File>;
     /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
-    type SubProjectFiles = [ReadonlyFile, ReadonlyFile] | [ReadonlyFile, ReadonlyFile, ReadonlyFile, ReadonlyFile];
+    type SubProjectFiles = [
+        ReadonlyFile,
+        ReadonlyFile
+    ] | [
+        ReadonlyFile,
+        ReadonlyFile,
+        ReadonlyFile,
+        ReadonlyFile
+    ];
     function projectPath(subProject: SubProject) {
         return TestFSWithWatch.getTsBuildProjectFilePath(project, subProject);
     }
@@ -57,7 +69,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         return getOutputFileNames(subProject, baseFileNameWithoutExtension).map(f => transformOutputToOutputFileStamp(f, host));
     }
 
-    function getOutputFileStamps(host: TsBuildWatchSystem, additionalFiles?: readonly [SubProject, string][]): OutputFileStamp[] {
+    function getOutputFileStamps(host: TsBuildWatchSystem, additionalFiles?: readonly [
+        SubProject,
+        string
+    ][]): OutputFileStamp[] {
         const result = [
             ...getOutputStamps(host, SubProject.core, "anotherModule"),
             ...getOutputStamps(host, SubProject.core, "index"),
@@ -166,10 +181,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
                 scenario,
                 subScenario: `${subScenario}/change builds changes and reports found errors message`,
                 commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
-                sys: () => createWatchedSystem(
-                    allFilesGetter(),
-                    { currentDirectory: projectsLocation }
-                ),
+                sys: () => createWatchedSystem(allFilesGetter(), { currentDirectory: projectsLocation }),
                 changes: [
                     changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
@@ -201,10 +213,7 @@ export class someClass2 { }`);
                 scenario,
                 subScenario: `${subScenario}/non local change does not start build of referencing projects`,
                 commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
-                sys: () => createWatchedSystem(
-                    allFilesGetter(),
-                    { currentDirectory: projectsLocation }
-                ),
+                sys: () => createWatchedSystem(allFilesGetter(), { currentDirectory: projectsLocation }),
                 changes: [
                     changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
@@ -220,10 +229,7 @@ function foo() { }`, "Make local change to core"),
                 scenario,
                 subScenario: `${subScenario}/builds when new file is added, and its subsequent updates`,
                 commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
-                sys: () => createWatchedSystem(
-                    allFilesGetter(),
-                    { currentDirectory: projectsLocation }
-                ),
+                sys: () => createWatchedSystem(allFilesGetter(), { currentDirectory: projectsLocation }),
                 changes: [
                     changeNewFile(newFile.content),
                     buildLogicOrUpdateTimeStamps,
@@ -237,16 +243,11 @@ export class someClass2 { }`),
         }
 
         describe("with simple project reference graph", () => {
-            verifyProjectChanges(
-                "with simple project reference graph",
-                () => allFiles
-            );
+            verifyProjectChanges("with simple project reference graph", () => allFiles);
         });
 
         describe("with circular project reference", () => {
-            verifyProjectChanges(
-                "with circular project reference",
-                () => {
+            verifyProjectChanges("with circular project reference", () => {
                     const [coreTsconfig, ...otherCoreFiles] = core;
                     const circularCoreConfig: File = {
                         path: coreTsconfig.path,
@@ -256,19 +257,15 @@ export class someClass2 { }`),
                         })
                     };
                     return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
-                }
-            );
         });
     });
 
+    });
     verifyTscWatch({
         scenario,
         subScenario: "watches config files that are not present",
         commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
-        sys: () => createWatchedSystem(
-            [libFile, ...core, logic[1], ...tests],
-            { currentDirectory: projectsLocation }
-        ),
+        sys: () => createWatchedSystem([libFile, ...core, logic[1], ...tests], { currentDirectory: projectsLocation }),
         changes: [
             {
                 caption: "Write logic tsconfig and build logic",
@@ -469,10 +466,7 @@ let x: string = 10;`),
                 scenario,
                 subScenario: "reportErrors/declarationEmitErrors/when fixing error files all files are emitted",
                 commandLineArgs: ["-b", "-w", subProject],
-                sys: () => createWatchedSystem(
-                    [libFile, fileWithError, fileWithoutError, tsconfig],
-                    { currentDirectory: `${projectsLocation}/${solution}` }
-                ),
+                sys: () => createWatchedSystem([libFile, fileWithError, fileWithoutError, tsconfig], { currentDirectory: `${projectsLocation}/${solution}` }),
                 changes: [
                     fixError
                 ]
@@ -482,10 +476,7 @@ let x: string = 10;`),
                 scenario,
                 subScenario: "reportErrors/declarationEmitErrors/when file with no error changes",
                 commandLineArgs: ["-b", "-w", subProject],
-                sys: () => createWatchedSystem(
-                    [libFile, fileWithError, fileWithoutError, tsconfig],
-                    { currentDirectory: `${projectsLocation}/${solution}` }
-                ),
+                sys: () => createWatchedSystem([libFile, fileWithError, fileWithoutError, tsconfig], { currentDirectory: `${projectsLocation}/${solution}` }),
                 changes: [
                     changeFileWithoutError
                 ]
@@ -502,10 +493,7 @@ let x: string = 10;`),
                     scenario,
                     subScenario: "reportErrors/declarationEmitErrors/introduceError/when fixing errors only changed file is emitted",
                     commandLineArgs: ["-b", "-w", subProject],
-                    sys: () => createWatchedSystem(
-                        [libFile, fileWithFixedError, fileWithoutError, tsconfig],
-                        { currentDirectory: `${projectsLocation}/${solution}` }
-                    ),
+                    sys: () => createWatchedSystem([libFile, fileWithFixedError, fileWithoutError, tsconfig], { currentDirectory: `${projectsLocation}/${solution}` }),
                     changes: [
                         introduceError,
                         fixError
@@ -516,10 +504,7 @@ let x: string = 10;`),
                     scenario,
                     subScenario: "reportErrors/declarationEmitErrors/introduceError/when file with no error changes",
                     commandLineArgs: ["-b", "-w", subProject],
-                    sys: () => createWatchedSystem(
-                        [libFile, fileWithFixedError, fileWithoutError, tsconfig],
-                        { currentDirectory: `${projectsLocation}/${solution}` }
-                    ),
+                    sys: () => createWatchedSystem([libFile, fileWithFixedError, fileWithoutError, tsconfig], { currentDirectory: `${projectsLocation}/${solution}` }),
                     changes: [
                         introduceError,
                         changeFileWithoutError
@@ -665,7 +650,9 @@ export function someFn() { }`),
             };
             return createWatchedSystem([
                 libFile,
-                alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                alphaExtendedConfigFile, project1Config,
+                commonFile1,
+                commonFile2,
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
@@ -770,8 +757,11 @@ export function someFn() { }`),
                 })
             };
             return createWatchedSystem([
-                libFile, configFile,
-                alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                libFile,
+                configFile,
+                alphaExtendedConfigFile, project1Config,
+                commonFile1,
+                commonFile2,
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
@@ -791,4 +781,3 @@ export function someFn() { }`),
         ]
     });
 });
-}

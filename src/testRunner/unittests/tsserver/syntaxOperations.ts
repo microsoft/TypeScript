@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { TestSession, File, protocol, libFile, createServerHost, createSession, checkNumberOfProjects, checkProjectActualFiles } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
 describe("unittests:: tsserver:: syntax operations", () => {
     function navBarFull(session: TestSession, file: File) {
         return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
@@ -16,11 +17,11 @@ describe("unittests:: tsserver:: syntax operations", () => {
 
     it("works when file is removed and added with different content", () => {
         const app: File = {
-            path: `${tscWatch.projectRoot}/app.ts`,
+            path: `${projectRoot}/app.ts`,
             content: "console.log('Hello world');"
         };
         const unitTest1: File = {
-            path: `${tscWatch.projectRoot}/unitTest1.ts`,
+            path: `${projectRoot}/unitTest1.ts`,
             content: `import assert = require('assert');
 
 describe("Test Suite 1", () => {
@@ -35,7 +36,7 @@ describe("Test Suite 1", () => {
 });`
         };
         const tsconfig: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const files = [app, libFile, tsconfig];
@@ -95,4 +96,3 @@ export function Test2() {
         assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
     });
 });
-}

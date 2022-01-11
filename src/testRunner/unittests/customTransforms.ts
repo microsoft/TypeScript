@@ -1,10 +1,15 @@
-namespace ts {
+import { CustomTransformers, CompilerOptions, createSourceFile, ScriptTarget, arrayToMap, CompilerHost, createProgram, arrayFrom, NewLineKind, TransformerFactory, SourceFile, visitEachChild, Node, VisitResult, SyntaxKind, FunctionDeclaration, addSyntheticLeadingComment, VariableStatement, visitNode, isStringLiteral, factory, ModuleKind, computeLineStarts, setSourceMapRange, computeLineAndCharacterOfPosition, Transformer, isIdentifier, createSourceMapSource, map } from "../ts";
+import { Baseline } from "../Harness";
+import * as ts from "../ts";
 describe("unittests:: customTransforms", () => {
-    function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
+    function emitsCorrectly(name: string, sources: {
+        file: string;
+        text: string;
+    }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
         it(name, () => {
             const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
             const fileMap = arrayToMap(roots, file => file.fileName);
-            const outputs = new Map<string, string>();
+            const outputs = new ts.Map<string, string>();
             const host: CompilerHost = {
                 getSourceFile: (fileName) => fileMap.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
@@ -22,11 +27,12 @@ describe("unittests:: customTransforms", () => {
             program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
             let content = "";
             for (const [file, text] of arrayFrom(outputs.entries())) {
-                if (content) content += "\n\n";
+                if (content)
+                    content += "\n\n";
                 content += `// [${file}]\n`;
                 content += text;
             }
-            Harness.Baseline.runBaseline(`customTransforms/${name}.js`, content);
+            Baseline.runBaseline(`customTransforms/${name}.js`, content);
         });
     }
 
@@ -87,7 +93,8 @@ describe("unittests:: customTransforms", () => {
             `
     }], {before: [
         context => node => visitNode(node, function visitor(node: Node): Node {
-            if (isStringLiteral(node) && node.text === "change") return factory.createStringLiteral("changed");
+                if (isStringLiteral(node) && node.text === "change")
+                    return factory.createStringLiteral("changed");
             return visitEachChild(node, visitor, context);
         })
     ]}, {
@@ -97,8 +104,7 @@ describe("unittests:: customTransforms", () => {
         experimentalDecorators: true
     });
 
-    emitsCorrectly("sourceMapExternalSourceFiles",
-        [
+    emitsCorrectly("sourceMapExternalSourceFiles", [
             {
                 file: "source.ts",
                 // The text of length 'changed' is made to be on two lines so we know the line map change
@@ -106,8 +112,7 @@ describe("unittests:: customTransforms", () => {
                     line\`
 'change'`
             },
-        ],
-        {
+    ], {
             before: [
                 context => node => visitNode(node, function visitor(node: Node): Node {
                     if (isStringLiteral(node) && node.text === "change") {
@@ -126,19 +131,14 @@ describe("unittests:: customTransforms", () => {
                     return visitEachChild(node, visitor, context);
                 })
             ]
-        },
-        { sourceMap: true }
-    );
-
-    emitsCorrectly("skipTriviaExternalSourceFiles",
-        [
+    }, { sourceMap: true });
+    emitsCorrectly("skipTriviaExternalSourceFiles", [
             {
                 file: "source.ts",
                 // The source file contains preceding trivia (e.g. whitespace) to try to confuse the `skipSourceTrivia` function.
                 text: "         original;"
             },
-        ],
-        {
+    ], {
             before: [
                 context => {
                     const transformSourceFile: Transformer<SourceFile> = node => visitNode(node, function visitor(node: Node): Node {
@@ -160,9 +160,6 @@ describe("unittests:: customTransforms", () => {
                     };
                 }
             ]
-        },
-        { sourceMap: true, outFile: "source.js" }
-    );
+    }, { sourceMap: true, outFile: "source.js" });
 
 });
-}

@@ -1,22 +1,21 @@
+import { DiagnosticMessage, regExpEscape, formatStringFromArgs, Diagnostics, isWhiteSpaceLike } from "./ts";
 /**
  * Common utilities
  */
-namespace Utils {
 const testPathPrefixRegExp = /(?:(file:\/{3})|\/)\.(ts|lib|src)\//g;
 export function removeTestPathPrefixes(text: string, retainTrailingDirectorySeparator?: boolean): string {
     return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined!; // TODO: GH#18217
 }
 
-function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...args: string[]) => string[]>(diagnosticMessage: ts.DiagnosticMessage, replacer: R) {
+function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...args: string[]) => string[]>(diagnosticMessage: DiagnosticMessage, replacer: R) {
     const messageParts = diagnosticMessage.message.split(/{\d+}/g);
-    const regExp = new RegExp(`^(?:${messageParts.map(ts.regExpEscape).join("(.*?)")})$`);
-    type Args<R> = R extends (messageArgs: string[], ...args: infer A) => string[] ? A : [];
-    return (text: string, ...args: Args<R>) => text.replace(regExp, (_, ...fixedArgs) => ts.formatStringFromArgs(diagnosticMessage.message, replacer(fixedArgs, ...args)));
+    const regExp = new RegExp(`^(?:${messageParts.map(regExpEscape).join("(.*?)")})$`);
+    type Args<R> = R extends (messageArgs: string[], ...args: infer A) => string[] ? A : [
+    ];
+    return (text: string, ...args: Args<R>) => text.replace(regExp, (_, ...fixedArgs) => formatStringFromArgs(diagnosticMessage.message, replacer(fixedArgs, ...args)));
 }
 
-const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(
-    ts.Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2,
-    ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName]);
+const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName]);
 
 export function sanitizeTraceResolutionLogEntry(text: string) {
     return text && removeTestPathPrefixes(replaceTypesVersionsMessage(text, "3.1.0-dev"));
@@ -67,7 +66,7 @@ function guessIndentation(lines: string[]) {
     let indentation: number | undefined;
     for (const line of lines) {
         for (let i = 0; i < line.length && (indentation === undefined || i < indentation); i++) {
-            if (!ts.isWhiteSpaceLike(line.charCodeAt(i))) {
+            if (!isWhiteSpaceLike(line.charCodeAt(i))) {
                 if (indentation === undefined || i < indentation) {
                     indentation = i;
                     break;
@@ -81,10 +80,14 @@ function guessIndentation(lines: string[]) {
 export function getByteOrderMarkLength(text: string): number {
     if (text.length >= 1) {
         const ch0 = text.charCodeAt(0);
-        if (ch0 === 0xfeff) return 1;
-        if (ch0 === 0xfe) return text.length >= 2 && text.charCodeAt(1) === 0xff ? 2 : 0;
-        if (ch0 === 0xff) return text.length >= 2 && text.charCodeAt(1) === 0xfe ? 2 : 0;
-        if (ch0 === 0xef) return text.length >= 3 && text.charCodeAt(1) === 0xbb && text.charCodeAt(2) === 0xbf ? 3 : 0;
+        if (ch0 === 0xfeff)
+            return 1;
+        if (ch0 === 0xfe)
+            return text.length >= 2 && text.charCodeAt(1) === 0xff ? 2 : 0;
+        if (ch0 === 0xff)
+            return text.length >= 2 && text.charCodeAt(1) === 0xfe ? 2 : 0;
+        if (ch0 === 0xef)
+            return text.length >= 3 && text.charCodeAt(1) === 0xbb && text.charCodeAt(2) === 0xbf ? 3 : 0;
     }
     return 0;
 }
@@ -108,5 +111,4 @@ function formatTheoryDatum(value: any) {
     return typeof value === "function" ? value.name || "<anonymous function>" :
         value === undefined ? "undefined" :
         JSON.stringify(value);
-}
 }

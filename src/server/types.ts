@@ -1,11 +1,20 @@
-declare namespace ts.server {
+import { System, FileWatcherCallback, WatchOptions, FileWatcher, DirectoryWatcherCallback } from "./ts";
 export interface CompressedData {
     length: number;
     compressionKind: string;
     data: any;
 }
 
-export type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
+export type RequireResult = {
+    module: {};
+    error: undefined;
+} | {
+    module: undefined;
+    error: {
+        stack?: string;
+        message?: string;
+    };
+};
 export interface ServerHost extends System {
     watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
     watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -16,5 +25,4 @@ export interface ServerHost extends System {
     gc?(): void;
     trace?(s: string): void;
     require?(initialPath: string, moduleName: string): RequireResult;
-}
 }

@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createSession, openFilesForSession, protocol, makeReferenceItem, MakeReferenceItem, executeSessionRequest, protocolFileLocationFromSubstring, protocolLocationFromSubstring } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: getExportReferences", () => {
     const exportVariable = "export const value = 0;";
     const exportArrayDestructured = "export const [valueA, valueB] = [0, 1];";
@@ -29,8 +29,7 @@ ${exportNestedObject}
         return session;
     }
 
-    const referenceMainTs = (mainTs: File, text: string): protocol.ReferencesResponseItem =>
-        makeReferenceItem({
+    const referenceMainTs = (mainTs: File, text: string): protocol.ReferencesResponseItem => makeReferenceItem({
             file: mainTs,
             isDefinition: false,
             isWriteAccess: true,
@@ -39,11 +38,11 @@ ${exportNestedObject}
             text,
         });
 
-    const referenceModTs = (
-        texts: { text: string; lineText: string; contextText?: string },
-        override: Partial<MakeReferenceItem> = {},
-    ): protocol.ReferencesResponseItem =>
-        makeReferenceItem({
+    const referenceModTs = (texts: {
+        text: string;
+        lineText: string;
+        contextText?: string;
+    }, override: Partial<MakeReferenceItem> = {}): protocol.ReferencesResponseItem => makeReferenceItem({
             file: modTs,
             isDefinition: true,
             ...texts,
@@ -53,11 +52,7 @@ ${exportNestedObject}
     it("should get const variable declaration references", () => {
         const session = makeSampleSession();
 
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
-            session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "value"),
-        );
+        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(modTs, "value"));
 
         const expectResponse = {
             refs: [
@@ -74,11 +69,7 @@ ${exportNestedObject}
 
     it("should get array destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
-            session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "valueA"),
-        );
+        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(modTs, "valueA"));
 
         const expectResponse = {
             refs: [
@@ -99,11 +90,7 @@ ${exportNestedObject}
 
     it("should get object destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
-            session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "valueC"),
-        );
+        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(modTs, "valueC"));
         const expectResponse = {
             refs: [
                 referenceModTs({
@@ -112,9 +99,7 @@ ${exportNestedObject}
                     contextText: exportObjectDestructured,
                 }),
                 referenceMainTs(mainTs, "valueC"),
-                referenceModTs(
-                    { text: "valueC", lineText: exportObjectDestructured, contextText: "valueC: 0" },
-                    {
+                referenceModTs({ text: "valueC", lineText: exportObjectDestructured, contextText: "valueC: 0" }, {
                         options: { index: 1 },
                         isDefinition: false,
                         isWriteAccess: true,
@@ -130,11 +115,7 @@ ${exportNestedObject}
 
     it("should get object declaration references that renames destructured property", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
-            session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "renamedD"),
-        );
+        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(modTs, "renamedD"));
 
         const expectResponse = {
             refs: [
@@ -155,11 +136,7 @@ ${exportNestedObject}
 
     it("should get nested object declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
-            session,
-            protocol.CommandTypes.References,
-            protocolFileLocationFromSubstring(modTs, "valueF"),
-        );
+        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(modTs, "valueF"));
 
         const expectResponse = {
             refs: [
@@ -169,18 +146,15 @@ ${exportNestedObject}
                     contextText: exportNestedObject,
                 }),
                 referenceMainTs(mainTs, "valueF"),
-                referenceModTs(
-                    {
+                referenceModTs({
                         text: "valueF",
                         lineText: exportNestedObject,
                         contextText: "valueF: 1",
-                    },
-                    {
+                }, {
                         options: { index: 1 },
                         isDefinition: false,
                         isWriteAccess: true,
-                    },
-                ),
+                }),
             ],
             symbolDisplayString: "const valueF: number",
             symbolName: "valueF",
@@ -190,4 +164,3 @@ ${exportNestedObject}
         assert.deepEqual(response, expectResponse);
     });
 });
-}

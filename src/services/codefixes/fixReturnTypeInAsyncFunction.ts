@@ -1,10 +1,14 @@
+import { Diagnostics, TypeNode, Type, SourceFile, TypeChecker, isInJSFile, getTokenAtPosition, findAncestor, isFunctionLikeDeclaration, factory } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "fixReturnTypeInAsyncFunction";
+/* @internal */
 const errorCodes = [
     Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0.code,
 ];
 
+/* @internal */
 interface Info {
     readonly returnTypeNode: TypeNode;
     readonly returnType: Type;
@@ -12,6 +16,7 @@ interface Info {
     readonly promisedType: Type;
 }
 
+/* @internal */
 registerCodeFix({
     errorCodes,
     fixIds: [fixId],
@@ -23,12 +28,9 @@ registerCodeFix({
             return undefined;
         }
         const { returnTypeNode, returnType, promisedTypeNode, promisedType } = info;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
-        return [createCodeFixAction(
-            fixId, changes,
-            [Diagnostics.Replace_0_with_Promise_1,
-             checker.typeToString(returnType), checker.typeToString(promisedType)],
-            fixId, Diagnostics.Fix_all_incorrect_return_type_of_an_async_functions)];
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
+        return [createCodeFixAction(fixId, changes, [Diagnostics.Replace_0_with_Promise_1,
+                checker.typeToString(returnType), checker.typeToString(promisedType)], fixId, Diagnostics.Fix_all_incorrect_return_type_of_an_async_functions)];
     },
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, context.program.getTypeChecker(), diag.start);
@@ -38,6 +40,7 @@ registerCodeFix({
     })
 });
 
+/* @internal */
 function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Info | undefined {
     if (isInJSFile(sourceFile)) {
         return undefined;
@@ -58,7 +61,7 @@ function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Inf
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
     changes.replaceNode(sourceFile, returnTypeNode, factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
-}
 }

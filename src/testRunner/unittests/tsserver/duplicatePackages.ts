@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createSession, openFilesForSession, executeSessionRequest, protocol } from "../../ts.projectSystem";
+import { Diagnostics } from "../../ts";
 describe("unittests:: tsserver:: duplicate packages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
     it("works with import fixes", () => {
@@ -51,4 +52,3 @@ describe("unittests:: tsserver:: duplicate packages", () => {
         }
     });
 });
-}

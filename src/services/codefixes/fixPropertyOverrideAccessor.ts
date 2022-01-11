@@ -1,10 +1,13 @@
+import { Diagnostics, SourceFile, CodeFixContext, CodeFixAllContext, getTokenAtPosition, Debug, isAccessor, isClassLike, singleOrUndefined, unescapeLeadingUnderscores, getTextOfPropertyName, getSourceFileOfNode } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll, getAllSupers, generateAccessorFromProperty } from "../ts.codefix";
 /* @internal */
-namespace ts.codefix {
 const errorCodes = [
     Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,
     Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor.code,
 ];
+/* @internal */
 const fixId = "fixPropertyOverrideAccessor";
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
@@ -25,6 +28,7 @@ registerCodeFix({
     }),
 });
 
+/* @internal */
 function doChange(file: SourceFile, start: number, length: number, code: number, context: CodeFixContext | CodeFixAllContext) {
     let startPosition: number;
     let endPosition: number;
@@ -39,11 +43,13 @@ function doChange(file: SourceFile, start: number, length: number, code: number,
         const containingClass = node.parent;
         Debug.assert(isClassLike(containingClass), "erroneous accessors should only be inside classes");
         const base = singleOrUndefined(getAllSupers(containingClass, checker));
-        if (!base) return [];
+        if (!base)
+            return [];
 
         const name = unescapeLeadingUnderscores(getTextOfPropertyName(node.name));
         const baseProp = checker.getPropertyOfType(checker.getTypeAtLocation(base), name);
-        if (!baseProp || !baseProp.valueDeclaration) return [];
+        if (!baseProp || !baseProp.valueDeclaration)
+            return [];
 
         startPosition = baseProp.valueDeclaration.pos;
         endPosition = baseProp.valueDeclaration.end;
@@ -53,5 +59,4 @@ function doChange(file: SourceFile, start: number, length: number, code: number,
         Debug.fail("fixPropertyOverrideAccessor codefix got unexpected error code " + code);
     }
     return generateAccessorFromProperty(file, context.program, startPosition, endPosition, context, Diagnostics.Generate_get_and_set_accessors.message);
-}
 }

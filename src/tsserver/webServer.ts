@@ -1,12 +1,20 @@
+import { Logger, findArgument, StartInput, nullCancellationToken, getLogLevel, MainProcessLogger, WebHost, StartSessionOptions, ServerCancellationToken, ServerHost } from "./ts.server";
+import { noop, returnFalse, returnUndefined, LanguageServiceMode, Debug, server, setSys, validateLocaleAndSetLanguage, performance, sys } from "./ts";
+import * as ts from "./ts";
 /*@internal*/
-namespace ts.server {
 declare const addEventListener: any;
+/* @internal */
 declare const postMessage: any;
+/* @internal */
 declare const close: any;
+/* @internal */
 declare const location: any;
+/* @internal */
 declare const XMLHttpRequest: any;
+/* @internal */
 declare const self: any;
 
+/* @internal */
 const nullLogger: Logger = {
     close: noop,
     hasLevel: returnFalse,
@@ -19,9 +27,11 @@ const nullLogger: Logger = {
     getLogFileName: returnUndefined,
 };
 
+/* @internal */
 function parseServerMode(): LanguageServiceMode | string | undefined {
     const mode = findArgument("--serverMode");
-    if (!mode) return undefined;
+    if (!mode)
+        return undefined;
     switch (mode.toLowerCase()) {
         case "partialsemantic":
             return LanguageServiceMode.PartialSemantic;
@@ -32,13 +42,16 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
     }
 }
 
+/* @internal */
 export function initializeWebSystem(args: string[]): StartInput {
     createWebSystem(args);
     const modeOrUnknown = parseServerMode();
     let serverMode: LanguageServiceMode | undefined;
     let unknownServerMode: string | undefined;
-    if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
-    else unknownServerMode = modeOrUnknown;
+    if (typeof modeOrUnknown === "number")
+        serverMode = modeOrUnknown;
+    else
+        unknownServerMode = modeOrUnknown;
     return {
         args,
         logger: createLogger(),
@@ -50,15 +63,18 @@ export function initializeWebSystem(args: string[]): StartInput {
     };
 }
 
+/* @internal */
 function createLogger() {
     const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
     return cmdLineVerbosity !== undefined ? new MainProcessLogger(cmdLineVerbosity, { writeMessage }) : nullLogger;
 }
 
+/* @internal */
 function writeMessage(s: any) {
     postMessage(s);
 }
 
+/* @internal */
 function createWebSystem(args: string[]) {
     Debug.assert(ts.sys === undefined);
     const webHost: WebHost = {
@@ -85,7 +101,11 @@ function createWebSystem(args: string[]) {
     }
 }
 
-function hrtime(previous?: [number, number]) {
+/* @internal */
+function hrtime(previous?: [
+    number,
+    number
+]) {
     const now = self.performance.now(performance) * 1e-3;
     let seconds = Math.floor(now);
     let nanoseconds = Math.floor((now % 1) * 1e9);
@@ -100,6 +120,7 @@ function hrtime(previous?: [number, number]) {
     return [seconds, nanoseconds];
 }
 
+/* @internal */
 function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     class WorkerSession extends server.WorkerSession {
         constructor() {
@@ -123,5 +144,4 @@ function startWebSession(options: StartSessionOptions, logger: Logger, cancellat
 
     // Start listening
     session.listen();
-}
 }

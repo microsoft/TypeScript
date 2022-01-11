@@ -1,10 +1,7 @@
+import { TransformationContext, chainBundle, SourceFile, visitEachChild, Node, VisitResult, TransformFlags, SyntaxKind, BinaryExpression, Expression, visitNode, isExpression, isElementAccessExpression, setTextRange, isPropertyAccessExpression } from "../ts";
 /*@internal*/
-namespace ts {
 export function transformES2016(context: TransformationContext) {
-    const {
-        factory,
-        hoistVariableDeclaration
-    } = context;
+    const { factory, hoistVariableDeclaration } = context;
 
     return chainBundle(context, transformSourceFile);
 
@@ -48,51 +45,21 @@ export function transformES2016(context: TransformationContext) {
             // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
             const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
             const argumentExpressionTemp = factory.createTempVariable(hoistVariableDeclaration);
-            target = setTextRange(
-                factory.createElementAccessExpression(
-                    setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
-                    setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
-                ),
-                left
-            );
-            value = setTextRange(
-                factory.createElementAccessExpression(
-                    expressionTemp,
-                    argumentExpressionTemp
-                ),
-                left
-            );
+            target = setTextRange(factory.createElementAccessExpression(setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression), setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)), left);
+            value = setTextRange(factory.createElementAccessExpression(expressionTemp, argumentExpressionTemp), left);
         }
         else if (isPropertyAccessExpression(left)) {
             // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
             const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
-            target = setTextRange(
-                factory.createPropertyAccessExpression(
-                    setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
-                    left.name
-                ),
-                left
-            );
-            value = setTextRange(
-                factory.createPropertyAccessExpression(
-                    expressionTemp,
-                    left.name
-                ),
-                left
-            );
+            target = setTextRange(factory.createPropertyAccessExpression(setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression), left.name), left);
+            value = setTextRange(factory.createPropertyAccessExpression(expressionTemp, left.name), left);
         }
         else {
             // Transforms `a **= b` into `a = Math.pow(a, b)`
             target = left;
             value = left;
         }
-        return setTextRange(
-            factory.createAssignment(
-                target,
-                setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node)
-            ),
-            node
-        );
+        return setTextRange(factory.createAssignment(target, setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node)), node);
     }
 
     function visitExponentiationExpression(node: BinaryExpression) {
@@ -101,5 +68,4 @@ export function transformES2016(context: TransformationContext) {
         const right = visitNode(node.right, visitor, isExpression);
         return setTextRange(factory.createGlobalMethodCall("Math", "pow", [left, right]), node);
     }
-}
 }

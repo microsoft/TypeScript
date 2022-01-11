@@ -1,8 +1,10 @@
+import { NodeBuilderFlags, TypeChecker, Symbol, Node, ScriptElementKind, getCombinedLocalAndExportSymbolFlags, SymbolFlags, getDeclarationOfKind, SyntaxKind, first, isExpression, isFirstDeclarationOfSymbolParameter, isVarConst, VariableDeclaration, forEach, isLet, TransientSymbol, CheckFlags, length, isDeprecatedDeclaration, some, ModifierFlags, getNodeModifiers, ScriptElementKindModifier, arrayFrom, SymbolDisplayPart, JSDocTagInfo, SourceFile, getMeaningFromLocation, SemanticMeaning, isInExpressionContext, Type, Printer, keywordPart, Signature, PropertyAccessExpression, CallExpression, NewExpression, JsxOpeningLikeElement, TaggedTemplateExpression, isCallOrNewExpression, isCallExpressionTarget, isNewExpressionTarget, isJsxOpeningLikeElement, isTaggedTemplateExpression, isFunctionLike, isCallExpression, contains, spacePart, SignatureFlags, punctuationPart, getObjectFlags, ObjectFlags, addRange, symbolToDisplayParts, SymbolFormatFlags, lineBreakPart, TypeFormatFlags, isNameOfFunctionDeclaration, SignatureDeclaration, find, operatorPart, typeToDisplayParts, isConstTypeReference, isEnumDeclaration, isEnumConst, ModuleDeclaration, textPart, Debug, isFunctionLikeKind, signatureToDisplayParts, EnumMember, displayPart, getTextOfConstantValue, SymbolDisplayPartKind, getNameOfDeclaration, isModuleWithStringLiteralName, hasSyntacticModifier, getSourceFileOfNode, ExportAssignment, ImportEqualsDeclaration, isExternalModuleImportEqualsDeclaration, getTextOfNode, getExternalModuleImportEqualsDeclarationExpression, mapToDisplayParts, TypeParameter, EmitHint, getParseTreeNode, isIdentifier, idText, BinaryExpression, createPrinter, isArrowFunction, isFunctionExpression, isClassExpression, textOrKeywordPart, ListFormat, isFunctionBlock } from "./ts";
+import * as ts from "./ts";
 /* @internal */
-namespace ts.SymbolDisplay {
 const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
 // TODO(drosen): use contextual SemanticMeaning.
+/* @internal */
 export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
     const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
     if (result !== ScriptElementKind.unknown) {
@@ -14,17 +16,25 @@ export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location
         return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
             ScriptElementKind.localClassElement : ScriptElementKind.classElement;
     }
-    if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
-    if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
-    if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
-    if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-    if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
-    if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
-    if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
+    if (flags & SymbolFlags.Enum)
+        return ScriptElementKind.enumElement;
+    if (flags & SymbolFlags.TypeAlias)
+        return ScriptElementKind.typeElement;
+    if (flags & SymbolFlags.Interface)
+        return ScriptElementKind.interfaceElement;
+    if (flags & SymbolFlags.TypeParameter)
+        return ScriptElementKind.typeParameterElement;
+    if (flags & SymbolFlags.EnumMember)
+        return ScriptElementKind.enumMemberElement;
+    if (flags & SymbolFlags.Alias)
+        return ScriptElementKind.alias;
+    if (flags & SymbolFlags.Module)
+        return ScriptElementKind.moduleElement;
 
     return result;
 }
 
+/* @internal */
 function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
     const roots = typeChecker.getRootSymbols(symbol);
     // If this is a method from a mapped type, leave as a method so long as it still has a call signature.
@@ -57,11 +67,16 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
         }
         return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
     }
-    if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
-    if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
-    if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
-    if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
-    if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+    if (flags & SymbolFlags.Function)
+        return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
+    if (flags & SymbolFlags.GetAccessor)
+        return ScriptElementKind.memberGetAccessorElement;
+    if (flags & SymbolFlags.SetAccessor)
+        return ScriptElementKind.memberSetAccessorElement;
+    if (flags & SymbolFlags.Method)
+        return ScriptElementKind.memberFunctionElement;
+    if (flags & SymbolFlags.Constructor)
+        return ScriptElementKind.constructorImplementationElement;
 
     if (flags & SymbolFlags.Property) {
         if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).checkFlags & CheckFlags.Synthetic) {
@@ -100,6 +115,7 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
     return ScriptElementKind.unknown;
 }
 
+/* @internal */
 function getNormalizedSymbolModifiers(symbol: Symbol) {
     if (symbol.declarations && symbol.declarations.length) {
         const [declaration, ...declarations] = symbol.declarations;
@@ -115,12 +131,13 @@ function getNormalizedSymbolModifiers(symbol: Symbol) {
     return [];
 }
 
+/* @internal */
 export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): string {
     if (!symbol) {
         return ScriptElementKindModifier.none;
     }
 
-    const modifiers = new Set(getNormalizedSymbolModifiers(symbol));
+    const modifiers = new ts.Set(getNormalizedSymbolModifiers(symbol));
     if (symbol.flags & SymbolFlags.Alias) {
         const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
         if (resolvedSymbol !== symbol) {
@@ -135,6 +152,7 @@ export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): st
     return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
 }
 
+/* @internal */
 interface SymbolDisplayPartsDocumentationAndSymbolKind {
     displayParts: SymbolDisplayPart[];
     documentation: SymbolDisplayPart[];
@@ -143,8 +161,8 @@ interface SymbolDisplayPartsDocumentationAndSymbolKind {
 }
 
 // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
-export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
-    location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+/* @internal */
+export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
@@ -268,8 +286,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             // get the signature from the declaration and write it
             const functionDeclaration = location.parent as SignatureDeclaration;
             // Use function declaration to write the signatures only if the symbol corresponding to this declaration
-            const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration =>
-                declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
+            const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration => declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
             if (locationIsSymbolDeclaration) {
                 const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
@@ -366,7 +383,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         else {
             // Method/function type parameter
             const decl = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
-            if (decl === undefined) return Debug.fail();
+            if (decl === undefined)
+                return Debug.fail();
             const declaration = decl.parent;
 
             if (declaration) {
@@ -405,8 +423,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
-                displayParts.push(displayPart(getTextOfConstantValue(constantValue),
-                    typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral));
+                displayParts.push(displayPart(getTextOfConstantValue(constantValue), typeof constantValue === "number" ? SymbolDisplayPartKind.numericLiteral : SymbolDisplayPartKind.stringLiteral));
             }
         }
     }
@@ -419,18 +436,10 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
                 const resolvedNode = resolvedSymbol.declarations[0];
                 const declarationName = getNameOfDeclaration(resolvedNode);
                 if (declarationName) {
-                    const isExternalModuleDeclaration =
-                        isModuleWithStringLiteralName(resolvedNode) &&
+                    const isExternalModuleDeclaration = isModuleWithStringLiteralName(resolvedNode) &&
                         hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                     const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
-                    const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
-                        typeChecker,
-                        resolvedSymbol,
-                        getSourceFileOfNode(resolvedNode),
-                        resolvedNode,
-                        declarationName,
-                        semanticMeaning,
-                        shouldUseAliasName ? symbol : resolvedSymbol);
+                    const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, resolvedSymbol, getSourceFileOfNode(resolvedNode), resolvedNode, declarationName, semanticMeaning, shouldUseAliasName ? symbol : resolvedSymbol);
                     displayParts.push(...resolvedInfo.displayParts);
                     displayParts.push(lineBreakPart());
                     documentationFromAlias = resolvedInfo.documentation;
@@ -620,8 +629,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         if (alias && symbolToDisplay === symbol) {
             symbolToDisplay = alias;
         }
-        const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-            SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+        const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
         addRange(displayParts, fullSymbolDisplayParts);
 
         if (symbol.flags & SymbolFlags.Optional) {
@@ -686,6 +694,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
     }
 }
 
+/* @internal */
 function isLocalVariableOrFunction(symbol: Symbol) {
     if (symbol.parent) {
         return false; // This is exported symbol
@@ -712,5 +721,4 @@ function isLocalVariableOrFunction(symbol: Symbol) {
         // parent is in function block
         return true;
     });
-}
 }

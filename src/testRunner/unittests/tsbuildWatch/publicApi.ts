@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { File, projectRoot, createBaseline, createWatchedSystem, libFile, runWatchBaseline } from "../../ts.tscWatch";
+import { commandLineCallbacks, createSolutionBuilderWithWatchHost, createDiagnosticReporter, createBuilderStatusReporter, createWatchStatusReporter, createSolutionBuilderWithWatch, CustomTransformers, TransformerFactory, SourceFile, visitEachChild, Node, VisitResult, SyntaxKind, FunctionDeclaration, addSyntheticLeadingComment, VariableStatement } from "../../ts";
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
     const solution: File = {
         path: `${projectRoot}/tsconfig.json`,
@@ -42,13 +43,8 @@ export function f22() { } // trailing`
     const commandLineArgs = ["--b", "--w"];
     const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: projectRoot }));
     const { cb, getPrograms } = commandLineCallbacks(sys);
-    const buildHost = createSolutionBuilderWithWatchHost(
-        sys,
-        /*createProgram*/ undefined,
-        createDiagnosticReporter(sys, /*pretty*/ true),
-        createBuilderStatusReporter(sys, /*pretty*/ true),
-        createWatchStatusReporter(sys, /*pretty*/ true)
-    );
+    const buildHost = createSolutionBuilderWithWatchHost(sys, 
+    /*createProgram*/ undefined, createDiagnosticReporter(sys, /*pretty*/ true), createBuilderStatusReporter(sys, /*pretty*/ true), createWatchStatusReporter(sys, /*pretty*/ true));
     buildHost.afterProgramEmitAndDiagnostics = cb;
     buildHost.afterEmitBundle = cb;
     buildHost.getCustomTransformers = getCustomTransformers;
@@ -112,4 +108,3 @@ export function f22() { } // trailing`
         return { before: [before], after: [after] };
     }
 });
-}

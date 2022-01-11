@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { verifyTscWatch, File, createWatchedSystem, libFile, runQueuedTimeoutCallbacks } from "../../ts.tscWatch";
+import { dedent } from "../../Utils";
 describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
     verifyTscWatch({
         scenario: "nodenext watch emit",
@@ -29,7 +30,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
             };
             const file1: File = {
                 path: "/project/src/index.ts",
-                content: Utils.dedent`
+                content: dedent `
                         import * as Thing from "thing";
 
                         Thing.fn();`
@@ -43,16 +44,11 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         changes: [
             {
                 caption: "Modify typescript file",
-                change: sys => sys.modifyFile(
-                    "/project/src/index.ts",
-                    Utils.dedent`
+                change: sys => sys.modifyFile("/project/src/index.ts", dedent `
                             import * as Thing from "thing";
-                            Thing.fn();`,
-                    {},
-                ),
+                            Thing.fn();`, {}),
                 timeouts: runQueuedTimeoutCallbacks,
             }
         ],
     });
 });
-}

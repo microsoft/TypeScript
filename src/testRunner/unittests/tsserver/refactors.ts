@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { createServerHost, createSession, openFilesForSession, File, executeSessionRequest } from "../../ts.projectSystem";
+import { protocol } from "../../ts.server";
+import { projectSystem } from "../../ts";
 describe("unittests:: tsserver:: refactors", () => {
     it("use formatting options", () => {
         const file = {
@@ -9,8 +11,8 @@ describe("unittests:: tsserver:: refactors", () => {
         const session = createSession(host);
         openFilesForSession([file], session);
 
-        const response0 = session.executeCommandSeq<server.protocol.ConfigureRequest>({
-            command: server.protocol.CommandTypes.Configure,
+        const response0 = session.executeCommandSeq<protocol.ConfigureRequest>({
+            command: protocol.CommandTypes.Configure,
             arguments: {
                 formatOptions: {
                     indentSize: 2,
@@ -19,8 +21,8 @@ describe("unittests:: tsserver:: refactors", () => {
         }).response;
         assert.deepEqual(response0, /*expected*/ undefined);
 
-        const response1 = session.executeCommandSeq<server.protocol.GetEditsForRefactorRequest>({
-            command: server.protocol.CommandTypes.GetEditsForRefactor,
+        const response1 = session.executeCommandSeq<protocol.GetEditsForRefactorRequest>({
+            command: protocol.CommandTypes.GetEditsForRefactor,
             arguments: {
                 refactor: "Extract Symbol",
                 action: "function_scope_1",
@@ -67,8 +69,8 @@ describe("unittests:: tsserver:: refactors", () => {
         const session = createSession(createServerHost([aTs, tsconfig]));
         openFilesForSession([aTs], session);
 
-        const response1 = session.executeCommandSeq<server.protocol.GetEditsForRefactorRequest>({
-            command: server.protocol.CommandTypes.GetEditsForRefactor,
+        const response1 = session.executeCommandSeq<protocol.GetEditsForRefactorRequest>({
+            command: protocol.CommandTypes.GetEditsForRefactor,
             arguments: {
                 refactor: "Move to a new file",
                 action: "Move to a new file",
@@ -123,7 +125,7 @@ describe("unittests:: tsserver:: refactors", () => {
         const session = createSession(createServerHost([aTs, tsconfig]));
         openFilesForSession([aTs], session);
 
-        const result = executeSessionRequest<protocol.GetEditsForRefactorRequest, protocol.GetEditsForRefactorResponse>(session, protocol.CommandTypes.GetEditsForRefactor, {
+        const result = executeSessionRequest<projectSystem.protocol.GetEditsForRefactorRequest, projectSystem.protocol.GetEditsForRefactorResponse>(session, projectSystem.protocol.CommandTypes.GetEditsForRefactor, {
             file: aTs.path,
             startLine: 1,
             startOffset: 1,
@@ -132,7 +134,7 @@ describe("unittests:: tsserver:: refactors", () => {
             refactor: "Move to a new file",
             action: "Move to a new file",
         });
-        assert.deepEqual<protocol.RefactorEditInfo | undefined>(result, {
+        assert.deepEqual<projectSystem.protocol.RefactorEditInfo | undefined>(result, {
             edits: [
                 {
                     fileName: aTs.path,
@@ -152,4 +154,3 @@ describe("unittests:: tsserver:: refactors", () => {
         });
     });
 });
-}

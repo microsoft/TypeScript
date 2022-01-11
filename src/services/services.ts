@@ -1,4 +1,15 @@
-namespace ts {
+import { SyntaxKind, Node, isNodeKind, NodeFlags, ModifierFlags, TransformFlags, Symbol, JSDoc, Debug, positionIsSynthesized, SourceFile, getSourceFileOfNode, SourceFileLike, getTokenPosOfNode, find, lastOrUndefined, NodeArray, forEachChild, emptyArray, isJSDocCommentContainingNode, scanner, forEach, JSDocContainer, Push, SyntaxList, EndOfFileToken, SymbolFlags, __String, Declaration, SymbolDisplayPart, JSDocTagInfo, symbolName, TypeChecker, TransientSymbol, filter, isGetAccessor, isSetAccessor, Token, Identifier, GeneratedIdentifierFlags, TypeNode, idText, PrivateIdentifier, Type, TypeFlags, ObjectFlags, Signature, SignatureKind, IndexKind, BaseType, UnionType, IntersectionType, UnionOrIntersectionType, LiteralType, StringLiteralType, NumberLiteralType, TypeParameter, InterfaceType, getObjectFlags, IndexType, TypeReference, SignatureFlags, SignatureDeclaration, TypePredicate, isThisTypeParameter, singleElementArray, getJSDocTags, lineBreakPart, hasStaticModifier, firstDefined, getAllSuperTypeNodes, Path, IScriptSnapshot, Statement, FileReference, DiagnosticWithLocation, ScriptKind, ScriptTarget, LanguageVariant, ESMap, UnderscoreEscapedMap, ModeAwareCache, ResolvedModuleFull, ResolvedTypeReferenceDirective, StringLiteralLike, StringLiteral, CheckJsDirective, TextRange, PragmaMap, EntityName, TextChangeRange, updateSourceFile, LineAndCharacter, getLineAndCharacterOfPosition, getLineStarts, computePositionOfLineAndCharacter, createMultiMap, getNonAssignedNameOfDeclaration, isComputedPropertyName, isPropertyAccessExpression, isPropertyName, getNameFromPropertyName, FunctionLikeDeclaration, hasSyntacticModifier, VariableDeclaration, isBindingPattern, ExportDeclaration, isNamedExports, ImportDeclaration, getAssignmentDeclarationKind, BinaryExpression, AssignmentDeclarationKind, SourceMapSource, ObjectAllocator, EmitTextWriter, FormatCodeOptions, FormatCodeSettings, EditorOptions, EditorSettings, MapLike, hasProperty, map, CompilerOptions, JsxEmit, LanguageServiceHost, GetCanonicalFileName, toPath, getScriptKind, isString, createSourceFile, getSnapshotText, textSpanEnd, CancellationToken, returnFalse, noop, HostCancellationToken, tracing, OperationCanceledException, timestamp, LanguageService, DocumentRegistry, createDocumentRegistry, LanguageServiceMode, Program, localizedDiagnosticMessages, setLocalizedDiagnosticMessages, hostUsesCaseSensitiveFileNames, createGetCanonicalFileName, getSourceMapper, maybeBind, PossibleProgramFileInfo, HasInvalidatedResolution, ParsedCommandLine, ParseConfigFileHost, isProgramUptoDate, CompilerHost, getNewLineCharacter, getNewLineOrDefaultFromHost, directoryProbablyExists, CreateProgramOptions, createProgram, JsonSourceFile, parseJsonSourceFileConfigFileContent, getNormalizedAbsolutePath, getDirectoryPath, ResolvedProjectReference, Diagnostic, getEmitDeclarations, computeSuggestionDiagnostics, GetCompletionsAtPositionOptions, emptyOptions, CompletionInfo, UserPreferences, identity, Completions, CompletionEntryData, CompletionEntryDetails, QuickInfo, getTouchingPropertyName, ScriptElementKind, ScriptElementKindModifier, createTextSpanFromNode, typeToDisplayParts, getContainerNode, isNewExpression, isNamedTupleMember, isLabelName, isTagName, isConstTypeReference, isInComment, DefinitionInfo, GoToDefinition, DefinitionInfoAndBoundSpan, ImplementationLocation, ReferenceEntry, flatMap, HighlightSpanKind, DocumentHighlights, normalizePath, mapDefined, RenameLocation, getAdjustedRenameLocation, isIdentifier, isJsxOpeningElement, isJsxClosingElement, isIntrinsicJsxName, ReferencedSymbol, NavigateToItem, NavigateTo, getFileEmitOutput, SignatureHelpItemsOptions, SignatureHelpItems, SignatureHelp, TextSpan, isRightSideOfPropertyAccess, isRightSideOfQualifiedName, isNameOfModuleDeclaration, ModuleDeclaration, createTextSpanFromBounds, NavigationBarItem, NavigationBar, NavigationTree, ClassifiedSpan, SemanticClassificationFormat, ClassifiedSpan2020, Classifications, OutliningSpan, getEntries, getTouchingToken, findChildOfKind, TextChange, CodeFixAction, deduplicate, equateValues, compareValues, CombinedCodeFixScope, CombinedCodeActions, OrganizeImportsArgs, FileTextChanges, OrganizeImports, CodeActionCommand, ApplyCodeActionCommandResult, isArray, DocCommentTemplateOptions, TextInsertion, JsDoc, CharacterCodes, isInString, isInsideJsxElementOrAttribute, isInTemplateString, JsxClosingTagInfo, findPrecedingToken, isJsxText, isJsxElement, isJsxOpeningFragment, isJsxFragment, isInsideJsxElement, SortedArray, isTextWhiteSpaceLike, insertSorted, JsxElement, tagNamesAreEquivalent, JsxFragment, createTextSpanFromRange, TodoCommentDescriptor, TodoComment, stringContains, RenameInfoOptions, RenameInfo, Rename, RefactorTriggerReason, RefactorContext, InlayHintsContext, SelectionRange, SmartSelectionRange, ApplicableRefactorInfo, refactor, RefactorEditInfo, CallHierarchyItem, mapOneOrMany, CallHierarchyIncomingCall, firstOrOnly, CallHierarchyOutgoingCall, InlayHintsOptions, InlayHint, InlayHints, isStringOrNumericLiteralLike, getEscapedTextOfIdentifierOrLiteral, isPrivateIdentifier, hasJSDocNodes, NumericLiteral, isDeclarationName, isLiteralComputedPropertyDeclarationName, isObjectLiteralExpression, isJsxAttributes, ObjectLiteralElement, isObjectLiteralElement, PropertyName, ObjectLiteralExpression, JsxAttributes, first, ElementAccessExpression, directorySeparator, getDefaultLibFileName, setObjectAllocator } from "./ts";
+import { getJsDocTagsFromDeclarations, getJsDocCommentsFromDeclarations } from "./ts.JsDoc";
+import { getSupportedErrorCodes, getFixes, getAllFixes } from "./ts.codefix";
+import { getFormatContext, SmartIndenter, formatSelection, formatDocument, formatOnOpeningCurly, formatOnClosingCurly, formatOnSemicolon, formatOnEnter, getRangeOfEnclosingComment } from "./ts.formatting";
+import { getSymbolDisplayPartsDocumentationAndSymbolKind, getSymbolModifiers } from "./ts.SymbolDisplay";
+import { getImplementationsAtPosition, toContextSpan, FindReferencesUse, toRenameLocation, toReferenceEntry, Options, ToReferenceOrRenameEntry, findReferenceOrRenameEntries, findReferencedSymbols, Core } from "./ts.FindAllReferences";
+import { nodeIsEligibleForRename } from "./ts.Rename";
+import { spanInSourceFileAtLocation } from "./ts.BreakpointResolver";
+import { v2020 } from "./ts.classifier";
+import { collectElements } from "./ts.OutliningElementsCollector";
+import { resolveCallHierarchyDeclaration, createCallHierarchyItem, getIncomingCalls, getOutgoingCalls } from "./ts.CallHierarchy";
+import * as ts from "./ts";
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
@@ -360,7 +371,7 @@ class SymbolObject implements Symbol {
 
     getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
         if (this.tags === undefined) {
-            this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations, checker);
+            this.tags = getJsDocTagsFromDeclarations(this.declarations, checker);
         }
 
         return this.tags;
@@ -581,7 +592,7 @@ function hasJSDocInheritDocTag(node: Node) {
 }
 
 function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
-    let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
+    let tags = getJsDocTagsFromDeclarations([declaration], checker);
     if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
         const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
         if (inheritedTags) {
@@ -592,11 +603,11 @@ function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker)
 }
 
 function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-    if (!declarations) return emptyArray;
-
-    let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
+    if (!declarations)
+        return emptyArray;
+    let doc = getJsDocCommentsFromDeclarations(declarations, checker);
     if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
-        const seenSymbols = new Set<Symbol>();
+        const seenSymbols = new ts.Set<Symbol>();
         for (const declaration of declarations) {
             const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
                 if (!seenSymbols.has(symbol)) {
@@ -605,17 +616,20 @@ function getDocumentationComment(declarations: readonly Declaration[] | undefine
                 }
             });
             // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
-            if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
+            if (inheritedDocs)
+                doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
         }
     }
     return doc;
 }
 
 function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-    if (hasStaticModifier(declaration)) return;
+    if (hasStaticModifier(declaration))
+        return;
 
     const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
-    if (!classOrInterfaceDeclaration) return;
+    if (!classOrInterfaceDeclaration)
+        return;
 
     return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
         const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
@@ -637,7 +651,10 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public statements!: NodeArray<Statement>;
     public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
 
-    public amdDependencies!: { name: string; path: string }[];
+    public amdDependencies!: {
+        name: string;
+        path: string;
+    }[];
     public moduleName!: string;
     public referencedFiles!: FileReference[];
     public typeReferenceDirectives!: FileReference[];
@@ -953,7 +970,7 @@ export function getDefaultCompilerOptions(): CompilerOptions {
 }
 
 export function getSupportedCodeFixes() {
-    return codefix.getSupportedErrorCodes();
+    return getSupportedErrorCodes();
 }
 
 // Either it will be file name if host doesnt have file or it will be the host's file information
@@ -969,7 +986,7 @@ class HostCache {
     constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
         // script id => script index
         this.currentDirectory = host.getCurrentDirectory();
-        this.fileNameToEntry = new Map();
+        this.fileNameToEntry = new ts.Map();
 
         // Initialize the list with the root file names
         const rootFileNames = host.getScriptFileNames();
@@ -1232,11 +1249,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
     "findRenameLocations",
     "getApplicableRefactors",
 ];
-export function createLanguageService(
-    host: LanguageServiceHost,
-    documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
-    syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode,
-): LanguageService {
+export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()), syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService {
     let languageServiceMode: LanguageServiceMode;
     if (syntaxOnlyOrLanguageServiceMode === undefined) {
         languageServiceMode = LanguageServiceMode.Semantic;
@@ -1410,28 +1423,25 @@ export function createLanguageService(
         function getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
             const existing = parsedCommandLines?.get(path);
-            if (existing !== undefined) return existing || undefined;
+            if (existing !== undefined)
+                return existing || undefined;
 
             const result = host.getParsedCommandLine ?
                 host.getParsedCommandLine(fileName) :
                 getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
-            (parsedCommandLines ||= new Map()).set(path, result || false);
+            (parsedCommandLines ||= new ts.Map()).set(path, result || false);
             return result;
         }
 
         function getParsedCommandLineOfConfigFileUsingSourceFile(configFileName: string): ParsedCommandLine | undefined {
             const result = getOrCreateSourceFile(configFileName, ScriptTarget.JSON) as JsonSourceFile | undefined;
-            if (!result) return undefined;
+            if (!result)
+                return undefined;
             result.path = toPath(configFileName, currentDirectory, getCanonicalFileName);
             result.resolvedPath = result.path;
             result.originalFileName = result.fileName;
-            return parseJsonSourceFileConfigFileContent(
-                result,
-                parseConfigHost,
-                getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
-                /*optionsToExtend*/ undefined,
-                getNormalizedAbsolutePath(configFileName, currentDirectory),
-            );
+            return parseJsonSourceFileConfigFileContent(result, parseConfigHost, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), 
+            /*optionsToExtend*/ undefined, getNormalizedAbsolutePath(configFileName, currentDirectory));
         }
 
         function onReleaseParsedCommandLine(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, oldOptions: CompilerOptions) {
@@ -1560,8 +1570,7 @@ export function createLanguageService(
         if (program) {
             // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
             const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
-            forEach(program.getSourceFiles(), f =>
-                documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
+            forEach(program.getSourceFiles(), f => documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
             program = undefined!; // TODO: GH#18217
         }
         host = undefined!;
@@ -1609,37 +1618,18 @@ export function createLanguageService(
     function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions, formattingSettings?: FormatCodeSettings): CompletionInfo | undefined {
         // Convert from deprecated options names to new names
         const fullPreferences: UserPreferences = {
-            ...identity<UserPreferences>(options), // avoid excess property check
+            ...identity<UserPreferences>(options),
             includeCompletionsForModuleExports: options.includeCompletionsForModuleExports || options.includeExternalModuleExports,
             includeCompletionsWithInsertText: options.includeCompletionsWithInsertText || options.includeInsertTextCompletions,
         };
         synchronizeHostData();
-        return Completions.getCompletionsAtPosition(
-            host,
-            program,
-            log,
-            getValidSourceFile(fileName),
-            position,
-            fullPreferences,
-            options.triggerCharacter,
-            options.triggerKind,
-            cancellationToken,
-            formattingSettings && formatting.getFormatContext(formattingSettings, host));
+        return Completions.getCompletionsAtPosition(host, program, log, getValidSourceFile(fileName), position, fullPreferences, options.triggerCharacter, options.triggerKind, cancellationToken, formattingSettings && getFormatContext(formattingSettings, host));
     }
 
     function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
         synchronizeHostData();
-        return Completions.getCompletionEntryDetails(
-            program,
-            log,
-            getValidSourceFile(fileName),
-            position,
-            { name, source, data },
-            host,
-            (formattingOptions && formatting.getFormatContext(formattingOptions, host))!, // TODO: GH#18217
-            preferences,
-            cancellationToken,
-        );
+        return Completions.getCompletionEntryDetails(program, log, getValidSourceFile(fileName), position, { name, source, data }, host, (formattingOptions && getFormatContext(formattingOptions, host))!, // TODO: GH#18217
+        preferences, cancellationToken);
     }
 
     function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string, preferences: UserPreferences = emptyOptions): Symbol | undefined {
@@ -1673,12 +1663,10 @@ export function createLanguageService(
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
-            SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
-        );
+        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo));
         return {
             kind: symbolKind,
-            kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
+            kindModifiers: getSymbolModifiers(typeChecker, symbol),
             textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
             displayParts,
             documentation,
@@ -1734,22 +1722,19 @@ export function createLanguageService(
 
     function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined {
         synchronizeHostData();
-        return FindAllReferences.getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+        return getImplementationsAtPosition(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
     }
 
     /// References and Occurrences
     function getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined {
-        return flatMap(
-            getDocumentHighlights(fileName, position, [fileName]),
-            entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
+        return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
                 fileName: entry.fileName,
                 textSpan: highlightSpan.textSpan,
                 isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
                 isDefinition: false,
                 ...highlightSpan.isInString && { isInString: true },
                 ...highlightSpan.contextSpan && { contextSpan: highlightSpan.contextSpan }
-            }))
-        );
+        })));
     }
 
     function getDocumentHighlights(fileName: string, position: number, filesToSearch: readonly string[]): DocumentHighlights[] | undefined {
@@ -1765,7 +1750,8 @@ export function createLanguageService(
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
-        if (!Rename.nodeIsEligibleForRename(node)) return undefined;
+        if (!nodeIsEligibleForRename(node))
+            return undefined;
         if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
             const { openingElement, closingElement } = node.parent.parent;
             return [openingElement, closingElement].map((node): RenameLocation => {
@@ -1773,41 +1759,40 @@ export function createLanguageService(
                 return {
                     fileName: sourceFile.fileName,
                     textSpan,
-                    ...FindAllReferences.toContextSpan(textSpan, sourceFile, node.parent)
+                    ...toContextSpan(textSpan, sourceFile, node.parent)
                 };
             });
         }
         else {
-            return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindAllReferences.FindReferencesUse.Rename },
-                (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false));
+            return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, use: FindReferencesUse.Rename }, (entry, originalNode, checker) => toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false));
         }
     }
 
     function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
         synchronizeHostData();
-        return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, (entry, node, checker) => FindAllReferences.toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
+        return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindReferencesUse.References }, (entry, node, checker) => toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
     }
 
-    function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
+    function getReferencesWorker<T>(node: Node, position: number, options: Options, cb: ToReferenceOrRenameEntry<T>): T[] | undefined {
         synchronizeHostData();
 
         // Exclude default library when renaming as commonly user don't want to change that file.
-        const sourceFiles = options && options.use === FindAllReferences.FindReferencesUse.Rename
+        const sourceFiles = options && options.use === FindReferencesUse.Rename
             ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
             : program.getSourceFiles();
 
-        return FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, sourceFiles, node, position, options, cb);
+        return findReferenceOrRenameEntries(program, cancellationToken, sourceFiles, node, position, options, cb);
     }
 
     function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
         synchronizeHostData();
-        return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+        return findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
     }
 
     function getFileReferences(fileName: string): ReferenceEntry[] {
         synchronizeHostData();
         const moduleSymbol = program.getSourceFile(fileName)?.symbol;
-        return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r, moduleSymbol));
+        return Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => toReferenceEntry(r, moduleSymbol));
     }
 
     function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
@@ -1902,7 +1887,7 @@ export function createLanguageService(
         // doesn't use compiler - no need to synchronize with host
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-        return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
+        return spanInSourceFileAtLocation(sourceFile, position);
     }
 
     function getNavigationBarItems(fileName: string): NavigationBarItem[] {
@@ -1919,7 +1904,7 @@ export function createLanguageService(
 
         const responseFormat = format || SemanticClassificationFormat.Original;
         if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
-            return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            return v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
         else {
             return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
@@ -1934,7 +1919,7 @@ export function createLanguageService(
             return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
         else {
-            return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            return v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
         }
     }
 
@@ -1951,10 +1936,10 @@ export function createLanguageService(
     function getOutliningSpans(fileName: string): OutliningSpan[] {
         // doesn't use compiler - no need to synchronize with host
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-        return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
+        return collectElements(sourceFile, cancellationToken);
     }
 
-    const braceMatching = new Map(getEntries({
+    const braceMatching = new ts.Map(getEntries({
         [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
         [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
         [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
@@ -1979,7 +1964,7 @@ export function createLanguageService(
 
         start = timestamp();
 
-        const result = formatting.SmartIndenter.getIndentation(position, sourceFile, settings);
+        const result = SmartIndenter.getIndentation(position, sourceFile, settings);
         log("getIndentationAtPosition: computeIndentation  : " + (timestamp() - start));
 
         return result;
@@ -1987,27 +1972,27 @@ export function createLanguageService(
 
     function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-        return formatting.formatSelection(start, end, sourceFile, formatting.getFormatContext(toEditorSettings(options), host));
+        return formatSelection(start, end, sourceFile, getFormatContext(toEditorSettings(options), host));
     }
 
     function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
-        return formatting.formatDocument(syntaxTreeCache.getCurrentSourceFile(fileName), formatting.getFormatContext(toEditorSettings(options), host));
+        return formatDocument(syntaxTreeCache.getCurrentSourceFile(fileName), getFormatContext(toEditorSettings(options), host));
     }
 
     function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-        const formatContext = formatting.getFormatContext(toEditorSettings(options), host);
+        const formatContext = getFormatContext(toEditorSettings(options), host);
 
         if (!isInComment(sourceFile, position)) {
             switch (key) {
                 case "{":
-                    return formatting.formatOnOpeningCurly(position, sourceFile, formatContext);
+                    return formatOnOpeningCurly(position, sourceFile, formatContext);
                 case "}":
-                    return formatting.formatOnClosingCurly(position, sourceFile, formatContext);
+                    return formatOnClosingCurly(position, sourceFile, formatContext);
                 case ";":
-                    return formatting.formatOnSemicolon(position, sourceFile, formatContext);
+                    return formatOnSemicolon(position, sourceFile, formatContext);
                 case "\n":
-                    return formatting.formatOnEnter(position, sourceFile, formatContext);
+                    return formatOnEnter(position, sourceFile, formatContext);
             }
         }
 
@@ -2018,11 +2003,11 @@ export function createLanguageService(
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
         const span = createTextSpanFromBounds(start, end);
-        const formatContext = formatting.getFormatContext(formatOptions, host);
+        const formatContext = getFormatContext(formatOptions, host);
 
         return flatMap(deduplicate<number>(errorCodes, equateValues, compareValues), errorCode => {
             cancellationToken.throwIfCancellationRequested();
-            return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
+            return getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
         });
     }
 
@@ -2030,22 +2015,21 @@ export function createLanguageService(
         synchronizeHostData();
         Debug.assert(scope.type === "file");
         const sourceFile = getValidSourceFile(scope.fileName);
-        const formatContext = formatting.getFormatContext(formatOptions, host);
-
-        return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
+        const formatContext = getFormatContext(formatOptions, host);
+        return getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
     }
 
     function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
         synchronizeHostData();
         Debug.assert(args.type === "file");
         const sourceFile = getValidSourceFile(args.fileName);
-        const formatContext = formatting.getFormatContext(formatOptions, host);
+        const formatContext = getFormatContext(formatOptions, host);
 
         return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
     }
 
     function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
-        return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
+        return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, getFormatContext(formatOptions, host), preferences, sourceMapper);
     }
 
     function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
@@ -2109,7 +2093,8 @@ export function createLanguageService(
     function getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
         const token = findPrecedingToken(position, sourceFile);
-        if (!token) return undefined;
+        if (!token)
+            return undefined;
         const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
             : isJsxText(token) && isJsxElement(token.parent) ? token.parent : undefined;
         if (element && isUnclosedTag(element)) {
@@ -2137,7 +2122,7 @@ export function createLanguageService(
 
         let isCommenting = insertComment || false;
         let leftMostPosition = Number.MAX_VALUE;
-        const lineTextStarts = new Map<string, number>();
+        const lineTextStarts = new ts.Map<string, number>();
         const firstNonWhitespaceCharacterRegex = new RegExp(/\S/);
         const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine]);
         const openComment = isJsx ? "{/*" : "//";
@@ -2368,7 +2353,7 @@ export function createLanguageService(
 
     function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {
         const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-        const range = formatting.getRangeOfEnclosingComment(sourceFile, position);
+        const range = getRangeOfEnclosingComment(sourceFile, position);
         return range && (!onlyMultiLine || range.kind === SyntaxKind.MultiLineCommentTrivia) ? createTextSpanFromRange(range) : undefined;
     }
 
@@ -2431,7 +2416,8 @@ export function createLanguageService(
                         descriptor = descriptors[i];
                     }
                 }
-                if (descriptor === undefined) return Debug.fail();
+                if (descriptor === undefined)
+                    return Debug.fail();
 
                 // We don't want to match something like 'TODOBY', so we make sure a non
                 // letter/digit follows the match.
@@ -2532,7 +2518,7 @@ export function createLanguageService(
             endPosition,
             program: getProgram()!,
             host,
-            formatContext: formatting.getFormatContext(formatOptions!, host), // TODO: GH#18217
+            formatContext: getFormatContext(formatOptions!, host),
             cancellationToken,
             preferences,
             triggerReason,
@@ -2561,14 +2547,7 @@ export function createLanguageService(
         return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
     }
 
-    function getEditsForRefactor(
-        fileName: string,
-        formatOptions: FormatCodeSettings,
-        positionOrRange: number | TextRange,
-        refactorName: string,
-        actionName: string,
-        preferences: UserPreferences = emptyOptions,
-    ): RefactorEditInfo | undefined {
+    function getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences = emptyOptions): RefactorEditInfo | undefined {
         synchronizeHostData();
         const file = getValidSourceFile(fileName);
         return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
@@ -2587,22 +2566,22 @@ export function createLanguageService(
 
     function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
         synchronizeHostData();
-        const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
-        return declarations && mapOneOrMany(declarations, declaration => CallHierarchy.createCallHierarchyItem(program, declaration));
+        const declarations = resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
+        return declarations && mapOneOrMany(declarations, declaration => createCallHierarchyItem(program, declaration));
     }
 
     function provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
-        return declaration ? CallHierarchy.getIncomingCalls(program, declaration, cancellationToken) : [];
+        const declaration = firstOrOnly(resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+        return declaration ? getIncomingCalls(program, declaration, cancellationToken) : [];
     }
 
     function provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[] {
         synchronizeHostData();
         const sourceFile = getValidSourceFile(fileName);
-        const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
-        return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+        const declaration = firstOrOnly(resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+        return declaration ? getOutgoingCalls(program, declaration) : [];
     }
 
     function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
@@ -2683,18 +2662,14 @@ export function createLanguageService(
         case LanguageServiceMode.Semantic:
             break;
         case LanguageServiceMode.PartialSemantic:
-            invalidOperationsInPartialSemanticMode.forEach(key =>
-                ls[key] = () => {
+            invalidOperationsInPartialSemanticMode.forEach(key => ls[key] = () => {
                     throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.PartialSemantic`);
-                }
-            );
+            });
             break;
         case LanguageServiceMode.Syntactic:
-            invalidOperationsInSyntacticMode.forEach(key =>
-                ls[key] = () => {
+            invalidOperationsInSyntacticMode.forEach(key => ls[key] = () => {
                     throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.Syntactic`);
-                }
-            );
+            });
             break;
         default:
             Debug.assertNever(languageServiceMode);
@@ -2713,7 +2688,7 @@ export function getNameTable(sourceFile: SourceFile): UnderscoreEscapedMap<numbe
 }
 
 function initializeNameTable(sourceFile: SourceFile): void {
-    const nameTable = sourceFile.nameTable = new Map();
+    const nameTable = sourceFile.nameTable = new ts.Map();
     sourceFile.forEachChild(function walk(node) {
         if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
             const text = getEscapedTextOfIdentifierOrLiteral(node);
@@ -2773,7 +2748,10 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
 }
 
 /* @internal */
-export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
+export type ObjectLiteralElementWithName = ObjectLiteralElement & {
+    name: PropertyName;
+    parent: ObjectLiteralExpression | JsxAttributes;
+};
 
 function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
     const object = getContainingObjectLiteralElement(node);
@@ -2791,7 +2769,8 @@ function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symb
 /* @internal */
 export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
     const name = getNameFromPropertyName(node.name);
-    if (!name) return emptyArray;
+    if (!name)
+        return emptyArray;
     if (!contextualType.isUnion()) {
         const symbol = contextualType.getProperty(name);
         return symbol ? [symbol] : emptyArray;
@@ -2800,7 +2779,8 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
     const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
     if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
         const symbol = contextualType.getProperty(name);
-        if (symbol) return [symbol];
+        if (symbol)
+            return [symbol];
     }
     if (discriminatedPropertySymbols.length === 0) {
         // Bad discriminant -- do again without discriminating
@@ -2834,4 +2814,3 @@ export function getDefaultLibFilePath(options: CompilerOptions): string {
 }
 
 setObjectAllocator(getServicesObjectAllocator());
-}

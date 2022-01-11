@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createProjectService, libFile, checkNumberOfInferredProjects } from "../../ts.projectSystem";
+import { ScriptTarget } from "../../ts";
 describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
     it("should be set to 2 if the project has js root files", () => {
         const file1: File = {
@@ -52,4 +53,3 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
         assert.isUndefined(project.getCompilationSettings().maxNodeModuleJsDepth);
     });
 });
-}

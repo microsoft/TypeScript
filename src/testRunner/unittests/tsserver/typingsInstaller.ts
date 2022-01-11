@@ -1,6 +1,10 @@
-namespace ts.projectSystem {
-import validatePackageName = JsTyping.validatePackageName;
-import NameValidationResult = JsTyping.NameValidationResult;
+import { ESMap, MapLike, emptyArray, TypeAcquisition, SortedReadonlyArray, ModuleResolutionKind, versionMajorMinor, combinePaths, TestFSWithWatch, getDirectoryPath, Path, emptyMap, getEntries, JsTyping, Version, arrayIterator, ModuleKind, ScriptTarget, JsxEmit, ScriptKind } from "../../ts";
+import { TestTypingsInstaller, TI, TestServerHost, File, createServerHost, createTypesRegistry, createProjectService, checkProjectActualFiles, configuredProjectAt, checkNumberOfProjects, libFile, checkWatchedFilesDetailed, checkWatchedDirectories, checkWatchedDirectoriesDetailed, toExternalFile, customTypesMap, checkWatchedFiles, getConfigFilesToWatch, createSession } from "../../ts.projectSystem";
+import { ServerHost, Project, protocol, SetTypings, InvalidateCachedTypings, BeginInstallTypes, EndInstallTypes, EventBeginInstallTypes, EventEndInstallTypes, updateProjectIfDirty } from "../../ts.server";
+import { projects } from "../../ts.tscWatch";
+import * as ts from "../../ts";
+import validatePackageName = ts.JsTyping.validatePackageName;
+import NameValidationResult = ts.JsTyping.NameValidationResult;
 
 interface InstallerParams {
     globalTypingsCacheLocation?: string;
@@ -9,13 +13,8 @@ interface InstallerParams {
 }
 
 class Installer extends TestTypingsInstaller {
-    constructor(host: server.ServerHost, p?: InstallerParams, log?: TI.Log) {
-        super(
-            (p && p.globalTypingsCacheLocation) || "/a/data",
-            (p && p.throttleLimit) || 5,
-            host,
-            (p && p.typesRegistry),
-            log);
+    constructor(host: ServerHost, p?: InstallerParams, log?: TI.Log) {
+        super((p && p.globalTypingsCacheLocation) || "/a/data", (p && p.throttleLimit) || 5, host, (p && p.typesRegistry), log);
     }
 
     installAll(expectedCount: number) {
@@ -33,7 +32,10 @@ function executeCommand(self: Installer, host: TestServerHost, installedTypings:
     });
 }
 
-function trackingLogger(): { log(message: string): void, finish(): string[] } {
+function trackingLogger(): {
+    log(message: string): void;
+    finish(): string[];
+} {
     const logs: string[] = [];
     return {
         log(message) {
@@ -45,7 +47,7 @@ function trackingLogger(): { log(message: string): void, finish(): string[] } {
     };
 }
 
-import typingsName = TI.typingsName;
+import typingsName = ts.projectSystem.TI.typingsName;
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {
@@ -137,7 +139,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const p = configuredProjectAt(projectService, 0);
         checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
-        const expectedWatchedFiles = new Map<string, number>();
+        const expectedWatchedFiles = new ts.Map<string, number>();
         expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
         expectedWatchedFiles.set(libFile.path, 1); // tsserver
         expectedWatchedFiles.set(packageJson.path, 1); // typing installer
@@ -145,7 +147,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
         checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
-        const expectedWatchedDirectoriesRecursive = new Map<string, number>();
+        const expectedWatchedDirectoriesRecursive = new ts.Map<string, number>();
         expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
         expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
         expectedWatchedDirectoriesRecursive.set("/a/b/node_modules", 1); // TypingInstaller
@@ -221,7 +223,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
             }
-            enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+            enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
             installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -354,7 +356,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+            enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                 enqueueIsCalled = true;
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
@@ -453,7 +455,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+            enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
             installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -493,7 +495,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
             }
-            enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+            enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
             installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -540,7 +542,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             constructor() {
                 super(host, { typesRegistry: createTypesRegistry("jquery") });
             }
-            enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+            enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                 super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
             installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -782,7 +784,9 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 super(host, { throttleLimit: 1, typesRegistry: createTypesRegistry("commander", "jquery", "lodash", "cordova", "gulp", "grunt") });
             }
             installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
-                let typingFiles: (File & { typings: string })[] = [];
+                let typingFiles: (File & {
+                    typings: string;
+                })[] = [];
                 if (args.indexOf(typingsName("commander")) >= 0) {
                     typingFiles = [commander, jquery, lodash, cordova];
                 }
@@ -1013,7 +1017,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const p = configuredProjectAt(projectService, 0);
         checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
-        const watchedFilesExpected = new Map<string, number>();
+        const watchedFilesExpected = new ts.Map<string, number>();
         watchedFilesExpected.set(jsconfig.path, 1); // project files
         watchedFilesExpected.set(libFile.path, 1); // project files
         watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
@@ -1170,13 +1174,13 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
 
     it("should redo resolution that resolved to '.js' file after typings are installed", () => {
         const file: TestFSWithWatch.File = {
-            path: `${tscWatch.projects}/a/b/app.js`,
+            path: `${projects}/a/b/app.js`,
             content: `
                 import * as commander from "commander";`
         };
-        const cachePath = `${tscWatch.projects}/a/cache`;
+        const cachePath = `${projects}/a/cache`;
         const commanderJS: TestFSWithWatch.File = {
-            path: `${tscWatch.projects}/node_modules/commander/index.js`,
+            path: `${projects}/node_modules/commander/index.js`,
             content: "module.exports = 0",
         };
 
@@ -1200,12 +1204,12 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         checkWatchedDirectories(host, [], /*recursive*/ false);
         // Does not include cachePath because that is handled by typingsInstaller
         checkWatchedDirectories(host, [
-            `${tscWatch.projects}/node_modules`,
-            `${tscWatch.projects}/a/node_modules`,
-            `${tscWatch.projects}/a/b/node_modules`,
-            `${tscWatch.projects}/a/node_modules/@types`,
-            `${tscWatch.projects}/a/b/node_modules/@types`,
-            `${tscWatch.projects}/a/b/bower_components`
+            `${projects}/node_modules`,
+            `${projects}/a/node_modules`,
+            `${projects}/a/b/node_modules`,
+            `${projects}/a/node_modules/@types`,
+            `${projects}/a/b/node_modules/@types`,
+            `${projects}/a/b/bower_components`
         ], /*recursive*/ true);
 
         service.checkNumberOfProjects({ inferredProjects: 1 });
@@ -1249,10 +1253,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const proj = projectService.inferredProjects[0];
         proj.updateGraph();
 
-        assert.deepEqual(
-            proj.cachedUnresolvedImportsPerFile.get(f1.path as Path),
-            ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
-        );
+        assert.deepEqual(proj.cachedUnresolvedImportsPerFile.get(f1.path as Path), ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]);
 
         installer.installAll(/*expectedCount*/ 1);
     });
@@ -1267,10 +1268,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
                 import * as cmd from "commander
                 `
         };
-        const openRequest: server.protocol.OpenRequest = {
+        const openRequest: protocol.OpenRequest = {
             seq: 1,
             type: "request",
-            command: server.protocol.CommandTypes.Open,
+            command: protocol.CommandTypes.Open,
             arguments: {
                 file: f.path,
                 fileContent: f.content
@@ -1283,10 +1284,10 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const version1 = proj.lastCachedUnresolvedImportsList;
 
         // make a change that should not affect the structure of the program
-        const changeRequest: server.protocol.ChangeRequest = {
+        const changeRequest: protocol.ChangeRequest = {
             seq: 2,
             type: "request",
-            command: server.protocol.CommandTypes.Change,
+            command: protocol.CommandTypes.Change,
             arguments: {
                 file: f.path,
                 insertString: "\nlet x = 1;",
@@ -1536,7 +1537,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
 
-        const safeList = new Map(getEntries({ jquery: "jquery", chroma: "chroma-js" }));
+        const safeList = new ts.Map(getEntries({ jquery: "jquery", chroma: "chroma-js" }));
 
         const host = createServerHost([app, jquery, chroma]);
         const logger = trackingLogger();
@@ -1556,7 +1557,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
         const host = createServerHost([f]);
-        const cache = new Map<string, JsTyping.CachedTyping>();
+        const cache = new ts.Map<string, JsTyping.CachedTyping>();
 
         for (const name of JsTyping.nodeCoreModuleList) {
             const logger = trackingLogger();
@@ -1579,7 +1580,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
         const host = createServerHost([f, node]);
-        const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
+        const cache = new ts.Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
         const registry = createTypesRegistry("node");
         const logger = trackingLogger();
         const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry);
@@ -1601,7 +1602,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
         const host = createServerHost([f, node]);
-        const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
+        const cache = new ts.Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
         const logger = trackingLogger();
         const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(f.path as Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
         assert.deepEqual(logger.finish(), [
@@ -1626,7 +1627,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: JSON.stringify({ name: "b" }),
         };
         const host = createServerHost([app, a, b]);
-        const cache = new Map<string, JsTyping.CachedTyping>();
+        const cache = new ts.Map<string, JsTyping.CachedTyping>();
         const logger = trackingLogger();
         const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
         assert.deepEqual(logger.finish(), [
@@ -1637,7 +1638,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         ]);
         assert.deepEqual(result, {
             cachedTypingPaths: [],
-            newTypingNames: ["a"], // But not "b"
+            newTypingNames: ["a"],
             filesToWatch: ["/bower_components", "/node_modules"],
         });
     });
@@ -1652,7 +1653,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: JSON.stringify({ name: "@a/b" }),
         };
         const host = createServerHost([app, a]);
-        const cache = new Map<string, JsTyping.CachedTyping>();
+        const cache = new ts.Map<string, JsTyping.CachedTyping>();
         const logger = trackingLogger();
         const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
         assert.deepEqual(logger.finish(), [
@@ -1682,7 +1683,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "export let y: number"
         };
         const host = createServerHost([app]);
-        const cache = new Map(getEntries<JsTyping.CachedTyping>({
+        const cache = new ts.Map(getEntries<JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new Version("1.3.0") },
             commander: { typingLocation: commander.path, version: new Version("1.0.0") }
         }));
@@ -1708,7 +1709,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "export let y: number"
         };
         const host = createServerHost([app]);
-        const cache = new Map(getEntries<JsTyping.CachedTyping>({
+        const cache = new ts.Map(getEntries<JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new Version("1.0.0") }
         }));
         const registry = createTypesRegistry("node");
@@ -1739,7 +1740,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "export let y: number"
         };
         const host = createServerHost([app]);
-        const cache = new Map(getEntries<JsTyping.CachedTyping>({
+        const cache = new ts.Map(getEntries<JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new Version("1.3.0-next.0") },
             commander: { typingLocation: commander.path, version: new Version("1.3.0-next.0") }
         }));
@@ -1782,11 +1783,11 @@ describe("unittests:: tsserver:: typingsInstaller:: telemetry events", () => {
                 const typingFiles = [commander];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
             }
-            sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
-                if (response.kind === server.EventBeginInstallTypes) {
+            sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+                if (response.kind === EventBeginInstallTypes) {
                     return;
                 }
-                if (response.kind === server.EventEndInstallTypes) {
+                if (response.kind === EventEndInstallTypes) {
                     assert.deepEqual(response.packagesToInstall, [typingsName("commander")]);
                     seenTelemetryEvent = true;
                     return;
@@ -1832,8 +1833,8 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             content: "export let x: number"
         };
         const host = createServerHost([f1, packageFile, packageLockFile]);
-        let beginEvent!: server.BeginInstallTypes;
-        let endEvent!: server.EndInstallTypes;
+        let beginEvent!: BeginInstallTypes;
+        let endEvent!: EndInstallTypes;
         const installer = new (class extends Installer {
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1843,12 +1844,12 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
                 const typingFiles = [commander];
                 executeCommand(this, host, installedTypings, typingFiles, cb);
             }
-            sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
-                if (response.kind === server.EventBeginInstallTypes) {
+            sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+                if (response.kind === EventBeginInstallTypes) {
                     beginEvent = response;
                     return;
                 }
-                if (response.kind === server.EventEndInstallTypes) {
+                if (response.kind === EventEndInstallTypes) {
                     endEvent = response;
                     return;
                 }
@@ -1880,8 +1881,8 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
         };
         const cachePath = "/a/cache/";
         const host = createServerHost([f1, packageFile]);
-        let beginEvent: server.BeginInstallTypes | undefined;
-        let endEvent: server.EndInstallTypes | undefined;
+        let beginEvent: BeginInstallTypes | undefined;
+        let endEvent: EndInstallTypes | undefined;
         const installer: Installer = new (class extends Installer {
             constructor() {
                 super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
@@ -1889,12 +1890,12 @@ describe("unittests:: tsserver:: typingsInstaller:: progress notifications", () 
             installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                 executeCommand(this, host, "", [], cb);
             }
-            sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {
-                if (response.kind === server.EventBeginInstallTypes) {
+            sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+                if (response.kind === EventBeginInstallTypes) {
                     beginEvent = response;
                     return;
                 }
-                if (response.kind === server.EventEndInstallTypes) {
+                if (response.kind === EventEndInstallTypes) {
                     endEvent = response;
                     return;
                 }
@@ -1947,8 +1948,8 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
     const globalTypingsCacheLocation = "/tmp";
     const appPath = "/a/b/app.js" as Path;
     const foooPath = "/a/b/node_modules/fooo/index.d.ts";
-    function verifyResolvedModuleOfFooo(project: server.Project) {
-        server.updateProjectIfDirty(project);
+    function verifyResolvedModuleOfFooo(project: Project) {
+        updateProjectIfDirty(project);
         const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo", /*mode*/ undefined)!;
         assert.equal(foooResolution.resolvedFileName, foooPath);
         return foooResolution;
@@ -2068,8 +2069,7 @@ declare module "stream" {
         host.checkTimeoutQueueLengthAndRun(2);
         checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
         projectService.applyChangesInOpenFiles(
-            /*openFiles*/ undefined,
-            arrayIterator([{
+        /*openFiles*/ undefined, arrayIterator([{
                 fileName: file.path,
                 changes: arrayIterator([{
                     span: {
@@ -2079,8 +2079,7 @@ declare module "stream" {
                     newText: " "
                 }])
             }]),
-            /*closedFiles*/ undefined
-        );
+        /*closedFiles*/ undefined);
         // Below timeout Updates the typings to empty array because of "s tream" as unsresolved import
         // and schedules the update graph because of this.
         host.checkTimeoutQueueLengthAndRun(2);
@@ -2139,15 +2138,13 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         const typingsCachePackageJson: File = {
             path: `${typingsCache}/package.json`,
             content: JSON.stringify({
-                devDependencies: {
-                },
+                devDependencies: {},
             })
         };
         const typingsCachePackageLockJson: File = {
             path: `${typingsCache}/package-lock.json`,
             content: JSON.stringify({
-                dependencies: {
-                },
+                dependencies: {},
             })
         };
 
@@ -2181,4 +2178,3 @@ describe("unittests:: tsserver:: typingsInstaller:: tsserver:: with inferred Pro
         checkProjectActualFiles(project, [file.path]);
     });
 });
-}

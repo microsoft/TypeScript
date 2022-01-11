@@ -1,5 +1,7 @@
+import { FormatDiagnosticsHost, sys, createGetCanonicalFileName, System, DiagnosticReporter, formatDiagnostic, Diagnostic, formatDiagnosticsWithColorAndContext, CompilerOptions, contains, Diagnostics, WatchStatusReporter, formatColorAndReset, ForegroundColorEscapeSequences, flattenDiagnosticMessageText, ExtendedConfigCacheEntry, WatchOptions, ParseConfigFileHost, getParsedCommandLineOfConfigFile, countWhere, DiagnosticCategory, ReportFileInError, filter, find, getLineAndCharacterOfPosition, HasCurrentDirectory, createCompilerDiagnostic, getRelativePathFromDirectory, Program, BuilderProgram, forEach, convertToRelativePath, SourceFile, DiagnosticMessageChain, chainDiagnosticMessages, getDirectoryPath, getNormalizedAbsolutePath, fileExtensionIs, Extension, endsWith, getPatternFromSpec, getRegexFromPattern, FileIncludeReason, isReferencedFile, getReferencedFileLocation, isReferenceFileLocation, DiagnosticMessage, Debug, FileIncludeKind, externalHelpersModuleNameText, packageIdToString, outFile, forEachEntry, targetOptionDeclaration, getEmitScriptTarget, isString, ReportEmitErrorSummary, WriteFileCallback, CancellationToken, CustomTransformers, addRange, emptyArray, sortAndDeduplicateDiagnostics, ExitStatus, FileWatcher, noop, WatchHost, maybeBind, WatchFactoryHost, WatchLogLevel, getWatchFactory, ProgramHost, DirectoryStructureHost, CompilerHost, memoize, createSourceFile, getNewLineCharacter, writeFileEnsuringDirectories, generateDjb2Hash, EmitAndSemanticDiagnosticsBuilderProgram, CreateProgram, normalizePath, combinePaths, getDefaultLibFileName, createEmitAndSemanticDiagnosticsBuilderProgram, WatchCompilerHost, copyProperties, FileExtensionInfo, WatchCompilerHostOfConfigFile, ProjectReference, WatchCompilerHostOfFilesAndCompilerOptions, createIncrementalCompilerHost, createIncrementalProgram } from "./ts";
+import { mark, measure } from "./ts.performance";
+import * as ts from "./ts";
 /*@internal*/
-namespace ts {
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),
     getNewLine: () => sys.newLine,
@@ -9,6 +11,7 @@ const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
 /**
  * Create a function that reports error by writing to the system and handles the formatting of the diagnostic
  */
+/* @internal */
 export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
     const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
         getCurrentDirectory: () => system.getCurrentDirectory(),
@@ -30,6 +33,7 @@ export function createDiagnosticReporter(system: System, pretty?: boolean): Diag
 /**
  * @returns Whether the screen was cleared.
  */
+/* @internal */
 function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diagnostic, options: CompilerOptions): boolean {
     if (system.clearScreen &&
         !options.preserveWatchOutput &&
@@ -43,11 +47,13 @@ function clearScreenIfNotWatchingForFileChanges(system: System, diagnostic: Diag
     return false;
 }
 
+/* @internal */
 export const screenStartingMessageCodes: number[] = [
     Diagnostics.Starting_compilation_in_watch_mode.code,
     Diagnostics.File_change_detected_Starting_incremental_compilation.code,
 ];
 
+/* @internal */
 function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: string): string {
     return contains(screenStartingMessageCodes, diagnostic.code)
         ? newLine + newLine
@@ -57,6 +63,7 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
 /**
  * Get locale specific time based on whether we are in test mode
  */
+/* @internal */
 export function getLocaleTimeString(system: System) {
     return !system.now ?
         new Date().toLocaleTimeString() :
@@ -66,6 +73,7 @@ export function getLocaleTimeString(system: System) {
 /**
  * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
  */
+/* @internal */
 export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
     return pretty ?
         (diagnostic, newLine, options) => {
@@ -89,7 +97,8 @@ export function createWatchStatusReporter(system: System, pretty?: boolean): Wat
 }
 
 /** Parses config file using System interface */
-export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
+/* @internal */
+export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: ts.Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
     const host: ParseConfigFileHost = system as any;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
     const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
@@ -97,22 +106,21 @@ export function parseConfigFileWithSystem(configFileName: string, optionsToExten
     return result;
 }
 
+/* @internal */
 export function getErrorCountForSummary(diagnostics: readonly Diagnostic[]) {
     return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
 }
 
+/* @internal */
 export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (ReportFileInError | undefined)[] {
-    const filesInError =
-        filter(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error)
-        .map(
-            errorDiagnostic => {
-                if(errorDiagnostic.file === undefined) return;
+    const filesInError = filter(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error)
+        .map(errorDiagnostic => {
+        if (errorDiagnostic.file === undefined)
+            return;
                 return `${errorDiagnostic.file.fileName}`;
         });
     return filesInError.map((fileName: string) => {
-        const diagnosticForFileName = find(diagnostics, diagnostic =>
-            diagnostic.file !== undefined && diagnostic.file.fileName === fileName
-        );
+        const diagnosticForFileName = find(diagnostics, diagnostic => diagnostic.file !== undefined && diagnostic.file.fileName === fileName);
 
         if(diagnosticForFileName !== undefined) {
             const { line } = getLineAndCharacterOfPosition(diagnosticForFileName.file!, diagnosticForFileName.start!);
@@ -124,43 +132,37 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
     });
 }
 
+/* @internal */
 export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
     return errorCount === 1 ?
         Diagnostics.Found_1_error_Watching_for_file_changes :
         Diagnostics.Found_0_errors_Watching_for_file_changes;
 }
 
-export function getErrorSummaryText(
-    errorCount: number,
-    filesInError: readonly (ReportFileInError | undefined)[],
-    newLine: string,
-    host: HasCurrentDirectory
-) {
-    if (errorCount === 0) return "";
+/* @internal */
+export function getErrorSummaryText(errorCount: number, filesInError: readonly (ReportFileInError | undefined)[], newLine: string, host: HasCurrentDirectory) {
+    if (errorCount === 0)
+        return "";
     const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
     const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
         .filter((value, index, self) => self.indexOf(value) === index);
     const d = errorCount === 1 ?
-        createCompilerDiagnostic(
-            filesInError[0] !== undefined ?
+        createCompilerDiagnostic(filesInError[0] !== undefined ?
                 Diagnostics.Found_1_error_in_1 :
-                Diagnostics.Found_1_error,
-            errorCount,
-            distinctFileNamesWithLines[0]) :
-        createCompilerDiagnostic(
-            distinctFileNamesWithLines.length === 0 ?
+            Diagnostics.Found_1_error, errorCount, distinctFileNamesWithLines[0]) :
+        createCompilerDiagnostic(distinctFileNamesWithLines.length === 0 ?
                 Diagnostics.Found_0_errors :
                 distinctFileNamesWithLines.length === 1 ?
                     Diagnostics.Found_0_errors_in_1_file :
-                    Diagnostics.Found_0_errors_in_1_files,
-            errorCount,
-            distinctFileNamesWithLines.length);
+                Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length);
     return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : ""}`;
 }
 
+/* @internal */
 function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[], host: HasCurrentDirectory) {
     const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
-    if (distinctFiles.length === 0) return "";
+    if (distinctFiles.length === 0)
+        return "";
 
     const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1;
     const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
@@ -187,10 +189,12 @@ function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined
     return tabularData;
 }
 
+/* @internal */
 export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
     return !!(program as BuilderProgram).getState;
 }
 
+/* @internal */
 export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
     const options = program.getCompilerOptions();
     if (options.explainFiles) {
@@ -203,6 +207,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T, write:
     }
 }
 
+/* @internal */
 export function explainFiles(program: Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
     const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
@@ -214,28 +219,25 @@ export function explainFiles(program: Program, write: (s: string) => void) {
     }
 }
 
+/* @internal */
 export function explainIfFileIsRedirect(file: SourceFile, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain[] | undefined {
     let result: DiagnosticMessageChain[] | undefined;
     if (file.path !== file.resolvedPath) {
         (result ||= []).push(chainDiagnosticMessages(
-            /*details*/ undefined,
-            Diagnostics.File_is_output_of_project_reference_source_0,
-            toFileName(file.originalFileName, fileNameConvertor)
-        ));
+        /*details*/ undefined, Diagnostics.File_is_output_of_project_reference_source_0, toFileName(file.originalFileName, fileNameConvertor)));
     }
     if (file.redirectInfo) {
         (result ||= []).push(chainDiagnosticMessages(
-            /*details*/ undefined,
-            Diagnostics.File_redirects_to_file_0,
-            toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)
-        ));
+        /*details*/ undefined, Diagnostics.File_redirects_to_file_0, toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)));
     }
     return result;
 }
 
+/* @internal */
 export function getMatchedFileSpec(program: Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
-    if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
+    if (!configFile?.configFileSpecs?.validatedFilesSpec)
+        return undefined;
 
     const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
     const filePath = getCanonicalFileName(fileName);
@@ -243,21 +245,25 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
     return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
 }
 
+/* @internal */
 export function getMatchedIncludeSpec(program: Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
-    if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
+    if (!configFile?.configFileSpecs?.validatedIncludeSpecs)
+        return undefined;
 
     const isJsonFile = fileExtensionIs(fileName, Extension.Json);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
     const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
     return find(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
-        if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
+        if (isJsonFile && !endsWith(includeSpec, Extension.Json))
+            return false;
         const pattern = getPatternFromSpec(includeSpec, basePath, "files");
         return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
     });
 }
 
-export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string,): DiagnosticMessageChain {
+/* @internal */
+export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain {
     const options = program.getCompilerOptions();
     if (isReferencedFile(reason)) {
         const referenceLocation = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
@@ -299,27 +305,20 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                 Debug.assertNever(reason);
         }
         return chainDiagnosticMessages(
-            /*details*/ undefined,
-            message,
-            referenceText,
-            toFileName(referenceLocation.file, fileNameConvertor),
-            referenceLocation.packageId && packageIdToString(referenceLocation.packageId)
-        );
+        /*details*/ undefined, message, referenceText, toFileName(referenceLocation.file, fileNameConvertor), referenceLocation.packageId && packageIdToString(referenceLocation.packageId));
     }
     switch (reason.kind) {
         case FileIncludeKind.RootFile:
-            if (!options.configFile?.configFileSpecs) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+            if (!options.configFile?.configFileSpecs)
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
             const fileName = getNormalizedAbsolutePath(program.getRootFileNames()[reason.index], program.getCurrentDirectory());
             const matchedByFiles = getMatchedFileSpec(program, fileName);
-            if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
+            if (matchedByFiles)
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
             const matchedByInclude = getMatchedIncludeSpec(program, fileName);
             return matchedByInclude ?
                 chainDiagnosticMessages(
-                    /*details*/ undefined,
-                    Diagnostics.Matched_by_include_pattern_0_in_1,
-                    matchedByInclude,
-                    toFileName(options.configFile, fileNameConvertor)
-                ) :
+                /*details*/ undefined, Diagnostics.Matched_by_include_pattern_0_in_1, matchedByInclude, toFileName(options.configFile, fileNameConvertor)) :
                 // Could be additional files specified as roots
                 chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
         case FileIncludeKind.SourceFromProjectReference:
@@ -327,45 +326,36 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             const isOutput = reason.kind === FileIncludeKind.OutputFromProjectReference;
             const referencedResolvedRef = Debug.checkDefined(program.getResolvedProjectReferences()?.[reason.index]);
             return chainDiagnosticMessages(
-                /*details*/ undefined,
-                outFile(options) ?
+            /*details*/ undefined, outFile(options) ?
                     isOutput ?
                         Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
                         Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
                     isOutput ?
                         Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
-                        Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
-                toFileName(referencedResolvedRef.sourceFile.fileName, fileNameConvertor),
-                options.outFile ? "--outFile" : "--out",
-            );
+                    Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none, toFileName(referencedResolvedRef.sourceFile.fileName, fileNameConvertor), options.outFile ? "--outFile" : "--out");
         case FileIncludeKind.AutomaticTypeDirectiveFile:
             return chainDiagnosticMessages(
-                /*details*/ undefined,
-                options.types ?
+            /*details*/ undefined, options.types ?
                     reason.packageId ?
                         Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1 :
                         Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions :
                     reason.packageId ?
                         Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1 :
-                        Diagnostics.Entry_point_for_implicit_type_library_0,
-                reason.typeReference,
-                reason.packageId && packageIdToString(reason.packageId),
-            );
+                    Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference, reason.packageId && packageIdToString(reason.packageId));
         case FileIncludeKind.LibFile:
-            if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
+            if (reason.index !== undefined)
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
             const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
             return chainDiagnosticMessages(
-                /*details*/ undefined,
-                target ?
+            /*details*/ undefined, target ?
                     Diagnostics.Default_library_for_target_0 :
-                    Diagnostics.Default_library,
-                target,
-            );
+                Diagnostics.Default_library, target);
         default:
             Debug.assertNever(reason);
     }
 }
 
+/* @internal */
 function toFileName(file: SourceFile | string, fileNameConvertor?: (fileName: string) => string) {
     const fileName = isString(file) ? file : file.fileName;
     return fileNameConvertor ? fileNameConvertor(fileName) : fileName;
@@ -374,16 +364,8 @@ function toFileName(file: SourceFile | string, fileNameConvertor?: (fileName: st
 /**
  * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
  */
-export function emitFilesAndReportErrors<T extends BuilderProgram>(
-    program: Program | T,
-    reportDiagnostic: DiagnosticReporter,
-    write?: (s: string) => void,
-    reportSummary?: ReportEmitErrorSummary,
-    writeFile?: WriteFileCallback,
-    cancellationToken?: CancellationToken,
-    emitOnlyDtsFiles?: boolean,
-    customTransformers?: CustomTransformers
-) {
+/* @internal */
+export function emitFilesAndReportErrors<T extends BuilderProgram>(program: Program | T, reportDiagnostic: DiagnosticReporter, write?: (s: string) => void, reportSummary?: ReportEmitErrorSummary, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers) {
     const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
 
     // First get and report any syntactic errors.
@@ -433,26 +415,9 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     };
 }
 
-export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgram>(
-    program: Program | T,
-    reportDiagnostic: DiagnosticReporter,
-    write?: (s: string) => void,
-    reportSummary?: ReportEmitErrorSummary,
-    writeFile?: WriteFileCallback,
-    cancellationToken?: CancellationToken,
-    emitOnlyDtsFiles?: boolean,
-    customTransformers?: CustomTransformers
-) {
-    const { emitResult, diagnostics } = emitFilesAndReportErrors(
-        program,
-        reportDiagnostic,
-        write,
-        reportSummary,
-        writeFile,
-        cancellationToken,
-        emitOnlyDtsFiles,
-        customTransformers
-    );
+/* @internal */
+export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgram>(program: Program | T, reportDiagnostic: DiagnosticReporter, write?: (s: string) => void, reportSummary?: ReportEmitErrorSummary, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers) {
+    const { emitResult, diagnostics } = emitFilesAndReportErrors(program, reportDiagnostic, write, reportSummary, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
 
     if (emitResult.emitSkipped && diagnostics.length > 0) {
         // If the emitter didn't emit anything, then pass that value along.
@@ -466,9 +431,12 @@ export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgra
     return ExitStatus.Success;
 }
 
+/* @internal */
 export const noopFileWatcher: FileWatcher = { close: noop };
+/* @internal */
 export const returnNoopFileWatcher = () => noopFileWatcher;
 
+/* @internal */
 export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
     const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
     return {
@@ -480,7 +448,9 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
     };
 }
 
+/* @internal */
 export type WatchType = WatchTypeRegistry[keyof WatchTypeRegistry];
+/* @internal */
 export const WatchType: WatchTypeRegistry = {
     ConfigFile: "Config file",
     ExtendedConfigFile: "Extended config file",
@@ -495,25 +465,33 @@ export const WatchType: WatchTypeRegistry = {
     PackageJson: "package.json file",
 };
 
+/* @internal */
 export interface WatchTypeRegistry {
-    ConfigFile: "Config file",
-    ExtendedConfigFile: "Extended config file",
-    SourceFile: "Source file",
-    MissingFile: "Missing file",
-    WildcardDirectory: "Wild card directory",
-    FailedLookupLocations: "Failed Lookup Locations",
-    TypeRoots: "Type roots",
-    ConfigFileOfReferencedProject: "Config file of referened project",
-    ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
-    WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
-    PackageJson: "package.json file",
+    ConfigFile: "Config file";
+    ExtendedConfigFile: "Extended config file";
+    SourceFile: "Source file";
+    MissingFile: "Missing file";
+    WildcardDirectory: "Wild card directory";
+    FailedLookupLocations: "Failed Lookup Locations";
+    TypeRoots: "Type roots";
+    ConfigFileOfReferencedProject: "Config file of referened project";
+    ExtendedConfigOfReferencedProject: "Extended config file of referenced project";
+    WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project";
+    PackageJson: "package.json file";
 }
 
+/* @internal */
 interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
     writeLog: (s: string) => void;
 }
 
-export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
+/* @internal */
+export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & {
+    trace?(s: string): void;
+}, options: {
+    extendedDiagnostics?: boolean;
+    diagnostics?: boolean;
+}) {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
     const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactory<WatchType, Y>;
@@ -521,6 +499,7 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
     return result;
 }
 
+/* @internal */
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const hostGetNewLine = memoize(() => host.getNewLine());
@@ -528,10 +507,10 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getSourceFile: (fileName, languageVersion, onError) => {
             let text: string | undefined;
             try {
-                performance.mark("beforeIORead");
+                mark("beforeIORead");
                 text = host.readFile(fileName, getCompilerOptions().charset);
-                performance.mark("afterIORead");
-                performance.measure("I/O Read", "beforeIORead", "afterIORead");
+                mark("afterIORead");
+                measure("I/O Read", "beforeIORead", "afterIORead");
             }
             catch (e) {
                 if (onError) {
@@ -563,21 +542,14 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 
     function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
         try {
-            performance.mark("beforeIOWrite");
+            mark("beforeIOWrite");
 
             // NOTE: If patchWriteFileEnsuringDirectory has been called,
             // the host.writeFile will do its own directory creation and
             // the ensureDirectoriesExist call will always be redundant.
-            writeFileEnsuringDirectories(
-                fileName,
-                text,
-                writeByteOrderMark,
-                (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
-                path => host.createDirectory!(path),
-                path => host.directoryExists!(path));
-
-            performance.mark("afterIOWrite");
-            performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+            writeFileEnsuringDirectories(fileName, text, writeByteOrderMark, (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark), path => host.createDirectory!(path), path => host.directoryExists!(path));
+            mark("afterIOWrite");
+            measure("I/O Write", "beforeIOWrite", "afterIOWrite");
         }
         catch (e) {
             if (onError) {
@@ -587,7 +559,10 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
     }
 }
 
-export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
+/* @internal */
+export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: {
+    createHash?(data: string): string;
+}) {
     const originalGetSourceFile = compilerHost.getSourceFile;
     const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
     compilerHost.getSourceFile = (...args) => {
@@ -602,6 +577,7 @@ export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
+/* @internal */
 export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
     const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
     return {
@@ -629,6 +605,7 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
  */
+/* @internal */
 function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
     const write = (s: string) => system.write(s + system.newLine);
     const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
@@ -637,17 +614,7 @@ function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagn
         const compilerOptions = builderProgram.getCompilerOptions();
         const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);
 
-        emitFilesAndReportErrors(
-            builderProgram,
-            reportDiagnostic,
-            write,
-            errorCount => result.onWatchStatusChange!(
-                createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(errorCount), errorCount),
-                newLine,
-                compilerOptions,
-                errorCount
-            )
-        );
+        emitFilesAndReportErrors(builderProgram, reportDiagnostic, write, errorCount => result.onWatchStatusChange!(createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(errorCount), errorCount), newLine, compilerOptions, errorCount));
     };
     return result;
 }
@@ -655,11 +622,13 @@ function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagn
 /**
  * Report error and exit
  */
+/* @internal */
 function reportUnrecoverableDiagnostic(system: System, reportDiagnostic: DiagnosticReporter, diagnostic: Diagnostic) {
     reportDiagnostic(diagnostic);
     system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
 }
 
+/* @internal */
 export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
     system: System;
     createProgram?: CreateProgram<T>;
@@ -667,6 +636,7 @@ export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
     reportWatchStatus?: WatchStatusReporter;
 }
 
+/* @internal */
 export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgram> extends CreateWatchCompilerHostInput<T> {
     configFileName: string;
     optionsToExtend?: CompilerOptions;
@@ -676,10 +646,8 @@ export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgr
 /**
  * Creates the watch compiler host from system for config file in watch mode
  */
-export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
-    configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions,
-    system, createProgram, reportDiagnostic, reportWatchStatus
-}: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
+/* @internal */
+export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions, system, createProgram, reportDiagnostic, reportWatchStatus }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
     const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
     const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
@@ -690,6 +658,7 @@ export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = E
     return host;
 }
 
+/* @internal */
 export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends BuilderProgram> extends CreateWatchCompilerHostInput<T> {
     rootFiles: string[];
     options: CompilerOptions;
@@ -699,10 +668,8 @@ export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends
 /**
  * Creates the watch compiler host from system for compiling root files and options in watch mode
  */
-export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
-    rootFiles, options, watchOptions, projectReferences,
-    system, createProgram, reportDiagnostic, reportWatchStatus
-}: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
+/* @internal */
+export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootFiles, options, watchOptions, projectReferences, system, createProgram, reportDiagnostic, reportWatchStatus }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
     const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
     host.rootFiles = rootFiles;
     host.options = options;
@@ -711,6 +678,7 @@ export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends Build
     return host;
 }
 
+/* @internal */
 export interface IncrementalCompilationOptions {
     rootNames: readonly string[];
     options: CompilerOptions;
@@ -722,17 +690,13 @@ export interface IncrementalCompilationOptions {
     afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
     system?: System;
 }
+/* @internal */
 export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
     const system = input.system || sys;
     const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
     const builderProgram = createIncrementalProgram(input);
-    const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
-        builderProgram,
-        input.reportDiagnostic || createDiagnosticReporter(system),
-        s => host.trace && host.trace(s),
-        input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined
-    );
-    if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
+    const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(builderProgram, input.reportDiagnostic || createDiagnosticReporter(system), s => host.trace && host.trace(s), input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined);
+    if (input.afterProgramEmitAndDiagnostics)
+        input.afterProgramEmitAndDiagnostics(builderProgram);
     return exitStatus;
-}
 }

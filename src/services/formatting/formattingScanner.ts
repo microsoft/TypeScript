@@ -1,8 +1,11 @@
+import { createScanner, ScriptTarget, LanguageVariant, Node, last, SyntaxKind, isTrivia, append, isKeyword, isJsxText, isJsxAttribute, Debug, isToken } from "../ts";
+import { TokenInfo, TextRangeWithKind, TextRangeWithTriviaKind, createTextRangeWithKind } from "../ts.formatting";
 /* @internal */
-namespace ts.formatting {
 const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
+/* @internal */
 const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);
 
+/* @internal */
 export interface FormattingScanner {
     advance(): void;
     getStartPos(): number;
@@ -16,6 +19,7 @@ export interface FormattingScanner {
     skipToStartOf(node: Node): void;
 }
 
+/* @internal */
 const enum ScanAction {
     Scan,
     RescanGreaterThanToken,
@@ -23,9 +27,10 @@ const enum ScanAction {
     RescanTemplateToken,
     RescanJsxIdentifier,
     RescanJsxText,
-    RescanJsxAttributeValue,
+    RescanJsxAttributeValue
 }
 
+/* @internal */
 export function getFormattingScanner<T>(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
     const scanner = languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
@@ -178,11 +183,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
 
         let currentToken = getNextToken(n, expectedScanAction);
 
-        const token = createTextRangeWithKind(
-            scanner.getStartPos(),
-            scanner.getTextPos(),
-            currentToken,
-        );
+        const token = createTextRangeWithKind(scanner.getStartPos(), scanner.getTextPos(), currentToken);
 
         // consume trailing trivia
         if (trailingTrivia) {
@@ -193,11 +194,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
             if (!isTrivia(currentToken)) {
                 break;
             }
-            const trivia = createTextRangeWithKind(
-                scanner.getStartPos(),
-                scanner.getTextPos(),
-                currentToken,
-            );
+            const trivia = createTextRangeWithKind(scanner.getStartPos(), scanner.getTextPos(), currentToken);
 
             if (!trailingTrivia) {
                 trailingTrivia = [];
@@ -305,5 +302,4 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
         leadingTrivia = undefined;
         trailingTrivia = undefined;
     }
-}
 }

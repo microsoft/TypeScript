@@ -1,7 +1,8 @@
-namespace ts.projectSystem {
+import { projectRoot } from "../../ts.tscWatch";
+import { File, GetErrForProjectDiagnostics, verifyGetErrScenario } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: with project references and error reporting", () => {
-    const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
-    const usageLocation = `${tscWatch.projectRoot}/usage`;
+    const dependecyLocation = `${projectRoot}/dependency`;
+    const usageLocation = `${projectRoot}/usage`;
 
     function verifyUsageAndDependency(scenario: string, dependencyTs: File, dependencyConfig: File, usageTs: File, usageConfig: File) {
         function usageProjectDiagnostics(): GetErrForProjectDiagnostics {
@@ -128,4 +129,3 @@ fnErr();
         verifyUsageAndDependency("with non module", dependencyTs, dependencyConfig, usageTs, usageConfig);
     });
 });
-}

@@ -1,4 +1,7 @@
-namespace ts {
+import { ESMap, CharacterCodes, hasProperty, isIdentifierPart, ScriptTarget, LanguageServiceHost, notImplemented, DiagnosticMessage, Extension, RefactorContext, noop, returnFalse, formatting, testFormatSettings, emptyOptions, refactor, createTextSpanFromRange, find, textChanges, Program, length } from "../../../ts";
+import { Baseline } from "../../../Harness";
+import { createServerHost, libFile, createProjectService } from "../../../ts.projectSystem";
+import * as ts from "../../../ts";
 interface Range {
     pos: number;
     end: number;
@@ -15,7 +18,7 @@ export function extractTest(source: string): Test {
     let text = "";
     let lastPos = 0;
     let pos = 0;
-    const ranges = new Map<string, Range>();
+    const ranges = new ts.Map<string, Range>();
 
     while (pos < source.length) {
         if (source.charCodeAt(pos) === CharacterCodes.openBracket &&
@@ -81,8 +84,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
         throw new Error(`Test ${caption} does not specify selection range`);
     }
 
-    [Extension.Ts, Extension.Js].forEach(extension =>
-        it(`${caption} [${extension}]`, () => runBaseline(extension)));
+    [Extension.Ts, Extension.Js].forEach(extension => it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
     function runBaseline(extension: Extension) {
         const path = "/a" + extension;
@@ -124,12 +126,15 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
             const { program: diagProgram } = makeProgram({ path, content: newText }, includeLib);
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
         }
-        Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
+        Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
     }
 
-    function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
-        const host = projectSystem.createServerHost(includeLib ? [f, projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
-        const projectService = projectSystem.createProjectService(host);
+    function makeProgram(f: {
+        path: string;
+        content: string;
+    }, includeLib?: boolean) {
+        const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+        const projectService = createProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
@@ -153,8 +158,8 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             path: "/a.ts",
             content: t.source
         };
-        const host = projectSystem.createServerHost([f, projectSystem.libFile]);
-        const projectService = projectSystem.createProjectService(host);
+        const host = createServerHost([f, libFile]);
+        const projectService = createProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFile(f.path)!;
@@ -173,5 +178,4 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
         const infos = refactor.extractSymbol.getAvailableActions(context);
         assert.isUndefined(find(infos, info => info.description === description.message));
     });
-}
 }

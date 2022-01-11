@@ -1,36 +1,18 @@
+import { SymbolAccessibilityResult, Node, DiagnosticMessage, DeclarationName, QualifiedName, VariableDeclaration, PropertyDeclaration, PropertySignature, BindingElement, SetAccessorDeclaration, GetAccessorDeclaration, ConstructSignatureDeclaration, CallSignatureDeclaration, MethodDeclaration, MethodSignature, FunctionDeclaration, ParameterDeclaration, TypeParameterDeclaration, ExpressionWithTypeArguments, ImportEqualsDeclaration, TypeAliasDeclaration, ConstructorDeclaration, IndexSignatureDeclaration, PropertyAccessExpression, JSDocTypedefTag, JSDocCallbackTag, JSDocEnumTag, isVariableDeclaration, isPropertyDeclaration, isPropertySignature, isBindingElement, isSetAccessor, isGetAccessor, isConstructSignatureDeclaration, isCallSignatureDeclaration, isMethodDeclaration, isMethodSignature, isFunctionDeclaration, isParameter, isTypeParameterDeclaration, isExpressionWithTypeArguments, isImportEqualsDeclaration, isTypeAliasDeclaration, isConstructorDeclaration, isIndexSignatureDeclaration, isPropertyAccessExpression, isJSDocTypeAlias, NamedDeclaration, isStatic, SymbolAccessibility, Diagnostics, SyntaxKind, isParameterPropertyDeclaration, hasSyntacticModifier, ModifierFlags, Debug, isClassDeclaration, isHeritageClause, getNameOfDeclaration, Declaration } from "../../ts";
+import * as ts from "../../ts";
 /* @internal */
-namespace ts {
 export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);
 
+/* @internal */
 export interface SymbolAccessibilityDiagnostic {
     errorNode: Node;
     diagnosticMessage: DiagnosticMessage;
     typeName?: DeclarationName | QualifiedName;
 }
 
-export type DeclarationDiagnosticProducing =
-    | VariableDeclaration
-    | PropertyDeclaration
-    | PropertySignature
-    | BindingElement
-    | SetAccessorDeclaration
-    | GetAccessorDeclaration
-    | ConstructSignatureDeclaration
-    | CallSignatureDeclaration
-    | MethodDeclaration
-    | MethodSignature
-    | FunctionDeclaration
-    | ParameterDeclaration
-    | TypeParameterDeclaration
-    | ExpressionWithTypeArguments
-    | ImportEqualsDeclaration
-    | TypeAliasDeclaration
-    | ConstructorDeclaration
-    | IndexSignatureDeclaration
-    | PropertyAccessExpression
-    | JSDocTypedefTag
-    | JSDocCallbackTag
-    | JSDocEnumTag;
+/* @internal */
+export type DeclarationDiagnosticProducing = VariableDeclaration | PropertyDeclaration | PropertySignature | BindingElement | SetAccessorDeclaration | GetAccessorDeclaration | ConstructSignatureDeclaration | CallSignatureDeclaration | MethodDeclaration | MethodSignature | FunctionDeclaration | ParameterDeclaration | TypeParameterDeclaration | ExpressionWithTypeArguments | ImportEqualsDeclaration | TypeAliasDeclaration | ConstructorDeclaration | IndexSignatureDeclaration | PropertyAccessExpression | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag;
+/* @internal */
 
 export function canProduceDiagnostics(node: Node): node is DeclarationDiagnosticProducing {
     return isVariableDeclaration(node) ||
@@ -55,6 +37,7 @@ export function canProduceDiagnostics(node: Node): node is DeclarationDiagnostic
         isJSDocTypeAlias(node);
 }
 
+/* @internal */
 export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
     if (isSetAccessor(node) || isGetAccessor(node)) {
         return getAccessorNameVisibilityError;
@@ -128,6 +111,7 @@ export function createGetSymbolAccessibilityDiagnosticForNodeName(node: Declarat
     }
 }
 
+/* @internal */
 export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): GetSymbolAccessibilityDiagnostic {
     if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
         return getVariableDeclarationTypeVisibilityError;
@@ -487,5 +471,4 @@ export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationD
             typeName: isJSDocTypeAlias(node) ? getNameOfDeclaration(node) : (node as TypeAliasDeclaration).name,
         };
     }
-}
 }

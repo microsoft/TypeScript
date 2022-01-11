@@ -1,11 +1,10 @@
-namespace ts.projectSystem {
+import { WorkerSession, ServerHost, HostWithWriteMessage, StartSessionOptions, Logger, nullCancellationToken, LogLevel, WebHost, createWebSystem, MainProcessLogger, MessageLogLevel } from "../../ts.server";
+import { emptyArray, LanguageServiceMode, last, ScriptElementKind } from "../../ts";
+import { createServerHost, libFile, nullLogger, File, protocol, checkNumberOfProjects, checkProjectActualFiles, protocolFileLocationFromSubstring, protocolTextSpanWithContextFromSubstring } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: webServer", () => {
-    class TestWorkerSession extends server.WorkerSession {
-        constructor(host: server.ServerHost, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
-            super(
-                host,
-                webHost,
-                {
+    class TestWorkerSession extends WorkerSession {
+        constructor(host: ServerHost, webHost: HostWithWriteMessage, options: Partial<StartSessionOptions>, logger: Logger) {
+            super(host, webHost, {
                     globalPlugins: undefined,
                     pluginProbeLocations: undefined,
                     allowLocalPluginLoads: undefined,
@@ -16,34 +15,30 @@ describe("unittests:: tsserver:: webServer", () => {
                     syntaxOnly: undefined,
                     serverMode: undefined,
                     ...options
-                },
-                logger,
-                server.nullCancellationToken,
-                () => emptyArray
-            );
+            }, logger, nullCancellationToken, () => emptyArray);
         }
 
         getProjectService() {
             return this.projectService;
         }
     }
-    function setup(logLevel: server.LogLevel | undefined) {
+    function setup(logLevel: LogLevel | undefined) {
         const host = createServerHost([libFile], { windowsStyleRoot: "c:/" });
         const messages: any[] = [];
-        const webHost: server.WebHost = {
+        const webHost: WebHost = {
             readFile: s => host.readFile(s),
             fileExists: s => host.fileExists(s),
             writeMessage: s => messages.push(s),
         };
-        const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
-        const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
+        const webSys = createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
+        const logger = logLevel !== undefined ? new MainProcessLogger(logLevel, webHost) : nullLogger();
         const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic }, logger);
         return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
 
     }
 
     describe("open files are added to inferred project and semantic operations succeed", () => {
-        function verify(logLevel: server.LogLevel | undefined) {
+        function verify(logLevel: LogLevel | undefined) {
             const { session, clearMessages, getMessages } = setup(logLevel);
             const service = session.getProjectService();
             const file: File = {
@@ -130,8 +125,8 @@ describe("unittests:: tsserver:: webServer", () => {
 
             function verifyLogger() {
                 const messages = getMessages();
-                assert.equal(messages.length, logLevel === server.LogLevel.verbose ? 4 : 1, `Expected ${JSON.stringify(messages)}`);
-                if (logLevel === server.LogLevel.verbose) {
+                assert.equal(messages.length, logLevel === LogLevel.verbose ? 4 : 1, `Expected ${JSON.stringify(messages)}`);
+                if (logLevel === LogLevel.verbose) {
                     verifyLogMessages(messages[0], "info");
                     verifyLogMessages(messages[1], "perf");
                     verifyLogMessages(messages[2], "info");
@@ -139,14 +134,14 @@ describe("unittests:: tsserver:: webServer", () => {
                 clearMessages();
             }
 
-            function verifyLogMessages(actual: any, expectedLevel: server.MessageLogLevel) {
+            function verifyLogMessages(actual: any, expectedLevel: MessageLogLevel) {
                 assert.equal(actual.type, "log");
                 assert.equal(actual.level, expectedLevel);
             }
         }
 
         it("with logging enabled", () => {
-            verify(server.LogLevel.verbose);
+            verify(LogLevel.verbose);
         });
 
         it("with logging disabled", () => {
@@ -154,4 +149,3 @@ describe("unittests:: tsserver:: webServer", () => {
         });
     });
 });
-}

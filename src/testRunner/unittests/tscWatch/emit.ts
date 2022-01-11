@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { verifyTscWatch, File, createWatchedSystem, libFile, runQueuedTimeoutCallbacks, TscWatchCompileChange, WatchedSystem, checkSingleTimeoutQueueLengthAndRun } from "../../ts.tscWatch";
+import { emptyArray, map, find } from "../../ts";
 const scenario = "emit";
 describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
     function verifyOutAndOutFileSetting(subScenario: string, out?: string, outFile?: string) {
@@ -94,15 +95,9 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
         getAdditionalFileOrFolder?: () => File[];
         /** initial list of files to emit if not the default list */
         firstReloadFileList?: string[];
-        changes: TscWatchCompileChange[]
+        changes: TscWatchCompileChange[];
     }
-    function verifyTscWatchEmit({
-        subScenario,
-        configObj,
-        getAdditionalFileOrFolder,
-        firstReloadFileList,
-        changes
-    }: VerifyTscWatchEmit) {
+    function verifyTscWatchEmit({ subScenario, configObj, getAdditionalFileOrFolder, firstReloadFileList, changes }: VerifyTscWatchEmit) {
         verifyTscWatch({
             scenario,
             subScenario: `emit for configured projects/${subScenario}`,
@@ -140,8 +135,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
                 return createWatchedSystem(firstReloadFileList ?
                     map(firstReloadFileList, fileName => find(files, file => file.path === fileName)!) :
-                    files
-                );
+                    files);
             },
             changes
         });
@@ -362,16 +356,13 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             scenario,
             subScenario: `emit file content/${subScenario}`,
             commandLineArgs: ["--w", "/a/app.ts"],
-            sys: () => createWatchedSystem(
-                [
+            sys: () => createWatchedSystem([
                     {
                         path: "/a/app.ts",
                         content: ["var x = 1;", "var y = 2;"].join(newLine)
                     },
                     libFile
-                ],
-                { newLine }
-            ),
+            ], { newLine }),
             changes: [
                 {
                     caption: "Append a line",
@@ -516,14 +507,9 @@ describe("unittests:: tsc-watch:: emit with when module emit is specified as nod
         changes: [
             {
                 caption: "Modify typescript file",
-                change: sys => sys.modifyFile(
-                    "/a/rootFolder/project/Scripts/TypeScript.ts",
-                    "var zz30 = 100;",
-                    { invokeDirectoryWatcherInsteadOfFileChanged: true },
-                ),
+                change: sys => sys.modifyFile("/a/rootFolder/project/Scripts/TypeScript.ts", "var zz30 = 100;", { invokeDirectoryWatcherInsteadOfFileChanged: true }),
                 timeouts: runQueuedTimeoutCallbacks,
             }
         ],
     });
 });
-}

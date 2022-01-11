@@ -1,5 +1,6 @@
+import { TextSpan, last, ESMap, startsWith, CharacterCodes, min, Comparison, compareValues, compareBooleans, createTextSpan, isUnicodeIdentifierStart, ScriptTarget } from "./ts";
+import * as ts from "./ts";
 /* @internal */
-namespace ts {
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
 export enum PatternMatchKind {
     exact,
@@ -10,6 +11,7 @@ export enum PatternMatchKind {
 
 // Information about a match made by the pattern matcher between a candidate and the
 // search pattern.
+/* @internal */
 export interface PatternMatch {
     // What kind of match this was.  Exact matches are better than prefix matches which are
     // better than substring matches which are better than CamelCase matches.
@@ -24,6 +26,7 @@ export interface PatternMatch {
 // The pattern matcher maintains an internal cache of information as it is used.  Therefore,
 // you should not keep it around forever and should get and release the matcher appropriately
 // once you no longer need it.
+/* @internal */
 export interface PatternMatcher {
     // Used to match a candidate against the last segment of a possibly dotted pattern.  This
     // is useful as a quick check to prevent having to compute a container before calling
@@ -54,6 +57,7 @@ export interface PatternMatcher {
 // into constituent 'character spans' of interest.  For example, while 'UIElement' is one
 // word, it make character spans corresponding to "U", "I" and "Element".  These spans
 // are then used when doing camel cased matches against candidate patterns.
+/* @internal */
 interface Segment {
     // Information about the entire piece of text between the dots.  For example, if the
     // text between the dots is 'GetKeyword', then TotalTextChunk.Text will be 'GetKeyword' and
@@ -70,6 +74,7 @@ interface Segment {
 // Information about a chunk of text from the pattern.  The chunk is a piece of text, with
 // cached information about the character spans within in.  Character spans are used for
 // camel case matching.
+/* @internal */
 interface TextChunk {
     // The text of the chunk.  This should be a contiguous sequence of character that could
     // occur in a symbol name.
@@ -90,6 +95,7 @@ interface TextChunk {
     characterSpans: TextSpan[];
 }
 
+/* @internal */
 function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): PatternMatch {
     return {
         kind,
@@ -97,16 +103,18 @@ function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): P
     };
 }
 
+/* @internal */
 export function createPatternMatcher(pattern: string): PatternMatcher | undefined {
     // We'll often see the same candidate string many times when searching (For example, when
     // we see the name of a module that is used everywhere, or the name of an overload).  As
     // such, we cache the information we compute about the candidate for the life of this
     // pattern matcher so we don't have to compute it multiple times.
-    const stringToWordSpans = new Map<string, TextSpan[]>();
+    const stringToWordSpans = new ts.Map<string, TextSpan[]>();
 
     const dotSeparatedSegments = pattern.trim().split(".").map(p => createSegment(p.trim()));
     // A segment is considered invalid if we couldn't find any words in it.
-    if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length)) return undefined;
+    if (dotSeparatedSegments.some(segment => !segment.subWordTextChunks.length))
+        return undefined;
 
     return {
         getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
@@ -115,6 +123,7 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     };
 }
 
+/* @internal */
 function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
     // First, check that the last part of the dot separated pattern matches the name of the
     // candidate.  If not, then there's no point in proceeding and doing the more
@@ -133,14 +142,13 @@ function getFullMatch(candidateContainers: readonly string[], candidate: string,
     }
 
     let bestMatch: PatternMatch | undefined;
-    for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
-        i >= 0;
-        i -= 1, j -= 1) {
+    for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1; i >= 0; i -= 1, j -= 1) {
         bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
     }
     return bestMatch;
 }
 
+/* @internal */
 function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>): TextSpan[] {
     let spans = stringToWordSpans.get(word);
     if (!spans) {
@@ -149,6 +157,7 @@ function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>
     return spans;
 }
 
+/* @internal */
 function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
     const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
     if (index === 0) {
@@ -158,7 +167,8 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
     }
 
     if (chunk.isLowerCase) {
-        if (index === -1) return undefined;
+        if (index === -1)
+            return undefined;
         // b) If the part is entirely lowercase, then check if it is contained anywhere in the
         //    candidate in a case insensitive manner.  If so, return that there was a substring
         //    match.
@@ -201,6 +211,7 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
     }
 }
 
+/* @internal */
 function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
     // First check if the segment matches as is.  This is also useful if the segment contains
     // characters we would normally strip when splitting into parts that we also may want to
@@ -211,7 +222,8 @@ function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ES
     // multi-word segment.
     if (every(segment.totalTextChunk.text, ch => ch !== CharacterCodes.space && ch !== CharacterCodes.asterisk)) {
         const match = matchTextChunk(candidate, segment.totalTextChunk, stringToWordSpans);
-        if (match) return match;
+        if (match)
+            return match;
     }
 
     // The logic for pattern matching is now as follows:
@@ -258,23 +270,28 @@ function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ES
     return bestMatch;
 }
 
+/* @internal */
 function betterMatch(a: PatternMatch | undefined, b: PatternMatch | undefined): PatternMatch | undefined {
     return min(a, b, compareMatches);
 }
+/* @internal */
 function compareMatches(a: PatternMatch | undefined, b: PatternMatch | undefined): Comparison {
     return a === undefined ? Comparison.GreaterThan : b === undefined ? Comparison.LessThan
         : compareValues(a.kind, b.kind) || compareBooleans(!a.isCaseSensitive, !b.isCaseSensitive);
 }
 
+/* @internal */
 function partStartsWith(candidate: string, candidateSpan: TextSpan, pattern: string, ignoreCase: boolean, patternSpan: TextSpan = { start: 0, length: pattern.length }): boolean {
     return patternSpan.length <= candidateSpan.length // If pattern part is longer than the candidate part there can never be a match.
         && everyInRange(0, patternSpan.length, i => equalChars(pattern.charCodeAt(patternSpan.start + i), candidate.charCodeAt(candidateSpan.start + i), ignoreCase));
 }
 
+/* @internal */
 function equalChars(ch1: number, ch2: number, ignoreCase: boolean): boolean {
     return ignoreCase ? toLowerCase(ch1) === toLowerCase(ch2) : ch1 === ch2;
 }
 
+/* @internal */
 function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk: TextChunk, ignoreCase: boolean): boolean {
     const chunkCharacterSpans = chunk.characterSpans;
 
@@ -347,6 +364,7 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
     }
 }
 
+/* @internal */
 function createSegment(text: string): Segment {
     return {
         totalTextChunk: createTextChunk(text),
@@ -354,6 +372,7 @@ function createSegment(text: string): Segment {
     };
 }
 
+/* @internal */
 function isUpperCaseLetter(ch: number) {
     // Fast check for the ascii range.
     if (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) {
@@ -370,6 +389,7 @@ function isUpperCaseLetter(ch: number) {
     return str === str.toUpperCase();
 }
 
+/* @internal */
 function isLowerCaseLetter(ch: number) {
     // Fast check for the ascii range.
     if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
@@ -388,6 +408,7 @@ function isLowerCaseLetter(ch: number) {
 }
 
 // Assumes 'value' is already lowercase.
+/* @internal */
 function indexOfIgnoringCase(str: string, value: string): number {
     const n = str.length - value.length;
     for (let start = 0; start <= n; start++) {
@@ -399,6 +420,7 @@ function indexOfIgnoringCase(str: string, value: string): number {
     return -1;
 }
 
+/* @internal */
 function toLowerCase(ch: number): number {
     // Fast convert for the ascii range.
     if (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) {
@@ -414,15 +436,18 @@ function toLowerCase(ch: number): number {
     return String.fromCharCode(ch).toLowerCase().charCodeAt(0);
 }
 
+/* @internal */
 function isDigit(ch: number) {
     // TODO(cyrusn): Find a way to support this for unicode digits.
     return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
 }
 
+/* @internal */
 function isWordChar(ch: number) {
     return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
 }
 
+/* @internal */
 function breakPatternIntoTextChunks(pattern: string): TextChunk[] {
     const result: TextChunk[] = [];
     let wordStart = 0;
@@ -451,6 +476,7 @@ function breakPatternIntoTextChunks(pattern: string): TextChunk[] {
     return result;
 }
 
+/* @internal */
 function createTextChunk(text: string): TextChunk {
     const textLowerCase = text.toLowerCase();
     return {
@@ -461,14 +487,17 @@ function createTextChunk(text: string): TextChunk {
     };
 }
 
+/* @internal */
 export function breakIntoCharacterSpans(identifier: string): TextSpan[] {
     return breakIntoSpans(identifier, /*word:*/ false);
 }
 
+/* @internal */
 export function breakIntoWordSpans(identifier: string): TextSpan[] {
     return breakIntoSpans(identifier, /*word:*/ true);
 }
 
+/* @internal */
 function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
     const result: TextSpan[] = [];
 
@@ -501,6 +530,7 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
     return result;
 }
 
+/* @internal */
 function charIsPunctuation(ch: number) {
     switch (ch) {
         case CharacterCodes.exclamation:
@@ -532,10 +562,12 @@ function charIsPunctuation(ch: number) {
     return false;
 }
 
+/* @internal */
 function isAllPunctuation(identifier: string, start: number, end: number): boolean {
     return every(identifier, ch => charIsPunctuation(ch) && ch !== CharacterCodes._, start, end);
 }
 
+/* @internal */
 function transitionFromUpperToLower(identifier: string, index: number, wordStart: number): boolean {
     // Cases this supports:
     // 1) IDisposable -> I, Disposable
@@ -558,6 +590,7 @@ function transitionFromUpperToLower(identifier: string, index: number, wordStart
         && every(identifier, isUpperCaseLetter, wordStart, index);
 }
 
+/* @internal */
 function transitionFromLowerToUpper(identifier: string, word: boolean, index: number): boolean {
     const lastIsUpper = isUpperCaseLetter(identifier.charCodeAt(index - 1));
     const currentIsUpper = isUpperCaseLetter(identifier.charCodeAt(index));
@@ -578,6 +611,7 @@ function transitionFromLowerToUpper(identifier: string, word: boolean, index: nu
     return currentIsUpper && (!word || !lastIsUpper);
 }
 
+/* @internal */
 function everyInRange(start: number, end: number, pred: (n: number) => boolean): boolean {
     for (let i = start; i < end; i++) {
         if (!pred(i)) {
@@ -587,7 +621,7 @@ function everyInRange(start: number, end: number, pred: (n: number) => boolean):
     return true;
 }
 
+/* @internal */
 function every(s: string, pred: (ch: number, index: number) => boolean, start = 0, end = s.length): boolean {
     return everyInRange(start, end, i => pred(s.charCodeAt(i), i));
-}
 }

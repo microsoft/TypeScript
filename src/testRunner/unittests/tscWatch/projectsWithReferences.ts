@@ -1,11 +1,10 @@
-namespace ts.tscWatch {
+import { verifyTscWatch, createSystemWithSolutionBuild, libFile, createSolutionBuilder, checkSingleTimeoutQueueLengthAndRun, WatchedSystem } from "../../ts.tscWatch";
+import { TestFSWithWatch, emptyArray } from "../../ts";
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "on sample project",
-        sys: () => createSystemWithSolutionBuild(
-            ["tests"],
-            [
+        sys: () => createSystemWithSolutionBuild(["tests"], [
                 libFile,
                 TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json"),
                 TestFSWithWatch.getTsBuildProjectFile("sample1", "core/index.ts"),
@@ -15,9 +14,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                 TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/index.ts"),
                 TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/tsconfig.json"),
                 TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/index.ts"),
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/sample1` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/sample1` }),
         commandLineArgs: ["-w", "-p", "tests"],
         changes: [
             {
@@ -65,9 +62,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "on transitive references",
-        sys: () => createSystemWithSolutionBuild(
-            ["tsconfig.c.json"],
-            [
+        sys: () => createSystemWithSolutionBuild(["tsconfig.c.json"], [
                 libFile,
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json"),
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.b.json"),
@@ -76,9 +71,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "b.ts"),
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "c.ts"),
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }),
         commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
         changes: [
             {
@@ -143,9 +136,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "when referenced project uses different module resolution",
-        sys: () => createSystemWithSolutionBuild(
-            ["tsconfig.c.json"],
-            [
+        sys: () => createSystemWithSolutionBuild(["tsconfig.c.json"], [
                 libFile,
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json"),
                 {
@@ -164,9 +155,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                 },
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "c.ts"),
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }),
         commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
         changes: emptyArray,
         baselineDependencies: true,
@@ -175,9 +164,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "on transitive references in different folders",
-        sys: () => createSystemWithSolutionBuild(
-            ["c"],
-            [
+        sys: () => createSystemWithSolutionBuild(["c"], [
                 libFile,
                 {
                     path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
@@ -219,9 +206,7 @@ b;
 X;`,
                 },
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }),
         commandLineArgs: ["-w", "-p", "c"],
         changes: [
             {
@@ -266,14 +251,11 @@ X;`,
             },
             {
                 caption: "Revert deleting referenced config file",
-                change: sys => sys.writeFile(
-                    TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                    JSON.stringify({
+                change: sys => sys.writeFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), JSON.stringify({
                         compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                         files: ["index.ts"],
                         references: [{ path: `../a` }]
-                    })
-                ),
+                })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
             },
             {
@@ -283,13 +265,10 @@ X;`,
             },
             {
                 caption: "Revert deleting transitively referenced config file",
-                change: sys => sys.writeFile(
-                    TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                    JSON.stringify({
+                change: sys => sys.writeFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"), JSON.stringify({
                         compilerOptions: { composite: true },
                         files: ["index.ts"]
-                    }),
-                ),
+                })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
             },
         ],
@@ -299,9 +278,7 @@ X;`,
     verifyTscWatch({
         scenario: "projectsWithReferences",
         subScenario: "on transitive references in different folders with no files clause",
-        sys: () => createSystemWithSolutionBuild(
-            ["c"],
-            [
+        sys: () => createSystemWithSolutionBuild(["c"], [
                 libFile,
                 {
                     path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
@@ -338,9 +315,7 @@ b;
 X;`,
                 },
                 TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }),
         commandLineArgs: ["-w", "-p", "c"],
         changes: [
             {
@@ -385,13 +360,10 @@ X;`,
             },
             {
                 caption: "Revert deleting referenced config file",
-                change: sys => sys.writeFile(
-                    TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                    JSON.stringify({
+                change: sys => sys.writeFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), JSON.stringify({
                         compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                         references: [{ path: `../a` }]
-                    })
-                ),
+                })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
             },
             {
@@ -401,14 +373,10 @@ X;`,
             },
             {
                 caption: "Revert deleting transitively referenced config file",
-                change: sys => sys.writeFile(
-                    TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                    JSON.stringify({ compilerOptions: { composite: true } }),
-                ),
+                change: sys => sys.writeFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"), JSON.stringify({ compilerOptions: { composite: true } })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
             },
         ],
         baselineDependencies: true,
     });
 });
-}

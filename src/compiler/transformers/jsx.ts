@@ -1,16 +1,16 @@
+import { TransformationContext, VariableDeclaration, Identifier, ImportSpecifier, SourceFile, chainBundle, GeneratedIdentifierFlags, JsxEmit, getJSXRuntimeImport, getJSXImplicitImportBase, visitEachChild, addEmitHelpers, Statement, insertStatementAfterCustomPrologue, NodeFlags, arrayFrom, isExternalModule, setParentRecursive, isExternalOrCommonJsModule, map, Node, VisitResult, TransformFlags, SyntaxKind, JsxElement, JsxSelfClosingElement, JsxFragment, JsxExpression, JsxChild, Expression, Debug, JsxOpeningLikeElement, isJsxSpreadAttribute, isJsxAttribute, getSemanticJsxChildren, length, mapDefined, TextRange, find, isIdentifier, JsxAttribute, filter, emptyArray, getOriginalNode, isSourceFile, getLineAndCharacterOfPosition, setTextRange, startOnNewLine, createJsxFactoryExpression, createExpressionForJsxElement, JsxOpeningFragment, createExpressionForJsxFragment, JsxSpreadAttribute, visitNode, isExpression, PropertyAssignment, getEmitScriptTarget, ScriptTarget, flatten, SpreadAssignment, spanMap, singleOrUndefined, StringLiteral, isStringDoubleQuoted, JsxText, isLineBreak, isWhiteSpaceSingleLine, utf16EncodeAsString, isIntrinsicJsxName, idText, createExpressionFromEntityName, getEntries } from "../ts";
+import * as ts from "../ts";
 /*@internal*/
-namespace ts {
 export function transformJsx(context: TransformationContext) {
     interface PerFileState {
         importSpecifier?: string;
-        filenameDeclaration?: VariableDeclaration & { name: Identifier; };
-        utilizedImplicitRuntimeImports?: Map<Map<ImportSpecifier>>;
+        filenameDeclaration?: VariableDeclaration & {
+            name: Identifier;
+        };
+        utilizedImplicitRuntimeImports?: ts.Map<ts.Map<ImportSpecifier>>;
     }
 
-    const {
-        factory,
-        getEmitHelperFactory: emitHelpers,
-    } = context;
+    const { factory, getEmitHelperFactory: emitHelpers, } = context;
     const compilerOptions = context.getCompilerOptions();
     let currentSourceFile: SourceFile;
     let currentFileState!: PerFileState;
@@ -22,7 +22,9 @@ export function transformJsx(context: TransformationContext) {
             return currentFileState.filenameDeclaration.name;
         }
         const declaration = factory.createVariableDeclaration(factory.createUniqueName("_jsxFileName", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), /*exclaimationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral(currentSourceFile.fileName));
-        currentFileState.filenameDeclaration = declaration as VariableDeclaration & { name: Identifier };
+        currentFileState.filenameDeclaration = declaration as VariableDeclaration & {
+            name: Identifier;
+        };
         return currentFileState.filenameDeclaration.name;
     }
 
@@ -48,11 +50,11 @@ export function transformJsx(context: TransformationContext) {
             return existing.name;
         }
         if (!currentFileState.utilizedImplicitRuntimeImports) {
-            currentFileState.utilizedImplicitRuntimeImports = new Map();
+            currentFileState.utilizedImplicitRuntimeImports = new ts.Map();
         }
         let specifierSourceImports = currentFileState.utilizedImplicitRuntimeImports.get(importSource);
         if (!specifierSourceImports) {
-            specifierSourceImports = new Map();
+            specifierSourceImports = new ts.Map();
             currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
         }
         const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
@@ -92,12 +94,9 @@ export function transformJsx(context: TransformationContext) {
                 else if (isExternalOrCommonJsModule(node)) {
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
-                        factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(map(arrayFrom(importSpecifiersMap.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
+                        factory.createVariableDeclaration(factory.createObjectBindingPattern(map(arrayFrom(importSpecifiersMap.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))), 
                             /*exclaimationToken*/ undefined,
-                            /*type*/ undefined,
-                            factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
-                        )
+                        /*type*/ undefined, factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)]))
                     ], NodeFlags.Const));
                     setParentRecursive(requireStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), requireStatement);
@@ -221,27 +220,12 @@ export function transformJsx(context: TransformationContext) {
         const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
         const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
             factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
-        return visitJsxOpeningLikeElementOrFragmentJSX(
-            tagName,
-            objectProperties,
-            keyAttr,
-            children || emptyArray,
-            isChild,
-            location
-        );
+        return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, children || emptyArray, isChild, location);
     }
 
-    function visitJsxOpeningLikeElementOrFragmentJSX(
-        tagName: Expression,
-        objectProperties: Expression,
-        keyAttr: JsxAttribute | undefined,
-        children: readonly JsxChild[],
-        isChild: boolean,
-        location: TextRange
-    ) {
+    function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
         const nonWhitespaceChildren = getSemanticJsxChildren(children);
-        const isStaticChildren =
-            length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
+        const isStaticChildren = length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
         const args: Expression[] = [tagName, objectProperties, !keyAttr ? factory.createVoidZero() : transformJsxAttributeInitializer(keyAttr.initializer)];
         if (compilerOptions.jsx === JsxEmit.ReactJSXDev) {
             const originalFile = getOriginalNode(currentSourceFile);
@@ -259,10 +243,7 @@ export function transformJsx(context: TransformationContext) {
                 args.push(factory.createThis());
             }
         }
-        const element = setTextRange(
-            factory.createCallExpression(getJsxFactoryCallee(isStaticChildren), /*typeArguments*/ undefined, args),
-            location
-        );
+        const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(isStaticChildren), /*typeArguments*/ undefined, args), location);
 
         if (isChild) {
             startOnNewLine(element);
@@ -278,22 +259,11 @@ export function transformJsx(context: TransformationContext) {
             factory.createNull(); // When there are no attributes, React wants "null"
 
         const callee = currentFileState.importSpecifier === undefined
-            ? createJsxFactoryExpression(
-                factory,
-                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
-                compilerOptions.reactNamespace!, // TODO: GH#18217
-                node
-            )
+            ? createJsxFactoryExpression(factory, context.getEmitResolver().getJsxFactoryEntity(currentSourceFile), compilerOptions.reactNamespace!, // TODO: GH#18217
+            node)
             : getImplicitImportForName("createElement");
 
-        const element = createExpressionForJsxElement(
-            factory,
-            callee,
-            tagName,
-            objectProperties,
-            mapDefined(children, transformJsxChildToExpression),
-            location
-        );
+        const element = createExpressionForJsxElement(factory, callee, tagName, objectProperties, mapDefined(children, transformJsxChildToExpression), location);
 
         if (isChild) {
             startOnNewLine(element);
@@ -310,26 +280,13 @@ export function transformJsx(context: TransformationContext) {
                 childrenProps = result;
             }
         }
-        return visitJsxOpeningLikeElementOrFragmentJSX(
-            getImplicitJsxFragmentReference(),
-            childrenProps || factory.createObjectLiteralExpression([]),
-            /*keyAttr*/ undefined,
-            children,
-            isChild,
-            location
-        );
+        return visitJsxOpeningLikeElementOrFragmentJSX(getImplicitJsxFragmentReference(), childrenProps || factory.createObjectLiteralExpression([]), 
+        /*keyAttr*/ undefined, children, isChild, location);
     }
 
     function visitJsxOpeningFragmentCreateElement(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
-        const element = createExpressionForJsxFragment(
-            factory,
-            context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
-            context.getEmitResolver().getJsxFragmentFactoryEntity(currentSourceFile),
-            compilerOptions.reactNamespace!, // TODO: GH#18217
-            mapDefined(children, transformJsxChildToExpression),
-            node,
-            location
-        );
+        const element = createExpressionForJsxFragment(factory, context.getEmitResolver().getJsxFactoryEntity(currentSourceFile), context.getEmitResolver().getJsxFragmentFactoryEntity(currentSourceFile), compilerOptions.reactNamespace!, // TODO: GH#18217
+        mapDefined(children, transformJsxChildToExpression), node, location);
 
         if (isChild) {
             startOnNewLine(element);
@@ -349,8 +306,7 @@ export function transformJsx(context: TransformationContext) {
     }
 
     function transformJsxAttributesToProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
-        const props = flatten<SpreadAssignment | PropertyAssignment>(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
-            map(attrs, attr => isSpread ? transformJsxSpreadAttributeToSpreadAssignment(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))));
+        const props = flatten<SpreadAssignment | PropertyAssignment>(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => map(attrs, attr => isSpread ? transformJsxSpreadAttributeToSpreadAssignment(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))));
         if (children) {
             props.push(children);
         }
@@ -360,12 +316,9 @@ export function transformJsx(context: TransformationContext) {
     function transformJsxAttributesToExpression(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
         // Map spans of JsxAttribute nodes into object literals and spans
         // of JsxSpreadAttribute nodes into expressions.
-        const expressions = flatten(
-            spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
+        const expressions = flatten(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                 ? map(attrs, transformJsxSpreadAttributeToExpression)
-                : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
-            )
-        );
+            : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))));
 
         if (isJsxSpreadAttribute(attrs[0])) {
             // We must always emit at least one object literal before a spread
@@ -540,7 +493,8 @@ export function transformJsx(context: TransformationContext) {
     }
 }
 
-const entities = new Map(getEntries({
+/* @internal */
+const entities = new ts.Map(getEntries({
     quot: 0x0022,
     amp: 0x0026,
     apos: 0x0027,
@@ -795,4 +749,3 @@ const entities = new Map(getEntries({
     hearts: 0x2665,
     diams: 0x2666
 }));
-}

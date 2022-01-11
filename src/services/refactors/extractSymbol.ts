@@ -1,17 +1,24 @@
+import { getLocaleSpecificMessage, Diagnostics, RefactorContext, ApplicableRefactorInfo, getRefactorContextSpan, emptyArray, RefactorActionInfo, Diagnostic, RefactorEditInfo, Debug, DiagnosticMessage, DiagnosticCategory, Expression, Statement, Symbol, FunctionLikeDeclaration, SourceFile, ModuleBlock, ClassLikeDeclaration, TextSpan, createFileDiagnostic, findFirstNonJsxWhitespaceToken, findTokenOnLeftOfPosition, textSpanEnd, getParentNodeInSpan, isJSDoc, isReturnStatement, Node, isVariableStatement, isVariableDeclarationList, isVariableDeclaration, isIdentifier, isExpressionStatement, createDiagnosticForNode, SyntaxKind, isStatic, getContainingFunction, positionIsSynthesized, isStatement, isExpressionNode, NodeFlags, getContainingClass, __String, isDeclaration, hasSyntacticModifier, ModifierFlags, forEachChild, isThis, isClassLike, isFunctionLike, isArrowFunction, isSourceFile, TryStatement, isIterationStatement, LabeledStatement, BreakStatement, ContinueStatement, contains, CharacterCodes, isFunctionLikeDeclaration, isModuleBlock, first, findAncestor, isExpression, ExpressionStatement, formatStringFromArgs, ANONYMOUS, Block, VariableDeclaration, getEmitScriptTarget, getUniqueName, isInJSFile, factory, TypeNode, ParameterDeclaration, Identifier, NodeBuilderFlags, arrayFrom, TypeParameterDeclaration, suppressLeadingAndTrailingTrivia, MethodDeclaration, FunctionDeclaration, Modifier, last, getSynthesizedDeepClone, BindingElement, TypeElement, TypeLiteralNode, setEmitFlags, EmitFlags, getRenameLocation, isParenthesizedTypeNode, isUnionTypeNode, find, skipParentheses, isFunctionExpression, singleOrUndefined, SignatureKind, firstOrUndefined, Type, Declaration, compareProperties, compareValues, compareStringsCaseSensitive, ReadonlyESMap, isBlock, visitNodes, VisitResult, ObjectLiteralElementLike, visitNode, getNodeId, visitEachChild, nullTransformationContext, ClassElement, assertType, isConstructorDeclaration, isPropertyDeclaration, isCaseClause, isSwitchStatement, ShorthandPropertyAssignment, map, isArray, TextRange, ESMap, TypeParameter, TypeChecker, CancellationToken, NamedDeclaration, TypeFlags, isDeclarationWithTypeParameters, getEffectiveTypeParameterDeclarations, isBlockScope, getEnclosingBlockScopeContainer, SymbolFlags, hasEffectiveModifier, isAssignmentExpression, isUnaryExpressionWithWrite, isPropertyAccessExpression, isElementAccessExpression, isQualifiedName, isPartOfTypeNode, getSymbolId, rangeContainsStartEnd, isShorthandPropertyAssignment, PropertyAccessExpression, EntityName, isBinaryExpression, BlockLike, isJsxElement, isJsxSelfClosingElement, isJsxFragment } from "../ts";
+import { registerRefactor, refactorKindBeginsWith } from "../ts.refactor";
+import { createImportAdder, typeToAutoImportableTypeNode } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.refactor.extractSymbol {
 const refactorName = "Extract Symbol";
 
+/* @internal */
 const extractConstantAction = {
     name: "Extract Constant",
     description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
     kind: "refactor.extract.constant",
 };
+/* @internal */
 const extractFunctionAction = {
     name: "Extract Function",
     description: getLocaleSpecificMessage(Diagnostics.Extract_function),
     kind: "refactor.extract.function",
 };
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [
         extractConstantAction.kind,
@@ -25,6 +32,7 @@ registerRefactor(refactorName, {
  * Compute the associated code actions
  * Exported for tests.
  */
+/* @internal */
 export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const requestedRefactor = context.kind;
     const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
@@ -60,11 +68,11 @@ export function getAvailableActions(context: RefactorContext): readonly Applicab
     }
 
     const functionActions: RefactorActionInfo[] = [];
-    const usedFunctionNames = new Map<string, boolean>();
+    const usedFunctionNames = new ts.Map<string, boolean>();
     let innermostErrorFunctionAction: RefactorActionInfo | undefined;
 
     const constantActions: RefactorActionInfo[] = [];
-    const usedConstantNames = new Map<string, boolean>();
+    const usedConstantNames = new ts.Map<string, boolean>();
     let innermostErrorConstantAction: RefactorActionInfo | undefined;
 
     let i = 0;
@@ -168,6 +176,7 @@ export function getAvailableActions(context: RefactorContext): readonly Applicab
 }
 
 /* Exported for tests */
+/* @internal */
 export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
     const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
@@ -190,6 +199,7 @@ export function getEditsForAction(context: RefactorContext, actionName: string):
 }
 
 // Move these into diagnostic messages if they become user-facing
+/* @internal */
 export namespace Messages {
     function createMessage(message: string): DiagnosticMessage {
         return { message, code: 0, category: DiagnosticCategory.Message, key: message };
@@ -219,6 +229,7 @@ export namespace Messages {
     export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
 }
 
+/* @internal */
 enum RangeFacts {
     None = 0,
     HasReturn = 1 << 0,
@@ -234,6 +245,7 @@ enum RangeFacts {
 /**
  * Represents an expression or a list of statements that should be extracted with some extra information
  */
+/* @internal */
 interface TargetRange {
     readonly range: Expression | Statement[];
     readonly facts: RangeFacts;
@@ -247,6 +259,7 @@ interface TargetRange {
 /**
  * Result of 'getRangeToExtract' operation: contains either a range or a list of errors
  */
+/* @internal */
 type RangeToExtract = {
     readonly targetRange?: never;
     readonly errors: readonly Diagnostic[];
@@ -258,6 +271,7 @@ type RangeToExtract = {
 /*
  * Scopes that can store newly extracted method
  */
+/* @internal */
 type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration;
 
 /**
@@ -267,6 +281,7 @@ type Scope = FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDecla
  * users if they have the provideRefactorNotApplicableReason option set.
  */
 // exported only for tests
+/* @internal */
 export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoked = true): RangeToExtract {
     const { length } = span;
     if (length === 0 && !invoked) {
@@ -612,6 +627,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
  * Includes the final semicolon so that the span covers statements in cases where it would otherwise
  * only cover the declaration list.
  */
+/* @internal */
 function getAdjustedSpanFromNodes(startNode: Node, endNode: Node, sourceFile: SourceFile): TextSpan {
     const start = startNode.getStart(sourceFile);
     let end = endNode.getEnd();
@@ -621,6 +637,7 @@ function getAdjustedSpanFromNodes(startNode: Node, endNode: Node, sourceFile: So
     return { start, length: end - start };
 }
 
+/* @internal */
 function getStatementOrExpressionRange(node: Node): Statement[] | Expression | undefined {
     if (isStatement(node)) {
         return [node];
@@ -635,6 +652,7 @@ function getStatementOrExpressionRange(node: Node): Statement[] | Expression | u
     return undefined;
 }
 
+/* @internal */
 function isScope(node: Node): node is Scope {
     return isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
 }
@@ -644,6 +662,7 @@ function isScope(node: Node): node is Scope {
  * you may be able to extract into a class method *or* local closure *or* namespace function,
  * depending on what's in the extracted body.
  */
+/* @internal */
 function collectEnclosingScopes(range: TargetRange): Scope[] {
     let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
     if (range.facts & RangeFacts.UsesThis) {
@@ -680,6 +699,7 @@ function collectEnclosingScopes(range: TargetRange): Scope[] {
     }
 }
 
+/* @internal */
 function getFunctionExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
     const { scopes, readsAndWrites: { target, usagesPerScope, functionErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(targetRange, context);
     Debug.assert(!functionErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
@@ -687,6 +707,7 @@ function getFunctionExtractionAtIndex(targetRange: TargetRange, context: Refacto
     return extractFunctionInScope(target, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], exposedVariableDeclarations, targetRange, context);
 }
 
+/* @internal */
 function getConstantExtractionAtIndex(targetRange: TargetRange, context: RefactorContext, requestedChangesIndex: number): RefactorEditInfo {
     const { scopes, readsAndWrites: { target, usagesPerScope, constantErrorsPerScope, exposedVariableDeclarations } } = getPossibleExtractionsWorker(targetRange, context);
     Debug.assert(!constantErrorsPerScope[requestedChangesIndex].length, "The extraction went missing? How?");
@@ -698,11 +719,13 @@ function getConstantExtractionAtIndex(targetRange: TargetRange, context: Refacto
     return extractConstantInScope(expression, scopes[requestedChangesIndex], usagesPerScope[requestedChangesIndex], targetRange.facts, context);
 }
 
+/* @internal */
 interface Extraction {
     readonly description: string;
     readonly errors: readonly Diagnostic[];
 }
 
+/* @internal */
 interface ScopeExtractions {
     readonly functionExtraction: Extraction;
     readonly constantExtraction: Extraction;
@@ -713,6 +736,7 @@ interface ScopeExtractions {
  * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
  * or an error explaining why we can't extract into that scope.
  */
+/* @internal */
 function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
     const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
     // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
@@ -760,21 +784,20 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
     return extractions;
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[], readonly readsAndWrites: ReadsAndWrites } {
+/* @internal */
+function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): {
+    readonly scopes: Scope[];
+    readonly readsAndWrites: ReadsAndWrites;
+} {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
     const enclosingTextRange = getEnclosingTextRange(targetRange, sourceFile);
-    const readsAndWrites = collectReadsAndWrites(
-        targetRange,
-        scopes,
-        enclosingTextRange,
-        sourceFile,
-        context.program.getTypeChecker(),
-        context.cancellationToken!);
+    const readsAndWrites = collectReadsAndWrites(targetRange, scopes, enclosingTextRange, sourceFile, context.program.getTypeChecker(), context.cancellationToken!);
     return { scopes, readsAndWrites };
 }
 
+/* @internal */
 function getDescriptionForFunctionInScope(scope: Scope): string {
     return isFunctionLikeDeclaration(scope)
         ? "inner function"
@@ -782,11 +805,13 @@ function getDescriptionForFunctionInScope(scope: Scope): string {
             ? "method"
             : "function";
 }
+/* @internal */
 function getDescriptionForConstantInScope(scope: Scope): string {
     return isClassLike(scope)
         ? "readonly field"
         : "constant";
 }
+/* @internal */
 function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration): string {
     switch (scope.kind) {
         case SyntaxKind.Constructor:
@@ -808,37 +833,35 @@ function getDescriptionForFunctionLikeDeclaration(scope: FunctionLikeDeclaration
             throw Debug.assertNever(scope, `Unexpected scope kind ${(scope as FunctionLikeDeclaration).kind}`);
     }
 }
+/* @internal */
 function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
     return scope.kind === SyntaxKind.ClassDeclaration
         ? scope.name ? `class '${scope.name.text}'` : "anonymous class declaration"
         : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
 }
+/* @internal */
 function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
     return scope.kind === SyntaxKind.ModuleBlock
         ? `namespace '${scope.parent.name.getText()}'`
         : scope.externalModuleIndicator ? SpecialScope.Module : SpecialScope.Global;
 }
 
+/* @internal */
 const enum SpecialScope {
     Module,
-    Global,
+    Global
 }
 
 /**
  * Result of 'extractRange' operation for a specific scope.
  * Stores either a list of changes that should be applied to extract a range or a list of errors
  */
-function extractFunctionInScope(
-    node: Statement | Expression | Block,
-    scope: Scope,
-    { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages,
-    exposedVariableDeclarations: readonly VariableDeclaration[],
-    range: TargetRange,
-    context: RefactorContext): RefactorEditInfo {
+/* @internal */
+function extractFunctionInScope(node: Statement | Expression | Block, scope: Scope, { usages: usagesInScope, typeParameterUsages, substitutions }: ScopeUsages, exposedVariableDeclarations: readonly VariableDeclaration[], range: TargetRange, context: RefactorContext): RefactorEditInfo {
 
     const checker = context.program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
-    const importAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
+    const importAdder = createImportAdder(context.file, context.program, context.preferences, context.host);
 
     // Make a unique name for the extracted function
     const file = scope.getSourceFile();
@@ -857,7 +880,7 @@ function extractFunctionInScope(
             let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             type = checker.getBaseTypeOfLiteralType(type);
-            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
+            typeNode = typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
         }
 
         const paramDecl = factory.createParameterDeclaration(
@@ -865,9 +888,7 @@ function extractFunctionInScope(
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             /*name*/ name,
-            /*questionToken*/ undefined,
-            typeNode
-        );
+        /*questionToken*/ undefined, typeNode);
         parameters.push(paramDecl);
         if (usage.usage === Usage.Write) {
             (writes || (writes = [])).push(usage);
@@ -910,31 +931,15 @@ function extractFunctionInScope(
             modifiers.push(factory.createModifier(SyntaxKind.AsyncKeyword));
         }
         newFunction = factory.createMethodDeclaration(
-            /*decorators*/ undefined,
-            modifiers.length ? modifiers : undefined,
-            range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
-            functionName,
-            /*questionToken*/ undefined,
-            typeParameters,
-            parameters,
-            returnType,
-            body
-        );
+        /*decorators*/ undefined, modifiers.length ? modifiers : undefined, range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined, functionName, 
+        /*questionToken*/ undefined, typeParameters, parameters, returnType, body);
     }
     else {
         newFunction = factory.createFunctionDeclaration(
-            /*decorators*/ undefined,
-            range.facts & RangeFacts.IsAsyncFunction ? [factory.createToken(SyntaxKind.AsyncKeyword)] : undefined,
-            range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
-            functionName,
-            typeParameters,
-            parameters,
-            returnType,
-            body
-        );
+        /*decorators*/ undefined, range.facts & RangeFacts.IsAsyncFunction ? [factory.createToken(SyntaxKind.AsyncKeyword)] : undefined, range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined, functionName, typeParameters, parameters, returnType, body);
     }
 
-    const changeTracker = textChanges.ChangeTracker.fromContext(context);
+    const changeTracker = ChangeTracker.fromContext(context);
     const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
     const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
     if (nodeToInsertBefore) {
@@ -949,9 +954,7 @@ function extractFunctionInScope(
     // replace range with function call
     const called = getCalledExpression(scope, range, functionNameText);
 
-    let call: Expression = factory.createCallExpression(
-        called,
-        callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
+    let call: Expression = factory.createCallExpression(called, callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
         callArguments);
     if (range.facts & RangeFacts.IsGenerator) {
         call = factory.createYieldExpression(factory.createToken(SyntaxKind.AsteriskToken), call);
@@ -974,9 +977,7 @@ function extractFunctionInScope(
             // Declaring exactly one variable: let x = newFunction();
             const variableDeclaration = exposedVariableDeclarations[0];
             newNodes.push(factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(getSynthesizedDeepClone(variableDeclaration.name), /*exclamationToken*/ undefined, /*type*/ getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)], // TODO (acasey): test binding patterns
+            /*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepClone(variableDeclaration.name), /*exclamationToken*/ undefined, /*type*/ getSynthesizedDeepClone(variableDeclaration.type), /*initializer*/ call)], // TODO (acasey): test binding patterns
                     variableDeclaration.parent.flags)));
         }
         else {
@@ -993,10 +994,7 @@ function extractFunctionInScope(
                     /*name*/ getSynthesizedDeepClone(variableDeclaration.name)));
 
                 // Being returned through an object literal will have widened the type.
-                const variableType: TypeNode | undefined = checker.typeToTypeNode(
-                    checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)),
-                    scope,
-                    NodeBuilderFlags.NoTruncation);
+                const variableType: TypeNode | undefined = checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)), scope, NodeBuilderFlags.NoTruncation);
 
                 typeElements.push(factory.createPropertySignature(
                     /*modifiers*/ undefined,
@@ -1013,14 +1011,10 @@ function extractFunctionInScope(
             }
 
             newNodes.push(factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(
-                        factory.createObjectBindingPattern(bindingElements),
+            /*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(factory.createObjectBindingPattern(bindingElements), 
                         /*exclamationToken*/ undefined,
                         /*type*/ typeLiteral,
-                        /*initializer*/call)],
-                    commonNodeFlags)));
+                /*initializer*/ call)], commonNodeFlags)));
         }
     }
     else if (exposedVariableDeclarations.length || writes) {
@@ -1033,20 +1027,14 @@ function extractFunctionInScope(
                 }
 
                 newNodes.push(factory.createVariableStatement(
-                    /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(
-                        [factory.createVariableDeclaration(variableDeclaration.symbol.name, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(variableDeclaration.type))],
-                        flags)));
+                /*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(variableDeclaration.symbol.name, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(variableDeclaration.type))], flags)));
             }
         }
 
         if (returnValueProperty) {
             // has both writes and return, need to create variable declaration to hold return value;
             newNodes.push(factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList(
-                    [factory.createVariableDeclaration(returnValueProperty, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(returnType))],
-                    NodeFlags.Let)));
+            /*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(returnValueProperty, /*exclamationToken*/ undefined, getTypeDeepCloneUnionUndefined(returnType))], NodeFlags.Let)));
         }
 
         const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
@@ -1122,12 +1110,8 @@ function extractFunctionInScope(
  * Result of 'extractRange' operation for a specific scope.
  * Stores either a list of changes that should be applied to extract a range or a list of errors
  */
-function extractConstantInScope(
-    node: Expression,
-    scope: Scope,
-    { substitutions }: ScopeUsages,
-    rangeFacts: RangeFacts,
-    context: RefactorContext): RefactorEditInfo {
+/* @internal */
+function extractConstantInScope(node: Expression, scope: Scope, { substitutions }: ScopeUsages, rangeFacts: RangeFacts, context: RefactorContext): RefactorEditInfo {
 
     const checker = context.program.getTypeChecker();
 
@@ -1146,7 +1130,7 @@ function extractConstantInScope(
 
     suppressLeadingAndTrailingTrivia(initializer);
 
-    const changeTracker = textChanges.ChangeTracker.fromContext(context);
+    const changeTracker = ChangeTracker.fromContext(context);
 
     if (isClassLike(scope)) {
         Debug.assert(!isJS, "Cannot extract to a JS class"); // See CannotExtractToJSClass
@@ -1158,18 +1142,11 @@ function extractConstantInScope(
         modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
 
         const newVariable = factory.createPropertyDeclaration(
-            /*decorators*/ undefined,
-            modifiers,
-            localNameText,
-            /*questionToken*/ undefined,
-            variableType,
-            initializer);
-
-        let localReference: Expression = factory.createPropertyAccessExpression(
-            rangeFacts & RangeFacts.InStaticRegion
+        /*decorators*/ undefined, modifiers, localNameText, 
+        /*questionToken*/ undefined, variableType, initializer);
+        let localReference: Expression = factory.createPropertyAccessExpression(rangeFacts & RangeFacts.InStaticRegion
                 ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
-                : factory.createThis(),
-                factory.createIdentifier(localNameText));
+            : factory.createThis(), factory.createIdentifier(localNameText));
 
         if (isInJSXContent(node)) {
             localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
@@ -1204,14 +1181,12 @@ function extractConstantInScope(
             // If the parent is an expression statement and the target scope is the immediately enclosing one,
             // replace the statement with the declaration.
             const newVariableStatement = factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+            /*modifiers*/ undefined, factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
             changeTracker.replaceNode(context.file, node.parent, newVariableStatement);
         }
         else {
             const newVariableStatement = factory.createVariableStatement(
-                /*modifiers*/ undefined,
-                factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
+            /*modifiers*/ undefined, factory.createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
 
             // Declare
             const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
@@ -1245,18 +1220,25 @@ function extractConstantInScope(
     const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
     return { renameFilename, renameLocation, edits };
 
-    function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
+    function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): {
+        variableType: TypeNode | undefined;
+        initializer: Expression;
+    } {
         // If no contextual type exists there is nothing to transfer to the function signature
-        if (variableType === undefined) return { variableType, initializer };
+        if (variableType === undefined)
+            return { variableType, initializer };
         // Only do this for function expressions and arrow functions that are not generic
-        if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters) return { variableType, initializer };
+        if (!isFunctionExpression(initializer) && !isArrowFunction(initializer) || !!initializer.typeParameters)
+            return { variableType, initializer };
         const functionType = checker.getTypeAtLocation(node);
         const functionSignature = singleOrUndefined(checker.getSignaturesOfType(functionType, SignatureKind.Call));
 
         // If no function signature, maybe there was an error, do nothing
-        if (!functionSignature) return { variableType, initializer };
+        if (!functionSignature)
+            return { variableType, initializer };
         // If the function signature has generic type parameters we don't attempt to move the parameters
-        if (!!functionSignature.getTypeParameters()) return { variableType, initializer };
+        if (!!functionSignature.getTypeParameters())
+            return { variableType, initializer };
 
         // We add parameter types if needed
         const parameters: ParameterDeclaration[] = [];
@@ -1267,24 +1249,19 @@ function extractConstantInScope(
             }
             else {
                 const paramType = checker.getTypeAtLocation(p);
-                if (paramType === checker.getAnyType()) hasAny = true;
-
-                parameters.push(factory.updateParameterDeclaration(p,
-                    p.decorators, p.modifiers, p.dotDotDotToken,
-                    p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                if (paramType === checker.getAnyType())
+                    hasAny = true;
+                parameters.push(factory.updateParameterDeclaration(p, p.decorators, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
             }
         }
         // If a parameter was inferred as any we skip adding function parameters at all.
         // Turning an implicit any (which under common settings is a error) to an explicit
         // is probably actually a worse refactor outcome.
-        if (hasAny) return { variableType, initializer };
+        if (hasAny)
+            return { variableType, initializer };
         variableType = undefined;
         if (isArrowFunction(initializer)) {
-            initializer = factory.updateArrowFunction(initializer, node.modifiers, initializer.typeParameters,
-                parameters,
-                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
-                initializer.equalsGreaterThanToken,
-                initializer.body);
+            initializer = factory.updateArrowFunction(initializer, node.modifiers, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.equalsGreaterThanToken, initializer.body);
         }
         else {
             if (functionSignature && !!functionSignature.thisParameter) {
@@ -1296,23 +1273,17 @@ function extractConstantInScope(
                     parameters.splice(0, 0, factory.createParameterDeclaration(
                         /* decorators */ undefined,
                         /* modifiers */ undefined,
-                        /* dotDotDotToken */ undefined,
-                        "this",
-                        /* questionToken */ undefined,
-                        checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)
-                    ));
+                    /* dotDotDotToken */ undefined, "this", 
+                    /* questionToken */ undefined, checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation)));
                 }
             }
-            initializer = factory.updateFunctionExpression(initializer, node.modifiers, initializer.asteriskToken,
-                initializer.name, initializer.typeParameters,
-                parameters,
-                initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
-                initializer.body);
+            initializer = factory.updateFunctionExpression(initializer, node.modifiers, initializer.asteriskToken, initializer.name, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.body);
         }
         return { variableType, initializer };
     }
 }
 
+/* @internal */
 function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     let prevNode;
     while (node !== undefined && node !== scope) {
@@ -1329,6 +1300,7 @@ function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
     }
 }
 
+/* @internal */
 function getFirstDeclaration(type: Type): Declaration | undefined {
     let firstDeclaration;
 
@@ -1344,17 +1316,21 @@ function getFirstDeclaration(type: Type): Declaration | undefined {
     return firstDeclaration;
 }
 
-function compareTypesByDeclarationOrder(
-    { type: type1, declaration: declaration1 }: { type: Type, declaration?: Declaration },
-    { type: type2, declaration: declaration2 }: { type: Type, declaration?: Declaration }) {
+/* @internal */
+function compareTypesByDeclarationOrder({ type: type1, declaration: declaration1 }: {
+    type: Type;
+    declaration?: Declaration;
+}, { type: type2, declaration: declaration2 }: {
+    type: Type;
+    declaration?: Declaration;
+}) {
 
     return compareProperties(declaration1, declaration2, "pos", compareValues)
-        || compareStringsCaseSensitive(
-            type1.symbol ? type1.symbol.getName() : "",
-            type2.symbol ? type2.symbol.getName() : "")
+        || compareStringsCaseSensitive(type1.symbol ? type1.symbol.getName() : "", type2.symbol ? type2.symbol.getName() : "")
         || compareValues(type1.id, type2.id);
 }
 
+/* @internal */
 function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {
     const functionReference = factory.createIdentifier(functionNameText);
     if (isClassLike(scope)) {
@@ -1366,7 +1342,11 @@ function getCalledExpression(scope: Node, range: TargetRange, functionNameText: 
     }
 }
 
-function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyESMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+/* @internal */
+function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyESMap<string, Node>, hasReturn: boolean): {
+    body: Block;
+    returnValueProperty: string | undefined;
+} {
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
     if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1422,6 +1402,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
     }
 }
 
+/* @internal */
 function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyESMap<string, Node>): Expression {
     return substitutions.size
         ? visitor(initializer) as Expression
@@ -1433,6 +1414,7 @@ function transformConstantInitializer(initializer: Expression, substitutions: Re
     }
 }
 
+/* @internal */
 function getStatementsOrClassElements(scope: Scope): readonly Statement[] | readonly ClassElement[] {
     if (isFunctionLikeDeclaration(scope)) {
         const body = scope.body!; // TODO: GH#18217
@@ -1457,11 +1439,12 @@ function getStatementsOrClassElements(scope: Scope): readonly Statement[] | read
  * If `scope` contains a function after `minPos`, then return the first such function.
  * Otherwise, return `undefined`.
  */
+/* @internal */
 function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Statement | ClassElement | undefined {
-    return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
-        child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
+    return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child => child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
 }
 
+/* @internal */
 function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
     const members = scope.members;
     Debug.assert(members.length > 0, "Found no members"); // There must be at least one child, since we extracted from one.
@@ -1484,10 +1467,12 @@ function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclarati
         prevMember = member;
     }
 
-    if (prevMember === undefined) return Debug.fail(); // If the loop didn't return, then it did set prevMember.
+    if (prevMember === undefined)
+        return Debug.fail(); // If the loop didn't return, then it did set prevMember.
     return prevMember;
 }
 
+/* @internal */
 function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
     Debug.assert(!isClassLike(scope));
 
@@ -1522,10 +1507,8 @@ function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
     }
 }
 
-function getPropertyAssignmentsForWritesAndVariableDeclarations(
-    exposedVariableDeclarations: readonly VariableDeclaration[],
-    writes: readonly UsageEntry[] | undefined
-): ShorthandPropertyAssignment[] {
+/* @internal */
+function getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined): ShorthandPropertyAssignment[] {
     const variableAssignments = map(exposedVariableDeclarations, v => factory.createShorthandPropertyAssignment(v.symbol.name));
     const writeAssignments = map(writes, w => factory.createShorthandPropertyAssignment(w.symbol.name));
 
@@ -1537,6 +1520,7 @@ function getPropertyAssignmentsForWritesAndVariableDeclarations(
             : variableAssignments.concat(writeAssignments);
 }
 
+/* @internal */
 function isReadonlyArray(v: any): v is readonly any[] {
     return isArray(v);
 }
@@ -1550,12 +1534,14 @@ function isReadonlyArray(v: any): v is readonly any[] {
  *   var someThing = foo + bar;
  *  this returns     ^-------^
  */
+/* @internal */
 function getEnclosingTextRange(targetRange: TargetRange, sourceFile: SourceFile): TextRange {
     return isReadonlyArray(targetRange.range)
         ? { pos: first(targetRange.range).getStart(sourceFile), end: last(targetRange.range).getEnd() }
         : targetRange.range;
 }
 
+/* @internal */
 const enum Usage {
     // value should be passed to extracted method
     Read = 1,
@@ -1563,18 +1549,21 @@ const enum Usage {
     Write = 2
 }
 
+/* @internal */
 interface UsageEntry {
     readonly usage: Usage;
     readonly symbol: Symbol;
     readonly node: Node;
 }
 
+/* @internal */
 interface ScopeUsages {
     readonly usages: ESMap<string, UsageEntry>;
     readonly typeParameterUsages: ESMap<string, TypeParameter>; // Key is type ID
     readonly substitutions: ESMap<string, Node>;
 }
 
+/* @internal */
 interface ReadsAndWrites {
     readonly target: Expression | Block;
     readonly usagesPerScope: readonly ScopeUsages[];
@@ -1582,21 +1571,15 @@ interface ReadsAndWrites {
     readonly constantErrorsPerScope: readonly (readonly Diagnostic[])[];
     readonly exposedVariableDeclarations: readonly VariableDeclaration[];
 }
-function collectReadsAndWrites(
-    targetRange: TargetRange,
-    scopes: Scope[],
-    enclosingTextRange: TextRange,
-    sourceFile: SourceFile,
-    checker: TypeChecker,
-    cancellationToken: CancellationToken): ReadsAndWrites {
-
-    const allTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
+/* @internal */
+function collectReadsAndWrites(targetRange: TargetRange, scopes: Scope[], enclosingTextRange: TextRange, sourceFile: SourceFile, checker: TypeChecker, cancellationToken: CancellationToken): ReadsAndWrites {
+    const allTypeParameterUsages = new ts.Map<string, TypeParameter>(); // Key is type ID
     const usagesPerScope: ScopeUsages[] = [];
     const substitutionsPerScope: ESMap<string, Node>[] = [];
     const functionErrorsPerScope: Diagnostic[][] = [];
     const constantErrorsPerScope: Diagnostic[][] = [];
     const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
-    const exposedVariableSymbolSet = new Map<string, true>(); // Key is symbol ID
+    const exposedVariableSymbolSet = new ts.Map<string, true>(); // Key is symbol ID
     const exposedVariableDeclarations: VariableDeclaration[] = [];
     let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
@@ -1619,8 +1602,8 @@ function collectReadsAndWrites(
 
     // initialize results
     for (const scope of scopes) {
-        usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
-        substitutionsPerScope.push(new Map<string, Expression>());
+        usagesPerScope.push({ usages: new ts.Map<string, UsageEntry>(), typeParameterUsages: new ts.Map<string, TypeParameter>(), substitutions: new ts.Map<string, Expression>() });
+        substitutionsPerScope.push(new ts.Map<string, Expression>());
 
         functionErrorsPerScope.push([]);
 
@@ -1638,7 +1621,7 @@ function collectReadsAndWrites(
         constantErrorsPerScope.push(constantErrors);
     }
 
-    const seenUsages = new Map<string, Usage>();
+    const seenUsages = new ts.Map<string, Usage>();
     const target = isReadonlyArray(targetRange.range) ? factory.createBlock(targetRange.range) : targetRange.range;
 
     const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
@@ -1655,7 +1638,7 @@ function collectReadsAndWrites(
     }
 
     if (allTypeParameterUsages.size > 0) {
-        const seenTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
+        const seenTypeParameterUsages = new ts.Map<string, TypeParameter>(); // Key is type ID
 
         let i = 0;
         for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
@@ -1948,6 +1931,7 @@ function collectReadsAndWrites(
     }
 }
 
+/* @internal */
 function getExtractableParent(node: Node | undefined): Node | undefined {
     return findAncestor(node, node => node.parent && isExtractableExpression(node) && !isBinaryExpression(node.parent));
 }
@@ -1959,6 +1943,7 @@ function getExtractableParent(node: Node | undefined): Node | undefined {
  * such as `import x from 'y'` -- the 'y' is a StringLiteral but is *not* an expression
  * in the sense of something that you could extract on
  */
+/* @internal */
 function isExtractableExpression(node: Node): boolean {
     const { parent } = node;
     switch (parent.kind) {
@@ -1984,6 +1969,7 @@ function isExtractableExpression(node: Node): boolean {
     return true;
 }
 
+/* @internal */
 function isBlockLike(node: Node): node is BlockLike {
     switch (node.kind) {
         case SyntaxKind.Block:
@@ -1996,7 +1982,7 @@ function isBlockLike(node: Node): node is BlockLike {
     }
 }
 
+/* @internal */
 function isInJSXContent(node: Node) {
     return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
-}
 }

@@ -1,4 +1,7 @@
-namespace ts {
+import { ResolvedModuleFull, ResolvedModuleWithFailedLookupLocations, extensionFromPath, ModuleResolutionHost, getDirectoryPath, Extension, filter, supportedTSExtensionsFlat, nodeModuleNameResolver, normalizePath, getRootLength, combinePaths, supportedTSExtensions, createModuleResolutionCache, CompilerOptions, ModuleResolutionKind, resolveModuleName, ESMap, ModuleKind, CompilerHost, ScriptTarget, createSourceFile, notImplemented, createProgram, getEntries, SourceFile, Program, Diagnostic, createGetCanonicalFileName, sortAndDeduplicateDiagnostics, emptyArray, Diagnostics, JsxEmit, resolveTypeReferenceDirective, map, arrayToMap, StructureIsReused } from "../ts";
+import { Compiler } from "../Harness";
+import { getDiagnosticOfFileFromProgram, getDiagnosticMessageChain, getDiagnosticOfFileFrom } from "../ts.tscWatch";
+import * as ts from "../ts";
 export function checkResolvedModule(actual: ResolvedModuleFull | undefined, expected: ResolvedModuleFull | undefined): boolean {
     if (!expected) {
         if (actual) {
@@ -35,7 +38,7 @@ interface File {
 }
 
 function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
-    const map = new Map<string, File>();
+    const map = new ts.Map<string, File>();
     for (const file of files) {
         map.set(file.name, file);
         if (file.symlinks) {
@@ -46,7 +49,7 @@ function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[
     }
 
     if (hasDirectoryExists) {
-        const directories = new Map<string, string>();
+        const directories = new ts.Map<string, string>();
         for (const f of files) {
             let name = getDirectoryPath(f.name);
             while (true) {
@@ -408,10 +411,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             const realFileName = "/linked/index.d.ts";
             const symlinkFileName = "/app/node_modules/linked/index.d.ts";
             const host = createModuleResolutionHost(
-                /*hasDirectoryExists*/ true,
-                { name: realFileName, symlinks: [symlinkFileName] },
-                { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
-            );
+            /*hasDirectoryExists*/ true, { name: realFileName, symlinks: [symlinkFileName] }, { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' });
             const resolution = nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
             const resolvedFileName = preserveSymlinks ? symlinkFileName : realFileName;
             checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
@@ -420,16 +420,13 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
 
     it("uses originalPath for caching", () => {
         const host = createModuleResolutionHost(
-            /*hasDirectoryExists*/ true,
-            {
+        /*hasDirectoryExists*/ true, {
                 name: "/modules/a.ts",
                 symlinks: ["/sub/node_modules/a/index.ts"],
-            },
-            {
+        }, {
                 name: "/sub/node_modules/a/package.json",
                 content: '{"version": "0.0.0", "main": "./index"}'
-            }
-        );
+        });
         const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
         const cache = createModuleResolutionCache("/", (f) => f);
         let resolution = resolveModuleName("a", "/sub/dir/foo.ts", compilerOptions, host, cache);
@@ -444,10 +441,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
 
     it("preserves originalPath on cache hit", () => {
         const host = createModuleResolutionHost(
-            /*hasDirectoryExists*/ true,
-            { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] },
-            { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
-        );
+        /*hasDirectoryExists*/ true, { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] }, { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' });
         const cache = createModuleResolutionCache("/", (f) => f);
         const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
         checkResolution(resolveModuleName("linked", "/app/src/app.ts", compilerOptions, host, cache));
@@ -487,9 +481,9 @@ describe("unittests:: moduleResolution:: Relative imports", () => {
 
         assert.equal(program.getSourceFiles().length, expectedFilesCount);
         const syntacticDiagnostics = program.getSyntacticDiagnostics();
-        assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(Harness.Compiler.minimalDiagnosticsToString(syntacticDiagnostics))}`);
+        assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(Compiler.minimalDiagnosticsToString(syntacticDiagnostics))}`);
         const semanticDiagnostics = program.getSemanticDiagnostics();
-        assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(Harness.Compiler.minimalDiagnosticsToString(semanticDiagnostics))}`);
+        assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(Compiler.minimalDiagnosticsToString(semanticDiagnostics))}`);
 
         // try to get file using a relative name
         for (const relativeFileName of relativeNamesToCheck) {
@@ -498,7 +492,7 @@ describe("unittests:: moduleResolution:: Relative imports", () => {
     }
 
     it("should find all modules", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/b/c/first/shared.ts": `
 class A {}
 export = A`,
@@ -517,7 +511,7 @@ export = C;
     });
 
     it("should find modules in node_modules", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/parent/node_modules/mod/index.d.ts": "export var x",
             "/parent/app/myapp.ts": `import {x} from "mod"`
         }));
@@ -525,7 +519,7 @@ export = C;
     });
 
     it("should find file referenced via absolute and relative names", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/b/c.ts": `/// <reference path="b.ts"/>`,
             "/a/b/b.ts": "var x"
         }));
@@ -535,18 +529,11 @@ export = C;
 
 describe("unittests:: moduleResolution:: Files with different casing with forceConsistentCasingInFileNames", () => {
     let library: SourceFile;
-    function test(
-        files: ESMap<string, string>,
-        options: CompilerOptions,
-        currentDirectory: string,
-        useCaseSensitiveFileNames: boolean,
-        rootFiles: string[],
-        expectedDiagnostics: (program: Program) => readonly Diagnostic[]
-    ): void {
+    function test(files: ESMap<string, string>, options: CompilerOptions, currentDirectory: string, useCaseSensitiveFileNames: boolean, rootFiles: string[], expectedDiagnostics: (program: Program) => readonly Diagnostic[]): void {
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         if (!useCaseSensitiveFileNames) {
             const oldFiles = files;
-            files = new Map<string, string>();
+            files = new ts.Map<string, string>();
             oldFiles.forEach((file, fileName) => {
                 files.set(getCanonicalFileName(fileName), file);
             });
@@ -583,245 +570,119 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     }
 
     it("should succeed when the same file is referenced using absolute and relative names", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/b/c.ts": `/// <reference path="d.ts"/>`,
             "/a/b/d.ts": "var x"
         }));
-        test(
-            files,
-            { module: ModuleKind.AMD },
-            "/a/b",
-            /*useCaseSensitiveFileNames*/ false,
-            ["c.ts", "/a/b/d.ts"],
-            () => emptyArray
-        );
+        test(files, { module: ModuleKind.AMD }, "/a/b", 
+        /*useCaseSensitiveFileNames*/ false, ["c.ts", "/a/b/d.ts"], () => emptyArray);
     });
 
     it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/b/c.ts": `/// <reference path="D.ts"/>`,
             "/a/b/d.ts": "var x"
         }));
-        test(
-            files,
-            { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true },
-            "/a/b",
-            /*useCaseSensitiveFileNames*/ false,
-            ["c.ts", "d.ts"],
-            program => [{
-                ...tscWatch.getDiagnosticOfFileFromProgram(
-                    program,
-                    "c.ts",
-                    `/// <reference path="D.ts"/>`.indexOf(`D.ts`),
-                    "D.ts".length,
-                    tscWatch.getDiagnosticMessageChain(
-                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
-                        ["D.ts", "d.ts"],
-                        [
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.The_file_is_in_the_program_because_Colon,
-                                emptyArray,
-                                [
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Referenced_via_0_from_file_1, ["D.ts", "c.ts"]),
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
-                                ]
-                            )
-                        ],
-                    )
-                ),
+        test(files, { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", 
+        /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], program => [{
+                ...getDiagnosticOfFileFromProgram(program, "c.ts", `/// <reference path="D.ts"/>`.indexOf(`D.ts`), "D.ts".length, getDiagnosticMessageChain(Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, ["D.ts", "d.ts"], [
+                    getDiagnosticMessageChain(Diagnostics.The_file_is_in_the_program_because_Colon, emptyArray, [
+                        getDiagnosticMessageChain(Diagnostics.Referenced_via_0_from_file_1, ["D.ts", "c.ts"]),
+                        getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
+                    ])
+                ])),
                 relatedInformation: undefined,
-            }]
-        );
+            }]);
     });
 
     it("should fail when two files used in program differ only in casing (imports)", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/b/c.ts": `import {x} from "D"`,
             "/a/b/d.ts": "export var x"
         }));
-        test(
-            files,
-            { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true },
-            "/a/b",
-            /*useCaseSensitiveFileNames*/ false,
-            ["c.ts", "d.ts"],
-            program => [{
-                ...tscWatch.getDiagnosticOfFileFromProgram(
-                    program,
-                    "c.ts",
-                    `import {x} from "D"`.indexOf(`"D"`),
-                    `"D"`.length,
-                    tscWatch.getDiagnosticMessageChain(
-                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
-                        ["/a/b/D.ts", "d.ts"],
-                        [
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.The_file_is_in_the_program_because_Colon,
-                                emptyArray,
-                                [
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
-                                ]
-                            )
-                        ],
-                    )
-                ),
+        test(files, { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true }, "/a/b", 
+        /*useCaseSensitiveFileNames*/ false, ["c.ts", "d.ts"], program => [{
+                ...getDiagnosticOfFileFromProgram(program, "c.ts", `import {x} from "D"`.indexOf(`"D"`), `"D"`.length, getDiagnosticMessageChain(Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, ["/a/b/D.ts", "d.ts"], [
+                    getDiagnosticMessageChain(Diagnostics.The_file_is_in_the_program_because_Colon, emptyArray, [
+                        getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
+                        getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
+                    ])
+                ])),
                 relatedInformation: undefined,
-            }]
-        );
+            }]);
     });
 
     it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "moduleA.ts": `import {x} from "./ModuleB"`,
             "moduleB.ts": "export var x"
         }));
-        test(
-            files,
-            { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
-            "",
-            /*useCaseSensitiveFileNames*/ false,
-            ["moduleA.ts", "moduleB.ts"],
-            program => [{
-                ...tscWatch.getDiagnosticOfFileFromProgram(
-                    program,
-                    "moduleA.ts",
-                    `import {x} from "./ModuleB"`.indexOf(`"./ModuleB"`),
-                    `"./ModuleB"`.length,
-                    tscWatch.getDiagnosticMessageChain(
-                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
-                        ["ModuleB.ts", "moduleB.ts"],
-                        [
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.The_file_is_in_the_program_because_Colon,
-                                emptyArray,
-                                [
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleB"`, "moduleA.ts"]),
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
-                                ]
-                            )
-                        ],
-                    )
-                ),
+        test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", 
+        /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts"], program => [{
+                ...getDiagnosticOfFileFromProgram(program, "moduleA.ts", `import {x} from "./ModuleB"`.indexOf(`"./ModuleB"`), `"./ModuleB"`.length, getDiagnosticMessageChain(Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, ["ModuleB.ts", "moduleB.ts"], [
+                    getDiagnosticMessageChain(Diagnostics.The_file_is_in_the_program_because_Colon, emptyArray, [
+                        getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleB"`, "moduleA.ts"]),
+                        getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
+                    ])
+                ])),
                 relatedInformation: undefined
-            }]
-        );
+            }]);
     });
 
     it("should fail when two files exist on disk that differs only in casing", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/b/c.ts": `import {x} from "D"`,
             "/a/b/D.ts": "export var x",
             "/a/b/d.ts": "export var y"
         }));
-        test(
-            files,
-            { module: ModuleKind.AMD },
-            "/a/b",
-            /*useCaseSensitiveFileNames*/ true,
-            ["c.ts", "d.ts"],
-            program => [{
-                ...tscWatch.getDiagnosticOfFileFromProgram(
-                    program,
-                    "c.ts",
-                    `import {x} from "D"`.indexOf(`"D"`),
-                    `"D"`.length,
-                    tscWatch.getDiagnosticMessageChain(
-                        Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
-                        ["/a/b/D.ts", "d.ts"],
-                        [
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.The_file_is_in_the_program_because_Colon,
-                                emptyArray,
-                                [
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
-                                ]
-                            )
-                        ],
-                    )
-                ),
+        test(files, { module: ModuleKind.AMD }, "/a/b", 
+        /*useCaseSensitiveFileNames*/ true, ["c.ts", "d.ts"], program => [{
+                ...getDiagnosticOfFileFromProgram(program, "c.ts", `import {x} from "D"`.indexOf(`"D"`), `"D"`.length, getDiagnosticMessageChain(Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, ["/a/b/D.ts", "d.ts"], [
+                    getDiagnosticMessageChain(Diagnostics.The_file_is_in_the_program_because_Colon, emptyArray, [
+                        getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
+                        getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)
+                    ])
+                ])),
                 relatedInformation: undefined
-            }]
-        );
+            }]);
     });
 
     it("should fail when module name in 'require' calls has inconsistent casing", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "moduleA.ts": `import a = require("./ModuleC")`,
             "moduleB.ts": `import a = require("./moduleC")`,
             "moduleC.ts": "export var x"
         }));
-        test(
-            files,
-            { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
-            "",
-            /*useCaseSensitiveFileNames*/ false,
-            ["moduleA.ts", "moduleB.ts", "moduleC.ts"],
-            program => {
+        test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "", 
+        /*useCaseSensitiveFileNames*/ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], program => {
                 const importInA = {
-                    ...tscWatch.getDiagnosticOfFileFromProgram(
-                        program,
-                        "moduleA.ts",
-                        `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),
-                        `"./ModuleC"`.length,
-                        Diagnostics.File_is_included_via_import_here,
-                    ),
+                ...getDiagnosticOfFileFromProgram(program, "moduleA.ts", `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`), `"./ModuleC"`.length, Diagnostics.File_is_included_via_import_here),
                     reportsUnnecessary: undefined,
                     reportsDeprecated: undefined
                 };
                 const importInB = {
-                    ...tscWatch.getDiagnosticOfFileFromProgram(
-                        program,
-                        "moduleB.ts",
-                        `import a = require("./moduleC")`.indexOf(`"./moduleC"`),
-                        `"./moduleC"`.length,
-                        Diagnostics.File_is_included_via_import_here,
-                    ),
+                ...getDiagnosticOfFileFromProgram(program, "moduleB.ts", `import a = require("./moduleC")`.indexOf(`"./moduleC"`), `"./moduleC"`.length, Diagnostics.File_is_included_via_import_here),
                     reportsUnnecessary: undefined,
                     reportsDeprecated: undefined
                 };
-                const importHereInA = tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "moduleA.ts"]);
-                const importHereInB = tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "moduleB.ts"]);
-                const details = [tscWatch.getDiagnosticMessageChain(
-                    Diagnostics.The_file_is_in_the_program_because_Colon,
-                    emptyArray,
-                    [importHereInA, importHereInB, tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)]
-                )];
+            const importHereInA = getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "moduleA.ts"]);
+            const importHereInB = getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "moduleB.ts"]);
+            const details = [getDiagnosticMessageChain(Diagnostics.The_file_is_in_the_program_because_Colon, emptyArray, [importHereInA, importHereInB, getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)])];
                 return [
                     {
-                        ...tscWatch.getDiagnosticOfFileFrom(
-                            importInA.file,
-                            importInA.start,
-                            importInA.length,
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
-                                ["ModuleC.ts", "moduleC.ts" ],
-                                details,
-                            )
-                        ),
+                    ...getDiagnosticOfFileFrom(importInA.file, importInA.start, importInA.length, getDiagnosticMessageChain(Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, ["ModuleC.ts", "moduleC.ts"], details)),
                         relatedInformation: [importInB]
                     },
                     {
-                        ...tscWatch.getDiagnosticOfFileFrom(
-                            importInB.file,
-                            importInB.start,
-                            importInB.length,
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                                ["moduleC.ts", "ModuleC.ts"],
-                                details,
-                            )
-                        ),
+                    ...getDiagnosticOfFileFrom(importInB.file, importInB.start, importInB.length, getDiagnosticMessageChain(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, ["moduleC.ts", "ModuleC.ts"], details)),
                         relatedInformation: [importInA]
                     }
                 ];
-            }
-        );
     });
 
+    });
     it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
             "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
             "/a/B/c/moduleC.ts": "export var x",
@@ -830,51 +691,25 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
         }));
-        test(
-            files,
-            { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
-            "/a/B/c",
-            /*useCaseSensitiveFileNames*/ false,
-            ["moduleD.ts"],
-            program => [{
-                ...tscWatch.getDiagnosticOfFileFromProgram(
-                    program,
-                    "moduleB.ts",
-                    `import a = require("./moduleC")`.indexOf(`"./moduleC"`),
-                    `"./moduleC"`.length,
-                    tscWatch.getDiagnosticMessageChain(
-                        Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                        ["/a/B/c/moduleC.ts", "/a/B/c/ModuleC.ts"],
-                        [
-                            tscWatch.getDiagnosticMessageChain(
-                                Diagnostics.The_file_is_in_the_program_because_Colon,
-                                emptyArray,
-                                [
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "/a/B/c/moduleA.ts"]),
-                                    tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "/a/B/c/moduleB.ts"])
-                                ]
-                            )
-                        ],
-                    )
-                ),
+        test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", 
+        /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], program => [{
+                ...getDiagnosticOfFileFromProgram(program, "moduleB.ts", `import a = require("./moduleC")`.indexOf(`"./moduleC"`), `"./moduleC"`.length, getDiagnosticMessageChain(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, ["/a/B/c/moduleC.ts", "/a/B/c/ModuleC.ts"], [
+                    getDiagnosticMessageChain(Diagnostics.The_file_is_in_the_program_because_Colon, emptyArray, [
+                        getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "/a/B/c/moduleA.ts"]),
+                        getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "/a/B/c/moduleB.ts"])
+                    ])
+                ])),
                 relatedInformation: [
                     {
-                        ...tscWatch.getDiagnosticOfFileFromProgram(
-                            program,
-                            "moduleA.ts",
-                            `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),
-                            `"./ModuleC"`.length,
-                            Diagnostics.File_is_included_via_import_here,
-                        ),
+                        ...getDiagnosticOfFileFromProgram(program, "moduleA.ts", `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`), `"./ModuleC"`.length, Diagnostics.File_is_included_via_import_here),
                         reportsUnnecessary: undefined,
                         reportsDeprecated: undefined
                     }
                 ]
-            }]
-        );
+            }]);
     });
     it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
             "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
             "/a/B/c/moduleC.ts": "export var x",
@@ -883,30 +718,18 @@ import a = require("./moduleA");
 import b = require("./moduleB");
                 `
         }));
-        test(
-            files,
-            { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
-            "/a/B/c",
-            /*useCaseSensitiveFileNames*/ false,
-            ["moduleD.ts"],
-            () => emptyArray
-        );
+        test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "/a/B/c", 
+        /*useCaseSensitiveFileNames*/ false, ["moduleD.ts"], () => emptyArray);
     });
 
     it("should succeed when the two files in program differ only in drive letter in their names", () => {
-        const files = new Map(getEntries({
+        const files = new ts.Map(getEntries({
             "d:/someFolder/moduleA.ts": `import a = require("D:/someFolder/moduleC")`,
             "d:/someFolder/moduleB.ts": `import a = require("./moduleC")`,
             "D:/someFolder/moduleC.ts": "export const x = 10",
         }));
-        test(
-            files,
-            { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
-            "d:/someFolder",
-            /*useCaseSensitiveFileNames*/ false,
-            ["d:/someFolder/moduleA.ts", "d:/someFolder/moduleB.ts"],
-            () => emptyArray
-        );
+        test(files, { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true }, "d:/someFolder", 
+        /*useCaseSensitiveFileNames*/ false, ["d:/someFolder/moduleA.ts", "d:/someFolder/moduleB.ts"], () => emptyArray);
     });
 });
 
@@ -1561,4 +1384,3 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
         });
     });
 });
-}

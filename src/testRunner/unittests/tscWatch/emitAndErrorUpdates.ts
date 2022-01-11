@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { File, projectRoot, verifyTscWatch, createWatchedSystem, libFile, TscWatchCompileChange, runQueuedTimeoutCallbacks, checkSingleTimeoutQueueLengthAndRun } from "../../ts.tscWatch";
+import { CompilerOptions, TestFSWithWatch, libContent } from "../../ts";
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
         path: `${projectRoot}/tsconfig.json`,
@@ -7,23 +8,12 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
     interface VerifyEmitAndErrorUpdatesWorker extends VerifyEmitAndErrorUpdates {
         configFile: () => File;
     }
-    function verifyEmitAndErrorUpdatesWorker({
-        subScenario,
-        files,
-        currentDirectory,
-        lib,
-        configFile,
-        changes,
-        baselineIncremental
-    }: VerifyEmitAndErrorUpdatesWorker) {
+    function verifyEmitAndErrorUpdatesWorker({ subScenario, files, currentDirectory, lib, configFile, changes, baselineIncremental }: VerifyEmitAndErrorUpdatesWorker) {
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario,
             commandLineArgs: ["--w"],
-            sys: () => createWatchedSystem(
-                [...files(), configFile(), lib?.() || libFile],
-                { currentDirectory: currentDirectory || projectRoot }
-            ),
+            sys: () => createWatchedSystem([...files(), configFile(), lib?.() || libFile], { currentDirectory: currentDirectory || projectRoot }),
             changes,
             baselineIncremental
         });
@@ -31,10 +21,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `incremental/${subScenario}`,
             commandLineArgs: ["--w", "--i"],
-            sys: () => createWatchedSystem(
-                [...files(), configFile(), lib?.() || libFile],
-                { currentDirectory: currentDirectory || projectRoot }
-            ),
+            sys: () => createWatchedSystem([...files(), configFile(), lib?.() || libFile], { currentDirectory: currentDirectory || projectRoot }),
             changes,
             baselineIncremental
         });
@@ -48,13 +35,13 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
     }
 
     interface VerifyEmitAndErrorUpdates {
-        subScenario: string
+        subScenario: string;
         files: () => File[];
         currentDirectory?: string;
         lib?: () => File;
         changes: TscWatchCompileChange[];
         configFile?: () => File;
-        baselineIncremental?: boolean
+        baselineIncremental?: boolean;
     }
     function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
         verifyEmitAndErrorUpdatesWorker({
@@ -142,11 +129,7 @@ export class B
     d = 1;
 }`
             };
-            verifyDeepImportChange(
-                "errors for .ts change",
-                bFile,
-                cFile
-            );
+            verifyDeepImportChange("errors for .ts change", bFile, cFile);
         });
         describe("updates errors when deep import through declaration file changes", () => {
             const bFile: File = {
@@ -164,11 +147,7 @@ export class B
     d: number;
 }`
             };
-            verifyDeepImportChange(
-                "errors for .d.ts change",
-                bFile,
-                cFile
-            );
+            verifyDeepImportChange("errors for .d.ts change", bFile, cFile);
         });
     });
 
@@ -307,10 +286,7 @@ export class Data {
             });
         }
         describe("when there are no circular import and exports", () => {
-            verifyTransitiveExports(
-                "no circular import/export",
-                [lib2Data]
-            );
+            verifyTransitiveExports("no circular import/export", [lib2Data]);
         });
         describe("when there are circular import and exports", () => {
             const lib2Data: File = {
@@ -332,10 +308,7 @@ export class Data2 {
     public dat?: Data;
 }`
             };
-            verifyTransitiveExports(
-                "yes circular import/exports",
-                [lib2Data, lib2Data2]
-            );
+            verifyTransitiveExports("yes circular import/exports", [lib2Data, lib2Data2]);
         });
     });
 
@@ -378,4 +351,3 @@ const a: string = "hello";`),
         });
     });
 });
-}

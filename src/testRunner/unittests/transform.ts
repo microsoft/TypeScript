@@ -1,4 +1,9 @@
-namespace ts {
+import { TransformationContext, SyntaxKind, EmitHint, isIdentifier, factory, addSyntheticTrailingComment, setTextRange, SourceFile, Node, isNumericLiteral, visitEachChild, visitNode, Visitor, Transformer, TransformerFactory, transform, createSourceFile, ScriptTarget, createPrinter, NewLineKind, VisitResult, transpileModule, VariableStatement, Identifier, ModuleBlock, ExportDeclaration, ModuleKind, TranspileOptions, createProgram, isSourceFile, setEmitFlags, EmitFlags, setSyntheticLeadingComments, isVoidExpression, isVariableStatement, isImportDeclaration, isExportDeclaration, isImportSpecifier, isExportSpecifier, isPropertyDeclaration, isParameterPropertyDeclaration, isClassDeclaration, isConstructorDeclaration, isModuleDeclaration, isVariableDeclaration, isMethodDeclaration, isNoSubstitutionTemplateLiteral } from "../ts";
+import { Baseline, IO } from "../Harness";
+import { evaluateJavaScript } from "../evaluator";
+import { createFromFileSystem } from "../vfs";
+import { TextDocument } from "../documents";
+import { CompilerHost } from "../fakes";
 describe("unittests:: TransformAPI", () => {
     function replaceUndefinedWithVoid0(context: TransformationContext) {
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -6,12 +11,7 @@ describe("unittests:: TransformAPI", () => {
         context.onSubstituteNode = (hint, node) => {
             node = previousOnSubstituteNode(hint, node);
             if (hint === EmitHint.Expression && isIdentifier(node) && node.escapedText === "undefined") {
-                node = factory.createPartiallyEmittedExpression(
-                    addSyntheticTrailingComment(
-                        setTextRange(
-                            factory.createVoidZero(),
-                            node),
-                        SyntaxKind.MultiLineCommentTrivia, "undefined"));
+                node = factory.createPartiallyEmittedExpression(addSyntheticTrailingComment(setTextRange(factory.createVoidZero(), node), SyntaxKind.MultiLineCommentTrivia, "undefined"));
             }
             return node;
         };
@@ -52,11 +52,8 @@ describe("unittests:: TransformAPI", () => {
 
     function createTaggedTemplateLiteral(): Transformer<SourceFile> {
         return sourceFile => factory.updateSourceFile(sourceFile, [
-            factory.createExpressionStatement(
-                factory.createTaggedTemplateExpression(
-                    factory.createIdentifier("$tpl"),
-                    /*typeArguments*/ undefined,
-                    factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
+            factory.createExpressionStatement(factory.createTaggedTemplateExpression(factory.createIdentifier("$tpl"), 
+            /*typeArguments*/ undefined, factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
         ]);
     }
 
@@ -73,7 +70,7 @@ describe("unittests:: TransformAPI", () => {
 
     function testBaseline(testName: string, test: () => string) {
         it(testName, () => {
-            Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, test());
+            Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, test());
         });
     }
 
@@ -87,10 +84,10 @@ describe("unittests:: TransformAPI", () => {
                 sourceText = undefined!;
             });
             it("compare baselines", () => {
-                Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, sourceText);
+                Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, sourceText);
             });
             it("evaluate", () => {
-                onEvaluate(evaluator.evaluateJavaScript(sourceText));
+                onEvaluate(evaluateJavaScript(sourceText));
             });
         });
     }
@@ -166,9 +163,7 @@ describe("unittests:: TransformAPI", () => {
                     .declarationList.declarations[0].name as Identifier;
 
                 return context.factory.updateSourceFile(file, file.statements.concat([
-                    context.factory.createExpressionStatement(
-                        context.factory.createArrayLiteralExpression([firstVarName, secondVarName])
-                    ),
+                    context.factory.createExpressionStatement(context.factory.createArrayLiteralExpression([firstVarName, secondVarName])),
                 ]));
             }
         ]);
@@ -229,13 +224,10 @@ describe("unittests:: TransformAPI", () => {
         function replaceWithClassAndNamespace() {
             return (sourceFile: SourceFile) => {
                 // TODO(rbuckton): Does this need to be parented?
-                const result = factory.updateSourceFile(
-                    sourceFile,
-                    factory.createNodeArray([
-                        factory.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                const result = factory.updateSourceFile(sourceFile, factory.createNodeArray([
+                    factory.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!),
                         factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
-                    ])
-                );
+                ]));
                 return result;
             };
         }
@@ -311,9 +303,7 @@ describe("unittests:: TransformAPI", () => {
                     /*modifiers*/ undefined,
                     /*importClause*/ factory.createImportClause(
                         /*isTypeOnly*/ false,
-                        /*name*/ undefined,
-                        factory.createNamespaceImport(factory.createIdentifier("i0"))
-                    ),
+                /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier("i0"))), 
                     /*moduleSpecifier*/ factory.createStringLiteral("./comp1"),
                     /*assertClause*/ undefined);
                 return factory.updateSourceFile(sf, [importStar]);
@@ -380,7 +370,8 @@ describe("unittests:: TransformAPI", () => {
                 // The decorator is required to trigger ts.ts transformations.
                 const classDecl = factory.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
                     factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, [
-                        factory.createParameterDeclaration(/*decorators*/ [factory.createDecorator(factory.createIdentifier("Dec"))], /*modifiers*/ [factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], factory.createBlock([]))
+                        factory.createParameterDeclaration(/*decorators*/ [factory.createDecorator(factory.createIdentifier("Dec"))], /*modifiers*/ [factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")
+                    ], factory.createBlock([]))
                 ]);
                 return factory.updateSourceFile(sf, [classDecl]);
             }
@@ -388,8 +379,8 @@ describe("unittests:: TransformAPI", () => {
     });
 
     function baselineDeclarationTransform(text: string, opts: TranspileOptions) {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true, { documents: [new documents.TextDocument("/.src/index.ts", text)] });
-        const host = new fakes.CompilerHost(fs, opts.compilerOptions);
+        const fs = createFromFileSystem(IO, /*caseSensitive*/ true, { documents: [new TextDocument("/.src/index.ts", text)] });
+        const host = new CompilerHost(fs, opts.compilerOptions);
         const program = createProgram(["/.src/index.ts"], opts.compilerOptions!, host);
         program.emit(program.getSourceFile("/.src/index.ts"), (p, s, bom) => host.writeFile(p, s, bom), /*cancellationToken*/ undefined, /*onlyDts*/ true, opts.transformers);
         return fs.readFileSync("/.src/index.d.ts").toString();
@@ -537,11 +528,11 @@ module MyModule {
 
     // https://github.com/Microsoft/TypeScript/issues/24709
     testBaseline("issue24709", () => {
-        const fs = vfs.createFromFileSystem(Harness.IO, /*caseSensitive*/ true);
+        const fs = createFromFileSystem(IO, /*caseSensitive*/ true);
         const transformed = transform(createSourceFile("source.ts", "class X { echo(x: string) { return x; } }", ScriptTarget.ES3), [transformSourceFile]);
         const transformedSourceFile = transformed.transformed[0];
         transformed.dispose();
-        const host = new fakes.CompilerHost(fs);
+        const host = new CompilerHost(fs);
         host.getSourceFile = () => transformedSourceFile;
         const program = createProgram(["source.ts"], {
             target: ScriptTarget.ES3,
@@ -554,18 +545,7 @@ module MyModule {
         function transformSourceFile(context: TransformationContext) {
             const visitor: Visitor = (node) => {
                 if (isMethodDeclaration(node)) {
-                    return factory.updateMethodDeclaration(
-                        node,
-                        node.decorators,
-                        node.modifiers,
-                        node.asteriskToken,
-                        factory.createIdentifier("foobar"),
-                        node.questionToken,
-                        node.typeParameters,
-                        node.parameters,
-                        node.type,
-                        node.body,
-                    );
+                    return factory.updateMethodDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, factory.createIdentifier("foobar"), node.questionToken, node.typeParameters, node.parameters, node.type, node.body);
                 }
                 return visitEachChild(node, visitor, context);
             };
@@ -600,5 +580,4 @@ module MyModule {
         assert.equal(exports.stringLength, 5);
     });
 });
-}
 

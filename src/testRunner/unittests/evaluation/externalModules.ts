@@ -1,7 +1,8 @@
+import { evaluateTypeScript } from "../../evaluator";
 describe("unittests:: evaluation:: externalModules", () => {
     // https://github.com/microsoft/TypeScript/issues/35420
     it("Correct 'this' in function exported from external module", async () => {
-        const result = evaluator.evaluateTypeScript({
+        const result = evaluateTypeScript({
             files: {
                 "/.src/output.ts": `
                     export const output: any[] = [];
@@ -42,7 +43,7 @@ describe("unittests:: evaluation:: externalModules", () => {
     });
 
     it("Correct 'this' in function expression exported from external module", async () => {
-        const result = evaluator.evaluateTypeScript({
+        const result = evaluateTypeScript({
             files: {
                 "/.src/output.ts": `
                     export const output: any[] = [];

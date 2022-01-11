@@ -1,4 +1,5 @@
-namespace ts {
+import { CompilerOptions, MapLike, CustomTransformers, Diagnostic, getDefaultCompilerOptions, hasProperty, transpileOptionValueCompilerOptions, createSourceFile, getEmitScriptTarget, getEntries, getNewLineCharacter, CompilerHost, normalizePath, fileExtensionIs, Debug, createProgram, addRange, CommandLineOptionOfCustomType, filter, optionDeclarations, forEachEntry, cloneCompilerOptions, isString, parseCustomTypeOption, createCompilerDiagnosticForInvalidCustomType } from "./ts";
+import * as ts from "./ts";
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;
     fileName?: string;
@@ -54,7 +55,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     if (transpileOptions.renamedDependencies) {
-        sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
+        sourceFile.renamedDependencies = new ts.Map(getEntries(transpileOptions.renamedDependencies));
     }
 
     const newLine = getNewLineCharacter(options);
@@ -96,7 +97,8 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     // Emit
     program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
 
-    if (outputText === undefined) return Debug.fail("Output generation failed");
+    if (outputText === undefined)
+        return Debug.fail("Output generation failed");
 
     return { outputText, diagnostics, sourceMapText };
 }
@@ -142,5 +144,4 @@ export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diag
     }
 
     return options;
-}
 }

@@ -1,5 +1,7 @@
+import { LogLevel, getLogLevel, findArgument, StartInput, ServerHost, BaseLogger, Msg, stringifyIndented, RequireResult, ServerCancellationToken, nullCancellationToken, StartSessionOptions, Logger, ITypingsInstaller, ProjectService, Event, InstallPackageOptionsWithProject, InstallPackageRequest, Arguments, Project, TypingInstallerRequestUnion, createInstallTypingsRequest, TypesRegistryResponse, PackageInstalledResponse, SetTypings, InvalidateCachedTypings, BeginInstallTypes, EndInstallTypes, InitializationFailedResponse, EventTypesRegistry, ActionPackageInstalled, EventInitializationFailed, protocol, EventBeginInstallTypes, EventEndInstallTypes, ActionInvalidate, ActionSet, Session, nullTypingsInstaller, formatMessage, toEvent, indent, hasArgument } from "./ts.server";
+import { CharacterCodes, stripQuotes, LanguageServiceMode, Debug, MapLike, noop, getNodeMajorVersion, combinePaths, noopFileWatcher, WatchFileKind, resolveJSModule, validateLocaleAndSetLanguage, normalizeSlashes, directorySeparator, toFileNameLowerCase, getRootLength, DirectoryWatcherCallback, WatchOptions, FileWatcher, ESMap, ApplyCodeActionCommandResult, JsTyping, getDirectoryPath, TypeAcquisition, SortedReadonlyArray, getEntries, assertType, sys, tracing, startTracing, versionMajorMinor } from "./ts";
+import * as ts from "./ts";
 /*@internal*/
-namespace ts.server {
 interface LogOptions {
     file?: string;
     detailLevel?: LogLevel;
@@ -7,6 +9,7 @@ interface LogOptions {
     logToFile?: boolean;
 }
 
+/* @internal */
 interface NodeChildProcess {
     send(message: any, sendHandle?: any): void;
     on(message: "message" | "exit", f: (m: any) => void): void;
@@ -14,6 +17,7 @@ interface NodeChildProcess {
     pid: number;
 }
 
+/* @internal */
 interface ReadLineOptions {
     input: NodeJS.ReadableStream;
     output?: NodeJS.WritableStream;
@@ -21,10 +25,12 @@ interface ReadLineOptions {
     historySize?: number;
 }
 
+/* @internal */
 interface NodeSocket {
     write(data: string, encoding: string): boolean;
 }
 
+/* @internal */
 function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOptions {
     if (!logEnvStr) {
         return {};
@@ -65,16 +71,19 @@ function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOption
                 pathStart += " ";
                 pathStart += args[i];
                 extraPartCounter++;
-                if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote) break;
+                if (pathStart.charCodeAt(pathStart.length - 1) === CharacterCodes.doubleQuote)
+                    break;
             }
         }
         return { value: stripQuotes(pathStart), extraPartCounter };
     }
 }
 
+/* @internal */
 function parseServerMode(): LanguageServiceMode | string | undefined {
     const mode = findArgument("--serverMode");
-    if (!mode) return undefined;
+    if (!mode)
+        return undefined;
 
     switch (mode.toLowerCase()) {
         case "semantic":
@@ -88,10 +97,14 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
     }
 }
 
+/* @internal */
 export function initializeNodeSystem(): StartInput {
     const sys = Debug.checkDefined(ts.sys) as ServerHost;
     const childProcess: {
-        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
+        execFileSync(file: string, args: string[], options: {
+            stdio: "ignore";
+            env: MapLike<string>;
+        }): string | Buffer;
     } = require("child_process");
 
     interface Stats {
@@ -128,11 +141,7 @@ export function initializeNodeSystem(): StartInput {
 
     class Logger extends BaseLogger {
         private fd = -1;
-        constructor(
-            private readonly logFilename: string,
-            private readonly traceToConsole: boolean,
-            level: LogLevel
-        ) {
+        constructor(private readonly logFilename: string, private readonly traceToConsole: boolean, level: LogLevel) {
             super(level);
             if (this.logFilename) {
                 try {
@@ -185,7 +194,7 @@ export function initializeNodeSystem(): StartInput {
 
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
-        const statusCache = new Map<string, boolean>();
+        const statusCache = new ts.Map<string, boolean>();
         sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
@@ -286,8 +295,10 @@ export function initializeNodeSystem(): StartInput {
     let serverMode: LanguageServiceMode | undefined;
     let unknownServerMode: string | undefined;
     if (modeOrUnknown !== undefined) {
-        if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
-        else unknownServerMode = modeOrUnknown;
+        if (typeof modeOrUnknown === "number")
+            serverMode = modeOrUnknown;
+        else
+            unknownServerMode = modeOrUnknown;
     }
     return {
         args: process.argv,
@@ -378,14 +389,19 @@ export function initializeNodeSystem(): StartInput {
     }
 }
 
+/* @internal */
 function parseEventPort(eventPortStr: string | undefined) {
     const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
     return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
 }
 
+/* @internal */
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
+        fork(modulePath: string, args: string[], options?: {
+            execArgv: string[];
+            env?: MapLike<string>;
+        }): NodeChildProcess;
     } = require("child_process");
 
     const os: {
@@ -394,7 +410,9 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
     } = require("os");
 
     const net: {
-        connect(options: { port: number }, onConnect?: () => void): NodeSocket
+        connect(options: {
+            port: number;
+        }, onConnect?: () => void): NodeSocket;
     } = require("net");
 
     const readline: {
@@ -417,7 +435,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
-        private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private requestMap = new ts.Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry = false;
         private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
@@ -429,18 +447,11 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
-
-        constructor(
-            private readonly telemetryEnabled: boolean,
-            private readonly logger: Logger,
-            private readonly host: ServerHost,
-            readonly globalTypingsCacheLocation: string,
-            readonly typingSafeListLocation: string,
-            readonly typesMapLocation: string,
-            private readonly npmLocation: string | undefined,
-            private readonly validateDefaultNpmLocation: boolean,
-            private event: Event) {
+        private packageInstalledPromise: {
+            resolve(value: ApplyCodeActionCommandResult): void;
+            reject(reason: unknown): void;
+        } | undefined;
+        constructor(private readonly telemetryEnabled: boolean, private readonly logger: Logger, private readonly host: ServerHost, readonly globalTypingsCacheLocation: string, readonly typingSafeListLocation: string, readonly typesMapLocation: string, private readonly npmLocation: string | undefined, private readonly validateDefaultNpmLocation: boolean, private event: Event) {
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -565,7 +576,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
+                    this.typesRegistryCache = new ts.Map(getEntries(response.typesRegistry));
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
@@ -671,7 +682,10 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
     class IOSession extends Session {
         private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
-        private socketEventQueue: { body: any, eventName: string }[] | undefined;
+        private socketEventQueue: {
+            body: any;
+            eventName: string;
+        }[] | undefined;
         /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
         private constructed: boolean | undefined;
 
@@ -850,5 +864,4 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
             : ".cache";
         return combinePaths(normalizeSlashes(homePath), cacheFolder);
     }
-}
 }

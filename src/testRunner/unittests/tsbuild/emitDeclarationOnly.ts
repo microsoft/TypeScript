@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTscSerializedIncrementalEdits, replaceText, BuildKind } from "../../ts";
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/emitDeclarationOnly");
     });
@@ -50,4 +51,3 @@ export interface A {`),
         ],
     });
 });
-}

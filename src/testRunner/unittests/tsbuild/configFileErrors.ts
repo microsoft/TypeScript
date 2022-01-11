@@ -1,4 +1,5 @@
-namespace ts {
+import { verifyTsc, loadProjectFromDisk, verifyTscIncrementalEdits, loadProjectFromFiles, BuildKind, replaceText, appendText, noChangeRun } from "../../ts";
+import { dedent } from "../../Utils";
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
     verifyTsc({
         scenario: "configFileErrors",
@@ -15,7 +16,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         fs: () => loadProjectFromFiles({
             "/src/a.ts": "export function foo() { }",
             "/src/b.ts": "export function bar() { }",
-            "/src/tsconfig.json": Utils.dedent`
+            "/src/tsconfig.json": dedent `
 {
     "compilerOptions": {
         "composite": true,
@@ -42,16 +43,12 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
             noChangeRun,
             {
                 buildKind: BuildKind.IncrementalDtsChange,
-                modifyFs: fs => fs.writeFileSync(
-                    "/src/tsconfig.json",
-                    JSON.stringify({
+                modifyFs: fs => fs.writeFileSync("/src/tsconfig.json", JSON.stringify({
                         compilerOptions: { composite: true, declaration: true },
                         files: ["a.ts", "b.ts"]
-                    })
-                ),
+                })),
                 subScenario: "builds after fixing config file errors"
             },
         ]
     });
 });
-}

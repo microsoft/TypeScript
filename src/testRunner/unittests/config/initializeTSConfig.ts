@@ -1,4 +1,5 @@
-namespace ts {
+import { parseCommandLine, generateTSConfig } from "../../ts";
+import { Baseline } from "../../Harness";
 describe("unittests:: config:: initTSConfig", () => {
     function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
         describe(name, () => {
@@ -7,7 +8,7 @@ describe("unittests:: config:: initTSConfig", () => {
             const outputFileName = `tsConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
-                Harness.Baseline.runBaseline(outputFileName, initResult);
+                Baseline.runBaseline(outputFileName, initResult);
             });
         });
     }
@@ -30,4 +31,3 @@ describe("unittests:: config:: initTSConfig", () => {
 
     initTSConfigCorrectly("Initialized TSConfig with advanced options", ["--init", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
 });
-}

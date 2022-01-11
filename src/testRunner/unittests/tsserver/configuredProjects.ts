@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createProjectService, checkNumberOfInferredProjects, checkNumberOfConfiguredProjects, configuredProjectAt, checkProjectActualFiles, checkProjectRootFiles, checkWatchedFiles, checkWatchedDirectories, nodeModulesAtTypes, getConfigFilesToWatch, commonFile1, commonFile2, checkNumberOfProjects, checkOpenFiles, createSessionWithEventTracking, protocol, SymLink, createSession, createLoggerWithInMemoryLogs, openFilesForSession, verifyGetErrRequest, baselineTsserverLogs, checkWatchedDirectoriesDetailed, getTypeRootsFromLocation } from "../../ts.projectSystem";
+import { getDirectoryPath, combinePaths, Path, find, createTextSpan, emptyArray, map, mapDefined, createCompilerDiagnostic, Diagnostics } from "../../ts";
+import { projectRoot, ensureErrorFreeBuild } from "../../ts.tscWatch";
+import { maxProgramSizeForNonTsFiles, toNormalizedPath, ProjectLanguageServiceStateEvent, NormalizedPath, ConfigFileDiagEvent } from "../../ts.server";
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("create configured project without file list", () => {
         const configFile: File = {
@@ -83,17 +86,17 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("add and then remove a config file in a folder with loose files", () => {
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: `{
                     "files": ["commonFile1.ts"]
                 }`
         };
         const commonFile1: File = {
-            path: `${tscWatch.projectRoot}/commonFile1.ts`,
+            path: `${projectRoot}/commonFile1.ts`,
             content: "let x = 1"
         };
         const commonFile2: File = {
-            path: `${tscWatch.projectRoot}/commonFile2.ts`,
+            path: `${projectRoot}/commonFile2.ts`,
             content: "let y = 1"
         };
 
@@ -107,7 +110,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         checkProjectActualFiles(projectService.inferredProjects[0], [commonFile1.path, libFile.path]);
         checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
 
-        const watchedFiles = getConfigFilesToWatch(tscWatch.projectRoot).concat(libFile.path);
+        const watchedFiles = getConfigFilesToWatch(projectRoot).concat(libFile.path);
         checkWatchedFiles(host, watchedFiles);
 
         // Add a tsconfig file
@@ -437,19 +440,19 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
     it("open file become a part of configured project if it is referenced from root file", () => {
         const file1 = {
-            path: `${tscWatch.projectRoot}/a/b/f1.ts`,
+            path: `${projectRoot}/a/b/f1.ts`,
             content: "export let x = 5"
         };
         const file2 = {
-            path: `${tscWatch.projectRoot}/a/c/f2.ts`,
+            path: `${projectRoot}/a/c/f2.ts`,
             content: `import {x} from "../b/f1"`
         };
         const file3 = {
-            path: `${tscWatch.projectRoot}/a/c/f3.ts`,
+            path: `${projectRoot}/a/c/f3.ts`,
             content: "export let y = 1"
         };
         const configFile = {
-            path: `${tscWatch.projectRoot}/a/c/tsconfig.json`,
+            path: `${projectRoot}/a/c/tsconfig.json`,
             content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
         };
 
@@ -753,8 +756,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, f3, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const projectService = createProjectService(host);
         projectService.openClientFile(f1.path);
@@ -771,7 +773,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         for (const f of [f1, f2, f3]) {
             // All the script infos should be present and contain the project since it is still alive.
-            const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path))!;
+            const scriptInfo = projectService.getScriptInfoForNormalizedPath(toNormalizedPath(f.path))!;
             assert.equal(scriptInfo.containingProjects.length, 1, `expect 1 containing projects for '${f.path}'`);
             assert.equal(scriptInfo.containingProjects[0], project, `expect configured project to be the only containing project for '${f.path}'`);
         }
@@ -788,7 +790,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
 
         for (const f of [f1, f2, f3]) {
             // All the script infos should not be present since the project is closed and orphan script infos are collected
-            assert.isUndefined(projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path)));
+            assert.isUndefined(projectService.getScriptInfoForNormalizedPath(toNormalizedPath(f.path)));
         }
     });
 
@@ -807,9 +809,8 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
-        const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        const { session, events } = createSessionWithEventTracking<ProjectLanguageServiceStateEvent>(host, ProjectLanguageServiceStateEvent);
         session.executeCommand({
             seq: 0,
             type: "request",
@@ -825,14 +826,14 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         assert.equal(events[0].data.project, project, "project name");
         assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
 
-        const options = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
+        const options = projectService.getFormatCodeOptions(f1.path as NormalizedPath);
         const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
         assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
     });
 
     it("when multiple projects are open, detects correct default project", () => {
         const barConfig: File = {
-            path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
+            path: `${projectRoot}/bar/tsconfig.json`,
             content: JSON.stringify({
                 include: ["index.ts"],
                 compilerOptions: {
@@ -841,14 +842,14 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
             })
         };
         const barIndex: File = {
-            path: `${tscWatch.projectRoot}/bar/index.ts`,
+            path: `${projectRoot}/bar/index.ts`,
             content: `
 export function bar() {
   console.log("hello world");
 }`
         };
         const fooConfig: File = {
-            path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+            path: `${projectRoot}/foo/tsconfig.json`,
             content: JSON.stringify({
                 include: ["index.ts"],
                 compilerOptions: {
@@ -857,14 +858,14 @@ export function bar() {
             })
         };
         const fooIndex: File = {
-            path: `${tscWatch.projectRoot}/foo/index.ts`,
+            path: `${projectRoot}/foo/index.ts`,
             content: `
 import { bar } from "bar";
 bar();`
         };
         const barSymLink: SymLink = {
-            path: `${tscWatch.projectRoot}/foo/node_modules/bar`,
-            symLink: `${tscWatch.projectRoot}/bar`
+            path: `${projectRoot}/foo/node_modules/bar`,
+            symLink: `${projectRoot}/bar`
         };
 
         const lib2017: File = {
@@ -887,15 +888,15 @@ declare var console: {
 
     it("when file name starts with ^", () => {
         const file: File = {
-            path: `${tscWatch.projectRoot}/file.ts`,
+            path: `${projectRoot}/file.ts`,
             content: "const x = 10;"
         };
         const app: File = {
-            path: `${tscWatch.projectRoot}/^app.ts`,
+            path: `${projectRoot}/^app.ts`,
             content: "const y = 10;"
         };
         const tsconfig: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const host = createServerHost([file, app, tsconfig, libFile]);
@@ -905,26 +906,28 @@ declare var console: {
 
     describe("when creating new file", () => {
         const foo: File = {
-            path: `${tscWatch.projectRoot}/src/foo.ts`,
+            path: `${projectRoot}/src/foo.ts`,
             content: "export function foo() { }"
         };
         const bar: File = {
-            path: `${tscWatch.projectRoot}/src/bar.ts`,
+            path: `${projectRoot}/src/bar.ts`,
             content: "export function bar() { }"
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
                 include: ["./src"]
             })
         };
         const fooBar: File = {
-            path: `${tscWatch.projectRoot}/src/sub/fooBar.ts`,
+            path: `${projectRoot}/src/sub/fooBar.ts`,
             content: "export function fooBar() { }"
         };
         function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
             const host = createServerHost([
-                foo, bar, libFile, { path: `${tscWatch.projectRoot}/src/sub` },
+                foo, bar,
+                libFile,
+                { path: `${projectRoot}/src/sub` },
                 withExclude ?
                     {
                         path: config.path,
@@ -944,7 +947,7 @@ declare var console: {
                 arguments: {
                     file: foo.path,
                     fileContent: foo.content,
-                    projectRootPath: tscWatch.projectRoot
+                    projectRootPath: projectRoot
                 }
             });
             if (!openFileBeforeCreating) {
@@ -955,7 +958,7 @@ declare var console: {
                 arguments: {
                     file: fooBar.path,
                     fileContent: fooBar.content,
-                    projectRootPath: tscWatch.projectRoot
+                    projectRootPath: projectRoot
                 }
             });
             if (openFileBeforeCreating) {
@@ -1011,24 +1014,24 @@ declare var console: {
 
     it("when default configured project does not contain the file", () => {
         const barConfig: File = {
-            path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
+            path: `${projectRoot}/bar/tsconfig.json`,
             content: "{}"
         };
         const barIndex: File = {
-            path: `${tscWatch.projectRoot}/bar/index.ts`,
+            path: `${projectRoot}/bar/index.ts`,
             content: `import {foo} from "../foo/lib";
 foo();`
         };
         const fooBarConfig: File = {
-            path: `${tscWatch.projectRoot}/foobar/tsconfig.json`,
+            path: `${projectRoot}/foobar/tsconfig.json`,
             content: barConfig.path
         };
         const fooBarIndex: File = {
-            path: `${tscWatch.projectRoot}/foobar/index.ts`,
+            path: `${projectRoot}/foobar/index.ts`,
             content: barIndex.content
         };
         const fooConfig: File = {
-            path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+            path: `${projectRoot}/foo/tsconfig.json`,
             content: JSON.stringify({
                 include: ["index.ts"],
                 compilerOptions: {
@@ -1038,12 +1041,12 @@ foo();`
             })
         };
         const fooIndex: File = {
-            path: `${tscWatch.projectRoot}/foo/index.ts`,
+            path: `${projectRoot}/foo/index.ts`,
             content: `export function foo() {}`
         };
         const host = createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex, libFile]);
-        tscWatch.ensureErrorFreeBuild(host, [fooConfig.path]);
-        const fooDts = `${tscWatch.projectRoot}/foo/lib/index.d.ts`;
+        ensureErrorFreeBuild(host, [fooConfig.path]);
+        const fooDts = `${projectRoot}/foo/lib/index.d.ts`;
         assert.isTrue(host.fileExists(fooDts));
         const session = createSession(host);
         const service = session.getProjectService();
@@ -1064,41 +1067,41 @@ foo();`
                 endOffset: 1
             }
         });
-        assert.equal(service.tryGetDefaultProjectForFile(server.toNormalizedPath(fooDts)), service.configuredProjects.get(barConfig.path));
+        assert.equal(service.tryGetDefaultProjectForFile(toNormalizedPath(fooDts)), service.configuredProjects.get(barConfig.path));
     });
 
     describe("watches extended config files", () => {
         function getService(additionalFiles?: File[]) {
             const alphaExtendedConfig: File = {
-                path: `${tscWatch.projectRoot}/extended/alpha.tsconfig.json`,
+                path: `${projectRoot}/extended/alpha.tsconfig.json`,
                 content: "{}"
             };
             const bravoExtendedConfig: File = {
-                path: `${tscWatch.projectRoot}/extended/bravo.tsconfig.json`,
+                path: `${projectRoot}/extended/bravo.tsconfig.json`,
                 content: JSON.stringify({
                     extends: "./alpha.tsconfig.json"
                 })
             };
             const aConfig: File = {
-                path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                path: `${projectRoot}/a/tsconfig.json`,
                 content: JSON.stringify({
                     extends: "../extended/alpha.tsconfig.json",
                     files: ["a.ts"]
                 })
             };
             const aFile: File = {
-                path: `${tscWatch.projectRoot}/a/a.ts`,
+                path: `${projectRoot}/a/a.ts`,
                 content: `let a = 1;`
             };
             const bConfig: File = {
-                path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                path: `${projectRoot}/b/tsconfig.json`,
                 content: JSON.stringify({
                     extends: "../extended/bravo.tsconfig.json",
                     files: ["b.ts"]
                 })
             };
             const bFile: File = {
-                path: `${tscWatch.projectRoot}/b/b.ts`,
+                path: `${projectRoot}/b/b.ts`,
                 content: `let b = 1;`
             };
 
@@ -1167,11 +1170,11 @@ foo();`
 
         it("should stop watching the extended configs of closed projects", () => {
             const dummy: File = {
-                path: `${tscWatch.projectRoot}/dummy/dummy.ts`,
+                path: `${projectRoot}/dummy/dummy.ts`,
                 content: `let dummy = 1;`
             };
             const dummyConfig: File = {
-                path: `${tscWatch.projectRoot}/dummy/tsconfig.json`,
+                path: `${projectRoot}/dummy/tsconfig.json`,
                 content: "{}"
             };
             const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService([dummy, dummyConfig]);
@@ -1221,8 +1224,8 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
         // Since file1 refers to config file as the default project, it needs to be kept alive
         checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
         const inferredProject = projectService.inferredProjects[0];
-        assert.isTrue(inferredProject.containsFile(file1.path as server.NormalizedPath));
-        assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(file1.path as server.NormalizedPath));
+        assert.isTrue(inferredProject.containsFile(file1.path as NormalizedPath));
+        assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(file1.path as NormalizedPath));
     });
 
     it("should be able to handle @types if input file list is empty", () => {
@@ -1255,11 +1258,11 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
 
     it("should tolerate invalid include files that start in subDirectory", () => {
         const f = {
-            path: `${tscWatch.projectRoot}/src/server/index.ts`,
+            path: `${projectRoot}/src/server/index.ts`,
             content: "let x = 1"
         };
         const config = {
-            path: `${tscWatch.projectRoot}/src/server/tsconfig.json`,
+            path: `${projectRoot}/src/server/tsconfig.json`,
             content: JSON.stringify({
                 compiler: {
                     module: "commonjs",
@@ -1372,16 +1375,16 @@ describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories l
 describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file fails", () => {
     it("should be tolerated without crashing the server", () => {
         const configFile = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: ""
         };
         const file1 = {
-            path: `${tscWatch.projectRoot}/file1.ts`,
+            path: `${projectRoot}/file1.ts`,
             content: "let t = 10;"
         };
 
         const host = createServerHost([file1, libFile, configFile]);
-        const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
+        const { session, events } = createSessionWithEventTracking<ConfigFileDiagEvent>(host, ConfigFileDiagEvent);
         const originalReadFile = host.readFile;
         host.readFile = f => {
             return f === configFile.path ?
@@ -1391,7 +1394,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         openFilesForSession([file1], session);
 
         assert.deepEqual(events, [{
-            eventName: server.ConfigFileDiagEvent,
+                eventName: ConfigFileDiagEvent,
             data: {
                 triggerFile: file1.path,
                 configFileName: configFile.path,
@@ -1402,4 +1405,3 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
         }]);
     });
 });
-}

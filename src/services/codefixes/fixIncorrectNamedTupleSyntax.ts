@@ -1,27 +1,33 @@
+import { Diagnostics, SourceFile, getTokenAtPosition, findAncestor, SyntaxKind, NamedTupleMember, OptionalTypeNode, RestTypeNode, ParenthesizedTypeNode, factory } from "../ts";
+import { registerCodeFix, createCodeFixAction } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "fixIncorrectNamedTupleSyntax";
+/* @internal */
 const errorCodes = [
     Diagnostics.A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_colon_rather_than_after_the_type.code,
     Diagnostics.A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type.code
 ];
 
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixIncorrectNamedTupleSyntax(context) {
         const { sourceFile, span } = context;
         const namedTupleMember = getNamedTupleMember(sourceFile, span.start);
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));
         return [createCodeFixAction(fixId, changes, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels, fixId, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels)];
     },
     fixIds: [fixId]
 });
 
+/* @internal */
 function getNamedTupleMember(sourceFile: SourceFile, pos: number) {
     const token = getTokenAtPosition(sourceFile, pos);
     return findAncestor(token, t => t.kind === SyntaxKind.NamedTupleMember) as NamedTupleMember | undefined;
 }
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, namedTupleMember?: NamedTupleMember) {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, namedTupleMember?: NamedTupleMember) {
     if (!namedTupleMember) {
         return;
     }
@@ -37,16 +43,9 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, na
         }
         unwrappedType = (unwrappedType as OptionalTypeNode | RestTypeNode | ParenthesizedTypeNode).type;
     }
-    const updated = factory.updateNamedTupleMember(
-        namedTupleMember,
-        namedTupleMember.dotDotDotToken || (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined),
-        namedTupleMember.name,
-        namedTupleMember.questionToken || (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined),
-        unwrappedType
-    );
+    const updated = factory.updateNamedTupleMember(namedTupleMember, namedTupleMember.dotDotDotToken || (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined), namedTupleMember.name, namedTupleMember.questionToken || (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined), unwrappedType);
     if (updated === namedTupleMember) {
         return;
     }
     changes.replaceNode(sourceFile, namedTupleMember, updated);
-}
 }

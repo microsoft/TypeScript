@@ -1,18 +1,26 @@
+import { Diagnostics, ApplicableRefactorInfo, emptyArray, SyntaxKind, RefactorEditInfo, Debug, RefactorContext, NamedImportBindings, getRefactorContextSpan, getTokenAtPosition, findAncestor, isImportDeclaration, getParentNodeInSpan, findNextToken, getLocaleSpecificMessage, SourceFile, Program, getAllowSyntheticDefaultImports, TypeChecker, NamespaceImport, PropertyAccessExpression, QualifiedName, isPropertyAccessOrQualifiedName, SymbolFlags, getUniqueName, factory, ImportSpecifier, isPropertyAccessExpression, NamedImports, Symbol, isStringLiteral, ScriptTarget, isExportSpecifier, isShorthandPropertyAssignment, arrayFrom, ImportDeclaration, Identifier } from "../ts";
+import { registerRefactor, isRefactorErrorInfo, RefactorErrorInfo } from "../ts.refactor";
+import { ChangeTracker } from "../ts.textChanges";
+import { Core } from "../ts.FindAllReferences";
+import { moduleSpecifierToValidIdentifier } from "../ts.codefix";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.refactor {
 const refactorName = "Convert import";
 
+/* @internal */
 const namespaceToNamedAction = {
     name: "Convert namespace import to named imports",
     description: Diagnostics.Convert_namespace_import_to_named_imports.message,
     kind: "refactor.rewrite.import.named",
 };
+/* @internal */
 const namedToNamespaceAction = {
     name: "Convert named imports to namespace import",
     description: Diagnostics.Convert_named_imports_to_namespace_import.message,
     kind: "refactor.rewrite.import.namespace",
 };
 
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [
         namespaceToNamedAction.kind,
@@ -20,7 +28,8 @@ registerRefactor(refactorName, {
     ],
     getAvailableActions(context): readonly ApplicableRefactorInfo[] {
         const info = getImportToConvert(context, context.triggerReason === "invoked");
-        if (!info) return emptyArray;
+        if (!info)
+            return emptyArray;
 
         if (!isRefactorErrorInfo(info)) {
             const namespaceImport = info.kind === SyntaxKind.NamespaceImport;
@@ -43,22 +52,25 @@ registerRefactor(refactorName, {
         Debug.assert(actionName === namespaceToNamedAction.name || actionName === namedToNamespaceAction.name, "Unexpected action name");
         const info = getImportToConvert(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, info));
+        const edits = ChangeTracker.with(context, t => doChange(context.file, context.program, t, info));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 });
 
 // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
+/* @internal */
 function getImportToConvert(context: RefactorContext, considerPartialSpans = true): NamedImportBindings | RefactorErrorInfo | undefined {
     const { file } = context;
     const span = getRefactorContextSpan(context);
     const token = getTokenAtPosition(file, span.start);
     const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
-    if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
+    if (!importDecl || !isImportDeclaration(importDecl))
+        return { error: "Selection is not an import declaration." };
 
     const end = span.start + span.length;
     const nextToken = findNextToken(importDecl, importDecl.parent, file);
-    if (nextToken && end > nextToken.getStart()) return undefined;
+    if (nextToken && end > nextToken.getStart())
+        return undefined;
 
     const { importClause } = importDecl;
     if (!importClause) {
@@ -72,7 +84,8 @@ function getImportToConvert(context: RefactorContext, considerPartialSpans = tru
     return importClause.namedBindings;
 }
 
-function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImportBindings): void {
+/* @internal */
+function doChange(sourceFile: SourceFile, program: Program, changes: ChangeTracker, toConvert: NamedImportBindings): void {
     const checker = program.getTypeChecker();
     if (toConvert.kind === SyntaxKind.NamespaceImport) {
         doChangeNamespaceToNamed(sourceFile, checker, changes, toConvert, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
@@ -82,13 +95,13 @@ function doChange(sourceFile: SourceFile, program: Program, changes: textChanges
     }
 }
 
-function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
+/* @internal */
+function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
     let usedAsNamespaceOrDefault = false;
 
     const nodesToReplace: (PropertyAccessExpression | QualifiedName)[] = [];
-    const conflictingNames = new Map<string, true>();
-
-    FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
+    const conflictingNames = new ts.Map<string, true>();
+    Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
         if (!isPropertyAccessOrQualifiedName(id.parent)) {
             usedAsNamespaceOrDefault = true;
         }
@@ -103,7 +116,7 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
     });
 
     // We may need to change `mod.x` to `_x` to avoid a name conflict.
-    const exportNameToImportName = new Map<string, string>();
+    const exportNameToImportName = new ts.Map<string, string>();
 
     for (const propertyAccessOrQualifiedName of nodesToReplace) {
         const exportName = getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName).text;
@@ -129,32 +142,35 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
     }
 }
 
+/* @internal */
 function getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
     return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name : propertyAccessOrQualifiedName.right;
 }
 
+/* @internal */
 function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
     return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression : propertyAccessOrQualifiedName.left;
 }
 
-function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamedImports): void {
+/* @internal */
+function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, toConvert: NamedImports): void {
     const importDecl = toConvert.parent.parent;
     const { moduleSpecifier } = importDecl;
 
-    const toConvertSymbols: Set<Symbol> = new Set();
+    const toConvertSymbols: ts.Set<Symbol> = new ts.Set();
     toConvert.elements.forEach(namedImport => {
         const symbol = checker.getSymbolAtLocation(namedImport.name);
         if (symbol) {
             toConvertSymbols.add(symbol);
         }
     });
-    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
+    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
     function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
         // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.
         // A name conflict means that, in a scope where we would like to use the preferred namespace name, there already exists a symbol with that name in that scope.
         // We are going to use the namespace name in the scopes the named imports being refactored are referenced,
         // so we look for conflicts by looking at every reference to those named imports.
-        return !!FindAllReferences.Core.eachSymbolReferenceInFile(namedImport.name, checker, sourceFile, id => {
+        return !!Core.eachSymbolReferenceInFile(namedImport.name, checker, sourceFile, id => {
             const symbol = checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true);
             if (symbol) { // There already is a symbol with the same name as the preferred namespace name.
                 if (toConvertSymbols.has(symbol)) { // `preferredName` resolves to a symbol for one of the named import references we are going to transform into namespace import references...
@@ -170,11 +186,11 @@ function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, 
 
     // Imports that need to be kept as named imports in the refactored code, to avoid changing the semantics.
     // More specifically, those are named imports that appear in named exports in the original code, e.g. `a` in `import { a } from "m"; export { a }`.
-    const neededNamedImports: Set<ImportSpecifier> = new Set();
+    const neededNamedImports: ts.Set<ImportSpecifier> = new ts.Set();
 
     for (const element of toConvert.elements) {
         const propertyName = (element.propertyName || element.name).text;
-        FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
+        Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
             const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
             if (isShorthandPropertyAssignment(id.parent)) {
                 changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
@@ -190,14 +206,12 @@ function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, 
 
     changes.replaceNode(sourceFile, toConvert, factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element =>
-            factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
+        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }
 }
 
+/* @internal */
 function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-    return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
-        factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*assertClause*/ undefined);
-}
+    return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*assertClause*/ undefined);
 }

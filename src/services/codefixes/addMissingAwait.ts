@@ -1,12 +1,20 @@
+import { ChangeTracker } from "../ts.textChanges";
+import { FileTextChanges, Diagnostics, compact, SourceFile, TextSpan, CancellationToken, Program, getFixableErrorSpanExpression, CodeFixContext, CodeFixAllContext, Expression, TypeChecker, forEach, some, isNumber, textSpansEqual, Symbol, Node, tryCast, isVariableDeclaration, isIdentifier, getAncestor, SyntaxKind, hasSyntacticModifier, ModifierFlags, Identifier, isPropertyAccessExpression, isBinaryExpression, Diagnostic, find, contains, TypeFlags, NodeFlags, findAncestor, isArrowFunction, isBlock, getSymbolId, factory, isCallOrNewExpression, tryAddToSet, findPrecedingToken, positionIsASICandidate } from "../ts";
+import { registerCodeFix, codeFixAll, createCodeFixActionWithoutFixAll, createCodeFixAction } from "../ts.codefix";
+import { Core } from "../ts.FindAllReferences";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
-type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
+type ContextualTrackChangesFunction = (cb: (changeTracker: ChangeTracker) => void) => FileTextChanges[];
+/* @internal */
 const fixId = "addMissingAwait";
+/* @internal */
 const propertyAccessCode = Diagnostics.Property_0_does_not_exist_on_type_1.code;
+/* @internal */
 const callableConstructableErrorCodes = [
     Diagnostics.This_expression_is_not_callable.code,
     Diagnostics.This_expression_is_not_constructable.code,
 ];
+/* @internal */
 const errorCodes = [
     Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_bigint_or_an_enum_type.code,
     Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type.code,
@@ -27,6 +35,7 @@ const errorCodes = [
     ...callableConstructableErrorCodes,
 ];
 
+/* @internal */
 registerCodeFix({
     fixIds: [fixId],
     errorCodes,
@@ -38,15 +47,16 @@ registerCodeFix({
         }
 
         const checker = context.program.getTypeChecker();
-        const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
+        const trackChanges: ContextualTrackChangesFunction = cb => ChangeTracker.with(context, cb);
         return compact([
             getDeclarationSiteFix(context, expression, errorCode, checker, trackChanges),
-            getUseSiteFix(context, expression, errorCode, checker, trackChanges)]);
+            getUseSiteFix(context, expression, errorCode, checker, trackChanges)
+        ]);
     },
     getAllCodeActions: context => {
         const { sourceFile, program, cancellationToken } = context;
         const checker = context.program.getTypeChecker();
-        const fixedDeclarations = new Set<number>();
+        const fixedDeclarations = new ts.Set<number>();
         return codeFixAll(context, errorCodes, (t, diagnostic) => {
             const expression = getAwaitErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
             if (!expression) {
@@ -59,6 +69,7 @@ registerCodeFix({
     },
 });
 
+/* @internal */
 function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
     const expression = getFixableErrorSpanExpression(sourceFile, span);
     return expression
@@ -66,7 +77,8 @@ function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, 
         && isInsideAwaitableBody(expression) ? expression : undefined;
 }
 
-function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+/* @internal */
+function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: ts.Set<number>) {
     const { sourceFile, program, cancellationToken } = context;
     const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
     if (awaitableInitializers) {
@@ -78,47 +90,42 @@ function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expr
         });
         // No fix-all because it will already be included once with the use site fix,
         // and for simplicity the fix-all doesn‘t let the user choose between use-site and declaration-site fixes.
-        return createCodeFixActionWithoutFixAll(
-            "addMissingAwaitToInitializer",
-            initializerChanges,
-            awaitableInitializers.initializers.length === 1
+        return createCodeFixActionWithoutFixAll("addMissingAwaitToInitializer", initializerChanges, awaitableInitializers.initializers.length === 1
                 ? [Diagnostics.Add_await_to_initializer_for_0, awaitableInitializers.initializers[0].declarationSymbol.name]
                 : Diagnostics.Add_await_to_initializers);
     }
 }
 
-function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
+/* @internal */
+function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: ts.Set<number>) {
     const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
     return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
 }
 
+/* @internal */
 function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
     const checker = program.getDiagnosticsProducingTypeChecker();
     const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
-    return some(diagnostics, ({ start, length, relatedInformation, code }) =>
-        isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
+    return some(diagnostics, ({ start, length, relatedInformation, code }) => isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
         code === errorCode &&
         !!relatedInformation &&
         some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
 }
 
+/* @internal */
 interface AwaitableInitializer {
     expression: Expression;
     declarationSymbol: Symbol;
 }
 
+/* @internal */
 interface AwaitableInitializers {
     initializers: readonly AwaitableInitializer[];
     needsSecondPassForFixAll: boolean;
 }
 
-function findAwaitableInitializers(
-    expression: Node,
-    sourceFile: SourceFile,
-    cancellationToken: CancellationToken,
-    program: Program,
-    checker: TypeChecker,
-): AwaitableInitializers | undefined {
+/* @internal */
+function findAwaitableInitializers(expression: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, program: Program, checker: TypeChecker): AwaitableInitializers | undefined {
     const identifiers = getIdentifiersFromErrorSpanExpression(expression, checker);
     if (!identifiers) {
         return;
@@ -147,7 +154,7 @@ function findAwaitableInitializers(
         }
 
         const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
+        const isUsedElsewhere = Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
             return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
         });
 
@@ -167,11 +174,13 @@ function findAwaitableInitializers(
     };
 }
 
+/* @internal */
 interface Identifiers {
     identifiers: readonly Identifier[];
     isCompleteFix: boolean;
 }
 
+/* @internal */
 function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeChecker): Identifiers | undefined {
     if (isPropertyAccessExpression(expression.parent) && isIdentifier(expression.parent.expression)) {
         return { identifiers: [expression.parent.expression], isCompleteFix: true };
@@ -196,12 +205,12 @@ function getIdentifiersFromErrorSpanExpression(expression: Node, checker: TypeCh
     }
 }
 
+/* @internal */
 function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: readonly Diagnostic[], sourceFile: SourceFile, checker: TypeChecker) {
     const errorNode = isPropertyAccessExpression(reference.parent) ? reference.parent.name :
         isBinaryExpression(reference.parent) ? reference.parent :
         reference;
-    const diagnostic = find(diagnostics, diagnostic =>
-        diagnostic.start === errorNode.getStart(sourceFile) &&
+    const diagnostic = find(diagnostics, diagnostic => diagnostic.start === errorNode.getStart(sourceFile) &&
         (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
 
     return diagnostic && contains(errorCodes, diagnostic.code) ||
@@ -215,17 +224,17 @@ function symbolReferenceIsAlsoMissingAwait(reference: Identifier, diagnostics: r
         checker.getTypeAtLocation(errorNode).flags & TypeFlags.Any;
 }
 
+/* @internal */
 function isInsideAwaitableBody(node: Node) {
-    return node.kind & NodeFlags.AwaitContext || !!findAncestor(node, ancestor =>
-        ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
-        isBlock(ancestor) && (
-            ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
+    return node.kind & NodeFlags.AwaitContext || !!findAncestor(node, ancestor => ancestor.parent && isArrowFunction(ancestor.parent) && ancestor.parent.body === ancestor ||
+        isBlock(ancestor) && (ancestor.parent.kind === SyntaxKind.FunctionDeclaration ||
             ancestor.parent.kind === SyntaxKind.FunctionExpression ||
             ancestor.parent.kind === SyntaxKind.ArrowFunction ||
             ancestor.parent.kind === SyntaxKind.MethodDeclaration));
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
+/* @internal */
+function makeChange(changeTracker: ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: ts.Set<number>) {
     if (isBinaryExpression(insertionSite)) {
         for (const side of [insertionSite.left, insertionSite.right]) {
             if (fixedDeclarations && isIdentifier(side)) {
@@ -246,10 +255,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
                 return;
             }
         }
-        changeTracker.replaceNode(
-            sourceFile,
-            insertionSite.parent.expression,
-            factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite.parent.expression)));
+        changeTracker.replaceNode(sourceFile, insertionSite.parent.expression, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite.parent.expression)));
         insertLeadingSemicolonIfNeeded(changeTracker, insertionSite.parent.expression, sourceFile);
     }
     else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
@@ -273,10 +279,10 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
     }
 }
 
-function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+/* @internal */
+function insertLeadingSemicolonIfNeeded(changeTracker: ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
     const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
     if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
         changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
     }
-}
 }

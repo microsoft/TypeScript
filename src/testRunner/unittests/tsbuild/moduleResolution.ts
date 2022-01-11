@@ -1,10 +1,12 @@
-namespace ts.tscWatch {
+import { CompilerOptions, emptyArray, verifyTsc, loadProjectFromFiles } from "../../ts";
+import { createWatchedSystem, projectRoot, libFile, verifyTscWatch, replaceFileText, runQueuedTimeoutCallbacks } from "../../ts.tscWatch";
+import { dedent } from "../../Utils";
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: CompilerOptions) {
         return createWatchedSystem([
             {
                 path: `${projectRoot}/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent `
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },
@@ -81,7 +83,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             },
             {
                 path: `${projectRoot}/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent `
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },
@@ -165,13 +167,13 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                 compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
                 files: ["./pkg1_index.ts"]
             }),
-            "/src/packages/typeroot1/sometype/index.d.ts": Utils.dedent`declare type TheNum = "type1";`,
+            "/src/packages/typeroot1/sometype/index.d.ts": dedent `declare type TheNum = "type1";`,
             "/src/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
             "/src/packages/pkg2.tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
                 files: ["./pkg2_index.ts"]
             }),
-            "/src/packages/typeroot2/sometype/index.d.ts": Utils.dedent`declare type TheNum2 = "type2";`,
+            "/src/packages/typeroot2/sometype/index.d.ts": dedent `declare type TheNum2 = "type2";`,
         }),
         commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
     });
@@ -190,7 +192,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             },
             {
                 path: `${projectRoot}/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent `
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },
@@ -258,7 +260,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
             },
             {
                 path: `${projectRoot}/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent `
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },
@@ -322,4 +324,3 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         ]
     });
 });
-}

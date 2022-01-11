@@ -1,16 +1,16 @@
+import { ConstructorDeclaration, PropertyDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, ParameterPropertyDeclaration, Diagnostics, DiagnosticMessage, emptyArray, CodeFixContext, CodeFixAllContext, Debug, SourceFile, isSourceFileJS, factory, find, isStaticModifier, isAbstractModifier, isAccessibilityModifier, skipTrivia, SyntaxKind, not, isJSDocOverrideTag, Node, isParameterPropertyDeclaration, getTokenAtPosition, findAncestor, isClassLike } from "../ts";
+import { registerCodeFix, createCodeFixActionMaybeFixAll, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixName = "fixOverrideModifier";
+/* @internal */
 const fixAddOverrideId = "fixAddOverrideModifier";
+/* @internal */
 const fixRemoveOverrideId = "fixRemoveOverrideModifier";
 
-type ClassElementLikeHasJSDoc =
-    | ConstructorDeclaration
-    | PropertyDeclaration
-    | MethodDeclaration
-    | GetAccessorDeclaration
-    | SetAccessorDeclaration
-    | ParameterPropertyDeclaration;
+/* @internal */
+type ClassElementLikeHasJSDoc = ConstructorDeclaration | PropertyDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ParameterPropertyDeclaration;
+/* @internal */
 
 const errorCodes = [
     Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code,
@@ -24,12 +24,14 @@ const errorCodes = [
     Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0.code,
 ];
 
+/* @internal */
 interface ErrorCodeFixInfo {
     descriptions: DiagnosticMessage;
     fixId?: string | undefined;
     fixAllDescriptions?: DiagnosticMessage | undefined;
 }
 
+/* @internal */
 const errorCodeFixIdMap: Record<number, ErrorCodeFixInfo> = {
     // case #1:
     [Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code]: {
@@ -83,24 +85,25 @@ const errorCodeFixIdMap: Record<number, ErrorCodeFixInfo> = {
     }
 };
 
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixOverrideModifierIssues(context) {
         const { errorCode, span } = context;
 
         const info = errorCodeFixIdMap[errorCode];
-        if (!info) return emptyArray;
+        if (!info)
+            return emptyArray;
 
         const { descriptions, fixId, fixAllDescriptions } = info;
-        const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
+        const changes = ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
 
         return [
             createCodeFixActionMaybeFixAll(fixName, changes, descriptions, fixId, fixAllDescriptions)
         ];
     },
     fixIds: [fixName, fixAddOverrideId, fixRemoveOverrideId],
-    getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, (changes, diag) => {
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const { code, start } = diag;
             const info = errorCodeFixIdMap[code];
             if (!info || info.fixId !== context.fixId) {
@@ -111,11 +114,8 @@ registerCodeFix({
         })
 });
 
-function dispatchChanges(
-    changeTracker: textChanges.ChangeTracker,
-    context: CodeFixContext | CodeFixAllContext,
-    errorCode: number,
-    pos: number) {
+/* @internal */
+function dispatchChanges(changeTracker: ChangeTracker, context: CodeFixContext | CodeFixAllContext, errorCode: number, pos: number) {
     switch (errorCode) {
         case Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code:
         case Diagnostics.This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0.code:
@@ -133,7 +133,8 @@ function dispatchChanges(
     }
 }
 
-function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
+/* @internal */
+function doAddOverrideModifierChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number) {
     const classElement = findContainerClassElementLike(sourceFile, pos);
     if (isSourceFileJS(sourceFile)) {
         changeTracker.addJSDocTags(sourceFile, classElement, [factory.createJSDocOverrideTag(factory.createIdentifier("override"))]);
@@ -151,7 +152,8 @@ function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, s
     changeTracker.insertModifierAt(sourceFile, modifierPos, SyntaxKind.OverrideKeyword, options);
 }
 
-function doRemoveOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
+/* @internal */
+function doRemoveOverrideModifierChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number) {
     const classElement = findContainerClassElementLike(sourceFile, pos);
     if (isSourceFileJS(sourceFile)) {
         changeTracker.filterJSDocTags(sourceFile, classElement, not(isJSDocOverrideTag));
@@ -163,6 +165,7 @@ function doRemoveOverrideModifierChange(changeTracker: textChanges.ChangeTracker
     changeTracker.deleteModifier(sourceFile, overrideModifier);
 }
 
+/* @internal */
 function isClassElementLikeHasJSDoc(node: Node): node is ClassElementLikeHasJSDoc {
     switch (node.kind) {
         case SyntaxKind.Constructor:
@@ -178,15 +181,16 @@ function isClassElementLikeHasJSDoc(node: Node): node is ClassElementLikeHasJSDo
     }
 }
 
+/* @internal */
 function findContainerClassElementLike(sourceFile: SourceFile, pos: number) {
     const token = getTokenAtPosition(sourceFile, pos);
     const classElement = findAncestor(token, node => {
-        if (isClassLike(node)) return "quit";
+        if (isClassLike(node))
+            return "quit";
         return isClassElementLikeHasJSDoc(node);
     });
 
     Debug.assert(classElement && isClassElementLikeHasJSDoc(classElement));
     return classElement;
-}
 }
 

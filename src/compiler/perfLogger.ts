@@ -1,6 +1,7 @@
+import { noop } from "./ts";
 /* @internal */
-namespace ts {
 type PerfLogger = typeof import("@microsoft/typescript-etw");
+/* @internal */
 const nullLogger: PerfLogger = {
     logEvent: noop,
     logErrEvent: noop,
@@ -26,7 +27,9 @@ const nullLogger: PerfLogger = {
 
 // Load optional module to enable Event Tracing for Windows
 // See https://github.com/microsoft/typescript-etw for more information
+/* @internal */
 let etwModule;
+/* @internal */
 try {
     const etwModulePath = process.env.TS_ETW_MODULE_PATH ?? "./node_modules/@microsoft/typescript-etw";
 
@@ -39,5 +42,5 @@ catch (e) {
 }
 
 /** Performance logger that will generate ETW events if possible - check for `logEvent` member, as `etwModule` will be `{}` when browserified */
+/* @internal */
 export const perfLogger: PerfLogger = etwModule && etwModule.logEvent ? etwModule : nullLogger;
-}

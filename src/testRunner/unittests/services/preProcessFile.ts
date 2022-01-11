@@ -1,6 +1,7 @@
+import { PreProcessedFileInfo, preProcessFile, FileReference } from "../../ts";
 describe("unittests:: services:: PreProcessFile:", () => {
-    function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
-        const resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
+    function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: PreProcessedFileInfo): void {
+        const resultPreProcess = preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
 
         assert.equal(resultPreProcess.isLibFile, expectedPreProcess.isLibFile, "Pre-processed file has different value for isLibFile. Expected: " + expectedPreProcess.isLibFile + ". Actual: " + resultPreProcess.isLibFile);
 
@@ -12,7 +13,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         assert.deepEqual(resultPreProcess.ambientExternalModules, expectedPreProcess.ambientExternalModules);
     }
 
-    function checkFileReferenceList(kind: string, expected: ts.FileReference[], actual: ts.FileReference[]) {
+    function checkFileReferenceList(kind: string, expected: FileReference[], actual: FileReference[]) {
         if (expected === actual) {
             return;
         }
@@ -23,11 +24,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly return referenced files from triple slash", () => {
             test("///<reference path = \"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "///<reference path=\"refFile3.ts\" />" + "\n" + "///<reference path= \"..\\refFile4d.ts\" />",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
+            /*detectJavaScriptImports*/ false, {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 22, end: 33 }, { fileName: "refFile2.ts", pos: 59, end: 70 },
                         { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
-                    importedFiles: [] as ts.FileReference[],
+                importedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -38,10 +38,9 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Do not return reference path because of invalid triple-slash syntax", () => {
             test("///<reference path\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\">" + "\n" + "///<referencepath=\"refFile3.ts\" />" + "\n" + "///<reference pat= \"refFile4d.ts\" />",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: [] as ts.FileReference[],
-                    importedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
+                importedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -52,10 +51,9 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Do not return reference path of non-imports", () => {
             test("Quill.import('delta');",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: [] as ts.FileReference[],
-                    importedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
+                importedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -66,10 +64,9 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Do not return reference path of nested non-imports", () => {
             test("a.b.import('c');",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: [] as ts.FileReference[],
-                    importedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
+                importedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -80,9 +77,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly return imported files", () => {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
@@ -95,12 +91,11 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Do not return imported files if readImportFiles argument is false", () => {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
                 /*readImportFile*/ false,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
-                    importedFiles: [] as ts.FileReference[],
+                importedFiles: [] as FileReference[],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -109,9 +104,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Do not return import path because of invalid import syntax", () => {
             test("import i1 require(\"r1.ts\"); import = require(\"r2.ts\") import i3= require(\"r3.ts\"); import i5",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
-                    referencedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
@@ -123,8 +117,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly return referenced files and import files", () => {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
+            /*detectJavaScriptImports*/ false, {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }, { fileName: "refFile2.ts", pos: 57, end: 68 }],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
@@ -137,8 +130,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly return referenced files and import files even with some invalid syntax", () => {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path \"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import = require(\"r2.ts\"); import i2 = require(\"r3.ts\");",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
+            /*detectJavaScriptImports*/ false, {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 20, end: 31 }],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
@@ -157,8 +149,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 "import {a as A, b, c as C} from \"m6\";" + "\n" +
                 "import def , {a, b, c as C} from \"m7\";" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -182,8 +173,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 "export {a as A} from \"m3\";" + "\n" +
                 "export {a as A, b, c as C} from \"m4\";" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -212,9 +202,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 "export import type T = require(\"m11\");" + "\n" +
                 "export import type = require(\"m12\");" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
-                referencedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
@@ -242,9 +231,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 "export type {a as A} from \"m3\";" + "\n" +
                 "export type {a as A, b, c as C} from \"m4\";" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
-                referencedFiles: [] as ts.FileReference[],
+            /*detectJavaScriptImports*/ false, {
+                referencedFiles: [] as FileReference[],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
@@ -263,8 +251,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 "let y: import(\"m2\").Bar.I = { a: \"\", b: 0 };" + "\n" +
                 "let shim: typeof import(\"m3\") = { Bar: Bar2 };" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -286,8 +273,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                }
                `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -300,8 +286,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly handles export import declarations", () => {
             test("export import a = require(\"m1\");",
                 /*readImportFile*/ true,
-                /*detectJavaScriptImports*/ false,
-                {
+            /*detectJavaScriptImports*/ false, {
                     referencedFiles: [],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
@@ -320,8 +305,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             var z = { f: require('m4') }
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ true,
-            {
+            /*detectJavaScriptImports*/ true, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -341,8 +325,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             });
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ true,
-            {
+            /*detectJavaScriptImports*/ true, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -361,8 +344,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             });
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ true,
-            {
+            /*detectJavaScriptImports*/ true, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -384,8 +366,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             export {}
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -405,8 +386,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             import * as x from "m";
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -427,8 +407,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             import m = require("m");
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -449,8 +428,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             export = N;
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -470,8 +448,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             export import IN = N;
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -490,8 +467,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             export let x = 1;
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -512,8 +488,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             }
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -537,8 +512,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             }
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -558,8 +532,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             /// <reference types="a3"/>
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [
                     { pos: 34, end: 35, fileName: "a" },
                     { pos: 112, end: 114, fileName: "a2" }
@@ -582,14 +555,12 @@ describe("unittests:: services:: PreProcessFile:", () => {
             /// <reference lib="a3"/>
             `,
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [
                     { pos: 34, end: 35, fileName: "a" },
                     { pos: 110, end: 112, fileName: "a2" }
                 ],
-                typeReferenceDirectives: [
-                ],
+                typeReferenceDirectives: [],
                 libReferenceDirectives: [
                     { pos: 71, end: 73, fileName: "a1" },
                     { pos: 148, end: 150, fileName: "a3" }
@@ -606,8 +577,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             "Promise.all([import('mod3'), import(`mod4`)]);" + "\n" +
             "import(/* webpackChunkName: 'module5' */ `mod5`);" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ false,
-            {
+            /*detectJavaScriptImports*/ false, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -628,8 +598,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             "f(require(`mod2`));" + "\n" +
             "const a = { x: require(`mod3`) };" + "\n",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ true,
-            {
+            /*detectJavaScriptImports*/ true, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
@@ -646,8 +615,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         it("Correctly handles dependency lists in define(modName, [deplist]) calls with template literals in JS files", () => {
             test("define(`mod`, [`mod1`, `mod2`], (m1, m2) => {});",
             /*readImportFile*/ true,
-            /*detectJavaScriptImports*/ true,
-            {
+            /*detectJavaScriptImports*/ true, {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],

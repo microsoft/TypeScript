@@ -1,4 +1,6 @@
-declare namespace ts.server {
+import { ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed } from "./ts.server";
+import { Path, CompilerOptions, WatchOptions, TypeAcquisition, SortedReadonlyArray, MapLike, FileWatcherCallback, FileWatcher, DirectoryWatcherCallback } from "./ts";
+import { TypingResolutionHost } from "./ts.JsTyping";
 export interface TypingInstallerResponse {
     readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
 }
@@ -79,7 +81,7 @@ export interface EndInstallTypes extends InstallTypes {
 }
 
 /* @internal */
-export interface InstallTypingHost extends JsTyping.TypingResolutionHost {
+export interface InstallTypingHost extends TypingResolutionHost {
     useCaseSensitiveFileNames: boolean;
     writeFile(path: string, content: string): void;
     createDirectory(path: string): void;
@@ -98,4 +100,3 @@ export interface SetTypings extends ProjectResponse {
 
 /* @internal */
 export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
-}

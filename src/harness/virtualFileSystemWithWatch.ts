@@ -1,4 +1,7 @@
-namespace ts.TestFSWithWatch {
+import { Path, combinePaths, getDirectoryPath, ESMap, patchWriteFileEnsuringDirectory, isString, SortedArray, isArray, MultiMap, FileWatcher, forEach, arrayFrom, ReadonlyESMap, arrayToMap, isNumber, identity, PollingInterval, WatchOptions, FileWatcherCallback, FsWatchCallback, FormatDiagnosticsHost, ModuleResolutionHost, createMultiMap, RequireResult, WatchFileKind, HostWatchFile, HostWatchDirectory, createGetCanonicalFileName, toPath, createSystemWatchFunctions, createSingleFileWatcherPerName, getNormalizedAbsolutePath, directorySeparator, Debug, clone, returnFalse, FileWatcherEventKind, getBaseFileName, insertSorted, compareStringsCaseSensitive, filterMutate, FileSystemEntryKind, createFileWatcherCallback, getRelativePathToDirectoryOrUrl, mapDefined, matchFiles, generateDjb2Hash, sys, clear, WatchDirectoryKind, PollingWatchKind } from "./ts";
+import { ServerHost } from "./ts.server";
+import { IO } from "./Harness";
+import * as ts from "./ts";
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
@@ -133,7 +136,7 @@ export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly s
     }
     const notInActual: string[] = [];
     const duplicates: string[] = [];
-    const seen = new Map<string, true>();
+    const seen = new ts.Map<string, true>();
     forEach(expectedKeys, expectedKey => {
         if (seen.has(expectedKey)) {
             duplicates.push(expectedKey);
@@ -158,17 +161,15 @@ export function verifyMapSize(caption: string, map: ESMap<string, any>, expected
     assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
 }
 
-export type MapValueTester<T, U> = [ESMap<string, U[]> | undefined, (value: T) => U];
+export type MapValueTester<T, U> = [
+    ESMap<string, U[]> | undefined,
+    (value: T) => U
+];
 
 export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: ReadonlyESMap<string, number>, valueTester?: MapValueTester<T,U>): void;
 export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: number, valueTester?: MapValueTester<T, U>): void;
 export function checkMap<T>(caption: string, actual: ESMap<string, T> | MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
-export function checkMap<T, U = undefined>(
-    caption: string,
-    actual: ESMap<string, T> | MultiMap<string, T>,
-    expectedKeysMapOrArray: ReadonlyESMap<string, number> | readonly string[],
-    eachKeyCountOrValueTester?: number | MapValueTester<T, U>,
-    valueTester?: MapValueTester<T, U>) {
+export function checkMap<T, U = undefined>(caption: string, actual: ESMap<string, T> | MultiMap<string, T>, expectedKeysMapOrArray: ReadonlyESMap<string, number> | readonly string[], eachKeyCountOrValueTester?: number | MapValueTester<T, U>, valueTester?: MapValueTester<T, U>) {
     const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCountOrValueTester as number) : expectedKeysMapOrArray;
     verifyMapSize(caption, actual, isArray(expectedKeysMapOrArray) ? expectedKeysMapOrArray : arrayFrom(expectedKeys.keys()));
     if (!isNumber(eachKeyCountOrValueTester)) {
@@ -181,11 +182,7 @@ export function checkMap<T, U = undefined>(
         if (!isArray(expectedKeysMapOrArray) || eachKeyCountOrValueTester !== undefined) {
             assert.equal((actual as MultiMap<string, T>).get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
             if (expectedValues) {
-                assert.deepEqual(
-                    (actual as MultiMap<string, T>).get(name)!.map(valueMapper),
-                    expectedValues.get(name),
-                    `${caption}:: expected values mismatch for ${name}`
-                );
+                assert.deepEqual((actual as MultiMap<string, T>).get(name)!.map(valueMapper), expectedValues.get(name), `${caption}:: expected values mismatch for ${name}`);
             }
         }
     });
@@ -206,23 +203,13 @@ export interface WatchFileDetails {
 export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyESMap<string, number>, expectedDetails?: ESMap<string, WatchFileDetails[]>): void;
 export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: ESMap<string, WatchFileDetails[]>): void;
 export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyESMap<string, number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | ESMap<string, WatchFileDetails[]>, expectedDetails?: ESMap<string, WatchFileDetails[]>) {
-    if (!isNumber(eachFileWatchCountOrExpectedDetails)) expectedDetails = eachFileWatchCountOrExpectedDetails;
+    if (!isNumber(eachFileWatchCountOrExpectedDetails))
+        expectedDetails = eachFileWatchCountOrExpectedDetails;
     if (isArray(expectedFiles)) {
-        checkMap(
-            "watchedFiles",
-            host.watchedFiles,
-            expectedFiles,
-            eachFileWatchCountOrExpectedDetails as number,
-            [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
-        );
+        checkMap("watchedFiles", host.watchedFiles, expectedFiles, eachFileWatchCountOrExpectedDetails as number, [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]);
     }
     else {
-        checkMap(
-            "watchedFiles",
-            host.watchedFiles,
-            expectedFiles,
-            [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
-        );
+        checkMap("watchedFiles", host.watchedFiles, expectedFiles, [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]);
     }
 }
 
@@ -238,30 +225,20 @@ export interface WatchDirectoryDetails {
 export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyESMap<string, number>, recursive: boolean, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>): void;
 export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>): void;
 export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyESMap<string, number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | ESMap<string, WatchDirectoryDetails[]>, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>) {
-    if (typeof recursiveOrExpectedDetails !== "boolean") expectedDetails = recursiveOrExpectedDetails;
+    if (typeof recursiveOrExpectedDetails !== "boolean")
+        expectedDetails = recursiveOrExpectedDetails;
     if (isArray(expectedDirectories)) {
-        checkMap(
-            `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
-            recursiveOrExpectedDetails as boolean ? host.fsWatchesRecursive : host.fsWatches,
-            expectedDirectories,
-            recursiveOrEachDirectoryWatchCount as number,
-            [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
-        );
+        checkMap(`fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`, recursiveOrExpectedDetails as boolean ? host.fsWatchesRecursive : host.fsWatches, expectedDirectories, recursiveOrEachDirectoryWatchCount as number, [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]);
     }
     else {
         recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
-        checkMap(
-            `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
-            recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
-            expectedDirectories,
-            [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
-        );
+        checkMap(`fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`, recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches, expectedDirectories, [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]);
     }
 }
 
 export function checkOutputContains(host: TestServerHost, expected: readonly string[]) {
-    const mapExpected = new Set(expected);
-    const mapSeen = new Set<string>();
+    const mapExpected = new ts.Set(expected);
+    const mapSeen = new ts.Set<string>();
     for (const f of host.getOutput()) {
         assert.isFalse(mapSeen.has(f), `Already found ${f} in ${JSON.stringify(host.getOutput())}`);
         if (mapExpected.has(f)) {
@@ -273,7 +250,7 @@ export function checkOutputContains(host: TestServerHost, expected: readonly str
 }
 
 export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | readonly string[]) {
-    const mapExpectedToBeAbsent = new Set(expectedToBeAbsent);
+    const mapExpectedToBeAbsent = new ts.Set(expectedToBeAbsent);
     for (const f of host.getOutput()) {
         assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);
     }
@@ -371,12 +348,12 @@ export interface TestServerHostOptions {
     environmentVariables?: ESMap<string, string>;
 }
 
-export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
+export class TestServerHost implements ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
     args: string[] = [];
 
     private readonly output: string[] = [];
 
-    private fs: ESMap<Path, FSEntry> = new Map();
+    private fs: ESMap<Path, FSEntry> = new ts.Map();
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
     private toPath: (f: string) => Path;
@@ -398,14 +375,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     public defaultWatchFileKind?: () => WatchFileKind | undefined;
     watchFile: HostWatchFile;
     watchDirectory: HostWatchDirectory;
-    constructor(
-        public withSafeList: boolean,
-        fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[],
-        {
-            useCaseSensitiveFileNames, executingFilePath, currentDirectory,
-            newLine, windowsStyleRoot, environmentVariables,
-            runWithoutRecursiveWatches, runWithFallbackPolling
-        }: TestServerHostCreationParameters = {}) {
+    constructor(public withSafeList: boolean, fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[], { useCaseSensitiveFileNames, executingFilePath, currentDirectory, newLine, windowsStyleRoot, environmentVariables, runWithoutRecursiveWatches, runWithFallbackPolling }: TestServerHostCreationParameters = {}) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
         this.newLine = newLine || "\n";
         this.windowsStyleRoot = windowsStyleRoot;
@@ -423,10 +393,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             // it is essentially fsWatch but lets get that separate from fsWatch and
             // into watchedFiles for easier testing
             pollingWatchFile: tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
-                createSingleFileWatcherPerName(
-                    this.watchFileWorker.bind(this),
-                    this.useCaseSensitiveFileNames
-                ) :
+                createSingleFileWatcherPerName(this.watchFileWorker.bind(this), this.useCaseSensitiveFileNames) :
                 this.watchFileWorker.bind(this),
             getModifiedTime: this.getModifiedTime.bind(this),
             setTimeout: this.setTimeout.bind(this),
@@ -716,38 +683,19 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     private watchFileWorker(fileName: string, cb: FileWatcherCallback, pollingInterval: PollingInterval) {
-        return createWatcher(
-            this.watchedFiles,
-            this.toFullPath(fileName),
-            { fileName, cb, pollingInterval }
-        );
+        return createWatcher(this.watchedFiles, this.toFullPath(fileName), { fileName, cb, pollingInterval });
     }
 
-    private fsWatch(
-        fileOrDirectory: string,
-        _entryKind: FileSystemEntryKind,
-        cb: FsWatchCallback,
-        recursive: boolean,
-        fallbackPollingInterval: PollingInterval,
-        fallbackOptions: WatchOptions | undefined): FileWatcher {
+    private fsWatch(fileOrDirectory: string, _entryKind: FileSystemEntryKind, cb: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined): FileWatcher {
         return this.runWithFallbackPolling ?
-            this.watchFile(
-                fileOrDirectory,
-                createFileWatcherCallback(cb),
-                fallbackPollingInterval,
-                fallbackOptions
-            ) :
-            createWatcher(
-                recursive ? this.fsWatchesRecursive : this.fsWatches,
-                this.toFullPath(fileOrDirectory),
-                {
+            this.watchFile(fileOrDirectory, createFileWatcherCallback(cb), fallbackPollingInterval, fallbackOptions) :
+            createWatcher(recursive ? this.fsWatchesRecursive : this.fsWatches, this.toFullPath(fileOrDirectory), {
                     directoryName: fileOrDirectory,
                     cb,
                     fallbackPollingInterval,
                     fallbackOptions
+            });
                 }
-            );
-    }
 
     invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
         invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
@@ -1055,7 +1003,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     snap(): ESMap<Path, FSEntry> {
-        const result = new Map<Path, FSEntry>();
+        const result = new ts.Map<Path, FSEntry>();
         this.fs.forEach((value, key) => {
             const cloneValue = clone(value);
             if (isFsFolder(cloneValue)) {
@@ -1068,7 +1016,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     writtenFiles?: ESMap<Path, number>;
-    diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
+    diff(baseline: string[], base: ESMap<string, FSEntry> = new ts.Map()) {
         this.fs.forEach(newFsEntry => {
             diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
         });
@@ -1195,7 +1143,8 @@ function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallba
 }
 
 function serializeWatchOptions(fallbackOptions: WatchOptions | undefined) {
-    if (!fallbackOptions) return undefined;
+    if (!fallbackOptions)
+        return undefined;
     const { watchFile, watchDirectory, fallbackPolling, ...rest } = fallbackOptions;
     return {
         watchFile: watchFile !== undefined ? WatchFileKind[watchFile] : undefined,
@@ -1220,15 +1169,18 @@ function baselineOutputs(baseline: string[], output: readonly string[], start: n
     for (let i = start; i < end; i++) {
         (baselinedOutput ||= []).push(output[i].replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms"));
     }
-    if (baselinedOutput) baseline.push(baselinedOutput.join(""));
+    if (baselinedOutput)
+        baseline.push(baselinedOutput.join(""));
 }
 
-export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: ESMap<Path, number>; };
+export type TestServerHostTrackingWrittenFiles = TestServerHost & {
+    writtenFiles: ESMap<Path, number>;
+};
 
 export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
     const host = inputHost as TestServerHostTrackingWrittenFiles;
     const originalWriteFile = host.writeFile;
-    host.writtenFiles = new Map<Path, number>();
+    host.writtenFiles = new ts.Map<Path, number>();
     host.writeFile = (fileName, content) => {
         originalWriteFile.call(host, fileName, content);
         const path = host.toFullPath(fileName);
@@ -1244,7 +1196,6 @@ export function getTsBuildProjectFilePath(project: string, file: string) {
 export function getTsBuildProjectFile(project: string, file: string): File {
     return {
         path: getTsBuildProjectFilePath(project, file),
-        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        content: IO.readFile(`${IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
     };
-}
 }

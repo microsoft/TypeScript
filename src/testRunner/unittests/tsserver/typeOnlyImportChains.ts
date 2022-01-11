@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { Diagnostics, TestFSWithWatch, DiagnosticMessage } from "../../ts";
+import { createServerHost, createSession, openFilesForSession, makeSessionRequest, protocol } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: typeOnlyImportChains", () => {
     it("named export -> type-only namespace import -> named export -> named import", () => {
         const a = {
@@ -153,12 +154,8 @@ function assertUsageError(files: readonly TestFSWithWatch.File[], openFile: Test
     const host = createServerHost(files);
     const session = createSession(host);
     openFilesForSession([openFile], session);
-    const req = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
-        protocol.CommandTypes.SemanticDiagnosticsSync,
-        { file: openFile.path }
-    );
+    const req = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(protocol.CommandTypes.SemanticDiagnosticsSync, { file: openFile.path });
     const diagnostics = session.executeCommand(req).response as protocol.Diagnostic[];
     assert.lengthOf(diagnostics, 1);
     assert.equal(diagnostics[0].code, diagnostic.code);
-}
 }

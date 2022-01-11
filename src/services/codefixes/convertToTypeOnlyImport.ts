@@ -1,11 +1,15 @@
+import { Diagnostics, TextSpan, SourceFile, tryCast, getTokenAtPosition, isImportDeclaration, ImportDeclaration, CodeFixContextBase, factory } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
+/* @internal */
 const fixId = "convertToTypeOnlyImport";
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertToTypeOnlyImport(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => {
+        const changes = ChangeTracker.with(context, t => {
             const importDeclaration = getImportDeclarationForDiagnosticSpan(context.span, context.sourceFile);
             fixSingleImportDeclaration(t, importDeclaration, context);
         });
@@ -22,11 +26,13 @@ registerCodeFix({
     }
 });
 
+/* @internal */
 function getImportDeclarationForDiagnosticSpan(span: TextSpan, sourceFile: SourceFile) {
     return tryCast(getTokenAtPosition(sourceFile, span.start).parent, isImportDeclaration);
 }
 
-function fixSingleImportDeclaration(changes: textChanges.ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
+/* @internal */
+function fixSingleImportDeclaration(changes: ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
     if (!importDeclaration?.importClause) {
         return;
     }
@@ -38,16 +44,11 @@ function fixSingleImportDeclaration(changes: textChanges.ChangeTracker, importDe
     // `import type foo, { Bar }` is not allowed, so move `foo` to new declaration
     if (importClause.name && importClause.namedBindings) {
         changes.deleteNodeRangeExcludingEnd(context.sourceFile, importClause.name, importDeclaration.importClause.namedBindings);
-        changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
-            importDeclaration,
+        changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(importDeclaration, 
             /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            factory.createImportClause(
-                /*isTypeOnly*/ true,
-                importClause.name,
-                /*namedBindings*/ undefined),
-            importDeclaration.moduleSpecifier,
+        /*modifiers*/ undefined, factory.createImportClause(
+        /*isTypeOnly*/ true, importClause.name, 
+        /*namedBindings*/ undefined), importDeclaration.moduleSpecifier, 
             /*assertClause*/ undefined));
     }
-}
 }

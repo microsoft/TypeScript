@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createProjectService, createSession } from "../../ts.projectSystem";
+import { PluginCreateInfo, HandlerResponse } from "../../ts.server";
+import { LanguageService } from "../../Harness";
 describe("unittests:: tsserver:: plugins loading", () => {
     const testProtocolCommand = "testProtocolCommand";
     const testProtocolCommandRequest = "testProtocolCommandRequest";
@@ -7,19 +9,22 @@ describe("unittests:: tsserver:: plugins loading", () => {
     function createHostWithPlugin(files: readonly File[]) {
         const host = createServerHost(files);
         const pluginsLoaded: string[] = [];
-        const protocolHandlerRequests: [string, string][] = [];
+        const protocolHandlerRequests: [
+            string,
+            string
+        ][] = [];
         host.require = (_initialPath, moduleName) => {
             pluginsLoaded.push(moduleName);
             return {
                 module: () => ({
-                    create(info: server.PluginCreateInfo) {
+                    create(info: PluginCreateInfo) {
                         info.session?.addProtocolHandler(testProtocolCommand, request => {
                             protocolHandlerRequests.push([request.command, request.arguments]);
                             return {
                                 response: testProtocolCommandResponse
                             };
                         });
-                        return Harness.LanguageService.makeDefaultProxy(info);
+                        return LanguageService.makeDefaultProxy(info);
                     }
                 }),
                 error: undefined
@@ -95,10 +100,9 @@ describe("unittests:: tsserver:: plugins loading", () => {
         assert.strictEqual(command, testProtocolCommand);
         assert.strictEqual(args, testProtocolCommandRequest);
 
-        const expectedResp: server.HandlerResponse = {
+        const expectedResp: HandlerResponse = {
             response: testProtocolCommandResponse
         };
         assert.deepEqual(resp, expectedResp);
     });
 });
-}

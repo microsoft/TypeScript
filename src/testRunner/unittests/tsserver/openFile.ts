@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { createServerHost, createProjectService, toExternalFile, File, libFile, checkProjectActualFiles, createSession, createLoggerWithInMemoryLogs, openFilesForSession, verifyGetErrRequest, protocolTextSpanFromSubstring, protocol, baselineTsserverLogs } from "../../ts.projectSystem";
+import { IScriptSnapshot, ScriptKind } from "../../ts";
+import { projectRoot } from "../../ts.tscWatch";
 describe("unittests:: tsserver:: Open-file", () => {
     it("can be reloaded with empty content", () => {
         const f = {
@@ -131,7 +133,7 @@ describe("unittests:: tsserver:: Open-file", () => {
 
     it("when file makes edits to add/remove comment directives, they are handled correcrly", () => {
         const file: File = {
-            path: `${tscWatch.projectRoot}/file.ts`,
+            path: `${projectRoot}/file.ts`,
             content: `const x = 10;
 function foo() {
     // @ts-ignore
@@ -184,4 +186,3 @@ bar();`
         baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
     });
 });
-}

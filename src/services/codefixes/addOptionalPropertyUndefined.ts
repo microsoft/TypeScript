@@ -1,13 +1,17 @@
+import { Diagnostics, SourceFile, TextSpan, TypeChecker, Symbol, getFixableErrorSpanExpression, emptyArray, getSourceFileOfNode, Node, PropertyAccessExpression, isPropertyAccessExpression, isBinaryExpression, SyntaxKind, isVariableDeclaration, isCallExpression, isFunctionLikeKind, isExpression, SignatureDeclaration, isIdentifier, isPropertyAssignment, isShorthandPropertyAssignment, Identifier, isPropertySignature, isPropertyDeclaration, factory, UnionTypeNode } from "../ts";
+import { registerCodeFix, createCodeFixActionWithoutFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
+/* @internal */
 const errorCodes = [
     Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
 ];
 
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
@@ -16,12 +20,13 @@ registerCodeFix({
         if (!toAdd.length) {
             return undefined;
         }
-        const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
+        const changes = ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
         return [createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type)];
     },
     fixIds: [addOptionalPropertyUndefined],
 });
 
+/* @internal */
 function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeChecker): Symbol[] {
     const sourceTarget = getSourceTarget(getFixableErrorSpanExpression(file, span), checker);
     if (!sourceTarget) {
@@ -37,6 +42,7 @@ function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeCheck
     return checker.getExactOptionalProperties(target);
 }
 
+/* @internal */
 function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, checker: TypeChecker): targetNode is PropertyAccessExpression {
     return isPropertyAccessExpression(targetNode)
         && !!checker.getExactOptionalProperties(checker.getTypeAtLocation(targetNode.expression)).length
@@ -47,7 +53,11 @@ function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, check
  * Find the source and target of the incorrect assignment.
  * The call is recursive for property assignments.
  */
-function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node, target: Node } | undefined {
+/* @internal */
+function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): {
+    source: Node;
+    target: Node;
+} | undefined {
     if (!errorNode) {
         return undefined;
     }
@@ -59,20 +69,26 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
     }
     else if (isCallExpression(errorNode.parent)) {
         const n = checker.getSymbolAtLocation(errorNode.parent.expression);
-        if (!n?.valueDeclaration || !isFunctionLikeKind(n.valueDeclaration.kind)) return undefined;
-        if (!isExpression(errorNode)) return undefined;
+        if (!n?.valueDeclaration || !isFunctionLikeKind(n.valueDeclaration.kind))
+            return undefined;
+        if (!isExpression(errorNode))
+            return undefined;
         const i = errorNode.parent.arguments.indexOf(errorNode);
-        if (i === -1) return undefined;
+        if (i === -1)
+            return undefined;
         const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name;
-        if (isIdentifier(name)) return { source: errorNode, target: name };
+        if (isIdentifier(name))
+            return { source: errorNode, target: name };
     }
     else if (isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
         isShorthandPropertyAssignment(errorNode.parent)) {
         const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
-        if (!parentTarget) return undefined;
+        if (!parentTarget)
+            return undefined;
         const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (errorNode.parent.name as Identifier).text);
         const declaration = prop?.declarations?.[0];
-        if (!declaration) return undefined;
+        if (!declaration)
+            return undefined;
         return {
             source: isPropertyAssignment(errorNode.parent) ? errorNode.parent.initializer : errorNode.parent.name,
             target: declaration
@@ -81,7 +97,8 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
     return undefined;
 }
 
-function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAdd: Symbol[]) {
+/* @internal */
+function addUndefinedToOptionalProperty(changes: ChangeTracker, toAdd: Symbol[]) {
     for (const add of toAdd) {
         const d = add.valueDeclaration;
         if (d && (isPropertySignature(d) || isPropertyDeclaration(d)) && d.type) {
@@ -92,5 +109,4 @@ function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAd
             changes.replaceNode(d.getSourceFile(), d.type, t);
         }
     }
-}
 }

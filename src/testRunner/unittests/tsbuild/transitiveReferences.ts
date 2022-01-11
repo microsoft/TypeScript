@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTsc } from "../../ts";
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
     });
@@ -8,7 +9,7 @@ describe("unittests:: tsbuild:: when project reference is referenced transitivel
         projFs = undefined!; // Release the contents
     });
 
-    function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
+    function modifyFsBTsToNonRelativeImport(fs: FileSystem, moduleResolution: "node" | "classic") {
         fs.writeFileSync("/src/b.ts", `import {A} from 'a';
 export const b = new A();`);
         fs.writeFileSync("/src/tsconfig.b.json", JSON.stringify({
@@ -44,4 +45,3 @@ export const b = new A();`);
         modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "node"),
     });
 });
-}

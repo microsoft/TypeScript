@@ -1,22 +1,29 @@
+import { getLocaleSpecificMessage, Diagnostics, RefactorContext, ApplicableRefactorInfo, emptyArray, RefactorEditInfo, Debug, PropertyAccessExpression, ElementAccessExpression, Identifier, CallExpression, BinaryExpression, ConditionalExpression, ExpressionStatement, ReturnStatement, VariableStatement, Node, isBinaryExpression, isConditionalExpression, isExpressionStatement, isReturnStatement, isVariableStatement, getRefactorContextSpan, getTokenAtPosition, findTokenOnLeftOfPosition, createTextSpanFromBounds, TypeChecker, isPropertyAccessExpression, isIdentifier, SyntaxKind, Expression, skipParentheses, isElementAccessExpression, isCallExpression, isStringOrNumericLiteralLike, TextSpan, getSingleVariableOfVariableStatement, isOptionalChain, factory, SourceFile } from "../ts";
+import { registerRefactor, isRefactorErrorInfo, RefactorErrorInfo } from "../ts.refactor";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.refactor.convertToOptionalChainExpression {
 const refactorName = "Convert to optional chain expression";
+/* @internal */
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
 
+/* @internal */
 const toOptionalChainAction = {
     name: refactorName,
     description: convertToOptionalChainExpressionMessage,
     kind: "refactor.rewrite.expression.optionalChain",
 };
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [toOptionalChainAction.kind],
     getAvailableActions,
     getEditsForAction
 });
 
+/* @internal */
 function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const info = getInfo(context, context.triggerReason === "invoked");
-    if (!info) return emptyArray;
+    if (!info)
+        return emptyArray;
 
     if (!isRefactorErrorInfo(info)) {
         return [{
@@ -36,53 +43,64 @@ function getAvailableActions(context: RefactorContext): readonly ApplicableRefac
     return emptyArray;
 }
 
+/* @internal */
 function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const info = getInfo(context);
     Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-    const edits = textChanges.ChangeTracker.with(context, t =>
-        doChange(context.file, context.program.getTypeChecker(), t, info, actionName)
-    );
+    const edits = ChangeTracker.with(context, t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName));
     return { edits, renameFilename: undefined, renameLocation: undefined };
 }
 
+/* @internal */
 type Occurrence = PropertyAccessExpression | ElementAccessExpression | Identifier;
 
+/* @internal */
 interface OptionalChainInfo {
-    finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression,
-    occurrences: Occurrence[],
-    expression: ValidExpression,
-};
+    finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression;
+    occurrences: Occurrence[];
+    expression: ValidExpression;
+}
+/* @internal */
+;
+/* @internal */
 
 type ValidExpressionOrStatement = ValidExpression | ValidStatement;
 
 /**
  * Types for which a "Convert to optional chain refactor" are offered.
  */
+/* @internal */
 type ValidExpression = BinaryExpression | ConditionalExpression;
 
 /**
  * Types of statements which are likely to include a valid expression for extraction.
  */
+/* @internal */
 type ValidStatement = ExpressionStatement | ReturnStatement | VariableStatement;
 
+/* @internal */
 function isValidExpression(node: Node): node is ValidExpression {
     return isBinaryExpression(node) || isConditionalExpression(node);
 }
 
+/* @internal */
 function isValidStatement(node: Node): node is ValidStatement {
     return isExpressionStatement(node) || isReturnStatement(node) || isVariableStatement(node);
 }
 
+/* @internal */
 function isValidExpressionOrStatement(node: Node): node is ValidExpressionOrStatement {
     return isValidExpression(node) || isValidStatement(node);
 }
 
+/* @internal */
 function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalChainInfo | RefactorErrorInfo | undefined {
     const { file, program } = context;
     const span = getRefactorContextSpan(context);
 
     const forEmptySpan = span.length === 0;
-    if (forEmptySpan && !considerEmptySpans) return undefined;
+    if (forEmptySpan && !considerEmptySpans)
+        return undefined;
 
     // selecting fo[|o && foo.ba|]r should be valid, so adjust span to fit start and end tokens
     const startToken = getTokenAtPosition(file, span.start);
@@ -91,12 +109,14 @@ function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalC
 
     const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken) : getValidParentNodeContainingSpan(startToken, adjustedSpan);
     const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
-    if (!expression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    if (!expression)
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
     const checker = program.getTypeChecker();
     return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
 }
 
+/* @internal */
 function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): OptionalChainInfo | RefactorErrorInfo | undefined {
     const condition = expression.condition;
     const finalExpression = getFinalExpressionInChain(expression.whenTrue);
@@ -116,13 +136,16 @@ function getConditionalInfo(expression: ConditionalExpression, checker: TypeChec
     }
 }
 
+/* @internal */
 function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | RefactorErrorInfo | undefined {
     if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) {
         return { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_logical_AND_access_chains) };
-    };
+    }
+    ;
     const finalExpression = getFinalExpressionInChain(expression.right);
 
-    if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+    if (!finalExpression)
+        return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
     const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
     return occurrences ? { finalExpression, occurrences, expression } :
@@ -132,6 +155,7 @@ function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | Refact
 /**
  * Gets a list of property accesses that appear in matchTo and occur in sequence in expression.
  */
+/* @internal */
 function getOccurrencesInExpression(matchTo: Expression, expression: Expression): Occurrence[] | undefined {
     const occurrences: Occurrence[] = [];
     while (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
@@ -153,6 +177,7 @@ function getOccurrencesInExpression(matchTo: Expression, expression: Expression)
 /**
  * Returns subchain if chain begins with subchain syntactically.
  */
+/* @internal */
 function getMatchingStart(chain: Expression, subchain: Expression): PropertyAccessExpression | ElementAccessExpression | Identifier | undefined {
     if (!isIdentifier(subchain) && !isPropertyAccessExpression(subchain) && !isElementAccessExpression(subchain)) {
         return undefined;
@@ -163,16 +188,19 @@ function getMatchingStart(chain: Expression, subchain: Expression): PropertyAcce
 /**
  * Returns true if chain begins with subchain syntactically.
  */
+/* @internal */
 function chainStartsWith(chain: Node, subchain: Node): boolean {
     // skip until we find a matching identifier.
     while (isCallExpression(chain) || isPropertyAccessExpression(chain) || isElementAccessExpression(chain)) {
-        if (getTextOfChainNode(chain) === getTextOfChainNode(subchain)) break;
+        if (getTextOfChainNode(chain) === getTextOfChainNode(subchain))
+            break;
         chain = chain.expression;
     }
     // check that the chains match at each access. Call chains in subchain are not valid.
     while ((isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) ||
            (isElementAccessExpression(chain) && isElementAccessExpression(subchain))) {
-        if (getTextOfChainNode(chain) !== getTextOfChainNode(subchain)) return false;
+        if (getTextOfChainNode(chain) !== getTextOfChainNode(subchain))
+            return false;
         chain = chain.expression;
         subchain = subchain.expression;
     }
@@ -180,6 +208,7 @@ function chainStartsWith(chain: Node, subchain: Node): boolean {
     return isIdentifier(chain) && isIdentifier(subchain) && chain.getText() === subchain.getText();
 }
 
+/* @internal */
 function getTextOfChainNode(node: Node): string | undefined {
     if (isIdentifier(node) || isStringOrNumericLiteralLike(node)) {
         return node.getText();
@@ -196,6 +225,7 @@ function getTextOfChainNode(node: Node): string | undefined {
 /**
  * Find the least ancestor of the input node that is a valid type for extraction and contains the input span.
  */
+/* @internal */
 function getValidParentNodeContainingSpan(node: Node, span: TextSpan): ValidExpressionOrStatement | undefined {
     while (node.parent) {
         if (isValidExpressionOrStatement(node) && span.length !== 0 && node.end >= span.start + span.length) {
@@ -209,6 +239,7 @@ function getValidParentNodeContainingSpan(node: Node, span: TextSpan): ValidExpr
 /**
  * Finds an ancestor of the input node that is a valid type for extraction, skipping subexpressions.
  */
+/* @internal */
 function getValidParentNodeOfEmptySpan(node: Node): ValidExpressionOrStatement | undefined {
     while (node.parent) {
         if (isValidExpressionOrStatement(node) && !isValidExpressionOrStatement(node.parent)) {
@@ -222,6 +253,7 @@ function getValidParentNodeOfEmptySpan(node: Node): ValidExpressionOrStatement |
 /**
  * Gets an expression of valid extraction type from a valid statement or expression.
  */
+/* @internal */
 function getExpression(node: ValidExpressionOrStatement): ValidExpression | undefined {
     if (isValidExpression(node)) {
         return node;
@@ -240,6 +272,7 @@ function getExpression(node: ValidExpressionOrStatement): ValidExpression | unde
  * it is followed by a different binary operator.
  * @param node the right child of a binary expression or a call expression.
  */
+/* @internal */
 function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | ElementAccessExpression | undefined {
     // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.
     // the rightmost member of the && chain should be the leftmost child of that expression.
@@ -257,12 +290,14 @@ function getFinalExpressionInChain(node: Expression): CallExpression | PropertyA
 /**
  * Creates an access chain from toConvert with '?.' accesses at expressions appearing in occurrences.
  */
+/* @internal */
 function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurrences: Occurrence[]): Expression {
     if (isPropertyAccessExpression(toConvert) || isElementAccessExpression(toConvert) || isCallExpression(toConvert)) {
         const chain = convertOccurrences(checker, toConvert.expression, occurrences);
         const lastOccurrence = occurrences.length > 0 ? occurrences[occurrences.length - 1] : undefined;
         const isOccurrence = lastOccurrence?.getText() === toConvert.expression.getText();
-        if (isOccurrence) occurrences.pop();
+        if (isOccurrence)
+            occurrences.pop();
         if (isCallExpression(toConvert)) {
             return isOccurrence ?
                 factory.createCallChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.typeArguments, toConvert.arguments) :
@@ -282,7 +317,8 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
     return toConvert;
 }
 
-function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
+/* @internal */
+function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
     const { finalExpression, occurrences, expression } = info;
     const firstOccurrence = occurrences[occurrences.length - 1];
     const convertedChain = convertOccurrences(checker, finalExpression, occurrences);
@@ -291,10 +327,7 @@ function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textCha
             changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
         }
         else if (isConditionalExpression(expression)) {
-            changes.replaceNode(sourceFile, expression,
-                factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse)
-            );
-        }
+            changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
     }
 }
 }

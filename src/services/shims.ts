@@ -1,3 +1,4 @@
+import { ESMap, JsTyping, TypeAcquisition, CompilerOptions, ReadonlyESMap, MapLike, ScriptKind, HostCancellationToken, LanguageService, SemanticClassificationFormat, UserPreferences, FormatCodeSettings, CompletionEntryData, SignatureHelpItemsOptions, RenameInfoOptions, DocCommentTemplateOptions, TextSpan, InlayHintsOptions, EmitOutput, TextRange, EndOfLineState, IScriptSnapshot, TextChangeRange, createTextChangeRange, createTextSpan, LanguageServiceHost, ResolvedModuleFull, ResolvedTypeReferenceDirective, map, getProperty, extensionFromPath, ThrottledCancellationToken, getFileMatcherPatterns, ParseConfigHost, ModuleResolutionHost, timestamp, isString, OperationCanceledException, Diagnostic, flattenDiagnosticMessageText, diagnosticCategoryName, getNewLineOrDefaultFromHost, EditorOptions, toFileNameLowerCase, normalizeSlashes, filter, GetCompletionsAtPositionOptions, FormatCodeOptions, Classifications, Classifier, createClassifier, resolveModuleName, Extension, resolveTypeReferenceDirective, preProcessFile, getSnapshotText, getAutomaticTypeDirectiveNames, FileReference, parseJsonText, parseJsonSourceFileConfigFileContent, getDirectoryPath, getDefaultCompilerOptions, createGetCanonicalFileName, toPath, DocumentRegistry, servicesVersion, createDocumentRegistry, createLanguageService, clear } from "./ts";
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
@@ -14,7 +15,9 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
+let debugObjectHost: {
+    CollectGarbage(): void;
+} = (function (this: any) {
     return this;
 })();
 
@@ -22,7 +25,6 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // esl
 /* eslint-disable no-in-operator */
 
 /* @internal */
-namespace ts {
 interface DiscoverTypingsInfo {
     fileNames: string[];                            // The file names that belong to the same project.
     projectRootPath: string;                        // The path to the project root directory
@@ -34,6 +36,7 @@ interface DiscoverTypingsInfo {
     typesRegistry: ReadonlyESMap<string, MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
 }
 
+/* @internal */
 export interface ScriptSnapshotShim {
     /** Gets a portion of the script snapshot specified by [start, end). */
     getText(start: number, end: number): string;
@@ -53,6 +56,7 @@ export interface ScriptSnapshotShim {
     dispose?(): void;
 }
 
+/* @internal */
 export interface Logger {
     log(s: string): void;
     trace(s: string): void;
@@ -60,6 +64,7 @@ export interface Logger {
 }
 
 /** Public interface of the host of a language service shim instance. */
+/* @internal */
 export interface LanguageServiceShimHost extends Logger {
     getCompilationSettings(): string;
 
@@ -88,6 +93,7 @@ export interface LanguageServiceShimHost extends Logger {
 }
 
 /** Public interface of the core-services host instance used in managed side */
+/* @internal */
 export interface CoreServicesShimHost extends Logger {
     directoryExists(directoryName: string): boolean;
     fileExists(fileName: string): boolean;
@@ -116,6 +122,7 @@ export interface CoreServicesShimHost extends Logger {
 ///
 // Note: This is being using by the host (VS) and is marshaled back and forth.
 // When changing this make sure the changes are reflected in the managed side as well
+/* @internal */
 export interface ShimsFileReference {
     path: string;
     position: number;
@@ -123,15 +130,18 @@ export interface ShimsFileReference {
 }
 
 /** Public interface of a language service instance shim. */
+/* @internal */
 export interface ShimFactory {
     registerShim(shim: Shim): void;
     unregisterShim(shim: Shim): void;
 }
 
+/* @internal */
 export interface Shim {
     dispose(_dummy: {}): void;
 }
 
+/* @internal */
 export interface LanguageServiceShim extends Shim {
     languageService: LanguageService;
 
@@ -292,11 +302,13 @@ export interface LanguageServiceShim extends Shim {
     uncommentSelection(fileName: string, textChange: TextRange): string;
 }
 
+/* @internal */
 export interface ClassifierShim extends Shim {
     getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
 }
 
+/* @internal */
 export interface CoreServicesShim extends Shim {
     getAutomaticTypeDirectiveNames(compilerOptionsJson: string): string;
     getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
@@ -305,12 +317,14 @@ export interface CoreServicesShim extends Shim {
     discoverTypings(discoverTypingsJson: string): string;
 }
 
+/* @internal */
 function logInternalError(logger: Logger, err: Error) {
     if (logger) {
         logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
     }
 }
 
+/* @internal */
 class ScriptSnapshotShimAdapter implements IScriptSnapshot {
     constructor(private scriptSnapshotShim: ScriptSnapshotShim) {
     }
@@ -332,9 +346,14 @@ class ScriptSnapshotShimAdapter implements IScriptSnapshot {
         }
         /* eslint-enable no-null/no-null */
 
-        const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded!); // TODO: GH#18217
-        return createTextChangeRange(
-            createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
+        const decoded: {
+            span: {
+                start: number;
+                length: number;
+            };
+            newLength: number;
+        } = JSON.parse(encoded!); // TODO: GH#18217
+        return createTextChangeRange(createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
     }
 
     public dispose(): void {
@@ -346,6 +365,7 @@ class ScriptSnapshotShimAdapter implements IScriptSnapshot {
     }
 }
 
+/* @internal */
 export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
     private loggingEnabled = false;
     private tracingEnabled = false;
@@ -483,17 +503,8 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
     }
 
     public readDirectory(path: string, extensions?: readonly string[], exclude?: string[], include?: string[], depth?: number): string[] {
-        const pattern = getFileMatcherPatterns(path, exclude, include,
-            this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
-        return JSON.parse(this.shimHost.readDirectory(
-            path,
-            JSON.stringify(extensions),
-            JSON.stringify(pattern.basePaths),
-            pattern.excludePattern,
-            pattern.includeFilePattern,
-            pattern.includeDirectoryPattern,
-            depth
-        ));
+        const pattern = getFileMatcherPatterns(path, exclude, include, this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
+        return JSON.parse(this.shimHost.readDirectory(path, JSON.stringify(extensions), JSON.stringify(pattern.basePaths), pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern, depth));
     }
 
     public readFile(path: string, encoding?: string): string | undefined {
@@ -505,6 +516,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
     }
 }
 
+/* @internal */
 export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost, JsTyping.TypingResolutionHost {
 
     public directoryExists: (directoryName: string) => boolean;
@@ -528,17 +540,8 @@ export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResol
     }
 
     public readDirectory(rootDir: string, extensions: readonly string[], exclude: readonly string[], include: readonly string[], depth?: number): string[] {
-        const pattern = getFileMatcherPatterns(rootDir, exclude, include,
-            this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
-        return JSON.parse(this.shimHost.readDirectory(
-            rootDir,
-            JSON.stringify(extensions),
-            JSON.stringify(pattern.basePaths),
-            pattern.excludePattern,
-            pattern.includeFilePattern,
-            pattern.includeDirectoryPattern,
-            depth
-        ));
+        const pattern = getFileMatcherPatterns(rootDir, exclude, include, this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
+        return JSON.parse(this.shimHost.readDirectory(rootDir, JSON.stringify(extensions), JSON.stringify(pattern.basePaths), pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern, depth));
     }
 
     public fileExists(fileName: string): boolean {
@@ -554,6 +557,7 @@ export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResol
     }
 }
 
+/* @internal */
 function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
     let start: number | undefined;
     if (logPerformance) {
@@ -578,10 +582,12 @@ function simpleForwardCall(logger: Logger, actionDescription: string, action: ()
     return result;
 }
 
+/* @internal */
 function forwardJSONCall(logger: Logger, actionDescription: string, action: () => {} | null | undefined, logPerformance: boolean): string {
     return forwardCall(logger, actionDescription, /*returnJson*/ true, action, logPerformance) as string;
 }
 
+/* @internal */
 function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: boolean, action: () => T, logPerformance: boolean): T | string {
     try {
         const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
@@ -598,6 +604,7 @@ function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: b
 }
 
 
+/* @internal */
 class ShimBase implements Shim {
     constructor(private factory: ShimFactory) {
         factory.registerShim(this);
@@ -607,6 +614,7 @@ class ShimBase implements Shim {
     }
 }
 
+/* @internal */
 export interface RealizedDiagnostic {
     message: string;
     start: number;
@@ -616,15 +624,17 @@ export interface RealizedDiagnostic {
     reportsUnnecessary?: {};
     reportsDeprecated?: {};
 }
+/* @internal */
 export function realizeDiagnostics(diagnostics: readonly Diagnostic[], newLine: string): RealizedDiagnostic[] {
     return diagnostics.map(d => realizeDiagnostic(d, newLine));
 }
 
+/* @internal */
 function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDiagnostic {
     return {
         message: flattenDiagnosticMessageText(diagnostic.messageText, newLine),
-        start: diagnostic.start!, // TODO: GH#18217
-        length: diagnostic.length!, // TODO: GH#18217
+        start: diagnostic.start!,
+        length: diagnostic.length!,
         category: diagnosticCategoryName(diagnostic),
         code: diagnostic.code,
         reportsUnnecessary: diagnostic.reportsUnnecessary,
@@ -632,13 +642,12 @@ function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDia
     };
 }
 
+/* @internal */
 class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
     private logger: Logger;
     private logPerformance = false;
 
-    constructor(factory: ShimFactory,
-        private host: LanguageServiceShimHost,
-        public languageService: LanguageService) {
+    constructor(factory: ShimFactory, private host: LanguageServiceShimHost, public languageService: LanguageService) {
         super(factory);
         this.logger = this.host;
     }
@@ -675,71 +684,58 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * Update the list of scripts known to the compiler
      */
     public refresh(throwOnError: boolean): void {
-        this.forwardJSONCall(
-            `refresh(${throwOnError})`,
-            () => null // eslint-disable-line no-null/no-null
+        this.forwardJSONCall(`refresh(${throwOnError})`, () => null // eslint-disable-line no-null/no-null
         );
     }
 
     public cleanupSemanticCache(): void {
-        this.forwardJSONCall(
-            "cleanupSemanticCache()",
-            () => {
+        this.forwardJSONCall("cleanupSemanticCache()", () => {
                 this.languageService.cleanupSemanticCache();
                 return null; // eslint-disable-line no-null/no-null
             });
     }
 
-    private realizeDiagnostics(diagnostics: readonly Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
+    private realizeDiagnostics(diagnostics: readonly Diagnostic[]): {
+        message: string;
+        start: number;
+        length: number;
+        category: string;
+    }[] {
         const newLine = getNewLineOrDefaultFromHost(this.host);
         return realizeDiagnostics(diagnostics, newLine);
     }
 
     public getSyntacticClassifications(fileName: string, start: number, length: number): string {
-        return this.forwardJSONCall(
-            `getSyntacticClassifications('${fileName}', ${start}, ${length})`,
-            () => this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length))
-        );
+        return this.forwardJSONCall(`getSyntacticClassifications('${fileName}', ${start}, ${length})`, () => this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length)));
     }
 
     public getSemanticClassifications(fileName: string, start: number, length: number): string {
-        return this.forwardJSONCall(
-            `getSemanticClassifications('${fileName}', ${start}, ${length})`,
-            () => this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length))
-        );
+        return this.forwardJSONCall(`getSemanticClassifications('${fileName}', ${start}, ${length})`, () => this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length)));
     }
 
     public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
-        return this.forwardJSONCall(
-            `getEncodedSyntacticClassifications('${fileName}', ${start}, ${length})`,
+        return this.forwardJSONCall(`getEncodedSyntacticClassifications('${fileName}', ${start}, ${length})`, 
             // directly serialize the spans out to a string.  This is much faster to decode
             // on the managed side versus a full JSON array.
-            () => convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)))
-        );
+        () => convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length))));
     }
 
     public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
-        return this.forwardJSONCall(
-            `getEncodedSemanticClassifications('${fileName}', ${start}, ${length})`,
+        return this.forwardJSONCall(`getEncodedSemanticClassifications('${fileName}', ${start}, ${length})`, 
             // directly serialize the spans out to a string.  This is much faster to decode
             // on the managed side versus a full JSON array.
-            () => convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)))
-        );
+        () => convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length))));
     }
 
     public getSyntacticDiagnostics(fileName: string): string {
-        return this.forwardJSONCall(
-            `getSyntacticDiagnostics('${fileName}')`,
-            () => {
+        return this.forwardJSONCall(`getSyntacticDiagnostics('${fileName}')`, () => {
                 const diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
                 return this.realizeDiagnostics(diagnostics);
             });
     }
 
     public getSemanticDiagnostics(fileName: string): string {
-        return this.forwardJSONCall(
-            `getSemanticDiagnostics('${fileName}')`,
-            () => {
+        return this.forwardJSONCall(`getSemanticDiagnostics('${fileName}')`, () => {
                 const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                 return this.realizeDiagnostics(diagnostics);
             });
@@ -750,9 +746,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     }
 
     public getCompilerOptionsDiagnostics(): string {
-        return this.forwardJSONCall(
-            "getCompilerOptionsDiagnostics()",
-            () => {
+        return this.forwardJSONCall("getCompilerOptionsDiagnostics()", () => {
                 const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
                 return this.realizeDiagnostics(diagnostics);
             });
@@ -765,10 +759,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * in the active file.
      */
     public getQuickInfoAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getQuickInfoAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getQuickInfoAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getQuickInfoAtPosition('${fileName}', ${position})`, () => this.languageService.getQuickInfoAtPosition(fileName, position));
     }
 
 
@@ -779,10 +770,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * in the active file.
      */
     public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
-        return this.forwardJSONCall(
-            `getNameOrDottedNameSpan('${fileName}', ${startPos}, ${endPos})`,
-            () => this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos)
-        );
+        return this.forwardJSONCall(`getNameOrDottedNameSpan('${fileName}', ${startPos}, ${endPos})`, () => this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos));
     }
 
     /**
@@ -790,19 +778,13 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * Computes span information of statement at the requested position in the active file.
      */
     public getBreakpointStatementAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getBreakpointStatementAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getBreakpointStatementAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getBreakpointStatementAtPosition('${fileName}', ${position})`, () => this.languageService.getBreakpointStatementAtPosition(fileName, position));
     }
 
     /// SIGNATUREHELP
 
     public getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): string {
-        return this.forwardJSONCall(
-            `getSignatureHelpItems('${fileName}', ${position})`,
-            () => this.languageService.getSignatureHelpItems(fileName, position, options)
-        );
+        return this.forwardJSONCall(`getSignatureHelpItems('${fileName}', ${position})`, () => this.languageService.getSignatureHelpItems(fileName, position, options));
     }
 
     /// GOTO DEFINITION
@@ -812,10 +794,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * at the requested position.
      */
     public getDefinitionAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getDefinitionAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDefinitionAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getDefinitionAtPosition('${fileName}', ${position})`, () => this.languageService.getDefinitionAtPosition(fileName, position));
     }
 
     /**
@@ -823,10 +802,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * at the requested position.
      */
     public getDefinitionAndBoundSpan(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getDefinitionAndBoundSpan('${fileName}', ${position})`,
-            () => this.languageService.getDefinitionAndBoundSpan(fileName, position)
-        );
+        return this.forwardJSONCall(`getDefinitionAndBoundSpan('${fileName}', ${position})`, () => this.languageService.getDefinitionAndBoundSpan(fileName, position));
     }
 
     /// GOTO Type
@@ -836,10 +812,7 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * at the requested position.
      */
     public getTypeDefinitionAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getTypeDefinitionAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getTypeDefinitionAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getTypeDefinitionAtPosition('${fileName}', ${position})`, () => this.languageService.getTypeDefinitionAtPosition(fileName, position));
     }
 
     /// GOTO Implementation
@@ -849,60 +822,37 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * at the requested position.
      */
     public getImplementationAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getImplementationAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getImplementationAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getImplementationAtPosition('${fileName}', ${position})`, () => this.languageService.getImplementationAtPosition(fileName, position));
     }
 
     public getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string {
-        return this.forwardJSONCall(
-            `getRenameInfo('${fileName}', ${position})`,
-            () => this.languageService.getRenameInfo(fileName, position, options)
-        );
+        return this.forwardJSONCall(`getRenameInfo('${fileName}', ${position})`, () => this.languageService.getRenameInfo(fileName, position, options));
     }
 
     public getSmartSelectionRange(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getSmartSelectionRange('${fileName}', ${position})`,
-            () => this.languageService.getSmartSelectionRange(fileName, position)
-        );
+        return this.forwardJSONCall(`getSmartSelectionRange('${fileName}', ${position})`, () => this.languageService.getSmartSelectionRange(fileName, position));
     }
 
     public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
-        return this.forwardJSONCall(
-            `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
-            () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename)
-        );
+        return this.forwardJSONCall(`findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`, () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
     }
 
     /// GET BRACE MATCHING
     public getBraceMatchingAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getBraceMatchingAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getBraceMatchingAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getBraceMatchingAtPosition('${fileName}', ${position})`, () => this.languageService.getBraceMatchingAtPosition(fileName, position));
     }
 
     public isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string {
-        return this.forwardJSONCall(
-            `isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`,
-            () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace)
-        );
+        return this.forwardJSONCall(`isValidBraceCompletionAtPosition('${fileName}', ${position}, ${openingBrace})`, () => this.languageService.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
     }
 
     public getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string {
-        return this.forwardJSONCall(
-            `getSpanOfEnclosingComment('${fileName}', ${position})`,
-            () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine)
-        );
+        return this.forwardJSONCall(`getSpanOfEnclosingComment('${fileName}', ${position})`, () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
     }
 
     /// GET SMART INDENT
     public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
-        return this.forwardJSONCall(
-            `getIndentationAtPosition('${fileName}', ${position})`,
-            () => {
+        return this.forwardJSONCall(`getIndentationAtPosition('${fileName}', ${position})`, () => {
                 const localOptions: EditorOptions = JSON.parse(options);
                 return this.languageService.getIndentationAtPosition(fileName, position, localOptions);
             });
@@ -911,37 +861,23 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
     /// GET REFERENCES
 
     public getReferencesAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getReferencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getReferencesAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getReferencesAtPosition('${fileName}', ${position})`, () => this.languageService.getReferencesAtPosition(fileName, position));
     }
 
     public findReferences(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `findReferences('${fileName}', ${position})`,
-            () => this.languageService.findReferences(fileName, position)
-        );
+        return this.forwardJSONCall(`findReferences('${fileName}', ${position})`, () => this.languageService.findReferences(fileName, position));
     }
 
     public getFileReferences(fileName: string) {
-        return this.forwardJSONCall(
-            `getFileReferences('${fileName})`,
-            () => this.languageService.getFileReferences(fileName)
-        );
+        return this.forwardJSONCall(`getFileReferences('${fileName})`, () => this.languageService.getFileReferences(fileName));
     }
 
     public getOccurrencesAtPosition(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `getOccurrencesAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getOccurrencesAtPosition(fileName, position)
-        );
+        return this.forwardJSONCall(`getOccurrencesAtPosition('${fileName}', ${position})`, () => this.languageService.getOccurrencesAtPosition(fileName, position));
     }
 
     public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
-        return this.forwardJSONCall(
-            `getDocumentHighlights('${fileName}', ${position})`,
-            () => {
+        return this.forwardJSONCall(`getDocumentHighlights('${fileName}', ${position})`, () => {
                 const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                 // workaround for VS document highlighting issue - keep only items from the initial file
                 const normalizedName = toFileNameLowerCase(normalizeSlashes(fileName));
@@ -957,178 +893,122 @@ class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim 
      * list if requested.
      */
     public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined, formattingSettings: FormatCodeSettings | undefined) {
-        return this.forwardJSONCall(
-            `getCompletionsAtPosition('${fileName}', ${position}, ${preferences}, ${formattingSettings})`,
-            () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings)
-        );
+        return this.forwardJSONCall(`getCompletionsAtPosition('${fileName}', ${position}, ${preferences}, ${formattingSettings})`, () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings));
     }
 
     /** Get a string based representation of a completion list entry details */
     public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined) {
-        return this.forwardJSONCall(
-            `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
-            () => {
+        return this.forwardJSONCall(`getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`, () => {
                 const localOptions: FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
                 return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences, data);
+        });
             }
-        );
-    }
 
     public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string {
-        return this.forwardJSONCall(
-            `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
-            () => {
+        return this.forwardJSONCall(`getFormattingEditsForRange('${fileName}', ${start}, ${end})`, () => {
                 const localOptions: FormatCodeOptions = JSON.parse(options);
                 return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
             });
     }
 
     public getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string {
-        return this.forwardJSONCall(
-            `getFormattingEditsForDocument('${fileName}')`,
-            () => {
+        return this.forwardJSONCall(`getFormattingEditsForDocument('${fileName}')`, () => {
                 const localOptions: FormatCodeOptions = JSON.parse(options);
                 return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
             });
     }
 
     public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string {
-        return this.forwardJSONCall(
-            `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
-            () => {
+        return this.forwardJSONCall(`getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`, () => {
                 const localOptions: FormatCodeOptions = JSON.parse(options);
                 return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
             });
     }
 
     public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
-        return this.forwardJSONCall(
-            `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-            () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
-        );
+        return this.forwardJSONCall(`getDocCommentTemplateAtPosition('${fileName}', ${position})`, () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options));
     }
 
     /// NAVIGATE TO
 
     /** Return a list of symbols that are interesting to navigate to */
     public getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string): string {
-        return this.forwardJSONCall(
-            `getNavigateToItems('${searchValue}', ${maxResultCount}, ${fileName})`,
-            () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName)
-        );
+        return this.forwardJSONCall(`getNavigateToItems('${searchValue}', ${maxResultCount}, ${fileName})`, () => this.languageService.getNavigateToItems(searchValue, maxResultCount, fileName));
     }
 
     public getNavigationBarItems(fileName: string): string {
-        return this.forwardJSONCall(
-            `getNavigationBarItems('${fileName}')`,
-            () => this.languageService.getNavigationBarItems(fileName)
-        );
+        return this.forwardJSONCall(`getNavigationBarItems('${fileName}')`, () => this.languageService.getNavigationBarItems(fileName));
     }
 
     public getNavigationTree(fileName: string): string {
-        return this.forwardJSONCall(
-            `getNavigationTree('${fileName}')`,
-            () => this.languageService.getNavigationTree(fileName)
-        );
+        return this.forwardJSONCall(`getNavigationTree('${fileName}')`, () => this.languageService.getNavigationTree(fileName));
     }
 
     public getOutliningSpans(fileName: string): string {
-        return this.forwardJSONCall(
-            `getOutliningSpans('${fileName}')`,
-            () => this.languageService.getOutliningSpans(fileName)
-        );
+        return this.forwardJSONCall(`getOutliningSpans('${fileName}')`, () => this.languageService.getOutliningSpans(fileName));
     }
 
     public getTodoComments(fileName: string, descriptors: string): string {
-        return this.forwardJSONCall(
-            `getTodoComments('${fileName}')`,
-            () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors))
-        );
+        return this.forwardJSONCall(`getTodoComments('${fileName}')`, () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors)));
     }
 
     /// CALL HIERARCHY
 
     public prepareCallHierarchy(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `prepareCallHierarchy('${fileName}', ${position})`,
-            () => this.languageService.prepareCallHierarchy(fileName, position)
-        );
+        return this.forwardJSONCall(`prepareCallHierarchy('${fileName}', ${position})`, () => this.languageService.prepareCallHierarchy(fileName, position));
     }
 
     public provideCallHierarchyIncomingCalls(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `provideCallHierarchyIncomingCalls('${fileName}', ${position})`,
-            () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position)
-        );
+        return this.forwardJSONCall(`provideCallHierarchyIncomingCalls('${fileName}', ${position})`, () => this.languageService.provideCallHierarchyIncomingCalls(fileName, position));
     }
 
     public provideCallHierarchyOutgoingCalls(fileName: string, position: number): string {
-        return this.forwardJSONCall(
-            `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
-            () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
-        );
+        return this.forwardJSONCall(`provideCallHierarchyOutgoingCalls('${fileName}', ${position})`, () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position));
     }
 
     public provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string {
-        return this.forwardJSONCall(
-            `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
-            () => this.languageService.provideInlayHints(fileName, span, preference)
-        );
+        return this.forwardJSONCall(`provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`, () => this.languageService.provideInlayHints(fileName, span, preference));
     }
 
     /// Emit
     public getEmitOutput(fileName: string): string {
-        return this.forwardJSONCall(
-            `getEmitOutput('${fileName}')`,
-            () => {
+        return this.forwardJSONCall(`getEmitOutput('${fileName}')`, () => {
                 const { diagnostics, ...rest } = this.languageService.getEmitOutput(fileName);
                 return { ...rest, diagnostics: this.realizeDiagnostics(diagnostics) };
+        });
             }
-        );
-    }
 
     public getEmitOutputObject(fileName: string): EmitOutput {
-        return forwardCall(
-            this.logger,
-            `getEmitOutput('${fileName}')`,
-            /*returnJson*/ false,
-            () => this.languageService.getEmitOutput(fileName),
-            this.logPerformance) as EmitOutput;
+        return forwardCall(this.logger, `getEmitOutput('${fileName}')`, 
+        /*returnJson*/ false, () => this.languageService.getEmitOutput(fileName), this.logPerformance) as EmitOutput;
     }
 
     public toggleLineComment(fileName: string, textRange: TextRange): string {
-        return this.forwardJSONCall(
-            `toggleLineComment('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.toggleLineComment(fileName, textRange)
-        );
+        return this.forwardJSONCall(`toggleLineComment('${fileName}', '${JSON.stringify(textRange)}')`, () => this.languageService.toggleLineComment(fileName, textRange));
     }
 
     public toggleMultilineComment(fileName: string, textRange: TextRange): string {
-        return this.forwardJSONCall(
-            `toggleMultilineComment('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.toggleMultilineComment(fileName, textRange)
-        );
+        return this.forwardJSONCall(`toggleMultilineComment('${fileName}', '${JSON.stringify(textRange)}')`, () => this.languageService.toggleMultilineComment(fileName, textRange));
     }
 
     public commentSelection(fileName: string, textRange: TextRange): string {
-        return this.forwardJSONCall(
-            `commentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.commentSelection(fileName, textRange)
-        );
+        return this.forwardJSONCall(`commentSelection('${fileName}', '${JSON.stringify(textRange)}')`, () => this.languageService.commentSelection(fileName, textRange));
     }
 
     public uncommentSelection(fileName: string, textRange: TextRange): string {
-        return this.forwardJSONCall(
-            `uncommentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
-            () => this.languageService.uncommentSelection(fileName, textRange)
-        );
+        return this.forwardJSONCall(`uncommentSelection('${fileName}', '${JSON.stringify(textRange)}')`, () => this.languageService.uncommentSelection(fileName, textRange));
     }
 }
 
-function convertClassifications(classifications: Classifications): { spans: string, endOfLineState: EndOfLineState } {
+/* @internal */
+function convertClassifications(classifications: Classifications): {
+    spans: string;
+    endOfLineState: EndOfLineState;
+} {
     return { spans: classifications.spans.join(","), endOfLineState: classifications.endOfLineState };
 }
 
+/* @internal */
 class ClassifierShimObject extends ShimBase implements ClassifierShim {
     public classifier: Classifier;
     private logPerformance = false;
@@ -1139,9 +1019,7 @@ class ClassifierShimObject extends ShimBase implements ClassifierShim {
     }
 
     public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent = false): string {
-        return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
-            () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
-            this.logPerformance);
+        return forwardJSONCall(this.logger, "getEncodedLexicalClassifications", () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)), this.logPerformance);
     }
 
     /// COLORIZATION
@@ -1157,6 +1035,7 @@ class ClassifierShimObject extends ShimBase implements ClassifierShim {
     }
 }
 
+/* @internal */
 class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     private logPerformance = false;
     private safeList: JsTyping.SafeList | undefined;
@@ -1198,9 +1077,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
-        return this.forwardJSONCall(
-            `getPreProcessedFileInfo('${fileName}')`,
-            () => {
+        return this.forwardJSONCall(`getPreProcessedFileInfo('${fileName}')`, () => {
                 // for now treat files as JavaScript
                 const result = preProcessFile(getSnapshotText(sourceTextSnapshot), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                 return {
@@ -1215,14 +1092,11 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public getAutomaticTypeDirectiveNames(compilerOptionsJson: string): string {
-        return this.forwardJSONCall(
-            `getAutomaticTypeDirectiveNames('${compilerOptionsJson}')`,
-            () => {
+        return this.forwardJSONCall(`getAutomaticTypeDirectiveNames('${compilerOptionsJson}')`, () => {
                 const compilerOptions = JSON.parse(compilerOptionsJson) as CompilerOptions;
                 return getAutomaticTypeDirectiveNames(compilerOptions, this.host);
+        });
             }
-        );
-    }
 
     private convertFileReferences(refs: FileReference[]): ShimsFileReference[] | undefined {
         if (!refs) {
@@ -1240,9 +1114,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public getTSConfigFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
-        return this.forwardJSONCall(
-            `getTSConfigFileInfo('${fileName}')`,
-            () => {
+        return this.forwardJSONCall(`getTSConfigFileInfo('${fileName}')`, () => {
                 const result = parseJsonText(fileName, getSnapshotText(sourceTextSnapshot));
                 const normalizedFileName = normalizeSlashes(fileName);
                 const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
@@ -1258,10 +1130,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
     }
 
     public getDefaultCompilationSettings(): string {
-        return this.forwardJSONCall(
-            "getDefaultCompilationSettings()",
-            () => getDefaultCompilerOptions()
-        );
+        return this.forwardJSONCall("getDefaultCompilationSettings()", () => getDefaultCompilerOptions());
     }
 
     public discoverTypings(discoverTypingsJson: string): string {
@@ -1271,20 +1140,12 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             if (this.safeList === undefined) {
                 this.safeList = JsTyping.loadSafeList(this.host, toPath(info.safeListPath, info.safeListPath, getCanonicalFileName));
             }
-            return JsTyping.discoverTypings(
-                this.host,
-                msg => this.logger.log(msg),
-                info.fileNames,
-                toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
-                this.safeList,
-                info.packageNameToTypingLocation,
-                info.typeAcquisition,
-                info.unresolvedImports,
-                info.typesRegistry);
+            return JsTyping.discoverTypings(this.host, msg => this.logger.log(msg), info.fileNames, toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName), this.safeList, info.packageNameToTypingLocation, info.typeAcquisition, info.unresolvedImports, info.typesRegistry);
         });
     }
 }
 
+/* @internal */
 export class TypeScriptServicesFactory implements ShimFactory {
     private _shims: Shim[] = [];
     private documentRegistry: DocumentRegistry | undefined;
@@ -1352,7 +1213,6 @@ export class TypeScriptServicesFactory implements ShimFactory {
 
         throw new Error("Invalid operation");
     }
-}
 }
 
 /* eslint-enable no-in-operator */

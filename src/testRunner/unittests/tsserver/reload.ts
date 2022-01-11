@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { createServerHost, createSession, libFile, checkNumberOfProjects } from "../../ts.projectSystem";
+import { protocol } from "../../ts.server";
+import { getSnapshotText } from "../../ts";
 describe("unittests:: tsserver:: reload", () => {
     it("should work with temp file", () => {
         const f1 = {
@@ -18,7 +20,7 @@ describe("unittests:: tsserver:: reload", () => {
             command: "open",
             seq: 1,
             arguments: { file: f1.path }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
 
         // reload from tmp file
         session.executeCommand({
@@ -26,7 +28,7 @@ describe("unittests:: tsserver:: reload", () => {
             command: "reload",
             seq: 2,
             arguments: { file: f1.path, tmpfile: tmp.path }
-        } as server.protocol.ReloadRequest);
+        } as protocol.ReloadRequest);
 
         // verify content
         const projectServiice = session.getProjectService();
@@ -39,7 +41,7 @@ describe("unittests:: tsserver:: reload", () => {
             command: "reload",
             seq: 2,
             arguments: { file: f1.path }
-        } as server.protocol.ReloadRequest);
+        } as protocol.ReloadRequest);
 
         // verify content
         const snap2 = projectServiice.getScriptInfo(f1.path)!.getSnapshot();
@@ -61,9 +63,9 @@ describe("unittests:: tsserver:: reload", () => {
         const openContent = "let z = 1";
         // send open request
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Open,
+            command: protocol.CommandTypes.Open,
             arguments: { file: f1.path, fileContent: openContent }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
 
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -73,60 +75,60 @@ describe("unittests:: tsserver:: reload", () => {
 
         // send close request
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Close,
+            command: protocol.CommandTypes.Close,
             arguments: { file: f1.path }
-        } as server.protocol.CloseRequest);
+        } as protocol.CloseRequest);
         checkScriptInfoAndProjects(f1.content, "contents of closed file");
         checkInferredProjectIsOrphan();
 
         // Can reload contents of the file when its not open and has no project
         // reload from temp file
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Reload,
+            command: protocol.CommandTypes.Reload,
             arguments: { file: f1.path, tmpfile: tmp.path }
-        } as server.protocol.ReloadRequest);
+        } as protocol.ReloadRequest);
         checkScriptInfoAndProjects(tmp.content, "contents of temp file");
         checkInferredProjectIsOrphan();
 
         // reload from own file
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Reload,
+            command: protocol.CommandTypes.Reload,
             arguments: { file: f1.path }
-        } as server.protocol.ReloadRequest);
+        } as protocol.ReloadRequest);
         checkScriptInfoAndProjects(f1.content, "contents of closed file");
         checkInferredProjectIsOrphan();
 
         // Open file again without setting its content
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Open,
+            command: protocol.CommandTypes.Open,
             arguments: { file: f1.path }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
         checkScriptInfoAndProjects(f1.content, "contents of file when opened without specifying contents");
         const snap = info.getSnapshot();
 
         // send close request
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Close,
+            command: protocol.CommandTypes.Close,
             arguments: { file: f1.path }
-        } as server.protocol.CloseRequest);
+        } as protocol.CloseRequest);
         checkScriptInfoAndProjects(f1.content, "contents of closed file");
         assert.strictEqual(info.getSnapshot(), snap);
         checkInferredProjectIsOrphan();
 
         // reload from temp file
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Reload,
+            command: protocol.CommandTypes.Reload,
             arguments: { file: f1.path, tmpfile: tmp.path }
-        } as server.protocol.ReloadRequest);
+        } as protocol.ReloadRequest);
         checkScriptInfoAndProjects(tmp.content, "contents of temp file");
         assert.notStrictEqual(info.getSnapshot(), snap);
         checkInferredProjectIsOrphan();
 
         // reload from own file
         session.executeCommandSeq({
-            command: server.protocol.CommandTypes.Reload,
+            command: protocol.CommandTypes.Reload,
             arguments: { file: f1.path }
-        } as server.protocol.ReloadRequest);
+        } as protocol.ReloadRequest);
         checkScriptInfoAndProjects(f1.content, "contents of closed file");
         assert.notStrictEqual(info.getSnapshot(), snap);
         checkInferredProjectIsOrphan();
@@ -148,4 +150,3 @@ describe("unittests:: tsserver:: reload", () => {
         }
     });
 });
-}

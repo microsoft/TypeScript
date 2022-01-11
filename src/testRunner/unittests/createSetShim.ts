@@ -1,4 +1,5 @@
-namespace ts {
+import { ReadonlyESMap, ShimCollections, arrayFrom } from "../ts";
+import * as ts from "../ts";
 describe("unittests:: createSetShim", () => {
     const stringKeys = [
         "1",
@@ -23,7 +24,7 @@ describe("unittests:: createSetShim", () => {
         { toString() { return "2"; } },
         "4",
         false,
-        null, // eslint-disable-line no-null/no-null
+        null,
         undefined,
         "B",
         { toString() { return "C"; } },
@@ -34,7 +35,7 @@ describe("unittests:: createSetShim", () => {
         "Y"
     ];
 
-    function testSetIterationAddedValues<K>(keys: K[], set: Set<K>, useForEach: boolean): string {
+    function testSetIterationAddedValues<K>(keys: K[], set: ts.Set<K>, useForEach: boolean): string {
         let resultString = "";
 
         set.add(keys[0]);
@@ -113,17 +114,16 @@ describe("unittests:: createSetShim", () => {
         return resultString;
     }
 
-    let SetShim!: SetConstructor;
+    let SetShim!: ts.SetConstructor;
     beforeEach(() => {
-        function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
-            I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
-            I extends ReadonlySet<infer T> ? T :
-            I extends readonly (infer T)[] ? T :
-            I extends undefined ? undefined :
-            never>;
-        function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
+        function getIterator<I extends readonly any[] | ts.ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): ts.Iterator<I extends ReadonlyESMap<infer K, infer V> ? [
+            K,
+            V
+        ] : I extends ts.ReadonlySet<infer T> ? T : I extends readonly (infer T)[] ? T : I extends undefined ? undefined : never>;
+        function getIterator(iterable: readonly any[] | ts.ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): ts.Iterator<any> | undefined {
             // override `ts.getIterator` with a version that allows us to iterate over a `SetShim` in an environment with a native `Set`.
-            if (iterable instanceof SetShim) return iterable.values();
+            if (iterable instanceof SetShim)
+                return iterable.values();
             return ts.getIterator(iterable);
         }
 
@@ -137,11 +137,11 @@ describe("unittests:: createSetShim", () => {
         const expectedResult = "1;3;2;4;0;3;999;A;Z;X;Y;";
 
         // First, ensure the test actually has the same behavior as a native Set.
-        let nativeSet = new Set<string>();
+        let nativeSet = new ts.Set<string>();
         const nativeSetForEachResult = testSetIterationAddedValues(stringKeys, nativeSet, /* useForEach */ true);
         assert.equal(nativeSetForEachResult, expectedResult, "nativeSet-forEach");
 
-        nativeSet = new Set<string>();
+        nativeSet = new ts.Set<string>();
         const nativeSetIteratorResult = testSetIterationAddedValues(stringKeys, nativeSet, /* useForEach */ false);
         assert.equal(nativeSetIteratorResult, expectedResult, "nativeSet-iterator");
 
@@ -159,11 +159,11 @@ describe("unittests:: createSetShim", () => {
         const expectedResult = "true;3;2;4;false;3;null;undefined;Z;X;Y;";
 
         // First, ensure the test actually has the same behavior as a native Set.
-        let nativeSet = new Set<any>();
+        let nativeSet = new ts.Set<any>();
         const nativeSetForEachResult = testSetIterationAddedValues(mixedKeys, nativeSet, /* useForEach */ true);
         assert.equal(nativeSetForEachResult, expectedResult, "nativeSet-forEach");
 
-        nativeSet = new Set<any>();
+        nativeSet = new ts.Set<any>();
         const nativeSetIteratorResult = testSetIterationAddedValues(mixedKeys, nativeSet, /* useForEach */ false);
         assert.equal(nativeSetIteratorResult, expectedResult, "nativeSet-iterator");
 
@@ -301,9 +301,11 @@ describe("unittests:: createSetShim", () => {
         const set = new SetShim<string>();
         set.add("c");
         set.add("a");
-        const actual: [string, string][] = [];
+        const actual: [
+            string,
+            string
+        ][] = [];
         set.forEach((value, key) => actual.push([key, value]));
         assert.deepEqual(actual, [["c", "c"], ["a", "a"]]);
     });
 });
-}

@@ -1,4 +1,6 @@
-namespace ts {
+import { HighlightSpan, Program, CancellationToken, SourceFile, getTouchingPropertyName, isJsxOpeningElement, isJsxClosingElement, Node, createTextSpanFromNode, HighlightSpanKind, arrayToMultiMap, createGetCanonicalFileName, mapDefined, arrayFrom, toPath, find, Debug, SyntaxKind, isIfStatement, isReturnStatement, isThrowStatement, isTryStatement, isSwitchStatement, isDefaultClause, isCaseClause, isBreakOrContinueStatement, IterationStatement, isIterationStatement, isConstructorDeclaration, isAccessor, isAwaitExpression, isModifierKind, isDeclaration, isVariableStatement, contains, ThrowStatement, concatenate, isFunctionLike, isFunctionBlock, BreakOrContinueStatement, toArray, findAncestor, Modifier, modifierToFlag, findModifier, ModifierFlags, ModuleBlock, Block, CaseClause, DefaultClause, ConstructorDeclaration, MethodDeclaration, FunctionDeclaration, ObjectTypeDeclaration, ObjectLiteralExpression, isClassDeclaration, isClassLike, Push, forEach, SwitchStatement, TryStatement, findChildOfKind, forEachReturnStatement, ReturnStatement, getContainingFunction, FunctionLikeDeclaration, cast, isBlock, forEachChild, isYieldExpression, isInterfaceDeclaration, isModuleDeclaration, isTypeAliasDeclaration, isTypeNode, IfStatement, isWhiteSpaceSingleLine, createTextSpanFromBounds, __String, isLabeledStatement } from "./ts";
+import { getReferenceEntriesForNode, toHighlightSpan } from "./ts.FindAllReferences";
+import * as ts from "./ts";
 export interface DocumentHighlights {
     fileName: string;
     highlightSpans: HighlightSpan[];
@@ -28,10 +30,11 @@ export namespace DocumentHighlights {
     }
 
     function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
-        const sourceFilesSet = new Set(sourceFilesToSearch.map(f => f.fileName));
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
-        if (!referenceEntries) return undefined;
-        const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+        const sourceFilesSet = new ts.Set(sourceFilesToSearch.map(f => f.fileName));
+        const referenceEntries = getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
+        if (!referenceEntries)
+            return undefined;
+        const map = arrayToMultiMap(referenceEntries.map(toHighlightSpan), e => e.fileName, e => e.span);
         const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
         return mapDefined(arrayFrom(map.entries()), ([fileName, highlightSpans]) => {
             if (!sourceFilesSet.has(fileName)) {
@@ -100,8 +103,7 @@ export namespace DocumentHighlights {
         }
 
         function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
-            return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d =>
-                nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
+            return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d => nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
 
         function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {
@@ -123,9 +125,7 @@ export namespace DocumentHighlights {
         }
         else if (isTryStatement(node)) {
             // Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
-            return concatenate(
-                node.catchClause ? aggregateOwnedThrowStatements(node.catchClause) : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
-                node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock));
+            return concatenate(node.catchClause ? aggregateOwnedThrowStatements(node.catchClause) : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock), node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock));
         }
         // Do not cross function boundaries.
         return isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateOwnedThrowStatements);
@@ -515,5 +515,4 @@ export namespace DocumentHighlights {
     function isLabeledBy(node: Node, labelName: __String): boolean {
         return !!findAncestor(node.parent, owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName);
     }
-}
 }

@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { protocol, File, createServerHost, libFile, createSession, openFilesForSession, makeSessionRequest, CommandNames, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "../../ts.projectSystem";
+import { find } from "../../ts";
 describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     function findNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
         return find(items, item => item.name === itemName && item.kind === itemKind);
@@ -136,4 +137,3 @@ export const ghijkl = a.abcdef;`
         assert.isTrue(fooItem?.kindModifiers?.includes("deprecated"));
     });
 });
-}

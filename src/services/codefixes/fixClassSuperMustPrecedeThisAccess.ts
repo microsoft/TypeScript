@@ -1,24 +1,31 @@
+import { Diagnostics, addToSeen, getNodeId, SourceFile, ConstructorDeclaration, ExpressionStatement, getTokenAtPosition, SyntaxKind, getContainingFunction, isPropertyAccessExpression, Node, CallExpression, isExpressionStatement, isSuperCall, isFunctionLike, forEachChild } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
 const fixId = "classSuperMustPrecedeThisAccess";
+/* @internal */
 const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile, span } = context;
         const nodes = getNodes(sourceFile, span.start);
-        if (!nodes) return undefined;
+        if (!nodes)
+            return undefined;
         const { constructor, superCall } = nodes;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
         return [createCodeFixAction(fixId, changes, Diagnostics.Make_super_call_the_first_statement_in_the_constructor, fixId, Diagnostics.Make_all_super_calls_the_first_statement_in_their_constructor)];
     },
     fixIds: [fixId],
     getAllCodeActions(context) {
         const { sourceFile } = context;
-        const seenClasses = new Map<number, true>(); // Ensure we only do this once per class.
+        const seenClasses = new ts.Map<number, true>(); // Ensure we only do this once per class.
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const nodes = getNodes(diag.file, diag.start);
-            if (!nodes) return;
+            if (!nodes)
+                return;
             const { constructor, superCall } = nodes;
             if (addToSeen(seenClasses, getNodeId(constructor.parent))) {
                 doChange(changes, sourceFile, constructor, superCall);
@@ -27,14 +34,20 @@ registerCodeFix({
     },
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
     changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall);
     changes.delete(sourceFile, superCall);
 }
 
-function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } | undefined {
+/* @internal */
+function getNodes(sourceFile: SourceFile, pos: number): {
+    readonly constructor: ConstructorDeclaration;
+    readonly superCall: ExpressionStatement;
+} | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
-    if (token.kind !== SyntaxKind.ThisKeyword) return undefined;
+    if (token.kind !== SyntaxKind.ThisKeyword)
+        return undefined;
     const constructor = getContainingFunction(token) as ConstructorDeclaration;
     const superCall = findSuperCall(constructor.body!);
     // figure out if the `this` access is actually inside the supercall
@@ -42,11 +55,15 @@ function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: 
     return superCall && !superCall.expression.arguments.some(arg => isPropertyAccessExpression(arg) && arg.expression === token) ? { constructor, superCall } : undefined;
 }
 
-function findSuperCall(n: Node): ExpressionStatement & { expression: CallExpression } | undefined {
+/* @internal */
+function findSuperCall(n: Node): (ExpressionStatement & {
+    expression: CallExpression;
+}) | undefined {
     return isExpressionStatement(n) && isSuperCall(n.expression)
-        ? n as ExpressionStatement & { expression: CallExpression }
+        ? n as ExpressionStatement & {
+            expression: CallExpression;
+        }
         : isFunctionLike(n)
             ? undefined
             : forEachChild(n, findSuperCall);
-}
 }

@@ -1,21 +1,28 @@
+import { Diagnostics, Debug, isIdentifier, getRenameLocation, isParameter, RefactorContext, ApplicableRefactorInfo, emptyArray } from "../ts";
+import { registerRefactor, isRefactorErrorInfo } from "../ts.refactor";
+import { getAccessorConvertiblePropertyAtPosition, generateAccessorFromProperty } from "../ts.codefix";
 /* @internal */
-namespace ts.refactor.generateGetAccessorAndSetAccessor {
 const actionName = "Generate 'get' and 'set' accessors";
+/* @internal */
 const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
 
+/* @internal */
 const generateGetSetAction = {
     name: actionName,
     description: actionDescription,
     kind: "refactor.rewrite.property.generateAccessors",
 };
+/* @internal */
 registerRefactor(actionName, {
     kinds: [generateGetSetAction.kind],
     getEditsForAction(context, actionName) {
-        if (!context.endPosition) return undefined;
-        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
+        if (!context.endPosition)
+            return undefined;
+        const info = getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
-        if (!edits) return undefined;
+        const edits = generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
+        if (!edits)
+            return undefined;
 
         const renameFilename = context.file.fileName;
         const nameNeedRename = info.renameAccessor ? info.accessorName : info.fieldName;
@@ -25,9 +32,11 @@ registerRefactor(actionName, {
         return { renameFilename, renameLocation, edits };
     },
     getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        if (!context.endPosition) return emptyArray;
-        const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
-        if (!info) return emptyArray;
+        if (!context.endPosition)
+            return emptyArray;
+        const info = getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
+        if (!info)
+            return emptyArray;
 
         if (!isRefactorErrorInfo(info)) {
             return [{
@@ -48,4 +57,3 @@ registerRefactor(actionName, {
         return emptyArray;
     }
 });
-}

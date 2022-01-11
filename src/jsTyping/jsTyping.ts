@@ -1,5 +1,6 @@
+import { MapLike, Version, getProperty, versionMajorMinor, ReadonlyESMap, Path, readConfigFile, getEntries, TypeAcquisition, mapDefined, normalizePath, hasJSFileExtension, getDirectoryPath, deduplicate, equateStringsCaseSensitive, compareStringsCaseSensitive, forEach, combinePaths, flatMap, getOwnKeys, Extension, getBaseFileName, getPathComponents, getNormalizedAbsolutePath, removeFileExtension, removeMinAndVersionNumbers, some, fileExtensionIs, CharacterCodes, Debug } from "./ts";
+import * as ts from "./ts";
 /* @internal */
-namespace ts.JsTyping {
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
@@ -8,6 +9,7 @@ export interface TypingResolutionHost {
     readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
 }
 
+/* @internal */
 interface PackageJson {
     dependencies?: MapLike<string>;
     devDependencies?: MapLike<string>;
@@ -18,16 +20,19 @@ interface PackageJson {
     typings?: string;
 }
 
+/* @internal */
 export interface CachedTyping {
     typingLocation: string;
     version: Version;
 }
 
+/* @internal */
 export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
     const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
 
+/* @internal */
 const unprefixedNodeCoreModuleList = [
     "assert",
     "assert/strict",
@@ -78,11 +83,15 @@ const unprefixedNodeCoreModuleList = [
     "zlib"
 ];
 
+/* @internal */
 export const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
 
+/* @internal */
 export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
 
-export const nodeCoreModules = new Set(nodeCoreModuleList);
+/* @internal */
+export const nodeCoreModules = new ts.Set(nodeCoreModuleList);
+/* @internal */
 
 export function nonRelativeModuleNameForTypingCache(moduleName: string) {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
@@ -91,17 +100,20 @@ export function nonRelativeModuleNameForTypingCache(moduleName: string) {
 /**
  * A map of loose file names to library names that we are confident require typings
  */
+/* @internal */
 export type SafeList = ReadonlyESMap<string, string>;
 
+/* @internal */
 export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
     const result = readConfigFile(safeListPath, path => host.readFile(path));
-    return new Map(getEntries<string>(result.config));
+    return new ts.Map(getEntries<string>(result.config));
 }
 
+/* @internal */
 export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
     const result = readConfigFile(typesMapPath, path => host.readFile(path));
     if (result.config) {
-        return new Map(getEntries<string>(result.config.simpleMap));
+        return new ts.Map(getEntries<string>(result.config.simpleMap));
     }
     return undefined;
 }
@@ -115,24 +127,19 @@ export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): Sa
  * @param typeAcquisition is used to customize the typing acquisition process
  * @param compilerOptions are used as a source for typing inference
  */
-export function discoverTypings(
-    host: TypingResolutionHost,
-    log: ((message: string) => void) | undefined,
-    fileNames: string[],
-    projectRootPath: Path,
-    safeList: SafeList,
-    packageNameToTypingLocation: ReadonlyESMap<string, CachedTyping>,
-    typeAcquisition: TypeAcquisition,
-    unresolvedImports: readonly string[],
-    typesRegistry: ReadonlyESMap<string, MapLike<string>>):
-    { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
+/* @internal */
+export function discoverTypings(host: TypingResolutionHost, log: ((message: string) => void) | undefined, fileNames: string[], projectRootPath: Path, safeList: SafeList, packageNameToTypingLocation: ReadonlyESMap<string, CachedTyping>, typeAcquisition: TypeAcquisition, unresolvedImports: readonly string[], typesRegistry: ReadonlyESMap<string, MapLike<string>>): {
+    cachedTypingPaths: string[];
+    newTypingNames: string[];
+    filesToWatch: string[];
+} {
 
     if (!typeAcquisition || !typeAcquisition.enable) {
         return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
     }
 
     // A typing name to typing file path mapping
-    const inferredTypings = new Map<string, string>();
+    const inferredTypings = new ts.Map<string, string>();
 
     // Only infer typings for .js and .jsx files
     fileNames = mapDefined(fileNames, fileName => {
@@ -144,11 +151,12 @@ export function discoverTypings(
 
     const filesToWatch: string[] = [];
 
-    if (typeAcquisition.include) addInferredTypings(typeAcquisition.include, "Explicitly included types");
+    if (typeAcquisition.include)
+        addInferredTypings(typeAcquisition.include, "Explicitly included types");
     const exclude = typeAcquisition.exclude || [];
 
     // Directories to search for package.json, bower.json and other typing information
-    const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
+    const possibleSearchDirs = new ts.Set(fileNames.map(getDirectoryPath));
     possibleSearchDirs.add(projectRootPath);
     possibleSearchDirs.forEach((searchDir) => {
         getTypingNames(searchDir, "bower.json", "bower_components", filesToWatch);
@@ -159,10 +167,7 @@ export function discoverTypings(
     }
     // add typings for unresolved imports
     if (unresolvedImports) {
-        const module = deduplicate<string>(
-            unresolvedImports.map(nonRelativeModuleNameForTypingCache),
-            equateStringsCaseSensitive,
-            compareStringsCaseSensitive);
+        const module = deduplicate<string>(unresolvedImports.map(nonRelativeModuleNameForTypingCache), equateStringsCaseSensitive, compareStringsCaseSensitive);
         addInferredTypings(module, "Inferred typings from unresolved imports");
     }
     // Add the cached typing locations for inferred typings that are already installed
@@ -176,7 +181,8 @@ export function discoverTypings(
     // Remove typings that the user has added to the exclude list
     for (const excludeTypingName of exclude) {
         const didDelete = inferredTypings.delete(excludeTypingName);
-        if (didDelete && log) log(`Typing for ${excludeTypingName} is in exclude list, will be ignored.`);
+        if (didDelete && log)
+            log(`Typing for ${excludeTypingName} is in exclude list, will be ignored.`);
     }
 
     const newTypingNames: string[] = [];
@@ -190,7 +196,8 @@ export function discoverTypings(
         }
     });
     const result = { cachedTypingPaths, newTypingNames, filesToWatch };
-    if (log) log(`Result: ${JSON.stringify(result)}`);
+    if (log)
+        log(`Result: ${JSON.stringify(result)}`);
     return result;
 
     function addInferredTyping(typingName: string) {
@@ -199,7 +206,8 @@ export function discoverTypings(
         }
     }
     function addInferredTypings(typingNames: readonly string[], message: string) {
-        if (log) log(`${message}: ${JSON.stringify(typingNames)}`);
+        if (log)
+            log(`${message}: ${JSON.stringify(typingNames)}`);
         forEach(typingNames, addInferredTyping);
     }
 
@@ -270,7 +278,8 @@ export function discoverTypings(
                         !isScoped && pathComponents[pathComponents.length - 3].toLowerCase() === modulesDirName; // `node_modules/foo`
                 });
 
-        if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
+        if (log)
+            log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
 
         // Once we have the names of things to look up, we iterate over
         // and either collect their included typings, or add them to the
@@ -289,11 +298,13 @@ export function discoverTypings(
             if (ownTypes) {
                 const absolutePath = getNormalizedAbsolutePath(ownTypes, getDirectoryPath(normalizedFileName));
                 if (host.fileExists(absolutePath)) {
-                    if (log) log(`    Package '${manifest.name}' provides its own types.`);
+                    if (log)
+                        log(`    Package '${manifest.name}' provides its own types.`);
                     inferredTypings.set(manifest.name, absolutePath);
                 }
                 else {
-                    if (log) log(`    Package '${manifest.name}' provides its own types but they are missing.`);
+                    if (log)
+                        log(`    Package '${manifest.name}' provides its own types but they are missing.`);
                 }
             }
             else {
@@ -312,7 +323,8 @@ export function discoverTypings(
      */
     function getTypingNamesFromSourceFileNames(fileNames: string[]) {
         const fromFileNames = mapDefined(fileNames, j => {
-            if (!hasJSFileExtension(j)) return undefined;
+            if (!hasJSFileExtension(j))
+                return undefined;
 
             const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
@@ -324,12 +336,14 @@ export function discoverTypings(
 
         const hasJsxFile = some(fileNames, f => fileExtensionIs(f, Extension.Jsx));
         if (hasJsxFile) {
-            if (log) log(`Inferred 'react' typings due to presence of '.jsx' extension`);
+            if (log)
+                log(`Inferred 'react' typings due to presence of '.jsx' extension`);
             addInferredTyping("react");
         }
     }
 }
 
+/* @internal */
 export const enum NameValidationResult {
     Ok,
     EmptyName,
@@ -339,24 +353,31 @@ export const enum NameValidationResult {
     NameContainsNonURISafeCharacters
 }
 
+/* @internal */
 const maxPackageNameLength = 214;
 
+/* @internal */
 export interface ScopedPackageNameValidationResult {
     name: string;
     isScopeName: boolean;
     result: NameValidationResult;
 }
+/* @internal */
 export type PackageNameValidationResult = NameValidationResult | ScopedPackageNameValidationResult;
 
 /**
  * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
  */
+/* @internal */
 export function validatePackageName(packageName: string): PackageNameValidationResult {
     return validatePackageNameWorker(packageName, /*supportScopedPackage*/ true);
 }
 
+/* @internal */
 function validatePackageNameWorker(packageName: string, supportScopedPackage: false): NameValidationResult;
+/* @internal */
 function validatePackageNameWorker(packageName: string, supportScopedPackage: true): PackageNameValidationResult;
+/* @internal */
 function validatePackageNameWorker(packageName: string, supportScopedPackage: boolean): PackageNameValidationResult {
     if (!packageName) {
         return NameValidationResult.EmptyName;
@@ -392,12 +413,14 @@ function validatePackageNameWorker(packageName: string, supportScopedPackage: bo
     return NameValidationResult.Ok;
 }
 
+/* @internal */
 export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
     return typeof result === "object" ?
         renderPackageNameValidationFailureWorker(typing, result.result, result.name, result.isScopeName) :
         renderPackageNameValidationFailureWorker(typing, result, typing, /*isScopeName*/ false);
 }
 
+/* @internal */
 function renderPackageNameValidationFailureWorker(typing: string, result: NameValidationResult, name: string, isScopeName: boolean): string {
     const kind = isScopeName ? "Scope" : "Package";
     switch (result) {
@@ -416,5 +439,4 @@ function renderPackageNameValidationFailureWorker(typing: string, result: NameVa
         default:
             throw Debug.assertNever(result);
     }
-}
 }

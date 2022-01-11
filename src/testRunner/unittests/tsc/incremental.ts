@@ -1,11 +1,14 @@
-namespace ts {
+import { verifyTscSerializedIncrementalEdits, loadProjectFromFiles, noChangeOnlyRuns, noChangeRun, BuildKind, appendText, loadProjectFromDisk, TscIncremental, CompilerOptions, hasProperty, replaceText, prependText, verifyTsc, CleanBuildDescrepancy } from "../../ts";
+import { dedent } from "../../Utils";
+import { FileSystem } from "../../vfs";
+import * as ts from "../../ts";
 describe("unittests:: tsc:: incremental::", () => {
     verifyTscSerializedIncrementalEdits({
         scenario: "incremental",
         subScenario: "when passing filename for buildinfo on commandline",
         fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
-            "/src/project/tsconfig.json": Utils.dedent`
+            "/src/project/tsconfig.json": dedent `
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -25,7 +28,7 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "when passing rootDir from commandline",
         fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
-            "/src/project/tsconfig.json": Utils.dedent`
+            "/src/project/tsconfig.json": dedent `
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -60,7 +63,7 @@ describe("unittests:: tsc:: incremental::", () => {
         subScenario: "when passing rootDir is in the tsconfig",
         fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
-            "/src/project/tsconfig.json": Utils.dedent`
+            "/src/project/tsconfig.json": dedent `
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -74,7 +77,7 @@ describe("unittests:: tsc:: incremental::", () => {
     });
 
     describe("with noEmitOnError", () => {
-        let projFs: vfs.FileSystem;
+        let projFs: FileSystem;
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
         });
@@ -100,21 +103,13 @@ describe("unittests:: tsc:: incremental::", () => {
                 baselinePrograms: true
             });
         }
-        verifyNoEmitOnError(
-            "with noEmitOnError syntax errors",
-            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+        verifyNoEmitOnError("with noEmitOnError syntax errors", fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`, "utf-8")
-        );
-
-        verifyNoEmitOnError(
-            "with noEmitOnError semantic errors",
-            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = "hello";`, "utf-8"),
-            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = 10;`, "utf-8"),
-        );
+};`, "utf-8"));
+        verifyNoEmitOnError("with noEmitOnError semantic errors", fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8"), fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8"));
     });
 
     describe("when noEmit changes between compilation", () => {
@@ -209,25 +204,25 @@ const a: string = 10;`, "utf-8"),
 
             function fs() {
                 return loadProjectFromFiles({
-                    "/src/project/src/class.ts": Utils.dedent`
+                    "/src/project/src/class.ts": dedent `
                             export class classC {
                                 prop = 1;
                             }`,
-                    "/src/project/src/indirectClass.ts": Utils.dedent`
+                    "/src/project/src/indirectClass.ts": dedent `
                             import { classC } from './class';
                             export class indirectClass {
                                 classC = new classC();
                             }`,
-                    "/src/project/src/directUse.ts": Utils.dedent`
+                    "/src/project/src/directUse.ts": dedent `
                             import { indirectClass } from './indirectClass';
                             new indirectClass().classC.prop;`,
-                    "/src/project/src/indirectUse.ts": Utils.dedent`
+                    "/src/project/src/indirectUse.ts": dedent `
                             import { indirectClass } from './indirectClass';
                             new indirectClass().classC.prop;`,
-                    "/src/project/src/noChangeFile.ts": Utils.dedent`
+                    "/src/project/src/noChangeFile.ts": dedent `
                             export function writeLog(s: string) {
                             }`,
-                    "/src/project/src/noChangeFileWithEmitSpecificError.ts": Utils.dedent`
+                    "/src/project/src/noChangeFileWithEmitSpecificError.ts": dedent `
                             function someFunc(arguments: boolean, ...rest: any[]) {
                             }`,
                     "/src/project/tsconfig.json": JSON.stringify({ compilerOptions }),
@@ -240,12 +235,12 @@ const a: string = 10;`, "utf-8"),
         scenario: "incremental",
         subScenario: `when global file is added, the signatures are updated`,
         fs: () => loadProjectFromFiles({
-            "/src/project/src/main.ts": Utils.dedent`
+            "/src/project/src/main.ts": dedent `
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function main() { }
                 `,
-            "/src/project/src/anotherFileWithSameReferenes.ts": Utils.dedent`
+            "/src/project/src/anotherFileWithSameReferenes.ts": dedent `
                     /// <reference path="./filePresent.ts"/>
                     /// <reference path="./fileNotFound.ts"/>
                     function anotherFileWithSameReferenes() { }
@@ -313,8 +308,8 @@ declare global {
             scenario: "react-jsx-emit-mode",
             subScenario: "with no backing types found doesn't crash",
             fs: () => loadProjectFromFiles({
-                "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
-                "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
+                "/src/project/node_modules/react/jsx-runtime.js": "export {}",
+                "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(),
                 "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
                 "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
             }),
@@ -325,8 +320,8 @@ declare global {
             scenario: "react-jsx-emit-mode",
             subScenario: "with no backing types found doesn't crash under --strict",
             fs: () => loadProjectFromFiles({
-                "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
-                "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
+                "/src/project/node_modules/react/jsx-runtime.js": "export {}",
+                "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(),
                 "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
                 "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
             }),
@@ -364,7 +359,7 @@ declare global {
                 subScenario: "Add class3 to project1 and build it",
                 buildKind: BuildKind.IncrementalDtsChange,
                 modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
-                cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
+                cleanBuildDiscrepancies: () => new ts.Map<string, CleanBuildDescrepancy>([
                     // Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build
                     // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
                     ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
@@ -387,7 +382,7 @@ declare global {
                 subScenario: "Delete output for class3",
                 buildKind: BuildKind.IncrementalDtsUnchanged,
                 modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
-                cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
+                cleanBuildDiscrepancies: () => new ts.Map<string, CleanBuildDescrepancy>([
                     // Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache
                     // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
                     ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
@@ -419,4 +414,3 @@ declare global {
         baselinePrograms: true
     });
 });
-}

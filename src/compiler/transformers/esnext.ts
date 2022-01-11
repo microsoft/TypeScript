@@ -1,5 +1,5 @@
+import { TransformationContext, chainBundle, SourceFile, visitEachChild, Node, VisitResult, TransformFlags } from "../ts";
 /*@internal*/
-namespace ts {
 export function transformESNext(context: TransformationContext) {
   return chainBundle(context, transformSourceFile);
 
@@ -20,5 +20,4 @@ export function transformESNext(context: TransformationContext) {
               return visitEachChild(node, visitor, context);
       }
   }
-}
 }

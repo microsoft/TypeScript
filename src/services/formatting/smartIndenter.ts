@@ -1,5 +1,6 @@
+import { SourceFile, EditorSettings, IndentStyle, findPrecedingToken, SyntaxKind, isStringOrRegularExpressionOrTemplateLiteral, rangeContainsRange, CommentRange, getLineAndCharacterOfPosition, Debug, getStartPositionOfLine, CharacterCodes, isWhiteSpaceLike, getLineStartPositionForPosition, Node, positionBelongsToNode, TextRange, LineAndCharacter, findListItemInfo, isDeclaration, isStatementButNotDeclaration, findNextToken, SourceFileLike, isCallExpression, contains, IfStatement, findChildOfKind, isConditionalExpression, isCallOrNewExpression, find, NodeArray, TypeReferenceNode, ObjectLiteralExpression, ArrayLiteralExpression, TypeLiteralNode, SignatureDeclaration, ClassDeclaration, ClassExpression, InterfaceDeclaration, TypeAliasDeclaration, JSDocTemplateTag, CallExpression, VariableDeclarationList, NamedImportsOrExports, ObjectBindingPattern, ArrayBindingPattern, rangeContainsStartEnd, isWhiteSpaceSingleLine, FormatCodeSettings, skipTrivia, ImportClause } from "../ts";
+import { getRangeOfEnclosingComment, TextRangeWithKind } from "../ts.formatting";
 /* @internal */
-namespace ts.formatting {
 export namespace SmartIndenter {
 
     const enum Value {
@@ -155,14 +156,7 @@ export namespace SmartIndenter {
         return options.baseIndentSize || 0;
     }
 
-    function getIndentationForNodeWorker(
-        current: Node,
-        currentStart: LineAndCharacter,
-        ignoreActualIndentationRange: TextRange | undefined,
-        indentationDelta: number,
-        sourceFile: SourceFile,
-        isNextChild: boolean,
-        options: EditorSettings): number {
+    function getIndentationForNodeWorker(current: Node, currentStart: LineAndCharacter, ignoreActualIndentationRange: TextRange | undefined, indentationDelta: number, sourceFile: SourceFile, isNextChild: boolean, options: EditorSettings): number {
         let parent = current.parent;
 
         // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
@@ -176,8 +170,7 @@ export namespace SmartIndenter {
             }
 
             const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
-            const parentAndChildShareLine =
-                containingListOrParentStart.line === currentStart.line ||
+            const parentAndChildShareLine = containingListOrParentStart.line === currentStart.line ||
                 childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
             if (useActualIndentation) {
@@ -226,8 +219,7 @@ export namespace SmartIndenter {
             // Instead, when at an argument, we unspoof the starting position of the enclosing call expression
             // *after* applying indentation for the argument.
 
-            const useTrueStart =
-                isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
+            const useTrueStart = isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
 
             current = parent;
             parent = current.parent;
@@ -261,18 +253,12 @@ export namespace SmartIndenter {
     /*
      * Function returns Value.Unknown if actual indentation for node should not be used (i.e because node is nested expression)
      */
-    function getActualIndentationForNode(current: Node,
-        parent: Node,
-        currentLineAndChar: LineAndCharacter,
-        parentAndChildShareLine: boolean,
-        sourceFile: SourceFile,
-        options: EditorSettings): number {
+    function getActualIndentationForNode(current: Node, parent: Node, currentLineAndChar: LineAndCharacter, parentAndChildShareLine: boolean, sourceFile: SourceFile, options: EditorSettings): number {
 
         // actual indentation is used for statements\declarations if one of cases below is true:
         // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
         // - parent and child are not on the same line
-        const useActualIndentation =
-            (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
+        const useActualIndentation = (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
             (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
         if (!useActualIndentation) {
@@ -386,12 +372,15 @@ export namespace SmartIndenter {
 
     export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
         if (isCallOrNewExpression(parent)) {
-            if (!parent.arguments) return false;
+            if (!parent.arguments)
+                return false;
             const currentNode = find(parent.arguments, arg => arg.pos === child.pos);
             // If it's not one of the arguments, don't look past this
-            if (!currentNode) return false;
+            if (!currentNode)
+                return false;
             const currentIndex = parent.arguments.indexOf(currentNode);
-            if (currentIndex === 0) return false; // Can't look at previous node if first
+            if (currentIndex === 0)
+                return false; // Can't look at previous node if first
 
             const previousNode = parent.arguments[currentIndex - 1];
             const lineOfPreviousNode = getLineAndCharacterOfPosition(sourceFile, previousNode.getEnd()).line;
@@ -680,5 +669,4 @@ export namespace SmartIndenter {
         const endLine = sourceFile.getLineAndCharacterOfPosition(range.end).line;
         return startLine === endLine;
     }
-}
 }

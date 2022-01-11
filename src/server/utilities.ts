@@ -1,7 +1,9 @@
+import { Logger, ServerHost, LogLevel, NormalizedPath } from "./ts.server";
+import { perfLogger, getBaseFileName, SortedArray, Comparer, binarySearch, identity } from "./ts";
+import * as ts from "./ts";
 /* @internal */
-namespace ts.server {
 export class ThrottledOperations {
-    private readonly pendingTimeouts = new Map<string, any>();
+    private readonly pendingTimeouts = new ts.Map<string, any>();
     private readonly logger?: Logger | undefined;
     constructor(private readonly host: ServerHost, logger: Logger) {
         this.logger = logger.hasLevel(LogLevel.verbose) ? logger : undefined;
@@ -28,7 +30,8 @@ export class ThrottledOperations {
 
     public cancel(operationId: string) {
         const pendingTimeout = this.pendingTimeouts.get(operationId);
-        if (!pendingTimeout) return false;
+        if (!pendingTimeout)
+            return false;
         this.host.clearTimeout(pendingTimeout);
         return this.pendingTimeouts.delete(operationId);
     }
@@ -44,6 +47,7 @@ export class ThrottledOperations {
     }
 }
 
+/* @internal */
 export class GcTimer {
     private timerId: any;
     constructor(private readonly host: ServerHost, private readonly delay: number, private readonly logger: Logger) {
@@ -73,11 +77,13 @@ export class GcTimer {
     }
 }
 
+/* @internal */
 export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
     const base = getBaseFileName(configFilePath);
     return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
 }
 
+/* @internal */
 export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
     if (!array || array.length === 0) {
         return;
@@ -94,14 +100,16 @@ export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Compa
     }
 }
 
+/* @internal */
 const indentStr = "\n    ";
 
+/* @internal */
 export function indent(str: string): string {
     return indentStr + str.replace(/\n/g, indentStr);
 }
 
 /** Put stringified JSON on the next line, indented. */
+/* @internal */
 export function stringifyIndented(json: {}): string {
     return indentStr + JSON.stringify(json);
-}
 }

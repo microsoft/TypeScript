@@ -1,11 +1,14 @@
+import { FormatCodeSettings, FormattingHost, every, Debug, SyntaxKind } from "../ts";
+import { FormatContext, getAllRules, RuleAction, FormattingContext, Rule, RuleSpec, anyContext } from "../ts.formatting";
 /* @internal */
-namespace ts.formatting {
 export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
     return { options, getRules: getRulesMap(), host };
 }
 
+/* @internal */
 let rulesMapCache: RulesMap | undefined;
 
+/* @internal */
 function getRulesMap(): RulesMap {
     if (rulesMapCache === undefined) {
         rulesMapCache = createRulesMap(getAllRules());
@@ -17,6 +20,7 @@ function getRulesMap(): RulesMap {
  * For a given rule action, gets a mask of other rule actions that
  * cannot be applied at the same position.
  */
+/* @internal */
 function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
     let mask: RuleAction = 0;
     if (ruleAction & RuleAction.StopProcessingSpaceActions) {
@@ -34,7 +38,9 @@ function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
     return mask;
 }
 
+/* @internal */
 export type RulesMap = (context: FormattingContext) => readonly Rule[] | undefined;
+/* @internal */
 function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
     const map = buildMap(rules);
     return context => {
@@ -56,6 +62,7 @@ function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
     };
 }
 
+/* @internal */
 function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
     // Map from bucket index to array of rules
     const map: Rule[][] = new Array(mapRowLength * mapRowLength);
@@ -78,15 +85,20 @@ function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
     return map;
 }
 
+/* @internal */
 function getRuleBucketIndex(row: number, column: number): number {
     Debug.assert(row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword, "Must compute formatting context from tokens");
     return (row * mapRowLength) + column;
 }
 
+/* @internal */
 const maskBitSize = 5;
+/* @internal */
 const mask = 0b11111; // MaskBitSize bits
+/* @internal */
 const mapRowLength = SyntaxKind.LastToken + 1;
 
+/* @internal */
 enum RulesPosition {
     StopRulesSpecific = 0,
     StopRulesAny = maskBitSize * 1,
@@ -111,6 +123,7 @@ enum RulesPosition {
 // Example:
 // In order to insert a rule to the end of sub-bucket (3), we get the index by adding
 // the values in the bitmap segments 3rd, 2nd, and 1st.
+/* @internal */
 function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
     const position = rule.action & RuleAction.StopAction ?
         specificTokens ? RulesPosition.StopRulesSpecific : RulesPosition.StopRulesAny :
@@ -123,6 +136,7 @@ function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructio
     constructionState[rulesBucketIndex] = increaseInsertionIndex(state, position);
 }
 
+/* @internal */
 function getInsertionIndex(indexBitmap: number, maskPosition: RulesPosition) {
     let index = 0;
     for (let pos = 0; pos <= maskPosition; pos += maskBitSize) {
@@ -132,9 +146,9 @@ function getInsertionIndex(indexBitmap: number, maskPosition: RulesPosition) {
     return index;
 }
 
+/* @internal */
 function increaseInsertionIndex(indexBitmap: number, maskPosition: RulesPosition): number {
     const value = ((indexBitmap >> maskPosition) & mask) + 1;
     Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
     return (indexBitmap & ~(mask << maskPosition)) | (value << maskPosition);
-}
 }

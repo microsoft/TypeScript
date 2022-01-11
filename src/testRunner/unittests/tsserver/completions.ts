@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createSession, createServerHost, openFilesForSession, protocol, executeSessionRequest, libFile, TestTypingsInstaller, checkNumberOfProjects, checkProjectActualFiles } from "../../ts.projectSystem";
+import { ScriptElementKind, ScriptElementKindModifier, Completions, CompletionEntryDetails, keywordPart, SyntaxKind, spacePart, displayPart, SymbolDisplayPartKind, punctuationPart, emptyArray, createTextChange, createTextSpan } from "../../ts";
 describe("unittests:: tsserver:: completions", () => {
     it("works", () => {
         const aTs: File = {
@@ -233,7 +234,8 @@ export interface BrowserRouterProps {
         ];
         const files = [
             ...filesInProject,
-            appPackage, libFile,
+            appPackage,
+            libFile,
             localReactPackage,
             localReactRouterDomPackage, localReactRouterDom,
             localPropTypesPackage,
@@ -262,4 +264,3 @@ export interface BrowserRouterProps {
         });
     });
 });
-}

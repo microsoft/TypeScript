@@ -1,5 +1,5 @@
+import { TransformationContext, chainBundle, SourceFile, visitEachChild, Node, VisitResult, TransformFlags, SyntaxKind, CatchClause, visitNode, isBlock } from "../ts";
 /*@internal*/
-namespace ts {
 export function transformES2019(context: TransformationContext) {
     const factory = context.factory;
     return chainBundle(context, transformSourceFile);
@@ -26,13 +26,8 @@ export function transformES2019(context: TransformationContext) {
 
     function visitCatchClause(node: CatchClause): CatchClause {
         if (!node.variableDeclaration) {
-            return factory.updateCatchClause(
-                node,
-                factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined)),
-                visitNode(node.block, visitor, isBlock)
-            );
+            return factory.updateCatchClause(node, factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined)), visitNode(node.block, visitor, isBlock));
         }
         return visitEachChild(node, visitor, context);
     }
-}
 }

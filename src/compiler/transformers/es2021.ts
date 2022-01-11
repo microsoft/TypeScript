@@ -1,10 +1,7 @@
+import { TransformationContext, chainBundle, SourceFile, visitEachChild, Node, VisitResult, TransformFlags, SyntaxKind, BinaryExpression, isLogicalOrCoalescingAssignmentExpression, AssignmentExpression, Token, LogicalOrCoalescingAssignmentOperator, getNonAssignmentOperatorForCompoundAssignment, skipParentheses, visitNode, isLeftHandSideExpression, isExpression, isAccessExpression, isSimpleCopiableExpression, isPropertyAccessExpression } from "../ts";
 /*@internal*/
-namespace ts {
 export function transformES2021(context: TransformationContext) {
-    const {
-        hoistVariableDeclaration,
-        factory
-    } = context;
+    const { hoistVariableDeclaration, factory } = context;
     return chainBundle(context, transformSourceFile);
 
     function transformSourceFile(node: SourceFile) {
@@ -42,50 +39,22 @@ export function transformES2021(context: TransformationContext) {
             const propertyAccessTargetSimpleCopiable = isSimpleCopiableExpression(left.expression);
             const propertyAccessTarget = propertyAccessTargetSimpleCopiable ? left.expression :
                 factory.createTempVariable(hoistVariableDeclaration);
-            const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
-                propertyAccessTarget,
-                left.expression
-            );
+            const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(propertyAccessTarget, left.expression);
 
             if (isPropertyAccessExpression(left)) {
-                assignmentTarget = factory.createPropertyAccessExpression(
-                    propertyAccessTarget,
-                    left.name
-                );
-                left = factory.createPropertyAccessExpression(
-                    propertyAccessTargetAssignment,
-                    left.name
-                );
+                assignmentTarget = factory.createPropertyAccessExpression(propertyAccessTarget, left.name);
+                left = factory.createPropertyAccessExpression(propertyAccessTargetAssignment, left.name);
             }
             else {
                 const elementAccessArgumentSimpleCopiable = isSimpleCopiableExpression(left.argumentExpression);
                 const elementAccessArgument = elementAccessArgumentSimpleCopiable ? left.argumentExpression :
                     factory.createTempVariable(hoistVariableDeclaration);
 
-                assignmentTarget = factory.createElementAccessExpression(
-                    propertyAccessTarget,
-                    elementAccessArgument
-                );
-                left = factory.createElementAccessExpression(
-                    propertyAccessTargetAssignment,
-                    elementAccessArgumentSimpleCopiable ? left.argumentExpression : factory.createAssignment(
-                        elementAccessArgument,
-                        left.argumentExpression
-                    )
-                );
+                assignmentTarget = factory.createElementAccessExpression(propertyAccessTarget, elementAccessArgument);
+                left = factory.createElementAccessExpression(propertyAccessTargetAssignment, elementAccessArgumentSimpleCopiable ? left.argumentExpression : factory.createAssignment(elementAccessArgument, left.argumentExpression));
             }
         }
 
-        return factory.createBinaryExpression(
-            left,
-            nonAssignmentOperator,
-            factory.createParenthesizedExpression(
-                factory.createAssignment(
-                    assignmentTarget,
-                    right
-                )
-            )
-        );
-    }
+        return factory.createBinaryExpression(left, nonAssignmentOperator, factory.createParenthesizedExpression(factory.createAssignment(assignmentTarget, right)));
 }
 }

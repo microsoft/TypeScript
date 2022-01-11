@@ -1,7 +1,10 @@
-namespace ts {
+import { ParseConfigHost } from "../../fakes";
+import { FileSystem } from "../../vfs";
+import { ParsedCommandLine, CompilerOptions, Path, parseJsonText, parseJsonSourceFileConfigFileContent, parseJsonConfigFileContent, Diagnostic, DiagnosticMessage, SyntaxKind, SourceFile, createFileDiagnostic, WatchDirectoryFlags, createCompilerDiagnostic, Diagnostics, JsxEmit } from "../../ts";
+import * as ts from "../../ts";
 const caseInsensitiveBasePath = "c:/dev/";
 const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
-const caseInsensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+const caseInsensitiveHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
     "c:/dev/a.ts": "",
     "c:/dev/a.d.ts": "",
     "c:/dev/a.js": "",
@@ -28,7 +31,7 @@ const caseInsensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignor
 }}));
 
 const caseSensitiveBasePath = "/dev/";
-const caseSensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
+const caseSensitiveHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
     "/dev/a.ts": "",
     "/dev/a.d.ts": "",
     "/dev/a.js": "",
@@ -52,7 +55,7 @@ const caseSensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreC
     "/dev/js/b.js": "",
 }}));
 
-const caseInsensitiveMixedExtensionHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+const caseInsensitiveMixedExtensionHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
     "c:/dev/a.ts": "",
     "c:/dev/a.d.ts": "",
     "c:/dev/a.js": "",
@@ -66,7 +69,7 @@ const caseInsensitiveMixedExtensionHost = new fakes.ParseConfigHost(new vfs.File
     "c:/dev/f.other": "",
 }}));
 
-const caseInsensitiveCommonFoldersHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+const caseInsensitiveCommonFoldersHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
     "c:/dev/a.ts": "",
     "c:/dev/a.d.ts": "",
     "c:/dev/a.js": "",
@@ -77,7 +80,7 @@ const caseInsensitiveCommonFoldersHost = new fakes.ParseConfigHost(new vfs.FileS
     "c:/dev/jspm_packages/a.ts": "",
 }}));
 
-const caseInsensitiveDottedFoldersHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+const caseInsensitiveDottedFoldersHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
     "c:/dev/x/d.ts": "",
     "c:/dev/x/y/d.ts": "",
     "c:/dev/x/y/.e.ts": "",
@@ -88,13 +91,13 @@ const caseInsensitiveDottedFoldersHost = new fakes.ParseConfigHost(new vfs.FileS
     "c:/dev/g.min.js/.g/g.ts": "",
 }}));
 
-const caseInsensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
+const caseInsensitiveOrderingDiffersWithCaseHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
     "c:/dev/xylophone.ts": "",
     "c:/dev/Yosemite.ts": "",
     "c:/dev/zebra.ts": "",
 }}));
 
-const caseSensitiveOrderingDiffersWithCaseHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
+const caseSensitiveOrderingDiffersWithCaseHost = new ParseConfigHost(new FileSystem(/*ignoreCase*/ false, { cwd: caseSensitiveBasePath, files: {
     "/dev/xylophone.ts": "",
     "/dev/Yosemite.ts": "",
     "/dev/zebra.ts": "",
@@ -106,7 +109,7 @@ function assertParsed(actual: ParsedCommandLine, expected: ParsedCommandLine): v
     assert.deepEqual(actual.errors, expected.errors);
 }
 
-function validateMatches(expected: ParsedCommandLine, json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]) {
+function validateMatches(expected: ParsedCommandLine, json: any, host: ts.ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]) {
     {
         const jsonText = JSON.stringify(json);
         const result = parseJsonText(caseInsensitiveTsconfigPath, jsonText);
@@ -251,8 +254,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ParsedCommandLine = {
                 options: {},
                 errors: [
-                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                        caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
                 wildcardDirectories: {},
@@ -269,8 +271,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ParsedCommandLine = {
                 options: {},
                 errors: [
-                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                        caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
                 wildcardDirectories: {},
@@ -604,8 +605,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ParsedCommandLine = {
                 options: {},
                 errors: [
-                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                        caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
                 wildcardDirectories: {
@@ -798,8 +798,7 @@ describe("unittests:: config:: matchFiles", () => {
                     allowJs: false
                 },
                 errors: [
-                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                        caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
                 wildcardDirectories: {
@@ -913,9 +912,8 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ParsedCommandLine = {
                 options: {},
                 errors: [
-                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                        caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))]
-                ,
+                    createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
+                ],
                 fileNames: [],
                 wildcardDirectories: {}
             };
@@ -1145,8 +1143,7 @@ describe("unittests:: config:: matchFiles", () => {
                     options: {},
                     errors: [
                         createDiagnosticForConfigFile(json, 12, 4, Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
-                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {}
@@ -1165,8 +1162,7 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
+                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                     ],
                     fileNames: [],
                     wildcardDirectories: {}
@@ -1232,8 +1228,7 @@ describe("unittests:: config:: matchFiles", () => {
                     options: {},
                     errors: [
                         createDiagnosticForConfigFile(json, 12, 9, Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
-                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {}
@@ -1251,8 +1246,7 @@ describe("unittests:: config:: matchFiles", () => {
                     options: {},
                     errors: [
                         createDiagnosticForConfigFile(json, 12, 11, Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
-                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
+                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
                     wildcardDirectories: {}
@@ -1428,8 +1422,7 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
-                            caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
+                        createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2, caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                     ],
                     fileNames: [],
                     wildcardDirectories: {}
@@ -1500,7 +1493,7 @@ describe("unittests:: config:: matchFiles", () => {
                 options: {},
                 errors: [],
                 fileNames: [
-                    `${basePath}Yosemite.ts`, // capital always comes before lowercase letters
+                    `${basePath}Yosemite.ts`,
                     `${basePath}xylophone.ts`,
                     `${basePath}zebra.ts`
                 ],
@@ -1515,7 +1508,7 @@ describe("unittests:: config:: matchFiles", () => {
     });
 
     it("when recursive symlinked directories are present", () => {
-        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+        const fs = new FileSystem(/*ignoreCase*/ true, {
             cwd: caseInsensitiveBasePath, files: {
                 "c:/dev/index.ts": ""
             }
@@ -1524,7 +1517,7 @@ describe("unittests:: config:: matchFiles", () => {
         fs.symlinkSync("c:/dev/A", "c:/dev/a/self");
         fs.symlinkSync("c:/dev/a", "c:/dev/a/b/parent");
         fs.symlinkSync("c:/dev/a", "c:/dev/a/b/c/grandparent");
-        const host = new fakes.ParseConfigHost(fs);
+        const host = new ParseConfigHost(fs);
         const json = {};
         const expected: ParsedCommandLine = {
             options: {},
@@ -1539,4 +1532,3 @@ describe("unittests:: config:: matchFiles", () => {
         validateMatches(expected, json, host, caseInsensitiveBasePath);
     });
 });
-}

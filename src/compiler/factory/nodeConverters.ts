@@ -1,5 +1,5 @@
+import { NodeFactory, NodeConverters, ConciseBody, Block, isBlock, setTextRange, FunctionDeclaration, Debug, setOriginalNode, getStartsOnNewLine, setStartsOnNewLine, ArrayBindingOrAssignmentElement, isBindingElement, isIdentifier, cast, isExpression, ObjectBindingOrAssignmentElement, isObjectLiteralElementLike, BindingOrAssignmentPattern, AssignmentPattern, SyntaxKind, ObjectBindingOrAssignmentPattern, isObjectBindingPattern, map, isObjectLiteralExpression, ArrayBindingOrAssignmentPattern, isArrayBindingPattern, isArrayLiteralExpression, BindingOrAssignmentElementTarget, Expression, isBindingPattern, notImplemented } from "../ts";
 /* @internal */
-namespace ts {
 export function createNodeConverters(factory: NodeFactory): NodeConverters {
     return {
         convertToFunctionBlock,
@@ -13,7 +13,8 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
     };
 
     function convertToFunctionBlock(node: ConciseBody, multiLine?: boolean): Block {
-        if (isBlock(node)) return node;
+        if (isBlock(node))
+            return node;
         const returnStatement = factory.createReturnStatement(node);
         setTextRange(returnStatement, node);
         const body = factory.createBlock([returnStatement], multiLine);
@@ -22,16 +23,9 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
     }
 
     function convertToFunctionExpression(node: FunctionDeclaration) {
-        if (!node.body) return Debug.fail(`Cannot convert a FunctionDeclaration without a body`);
-        const updated = factory.createFunctionExpression(
-            node.modifiers,
-            node.asteriskToken,
-            node.name,
-            node.typeParameters,
-            node.parameters,
-            node.type,
-            node.body
-        );
+        if (!node.body)
+            return Debug.fail(`Cannot convert a FunctionDeclaration without a body`);
+        const updated = factory.createFunctionExpression(node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body);
         setOriginalNode(updated, node);
         setTextRange(updated, node);
         if (getStartsOnNewLine(node)) {
@@ -48,13 +42,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             }
             const expression = convertToAssignmentElementTarget(element.name);
             return element.initializer
-                ? setOriginalNode(
-                    setTextRange(
-                        factory.createAssignment(expression, element.initializer),
-                        element
-                    ),
-                    element
-                )
+                ? setOriginalNode(setTextRange(factory.createAssignment(expression, element.initializer), element), element)
                 : expression;
         }
         return cast(element, isExpression);
@@ -91,26 +79,14 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
 
     function convertToObjectAssignmentPattern(node: ObjectBindingOrAssignmentPattern) {
         if (isObjectBindingPattern(node)) {
-            return setOriginalNode(
-                setTextRange(
-                    factory.createObjectLiteralExpression(map(node.elements, convertToObjectAssignmentElement)),
-                    node
-                ),
-                node
-            );
+            return setOriginalNode(setTextRange(factory.createObjectLiteralExpression(map(node.elements, convertToObjectAssignmentElement)), node), node);
         }
         return cast(node, isObjectLiteralExpression);
     }
 
     function convertToArrayAssignmentPattern(node: ArrayBindingOrAssignmentPattern) {
         if (isArrayBindingPattern(node)) {
-            return setOriginalNode(
-                setTextRange(
-                    factory.createArrayLiteralExpression(map(node.elements, convertToArrayAssignmentElement)),
-                    node
-                ),
-                node
-            );
+            return setOriginalNode(setTextRange(factory.createArrayLiteralExpression(map(node.elements, convertToArrayAssignmentElement)), node), node);
         }
         return cast(node, isArrayLiteralExpression);
     }
@@ -124,6 +100,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
     }
 }
 
+/* @internal */
 export const nullNodeConverters: NodeConverters = {
     convertToFunctionBlock: notImplemented,
     convertToFunctionExpression: notImplemented,
@@ -134,4 +111,3 @@ export const nullNodeConverters: NodeConverters = {
     convertToArrayAssignmentPattern: notImplemented,
     convertToAssignmentElementTarget: notImplemented,
 };
-}

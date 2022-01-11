@@ -1,4 +1,4 @@
-namespace ts {
+import { verifyTsc, loadProjectFromFiles } from "../../ts";
 describe("unittests:: tsbuild - clean", () => {
     verifyTsc({
         scenario: "clean",
@@ -13,4 +13,3 @@ describe("unittests:: tsbuild - clean", () => {
         }),
     });
 });
-}

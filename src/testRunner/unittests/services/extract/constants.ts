@@ -1,35 +1,26 @@
-namespace ts {
+import { testExtractSymbol, Diagnostics, testExtractSymbolFailed } from "../../../ts";
 describe("unittests:: services:: extract:: extractConstants", () => {
-    testExtractConstant("extractConstant_TopLevel",
-        `let x = [#|1|];`);
-
-    testExtractConstant("extractConstant_Namespace",
-        `namespace N {
+    testExtractConstant("extractConstant_TopLevel", `let x = [#|1|];`);
+    testExtractConstant("extractConstant_Namespace", `namespace N {
     let x = [#|1|];
 }`);
 
-    testExtractConstant("extractConstant_Class",
-        `class C {
+    testExtractConstant("extractConstant_Class", `class C {
     x = [#|1|];
 }`);
 
-    testExtractConstant("extractConstant_Method",
-        `class C {
+    testExtractConstant("extractConstant_Method", `class C {
     M() {
         let x = [#|1|];
     }
 }`);
 
-    testExtractConstant("extractConstant_Function",
-        `function F() {
+    testExtractConstant("extractConstant_Function", `function F() {
     let x = [#|1|];
 }`);
 
-    testExtractConstant("extractConstant_ExpressionStatement",
-        `[#|"hello";|]`);
-
-    testExtractConstant("extractConstant_ExpressionStatementExpression",
-        `[#|"hello"|];`);
+    testExtractConstant("extractConstant_ExpressionStatement", `[#|"hello";|]`);
+    testExtractConstant("extractConstant_ExpressionStatementExpression", `[#|"hello"|];`);
 
     testExtractConstant("extractConstant_ExpressionStatementInNestedScope", `
 let i = 0;
@@ -45,15 +36,13 @@ function F() {
 }
         `);
 
-    testExtractConstant("extractConstant_BlockScopes_NoDependencies",
-        `for (let i = 0; i < 10; i++) {
+    testExtractConstant("extractConstant_BlockScopes_NoDependencies", `for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
         let x = [#|1|];
     }
 }`);
 
-    testExtractConstant("extractConstant_ClassInsertionPosition1",
-        `class C {
+    testExtractConstant("extractConstant_ClassInsertionPosition1", `class C {
     a = 1;
     b = 2;
     M1() { }
@@ -63,8 +52,7 @@ function F() {
     }
 }`);
 
-    testExtractConstant("extractConstant_ClassInsertionPosition2",
-        `class C {
+    testExtractConstant("extractConstant_ClassInsertionPosition2", `class C {
     a = 1;
     M1() { }
     b = 2;
@@ -74,8 +62,7 @@ function F() {
     }
 }`);
 
-    testExtractConstant("extractConstant_ClassInsertionPosition3",
-        `class C {
+    testExtractConstant("extractConstant_ClassInsertionPosition3", `class C {
     M1() { }
     a = 1;
     b = 2;
@@ -85,33 +72,27 @@ function F() {
     }
 }`);
 
-    testExtractConstant("extractConstant_Parameters",
-        `function F() {
+    testExtractConstant("extractConstant_Parameters", `function F() {
     let w = 1;
     let x = [#|w + 1|];
 }`);
 
-    testExtractConstant("extractConstant_TypeParameters",
-        `function F<T>(t: T) {
+    testExtractConstant("extractConstant_TypeParameters", `function F<T>(t: T) {
     let x = [#|t + 1|];
 }`);
 
-    testExtractConstant("extractConstant_RepeatedSubstitution",
-        `namespace X {
+    testExtractConstant("extractConstant_RepeatedSubstitution", `namespace X {
     export const j = 10;
     export const y = [#|j * j|];
 }`);
 
-    testExtractConstant("extractConstant_VariableList_const",
-        `const a = 1, b = [#|a + 1|];`);
+    testExtractConstant("extractConstant_VariableList_const", `const a = 1, b = [#|a + 1|];`);
 
     // NOTE: this test isn't normative - it just documents our sub-optimal behavior.
-    testExtractConstant("extractConstant_VariableList_let",
-        `let a = 1, b = [#|a + 1|];`);
+    testExtractConstant("extractConstant_VariableList_let", `let a = 1, b = [#|a + 1|];`);
 
     // NOTE: this test isn't normative - it just documents our sub-optimal behavior.
-    testExtractConstant("extractConstant_VariableList_MultipleLines",
-        `const /*About A*/a = 1,
+    testExtractConstant("extractConstant_VariableList_MultipleLines", `const /*About A*/a = 1,
     /*About B*/b = [#|a + 1|];`);
 
     testExtractConstant("extractConstant_BlockScopeMismatch", `
@@ -218,8 +199,7 @@ const f = () => {
     return [#|2 + 1|];
 };`);
 
-    testExtractConstant("extractConstant_ArrowFunction_Expression",
-        `const f = () => [#|2 + 1|];`);
+    testExtractConstant("extractConstant_ArrowFunction_Expression", `const f = () => [#|2 + 1|];`);
 
     testExtractConstant("extractConstant_PreserveTrivia", `
 // a
@@ -287,5 +267,4 @@ function testExtractConstant(caption: string, text: string) {
 
 function testExtractConstantFailed(caption: string, text: string) {
     testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
-}
 }

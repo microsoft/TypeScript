@@ -1,4 +1,5 @@
-namespace ts {
+import { DiagnosticMessage, SyntaxKind, TokenFlags, CommentDirective, JsxTokenSyntaxKind, JSDocSyntaxKind, ScriptTarget, LanguageVariant, MapLike, KeywordSyntaxKind, getEntries, ESMap, CharacterCodes, SourceFileLike, Debug, arraysEqual, LineAndCharacter, binarySearch, identity, compareValues, positionIsSynthesized, Diagnostics, CommentKind, CommentRange, parsePseudoBigInt, trimStringStart, append, CommentDirectiveType } from "./ts";
+import * as ts from "./ts";
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
 /* @internal */
@@ -160,9 +161,8 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     of: SyntaxKind.OfKeyword,
 };
 
-const textToKeyword = new Map(getEntries(textToKeywordObj));
-
-const textToToken = new Map(getEntries({
+const textToKeyword = new ts.Map(getEntries(textToKeywordObj));
+const textToToken = new ts.Map(getEntries({
     ...textToKeywordObj,
     "{": SyntaxKind.OpenBraceToken,
     "}": SyntaxKind.CloseBraceToken,
@@ -459,7 +459,8 @@ export function computeLineOfPosition(lineStarts: readonly number[], position: n
 
 /** @internal */
 export function getLinesBetweenPositions(sourceFile: SourceFileLike, pos1: number, pos2: number) {
-    if (pos1 === pos2) return 0;
+    if (pos1 === pos2)
+        return 0;
     const lineStarts = getLineStarts(sourceFile);
     const lower = Math.min(pos1, pos2);
     const isNegative = lower === pos2;
@@ -926,13 +927,7 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
 }
 
 // Creates a scanner over a (possibly unspecified) range of a piece of text.
-export function createScanner(languageVersion: ScriptTarget,
-    skipTrivia: boolean,
-    languageVariant = LanguageVariant.Standard,
-    textInitial?: string,
-    onError?: ErrorCallback,
-    start?: number,
-    length?: number): Scanner {
+export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant = LanguageVariant.Standard, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
 
     let text = textInitial!;
 
@@ -1064,7 +1059,10 @@ export function createScanner(languageVersion: ScriptTarget,
         return result + text.substring(start, pos);
     }
 
-    function scanNumber(): { type: SyntaxKind, value: string } {
+    function scanNumber(): {
+        type: SyntaxKind;
+        value: string;
+    } {
         const start = pos;
         const mainFragment = scanNumberFragment();
         let decimalFragment: string | undefined;
@@ -1077,7 +1075,8 @@ export function createScanner(languageVersion: ScriptTarget,
         if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
             pos++;
             tokenFlags |= TokenFlags.Scientific;
-            if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
+            if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus)
+                pos++;
             const preNumericPart = pos;
             const finalFragment = scanNumberFragment();
             if (!finalFragment) {
@@ -1190,8 +1189,7 @@ export function createScanner(languageVersion: ScriptTarget,
                 ch += CharacterCodes.a - CharacterCodes.A; // standardize hex literals to lowercase
             }
             else if (!((ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
-                (ch >= CharacterCodes.a && ch <= CharacterCodes.f)
-            )) {
+                (ch >= CharacterCodes.a && ch <= CharacterCodes.f))) {
                 break;
             }
             valueChars.push(ch);
@@ -1777,12 +1775,7 @@ export function createScanner(languageVersion: ScriptTarget,
                             pos++;
                         }
 
-                        commentDirectives = appendIfCommentDirective(
-                            commentDirectives,
-                            text.slice(tokenPos, pos),
-                            commentDirectiveRegExSingleLine,
-                            tokenPos,
-                        );
+                        commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(tokenPos, pos), commentDirectiveRegExSingleLine, tokenPos);
 
                         if (skipTrivia) {
                             continue;
@@ -2097,7 +2090,8 @@ export function createScanner(languageVersion: ScriptTarget,
         let ch = startCharacter;
         if (isIdentifierStart(ch, languageVersion)) {
             pos += charSize(ch);
-            while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
+            while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion))
+                pos += charSize(ch);
             tokenValue = text.substring(tokenPos, pos);
             if (ch === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();
@@ -2189,24 +2183,16 @@ export function createScanner(languageVersion: ScriptTarget,
         return token;
     }
 
-    function appendIfCommentDirective(
-        commentDirectives: CommentDirective[] | undefined,
-        text: string,
-        commentDirectiveRegEx: RegExp,
-        lineStart: number,
-    ) {
+    function appendIfCommentDirective(commentDirectives: CommentDirective[] | undefined, text: string, commentDirectiveRegEx: RegExp, lineStart: number) {
         const type = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
         if (type === undefined) {
             return commentDirectives;
         }
 
-        return append(
-            commentDirectives,
-            {
+        return append(commentDirectives, {
                 range: { pos: lineStart, end: pos },
                 type,
-            },
-        );
+        });
     }
 
     function getDirectiveFromComment(text: string, commentDirectiveRegEx: RegExp) {
@@ -2473,7 +2459,8 @@ export function createScanner(languageVersion: ScriptTarget,
 
         if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
-            while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus) pos += charSize(char);
+            while (pos < end && isIdentifierPart(char = codePointAt(text, pos), languageVersion) || text.charCodeAt(pos) === CharacterCodes.minus)
+                pos += charSize(char);
             tokenValue = text.substring(tokenPos, pos);
             if (char === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();
@@ -2629,5 +2616,4 @@ const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any)
 /* @internal */
 export function utf16EncodeAsString(codePoint: number) {
     return utf16EncodeAsStringWorker(codePoint);
-}
 }

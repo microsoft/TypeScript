@@ -1,20 +1,26 @@
+import { ParsedCommandLine, Diagnostic, CompilerOptions, readConfigFile, parseJsonConfigFileContent, Program, EmitResult, fileExtensionIs, Extension, getOutputExtension, getDeclarationEmitExtensionForPath, ModuleKind, ScriptTarget, NewLineKind, length, createProgram, getPreEmitDiagnostics, addRelatedInfo, createCompilerDiagnostic, DiagnosticCategory, filter, some, compareDiagnostics, Comparison } from "./ts";
+import { ParseConfigHost, CompilerHost } from "./fakes";
+import { isTsConfigFile, combine, basename, dirname, isJavaScript, isDeclaration, isSourceMap, resolve, changeExtension, relative } from "./vpath";
+import { TextDocument, SourceMap } from "./documents";
+import { FileSet, FileSystem } from "./vfs";
+import { SortedMap } from "./collections";
+import { getSourceMapRecord } from "./Harness.SourceMapRecorder";
 /**
  * Test harness compiler functionality.
  */
-namespace compiler {
 export interface Project {
     file: string;
-    config?: ts.ParsedCommandLine;
-    errors?: ts.Diagnostic[];
+    config?: ParsedCommandLine;
+    errors?: Diagnostic[];
 }
 
-export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
+export function readProject(host: ParseConfigHost, project: string | undefined, existingOptions?: CompilerOptions): Project | undefined {
     if (project) {
-        project = vpath.isTsConfigFile(project) ? project : vpath.combine(project, "tsconfig.json");
+        project = isTsConfigFile(project) ? project : combine(project, "tsconfig.json");
     }
     else {
         [project] = host.vfs.scanSync(".", "ancestors-or-self", {
-            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(vpath.basename(path), "tsconfig.json") === 0
+            accept: (path, stats) => stats.isFile() && host.vfs.stringComparer(basename(path), "tsconfig.json") === 0
         });
     }
 
@@ -23,13 +29,13 @@ export function readProject(host: fakes.ParseConfigHost, project: string | undef
         // project = vpath.resolve(host.vfs.currentDirectory, project);
 
         // read the config file
-        const readResult = ts.readConfigFile(project, path => host.readFile(path));
+        const readResult = readConfigFile(project, path => host.readFile(path));
         if (readResult.error) {
             return { file: project, errors: [readResult.error] };
         }
 
         // parse the config file
-        const config = ts.parseJsonConfigFileContent(readResult.config, host, vpath.dirname(project), existingOptions);
+        const config = parseJsonConfigFileContent(readResult.config, host, dirname(project), existingOptions);
         return { file: project, errors: config.errors, config };
     }
 }
@@ -38,27 +44,25 @@ export function readProject(host: fakes.ParseConfigHost, project: string | undef
  * Correlates compilation inputs and outputs
  */
 export interface CompilationOutput {
-    readonly inputs: readonly documents.TextDocument[];
-    readonly js: documents.TextDocument | undefined;
-    readonly dts: documents.TextDocument | undefined;
-    readonly map: documents.TextDocument | undefined;
+    readonly inputs: readonly TextDocument[];
+    readonly js: TextDocument | undefined;
+    readonly dts: TextDocument | undefined;
+    readonly map: TextDocument | undefined;
 }
 
 export class CompilationResult {
-    public readonly host: fakes.CompilerHost;
-    public readonly program: ts.Program | undefined;
-    public readonly result: ts.EmitResult | undefined;
-    public readonly options: ts.CompilerOptions;
-    public readonly diagnostics: readonly ts.Diagnostic[];
-    public readonly js: ReadonlyMap<string, documents.TextDocument>;
-    public readonly dts: ReadonlyMap<string, documents.TextDocument>;
-    public readonly maps: ReadonlyMap<string, documents.TextDocument>;
-    public symlinks?: vfs.FileSet; // Location to store original symlinks so they may be used in both original and declaration file compilations
-
-    private _inputs: documents.TextDocument[] = [];
-    private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
-
-    constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: readonly ts.Diagnostic[]) {
+    public readonly host: CompilerHost;
+    public readonly program: Program | undefined;
+    public readonly result: EmitResult | undefined;
+    public readonly options: CompilerOptions;
+    public readonly diagnostics: readonly Diagnostic[];
+    public readonly js: ReadonlyMap<string, TextDocument>;
+    public readonly dts: ReadonlyMap<string, TextDocument>;
+    public readonly maps: ReadonlyMap<string, TextDocument>;
+    public symlinks?: FileSet; // Location to store original symlinks so they may be used in both original and declaration file compilations
+    private _inputs: TextDocument[] = [];
+    private _inputsAndOutputs: SortedMap<string, CompilationOutput>;
+    constructor(host: CompilerHost, options: CompilerOptions, program: Program | undefined, result: EmitResult | undefined, diagnostics: readonly Diagnostic[]) {
         this.host = host;
         this.program = program;
         this.result = result;
@@ -66,32 +70,32 @@ export class CompilationResult {
         this.options = program ? program.getCompilerOptions() : options;
 
         // collect outputs
-        const js = this.js = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-        const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-        const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        const js = this.js = new SortedMap<string, TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        const dts = this.dts = new SortedMap<string, TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        const maps = this.maps = new SortedMap<string, TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
         for (const document of this.host.outputs) {
-            if (vpath.isJavaScript(document.file) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+            if (isJavaScript(document.file) || fileExtensionIs(document.file, Extension.Json)) {
                 js.set(document.file, document);
             }
-            else if (vpath.isDeclaration(document.file)) {
+            else if (isDeclaration(document.file)) {
                 dts.set(document.file, document);
             }
-            else if (vpath.isSourceMap(document.file)) {
+            else if (isSourceMap(document.file)) {
                 maps.set(document.file, document);
             }
         }
 
         // correlate inputs and outputs
-        this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+        this._inputsAndOutputs = new SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
         if (program) {
             if (this.options.out || this.options.outFile) {
-                const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
-                const inputs: documents.TextDocument[] = [];
+                const outFile = resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
+                const inputs: TextDocument[] = [];
                 for (const sourceFile of program.getSourceFiles()) {
                     if (sourceFile) {
-                        const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
+                        const input = new TextDocument(sourceFile.fileName, sourceFile.text);
                         this._inputs.push(input);
-                        if (!vpath.isDeclaration(sourceFile.fileName)) {
+                        if (!isDeclaration(sourceFile.fileName)) {
                             inputs.push(input);
                         }
                     }
@@ -100,13 +104,16 @@ export class CompilationResult {
                 const outputs: CompilationOutput = {
                     inputs,
                     js: js.get(outFile),
-                    dts: dts.get(vpath.changeExtension(outFile, ".d.ts")),
+                    dts: dts.get(changeExtension(outFile, ".d.ts")),
                     map: maps.get(outFile + ".map")
                 };
 
-                if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
-                if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
-                if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+                if (outputs.js)
+                    this._inputsAndOutputs.set(outputs.js.file, outputs);
+                if (outputs.dts)
+                    this._inputsAndOutputs.set(outputs.dts.file, outputs);
+                if (outputs.map)
+                    this._inputsAndOutputs.set(outputs.map.file, outputs);
 
                 for (const input of inputs) {
                     this._inputsAndOutputs.set(input.file, outputs);
@@ -115,21 +122,24 @@ export class CompilationResult {
             else {
                 for (const sourceFile of program.getSourceFiles()) {
                     if (sourceFile) {
-                        const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
+                        const input = new TextDocument(sourceFile.fileName, sourceFile.text);
                         this._inputs.push(input);
-                        if (!vpath.isDeclaration(sourceFile.fileName)) {
-                            const extname = ts.getOutputExtension(sourceFile.fileName, this.options);
+                        if (!isDeclaration(sourceFile.fileName)) {
+                            const extname = getOutputExtension(sourceFile.fileName, this.options);
                             const outputs: CompilationOutput = {
                                 inputs: [input],
                                 js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
-                                dts: dts.get(this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName))),
+                                dts: dts.get(this.getOutputPath(sourceFile.fileName, getDeclarationEmitExtensionForPath(sourceFile.fileName))),
                                 map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
                             };
 
                             this._inputsAndOutputs.set(sourceFile.fileName, outputs);
-                            if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
-                            if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
-                            if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+                            if (outputs.js)
+                                this._inputsAndOutputs.set(outputs.js.file, outputs);
+                            if (outputs.dts)
+                                this._inputsAndOutputs.set(outputs.dts.file, outputs);
+                            if (outputs.map)
+                                this._inputsAndOutputs.set(outputs.map.file, outputs);
                         }
                     }
                 }
@@ -137,15 +147,15 @@ export class CompilationResult {
         }
     }
 
-    public get vfs(): vfs.FileSystem {
+    public get vfs(): FileSystem {
         return this.host.vfs;
     }
 
-    public get inputs(): readonly documents.TextDocument[] {
+    public get inputs(): readonly TextDocument[] {
         return this._inputs;
     }
 
-    public get outputs(): readonly documents.TextDocument[] {
+    public get outputs(): readonly TextDocument[] {
         return this.host.outputs;
     }
 
@@ -163,19 +173,19 @@ export class CompilationResult {
 
     public get commonSourceDirectory(): string {
         const common = this.program && this.program.getCommonSourceDirectory() || "";
-        return common && vpath.combine(this.vfs.cwd(), common);
+        return common && combine(this.vfs.cwd(), common);
     }
 
     public getInputsAndOutputs(path: string): CompilationOutput | undefined {
-        return this._inputsAndOutputs.get(vpath.resolve(this.vfs.cwd(), path));
+        return this._inputsAndOutputs.get(resolve(this.vfs.cwd(), path));
     }
 
-    public getInputs(path: string): readonly documents.TextDocument[] | undefined {
+    public getInputs(path: string): readonly TextDocument[] | undefined {
         const outputs = this.getInputsAndOutputs(path);
         return outputs && outputs.inputs;
     }
 
-    public getOutput(path: string, kind: "js" | "dts" | "map"): documents.TextDocument | undefined {
+    public getOutput(path: string, kind: "js" | "dts" | "map"): TextDocument | undefined {
         const outputs = this.getInputsAndOutputs(path);
         return outputs && outputs[kind];
     }
@@ -183,38 +193,39 @@ export class CompilationResult {
     public getSourceMapRecord(): string | undefined {
         const maps = this.result!.sourceMaps;
         if (maps && maps.length > 0) {
-            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
+            return getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !fileExtensionIs(d.file, Extension.Json)), Array.from(this.dts.values()));
         }
     }
 
-    public getSourceMap(path: string): documents.SourceMap | undefined {
-        if (this.options.noEmit || vpath.isDeclaration(path)) return undefined;
+    public getSourceMap(path: string): SourceMap | undefined {
+        if (this.options.noEmit || isDeclaration(path))
+            return undefined;
         if (this.options.inlineSourceMap) {
             const document = this.getOutput(path, "js");
-            return document && documents.SourceMap.fromSource(document.text);
+            return document && SourceMap.fromSource(document.text);
         }
         if (this.options.sourceMap) {
             const document = this.getOutput(path, "map");
-            return document && new documents.SourceMap(document.file, document.text);
+            return document && new SourceMap(document.file, document.text);
         }
     }
 
     public getOutputPath(path: string, ext: string): string {
         if (this.options.outFile || this.options.out) {
-            path = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
+            path = resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
         }
         else {
-            path = vpath.resolve(this.vfs.cwd(), path);
+            path = resolve(this.vfs.cwd(), path);
             const outDir = ext === ".d.ts" || ext === ".json.d.ts" || ext === ".d.mts" || ext === ".d.cts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {
-                    path = vpath.relative(common, path, this.vfs.ignoreCase);
-                    path = vpath.combine(vpath.resolve(this.vfs.cwd(), this.options.outDir), path);
+                    path = relative(common, path, this.vfs.ignoreCase);
+                    path = combine(resolve(this.vfs.cwd(), this.options.outDir), path);
                 }
             }
         }
-        return vpath.changeExtension(path, ext);
+        return changeExtension(path, ext);
     }
 
     public getNumberOfJsFiles(includeJson: boolean) {
@@ -224,7 +235,7 @@ export class CompilationResult {
         else {
             let count = this.js.size;
             this.js.forEach(document => {
-                if (ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                if (fileExtensionIs(document.file, Extension.Json)) {
                     count--;
                 }
             });
@@ -233,7 +244,7 @@ export class CompilationResult {
     }
 }
 
-export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
+export function compileFiles(host: CompilerHost, rootFiles: string[] | undefined, compilerOptions: CompilerOptions): CompilationResult {
     if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
         if (project) {
@@ -249,40 +260,37 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     }
 
     // establish defaults (aligns with old harness)
-    if (compilerOptions.target === undefined && compilerOptions.module !== ts.ModuleKind.Node12 && compilerOptions.module !== ts.ModuleKind.NodeNext) compilerOptions.target = ts.ScriptTarget.ES3;
-    if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-    if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
-    if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
+    if (compilerOptions.target === undefined && compilerOptions.module !== ModuleKind.Node12 && compilerOptions.module !== ModuleKind.NodeNext)
+        compilerOptions.target = ScriptTarget.ES3;
+    if (compilerOptions.newLine === undefined)
+        compilerOptions.newLine = NewLineKind.CarriageReturnLineFeed;
+    if (compilerOptions.skipDefaultLibCheck === undefined)
+        compilerOptions.skipDefaultLibCheck = true;
+    if (compilerOptions.noErrorTruncation === undefined)
+        compilerOptions.noErrorTruncation = true;
 
     // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
-    const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
-
-    const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
-    const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
-
-    const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+    const skipErrorComparison = length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
+    const preProgram = !skipErrorComparison ? createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
+    const preErrors = preProgram && getPreEmitDiagnostics(preProgram);
+    const program = createProgram(rootFiles || [], compilerOptions, host);
     const emitResult = program.emit();
-    const postErrors = ts.getPreEmitDiagnostics(program);
-    const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
+    const postErrors = getPreEmitDiagnostics(program);
+    const longerErrors = length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
     const errors = preErrors && (preErrors.length !== postErrors.length) ? [...shorterErrors!,
-        ts.addRelatedInfo(
-            ts.createCompilerDiagnostic({
-                category: ts.DiagnosticCategory.Error,
+        addRelatedInfo(createCompilerDiagnostic({
+            category: DiagnosticCategory.Error,
                 code: -1,
                 key: "-1",
                 message: `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`
-            }),
-            ts.createCompilerDiagnostic({
-                category: ts.DiagnosticCategory.Error,
+        }), createCompilerDiagnostic({
+            category: DiagnosticCategory.Error,
                 code: -1,
                 key: "-1",
                 message: `The excess diagnostics are:`
-            }),
-            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
-        )
+        }), ...filter(longerErrors!, p => !some(shorterErrors, p2 => compareDiagnostics(p, p2) === Comparison.EqualTo)))
     ] : postErrors;
     return new CompilationResult(host, compilerOptions, program, emitResult, errors);
-}
 }

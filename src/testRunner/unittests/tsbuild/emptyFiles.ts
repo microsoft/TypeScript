@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTsc } from "../../ts";
 describe("unittests:: tsbuild - empty files option in tsconfig", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/empty-files");
     });
@@ -22,4 +23,3 @@ describe("unittests:: tsbuild - empty files option in tsconfig", () => {
         commandLineArgs: ["--b", "/src/with-references"],
     });
 });
-}

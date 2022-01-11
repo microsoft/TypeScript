@@ -1,6 +1,7 @@
+import { evaluateTypeScript } from "../../evaluator";
 describe("unittests:: evaluation:: templateLiteral", () => {
     it("toString() over valueOf()", () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = evaluateTypeScript(`
             class C {
                 toString() {
                     return "toString";
@@ -16,7 +17,7 @@ describe("unittests:: evaluation:: templateLiteral", () => {
     });
 
     it("correct evaluation order", () => {
-        const result = evaluator.evaluateTypeScript(`
+        const result = evaluateTypeScript(`
             class C {
                 counter: number;
 

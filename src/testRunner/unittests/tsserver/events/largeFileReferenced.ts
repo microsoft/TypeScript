@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createSessionWithEventTracking, checkProjectActualFiles, libFile, openFilesForSession, checkNumberOfProjects } from "../../../ts.projectSystem";
+import { projectRoot } from "../../../ts.tscWatch";
+import { maxFileSize, LargeFileReferencedEvent, Project } from "../../../ts.server";
+import { emptyArray } from "../../../ts";
 describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
 
     function getLargeFile(useLargeTsFile: boolean) {
@@ -7,17 +10,17 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
 
     function createSessionWithEventHandler(files: File[], useLargeTsFile: boolean) {
         const largeFile: File = {
-            path: `${tscWatch.projectRoot}/${getLargeFile(useLargeTsFile)}`,
+            path: `${projectRoot}/${getLargeFile(useLargeTsFile)}`,
             content: "export var x = 10;",
-            fileSize: server.maxFileSize + 1
+            fileSize: maxFileSize + 1
         };
         files.push(largeFile);
         const host = createServerHost(files);
-        const { session, events: largeFileReferencedEvents } = createSessionWithEventTracking<server.LargeFileReferencedEvent>(host, server.LargeFileReferencedEvent);
+        const { session, events: largeFileReferencedEvents } = createSessionWithEventTracking<LargeFileReferencedEvent>(host, LargeFileReferencedEvent);
 
         return { session, verifyLargeFile };
 
-        function verifyLargeFile(project: server.Project) {
+        function verifyLargeFile(project: Project) {
             checkProjectActualFiles(project, files.map(f => f.path));
 
             // large file for non ts file should be empty and for ts file should have content
@@ -26,8 +29,8 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
             assert.equal(info.cacheSourceFile!.sourceFile.text, useLargeTsFile ? largeFile.content : "");
 
             assert.deepEqual(largeFileReferencedEvents, useLargeTsFile ? emptyArray : [{
-                eventName: server.LargeFileReferencedEvent,
-                data: { file: largeFile.path, fileSize: largeFile.fileSize, maxFileSize: server.maxFileSize }
+                    eventName: LargeFileReferencedEvent,
+                    data: { file: largeFile.path, fileSize: largeFile.fileSize, maxFileSize: maxFileSize }
             }]);
         }
     }
@@ -35,11 +38,11 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
     function verifyLargeFile(useLargeTsFile: boolean) {
         it("when large file is included by tsconfig", () => {
             const file: File = {
-                path: `${tscWatch.projectRoot}/src/file.ts`,
+                path: `${projectRoot}/src/file.ts`,
                 content: "export var y = 10;"
             };
             const tsconfig: File = {
-                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                path: `${projectRoot}/tsconfig.json`,
                 content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } })
             };
             const files = [file, libFile, tsconfig];
@@ -52,7 +55,7 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
 
         it("when large file is included by module resolution", () => {
             const file: File = {
-                path: `${tscWatch.projectRoot}/src/file.ts`,
+                path: `${projectRoot}/src/file.ts`,
                 content: `export var y = 10;import {x} from "./large"`
             };
             const files = [file, libFile];
@@ -72,4 +75,3 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
         verifyLargeFile(/*useLargeTsFile*/ false);
     });
 });
-}

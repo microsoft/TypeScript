@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { File, projectRoot, TscWatchCompileChange, verifyTscWatch, createWatchedSystem, libFile, runQueuedTimeoutCallbacks, SymLink } from "../../ts.tscWatch";
+import { emptyArray } from "../../ts";
 describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
     const loggerFile: File = {
         path: `${projectRoot}/logger.ts`,
@@ -15,7 +16,10 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         })
     };
 
-    function verifyConsistentFileNames({ subScenario, changes }: { subScenario: string; changes: TscWatchCompileChange[]; }) {
+    function verifyConsistentFileNames({ subScenario, changes }: {
+        subScenario: string;
+        changes: TscWatchCompileChange[];
+    }) {
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
@@ -263,4 +267,3 @@ a;b;
     verifyDirSymlink("when import and directory symlink target agree but do not match disk", `${projectRoot}/XY`, `${projectRoot}/Xy`, `./Xy`);
     verifyDirSymlink("when import, directory symlink target, and disk are all different", `${projectRoot}/XY`, `${projectRoot}/Xy`, `./yX`);
 });
-}

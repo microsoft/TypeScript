@@ -1,4 +1,6 @@
-namespace ts.tscWatch {
+import { File, WatchedSystem, createBaseline, createWatchedSystem, applyChange, SystemSnap, watchBaseline, libFile } from "../../ts.tscWatch";
+import { emptyArray, CommandLineProgram, commandLineCallbacks, isBuild, executeCommandLine, createDiagnosticReporter, parseConfigFileWithSystem, performIncrementalCompilation, getConfigFileParsingDiagnostics, noop, createIncrementalProgram, createIncrementalCompilerHost, Path, ModuleKind, arrayFrom, Diagnostics, libContent } from "../../ts";
+import { Baseline } from "../../Harness";
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
 
@@ -24,12 +26,10 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         });
     }
 
-    function verifyIncrementalWatchEmitWorker(
-        { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
-        incremental: boolean
-    ) {
+    function verifyIncrementalWatchEmitWorker({ subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput, incremental: boolean) {
         const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
-        if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
+        if (incremental)
+            sys.exit = exitCode => sys.exitCode = exitCode;
         const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
         baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
         let oldPrograms: readonly CommandLineProgram[] = emptyArray;
@@ -41,14 +41,10 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             build(oldSnap);
         }
 
-        Harness.Baseline.runBaseline(`${isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
+        Baseline.runBaseline(`${isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
 
         function build(oldSnap: SystemSnap) {
-            const closer = executeCommandLine(
-                sys,
-                cb,
-                argsToPass,
-            );
+            const closer = executeCommandLine(sys, cb, argsToPass);
             oldPrograms = watchBaseline({
                 baseline,
                 getPrograms,
@@ -56,7 +52,8 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 sys,
                 oldSnap
             });
-            if (closer) closer.close();
+            if (closer)
+                closer.close();
         }
     }
 
@@ -376,4 +373,3 @@ export const Fragment: unique symbol;
         });
     });
 });
-}

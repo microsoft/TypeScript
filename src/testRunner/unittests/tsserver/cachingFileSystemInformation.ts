@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { countWhere, startsWith, directorySeparator, MultiMap, createMultiMap, arrayFrom, ESMap, TestFSWithWatch, ModuleKind, getDirectoryPath, returnTrue, ScriptTarget, Diagnostics, flattenDiagnosticMessageText, forEachAncestorDirectory, combinePaths, map, server, Path, mapDefined, last, forEach, find, filter, Debug } from "../../ts";
+import { TestServerHost, File, createServerHost, createProjectService, checkNumberOfProjects, mapCombinedPathsInAncestor, nodeModulesAtTypes, nodeModules, createSession, checkNumberOfConfiguredProjects, checkProjectActualFiles, makeSessionRequest, protocol, libFile, getNodeModuleDirectories, checkWatchedFiles, checkWatchedDirectories, getTypeRootsFromLocation, SymLink } from "../../ts.projectSystem";
+import { NormalizedPath } from "../../ts.server";
+import { projectRoot } from "../../ts.tscWatch";
+import * as ts from "../../ts";
 function getNumberOfWatchesInvokedForRecursiveWatches(recursiveWatchedDirs: string[], file: string) {
     return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
 }
@@ -14,7 +18,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         readDirectory = "readDirectory"
     }
     type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
-    type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
+    type CalledWithFiveArgs = [
+        readonly string[],
+        readonly string[],
+        readonly string[],
+        number
+    ];
     function createCallsTrackingHost(host: TestServerHost) {
         const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, MultiMap<string, CalledWithFiveArgs>> = {
             fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
@@ -45,7 +54,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
 
         function setCallsTrackingWithFiveArgFn<U, V, W, X>(prop: CalledMapsWithFiveArgs) {
-            const calledMap = createMultiMap<[U, V, W, X]>();
+            const calledMap = createMultiMap<[
+                U,
+                V,
+                W,
+                X
+            ]>();
             const cb = (host as any)[prop].bind(host);
             (host as any)[prop] = (f: string, arg1?: U, arg2?: V, arg3?: W, arg4?: X) => {
                 calledMap.add(f, [arg1!, arg2!, arg3!, arg4!]); // TODO: GH#18217
@@ -188,23 +202,16 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         function getLocationsForModuleLookup(module: string) {
             const locations: string[] = [];
             forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
-                locations.push(
-                    combinePaths(ancestor, `${module}.ts`),
-                    combinePaths(ancestor, `${module}.tsx`),
-                    combinePaths(ancestor, `${module}.d.ts`)
-                );
+                locations.push(combinePaths(ancestor, `${module}.ts`), combinePaths(ancestor, `${module}.tsx`), combinePaths(ancestor, `${module}.d.ts`));
             });
             forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
-                locations.push(
-                    combinePaths(ancestor, `${module}.js`),
-                    combinePaths(ancestor, `${module}.jsx`)
-                );
+                locations.push(combinePaths(ancestor, `${module}.js`), combinePaths(ancestor, `${module}.jsx`));
             });
             return locations;
         }
 
         function getLocationsForDirectoryLookup() {
-            const result = new Map<string, number>();
+            const result = new ts.Map<string, number>();
             forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                 // To resolve modules
                 result.set(ancestor, 2);
@@ -278,7 +285,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 compilerOptions: {
                     target: "es6",
                     module: "es6",
-                    baseUrl: "./",  // all paths are relative to the baseUrl
+                    baseUrl: "./",
                     paths: {
                         "~/*": ["*"]   // resolve any `~/foo/bar` to `<baseUrl>/foo/bar`
                     }
@@ -312,7 +319,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         const getDefinitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(protocol.CommandTypes.Definition, {
             file: clientFile.path,
             position: clientFile.content.indexOf("/vessel") + 1,
-            line: undefined!, // TODO: GH#18217
+            line: undefined!,
             offset: undefined! // TODO: GH#18217
         });
         const response = session.executeCommand(getDefinitionRequest).response as server.protocol.FileSpan[];
@@ -389,7 +396,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             const projectService = createProjectService(host);
             const canonicalConfigPath = toCanonical(tsconfigFile.path);
             const { configFileName } = projectService.openClientFile(file1.path);
-            assert.equal(configFileName, tsconfigFile.path as server.NormalizedPath, `should find config`);
+            assert.equal(configFileName, tsconfigFile.path as NormalizedPath, `should find config`);
             checkNumberOfConfiguredProjects(projectService, 1);
             const watchingRecursiveDirectories = [`${canonicalFrontendDir}/src`, `${canonicalFrontendDir}/types`, `${canonicalFrontendDir}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(canonicalFrontendDir)));
 
@@ -546,7 +553,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             const projectService = createProjectService(host);
             projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
             const { configFileName } = projectService.openClientFile(app.path);
-            assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
+            assert.equal(configFileName, tsconfigJson.path as NormalizedPath, `should find config`); // TODO: GH#18217
             const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
             verifyProject();
 
@@ -716,19 +723,19 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
     it("when creating new file in symlinked folder", () => {
         const module1: File = {
-            path: `${tscWatch.projectRoot}/client/folder1/module1.ts`,
+            path: `${projectRoot}/client/folder1/module1.ts`,
             content: `export class Module1Class { }`
         };
         const module2: File = {
-            path: `${tscWatch.projectRoot}/folder2/module2.ts`,
+            path: `${projectRoot}/folder2/module2.ts`,
             content: `import * as M from "folder1/module1";`
         };
         const symlink: SymLink = {
-            path: `${tscWatch.projectRoot}/client/linktofolder2`,
-            symLink: `${tscWatch.projectRoot}/folder2`,
+            path: `${projectRoot}/client/linktofolder2`,
+            symLink: `${projectRoot}/folder2`,
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     baseUrl: "client",
@@ -749,4 +756,3 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path, `${symlink.path}/module3.ts`]);
     });
 });
-}

@@ -1,15 +1,21 @@
+import { Diagnostics, SyntaxKind, TypeFlags, Type, DiagnosticMessage, CodeFixAction, SourceFile, TypeNode, TypeChecker, findAncestor, getTokenAtPosition, AsExpression, CallSignatureDeclaration, ConstructSignatureDeclaration, FunctionDeclaration, GetAccessorDeclaration, IndexSignatureDeclaration, MappedTypeNode, MethodDeclaration, MethodSignature, ParameterDeclaration, PropertyDeclaration, PropertySignature, SetAccessorDeclaration, TypeAliasDeclaration, TypeAssertion, VariableDeclaration, Node } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixIdPlain = "fixJSDocTypes_plain";
+/* @internal */
 const fixIdNullable = "fixJSDocTypes_nullable";
+/* @internal */
 const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile } = context;
         const checker = context.program.getTypeChecker();
         const info = getInfo(sourceFile, context.span.start, checker);
-        if (!info) return undefined;
+        if (!info)
+            return undefined;
         const { typeNode, type } = info;
         const original = typeNode.getText(sourceFile);
         const actions = [fix(type, fixIdPlain, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript)];
@@ -21,7 +27,7 @@ registerCodeFix({
         return actions;
 
         function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
+            const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
             return createCodeFixAction("jdocTypes", changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
         }
     },
@@ -31,7 +37,8 @@ registerCodeFix({
         const checker = program.getTypeChecker();
         return codeFixAll(context, errorCodes, (changes, err) => {
             const info = getInfo(err.file, err.start, checker);
-            if (!info) return;
+            if (!info)
+                return;
             const { typeNode, type } = info;
             const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
             doChange(changes, sourceFile, typeNode, fixedType, checker);
@@ -39,22 +46,25 @@ registerCodeFix({
     }
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
     changes.replaceNode(sourceFile, oldTypeNode, checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode, /*flags*/ undefined)!); // TODO: GH#18217
 }
 
-function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
+/* @internal */
+function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): {
+    readonly typeNode: TypeNode;
+    readonly type: Type;
+} | undefined {
     const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
     const typeNode = decl && decl.type;
     return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };
 }
 
 // TODO: GH#19856 Node & { type: TypeNode }
-type TypeContainer =
-    | AsExpression | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionDeclaration
-    | GetAccessorDeclaration | IndexSignatureDeclaration | MappedTypeNode | MethodDeclaration
-    | MethodSignature | ParameterDeclaration | PropertyDeclaration | PropertySignature | SetAccessorDeclaration
-    | TypeAliasDeclaration | TypeAssertion | VariableDeclaration;
+/* @internal */
+type TypeContainer = AsExpression | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionDeclaration | GetAccessorDeclaration | IndexSignatureDeclaration | MappedTypeNode | MethodDeclaration | MethodSignature | ParameterDeclaration | PropertyDeclaration | PropertySignature | SetAccessorDeclaration | TypeAliasDeclaration | TypeAssertion | VariableDeclaration;
+/* @internal */
 function isTypeContainer(node: Node): node is TypeContainer {
     // NOTE: Some locations are not handled yet:
     // MappedTypeNode.typeParameters and SignatureDeclaration.typeParameters, as well as CallExpression.typeArguments
@@ -79,5 +89,4 @@ function isTypeContainer(node: Node): node is TypeContainer {
         default:
             return false;
     }
-}
 }

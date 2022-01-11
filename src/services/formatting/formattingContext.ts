@@ -1,5 +1,6 @@
+import { TextRangeWithKind } from "../ts.formatting";
+import { Node, SourceFileLike, FormatCodeSettings, Debug, findChildOfKind, SyntaxKind } from "../ts";
 /* @internal */
-namespace ts.formatting {
 export const enum FormattingRequestKind {
     FormatDocument,
     FormatSelection,
@@ -9,6 +10,7 @@ export const enum FormattingRequestKind {
     FormatOnClosingCurlyBrace
 }
 
+/* @internal */
 export class FormattingContext {
     public currentTokenSpan!: TextRangeWithKind;
     public nextTokenSpan!: TextRangeWithKind;
@@ -98,5 +100,4 @@ export class FormattingContext {
         }
         return false;
     }
-}
 }

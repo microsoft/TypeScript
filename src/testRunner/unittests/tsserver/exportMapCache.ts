@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, protocol, createServerHost, createSession, openFilesForSession, configuredProjectAt, executeSessionRequest } from "../../ts.projectSystem";
+import { Path, SymbolExportInfo, SymbolFlags, getSymbolId } from "../../ts";
 const packageJson: File = {
     path: "/package.json",
     content: `{ "dependencies": { "mobx": "*" } }`
@@ -84,7 +85,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         const programBefore = project.getCurrentProgram()!;
         let sigintPropBefore: readonly SymbolExportInfo[] | undefined;
         exportMapCache.forEach(bTs.path as Path, (info, name) => {
-            if (name === "SIGINT") sigintPropBefore = info;
+            if (name === "SIGINT")
+                sigintPropBefore = info;
         });
         assert.ok(sigintPropBefore);
         assert.ok(sigintPropBefore![0].symbol.flags & SymbolFlags.Transient);
@@ -110,7 +112,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         // Get same info from cache again
         let sigintPropAfter: readonly SymbolExportInfo[] | undefined;
         exportMapCache.forEach(bTs.path as Path, (info, name) => {
-            if (name === "SIGINT") sigintPropAfter = info;
+            if (name === "SIGINT")
+                sigintPropAfter = info;
         });
         assert.ok(sigintPropAfter);
         assert.notEqual(symbolIdBefore, getSymbolId(sigintPropAfter![0].symbol));
@@ -139,5 +142,4 @@ function setup() {
             prefix: "foo",
         });
     }
-}
 }

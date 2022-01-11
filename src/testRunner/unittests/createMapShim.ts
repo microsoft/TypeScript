@@ -1,4 +1,5 @@
-namespace ts {
+import { ESMap, ReadonlyESMap, ShimCollections, arrayFrom } from "../ts";
+import * as ts from "../ts";
 describe("unittests:: createMapShim", () => {
 
     const stringKeys = [
@@ -24,7 +25,7 @@ describe("unittests:: createMapShim", () => {
         { toString() { return "2"; } },
         "4",
         false,
-        null, // eslint-disable-line no-null/no-null
+        null,
         undefined,
         "B",
         { toString() { return "C"; } },
@@ -115,17 +116,16 @@ describe("unittests:: createMapShim", () => {
         return resultString;
     }
 
-    let MapShim!: MapConstructor;
+    let MapShim!: ts.MapConstructor;
     beforeEach(() => {
-        function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
-            I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
-            I extends ReadonlySet<infer T> ? T :
-            I extends readonly (infer T)[] ? T :
-            I extends undefined ? undefined :
-            never>;
-        function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
+        function getIterator<I extends readonly any[] | ts.ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): ts.Iterator<I extends ReadonlyESMap<infer K, infer V> ? [
+            K,
+            V
+        ] : I extends ts.ReadonlySet<infer T> ? T : I extends readonly (infer T)[] ? T : I extends undefined ? undefined : never>;
+        function getIterator(iterable: readonly any[] | ts.ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): ts.Iterator<any> | undefined {
             // override `ts.getIterator` with a version that allows us to iterate over a `MapShim` in an environment with a native `Map`.
-            if (iterable instanceof MapShim) return iterable.entries();
+            if (iterable instanceof MapShim)
+                return iterable.entries();
             return ts.getIterator(iterable);
         }
 
@@ -139,11 +139,11 @@ describe("unittests:: createMapShim", () => {
         const expectedResult = "1:1;3:3;2:Y2;4:X4;0:X0;3:Y3;999:999;A:A;Z:Z;X:X;Y:Y;";
 
         // First, ensure the test actually has the same behavior as a native Map.
-        let nativeMap = new Map<string, string>();
+        let nativeMap = new ts.Map<string, string>();
         const nativeMapForEachResult = testMapIterationAddedValues(stringKeys, nativeMap, /* useForEach */ true);
         assert.equal(nativeMapForEachResult, expectedResult, "nativeMap-forEach");
 
-        nativeMap = new Map<string, string>();
+        nativeMap = new ts.Map<string, string>();
         const nativeMapIteratorResult = testMapIterationAddedValues(stringKeys, nativeMap, /* useForEach */ false);
         assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
@@ -161,11 +161,11 @@ describe("unittests:: createMapShim", () => {
         const expectedResult = "true:1;3:3;2:Y2;4:X4;false:X0;3:Y3;null:999;undefined:A;Z:Z;X:X;Y:Y;";
 
         // First, ensure the test actually has the same behavior as a native Map.
-        let nativeMap = new Map<any, string>();
+        let nativeMap = new ts.Map<any, string>();
         const nativeMapForEachResult = testMapIterationAddedValues(mixedKeys, nativeMap, /* useForEach */ true);
         assert.equal(nativeMapForEachResult, expectedResult, "nativeMap-forEach");
 
-        nativeMap = new Map<any, string>();
+        nativeMap = new ts.Map<any, string>();
         const nativeMapIteratorResult = testMapIterationAddedValues(mixedKeys, nativeMap, /* useForEach */ false);
         assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
@@ -318,9 +318,11 @@ describe("unittests:: createMapShim", () => {
         const map = new MapShim<string, string>();
         map.set("c", "d");
         map.set("a", "b");
-        const actual: [string, string][] = [];
+        const actual: [
+            string,
+            string
+        ][] = [];
         map.forEach((value, key) => actual.push([key, value]));
         assert.deepEqual(actual, [["c", "d"], ["a", "b"]]);
     });
 });
-}

@@ -1,10 +1,9 @@
-namespace ts.tscWatch {
+import { verifyTscWatch, createWatchedSystem, projectRoot, libFile } from "../../ts.tscWatch";
 describe("unittests:: tsbuildWatch:: watchMode:: module resolution different in referenced project", () => {
     verifyTscWatch({
         scenario: "moduleResolutionCache",
         subScenario: "handles the cache correctly when two projects use different module resolution settings",
-        sys: () => createWatchedSystem(
-            [
+        sys: () => createWatchedSystem([
                 { path: `${projectRoot}/project1/index.ts`, content: `import { foo } from "file";` },
                 { path: `${projectRoot}/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
                 {
@@ -36,9 +35,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: module resolution different in 
                     })
                 },
                 libFile
-            ],
-            { currentDirectory: projectRoot }
-        ),
+        ], { currentDirectory: projectRoot }),
         commandLineArgs: ["--b", "-w", "-v"],
         changes: [
             {
@@ -53,4 +50,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: module resolution different in 
         ]
     });
 });
-}

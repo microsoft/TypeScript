@@ -1,5 +1,6 @@
+import { NodeFactory, ParenthesizerRules, BinaryExpression, SyntaxKind, ESMap, BinaryOperator, Expression, getOperatorPrecedence, getOperatorAssociativity, skipPartiallyEmittedExpressions, OperatorPrecedence, getExpressionPrecedence, compareValues, Comparison, Associativity, isBinaryExpression, isLiteralKind, getExpressionAssociativity, isCommaSequence, getLeftmostExpression, LeftHandSideExpression, NewExpression, isLeftHandSideExpression, setTextRange, UnaryExpression, isUnaryExpression, NodeArray, sameMap, isCallExpression, OuterExpressionKinds, ConciseBody, isBlock, TypeNode, isFunctionOrConstructorTypeNode, some, identity, cast, isNodeArray } from "../ts";
+import * as ts from "../ts";
 /* @internal */
-namespace ts {
 export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {
     interface BinaryPlusExpression extends BinaryExpression {
         cachedLiteralKind: SyntaxKind;
@@ -33,7 +34,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     };
 
     function getParenthesizeLeftSideOfBinaryForOperator(operatorKind: BinaryOperator) {
-        binaryLeftOperandParenthesizerCache ||= new Map();
+        binaryLeftOperandParenthesizerCache ||= new ts.Map();
         let parenthesizerRule = binaryLeftOperandParenthesizerCache.get(operatorKind);
         if (!parenthesizerRule) {
             parenthesizerRule = node => parenthesizeLeftSideOfBinary(operatorKind, node);
@@ -43,7 +44,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 
     function getParenthesizeRightSideOfBinaryForOperator(operatorKind: BinaryOperator) {
-        binaryRightOperandParenthesizerCache ||= new Map();
+        binaryRightOperandParenthesizerCache ||= new ts.Map();
         let parenthesizerRule = binaryRightOperandParenthesizerCache.get(operatorKind);
         if (!parenthesizerRule) {
             parenthesizerRule = node => parenthesizeRightSideOfBinary(operatorKind, /*leftSide*/ undefined, node);
@@ -358,12 +359,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
             const kind = skipPartiallyEmittedExpressions(callee).kind;
             if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-                const updated = factory.updateCallExpression(
-                    emittedExpression,
-                    setTextRange(factory.createParenthesizedExpression(callee), callee),
-                    emittedExpression.typeArguments,
-                    emittedExpression.arguments
-                );
+                const updated = factory.updateCallExpression(emittedExpression, setTextRange(factory.createParenthesizedExpression(callee), callee), emittedExpression.typeArguments, emittedExpression.arguments);
                 return factory.restoreOuterExpressions(expression, updated, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
@@ -429,6 +425,7 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
     }
 }
 
+/* @internal */
 export const nullParenthesizerRules: ParenthesizerRules = {
     getParenthesizeLeftSideOfBinaryForOperator: _ => identity,
     getParenthesizeRightSideOfBinaryForOperator: _ => identity,
@@ -452,4 +449,3 @@ export const nullParenthesizerRules: ParenthesizerRules = {
     parenthesizeConstituentTypesOfUnionOrIntersectionType: nodes => cast(nodes, isNodeArray),
     parenthesizeTypeArguments: nodes => nodes && cast(nodes, isNodeArray),
 };
-}

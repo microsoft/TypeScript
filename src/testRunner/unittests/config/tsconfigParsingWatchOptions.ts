@@ -1,49 +1,35 @@
-namespace ts {
+import { FileSet, FileSystem } from "../../vfs";
+import { ParseConfigHost } from "../../fakes";
+import { WatchOptions, parseJsonConfigFileContent, parseJsonText, parseJsonSourceFileConfigFileContent, SourceFile, Diagnostic, length, WatchFileKind, WatchDirectoryKind, PollingWatchKind, Diagnostics } from "../../ts";
 describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileTextToJson", () => {
-    function createParseConfigHost(additionalFiles?: vfs.FileSet) {
-        return new fakes.ParseConfigHost(
-            new vfs.FileSystem(
-                /*ignoreCase*/ false,
-                {
+    function createParseConfigHost(additionalFiles?: FileSet) {
+        return new ParseConfigHost(new FileSystem(
+        /*ignoreCase*/ false, {
                     cwd: "/",
                     files: { "/": {}, "/a.ts": "", ...additionalFiles }
+        }));
                 }
-            )
-        );
-    }
-    function getParsedCommandJson(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: WatchOptions) {
-        return parseJsonConfigFileContent(
-            json,
-            createParseConfigHost(additionalFiles),
-            "/",
-            /*existingOptions*/ undefined,
-            "tsconfig.json",
+    function getParsedCommandJson(json: object, additionalFiles?: FileSet, existingWatchOptions?: WatchOptions) {
+        return parseJsonConfigFileContent(json, createParseConfigHost(additionalFiles), "/", 
+        /*existingOptions*/ undefined, "tsconfig.json", 
             /*resolutionStack*/ undefined,
             /*extraFileExtensions*/ undefined,
-            /*extendedConfigCache*/ undefined,
-            existingWatchOptions,
-        );
+        /*extendedConfigCache*/ undefined, existingWatchOptions);
     }
 
-    function getParsedCommandJsonNode(json: object, additionalFiles?: vfs.FileSet, existingWatchOptions?: WatchOptions) {
+    function getParsedCommandJsonNode(json: object, additionalFiles?: FileSet, existingWatchOptions?: WatchOptions) {
         const parsed = parseJsonText("tsconfig.json", JSON.stringify(json));
-        return parseJsonSourceFileConfigFileContent(
-            parsed,
-            createParseConfigHost(additionalFiles),
-            "/",
-            /*existingOptions*/ undefined,
-            "tsconfig.json",
+        return parseJsonSourceFileConfigFileContent(parsed, createParseConfigHost(additionalFiles), "/", 
+        /*existingOptions*/ undefined, "tsconfig.json", 
             /*resolutionStack*/ undefined,
             /*extraFileExtensions*/ undefined,
-            /*extendedConfigCache*/ undefined,
-            existingWatchOptions,
-        );
+        /*extendedConfigCache*/ undefined, existingWatchOptions);
     }
 
     interface VerifyWatchOptions {
         json: object;
         expectedOptions: WatchOptions | undefined;
-        additionalFiles?: vfs.FileSet;
+        additionalFiles?: FileSet;
         existingWatchOptions?: WatchOptions | undefined;
         expectedErrors?: (sourceFile?: SourceFile) => Diagnostic[];
     }
@@ -228,4 +214,3 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         ]);
     });
 });
-}

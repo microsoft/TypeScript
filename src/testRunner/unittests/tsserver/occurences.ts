@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createSession, makeSessionRequest, protocol, CommandNames } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: occurrence highlight on string", () => {
     it("should be marked if only on string values", () => {
         const file1: File = {
@@ -12,20 +12,14 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
 
         projectService.openClientFile(file1.path);
         {
-            const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
-                CommandNames.Occurrences,
-                { file: file1.path, line: 1, offset: 11 }
-            );
+            const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Occurrences, { file: file1.path, line: 1, offset: 11 });
             const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
             const firstOccurence = highlightResponse[0];
             assert.isTrue(firstOccurence.isInString, "Highlights should be marked with isInString");
         }
 
         {
-            const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
-                CommandNames.Occurrences,
-                { file: file1.path, line: 3, offset: 13 }
-            );
+            const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Occurrences, { file: file1.path, line: 3, offset: 13 });
             const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
             assert.isTrue(highlightResponse.length === 2);
             const firstOccurence = highlightResponse[0];
@@ -33,10 +27,7 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         }
 
         {
-            const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
-                CommandNames.Occurrences,
-                { file: file1.path, line: 4, offset: 14 }
-            );
+            const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(CommandNames.Occurrences, { file: file1.path, line: 4, offset: 14 });
             const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
             assert.isTrue(highlightResponse.length === 2);
             const firstOccurence = highlightResponse[0];
@@ -44,4 +35,3 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         }
     });
 });
-}

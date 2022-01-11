@@ -1,4 +1,6 @@
-namespace ts.textStorage {
+import { noop, computeLineStarts } from "../../ts";
+import { ScriptInfo, TextStorage, asNormalizedPath, maxFileSize } from "../../ts.server";
+import { createServerHost, createProjectService } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: Text storage", () => {
     const f = {
         path: "/a/app.ts",
@@ -11,15 +13,15 @@ describe("unittests:: tsserver:: Text storage", () => {
     };
 
     function getDummyScriptInfo(fileName: string) {
-        return { fileName, closeSourceMapFileWatcher: noop } as server.ScriptInfo;
+        return { fileName, closeSourceMapFileWatcher: noop } as ScriptInfo;
     }
 
     it("text based storage should be have exactly the same as script version cache", () => {
 
-        const host = projectSystem.createServerHost([f]);
+        const host = createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
-        const ts1 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(f.path)));
-        const ts2 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(f.path)));
+        const ts1 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(f.path)));
+        const ts2 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(f.path)));
 
         ts1.useScriptVersionCache_TestOnly();
         ts2.useText();
@@ -51,9 +53,9 @@ describe("unittests:: tsserver:: Text storage", () => {
     });
 
     it("should switch to script version cache if necessary", () => {
-        const host = projectSystem.createServerHost([f]);
+        const host = createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
-        const ts1 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(f.path)));
+        const ts1 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(f.path)));
 
         ts1.getSnapshot();
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 1");
@@ -69,17 +71,17 @@ describe("unittests:: tsserver:: Text storage", () => {
     });
 
     it("should be able to return the file size immediately after construction", () => {
-        const host = projectSystem.createServerHost([f]);
+        const host = createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
-        const ts1 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(f.path)));
+        const ts1 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(f.path)));
 
         assert.strictEqual(f.content.length, ts1.getTelemetryFileSize());
     });
 
     it("should be able to return the file size when backed by text", () => {
-        const host = projectSystem.createServerHost([f]);
+        const host = createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
-        const ts1 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(f.path)));
+        const ts1 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(f.path)));
 
         ts1.useText(f.content);
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
@@ -88,9 +90,9 @@ describe("unittests:: tsserver:: Text storage", () => {
     });
 
     it("should be able to return the file size when backed by a script version cache", () => {
-        const host = projectSystem.createServerHost([f]);
+        const host = createServerHost([f]);
         // Since script info is not used in these tests, just cheat by passing undefined
-        const ts1 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(f.path)));
+        const ts1 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(f.path)));
 
         ts1.useScriptVersionCache_TestOnly();
         assert.isTrue(ts1.hasScriptVersionCache_TestOnly());
@@ -101,17 +103,17 @@ describe("unittests:: tsserver:: Text storage", () => {
     it("should be able to return the file size when a JS file is too large to load into text", () => {
         const largeFile = {
             path: "/a/large.js",
-            content: " ".repeat(server.maxFileSize + 1)
+            content: " ".repeat(maxFileSize + 1)
         };
 
-        const host = projectSystem.createServerHost([largeFile]);
+        const host = createServerHost([largeFile]);
 
         // The large-file handling requires a ScriptInfo with a containing project
-        const projectService = projectSystem.createProjectService(host);
+        const projectService = createProjectService(host);
         projectService.openClientFile(largeFile.path);
         const scriptInfo = projectService.getScriptInfo(largeFile.path);
 
-        const ts1 = new server.TextStorage(host, scriptInfo!);
+        const ts1 = new TextStorage(host, scriptInfo!);
 
         assert.isTrue(ts1.reloadFromDisk());
         assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
@@ -128,9 +130,9 @@ describe("unittests:: tsserver:: Text storage", () => {
             content: oldText
         };
 
-        const host = projectSystem.createServerHost([changingFile]);
+        const host = createServerHost([changingFile]);
         // Since script info is not used in these tests, just cheat by passing undefined
-        const ts1 = new server.TextStorage(host, getDummyScriptInfo(server.asNormalizedPath(changingFile.path)));
+        const ts1 = new TextStorage(host, getDummyScriptInfo(asNormalizedPath(changingFile.path)));
 
         assert.isTrue(ts1.reloadFromDisk());
 
@@ -145,4 +147,3 @@ describe("unittests:: tsserver:: Text storage", () => {
         assert.strictEqual(newText.length, ts1.getTelemetryFileSize());
     });
 });
-}

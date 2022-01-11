@@ -1,4 +1,4 @@
-namespace ts {
+import { extractTest, createSourceFile, ScriptTarget, refactor, createTextSpanFromRange, isArray, last } from "../../../ts";
 function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
     return it(caption, () => {
         const t = extractTest(s);
@@ -195,8 +195,7 @@ describe("unittests:: services:: extract:: extractRanges", () => {
         testExtractRange("extractRange30", `for (var i = [#|[$|1|]|]; i < 2; i++) {}`);
     });
 
-    testExtractRangeFailed("extractRangeFailed1",
-        `
+    testExtractRangeFailed("extractRangeFailed1", `
 namespace A {
 function f() {
     [#|
@@ -207,11 +206,8 @@ function f() {
     |]
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
-
-    testExtractRangeFailed("extractRangeFailed2",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
+    testExtractRangeFailed("extractRangeFailed2", `
 namespace A {
 function f() {
     while (true) {
@@ -224,11 +220,8 @@ function f() {
     }
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
-
-    testExtractRangeFailed("extractRangeFailed3",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+    testExtractRangeFailed("extractRangeFailed3", `
 namespace A {
 function f() {
     while (true) {
@@ -241,11 +234,8 @@ function f() {
     }
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
-
-    testExtractRangeFailed("extractRangeFailed4",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+    testExtractRangeFailed("extractRangeFailed4", `
 namespace A {
 function f() {
     l1: {
@@ -258,11 +248,8 @@ function f() {
     }
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message]);
-
-    testExtractRangeFailed("extractRangeFailed5",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message]);
+    testExtractRangeFailed("extractRangeFailed5", `
 namespace A {
 function f() {
     [#|
@@ -277,11 +264,8 @@ function f() {
 function f2() {
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
-
-    testExtractRangeFailed("extractRangeFailed6",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
+    testExtractRangeFailed("extractRangeFailed6", `
 namespace A {
 function f() {
     [#|
@@ -296,46 +280,31 @@ function f() {
 function f2() {
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
-
-    testExtractRangeFailed("extractRangeFailed7",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
+    testExtractRangeFailed("extractRangeFailed7", `
 function test(x: number) {
 while (x) {
     x--;
     [#|break;|]
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
-
-    testExtractRangeFailed("extractRangeFailed8",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+    testExtractRangeFailed("extractRangeFailed8", `
 function test(x: number) {
 switch (x) {
     case 1:
         [#|break;|]
 }
 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
-
-    testExtractRangeFailed("extractRangeFailed9",
-        `var x = ([#||]1 + 2);`,
-        [refactor.extractSymbol.Messages.cannotExtractEmpty.message]);
-
-    testExtractRangeFailed("extractRangeFailed10",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+    testExtractRangeFailed("extractRangeFailed9", `var x = ([#||]1 + 2);`, [refactor.extractSymbol.Messages.cannotExtractEmpty.message]);
+    testExtractRangeFailed("extractRangeFailed10", `
                 function f() {
                     return 1 + [#|2 + 3|];
                     }
                 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
-
-    testExtractRangeFailed("extractRangeFailed11",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+    testExtractRangeFailed("extractRangeFailed11", `
                 function f(x: number) {
                     while (true) {
                         [#|try {
@@ -346,63 +315,39 @@ switch (x) {
                         }|]
                     }
                 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
-
-    testExtractRangeFailed("extractRangeFailed12",
-        `let [#|x|];`,
-        [refactor.extractSymbol.Messages.statementOrExpressionExpected.message]);
-
-    testExtractRangeFailed("extractRangeFailed13",
-        `[#|return;|]`,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
-
-    testExtractRangeFailed("extractRangeFailed14",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+    testExtractRangeFailed("extractRangeFailed12", `let [#|x|];`, [refactor.extractSymbol.Messages.statementOrExpressionExpected.message]);
+    testExtractRangeFailed("extractRangeFailed13", `[#|return;|]`, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+    testExtractRangeFailed("extractRangeFailed14", `
                 switch(1) {
                     case [#|1:
                         break;|]
                 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
-
-    testExtractRangeFailed("extractRangeFailed15",
-        `
+            `, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+    testExtractRangeFailed("extractRangeFailed15", `
                 switch(1) {
                     case [#|1:
                         break|];
                 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            `, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
 
     // Documentation only - it would be nice if the result were [$|1|]
-    testExtractRangeFailed("extractRangeFailed16",
-        `
+    testExtractRangeFailed("extractRangeFailed16", `
                 switch(1) {
                     [#|case 1|]:
                         break;
                 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            `, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
 
     // Documentation only - it would be nice if the result were [$|1|]
-    testExtractRangeFailed("extractRangeFailed17",
-        `
+    testExtractRangeFailed("extractRangeFailed17", `
                 switch(1) {
                     [#|case 1:|]
                         break;
                 }
-            `,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
-
-    testExtractRangeFailed("extractRangeFailed18",
-        `[#|{ 1;|] }`,
-        [refactor.extractSymbol.Messages.cannotExtractRange.message]);
-
-    testExtractRangeFailed("extractRangeFailed19",
-        `[#|/** @type {number} */|] const foo = 1;`,
-        [refactor.extractSymbol.Messages.cannotExtractJSDoc.message]);
+            `, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+    testExtractRangeFailed("extractRangeFailed18", `[#|{ 1;|] }`, [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+    testExtractRangeFailed("extractRangeFailed19", `[#|/** @type {number} */|] const foo = 1;`, [refactor.extractSymbol.Messages.cannotExtractJSDoc.message]);
 
     testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
 });
-}

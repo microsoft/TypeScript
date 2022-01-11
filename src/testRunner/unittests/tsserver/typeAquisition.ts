@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { createServerHost, createProjectService, toExternalFile, TestTypingsInstaller, checkProjectActualFiles, configuredProjectAt } from "../../ts.projectSystem";
+import { ScriptKind } from "../../ts";
 describe("unittests:: tsserver:: autoDiscovery", () => {
     it("does not depend on extension", () => {
         const file1 = {
@@ -49,4 +50,3 @@ describe("unittests:: tsserver:: prefer typings to js", () => {
         checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
     });
 });
-}

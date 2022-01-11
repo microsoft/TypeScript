@@ -1,4 +1,5 @@
-namespace ts {
+import { TranspileOptions, TranspileOutput, Diagnostic, ScriptTarget, NewLineKind, Extension, transpileModule, transpile, ModuleKind, JsxEmit, ModuleResolutionKind } from "../../ts";
+import { Baseline, Compiler } from "../../Harness";
 describe("unittests:: services:: Transpile", () => {
 
     interface TranspileTestSettings {
@@ -61,25 +62,23 @@ describe("unittests:: services:: Transpile", () => {
 
             /* eslint-disable no-null/no-null */
             it("Correct errors for " + justName, () => {
-                Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"),
-                    transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
+                Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), transpileResult.diagnostics!.length === 0 ? null : Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
             });
 
             if (canUseOldTranspile) {
                 it("Correct errors (old transpile) for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"),
-                        oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
+                    Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), oldTranspileDiagnostics.length === 0 ? null : Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
                 });
             }
             /* eslint-enable no-null/no-null */
 
             it("Correct output for " + justName, () => {
-                Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), transpileResult.outputText);
+                Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), transpileResult.outputText);
             });
 
             if (canUseOldTranspile) {
                 it("Correct output (old transpile) for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), oldTranspileResult);
+                    Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), oldTranspileResult);
                 });
             }
         });
@@ -122,29 +121,25 @@ var x = 0;`, {
         options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "file" }
     });
 
-    transpilesCorrectly("Rename dependencies - System",
-        `import {foo} from "SomeName";\n` +
+    transpilesCorrectly("Rename dependencies - System", `import {foo} from "SomeName";\n` +
         `declare function use(a: any);\n` +
         `use(foo);`, {
             options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
         });
 
-    transpilesCorrectly("Rename dependencies - AMD",
-        `import {foo} from "SomeName";\n` +
+    transpilesCorrectly("Rename dependencies - AMD", `import {foo} from "SomeName";\n` +
         `declare function use(a: any);\n` +
         `use(foo);`, {
             options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
         });
 
-    transpilesCorrectly("Rename dependencies - UMD",
-        `import {foo} from "SomeName";\n` +
+    transpilesCorrectly("Rename dependencies - UMD", `import {foo} from "SomeName";\n` +
         `declare function use(a: any);\n` +
         `use(foo);`, {
             options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
         });
 
-    transpilesCorrectly("Transpile with emit decorators and emit metadata",
-        `import {db} from './db';\n` +
+    transpilesCorrectly("Transpile with emit decorators and emit metadata", `import {db} from './db';\n` +
         `function someDecorator(target) {\n` +
         `    return target;\n` +
         `} \n` +
@@ -427,8 +422,7 @@ var x = 0;`, {
         options: { compilerOptions: { incremental: true, tsBuildInfoFile: "./folder/config.tsbuildinfo" }, fileName: "input.js", reportDiagnostics: true }
     });
 
-    transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option",
-        `import * as ng from "angular2/core";` +
+    transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option", `import * as ng from "angular2/core";` +
         `declare function foo(...args: any[]);` +
         `@foo` +
         `export class MyClass1 {` +
@@ -444,11 +438,8 @@ var x = 0;`, {
                     isolatedModules: true,
                 }
             }
-        }
-    );
-
-    transpilesCorrectly("Correctly serialize metadata when transpile with System option",
-        `import * as ng from "angular2/core";` +
+    });
+    transpilesCorrectly("Correctly serialize metadata when transpile with System option", `import * as ng from "angular2/core";` +
         `declare function foo(...args: any[]);` +
         `@foo` +
         `export class MyClass1 {` +
@@ -464,8 +455,7 @@ var x = 0;`, {
                     isolatedModules: true,
                 }
             }
-        }
-    );
+    });
 
     transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
         options: { compilerOptions: { module: ModuleKind.CommonJS } }
@@ -486,4 +476,3 @@ export * as alias from './file';`, {
         noSetFileName: true
     });
 });
-}

@@ -1,10 +1,12 @@
-namespace ts.projectSystem {
+import { TestServerEventManager, checkNumberOfProjects, fileStats, toExternalFiles, File } from "../../ts.projectSystem";
+import { ProjectInfoTelemetryEvent, protocol, maxProgramSizeForNonTsFiles, ProjectLanguageServiceStateEvent } from "../../ts.server";
+import { CompilerOptions, isString } from "../../ts";
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {
         const file = makeFile("/a.js");
         const et = new TestServerEventManager([file]);
         et.service.openClientFile(file.path);
-        et.hasZeroEvent(server.ProjectInfoTelemetryEvent);
+        et.hasZeroEvent(ProjectInfoTelemetryEvent);
     });
 
     it("only sends an event once", () => {
@@ -22,12 +24,12 @@ describe("unittests:: tsserver:: project telemetry", () => {
         et.service.openClientFile(file2.path);
         checkNumberOfProjects(et.service, { inferredProjects: 1 });
 
-        et.hasZeroEvent(server.ProjectInfoTelemetryEvent);
+        et.hasZeroEvent(ProjectInfoTelemetryEvent);
 
         et.service.openClientFile(file.path);
         checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
-        et.hasZeroEvent(server.ProjectInfoTelemetryEvent);
+        et.hasZeroEvent(ProjectInfoTelemetryEvent);
     });
 
     it("counts files by extension", () => {
@@ -48,7 +50,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
     it("works with external project", () => {
         const file1 = makeFile("/a.ts");
         const et = new TestServerEventManager([file1]);
-        const compilerOptions: server.protocol.CompilerOptions = { strict: true };
+        const compilerOptions: protocol.CompilerOptions = { strict: true };
 
         const projectFileName = "/hunter2/foo.csproj";
 
@@ -235,10 +237,10 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const file = makeFile("/a.js");
         const tsconfig = makeFile("/jsconfig.json", {});
         const et = new TestServerEventManager([tsconfig, file]);
-        const fileSize = server.maxProgramSizeForNonTsFiles + 1;
+        const fileSize = maxProgramSizeForNonTsFiles + 1;
         et.host.getFileSize = () => fileSize;
         et.service.openClientFile(file.path);
-        et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
+        et.getEvent<ProjectLanguageServiceStateEvent>(ProjectLanguageServiceStateEvent);
         et.assertProjectInfoTelemetryEvent({
             fileStats: fileStats({ js: 1, jsSize: fileSize }),
             compilerOptions: autoJsCompilerOptions,
@@ -290,5 +292,4 @@ describe("unittests:: tsserver:: project telemetry", () => {
 
 function makeFile(path: string, content: {} = ""): File {
     return { path, content: isString(content) ? content : JSON.stringify(content) };
-}
 }

@@ -1,6 +1,9 @@
-namespace ts.projectSystem {
+import { ProjectFilesWithTSDiagnostics, protocol, CommandNames } from "../../ts.server";
+import { Diagnostic, flattenDiagnosticMessageText, zipWith, startsWith, getBaseFileName, find, projectSystem, ModuleKind, Diagnostics } from "../../ts";
+import { createServerHost, libFile, createSession, toExternalFiles, checkNumberOfProjects, openFilesForSession, configuredProjectAt, createProjectService, checkProjectRootFiles, File, createLoggerWithInMemoryLogs, appendAllScriptInfos, verifyGetErrRequest, baselineTsserverLogs, closeFilesForSession, verifyGetErrScenario, executeSessionRequest, Folder } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
 describe("unittests:: tsserver:: Project Errors", () => {
-    function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
+    function checkProjectErrors(projectFiles: ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
         assert.isTrue(projectFiles !== undefined, "missing project files");
         checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);
     }
@@ -16,7 +19,7 @@ describe("unittests:: tsserver:: Project Errors", () => {
         }
     }
 
-    function checkDiagnosticsWithLinePos(errors: server.protocol.DiagnosticWithLinePosition[], expectedErrors: string[]) {
+    function checkDiagnosticsWithLinePos(errors: protocol.DiagnosticWithLinePosition[], expectedErrors: string[]) {
         assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
         if (expectedErrors.length) {
             zipWith(errors, expectedErrors, ({ message: actualMessage }, expectedMessage) => {
@@ -38,9 +41,9 @@ describe("unittests:: tsserver:: Project Errors", () => {
         const session = createSession(host);
         const projectService = session.getProjectService();
         const projectFileName = "/a/b/test.csproj";
-        const compilerOptionsRequest: server.protocol.CompilerOptionsDiagnosticsRequest = {
+        const compilerOptionsRequest: protocol.CompilerOptionsDiagnosticsRequest = {
             type: "request",
-            command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName }
         };
@@ -53,7 +56,7 @@ describe("unittests:: tsserver:: Project Errors", () => {
             });
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
+            const diags = session.executeCommand(compilerOptionsRequest).response as protocol.DiagnosticWithLinePosition[];
             // only file1 exists - expect error
             checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
         }
@@ -61,7 +64,7 @@ describe("unittests:: tsserver:: Project Errors", () => {
         {
             // only file2 exists - expect error
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
+            const diags = session.executeCommand(compilerOptionsRequest).response as protocol.DiagnosticWithLinePosition[];
             checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
         }
 
@@ -69,7 +72,7 @@ describe("unittests:: tsserver:: Project Errors", () => {
         {
             // both files exist - expect no errors
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            const diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
+            const diags = session.executeCommand(compilerOptionsRequest).response as protocol.DiagnosticWithLinePosition[];
             checkDiagnosticsWithLinePos(diags, []);
         }
     });
@@ -93,19 +96,19 @@ describe("unittests:: tsserver:: Project Errors", () => {
         openFilesForSession([file1], session);
         checkNumberOfProjects(projectService, { configuredProjects: 1 });
         const project = configuredProjectAt(projectService, 0);
-        const compilerOptionsRequest: server.protocol.CompilerOptionsDiagnosticsRequest = {
+        const compilerOptionsRequest: protocol.CompilerOptionsDiagnosticsRequest = {
             type: "request",
-            command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName: project.getProjectName() }
         };
-        let diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
+        let diags = session.executeCommand(compilerOptionsRequest).response as protocol.DiagnosticWithLinePosition[];
         checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
 
         host.writeFile(file2.path, file2.content);
 
         checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
+        diags = session.executeCommand(compilerOptionsRequest).response as protocol.DiagnosticWithLinePosition[];
         checkDiagnosticsWithLinePos(diags, []);
     });
 
@@ -239,8 +242,8 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
             const refPathNotFound2 = "./src/somefile.d.ts";
             const fileContent = `/// <reference path="${refPathNotFound1}" />
 /// <reference path="${refPathNotFound2}" />`;
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: server.CommandNames.Open,
+            session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+                command: CommandNames.Open,
                 arguments: {
                     file: untitledFile,
                     fileContent,
@@ -282,8 +285,8 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
         const host = createServerHost([app, foo, configFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
 
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: server.CommandNames.Open,
+        session.executeCommandSeq<projectSystem.protocol.OpenRequest>({
+            command: CommandNames.Open,
             arguments: { file: app.path, }
         });
         verifyGetErrRequest({ session, host, files: [app] });
@@ -302,8 +305,8 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
         };
         const host = createServerHost([file, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
-        session.executeCommandSeq<protocol.GeterrRequest>({
-            command: server.CommandNames.Geterr,
+        session.executeCommandSeq<projectSystem.protocol.GeterrRequest>({
+            command: CommandNames.Geterr,
             arguments: {
                 delay: 0,
                 files: [file.path]
@@ -316,25 +319,25 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
 
     it("Reports errors correctly when file referenced by inferred project root, is opened right after closing the root file", () => {
         const app: File = {
-            path: `${tscWatch.projectRoot}/src/client/app.js`,
+            path: `${projectRoot}/src/client/app.js`,
             content: ""
         };
         const serverUtilities: File = {
-            path: `${tscWatch.projectRoot}/src/server/utilities.js`,
+            path: `${projectRoot}/src/server/utilities.js`,
             content: `function getHostName() { return "hello"; } export { getHostName };`
         };
         const backendTest: File = {
-            path: `${tscWatch.projectRoot}/test/backend/index.js`,
+            path: `${projectRoot}/test/backend/index.js`,
             content: `import { getHostName } from '../../src/server/utilities';export default getHostName;`
         };
         const files = [libFile, app, serverUtilities, backendTest];
         const host = createServerHost(files);
         const session = createSession(host, { useInferredProjectPerProjectRoot: true, canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
-        openFilesForSession([{ file: app, projectRootPath: tscWatch.projectRoot }], session);
-        openFilesForSession([{ file: backendTest, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: app, projectRootPath: projectRoot }], session);
+        openFilesForSession([{ file: backendTest, projectRootPath: projectRoot }], session);
         verifyGetErrRequest({ session, host, files: [backendTest.path, app.path] });
         closeFilesForSession([backendTest], session);
-        openFilesForSession([{ file: serverUtilities.path, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: serverUtilities.path, projectRootPath: projectRoot }], session);
         verifyGetErrRequest({ session, host, files: [serverUtilities.path, app.path] });
         baselineTsserverLogs("projectErrors", `reports errors correctly when file referenced by inferred project root, is opened right after closing the root file`, session);
     });
@@ -372,8 +375,8 @@ declare module '@custom/plugin' {
 
         checkErrors();
 
-        session.executeCommandSeq<protocol.ChangeRequest>({
-            command: protocol.CommandTypes.Change,
+        session.executeCommandSeq<projectSystem.protocol.ChangeRequest>({
+            command: projectSystem.protocol.CommandTypes.Change,
             arguments: {
                 file: aFile.path,
                 line: 3,
@@ -394,12 +397,12 @@ declare module '@custom/plugin' {
 
     describe("when semantic error returns includes global error", () => {
         const file: File = {
-            path: `${tscWatch.projectRoot}/ui.ts`,
+            path: `${projectRoot}/ui.ts`,
             content: `const x = async (_action: string) => {
 };`
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         verifyGetErrScenario({
@@ -602,24 +605,24 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
 
         const diags = session.executeCommand({
             type: "request",
-            command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName: projectName }
-        } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
+        } as protocol.CompilerOptionsDiagnosticsRequest).response as readonly projectSystem.protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diags.length === 0);
 
         session.executeCommand({
             type: "request",
-            command: server.CommandNames.CompilerOptionsForInferredProjects,
+            command: CommandNames.CompilerOptionsForInferredProjects,
             seq: 3,
             arguments: { options: { module: ModuleKind.CommonJS } }
-        } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+        } as protocol.SetCompilerOptionsForInferredProjectsRequest);
         const diagsAfterUpdate = session.executeCommand({
             type: "request",
-            command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 4,
             arguments: { projectFileName: projectName }
-        } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
+        } as protocol.CompilerOptionsDiagnosticsRequest).response as readonly projectSystem.protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diagsAfterUpdate.length === 0);
     });
 
@@ -637,34 +640,34 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
             projectFileName,
             rootFiles: externalFiles,
             options: {}
-        } as protocol.ExternalProject);
+        } as projectSystem.protocol.ExternalProject);
 
         checkNumberOfProjects(projectService, { externalProjects: 1 });
 
         const diags = session.executeCommand({
             type: "request",
-            command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName }
-        } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
+        } as protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diags.length === 0);
 
         session.executeCommand({
             type: "request",
-            command: server.CommandNames.OpenExternalProject,
+            command: CommandNames.OpenExternalProject,
             seq: 3,
             arguments: {
                 projectFileName,
                 rootFiles: externalFiles,
                 options: { module: ModuleKind.CommonJS }
             }
-        } as server.protocol.OpenExternalProjectRequest);
+        } as protocol.OpenExternalProjectRequest);
         const diagsAfterUpdate = session.executeCommand({
             type: "request",
-            command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+            command: CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 4,
             arguments: { projectFileName }
-        } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
+        } as protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diagsAfterUpdate.length === 0);
     });
 });
@@ -701,10 +704,10 @@ describe("unittests:: tsserver:: Project Errors reports Options Diagnostic locat
 
         const diags = session.executeCommand({
             type: "request",
-            command: server.CommandNames.SemanticDiagnosticsSync,
+            command: CommandNames.SemanticDiagnosticsSync,
             seq: 2,
             arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-        } as server.protocol.SemanticDiagnosticsSyncRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
+        } as protocol.SemanticDiagnosticsSyncRequest).response as readonly protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diags.length === 3);
 
         configFile.content = configFileContentWithoutCommentLine;
@@ -712,17 +715,17 @@ describe("unittests:: tsserver:: Project Errors reports Options Diagnostic locat
 
         const diagsAfterEdit = session.executeCommand({
             type: "request",
-            command: server.CommandNames.SemanticDiagnosticsSync,
+            command: CommandNames.SemanticDiagnosticsSync,
             seq: 2,
             arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-        } as server.protocol.SemanticDiagnosticsSyncRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
+        } as protocol.SemanticDiagnosticsSyncRequest).response as readonly protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diagsAfterEdit.length === 3);
 
         verifyDiagnostic(diags[0], diagsAfterEdit[0]);
         verifyDiagnostic(diags[1], diagsAfterEdit[1]);
         verifyDiagnostic(diags[2], diagsAfterEdit[2]);
 
-        function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
+        function verifyDiagnostic(beforeEditDiag: protocol.DiagnosticWithLinePosition, afterEditDiag: protocol.DiagnosticWithLinePosition) {
             assert.equal(beforeEditDiag.message, afterEditDiag.message);
             assert.equal(beforeEditDiag.code, afterEditDiag.code);
             assert.equal(beforeEditDiag.category, afterEditDiag.category);
@@ -747,8 +750,8 @@ describe("unittests:: tsserver:: Project Errors with config file change", () => 
         host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
         host.runQueuedTimeoutCallbacks();
 
-        const response = executeSessionRequest<protocol.SemanticDiagnosticsSyncRequest, protocol.SemanticDiagnosticsSyncResponse>(session, protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as protocol.Diagnostic[] | undefined;
-        assert.deepEqual<protocol.Diagnostic[] | undefined>(response, [
+        const response = executeSessionRequest<projectSystem.protocol.SemanticDiagnosticsSyncRequest, projectSystem.protocol.SemanticDiagnosticsSyncResponse>(session, projectSystem.protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as projectSystem.protocol.Diagnostic[] | undefined;
+        assert.deepEqual<projectSystem.protocol.Diagnostic[] | undefined>(response, [
             {
                 start: { line: 1, offset: 1 },
                 end: { line: 1, offset: 1 + "label".length },
@@ -765,19 +768,21 @@ describe("unittests:: tsserver:: Project Errors with config file change", () => 
 });
 
 describe("unittests:: tsserver:: Project Errors with resolveJsonModule", () => {
-    function createSessionForTest({ include }: { include: readonly string[]; }) {
+    function createSessionForTest({ include }: {
+        include: readonly string[];
+    }) {
         const test: File = {
-            path: `${tscWatch.projectRoot}/src/test.ts`,
+            path: `${projectRoot}/src/test.ts`,
             content: `import * as blabla from "./blabla.json";
 declare var console: any;
 console.log(blabla);`
         };
         const blabla: File = {
-            path: `${tscWatch.projectRoot}/src/blabla.json`,
+            path: `${projectRoot}/src/blabla.json`,
             content: "{}"
         };
         const tsconfig: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     resolveJsonModule: true,
@@ -813,40 +818,40 @@ console.log(blabla);`
 describe("unittests:: tsserver:: Project Errors with npm install when", () => {
     function verifyNpmInstall(timeoutDuringPartialInstallation: boolean) {
         const main: File = {
-            path: `${tscWatch.projectRoot}/src/main.ts`,
+            path: `${projectRoot}/src/main.ts`,
             content: "import * as _a from '@angular/core';"
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         // Move things from staging to node_modules without triggering watch
         const moduleFile: File = {
-            path: `${tscWatch.projectRoot}/node_modules/@angular/core/index.d.ts`,
+            path: `${projectRoot}/node_modules/@angular/core/index.d.ts`,
             content: `export const y = 10;`
         };
         const projectFiles = [main, libFile, config];
         const host = createServerHost(projectFiles);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
-        openFilesForSession([{ file: main, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: main, projectRootPath: projectRoot }], session);
         verifyGetErrRequest({ session, host, files: [main] });
 
         let npmInstallComplete = false;
 
         // Simulate npm install
         let filesAndFoldersToAdd: (File | Folder)[] = [
-            { path: `${tscWatch.projectRoot}/node_modules` }, // This should queue update
-            { path: `${tscWatch.projectRoot}/node_modules/.staging` },
-            { path: `${tscWatch.projectRoot}/node_modules/.staging/@babel` },
-            { path: `${tscWatch.projectRoot}/node_modules/.staging/@babel/helper-plugin-utils-a06c629f` },
-            { path: `${tscWatch.projectRoot}/node_modules/.staging/core-js-db53158d` },
+            { path: `${projectRoot}/node_modules` },
+            { path: `${projectRoot}/node_modules/.staging` },
+            { path: `${projectRoot}/node_modules/.staging/@babel` },
+            { path: `${projectRoot}/node_modules/.staging/@babel/helper-plugin-utils-a06c629f` },
+            { path: `${projectRoot}/node_modules/.staging/core-js-db53158d` },
         ];
         verifyWhileNpmInstall(3);
 
         filesAndFoldersToAdd = [
-            { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
-            { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`, content: `export const x = 10;` },
-            { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
+            { path: `${projectRoot}/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
+            { path: `${projectRoot}/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts`, content: `export const x = 10;` },
+            { path: `${projectRoot}/node_modules/.staging/@angular/core-0963aebf/index.d.ts`, content: `export const y = 10;` },
         ];
         // Since we added/removed in .staging no timeout
         verifyWhileNpmInstall(0);
@@ -857,7 +862,7 @@ describe("unittests:: tsserver:: Project Errors with npm install when", () => {
         verifyWhileNpmInstall(0);
 
         // Remove staging folder to remove errors
-        host.deleteFolder(`${tscWatch.projectRoot}/node_modules/.staging`, /*recursive*/ true);
+        host.deleteFolder(`${projectRoot}/node_modules/.staging`, /*recursive*/ true);
         npmInstallComplete = true;
         projectFiles.push(moduleFile);
         // Additional watch for watching script infos from node_modules
@@ -888,4 +893,3 @@ describe("unittests:: tsserver:: Project Errors with npm install when", () => {
         verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
     });
 });
-}

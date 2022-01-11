@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createServerHost, createProjectService, textSpanFromSubstring, createSession, openFilesForSession, executeSessionRequest, protocol, CommandNames, protocolTextSpanFromSubstring } from "../../ts.projectSystem";
+import { Debug, testFormatSettings, emptyOptions, FileTextChanges } from "../../ts";
 describe("unittests:: tsserver:: getEditsForFileRename", () => {
     it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
         const userTs: File = {
@@ -102,4 +103,3 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         ]);
     });
 });
-}

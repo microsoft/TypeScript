@@ -1,8 +1,12 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createProjectService, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, checkArray, checkWatchedFiles, getConfigFilesToWatch, checkWatchedDirectories, nodeModulesAtTypes, checkProjectActualFiles, checkNumberOfProjects, createSession, CommandNames, commonFile1 } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
+import { combinePaths, ModuleResolutionKind, ScriptTarget, ScriptKind } from "../../ts";
+import { protocol, InferredProject } from "../../ts.server";
+import * as ts from "../../ts";
 describe("unittests:: tsserver:: Inferred projects", () => {
     it("create inferred project", () => {
         const appFile: File = {
-            path: `${tscWatch.projectRoot}/app.ts`,
+            path: `${projectRoot}/app.ts`,
             content: `
                 import {f} from "./module"
                 console.log(f)
@@ -10,7 +14,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         };
 
         const moduleFile: File = {
-            path: `${tscWatch.projectRoot}/module.d.ts`,
+            path: `${projectRoot}/module.d.ts`,
             content: `export let x: number`
         };
         const host = createServerHost([appFile, moduleFile, libFile]);
@@ -24,18 +28,18 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         const project = projectService.inferredProjects[0];
 
         checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
-        checkWatchedFiles(host, getConfigFilesToWatch(tscWatch.projectRoot).concat(libFile.path, moduleFile.path));
-        checkWatchedDirectories(host, [tscWatch.projectRoot], /*recursive*/ false);
-        checkWatchedDirectories(host, [combinePaths(tscWatch.projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
+        checkWatchedFiles(host, getConfigFilesToWatch(projectRoot).concat(libFile.path, moduleFile.path));
+        checkWatchedDirectories(host, [projectRoot], /*recursive*/ false);
+        checkWatchedDirectories(host, [combinePaths(projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
     });
 
     it("should use only one inferred project if 'useOneInferredProject' is set", () => {
         const file1 = {
-            path: `${tscWatch.projectRoot}/a/b/main.ts`,
+            path: `${projectRoot}/a/b/main.ts`,
             content: "let x =1;"
         };
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/a/b/tsconfig.json`,
+            path: `${projectRoot}/a/b/tsconfig.json`,
             content: `{
                     "compilerOptions": {
                         "target": "es6"
@@ -44,12 +48,12 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 }`
         };
         const file2 = {
-            path: `${tscWatch.projectRoot}/a/c/main.ts`,
+            path: `${projectRoot}/a/c/main.ts`,
             content: "let x =1;"
         };
 
         const file3 = {
-            path: `${tscWatch.projectRoot}/a/d/main.ts`,
+            path: `${projectRoot}/a/d/main.ts`,
             content: "let x =1;"
         };
 
@@ -134,7 +138,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                     allowJs: true
                 }
             }
-        } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+        } as protocol.SetCompilerOptionsForInferredProjectsRequest);
         session.executeCommand({
             seq: 2,
             type: "request",
@@ -144,7 +148,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 fileContent: f.content,
                 scriptKindName: "JS"
             }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { inferredProjects: 1 });
         checkProjectActualFiles(projectService.inferredProjects[0], [f.path]);
@@ -170,7 +174,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                     target: ScriptTarget.ESNext
                 }
             }
-        } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+        } as protocol.SetCompilerOptionsForInferredProjectsRequest);
         session.executeCommand({
             seq: 2,
             type: "request",
@@ -182,7 +186,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 },
                 projectRootPath: "/b"
             }
-        } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+        } as protocol.SetCompilerOptionsForInferredProjectsRequest);
         session.executeCommand({
             seq: 3,
             type: "request",
@@ -193,7 +197,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 scriptKindName: "JS",
                 projectRootPath: file1.projectRootPath
             }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
         session.executeCommand({
             seq: 4,
             type: "request",
@@ -204,7 +208,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 scriptKindName: "JS",
                 projectRootPath: file2.projectRootPath
             }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
         session.executeCommand({
             seq: 5,
             type: "request",
@@ -215,7 +219,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 scriptKindName: "JS",
                 projectRootPath: file3.projectRootPath
             }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
         session.executeCommand({
             seq: 6,
             type: "request",
@@ -225,7 +229,7 @@ describe("unittests:: tsserver:: Inferred projects", () => {
                 fileContent: file4.content,
                 scriptKindName: "JS"
             }
-        } as server.protocol.OpenRequest);
+        } as protocol.OpenRequest);
 
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { inferredProjects: 3 });
@@ -237,13 +241,18 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         assert.equal(projectService.inferredProjects[2].getCompilationSettings().target, ScriptTarget.ES2015);
     });
 
-    function checkInferredProject(inferredProject: server.InferredProject, actualFiles: File[], target: ScriptTarget) {
+    function checkInferredProject(inferredProject: InferredProject, actualFiles: File[], target: ScriptTarget) {
         checkProjectActualFiles(inferredProject, actualFiles.map(f => f.path));
         assert.equal(inferredProject.getCompilationSettings().target, target);
     }
 
     function verifyProjectRootWithCaseSensitivity(useCaseSensitiveFileNames: boolean) {
-        const files: [File, File, File, File] = [
+        const files: [
+            File,
+            File,
+            File,
+            File
+        ] = [
             { path: "/a/file1.ts", content: "let x = 1;" },
             { path: "/A/file2.ts", content: "let y = 2;" },
             { path: "/b/file2.ts", content: "let x = 3;" },
@@ -317,7 +326,12 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         }
         closeClientFiles();
 
-        function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
+        function openClientFiles(projectRoots: [
+            string | undefined,
+            string | undefined,
+            string | undefined,
+            string | undefined
+        ]) {
             files.forEach((file, index) => {
                 projectService.openClientFile(file.path, file.content, ScriptKind.JS, projectRoots[index]);
             });
@@ -327,7 +341,10 @@ describe("unittests:: tsserver:: Inferred projects", () => {
             files.forEach(file => projectService.closeClientFile(file.path));
         }
 
-        function verifyInferredProjectsState(expected: [File[], ScriptTarget][]) {
+        function verifyInferredProjectsState(expected: [
+            File[],
+            ScriptTarget
+        ][]) {
             checkNumberOfProjects(projectService, { inferredProjects: expected.length });
             projectService.inferredProjects.forEach((p, index) => {
                 const [actualFiles, target] = expected[index];
@@ -346,27 +363,27 @@ describe("unittests:: tsserver:: Inferred projects", () => {
 
     it("should still retain configured project created while opening the file", () => {
         const appFile: File = {
-            path: `${tscWatch.projectRoot}/app.ts`,
+            path: `${projectRoot}/app.ts`,
             content: `const app = 20;`
         };
         const config: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const jsFile1: File = {
-            path: `${tscWatch.projectRoot}/jsFile1.js`,
+            path: `${projectRoot}/jsFile1.js`,
             content: `const jsFile1 = 10;`
         };
         const jsFile2: File = {
-            path: `${tscWatch.projectRoot}/jsFile2.js`,
+            path: `${projectRoot}/jsFile2.js`,
             content: `const jsFile2 = 10;`
         };
         const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
         const projectService = createProjectService(host);
         const originalSet = projectService.configuredProjects.set;
         const originalDelete = projectService.configuredProjects.delete;
-        const configuredCreated = new Map<string, true>();
-        const configuredRemoved = new Map<string, true>();
+        const configuredCreated = new ts.Map<string, true>();
+        const configuredRemoved = new ts.Map<string, true>();
         projectService.configuredProjects.set = (key, value) => {
             assert.isFalse(configuredCreated.has(key));
             configuredCreated.set(key, true);
@@ -461,4 +478,3 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         host.checkTimeoutQueueLength(0);
     });
 });
-}

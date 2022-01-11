@@ -1,22 +1,30 @@
+import { Diagnostics, ArrowFunction, Expression, ReturnStatement, RefactorContext, ApplicableRefactorInfo, emptyArray, RefactorEditInfo, Debug, ConciseBody, factory, copyLeadingComments, SyntaxKind, needsParentheses, copyTrailingAsLeadingComments, copyTrailingComments, SourceFile, getTokenAtPosition, getContainingFunction, getLocaleSpecificMessage, isArrowFunction, rangeContainsRange, isExpression, isBlock, first, isReturnStatement } from "../ts";
+import { registerRefactor, isRefactorErrorInfo, RefactorErrorInfo, refactorKindBeginsWith } from "../ts.refactor";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 const refactorName = "Add or remove braces in an arrow function";
+/* @internal */
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
 
+/* @internal */
 const addBracesAction = {
     name: "Add braces to arrow function",
     description: Diagnostics.Add_braces_to_arrow_function.message,
     kind: "refactor.rewrite.arrow.braces.add",
 };
+/* @internal */
 const removeBracesAction = {
     name: "Remove braces from arrow function",
     description: Diagnostics.Remove_braces_from_arrow_function.message,
     kind: "refactor.rewrite.arrow.braces.remove"
 };
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [removeBracesAction.kind],
     getEditsForAction,
-    getAvailableActions });
+    getAvailableActions
+});
+/* @internal */
 
 interface FunctionBracesInfo {
     func: ArrowFunction;
@@ -25,10 +33,12 @@ interface FunctionBracesInfo {
     addBraces: boolean;
 }
 
+/* @internal */
 function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const { file, startPosition, triggerReason } = context;
     const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
-    if (!info) return emptyArray;
+    if (!info)
+        return emptyArray;
 
     if (!isRefactorErrorInfo(info)) {
         return [{
@@ -54,6 +64,7 @@ function getAvailableActions(context: RefactorContext): readonly ApplicableRefac
     return emptyArray;
 }
 
+/* @internal */
 function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const { file, startPosition } = context;
     const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
@@ -79,13 +90,14 @@ function getEditsForAction(context: RefactorContext, actionName: string): Refact
         Debug.fail("invalid action");
     }
 
-    const edits = textChanges.ChangeTracker.with(context, t => {
+    const edits = ChangeTracker.with(context, t => {
         t.replaceNode(file, func.body, body);
     });
 
     return { renameFilename: undefined, renameLocation: undefined, edits };
 }
 
+/* @internal */
 function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true, kind?: string): FunctionBracesInfo | RefactorErrorInfo | undefined {
     const node = getTokenAtPosition(file, startPosition);
     const func = getContainingFunction(node);
@@ -116,5 +128,4 @@ function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: 
         }
     }
     return undefined;
-}
 }

@@ -1,4 +1,5 @@
-namespace ts {
+import { DeprecationOptions, Debug, factory, TypeParameterDeclaration, ParameterDeclaration, TypeNode, ConstructorTypeNode, NodeArray, SyntaxKind, Token, Identifier, Node, GeneratedIdentifierFlags, Decorator, Modifier, IndexSignatureDeclaration, ThisTypeNode, TypePredicateNode, PseudoBigInt, StringLiteral, NoSubstitutionTemplateLiteral, NumericLiteral, PrimaryExpression, BooleanLiteral, PropertyName, QuestionToken, MethodSignature, TypeOperatorNode, Expression, TemplateLiteral, TaggedTemplateExpression, BinaryExpression, BinaryOperator, BinaryOperatorToken, ColonToken, ConditionalExpression, AsteriskToken, YieldExpression, HeritageClause, ClassElement, ClassExpression, PropertySignature, ExpressionWithTypeArguments, ConciseBody, EqualsGreaterThanToken, ArrowFunction, BindingName, ExclamationToken, VariableDeclaration, NamedImportBindings, ImportClause, NamedExportBindings, ExportDeclaration, EntityName, JSDocTypeExpression, JSDocParameterTag, PostfixUnaryExpression, PrefixUnaryExpression, setTextRangePosEnd, parseBaseNodeFactory, isNodeKind, setTextRange, setParent, TypeAssertion, MemberName, isMemberName } from "./ts";
+import * as ts from "./ts";
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
 // the `@deprecated` JSDoc tag as well as the `Debug.deprecate` API.
@@ -164,21 +165,12 @@ export const createFunctionTypeNode = Debug.deprecate(factory.createFunctionType
 export const updateFunctionTypeNode = Debug.deprecate(factory.updateFunctionTypeNode, factoryDeprecation);
 
 /** @deprecated Use `factory.createConstructorTypeNode` or the factory supplied by your transformation context instead. */
-export const createConstructorTypeNode = Debug.deprecate((
-    typeParameters: readonly TypeParameterDeclaration[] | undefined,
-    parameters: readonly ParameterDeclaration[],
-    type: TypeNode
-) => {
+export const createConstructorTypeNode = Debug.deprecate((typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode) => {
     return factory.createConstructorTypeNode(/*modifiers*/ undefined, typeParameters, parameters, type);
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.updateConstructorTypeNode` or the factory supplied by your transformation context instead. */
-export const updateConstructorTypeNode = Debug.deprecate((
-    node: ConstructorTypeNode,
-    typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
-    parameters: NodeArray<ParameterDeclaration>,
-    type: TypeNode
-) => {
+export const updateConstructorTypeNode = Debug.deprecate((node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode) => {
     return factory.updateConstructorTypeNode(node, node.modifiers, typeParameters, parameters, type);
 }, factoryDeprecation);
 
@@ -995,25 +987,12 @@ export const createLiteral = Debug.deprecate(function createLiteral(value: strin
 }, { since: "4.0", warnAfter: "4.1", message: "Use `factory.createStringLiteral`, `factory.createStringLiteralFromNode`, `factory.createNumericLiteral`, `factory.createBigIntLiteral`, `factory.createTrue`, `factory.createFalse`, or the factory supplied by your transformation context instead." });
 
 /** @deprecated Use `factory.createMethodSignature` or the factory supplied by your transformation context instead. */
-export const createMethodSignature = Debug.deprecate(function createMethodSignature(
-    typeParameters: readonly TypeParameterDeclaration[] | undefined,
-    parameters: readonly ParameterDeclaration[],
-    type: TypeNode | undefined,
-    name: string | PropertyName,
-    questionToken: QuestionToken | undefined
-) {
+export const createMethodSignature = Debug.deprecate(function createMethodSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined) {
     return factory.createMethodSignature(/*modifiers*/ undefined, name, questionToken, typeParameters, parameters, type);
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.updateMethodSignature` or the factory supplied by your transformation context instead. */
-export const updateMethodSignature = Debug.deprecate(function updateMethodSignature(
-    node: MethodSignature,
-    typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
-    parameters: NodeArray<ParameterDeclaration>,
-    type: TypeNode | undefined,
-    name: PropertyName,
-    questionToken: QuestionToken | undefined
-) {
+export const updateMethodSignature = Debug.deprecate(function updateMethodSignature(node: MethodSignature, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name: PropertyName, questionToken: QuestionToken | undefined) {
     return factory.updateMethodSignature(node, node.modifiers, name, questionToken, typeParameters, parameters, type);
 }, factoryDeprecation);
 
@@ -1097,50 +1076,24 @@ export const createYield = Debug.deprecate(function createYield(asteriskTokenOrE
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.createClassExpression` or the factory supplied by your transformation context instead. */
-export const createClassExpression = Debug.deprecate(function createClassExpression(
-    modifiers: readonly Modifier[] | undefined,
-    name: string | Identifier | undefined,
-    typeParameters: readonly TypeParameterDeclaration[] | undefined,
-    heritageClauses: readonly HeritageClause[] | undefined,
-    members: readonly ClassElement[]
-) {
+export const createClassExpression = Debug.deprecate(function createClassExpression(modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]) {
     return factory.createClassExpression(/*decorators*/ undefined, modifiers, name, typeParameters, heritageClauses, members);
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.updateClassExpression` or the factory supplied by your transformation context instead. */
-export const updateClassExpression = Debug.deprecate(function updateClassExpression(
-    node: ClassExpression,
-    modifiers: readonly Modifier[] | undefined,
-    name: Identifier | undefined,
-    typeParameters: readonly TypeParameterDeclaration[] | undefined,
-    heritageClauses: readonly HeritageClause[] | undefined,
-    members: readonly ClassElement[]
-) {
+export const updateClassExpression = Debug.deprecate(function updateClassExpression(node: ClassExpression, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]) {
     return factory.updateClassExpression(node, /*decorators*/ undefined, modifiers, name, typeParameters, heritageClauses, members);
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.createPropertySignature` or the factory supplied by your transformation context instead. */
-export const createPropertySignature = Debug.deprecate(function createPropertySignature(
-    modifiers: readonly Modifier[] | undefined,
-    name: PropertyName | string,
-    questionToken: QuestionToken | undefined,
-    type: TypeNode | undefined,
-    initializer?: Expression
-): PropertySignature {
+export const createPropertySignature = Debug.deprecate(function createPropertySignature(modifiers: readonly Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer?: Expression): PropertySignature {
     const node = factory.createPropertySignature(modifiers, name, questionToken, type);
     node.initializer = initializer;
     return node;
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.updatePropertySignature` or the factory supplied by your transformation context instead. */
-export const updatePropertySignature = Debug.deprecate(function updatePropertySignature(
-    node: PropertySignature,
-    modifiers: readonly Modifier[] | undefined,
-    name: PropertyName,
-    questionToken: QuestionToken | undefined,
-    type: TypeNode | undefined,
-    initializer: Expression | undefined
-) {
+export const updatePropertySignature = Debug.deprecate(function updatePropertySignature(node: PropertySignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
     let updated = factory.updatePropertySignature(node, modifiers, name, questionToken, type);
     if (node.initializer !== initializer) {
         if (updated === node) {
@@ -1217,13 +1170,7 @@ export const createExportDeclaration = Debug.deprecate(function createExportDecl
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.updateExportDeclaration` or the factory supplied by your transformation context instead. */
-export const updateExportDeclaration = Debug.deprecate(function updateExportDeclaration(
-    node: ExportDeclaration,
-    decorators: readonly Decorator[] | undefined,
-    modifiers: readonly Modifier[] | undefined,
-    exportClause: NamedExportBindings | undefined,
-    moduleSpecifier: Expression | undefined,
-    isTypeOnly: boolean) {
+export const updateExportDeclaration = Debug.deprecate(function updateExportDeclaration(node: ExportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, isTypeOnly: boolean) {
     return factory.updateExportDeclaration(node, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, node.assertClause);
 }, factoryDeprecation);
 
@@ -1289,15 +1236,11 @@ export const createLogicalNot = Debug.deprecate(function createLogicalNot(operan
 
 /** @deprecated Use an appropriate `factory` method instead. */
 export const createNode = Debug.deprecate(function createNode(kind: SyntaxKind, pos = 0, end = 0): Node {
-    return setTextRangePosEnd(
-        kind === SyntaxKind.SourceFile ? parseBaseNodeFactory.createBaseSourceFileNode(kind) :
+    return setTextRangePosEnd(kind === SyntaxKind.SourceFile ? parseBaseNodeFactory.createBaseSourceFileNode(kind) :
         kind === SyntaxKind.Identifier ? parseBaseNodeFactory.createBaseIdentifierNode(kind) :
         kind === SyntaxKind.PrivateIdentifier ? parseBaseNodeFactory.createBasePrivateIdentifierNode(kind) :
         !isNodeKind(kind) ? parseBaseNodeFactory.createBaseTokenNode(kind) :
-        parseBaseNodeFactory.createBaseNode(kind),
-        pos,
-        end
-    );
+                    parseBaseNodeFactory.createBaseNode(kind), pos, end);
 }, { since: "4.0", warnAfter: "4.1", message: "Use an appropriate `factory` method instead." });
 
 /**
@@ -1333,6 +1276,7 @@ export const isTypeAssertion = Debug.deprecate(function isTypeAssertion(node: No
     message: "Use `isTypeAssertionExpression` instead."
 });
 
+declare module "../compiler/corePublic" {
 // #endregion Renamed node Tests
 
 // DEPRECATION: Renamed `Map` and `ReadonlyMap` interfaces
@@ -1345,13 +1289,17 @@ export const isTypeAssertion = Debug.deprecate(function isTypeAssertion(node: No
 /**
  * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
  */
-export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    export interface ReadonlyMap<T> extends ts.ReadonlyESMap<string, T> {
 }
 
+}
+declare module "../compiler/corePublic" {
 /**
  * @deprecated Use `ts.ESMap<K, V>` instead.
  */
-export interface Map<T> extends ESMap<string, T> { }
+    export interface Map<T> extends ts.ESMap<string, T> {
+    }
+}
 
 // #endregion
 
@@ -1373,5 +1321,3 @@ export const isIdentifierOrPrivateIdentifier = Debug.deprecate(function isIdenti
     message: "Use `isMemberName` instead."
 });
 
-// #endregion Renamed node Tests
-}

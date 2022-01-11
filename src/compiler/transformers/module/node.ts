@@ -1,5 +1,5 @@
+import { TransformationContext, transformECMAScriptModule, transformModule, SyntaxKind, SourceFile, EmitHint, Node, isSourceFile, ModuleKind, Debug, Bundle, map } from "../../ts";
 /*@internal*/
-namespace ts {
 export function transformNodeModule(context: TransformationContext) {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
@@ -80,5 +80,4 @@ export function transformNodeModule(context: TransformationContext) {
     function transformBundle(node: Bundle) {
         return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
     }
-}
 }

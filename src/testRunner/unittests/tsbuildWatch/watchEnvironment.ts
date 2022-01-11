@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { arrayToMap, identity, TestFSWithWatch, ESMap, createSolutionBuilderWithWatchHost, createSolutionBuilderWithWatch, emptyArray, concatenate, last, flatMap } from "../../ts";
+import { File, createWatchedSystem, libFile, checkOutputErrorsInitial, checkWatchedFilesDetailed, checkOutputErrorsIncremental } from "../../ts.tscWatch";
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
     describe("when watchFile can create multiple watchers per file", () => {
         verifyWatchFileOnMultipleProjects(/*singleWatchPerFile*/ false);
@@ -6,9 +7,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
 
     describe("when watchFile is single watcher per file", () => {
         verifyWatchFileOnMultipleProjects(
-            /*singleWatchPerFile*/ true,
-            arrayToMap(["TSC_WATCHFILE"], identity, () => TestFSWithWatch.Tsc_WatchFile.SingleFileWatcherPerName)
-        );
+        /*singleWatchPerFile*/ true, arrayToMap(["TSC_WATCHFILE"], identity, () => TestFSWithWatch.Tsc_WatchFile.SingleFileWatcherPerName));
     });
 
     function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: ESMap<string, string>) {
@@ -28,11 +27,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             const solutionBuilder = createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
             solutionBuilder.build();
             checkOutputErrorsInitial(system, emptyArray, /*disableConsoleClears*/ undefined, [
-                `Projects in this build: \r\n${
-                    concatenate(
-                        pkgs(index => `    * pkg${index}/tsconfig.json`),
-                        ["    * tsconfig.json"]
-                    ).join("\r\n")}\n\n`,
+                `Projects in this build: \r\n${concatenate(pkgs(index => `    * pkg${index}/tsconfig.json`), ["    * tsconfig.json"]).join("\r\n")}\n\n`,
                 ...flatArray(pkgs(index => [
                     `Project 'pkg${index}/tsconfig.json' is out of date because output file 'pkg${index}/index.js' does not exist\n\n`,
                     `Building project '${project}/pkg${index}/tsconfig.json'...\n\n`
@@ -121,4 +116,3 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         });
     }
 });
-}

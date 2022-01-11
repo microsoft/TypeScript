@@ -1,7 +1,7 @@
+import { Program, SourceFile, CancellationToken, CustomTransformers, EmitOutput, OutputFile, ReadonlyESMap, Path, ESMap, Symbol, mapDefined, getSourceFileOfNode, TypeChecker, StringLiteralLike, GetCanonicalFileName, toPath, getDirectoryPath, isStringLiteral, ModuleKind, Debug, emptyArray, firstOrUndefined, fileExtensionIsOneOf, Extension, getAnyExtensionFromPath, generateDjb2Hash, ExportedModulesFromDeclarationEmit, outFile, arrayFrom, mapDefinedIterator, isModuleWithStringLiteralName, some, isGlobalScopeAugmentation, ModuleDeclaration, isExternalOrCommonJsModule, isJsonSourceFile } from "./ts";
+import * as ts from "./ts";
 /*@internal*/
-namespace ts {
-export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
-    cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
+export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
     const outputFiles: OutputFile[] = [];
     const { emitSkipped, diagnostics, exportedModulesFromDeclarationEmit } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
     return { outputFiles, emitSkipped, diagnostics, exportedModulesFromDeclarationEmit };
@@ -11,6 +11,7 @@ export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emit
     }
 }
 
+/* @internal */
 export interface ReusableBuilderState {
     /**
      * Information of the file eg. its version, signature etc
@@ -29,6 +30,7 @@ export interface ReusableBuilderState {
     readonly exportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
 }
 
+/* @internal */
 export interface BuilderState {
     /**
      * Information of the file eg. its version, signature etc
@@ -49,8 +51,8 @@ export interface BuilderState {
     readonly exportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
 
     previousCache?: {
-        id: number,
-        version: number,
+        id: number;
+        version: number;
     };
 
     /**
@@ -63,7 +65,7 @@ export interface BuilderState {
      * That means hence forth these files are assumed to have
      * no change in their signature for this version of the program
      */
-    hasCalledUpdateShapeSignature: Set<Path>;
+    hasCalledUpdateShapeSignature: ts.Set<Path>;
     /**
      * Cache of all files excluding default library file for the current program
      */
@@ -74,6 +76,7 @@ export interface BuilderState {
     allFileNames?: readonly string[];
 }
 
+/* @internal */
 export namespace BuilderState {
     /**
      * Information about the source file: Its version and optional signature from last emit
@@ -88,34 +91,34 @@ export namespace BuilderState {
     export interface ReadonlyManyToManyPathMap {
         readonly id: number;
         clone(): ManyToManyPathMap;
-        forEach(action: (v: ReadonlySet<Path>, k: Path) => void): void;
-        getKeys(v: Path): ReadonlySet<Path> | undefined;
-        getValues(k: Path): ReadonlySet<Path> | undefined;
+        forEach(action: (v: ts.ReadonlySet<Path>, k: Path) => void): void;
+        getKeys(v: Path): ts.ReadonlySet<Path> | undefined;
+        getValues(k: Path): ts.ReadonlySet<Path> | undefined;
         hasKey(k: Path): boolean;
-        keys(): Iterator<Path>;
+        keys(): ts.Iterator<Path>;
 
         /**
          * The set of arguments to {@link deleteKeys} which have not subsequently
          * been arguments to {@link set}.  Note that a key does not have to have
          * ever been in the map to appear in this set.
          */
-        deletedKeys(): ReadonlySet<Path> | undefined;
+        deletedKeys(): ts.ReadonlySet<Path> | undefined;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
         version(): number; // Incremented each time the contents are changed
         deleteKey(k: Path): boolean;
-        set(k: Path, v: ReadonlySet<Path>): void;
+        set(k: Path, v: ts.ReadonlySet<Path>): void;
     }
 
     let manyToManyPathMapCount = 0;
     export function createManyToManyPathMap(): ManyToManyPathMap {
-        function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
+        function create(forward: ESMap<Path, ts.ReadonlySet<Path>>, reverse: ESMap<Path, ts.Set<Path>>, deleted: ts.Set<Path> | undefined): ManyToManyPathMap {
             let version = 0;
             const map: ManyToManyPathMap = {
                 id: manyToManyPathMapCount++,
                 version: () => version,
-                clone: () => create(new Map(forward), new Map(reverse), deleted && new Set(deleted)),
+                clone: () => create(new ts.Map(forward), new ts.Map(reverse), deleted && new ts.Set(deleted)),
                 forEach: fn => forward.forEach(fn),
                 getKeys: v => reverse.get(v),
                 getValues: k => forward.get(k),
@@ -124,7 +127,7 @@ export namespace BuilderState {
 
                 deletedKeys: () => deleted,
                 deleteKey: k => {
-                    (deleted ||= new Set<Path>()).add(k);
+                    (deleted ||= new ts.Set<Path>()).add(k);
 
                     const set = forward.get(k);
                     if (!set) {
@@ -167,19 +170,19 @@ export namespace BuilderState {
             return map;
         }
 
-        return create(new Map<Path, Set<Path>>(), new Map<Path, Set<Path>>(), /*deleted*/ undefined);
+        return create(new ts.Map<Path, ts.Set<Path>>(), new ts.Map<Path, ts.Set<Path>>(), /*deleted*/ undefined);
     }
 
-    function addToMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): void {
+    function addToMultimap<K, V>(map: ESMap<K, ts.Set<V>>, k: K, v: V): void {
         let set = map.get(k);
         if (!set) {
-            set = new Set<V>();
+            set = new ts.Set<V>();
             map.set(k, set);
         }
         set.add(v);
     }
 
-    function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V, removeEmpty = true): boolean {
+    function deleteFromMultimap<K, V>(map: ESMap<K, ts.Set<V>>, k: K, v: V, removeEmpty = true): boolean {
         const set = map.get(k);
 
         if (set?.delete(v)) {
@@ -219,8 +222,8 @@ export namespace BuilderState {
     /**
      * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
      */
-    function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Set<Path> | undefined {
-        let referencedFiles: Set<Path> | undefined;
+    function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): ts.Set<Path> | undefined {
+        let referencedFiles: ts.Set<Path> | undefined;
 
         // We need to use a set here since the code can contain the same import twice,
         // but that will only be one dependency.
@@ -259,9 +262,11 @@ export namespace BuilderState {
         if (sourceFile.moduleAugmentations.length) {
             const checker = program.getTypeChecker();
             for (const moduleName of sourceFile.moduleAugmentations) {
-                if (!isStringLiteral(moduleName)) continue;
+                if (!isStringLiteral(moduleName))
+                    continue;
                 const symbol = checker.getSymbolAtLocation(moduleName);
-                if (!symbol) continue;
+                if (!symbol)
+                    continue;
 
                 // Add any file other than our own as reference
                 addReferenceFromAmbientModule(symbol);
@@ -292,7 +297,7 @@ export namespace BuilderState {
         }
 
         function addReferencedFile(referencedPath: Path) {
-            (referencedFiles || (referencedFiles = new Set())).add(referencedPath);
+            (referencedFiles || (referencedFiles = new ts.Set())).add(referencedPath);
         }
     }
 
@@ -307,10 +312,10 @@ export namespace BuilderState {
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
     export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
-        const fileInfos = new Map<Path, FileInfo>();
+        const fileInfos = new ts.Map<Path, FileInfo>();
         const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createManyToManyPathMap() : undefined;
         const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
-        const hasCalledUpdateShapeSignature = new Set<Path>();
+        const hasCalledUpdateShapeSignature = new ts.Set<Path>();
         const useOldState = canReuseOldState(referencedMap, oldState);
 
         // Ensure source files have parent pointers set
@@ -359,10 +364,10 @@ export namespace BuilderState {
     export function clone(state: Readonly<BuilderState>): BuilderState {
         // Dont need to backup allFiles info since its cache anyway
         return {
-            fileInfos: new Map(state.fileInfos),
+            fileInfos: new ts.Map(state.fileInfos),
             referencedMap: state.referencedMap?.clone(),
             exportedModulesMap: state.exportedModulesMap?.clone(),
-            hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
+            hasCalledUpdateShapeSignature: new ts.Set(state.hasCalledUpdateShapeSignature),
             useFileVersionAsSignature: state.useFileVersionAsSignature,
         };
     }
@@ -375,7 +380,7 @@ export namespace BuilderState {
         // They will be committed once it is safe to use them
         // eg when calling this api from tsserver, if there is no cancellation of the operation
         // In the other cases the affected files signatures are committed only after the iteration through the result is complete
-        const signatureCache = cacheToUpdateSignature || new Map();
+        const signatureCache = cacheToUpdateSignature || new ts.Map();
         const sourceFile = programOfThisState.getSourceFileByPath(path);
         if (!sourceFile) {
             return emptyArray;
@@ -419,19 +424,16 @@ export namespace BuilderState {
         }
 
         const info = state.fileInfos.get(sourceFile.resolvedPath);
-        if (!info) return Debug.fail();
+        if (!info)
+            return Debug.fail();
 
         const prevSignature = info.signature;
         let latestSignature: string | undefined;
         if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
-            const emitOutput = getFileEmitOutput(
-                programOfThisState,
-                sourceFile,
-                /*emitOnlyDtsFiles*/ true,
-                cancellationToken,
+            const emitOutput = getFileEmitOutput(programOfThisState, sourceFile, 
+            /*emitOnlyDtsFiles*/ true, cancellationToken, 
                 /*customTransformers*/ undefined,
-                /*forceDtsEmit*/ true
-            );
+            /*forceDtsEmit*/ true);
             const firstDts = firstOrUndefined(emitOutput.outputFiles);
             if (firstDts) {
                 Debug.assert(fileExtensionIsOneOf(firstDts.name, [Extension.Dts, Extension.Dmts, Extension.Dcts]), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
@@ -468,7 +470,7 @@ export namespace BuilderState {
             return;
         }
 
-        let exportedModules: Set<Path> | undefined;
+        let exportedModules: ts.Set<Path> | undefined;
         exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFilesFromImportedModuleSymbol(symbol)));
         if (exportedModules) {
             exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules);
@@ -480,7 +482,7 @@ export namespace BuilderState {
         function addExportedModule(exportedModulePaths: Path[] | undefined) {
             if (exportedModulePaths?.length) {
                 if (!exportedModules) {
-                    exportedModules = new Set();
+                    exportedModules = new ts.Set();
                 }
                 exportedModulePaths.forEach(path => exportedModules!.add(path));
             }
@@ -531,7 +533,7 @@ export namespace BuilderState {
         }
 
         // Get the references, traversing deep from the referenceMap
-        const seenMap = new Set<Path>();
+        const seenMap = new ts.Set<Path>();
         const queue = [sourceFile.resolvedPath];
         while (queue.length) {
             const path = queue.pop()!;
@@ -610,7 +612,8 @@ export namespace BuilderState {
         }
 
         let result: SourceFile[] | undefined;
-        if (firstSourceFile) addSourceFile(firstSourceFile);
+        if (firstSourceFile)
+            addSourceFile(firstSourceFile);
         for (const sourceFile of programOfThisState.getSourceFiles()) {
             if (sourceFile !== firstSourceFile) {
                 addSourceFile(sourceFile);
@@ -655,7 +658,7 @@ export namespace BuilderState {
         // Now we need to if each file in the referencedBy list has a shape change as well.
         // Because if so, its own referencedBy files need to be saved as well to make the
         // emitting result consistent with files on disk.
-        const seenFileNamesMap = new Map<Path, SourceFile>();
+        const seenFileNamesMap = new ts.Map<Path, SourceFile>();
 
         // Start with the paths this file was referenced by
         seenFileNamesMap.set(sourceFileWithUpdatedShape.resolvedPath, sourceFileWithUpdatedShape);
@@ -674,5 +677,4 @@ export namespace BuilderState {
         // Return array of values that needs emit
         return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
     }
-}
 }

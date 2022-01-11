@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { TestFSWithWatch, emptyArray, arrayToMap, identity } from "../../ts";
+import { createServerHost, libFile, createProjectService, checkWatchedFilesDetailed, checkWatchedDirectoriesDetailed, getTypeRootsFromLocation, checkNumberOfProjects, checkProjectActualFiles, File, checkOrphanScriptInfos } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {
         const coreConfig = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json");
@@ -46,14 +48,14 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
     describe("on transitive references in different folders", () => {
         function createService() {
             const aConfig: File = {
-                path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                path: `${projectRoot}/a/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true },
                     files: ["index.ts"]
                 }),
             };
             const bConfig: File = {
-                path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                path: `${projectRoot}/b/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     files: ["index.ts"],
@@ -61,7 +63,7 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
                 }),
             };
             const cConfig: File = {
-                path: `${tscWatch.projectRoot}/c/tsconfig.json`,
+                path: `${projectRoot}/c/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     files: ["index.ts"],
@@ -69,23 +71,23 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
                 }),
             };
             const aTs: File = {
-                path: `${tscWatch.projectRoot}/a/index.ts`,
+                path: `${projectRoot}/a/index.ts`,
                 content: `export class A {}`,
             };
             const bTs: File = {
-                path: `${tscWatch.projectRoot}/b/index.ts`,
+                path: `${projectRoot}/b/index.ts`,
                 content: `import {A} from '@ref/a';
 export const b = new A();`,
             };
             const cTs: File = {
-                path: `${tscWatch.projectRoot}/c/index.ts`,
+                path: `${projectRoot}/c/index.ts`,
                 content: `import {b} from '../b';
 import {X} from "@ref/a";
 b;
 X;`,
             };
             const refsTs: File = {
-                path: `${tscWatch.projectRoot}/refs/a.d.ts`,
+                path: `${projectRoot}/refs/a.d.ts`,
                 content: `export class X {}
 export class A {}`
             };
@@ -101,13 +103,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
 
@@ -118,13 +120,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
         });
@@ -132,7 +134,7 @@ export class A {}`
         it("edit on config file", () => {
             const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
             const nRefsTs: File = {
-                path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
+                path: `${projectRoot}/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const cTsConfigJson = JSON.parse(cConfig.content);
@@ -144,13 +146,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, nRefsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/nrefs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [refsTs.path]);
@@ -161,13 +163,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [nRefsTs.path]);
@@ -176,7 +178,7 @@ export class A {}`
         it("edit in referenced config file", () => {
             const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
             const nRefsTs: File = {
-                path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
+                path: `${projectRoot}/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const bTsConfigJson = JSON.parse(bConfig.content);
@@ -188,13 +190,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path, nRefsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                `${projectRoot}/nrefs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [aTs.path]);
@@ -205,13 +207,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [nRefsTs.path]);
@@ -225,12 +227,12 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [aTs.path]);
@@ -241,13 +243,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
         });
@@ -260,13 +262,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
 
@@ -276,13 +278,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
         });
@@ -291,41 +293,41 @@ export class A {}`
     describe("on transitive references in different folders without files", () => {
         function createService() {
             const aConfig: File = {
-                path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                path: `${projectRoot}/a/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { composite: true } }),
             };
             const bConfig: File = {
-                path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                path: `${projectRoot}/b/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     references: [{ path: `../a` }]
                 }),
             };
             const cConfig: File = {
-                path: `${tscWatch.projectRoot}/c/tsconfig.json`,
+                path: `${projectRoot}/c/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     references: [{ path: `../b` }]
                 }),
             };
             const aTs: File = {
-                path: `${tscWatch.projectRoot}/a/index.ts`,
+                path: `${projectRoot}/a/index.ts`,
                 content: `export class A {}`,
             };
             const bTs: File = {
-                path: `${tscWatch.projectRoot}/b/index.ts`,
+                path: `${projectRoot}/b/index.ts`,
                 content: `import {A} from '@ref/a';
 export const b = new A();`,
             };
             const cTs: File = {
-                path: `${tscWatch.projectRoot}/c/index.ts`,
+                path: `${projectRoot}/c/index.ts`,
                 content: `import {b} from '../b';
 import {X} from "@ref/a";
 b;
 X;`,
             };
             const refsTs: File = {
-                path: `${tscWatch.projectRoot}/refs/a.d.ts`,
+                path: `${projectRoot}/refs/a.d.ts`,
                 content: `export class X {}
 export class A {}`
             };
@@ -341,15 +343,15 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             const expectedWatchedDirectoriesDetailed = arrayToMap([
-                `${tscWatch.projectRoot}/c`, // Wild card directory
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/c`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], identity, () => 1);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/a`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/b`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
 
@@ -360,7 +362,7 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
@@ -369,7 +371,7 @@ export class A {}`
         it("edit on config file", () => {
             const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
             const nRefsTs: File = {
-                path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
+                path: `${projectRoot}/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const cTsConfigJson = JSON.parse(cConfig.content);
@@ -381,15 +383,15 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, nRefsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             const expectedWatchedDirectoriesDetailed = arrayToMap([
-                `${tscWatch.projectRoot}/c`, // Wild card directory
-                `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/c`,
+                `${projectRoot}/nrefs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], identity, () => 1);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/a`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/b`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [refsTs.path]);
@@ -400,10 +402,10 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
-            expectedWatchedDirectoriesDetailed.delete(`${tscWatch.projectRoot}/nrefs`);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/refs`, 1);  // Failed lookup since refs/a.ts does not exist
+            expectedWatchedDirectoriesDetailed.delete(`${projectRoot}/nrefs`);
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/refs`, 1); // Failed lookup since refs/a.ts does not exist
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [nRefsTs.path]);
@@ -412,7 +414,7 @@ export class A {}`
         it("edit in referenced config file", () => {
             const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
             const nRefsTs: File = {
-                path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
+                path: `${projectRoot}/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const bTsConfigJson = JSON.parse(bConfig.content);
@@ -424,16 +426,16 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path, nRefsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             const expectedWatchedDirectoriesDetailed = arrayToMap([
-                `${tscWatch.projectRoot}/a`, // Wild card directory
-                `${tscWatch.projectRoot}/c`, // Wild card directory
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/a`,
+                `${projectRoot}/c`,
+                `${projectRoot}/refs`,
+                `${projectRoot}/nrefs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], identity, () => 1);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/b`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [aTs.path]);
@@ -444,10 +446,10 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
-            expectedWatchedDirectoriesDetailed.delete(`${tscWatch.projectRoot}/nrefs`);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.delete(`${projectRoot}/nrefs`);
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/a`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [nRefsTs.path]);
@@ -461,13 +463,13 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             checkWatchedDirectoriesDetailed(host, [
-                `${tscWatch.projectRoot}/c`, // Wild card directory
-                `${tscWatch.projectRoot}/b`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/c`,
+                `${projectRoot}/b`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], 1, /*recursive*/ true);
             // Script infos arent deleted till next file open
             checkOrphanScriptInfos(service, [aTs.path]);
@@ -478,15 +480,15 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             const expectedWatchedDirectoriesDetailed = arrayToMap([
-                `${tscWatch.projectRoot}/c`, // Wild card directory
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/c`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], identity, () => 1);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/a`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/b`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
         });
@@ -499,15 +501,15 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
             const expectedWatchedDirectoriesDetailed = arrayToMap([
-                `${tscWatch.projectRoot}/c`, // Wild card directory
-                `${tscWatch.projectRoot}/a`, // Failed to package json
-                `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
+                `${projectRoot}/c`,
+                `${projectRoot}/a`,
+                `${projectRoot}/refs`,
+                ...getTypeRootsFromLocation(`${projectRoot}/c`)
             ], identity, () => 1);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/b`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
 
@@ -517,12 +519,11 @@ export class A {}`
             checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
             checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
             checkWatchedDirectoriesDetailed(host, [
-                tscWatch.projectRoot // watches for directories created for resolution of b
+                projectRoot // watches for directories created for resolution of b
             ], 1, /*recursive*/ false);
-            expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
+            expectedWatchedDirectoriesDetailed.set(`${projectRoot}/a`, 2); // Failed to package json and wild card directory
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
             checkOrphanScriptInfos(service, emptyArray);
         });
     });
 });
-}

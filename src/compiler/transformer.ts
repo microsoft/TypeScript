@@ -1,5 +1,6 @@
+import { ModuleKind, TransformerFactory, SourceFile, Bundle, transformECMAScriptModule, transformSystemModule, transformNodeModule, transformModule, EmitTransformers, emptyArray, CompilerOptions, CustomTransformers, getEmitScriptTarget, getEmitModuleKind, addRange, map, transformTypeScript, transformClassFields, getJSXTransformEnabled, transformJsx, ScriptTarget, transformESNext, transformES2021, transformES2020, transformES2019, transformES2018, transformES2017, transformES2016, transformES2015, transformGenerators, transformES5, transformDeclarations, CustomTransformer, Transformer, isBundle, CustomTransformerFactory, TransformationContext, chainBundle, EmitHint, Node, EmitResolver, EmitHost, NodeFactory, TransformationResult, SyntaxKind, VariableDeclaration, FunctionDeclaration, Statement, LexicalEnvironmentFlags, Identifier, EmitHelper, DiagnosticWithLocation, memoize, createEmitHelperFactory, Debug, disposeEmitNodes, getSourceFileOfNode, getParseTreeNode, tracing, isSourceFile, getEmitFlags, EmitFlags, setEmitFlags, some, NodeFlags, append, factory, notImplemented, noop, returnUndefined } from "./ts";
+import { mark, measure } from "./ts.performance";
 /* @internal */
-namespace ts {
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {
         case ModuleKind.ESNext:
@@ -17,6 +18,7 @@ function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<Source
     }
 }
 
+/* @internal */
 const enum TransformationState {
     Uninitialized,
     Initialized,
@@ -24,13 +26,16 @@ const enum TransformationState {
     Disposed
 }
 
+/* @internal */
 const enum SyntaxKindFeatureFlags {
     Substitution = 1 << 0,
-    EmitNotifications = 1 << 1,
+    EmitNotifications = 1 << 1
 }
 
+/* @internal */
 export const noTransformers: EmitTransformers = { scriptTransformers: emptyArray, declarationTransformers: emptyArray };
 
+/* @internal */
 export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean): EmitTransformers {
     return {
         scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnlyDtsFiles),
@@ -38,8 +43,10 @@ export function getTransformers(compilerOptions: CompilerOptions, customTransfor
     };
 }
 
+/* @internal */
 function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
-    if (emitOnlyDtsFiles) return emptyArray;
+    if (emitOnlyDtsFiles)
+        return emptyArray;
 
     const languageVersion = getEmitScriptTarget(compilerOptions);
     const moduleKind = getEmitModuleKind(compilerOptions);
@@ -99,6 +106,7 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
     return transformers;
 }
 
+/* @internal */
 function getDeclarationTransformers(customTransformers?: CustomTransformers) {
     const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
     transformers.push(transformDeclarations);
@@ -109,6 +117,7 @@ function getDeclarationTransformers(customTransformers?: CustomTransformers) {
 /**
  * Wrap a custom script or declaration transformer object in a `Transformer` callback with fallback support for transforming bundles.
  */
+/* @internal */
 function wrapCustomTransformer(transformer: CustomTransformer): Transformer<Bundle | SourceFile> {
     return node => isBundle(node) ? transformer.transformBundle(node) : transformer.transformSourceFile(node);
 }
@@ -116,6 +125,7 @@ function wrapCustomTransformer(transformer: CustomTransformer): Transformer<Bund
 /**
  * Wrap a transformer factory that may return a custom script or declaration transformer object.
  */
+/* @internal */
 function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (context: TransformationContext, tx: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
     return context => {
         const customTransformer = transformer(context);
@@ -125,18 +135,22 @@ function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer
     };
 }
 
+/* @internal */
 function wrapScriptTransformerFactory(transformer: TransformerFactory<SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
     return wrapCustomTransformerFactory(transformer, chainBundle);
 }
 
+/* @internal */
 function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
     return wrapCustomTransformerFactory(transformer, (_, node) => node);
 }
 
+/* @internal */
 export function noEmitSubstitution(_hint: EmitHint, node: Node) {
     return node;
 }
 
+/* @internal */
 export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: EmitHint, node: Node) => void) {
     callback(hint, node);
 }
@@ -151,6 +165,7 @@ export function noEmitNotification(hint: EmitHint, node: Node, callback: (hint: 
  * @param transforms An array of `TransformerFactory` callbacks.
  * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
  */
+/* @internal */
 export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
     const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
     let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
@@ -177,8 +192,8 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     const context: TransformationContext = {
         factory,
         getCompilerOptions: () => options,
-        getEmitResolver: () => resolver!, // TODO: GH#18217
-        getEmitHost: () => host!, // TODO: GH#18217
+        getEmitResolver: () => resolver!,
+        getEmitHost: () => host!,
         getEmitHelperFactory: memoize(() => createEmitHelperFactory(context)),
         startLexicalEnvironment,
         suspendLexicalEnvironment,
@@ -220,7 +235,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
     }
 
-    performance.mark("beforeTransform");
+    mark("beforeTransform");
 
     // Chain together and initialize each transformer.
     const transformersWithContext = transformers.map(t => t(context));
@@ -245,8 +260,8 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     // prevent modification of the lexical environment.
     state = TransformationState.Completed;
 
-    performance.mark("afterTransform");
-    performance.measure("transformTime", "beforeTransform", "afterTransform");
+    mark("afterTransform");
+    measure("transformTime", "beforeTransform", "afterTransform");
 
     return {
         transformed,
@@ -434,9 +449,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
 
             if (lexicalEnvironmentVariableDeclarations) {
                 const statement = factory.createVariableStatement(
-                    /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
-                );
+                /*modifiers*/ undefined, factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations));
 
                 setEmitFlags(statement, EmitFlags.CustomPrologue);
 
@@ -503,12 +516,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         const statements: Statement[] | undefined = some(blockScopedVariableDeclarations) ?
             [
                 factory.createVariableStatement(
-                    /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(
-                        blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
-                        NodeFlags.Let
-                    )
-                )
+                /*modifiers*/ undefined, factory.createVariableDeclarationList(blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)), NodeFlags.Let))
             ] : undefined;
         blockScopeStackOffset--;
         blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];
@@ -565,8 +573,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     }
 }
 
+/* @internal */
 export const nullTransformationContext: TransformationContext = {
-    factory: factory, // eslint-disable-line object-shorthand
+    factory: factory,
     getCompilerOptions: () => ({}),
     getEmitResolver: notImplemented,
     getEmitHost: notImplemented,
@@ -593,4 +602,3 @@ export const nullTransformationContext: TransformationContext = {
     onEmitNode: noEmitNotification,
     addDiagnostic: noop,
 };
-}

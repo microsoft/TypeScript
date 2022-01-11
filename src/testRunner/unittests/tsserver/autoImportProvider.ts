@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { File, openFilesForSession, checkNumberOfInferredProjects, checkNumberOfConfiguredProjects, createServerHost, createSession, protocol } from "../../ts.projectSystem";
+import { NormalizedPath, ProjectKind, AutoImportProviderProject } from "../../ts.server";
+import { flatten, sourceFileAffectingCompilerOptions, hasProperty, Debug } from "../../ts";
 const angularFormsDts: File = {
     path: "/node_modules/@angular/forms/forms.d.ts",
     content: "export declare class PatternValidator {}",
@@ -67,7 +69,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         checkNumberOfInferredProjects(projectService, 1);
         checkNumberOfConfiguredProjects(projectService, 0);
         assert.isUndefined(projectService
-            .getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)!
+            .getDefaultProjectForFile(angularFormsDts.path as NormalizedPath, /*ensureProject*/ true)!
             .getLanguageService()
             .getAutoImportProvider());
     });
@@ -77,14 +79,10 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         checkNumberOfInferredProjects(projectService, 0);
         openFilesForSession([angularFormsDts], session);
         checkNumberOfInferredProjects(projectService, 1);
-        assert.equal(
-            projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
-            server.ProjectKind.Inferred);
+        assert.equal(projectService.getDefaultProjectForFile(angularFormsDts.path as NormalizedPath, /*ensureProject*/ true)?.projectKind, ProjectKind.Inferred);
 
         updateFile(indexTs.path, "import '@angular/forms'");
-        assert.equal(
-            projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
-            server.ProjectKind.Configured);
+        assert.equal(projectService.getDefaultProjectForFile(angularFormsDts.path as NormalizedPath, /*ensureProject*/ true)?.projectKind, ProjectKind.Configured);
 
         assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
     });
@@ -119,9 +117,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         assert.ok(autoImportProvider);
 
         updateFile(indexTs.path, "console.log(0)");
-        assert.strictEqual(
-            projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider(),
-            autoImportProvider);
+        assert.strictEqual(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider(), autoImportProvider);
     });
 
     it("Closes AutoImportProviderProject when host project closes", () => {
@@ -305,10 +301,7 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 
     it("Can use the same document registry bucket key as main program", () => {
         for (const option of sourceFileAffectingCompilerOptions) {
-            assert(
-                !hasProperty(server.AutoImportProviderProject.compilerOptionsOverrides, option.name),
-                `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`
-            );
+            assert(!hasProperty(AutoImportProviderProject.compilerOptionsOverrides, option.name), `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`);
         }
     });
 });
@@ -349,5 +342,4 @@ function setup(files: File[]) {
             }
         });
     }
-}
 }

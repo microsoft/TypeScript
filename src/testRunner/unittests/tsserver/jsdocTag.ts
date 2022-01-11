@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+import { File, protocol, createSession, createServerHost, openFilesForSession } from "../../ts.projectSystem";
 describe("unittests:: tsserver:: jsdoc @link ", () => {
     const config: File = {
         path: "/a/tsconfig.json",
@@ -12,10 +12,10 @@ describe("unittests:: tsserver:: jsdoc @link ", () => {
 `
     };
     function assertQuickInfoJSDoc(file: File, options: {
-        displayPartsForJSDoc: boolean,
-        command: protocol.CommandTypes,
-        tags: string | unknown[] | undefined,
-        documentation: string | unknown[]
+        displayPartsForJSDoc: boolean;
+        command: protocol.CommandTypes;
+        tags: string | unknown[] | undefined;
+        documentation: string | unknown[];
     }) {
 
         const { command, displayPartsForJSDoc, tags, documentation } = options;
@@ -270,10 +270,10 @@ var x = 1
     });
 
     function assertSignatureHelpJSDoc(options: {
-        displayPartsForJSDoc: boolean,
-        command: protocol.CommandTypes,
-        documentation: string | unknown[],
-        tags: unknown[]
+        displayPartsForJSDoc: boolean;
+        command: protocol.CommandTypes;
+        documentation: string | unknown[];
+        tags: unknown[];
     }) {
         const linkInParamTag: File = {
             path: "/a/someFile1.js",
@@ -524,9 +524,9 @@ x(1)`
     });
 
     function assertCompletionsJSDoc(options: {
-        displayPartsForJSDoc: boolean,
-        command: protocol.CommandTypes,
-        tags: unknown[]
+        displayPartsForJSDoc: boolean;
+        command: protocol.CommandTypes;
+        tags: unknown[];
     }) {
         const linkInParamJSDoc: File = {
             path: "/a/someFile1.js",
@@ -691,4 +691,3 @@ foo`
         });
     });
 });
-}

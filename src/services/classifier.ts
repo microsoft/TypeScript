@@ -1,4 +1,5 @@
-namespace ts {
+import { Classifier, createScanner, ScriptTarget, EndOfLineState, ClassificationResult, Classifications, SyntaxKind, isTrivia, lastOrUndefined, Debug, isKeyword, arrayToNumericMap, Scanner, CharacterCodes, isTemplateLiteralKind, ClassificationType, Push, ClassificationInfo, TokenClass, isAccessibilityModifier, TypeChecker, CancellationToken, SourceFile, __String, TextSpan, ClassifiedSpan, Node, textSpanIntersectsWith, isIdentifier, nodeIsMissing, getMeaningFromLocation, Symbol, SemanticMeaning, SymbolFlags, some, isModuleDeclaration, getModuleInstanceState, ModuleInstanceState, ClassificationTypeNames, createTextSpan, couldStartTrivia, parseIsolatedJSDocComment, setParent, HasJSDoc, JSDoc, JSDocParameterTag, JSDocPropertyTag, JSDocTemplateTag, JSDocTypedefTag, JSDocCallbackTag, JSDocTypeTag, JSDocThisTag, JSDocEnumTag, JSDocReturnTag, JSDocSeeTag, JSDocImplementsTag, JSDocAugmentsTag, commentPragmas, isLineBreak, isJSDoc, isToken, JsxOpeningElement, JsxClosingElement, JsxSelfClosingElement, JsxAttribute, getTypeArgumentOrTypeParameterList, isPunctuation, ClassDeclaration, TypeParameterDeclaration, InterfaceDeclaration, EnumDeclaration, ModuleDeclaration, ParameterDeclaration, isThisIdentifier, isConstTypeReference, decodedTextSpanIntersectsWith } from "./ts";
+import * as ts from "./ts";
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): Classifier {
     const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
@@ -199,7 +200,8 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
     switch (token) {
         case SyntaxKind.StringLiteral: {
             // Check to see if we finished up on a multiline string literal.
-            if (!scanner.isUnterminated()) return undefined;
+            if (!scanner.isUnterminated())
+                return undefined;
 
             const tokenText = scanner.getTokenText();
             const lastCharIndex = tokenText.length - 1;
@@ -209,7 +211,8 @@ function getNewEndOfLineState(scanner: Scanner, token: SyntaxKind, lastOnTemplat
             }
 
             // If we have an odd number of backslashes, then the multiline string is unclosed
-            if ((numBackslashes & 1) === 0) return undefined;
+            if ((numBackslashes & 1) === 0)
+                return undefined;
             return tokenText.charCodeAt(0) === CharacterCodes.doubleQuote ? EndOfLineState.InDoubleQuoteStringLiteral : EndOfLineState.InSingleQuoteStringLiteral;
         }
         case SyntaxKind.MultiLineCommentTrivia:
@@ -326,7 +329,10 @@ function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind): boolean {
     }
 }
 
-function getPrefixFromLexState(lexState: EndOfLineState): { readonly prefix: string, readonly pushTemplate?: true } {
+function getPrefixFromLexState(lexState: EndOfLineState): {
+    readonly prefix: string;
+    readonly pushTemplate?: true;
+} {
     // If we're in a string literal, then prepend: "\
     // (and a newline).  That way when we lex we'll think we're still in a string literal.
     //
@@ -452,7 +458,7 @@ function classFromKind(token: SyntaxKind): ClassificationType {
 }
 
 /* @internal */
-export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): ClassifiedSpan[] {
+export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ts.ReadonlySet<__String>, span: TextSpan): ClassifiedSpan[] {
     return convertClassificationsToSpans(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
 }
 
@@ -480,7 +486,7 @@ function checkForClassificationCancellation(cancellationToken: CancellationToken
 }
 
 /* @internal */
-export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): Classifications {
+export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ts.ReadonlySet<__String>, span: TextSpan): Classifications {
     const spans: number[] = [];
     sourceFile.forEachChild(function cb(node: Node): void {
         // Only walk into nodes that intersect the requested span.
@@ -546,8 +552,7 @@ function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning, chec
 
 /** Returns true if there exists a module that introduces entities on the value side. */
 function hasValueSideModule(symbol: Symbol): boolean {
-    return some(symbol.declarations, declaration =>
-        isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
+    return some(symbol.declarations, declaration => isModuleDeclaration(declaration) && getModuleInstanceState(declaration) === ModuleInstanceState.Instantiated);
 }
 
 function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
@@ -1101,5 +1106,4 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
             }
         }
     }
-}
 }

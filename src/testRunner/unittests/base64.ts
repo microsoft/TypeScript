@@ -1,4 +1,4 @@
-namespace ts {
+import { base64decode, convertToBase64 } from "../ts";
 describe("unittests:: base64", () => {
     describe("base64decode", () => {
         it("can decode input strings correctly without needing a host implementation", () => {
@@ -19,4 +19,3 @@ describe("unittests:: base64", () => {
         });
     });
 });
-}

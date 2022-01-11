@@ -1,9 +1,10 @@
+import { TextInsertion, TodoCommentDescriptor, TodoComment, OutliningSpanKind, EndOfLineState, OutputFile, HighlightSpanKind, RenameLocation, ScriptElementKind, ScriptKind, TypeAcquisition, TextChange, FileExtensionInfo, CompilerOptionsValue, MapLike, PluginImport, ProjectReference } from "./ts";
+import * as ts from "./ts";
 /* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 
 /**
  * Declaration module describing the TypeScript Server protocol
  */
-namespace ts.server.protocol {
 // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
 export const enum CommandTypes {
     JsxClosingTag = "jsxClosingTag",
@@ -104,7 +105,7 @@ export const enum CommandTypes {
     Cleanup = "cleanup",
     GetOutliningSpans = "getOutliningSpans",
     /* @internal */
-    GetOutliningSpansFull = "outliningSpans", // Full command name is different for backward compatibility purposes
+    GetOutliningSpansFull = "outliningSpans",
     TodoComments = "todoComments",
     Indentation = "indentation",
     DocCommentTemplate = "docCommentTemplate",
@@ -727,7 +728,8 @@ export interface ApplyCodeActionCommandRequest extends Request {
 }
 
 // All we need is the `success` and `message` fields of Response.
-export interface ApplyCodeActionCommandResponse extends Response {}
+export interface ApplyCodeActionCommandResponse extends Response {
+}
 
 export interface FileRangeRequestArgs extends FileRequestArgs {
     /**
@@ -865,12 +867,12 @@ export interface EncodedSemanticClassificationsRequestArgs extends FileRequestAr
      * Optional parameter for the semantic highlighting response, if absent it
      * defaults to "original".
      */
-    format?: "original" | "2020"
+    format?: "original" | "2020";
 }
 
 /** The response for a EncodedSemanticClassificationsRequest */
 export interface EncodedSemanticClassificationsResponse extends Response {
-    body?: EncodedSemanticClassificationsResponseBody
+    body?: EncodedSemanticClassificationsResponseBody;
 }
 
 /**
@@ -1062,7 +1064,8 @@ export interface JsxClosingTagRequest extends FileLocationRequest {
     readonly arguments: JsxClosingTagRequestArgs;
 }
 
-export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {
+}
 
 export interface JsxClosingTagResponse extends Response {
     readonly body: TextInsertion;
@@ -1347,7 +1350,7 @@ export interface ExternalFile {
     /**
      * Script kind of the file
      */
-    scriptKind?: ScriptKindName | ts.ScriptKind;
+    scriptKind?: ScriptKindName | ScriptKind;
     /**
      * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
      */
@@ -1511,7 +1514,7 @@ export interface ChangedOpenFile {
     /**
      * List of changes that should be applied to known open file
      */
-    changes: ts.TextChange[];
+    changes: TextChange[];
 }
 
 
@@ -1552,21 +1555,21 @@ export const enum WatchFileKind {
     DynamicPriorityPolling = "DynamicPriorityPolling",
     FixedChunkSizePolling = "FixedChunkSizePolling",
     UseFsEvents = "UseFsEvents",
-    UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
+    UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory"
 }
 
 export const enum WatchDirectoryKind {
     UseFsEvents = "UseFsEvents",
     FixedPollingInterval = "FixedPollingInterval",
     DynamicPriorityPolling = "DynamicPriorityPolling",
-    FixedChunkSizePolling = "FixedChunkSizePolling",
+    FixedChunkSizePolling = "FixedChunkSizePolling"
 }
 
 export const enum PollingWatchKind {
     FixedInterval = "FixedInterval",
     PriorityInterval = "PriorityInterval",
     DynamicPriority = "DynamicPriority",
-    FixedChunkSize = "FixedChunkSize",
+    FixedChunkSize = "FixedChunkSize"
 }
 
 export interface WatchOptions {
@@ -2154,7 +2157,7 @@ export const enum CompletionTriggerKind {
     TriggerCharacter = 2,
 
     /** Completion was re-triggered as the current completion list is incomplete. */
-    TriggerForIncompleteCompletions = 3,
+    TriggerForIncompleteCompletions = 3
 }
 
 /**
@@ -2505,10 +2508,7 @@ export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
     triggerReason?: SignatureHelpTriggerReason;
 }
 
-export type SignatureHelpTriggerReason =
-    | SignatureHelpInvokedReason
-    | SignatureHelpCharacterTypedReason
-    | SignatureHelpRetriggeredReason;
+export type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
 
 /**
  * Signals that the user manually requested signature help.
@@ -2924,17 +2924,7 @@ export interface LargeFileReferencedEventBody {
 }
 
 /*@internal*/
-export type AnyEvent =
-    RequestCompletedEvent
-    | DiagnosticEvent
-    | ConfigFileDiagnosticEvent
-    | ProjectLanguageServiceStateEvent
-    | TelemetryEvent
-    | ProjectsUpdatedInBackgroundEvent
-    | ProjectLoadingStartEvent
-    | ProjectLoadingFinishEvent
-    | SurveyReadyEvent
-    | LargeFileReferencedEvent;
+export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
 /**
  * Arguments for reload request.
@@ -3287,7 +3277,7 @@ export interface NavTreeResponse extends Response {
 export interface CallHierarchyItem {
     name: string;
     kind: ScriptElementKind;
-    kindModifiers?: string
+    kindModifiers?: string;
     file: string;
     span: TextSpan;
     selectionSpan: TextSpan;
@@ -3331,13 +3321,13 @@ export interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
 export const enum IndentStyle {
     None = "None",
     Block = "Block",
-    Smart = "Smart",
+    Smart = "Smart"
 }
 
 export enum SemicolonPreference {
     Ignore = "ignore",
     Insert = "insert",
-    Remove = "remove",
+    Remove = "remove"
 }
 
 export interface EditorSettings {
@@ -3499,7 +3489,7 @@ export const enum JsxEmit {
     None = "None",
     Preserve = "Preserve",
     ReactNative = "ReactNative",
-    React = "React",
+    React = "React"
 }
 
 export const enum ModuleKind {
@@ -3515,12 +3505,12 @@ export const enum ModuleKind {
 
 export const enum ModuleResolutionKind {
     Classic = "Classic",
-    Node = "Node",
+    Node = "Node"
 }
 
 export const enum NewLineKind {
     Crlf = "Crlf",
-    Lf = "Lf",
+    Lf = "Lf"
 }
 
 export const enum ScriptTarget {
@@ -3563,6 +3553,5 @@ export const enum ClassificationType {
     jsxAttribute = 22,
     jsxText = 23,
     jsxAttributeStringLiteralValue = 24,
-    bigintLiteral = 25,
-}
+    bigintLiteral = 25
 }

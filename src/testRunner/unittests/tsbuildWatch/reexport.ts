@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { WatchedSystem, verifyTscWatch, createWatchedSystem, libFile, replaceFileText } from "../../ts.tscWatch";
+import { TestFSWithWatch, libContent } from "../../ts";
 describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
     function build(sys: WatchedSystem) {
         sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
@@ -10,8 +11,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
         scenario: "reexport",
         subScenario: "Reports errors correctly",
         commandLineArgs: ["-b", "-w", "-verbose", "src"],
-        sys: () => createWatchedSystem(
-            [
+        sys: () => createWatchedSystem([
                 ...[
                     "src/tsconfig.json",
                     "src/main/tsconfig.json", "src/main/index.ts",
@@ -19,9 +19,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
                 ]
                     .map(f => TestFSWithWatch.getTsBuildProjectFile("reexport", f)),
                 { path: libFile.path, content: libContent }
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/reexport` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/reexport` }),
         changes: [
             {
                 caption: "Introduce error",
@@ -36,4 +34,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
         ]
     });
 });
-}

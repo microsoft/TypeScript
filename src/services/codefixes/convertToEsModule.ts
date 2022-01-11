@@ -1,10 +1,13 @@
+import { registerCodeFix, createCodeFixActionWithoutFixAll, moduleSpecifierToValidIdentifier } from "../ts.codefix";
+import { Diagnostics, getEmitScriptTarget, getQuotePreference, SourceFile, QuotePreference, getResolvedModule, getModeForUsageLocation, importFromModuleSpecifier, SyntaxKind, makeImport, isRequireCall, factory, getSynthesizedDeepClone, TypeChecker, ScriptTarget, ESMap, Node, filter, isVariableStatement, copyEntries, ReadonlyESMap, isNonContextualKeyword, SymbolFlags, PropertyAccessExpression, Identifier, isPropertyAccessExpression, isExportsOrModuleExportsOrAlias, isIdentifier, isBinaryExpression, Statement, VariableStatement, ExpressionStatement, BinaryExpression, map, flatMap, forEach, BindingName, StringLiteralLike, Debug, isObjectLiteralExpression, createRange, ObjectLiteralExpression, mapAllOrFail, ObjectLiteralElementLike, emptyMap, ReadonlyCollection, __String, InternalSymbolName, ExportDeclaration, isFunctionExpression, isArrowFunction, isClassExpression, findChildOfKind, Expression, FunctionExpression, ArrowFunction, ClassExpression, NodeArray, some, arrayFrom, rangeContainsRange, isArray, getSynthesizedDeepClonesWithReplacements, getSynthesizedDeepCloneWithReplacements, mapIterator, createMultiMap, BindingElement, ImportSpecifier, Modifier, MethodDeclaration, FunctionDeclaration, getSynthesizedDeepClones, concatenate, ClassDeclaration, ImportDeclaration, NodeFlags, ExportSpecifier } from "../ts";
+import { ChangeTracker } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],
     getCodeActions(context) {
         const { sourceFile, program, preferences } = context;
-        const changes = textChanges.ChangeTracker.with(context, changes => {
+        const changes = ChangeTracker.with(context, changes => {
             const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
@@ -17,7 +20,8 @@ registerCodeFix({
     },
 });
 
-function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
+/* @internal */
+function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: ChangeTracker, quotePreference: QuotePreference) {
     for (const moduleSpecifier of importingFile.imports) {
         const imported = getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier));
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
@@ -39,8 +43,9 @@ function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: Sour
 }
 
 /** @returns Whether we converted a `module.exports =` to a default export. */
-function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
-    const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new Set() };
+/* @internal */
+function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
+    const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new ts.Set() };
     const exports = collectExportRenames(sourceFile, checker, identifiers);
     convertExportsAccesses(sourceFile, exports, changes);
     let moduleExportsChangedToDefault = false;
@@ -49,7 +54,7 @@ function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, cha
     for (const statement of filter(sourceFile.statements, isVariableStatement)) {
         const newUseSites = convertVariableStatement(sourceFile, statement, changes, checker, identifiers, target, quotePreference);
         if (newUseSites) {
-            copyEntries(newUseSites, useSitesToUnqualify ??= new Map());
+            copyEntries(newUseSites, useSitesToUnqualify ??= new ts.Map());
         }
     }
     // `convertStatement` will delete entries from `useSitesToUnqualify` when containing statements are replaced
@@ -74,10 +79,12 @@ function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, cha
  *     export { _x as x };
  * This conversion also must place if the exported name is not a valid identifier, e.g. `exports.class = 0;`.
  */
+/* @internal */
 type ExportRenames = ReadonlyESMap<string, string>;
 
+/* @internal */
 function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
-    const res = new Map<string, string>();
+    const res = new ts.Map<string, string>();
     forEachExportReference(sourceFile, node => {
         const { text, originalKeywordKind } = node.name;
         if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
@@ -89,7 +96,8 @@ function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, iden
     return res;
 }
 
-function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, changes: textChanges.ChangeTracker): void {
+/* @internal */
+function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, changes: ChangeTracker): void {
     forEachExportReference(sourceFile, (node, isAssignmentLhs) => {
         if (isAssignmentLhs) {
             return;
@@ -99,30 +107,27 @@ function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, 
     });
 }
 
-function forEachExportReference(sourceFile: SourceFile, cb: (node: (PropertyAccessExpression & { name: Identifier }), isAssignmentLhs: boolean) => void): void {
+/* @internal */
+function forEachExportReference(sourceFile: SourceFile, cb: (node: (PropertyAccessExpression & {
+    name: Identifier;
+}), isAssignmentLhs: boolean) => void): void {
     sourceFile.forEachChild(function recur(node) {
         if (isPropertyAccessExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node.expression) && isIdentifier(node.name)) {
             const { parent } = node;
-            cb(node as typeof node & { name: Identifier }, isBinaryExpression(parent) && parent.left === node && parent.operatorToken.kind === SyntaxKind.EqualsToken);
+            cb(node as typeof node & {
+                name: Identifier;
+            }, isBinaryExpression(parent) && parent.left === node && parent.operatorToken.kind === SyntaxKind.EqualsToken);
         }
         node.forEachChild(recur);
     });
 }
 
 /** Whether `module.exports =` was changed to `export default` */
+/* @internal */
 type ModuleExportsChanged = boolean;
 
-function convertStatement(
-    sourceFile: SourceFile,
-    statement: Statement,
-    checker: TypeChecker,
-    changes: textChanges.ChangeTracker,
-    identifiers: Identifiers,
-    target: ScriptTarget,
-    exports: ExportRenames,
-    useSitesToUnqualify: ESMap<Node, Node> | undefined,
-    quotePreference: QuotePreference
-): ModuleExportsChanged {
+/* @internal */
+function convertStatement(sourceFile: SourceFile, statement: Statement, checker: TypeChecker, changes: ChangeTracker, identifiers: Identifiers, target: ScriptTarget, exports: ExportRenames, useSitesToUnqualify: ESMap<Node, Node> | undefined, quotePreference: QuotePreference): ModuleExportsChanged {
     switch (statement.kind) {
         case SyntaxKind.VariableStatement:
             convertVariableStatement(sourceFile, statement as VariableStatement, changes, checker, identifiers, target, quotePreference);
@@ -149,15 +154,8 @@ function convertStatement(
     }
 }
 
-function convertVariableStatement(
-    sourceFile: SourceFile,
-    statement: VariableStatement,
-    changes: textChanges.ChangeTracker,
-    checker: TypeChecker,
-    identifiers: Identifiers,
-    target: ScriptTarget,
-    quotePreference: QuotePreference,
-): ESMap<Node, Node> | undefined {
+/* @internal */
+function convertVariableStatement(sourceFile: SourceFile, statement: VariableStatement, changes: ChangeTracker, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget, quotePreference: QuotePreference): ESMap<Node, Node> | undefined {
     const { declarationList } = statement;
     let foundImport = false;
     const converted = map(declarationList.declarations, decl => {
@@ -186,7 +184,7 @@ function convertVariableStatement(
         let combinedUseSites: ESMap<Node, Node> | undefined;
         forEach(converted, c => {
             if (c.useSitesToUnqualify) {
-                copyEntries(c.useSitesToUnqualify, combinedUseSites ??= new Map());
+                copyEntries(c.useSitesToUnqualify, combinedUseSites ??= new ts.Map());
             }
         });
 
@@ -195,6 +193,7 @@ function convertVariableStatement(
 }
 
 /** Converts `const name = require("moduleSpecifier").propertyName` */
+/* @internal */
 function convertPropertyAccessImport(name: BindingName, propertyName: string, moduleSpecifier: StringLiteralLike, identifiers: Identifiers, quotePreference: QuotePreference): ConvertedImports {
     switch (name.kind) {
         case SyntaxKind.ObjectBindingPattern:
@@ -214,14 +213,8 @@ function convertPropertyAccessImport(name: BindingName, propertyName: string, mo
     }
 }
 
-function convertAssignment(
-    sourceFile: SourceFile,
-    checker: TypeChecker,
-    assignment: BinaryExpression,
-    changes: textChanges.ChangeTracker,
-    exports: ExportRenames,
-    useSitesToUnqualify: ESMap<Node, Node> | undefined,
-): ModuleExportsChanged {
+/* @internal */
+function convertAssignment(sourceFile: SourceFile, checker: TypeChecker, assignment: BinaryExpression, changes: ChangeTracker, exports: ExportRenames, useSitesToUnqualify: ESMap<Node, Node> | undefined): ModuleExportsChanged {
     const { left, right } = assignment;
     if (!isPropertyAccessExpression(left)) {
         return false;
@@ -247,7 +240,9 @@ function convertAssignment(
         }
     }
     else if (isExportsOrModuleExportsOrAlias(sourceFile, left.expression)) {
-        convertNamedExport(sourceFile, assignment as BinaryExpression & { left: PropertyAccessExpression }, changes, exports);
+        convertNamedExport(sourceFile, assignment as BinaryExpression & {
+            left: PropertyAccessExpression;
+        }, changes, exports);
     }
 
     return false;
@@ -257,7 +252,11 @@ function convertAssignment(
  * Convert `module.exports = { ... }` to individual exports..
  * We can't always do this if the module has interesting members -- then it will be a default export instead.
  */
-function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesToUnqualify: ESMap<Node, Node> | undefined): [readonly Statement[], ModuleExportsChanged] | undefined {
+/* @internal */
+function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesToUnqualify: ESMap<Node, Node> | undefined): [
+    readonly Statement[],
+    ModuleExportsChanged
+] | undefined {
     const statements = mapAllOrFail(object.properties, prop => {
         switch (prop.kind) {
             case SyntaxKind.GetAccessor:
@@ -278,12 +277,10 @@ function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesT
     return statements && [statements, false];
 }
 
-function convertNamedExport(
-    sourceFile: SourceFile,
-    assignment: BinaryExpression & { left: PropertyAccessExpression },
-    changes: textChanges.ChangeTracker,
-    exports: ExportRenames,
-): void {
+/* @internal */
+function convertNamedExport(sourceFile: SourceFile, assignment: BinaryExpression & {
+    left: PropertyAccessExpression;
+}, changes: ChangeTracker, exports: ExportRenames): void {
     // If "originalKeywordKind" was set, this is e.g. `exports.
     const { text } = assignment.left.name;
     const rename = exports.get(text);
@@ -303,7 +300,11 @@ function convertNamedExport(
     }
 }
 
-function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [readonly Statement[], ModuleExportsChanged] {
+/* @internal */
+function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker): [
+    readonly Statement[],
+    ModuleExportsChanged
+] {
     // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
     const moduleSpecifier = reExported.text;
     const moduleSymbol = checker.getSymbolAtLocation(reExported);
@@ -313,33 +314,39 @@ function convertReExportAll(reExported: StringLiteralLike, checker: TypeChecker)
         // If there's some non-default export, must include both `export *` and `export default`.
         exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
 }
+/* @internal */
 function reExportStar(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
 }
+/* @internal */
 function reExportDefault(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
 }
 
-function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
+/* @internal */
+function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & {
+    left: PropertyAccessExpression;
+}, sourceFile: SourceFile, changes: ChangeTracker): void {
     const name = left.name.text;
     if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
         // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
         changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, factory.createToken(SyntaxKind.ExportKeyword), { suffix: " " });
 
-        if (!right.name) changes.insertName(sourceFile, right, name);
+        if (!right.name)
+            changes.insertName(sourceFile, right, name);
 
         const semi = findChildOfKind(parent, SyntaxKind.SemicolonToken, sourceFile);
-        if (semi) changes.delete(sourceFile, semi);
+        if (semi)
+            changes.delete(sourceFile, semi);
     }
     else {
         // `exports.f = function g() {}` -> `export const f = function g() {}` -- just replace `exports.` with `export const `
-        changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!,
-            [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.ConstKeyword)],
-            { joiner: " ", suffix: " " });
+        changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!, [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.ConstKeyword)], { joiner: " ", suffix: " " });
     }
 }
 
 // TODO: GH#22492 this will cause an error if a change has been made inside the body of the node.
+/* @internal */
 function convertExportsDotXEquals_replaceNode(name: string | undefined, exported: Expression, useSitesToUnqualify: ESMap<Node, Node> | undefined): Statement {
     const modifiers = [factory.createToken(SyntaxKind.ExportKeyword)];
     switch (exported.kind) {
@@ -368,8 +375,11 @@ function convertExportsDotXEquals_replaceNode(name: string | undefined, exported
     }
 }
 
+/* @internal */
 function replaceImportUseSites<T extends Node>(node: T, useSitesToUnqualify: ESMap<Node, Node> | undefined): T;
+/* @internal */
 function replaceImportUseSites<T extends Node>(nodes: NodeArray<T>, useSitesToUnqualify: ESMap<Node, Node> | undefined): NodeArray<T>;
+/* @internal */
 function replaceImportUseSites<T extends Node>(nodeOrNodes: T | NodeArray<T>, useSitesToUnqualify: ESMap<Node, Node> | undefined) {
     if (!useSitesToUnqualify || !some(arrayFrom(useSitesToUnqualify.keys()), original => rangeContainsRange(nodeOrNodes, original))) {
         return nodeOrNodes;
@@ -395,18 +405,11 @@ function replaceImportUseSites<T extends Node>(nodeOrNodes: T | NodeArray<T>, us
  * Returns nodes that will replace the variable declaration for the commonjs import.
  * May also make use `changes` to remove qualifiers at the use sites of imports, to change `mod.x` to `x`.
  */
-function convertSingleImport(
-    name: BindingName,
-    moduleSpecifier: StringLiteralLike,
-    checker: TypeChecker,
-    identifiers: Identifiers,
-    target: ScriptTarget,
-    quotePreference: QuotePreference,
-): ConvertedImports {
+/* @internal */
+function convertSingleImport(name: BindingName, moduleSpecifier: StringLiteralLike, checker: TypeChecker, identifiers: Identifiers, target: ScriptTarget, quotePreference: QuotePreference): ConvertedImports {
     switch (name.kind) {
         case SyntaxKind.ObjectBindingPattern: {
-            const importSpecifiers = mapAllOrFail(name.elements, e =>
-                e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
+            const importSpecifiers = mapAllOrFail(name.elements, e => e.dotDotDotToken || e.initializer || e.propertyName && !isIdentifier(e.propertyName) || !isIdentifier(e.name)
                     ? undefined
                     : makeImportSpecifier(e.propertyName && e.propertyName.text, e.name.text));
             if (importSpecifiers) {
@@ -438,10 +441,11 @@ function convertSingleImport(
  * - Convert `x.default()` to `x()` to handle ES6 default export
  * - Converts uses like `x.y()` to `y()` and uses a named import.
  */
+/* @internal */
 function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: StringLiteralLike, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ConvertedImports {
     const nameSymbol = checker.getSymbolAtLocation(name);
     // Maps from module property name to name actually used. (The same if there isn't shadowing.)
-    const namedBindingsNames = new Map<string, string>();
+    const namedBindingsNames = new ts.Map<string, string>();
     // True if there is some non-property use like `x()` or `f(x)`.
     let needDefaultImport = false;
     let useSitesToUnqualify: ESMap<Node, Node> | undefined;
@@ -459,7 +463,7 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
                 needDefaultImport = true;
 
                 const importDefaultName = use.getText();
-                (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(importDefaultName));
+                (useSitesToUnqualify ??= new ts.Map()).set(parent, factory.createIdentifier(importDefaultName));
             }
             else {
                 Debug.assert(parent.expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
@@ -469,7 +473,7 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
                     namedBindingsNames.set(propertyName, idName);
                 }
 
-                (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(idName));
+                (useSitesToUnqualify ??= new ts.Map()).set(parent, factory.createIdentifier(idName));
             }
         }
         else {
@@ -477,20 +481,17 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
         }
     }
 
-    const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
-        factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
+    const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) => factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
     if (!namedBindings) {
         // If it was unused, ensure that we at least import *something*.
         needDefaultImport = true;
     }
-    return convertedImports(
-        [makeImport(needDefaultImport ? getSynthesizedDeepClone(name) : undefined, namedBindings, moduleSpecifier, quotePreference)],
-        useSitesToUnqualify
-    );
+    return convertedImports([makeImport(needDefaultImport ? getSynthesizedDeepClone(name) : undefined, namedBindings, moduleSpecifier, quotePreference)], useSitesToUnqualify);
 }
 
 // Identifiers helpers
 
+/* @internal */
 function makeUniqueName(name: string, identifiers: Identifiers): string {
     while (identifiers.original.has(name) || identifiers.additional.has(name)) {
         name = `_${name}`;
@@ -504,13 +505,16 @@ function makeUniqueName(name: string, identifiers: Identifiers): string {
  * `original` refers to the local variable names in the original source file.
  * `additional` is any new unique identifiers we've generated. (e.g., we'll generate `_x`, then `__x`.)
  */
+/* @internal */
 interface Identifiers {
     readonly original: FreeIdentifiers;
     // Additional identifiers we've added. Mutable!
-    readonly additional: Set<string>;
+    readonly additional: ts.Set<string>;
 }
 
+/* @internal */
 type FreeIdentifiers = ReadonlyESMap<string, readonly Identifier[]>;
+/* @internal */
 function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
     const map = createMultiMap<Identifier>();
     forEachFreeIdentifier(file, id => map.add(id.text, id));
@@ -521,11 +525,14 @@ function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
  * A free identifier is an identifier that can be accessed through name lookup as a local variable.
  * In the expression `x.y`, `x` is a free identifier, but `y` is not.
  */
+/* @internal */
 function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
-    if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
+    if (isIdentifier(node) && isFreeIdentifier(node))
+        cb(node);
     node.forEachChild(child => forEachFreeIdentifier(child, cb));
 }
 
+/* @internal */
 function isFreeIdentifier(node: Identifier): boolean {
     const { parent } = node;
     switch (parent.kind) {
@@ -542,64 +549,53 @@ function isFreeIdentifier(node: Identifier): boolean {
 
 // Node helpers
 
+/* @internal */
 function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration, useSitesToUnqualify: ESMap<Node, Node> | undefined): FunctionDeclaration {
-    return factory.createFunctionDeclaration(
-        getSynthesizedDeepClones(fn.decorators), // TODO: GH#19915 Don't think this is even legal.
-        concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
-        getSynthesizedDeepClone(fn.asteriskToken),
-        name,
-        getSynthesizedDeepClones(fn.typeParameters),
-        getSynthesizedDeepClones(fn.parameters),
-        getSynthesizedDeepClone(fn.type),
-        factory.converters.convertToFunctionBlock(replaceImportUseSites(fn.body!, useSitesToUnqualify)));
+    return factory.createFunctionDeclaration(getSynthesizedDeepClones(fn.decorators), // TODO: GH#19915 Don't think this is even legal.
+    concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)), getSynthesizedDeepClone(fn.asteriskToken), name, getSynthesizedDeepClones(fn.typeParameters), getSynthesizedDeepClones(fn.parameters), getSynthesizedDeepClone(fn.type), factory.converters.convertToFunctionBlock(replaceImportUseSites(fn.body!, useSitesToUnqualify)));
 }
 
+/* @internal */
 function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression, useSitesToUnqualify: ESMap<Node, Node> | undefined): ClassDeclaration {
-    return factory.createClassDeclaration(
-        getSynthesizedDeepClones(cls.decorators), // TODO: GH#19915 Don't think this is even legal.
-        concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
-        name,
-        getSynthesizedDeepClones(cls.typeParameters),
-        getSynthesizedDeepClones(cls.heritageClauses),
-        replaceImportUseSites(cls.members, useSitesToUnqualify));
+    return factory.createClassDeclaration(getSynthesizedDeepClones(cls.decorators), // TODO: GH#19915 Don't think this is even legal.
+    concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)), name, getSynthesizedDeepClones(cls.typeParameters), getSynthesizedDeepClones(cls.heritageClauses), replaceImportUseSites(cls.members, useSitesToUnqualify));
 }
 
+/* @internal */
 function makeSingleImport(localName: string, propertyName: string, moduleSpecifier: StringLiteralLike, quotePreference: QuotePreference): ImportDeclaration {
     return propertyName === "default"
         ? makeImport(factory.createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, quotePreference)
         : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, quotePreference);
 }
 
+/* @internal */
 function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {
     return factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
 }
 
+/* @internal */
 function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {
-    return factory.createVariableStatement(
-        modifiers,
-        factory.createVariableDeclarationList(
-            [factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, init)],
-            NodeFlags.Const));
+    return factory.createVariableStatement(modifiers, factory.createVariableDeclarationList([factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, init)], NodeFlags.Const));
 }
 
+/* @internal */
 function makeExportDeclaration(exportSpecifiers: ExportSpecifier[] | undefined, moduleSpecifier?: string): ExportDeclaration {
     return factory.createExportDeclaration(
         /*decorators*/ undefined,
         /*modifiers*/ undefined,
-        /*isTypeOnly*/ false,
-        exportSpecifiers && factory.createNamedExports(exportSpecifiers),
-        moduleSpecifier === undefined ? undefined : factory.createStringLiteral(moduleSpecifier));
+    /*isTypeOnly*/ false, exportSpecifiers && factory.createNamedExports(exportSpecifiers), moduleSpecifier === undefined ? undefined : factory.createStringLiteral(moduleSpecifier));
 }
 
+/* @internal */
 interface ConvertedImports {
     newImports: readonly Node[];
     useSitesToUnqualify?: ESMap<Node, Node>;
 }
 
+/* @internal */
 function convertedImports(newImports: readonly Node[], useSitesToUnqualify?: ESMap<Node, Node>): ConvertedImports {
     return {
         newImports,
         useSitesToUnqualify
     };
-}
 }

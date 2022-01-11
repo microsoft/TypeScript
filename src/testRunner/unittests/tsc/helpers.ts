@@ -1,7 +1,14 @@
-namespace ts {
-export type TscCompileSystem = fakes.System & {
-    writtenFiles: Set<Path>;
-    baseLine(): { file: string; text: string; };
+import { System, patchHostForBuildInfoReadWrite } from "../../fakes";
+import { Path, TscIncremental, noop, Program, EmitAndSemanticDiagnosticsBuilderProgram, ExecuteCommandLineCallbacks, ParsedCommandLine, ReadonlyCollection, baselineBuildInfo, isBuilderProgram, emptyArray, toPathWithSystem, MapLike, getProperty, executeCommandLine, ExitStatus, tscWatch, generateSourceMapBaselineFiles, isBuild, getFsWithTime } from "../../ts";
+import { FileSystem, formatPatch } from "../../vfs";
+import { Baseline } from "../../Harness";
+import * as ts from "../../ts";
+export type TscCompileSystem = System & {
+    writtenFiles: ts.Set<Path>;
+    baseLine(): {
+        file: string;
+        text: string;
+    };
     disableUseFileVersionAsSignature?: boolean;
 };
 
@@ -23,10 +30,10 @@ export interface TscCompile {
     scenario: string;
     subScenario: string;
     buildKind?: BuildKind; // Should be defined for tsc --b
-    fs: () => vfs.FileSystem;
+    fs: () => FileSystem;
     commandLineArgs: readonly string[];
 
-    modifyFs?: (fs: vfs.FileSystem) => void;
+    modifyFs?: (fs: FileSystem) => void;
     baselineSourceMap?: boolean;
     baselineReadFileCalls?: boolean;
     baselinePrograms?: boolean;
@@ -35,7 +42,10 @@ export interface TscCompile {
     environmentVariables?: Record<string, string>;
 }
 
-export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
+export type CommandLineProgram = [
+    Program,
+    EmitAndSemanticDiagnosticsBuilderProgram?
+];
 export interface CommandLineCallbacks {
     cb: ExecuteCommandLineCallbacks;
     getPrograms: () => readonly CommandLineProgram[];
@@ -44,11 +54,9 @@ export interface CommandLineCallbacks {
 function isAnyProgram(program: Program | EmitAndSemanticDiagnosticsBuilderProgram | ParsedCommandLine): program is Program | EmitAndSemanticDiagnosticsBuilderProgram {
     return !!(program as Program | EmitAndSemanticDiagnosticsBuilderProgram).getCompilerOptions;
 }
-export function commandLineCallbacks(
-    sys: System & { writtenFiles: ReadonlyCollection<Path>; },
-    originalReadCall?: System["readFile"],
-    originalWriteFile?: System["writeFile"],
-): CommandLineCallbacks {
+export function commandLineCallbacks(sys: ts.System & {
+    writtenFiles: ReadonlyCollection<Path>;
+}, originalReadCall?: ts.System["readFile"], originalWriteFile?: ts.System["writeFile"]): CommandLineCallbacks {
     let programs: CommandLineProgram[] | undefined;
 
     return {
@@ -57,8 +65,7 @@ export function commandLineCallbacks(
                 baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall, originalWriteFile);
                 (programs || (programs = [])).push(isBuilderProgram(program) ?
                     [program.getProgram(), program] :
-                    [program]
-                );
+                    [program]);
             }
             else {
                 baselineBuildInfo(program.options, sys, originalReadCall, originalWriteFile);
@@ -75,21 +82,18 @@ export function commandLineCallbacks(
 export function tscCompile(input: TscCompile) {
     const initialFs = input.fs();
     const inputFs = initialFs.shadow();
-    const {
-        scenario, subScenario, buildKind,
-        commandLineArgs, modifyFs,
-        baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies,
-        environmentVariables
-    } = input;
-    if (modifyFs) modifyFs(inputFs);
+    const { scenario, subScenario, buildKind, commandLineArgs, modifyFs, baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies, environmentVariables } = input;
+    if (modifyFs)
+        modifyFs(inputFs);
     inputFs.makeReadonly();
     const fs = inputFs.shadow();
 
     // Create system
-    const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
-    if (input.disableUseFileVersionAsSignature) sys.disableUseFileVersionAsSignature = true;
-    fakes.patchHostForBuildInfoReadWrite(sys);
-    const writtenFiles = sys.writtenFiles = new Set();
+    const sys = new System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
+    if (input.disableUseFileVersionAsSignature)
+        sys.disableUseFileVersionAsSignature = true;
+    patchHostForBuildInfoReadWrite(sys);
+    const writtenFiles = sys.writtenFiles = new ts.Set();
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (fileName, content, writeByteOrderMark) => {
         const path = toPathWithSystem(sys, fileName);
@@ -110,11 +114,7 @@ export function tscCompile(input: TscCompile) {
     sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;
     const { cb, getPrograms } = commandLineCallbacks(sys, originalReadFile, originalWriteFile);
-    executeCommandLine(
-        sys,
-        cb,
-        commandLineArgs,
-    );
+    executeCommandLine(sys, cb, commandLineArgs);
     sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
     if (baselinePrograms) {
         const baseline: string[] = [];
@@ -124,7 +124,8 @@ export function tscCompile(input: TscCompile) {
     if (baselineReadFileCalls) {
         sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
     }
-    if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
+    if (baselineSourceMap)
+        generateSourceMapBaselineFiles(sys);
 
     fs.makeReadonly();
 
@@ -136,21 +137,23 @@ export function tscCompile(input: TscCompile) {
         return {
             file: `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`,
             text: `Input::
-${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
+${baseFsPatch ? formatPatch(baseFsPatch) : ""}
 
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`
+${patch ? formatPatch(patch) : ""}`
         };
     };
     return sys;
 }
 
-export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
+export function verifyTscBaseline(sys: () => {
+    baseLine: TscCompileSystem["baseLine"];
+}) {
     it(`Generates files matching the baseline`, () => {
         const { file, text } = sys().baseLine();
-        Harness.Baseline.runBaseline(file, text);
+        Baseline.runBaseline(file, text);
     });
 }
 
@@ -172,5 +175,4 @@ export function verifyTsc(input: TscCompile) {
             });
         });
     });
-}
 }

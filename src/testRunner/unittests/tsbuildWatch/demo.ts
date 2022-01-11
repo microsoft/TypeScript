@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { TestFSWithWatch, libContent } from "../../ts";
+import { File, libFile, verifyTscWatch, createWatchedSystem, checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout } from "../../ts.tscWatch";
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     const projectLocation = `${TestFSWithWatch.tsbuildProjectsLocation}/demo`;
     let coreFiles: File[];
@@ -31,15 +32,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
         commandLineArgs: ["-b", "-w", "-verbose"],
         sys: () => {
             const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
-            sys.writeFile(coreFiles[0].path, coreFiles[0].content.replace(
-                "}",
-                `},
+            sys.writeFile(coreFiles[0].path, coreFiles[0].content.replace("}", `},
   "references": [
     {
       "path": "../zoo"
     }
-  ]`
-            ));
+  ]`));
             return sys;
         },
         changes: [
@@ -87,4 +85,3 @@ ${coreFiles[1].content}`),
         return TestFSWithWatch.getTsBuildProjectFile("demo", fileName);
     }
 });
-}

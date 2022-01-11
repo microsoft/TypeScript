@@ -1,6 +1,9 @@
+import { Diagnostics, getEmitScriptTarget, symbolName, SourceFile, CodeFixContextBase, Node, Symbol, getTokenAtPosition, isJsxAttribute, isPropertyAccessExpression, Debug, isMemberName, NodeFlags, isBinaryExpression, SyntaxKind, isPrivateIdentifier, isQualifiedName, SymbolFlags, isImportSpecifier, isIdentifier, findAncestor, isImportDeclaration, isJsxOpeningLikeElement, hasSyntacticModifier, ModifierFlags, isClassElement, isClassLike, getEffectiveBaseTypeNode, getTextOfNode, getMeaningFromLocation, ScriptTarget, isIdentifierText, isNamedDeclaration, factory, SemanticMeaning, ImportDeclaration, isStringLiteralLike, getResolvedModule, getModeForUsageLocation } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "fixSpelling";
+/* @internal */
 const errorCodes = [
     Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
     Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2.code,
@@ -17,36 +20,43 @@ const errorCodes = [
     // for JSX FC
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
 ];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile, errorCode } = context;
         const info = getInfo(sourceFile, context.span.start, context, errorCode);
-        if (!info) return undefined;
+        if (!info)
+            return undefined;
         const { node, suggestedSymbol } = info;
         const target = getEmitScriptTarget(context.host.getCompilationSettings());
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
         return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
     },
     fixIds: [fixId],
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, diag.start, context, diag.code);
         const target = getEmitScriptTarget(context.host.getCompilationSettings());
-        if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
+        if (info)
+            doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
     }),
 });
 
-function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): { node: Node, suggestedSymbol: Symbol } | undefined {
+/* @internal */
+function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBase, errorCode: number): {
+    node: Node;
+    suggestedSymbol: Symbol;
+} | undefined {
     // This is the identifier of the misspelled word. eg:
     // this.speling = 1;
     //      ^^^^^^^
     const node = getTokenAtPosition(sourceFile, pos);
     const parent = node.parent;
     // Only fix spelling for No_overload_matches_this_call emitted on the React class component
-    if ((
-        errorCode === Diagnostics.No_overload_matches_this_call.code ||
+    if ((errorCode === Diagnostics.No_overload_matches_this_call.code ||
         errorCode === Diagnostics.Type_0_is_not_assignable_to_type_1.code) &&
-        !isJsxAttribute(parent)) return undefined;
+        !isJsxAttribute(parent))
+        return undefined;
     const checker = context.program.getTypeChecker();
 
     let suggestedSymbol: Symbol | undefined;
@@ -100,7 +110,8 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     return suggestedSymbol === undefined ? undefined : { node, suggestedSymbol };
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
     const suggestion = symbolName(suggestedSymbol);
     if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
         const valDecl = suggestedSymbol.valueDeclaration;
@@ -116,6 +127,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, no
     }
 }
 
+/* @internal */
 function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFlags {
     let flags = 0;
     if (meaning & SemanticMeaning.Namespace) {
@@ -130,12 +142,14 @@ function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFl
     return flags;
 }
 
+/* @internal */
 function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
-    if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
+    if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier))
+        return undefined;
 
     const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier));
-    if (!resolvedModule) return undefined;
+    if (!resolvedModule)
+        return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);
-}
 }

@@ -3,11 +3,12 @@
     "compilerOptions": {
         "target": "es2019",
         "lib": ["es2019"],
-        "outFile": "../../built/local/compiler-debug.js",
+        "outDir": "../../built/local",
         "declaration": false,
         "sourceMap": true
     },
     "files": [
-        "dbg.ts"
+        "dbg.ts",
+        "./Debug.ts"
     ]
 }

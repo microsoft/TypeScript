@@ -1,5 +1,6 @@
+import { CancellationToken, SourceFile, ESMap, NavigationBarItem, Node, DeclarationName, map, NavigationTree, SyntaxKind, Debug, isDeclaration, isExpression, getNameOfDeclaration, BindableStaticNameExpression, PropertyNameLiteral, isPropertyNameLiteral, getNameOrArgument, getElementOrPropertyAccessName, isPrivateIdentifier, VariableDeclaration, PropertyAssignment, BindingElement, PropertyDeclaration, forEachChild, Declaration, hasDynamicName, isPropertyAccessExpression, isIdentifier, idText, isToken, ConstructorDeclaration, isParameterPropertyDeclaration, ClassElement, TypeElement, FunctionLikeDeclaration, ImportClause, ShorthandPropertyAssignment, SpreadAssignment, isBindingPattern, EnumDeclaration, InterfaceDeclaration, ModuleDeclaration, ExportAssignment, isObjectLiteralExpression, isCallExpression, isArrowFunction, isFunctionExpression, getAssignmentDeclarationKind, BinaryExpression, AssignmentDeclarationKind, PropertyAccessExpression, EntityNameExpression, BindableObjectDefinePropertyCall, setTextRange, factory, CallExpression, BindableElementAccessExpression, isBindableStaticAccessExpression, hasJSDocNodes, forEach, isJSDocTypeAlias, filterMutate, isFunctionDeclaration, isVariableDeclaration, isBinaryExpression, isClassDeclaration, lastOrUndefined, concatenate, Identifier, isStatic, NodeFlags, isModuleBlock, contains, compareStringsCaseSensitiveUI, compareValues, isPropertyName, getPropertyNameForPropertyNameNode, unescapeLeadingUnderscores, FunctionExpression, ArrowFunction, ClassExpression, isElementAccessExpression, isExternalModule, escapeString, getBaseFileName, removeFileExtension, normalizePath, isExportAssignment, InternalSymbolName, getSyntacticModifierFlags, ModifierFlags, FunctionDeclaration, getNodeKind, getNodeModifiers, TextSpan, isAmbientModule, getTextOfNode, getTextOfIdentifierOrLiteral, isModuleDeclaration, EnumMember, createTextSpanFromRange, createTextSpanFromNode, ClassLikeDeclaration, getFullWidth, declarationNameToString, isPropertyAssignment, isClassLike, mapDefined, isStringLiteralLike, Expression } from "./ts";
+import * as ts from "./ts";
 /* @internal */
-namespace ts.NavigationBar {
 /**
  * Matches all whitespace characters in a string. Eg:
  *
@@ -19,10 +20,13 @@ const whiteSpaceRegex = /\s+/g;
  * Maximum amount of characters to return
  * The amount was chosen arbitrarily.
  */
+/* @internal */
 const maxLength = 150;
 
 // Keep sourceFile handy so we don't have to search for it every time we need to call `getText`.
+/* @internal */
 let curCancellationToken: CancellationToken;
+/* @internal */
 let curSourceFile: SourceFile;
 
 /**
@@ -30,19 +34,25 @@ let curSourceFile: SourceFile;
  * `parent` is the current parent and is *not* stored in parentsStack.
  * `startNode` sets a new parent and `endNode` returns to the previous parent.
  */
+/* @internal */
 let parentsStack: NavigationBarNode[] = [];
+/* @internal */
 let parent: NavigationBarNode;
 
+/* @internal */
 const trackedEs5ClassesStack: (ESMap<string, boolean> | undefined)[] = [];
+/* @internal */
 let trackedEs5Classes: ESMap<string, boolean> | undefined;
 
 // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
+/* @internal */
 let emptyChildItemArray: NavigationBarItem[] = [];
 
 /**
  * Represents a navigation bar item and its children.
  * The returned NavigationBarItem is more complicated and doesn't include 'parent', so we use these to do work before converting.
  */
+/* @internal */
 interface NavigationBarNode {
     node: Node;
     name: DeclarationName | undefined;
@@ -52,6 +62,7 @@ interface NavigationBarNode {
     indent: number; // # of parents
 }
 
+/* @internal */
 export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationBarItem[] {
     curCancellationToken = cancellationToken;
     curSourceFile = sourceFile;
@@ -63,6 +74,7 @@ export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken:
     }
 }
 
+/* @internal */
 export function getNavigationTree(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationTree {
     curCancellationToken = cancellationToken;
     curSourceFile = sourceFile;
@@ -74,6 +86,7 @@ export function getNavigationTree(sourceFile: SourceFile, cancellationToken: Can
     }
 }
 
+/* @internal */
 function reset() {
     curSourceFile = undefined!;
     curCancellationToken = undefined!;
@@ -82,14 +95,17 @@ function reset() {
     emptyChildItemArray = [];
 }
 
+/* @internal */
 function nodeText(node: Node): string {
     return cleanText(node.getText(curSourceFile));
 }
 
+/* @internal */
 function navigationBarNodeKind(n: NavigationBarNode): SyntaxKind {
     return n.node.kind;
 }
 
+/* @internal */
 function pushChild(parent: NavigationBarNode, child: NavigationBarNode): void {
     if (parent.children) {
         parent.children.push(child);
@@ -99,6 +115,7 @@ function pushChild(parent: NavigationBarNode, child: NavigationBarNode): void {
     }
 }
 
+/* @internal */
 function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
     Debug.assert(!parentsStack.length);
     const root: NavigationBarNode = { node: sourceFile, name: undefined, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
@@ -111,10 +128,12 @@ function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
     return root;
 }
 
+/* @internal */
 function addLeafNode(node: Node, name?: DeclarationName): void {
     pushChild(parent, emptyNavigationBarNode(node, name));
 }
 
+/* @internal */
 function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationBarNode {
     return {
         node,
@@ -126,22 +145,27 @@ function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationB
     };
 }
 
+/* @internal */
 function addTrackedEs5Class(name: string) {
     if (!trackedEs5Classes) {
-        trackedEs5Classes = new Map();
+        trackedEs5Classes = new ts.Map();
     }
     trackedEs5Classes.set(name, true);
 }
+/* @internal */
 function endNestedNodes(depth: number): void {
-    for (let i = 0; i < depth; i++) endNode();
+    for (let i = 0; i < depth; i++)
+        endNode();
 }
+/* @internal */
 function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
     const names: PropertyNameLiteral[] = [];
     while (!isPropertyNameLiteral(entityName)) {
         const name = getNameOrArgument(entityName);
         const nameText = getElementOrPropertyAccessName(entityName);
         entityName = entityName.expression;
-        if (nameText === "prototype" || isPrivateIdentifier(name)) continue;
+        if (nameText === "prototype" || isPrivateIdentifier(name))
+            continue;
         names.push(name);
     }
     names.push(entityName);
@@ -156,6 +180,7 @@ function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpres
  * Add a new level of NavigationBarNodes.
  * This pushes to the stack, so you must call `endNode` when you are done adding to this node.
  */
+/* @internal */
 function startNode(node: Node, name?: DeclarationName): void {
     const navNode: NavigationBarNode = emptyNavigationBarNode(node, name);
     pushChild(parent, navNode);
@@ -168,6 +193,7 @@ function startNode(node: Node, name?: DeclarationName): void {
 }
 
 /** Call after calling `startNode` and adding children to it. */
+/* @internal */
 function endNode(): void {
     if (parent.children) {
         mergeChildren(parent.children, parent);
@@ -177,12 +203,14 @@ function endNode(): void {
     trackedEs5Classes = trackedEs5ClassesStack.pop();
 }
 
+/* @internal */
 function addNodeWithRecursiveChild(node: Node, child: Node | undefined, name?: DeclarationName): void {
     startNode(node, name);
     addChildrenRecursively(child);
     endNode();
 }
 
+/* @internal */
 function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAssignment | BindingElement | PropertyDeclaration): void {
     if (node.initializer && isFunctionOrClassExpression(node.initializer)) {
         startNode(node);
@@ -199,17 +227,17 @@ function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAss
  * but included certain "well known" symbol names. While we no longer distinguish those well-known
  * symbols from other unique symbols, we do the below to retain those members in the nav tree.
  */
+/* @internal */
 function hasNavigationBarName(node: Declaration) {
     return !hasDynamicName(node) ||
-        (
-            node.kind !== SyntaxKind.BinaryExpression &&
+        (node.kind !== SyntaxKind.BinaryExpression &&
             isPropertyAccessExpression(node.name.expression) &&
             isIdentifier(node.name.expression.expression) &&
-            idText(node.name.expression.expression) === "Symbol"
-        );
+            idText(node.name.expression.expression) === "Symbol");
 }
 
 /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
+/* @internal */
 function addChildrenRecursively(node: Node | undefined): void {
     curCancellationToken.throwIfCancellationRequested();
 
@@ -393,9 +421,7 @@ function addChildrenRecursively(node: Node | undefined): void {
                         }
                     }
                     else if (isFunctionExpression(binaryExpression.right) || isArrowFunction(binaryExpression.right)) {
-                        addNodeWithRecursiveChild(node,
-                            binaryExpression.right,
-                            className);
+                        addNodeWithRecursiveChild(node, binaryExpression.right, className);
                     }
                     else {
                         startNode(binaryExpression, className);
@@ -466,8 +492,9 @@ function addChildrenRecursively(node: Node | undefined): void {
 }
 
 /** Merge declarations of the same kind. */
+/* @internal */
 function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
-    const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
+    const nameToItems = new ts.Map<string, NavigationBarNode | NavigationBarNode[]>();
     filterMutate(children, (child, index) => {
         const declName = child.name || getNameOfDeclaration(child.node as Declaration);
         const name = declName && nodeText(declName);
@@ -501,6 +528,7 @@ function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): 
         }
     });
 }
+/* @internal */
 const isEs5ClassMember: Record<AssignmentDeclarationKind, boolean> = {
     [AssignmentDeclarationKind.Property]: true,
     [AssignmentDeclarationKind.PrototypeProperty]: true,
@@ -513,6 +541,7 @@ const isEs5ClassMember: Record<AssignmentDeclarationKind, boolean> = {
     [AssignmentDeclarationKind.Prototype]: true,
     [AssignmentDeclarationKind.ThisProperty]: false,
 };
+/* @internal */
 function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {
     function isPossibleConstructor(node: Node) {
         return isFunctionExpression(node) || isFunctionDeclaration(node) || isVariableDeclaration(node);
@@ -545,9 +574,7 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
                 undefined;
 
             if (ctorFunction !== undefined) {
-                const ctorNode = setTextRange(
-                    factory.createConstructorDeclaration(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
-                    ctorFunction);
+                const ctorNode = setTextRange(factory.createConstructorDeclaration(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined), ctorFunction);
                 const ctor = emptyNavigationBarNode(ctorNode);
                 ctor.indent = a.indent + 1;
                 ctor.children = a.node === ctorFunction ? a.children : b.children;
@@ -565,12 +592,9 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
 
             lastANode = a.node = setTextRange(factory.createClassDeclaration(
                 /* decorators */ undefined,
-                /* modifiers */ undefined,
-                a.name as Identifier || factory.createIdentifier("__class__"),
+            /* modifiers */ undefined, a.name as Identifier || factory.createIdentifier("__class__"), 
                 /* typeParameters */ undefined,
-                /* heritageClauses */ undefined,
-                []
-            ), a.node);
+            /* heritageClauses */ undefined, []), a.node);
         }
         else {
             a.children = concatenate(a.children, b.children);
@@ -590,21 +614,20 @@ function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: nu
             setTextRange(lastANode, { pos: lastANode.pos, end: bNode.end });
         }
         else {
-            if (!a.additionalNodes) a.additionalNodes = [];
+            if (!a.additionalNodes)
+                a.additionalNodes = [];
             a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
                 /* decorators */ undefined,
-                /* modifiers */ undefined,
-                a.name as Identifier || factory.createIdentifier("__class__"),
+            /* modifiers */ undefined, a.name as Identifier || factory.createIdentifier("__class__"), 
                 /* typeParameters */ undefined,
-                /* heritageClauses */ undefined,
-                []
-            ), b.node));
+            /* heritageClauses */ undefined, []), b.node));
         }
         return true;
     }
     return bAssignmentDeclarationKind === AssignmentDeclarationKind.None ? false : true;
 }
 
+/* @internal */
 function tryMerge(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean {
     // const v = false as boolean;
     if (tryMergeEs5Class(a, b, bIndex, parent)) {
@@ -618,6 +641,7 @@ function tryMerge(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, pa
 }
 
 /** a and b have the same name, but they may not be mergeable. */
+/* @internal */
 function shouldReallyMerge(a: Node, b: Node, parent: NavigationBarNode): boolean {
     if (a.kind !== b.kind || a.parent !== b.parent && !(isOwnChild(a, parent) && isOwnChild(b, parent))) {
         return false;
@@ -636,12 +660,14 @@ function shouldReallyMerge(a: Node, b: Node, parent: NavigationBarNode): boolean
     }
 }
 
+/* @internal */
 function isSynthesized(node: Node) {
     return !!(node.flags & NodeFlags.Synthesized);
 }
 
 // We want to merge own children like `I` in in `module A { interface I {} } module A { interface I {} }`
 // We don't want to merge unrelated children like `m` in `const o = { a: { m() {} }, b: { m() {} } };`
+/* @internal */
 function isOwnChild(n: Node, parent: NavigationBarNode): boolean {
     const par = isModuleBlock(n.parent) ? n.parent.parent : n.parent;
     return par === parent.node || contains(parent.additionalNodes, par);
@@ -649,11 +675,13 @@ function isOwnChild(n: Node, parent: NavigationBarNode): boolean {
 
 // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
 // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
+/* @internal */
 function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
     return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(a.body as ModuleDeclaration, b.body as ModuleDeclaration));
 }
 
 /** Merge source into target. Source should be thrown away after this is called. */
+/* @internal */
 function merge(target: NavigationBarNode, source: NavigationBarNode): void {
     target.additionalNodes = target.additionalNodes || [];
     target.additionalNodes.push(source.node);
@@ -669,10 +697,12 @@ function merge(target: NavigationBarNode, source: NavigationBarNode): void {
 }
 
 /** Recursively ensure that each NavNode's children are in sorted order. */
+/* @internal */
 function sortChildren(children: NavigationBarNode[]): void {
     children.sort(compareChildren);
 }
 
+/* @internal */
 function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
     return compareStringsCaseSensitiveUI(tryGetName(child1.node)!, tryGetName(child2.node)!) // TODO: GH#18217
         || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
@@ -683,6 +713,7 @@ function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
  * We only sort nodes by name that have a more-or-less "direct" name, as opposed to `new()` and the like.
  * So `new()` can still come before an `aardvark` method.
  */
+/* @internal */
 function tryGetName(node: Node): string | undefined {
     if (node.kind === SyntaxKind.ModuleDeclaration) {
         return getModuleName(node as ModuleDeclaration);
@@ -703,6 +734,7 @@ function tryGetName(node: Node): string | undefined {
     }
 }
 
+/* @internal */
 function getItemName(node: Node, name: Node | undefined): string {
     if (node.kind === SyntaxKind.ModuleDeclaration) {
         return cleanText(getModuleName(node as ModuleDeclaration));
@@ -752,6 +784,7 @@ function getItemName(node: Node, name: Node | undefined): string {
 }
 
 /** Flattens the NavNode tree to a list of items to appear in the primary navbar menu. */
+/* @internal */
 function primaryNavBarMenuItems(root: NavigationBarNode): NavigationBarNode[] {
     // The primary (middle) navbar menu displays the general code navigation hierarchy, similar to the navtree.
     // The secondary (right) navbar menu displays the child items of whichever primary item is selected.
@@ -816,6 +849,7 @@ function primaryNavBarMenuItems(root: NavigationBarNode): NavigationBarNode[] {
     }
 }
 
+/* @internal */
 function convertToTree(n: NavigationBarNode): NavigationTree {
     return {
         text: getItemName(n.node, n.name),
@@ -827,6 +861,7 @@ function convertToTree(n: NavigationBarNode): NavigationTree {
     };
 }
 
+/* @internal */
 function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
     return {
         text: getItemName(n.node, n.name),
@@ -853,6 +888,7 @@ function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem
     }
 }
 
+/* @internal */
 function getSpans(n: NavigationBarNode): TextSpan[] {
     const spans = [getNodeSpan(n.node)];
     if (n.additionalNodes) {
@@ -863,6 +899,7 @@ function getSpans(n: NavigationBarNode): TextSpan[] {
     return spans;
 }
 
+/* @internal */
 function getModuleName(moduleDeclaration: ModuleDeclaration): string {
     // We want to maintain quotation marks.
     if (isAmbientModule(moduleDeclaration)) {
@@ -872,6 +909,7 @@ function getModuleName(moduleDeclaration: ModuleDeclaration): string {
     return getFullyQualifiedModuleName(moduleDeclaration);
 }
 
+/* @internal */
 function getFullyQualifiedModuleName(moduleDeclaration: ModuleDeclaration): string {
     // Otherwise, we need to aggregate each identifier to build up the qualified name.
     const result = [getTextOfIdentifierOrLiteral(moduleDeclaration.name)];
@@ -886,18 +924,22 @@ function getFullyQualifiedModuleName(moduleDeclaration: ModuleDeclaration): stri
  * For 'module A.B.C', we want to get the node for 'C'.
  * We store 'A' as associated with a NavNode, and use getModuleName to traverse down again.
  */
+/* @internal */
 function getInteriorModule(decl: ModuleDeclaration): ModuleDeclaration {
     return decl.body && isModuleDeclaration(decl.body) ? getInteriorModule(decl.body) : decl;
 }
 
+/* @internal */
 function isComputedProperty(member: EnumMember): boolean {
     return !member.name || member.name.kind === SyntaxKind.ComputedPropertyName;
 }
 
+/* @internal */
 function getNodeSpan(node: Node): TextSpan {
     return node.kind === SyntaxKind.SourceFile ? createTextSpanFromRange(node) : createTextSpanFromNode(node, curSourceFile);
 }
 
+/* @internal */
 function getModifiers(node: Node): string {
     if (node.parent && node.parent.kind === SyntaxKind.VariableDeclaration) {
         node = node.parent;
@@ -905,6 +947,7 @@ function getModifiers(node: Node): string {
     return getNodeModifiers(node);
 }
 
+/* @internal */
 function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
     const { parent } = node;
     if (node.name && getFullWidth(node.name) > 0) {
@@ -946,6 +989,7 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
 }
 
 // See also 'tryGetPropertyAccessOrIdentifierToString'
+/* @internal */
 function getCalledExpressionName(expr: Expression): string | undefined {
     if (isIdentifier(expr)) {
         return expr.text;
@@ -960,6 +1004,7 @@ function getCalledExpressionName(expr: Expression): string | undefined {
     }
 }
 
+/* @internal */
 function isFunctionOrClassExpression(node: Node): node is ArrowFunction | FunctionExpression | ClassExpression {
     switch (node.kind) {
         case SyntaxKind.ArrowFunction:
@@ -971,6 +1016,7 @@ function isFunctionOrClassExpression(node: Node): node is ArrowFunction | Functi
     }
 }
 
+/* @internal */
 function cleanText(text: string): string {
     // Truncate to maximum amount of characters as we don't want to do a big replace operation.
     text = text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
@@ -981,5 +1027,4 @@ function cleanText(text: string): string {
     // \u2028 - Line separator
     // \u2029 - Paragraph separator
     return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
-}
 }

@@ -1,4 +1,9 @@
-namespace ts.server {
+import { FileWatcher, noop, returnUndefined, AnyFunction, IndentStyle, ModuleKind, ScriptTarget, JsxEmit, NewLineKind, ModuleResolutionKind, CompilerOptions, version, Debug, FileTextChanges } from "../../ts";
+import { ServerHost, Session, protocol, SessionOptions, nullCancellationToken, CommandNames, NormalizedPath, HandlerResponse, ProjectService, getLocationInNewDocument } from "../../ts.server";
+import { mockHash } from "../../Harness";
+import { byteLength } from "../../Utils";
+import { nullLogger, createHasErrorMessageLogger } from "../../ts.projectSystem";
+import * as ts from "../../ts";
 const _chai: typeof import("chai") = require("chai");
 const expect: typeof _chai.expect = _chai.expect;
 let lastWrittenToHost: string;
@@ -10,7 +15,7 @@ const mockHost: ServerHost = {
     write(s): void { lastWrittenToHost = s; },
     readFile: returnUndefined,
     writeFile: noop,
-    resolvePath(): string { return undefined!; }, // TODO: GH#18217
+    resolvePath(): string { return undefined!; },
     fileExists: () => false,
     directoryExists: () => false,
     getDirectories: () => [],
@@ -24,7 +29,7 @@ const mockHost: ServerHost = {
     clearTimeout: noop,
     setImmediate: () => 0,
     clearImmediate: noop,
-    createHash: Harness.mockHash,
+    createHash: mockHash,
     watchFile: () => noopFileWatcher,
     watchDirectory: () => noopFileWatcher
 };
@@ -45,10 +50,10 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             cancellationToken: nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: undefined!, // TODO: GH#18217
-            byteLength: Utils.byteLength,
+            typingsInstaller: undefined!,
+            byteLength: byteLength,
             hrtime: process.hrtime,
-            logger: projectSystem.nullLogger(),
+            logger: nullLogger(),
             canUseEvents: true
         };
         return new TestSession(opts);
@@ -162,9 +167,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 }
             };
             session.onMessage(JSON.stringify(setOptionsRequest));
-            assert.deepEqual(
-                session.getProjectService().getCompilerOptionsForInferredProjects(),
-                {
+            assert.deepEqual(session.getProjectService().getCompilerOptionsForInferredProjects(), {
                     module: ModuleKind.System,
                     target: ScriptTarget.ES5,
                     jsx: JsxEmit.React,
@@ -182,7 +185,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
 
             const expected: protocol.StatusResponseBody = {
-                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                version: version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
             };
             assert.deepEqual(session.executeCommand(req).response, expected);
         });
@@ -345,7 +348,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
         it("is an overrideable handle which sends protocol messages over the wire", () => {
             const msg: protocol.Request = { seq: 0, type: "request", command: "" };
             const strmsg = JSON.stringify(msg);
-            const len = 1 + Utils.byteLength(strmsg, "utf8");
+            const len = 1 + byteLength(strmsg, "utf8");
             const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
             session.send = Session.prototype.send;
@@ -453,7 +456,10 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
     const command = "testhandler";
     class TestSession extends Session {
         lastSent: protocol.Message | undefined;
-        private exceptionRaisingHandler(_request: protocol.Request): { response?: any, responseRequired: boolean } {
+        private exceptionRaisingHandler(_request: protocol.Request): {
+            response?: any;
+            responseRequired: boolean;
+        } {
             f1();
             return Debug.fail(); // unreachable, throw to make compiler happy
             function f1() {
@@ -467,10 +473,10 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                typingsInstaller: undefined!,
+                byteLength: byteLength,
                 hrtime: process.hrtime,
-                logger: projectSystem.nullLogger(),
+                logger: nullLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler(command, this.exceptionRaisingHandler);
@@ -514,10 +520,10 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                typingsInstaller: undefined!,
+                byteLength: byteLength,
                 hrtime: process.hrtime,
-                logger: projectSystem.createHasErrorMessageLogger(),
+                logger: createHasErrorMessageLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler(this.customHandler, () => {
@@ -582,10 +588,10 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined!, // TODO: GH#18217
-                byteLength: Utils.byteLength,
+                typingsInstaller: undefined!,
+                byteLength: byteLength,
                 hrtime: process.hrtime,
-                logger: projectSystem.createHasErrorMessageLogger(),
+                logger: createHasErrorMessageLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler("echo", (req: protocol.Request) => ({
@@ -628,7 +634,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
         private server: InProcSession | undefined;
         private seq = 0;
         private callbacks: ((resp: protocol.Response) => void)[] = [];
-        private eventHandlers = new Map<string, (args: any) => void>();
+        private eventHandlers = new ts.Map<string, (args: any) => void>();
 
         handle(msg: protocol.Message): void {
             if (msg.type === "response") {
@@ -748,4 +754,3 @@ describe("unittests:: tsserver:: Session:: helpers", () => {
         assert.deepEqual(res, { line: 4, offset: 11 });
     });
 });
-}

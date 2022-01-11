@@ -1,12 +1,15 @@
+import { Type, Debug, combinePaths, timestamp, Node, getSourceFileOfNode, getLineAndCharacterOfPosition, LineAndCharacter, ObjectFlags, TypeFlags, IndexedAccessType, TypeReference, ConditionalType, SubstitutionType, ReverseMappedType, EvolvingArrayType, unescapeLeadingUnderscores, UnionType, IntersectionType, IndexType } from "./ts";
+import { mark, measure } from "./ts.performance";
+import * as ts from "./ts";
 /* Tracing events for the compiler. */
 
 /*@internal*/
-namespace ts { // eslint-disable-line one-namespace-per-file
 // should be used as tracing?.___
 export let tracing: typeof tracingEnabled | undefined;
 // enable the above using startTracing()
 
 // `tracingEnabled` should never be used directly, only through the above
+/* @internal */
 namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
     type Mode = "project" | "build" | "server";
 
@@ -25,7 +28,8 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
     interface Args {
         [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
-    };
+    }
+    ;
 
     /** Starts tracing for the given project. */
     export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
@@ -52,8 +56,7 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
             fs.mkdirSync(traceDir, { recursive: true });
         }
 
-        const countPart =
-            mode === "build" ? `.${process.pid}-${++traceCount}`
+        const countPart = mode === "build" ? `.${process.pid}-${++traceCount}`
             : mode === "server" ? `.${process.pid}`
             : ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
@@ -70,8 +73,7 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
 
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
         const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
-        fs.writeSync(traceFd,
-            "[\n"
+        fs.writeSync(traceFd, "[\n"
             + [{ name: "process_name", args: { name: "tsc" }, ...meta },
                { name: "thread_name", args: { name: "Main" }, ...meta },
                { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
@@ -107,17 +109,23 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
         Parse = "parse",
         Program = "program",
         Bind = "bind",
-        Check = "check", // Before we get into checking types (e.g. checkSourceFile)
+        Check = "check",
         CheckTypes = "checkTypes",
         Emit = "emit",
-        Session = "session",
+        Session = "session"
     }
 
     export function instant(phase: Phase, name: string, args?: Args) {
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
-    const eventStack: { phase: Phase, name: string, args?: Args, time: number, separateBeginAndEnd: boolean }[] = [];
+    const eventStack: {
+        phase: Phase;
+        name: string;
+        args?: Args;
+        time: number;
+        separateBeginAndEnd: boolean;
+    }[] = [];
 
     /**
      * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
@@ -156,19 +164,20 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
         }
     }
 
-    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
-                        time: number = 1000 * timestamp()) {
+    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string, time: number = 1000 * timestamp()) {
 
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
-        if (mode === "server" && phase === Phase.CheckTypes) return;
-
-        performance.mark("beginTracing");
+        if (mode === "server" && phase === Phase.CheckTypes)
+            return;
+        mark("beginTracing");
         fs.writeSync(traceFd, `,\n{"pid":1,"tid":1,"ph":"${eventType}","cat":"${phase}","ts":${time},"name":"${name}"`);
-        if (extras) fs.writeSync(traceFd, `,${extras}`);
-        if (args) fs.writeSync(traceFd, `,"args":${JSON.stringify(args)}`);
+        if (extras)
+            fs.writeSync(traceFd, `,${extras}`);
+        if (args)
+            fs.writeSync(traceFd, `,"args":${JSON.stringify(args)}`);
         fs.writeSync(traceFd, `}`);
-        performance.mark("endTracing");
-        performance.measure("Tracing", "beginTracing", "endTracing");
+        mark("endTracing");
+        measure("Tracing", "beginTracing", "endTracing");
     }
 
     function getLocation(node: Node | undefined) {
@@ -190,12 +199,12 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
     }
 
     function dumpTypes(types: readonly Type[]) {
-        performance.mark("beginDumpTypes");
+        mark("beginDumpTypes");
 
         const typesPath = legend[legend.length - 1].typesPath!;
         const typesFd = fs.openSync(typesPath, "w");
 
-        const recursionIdentityMap = new Map<object, number>();
+        const recursionIdentityMap = new ts.Map<object, number>();
 
         // Cleverness: no line break here so that the type ID will match the line number
         fs.writeSync(typesFd, "[");
@@ -319,8 +328,8 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
 
         fs.closeSync(typesFd);
 
-        performance.mark("endDumpTypes");
-        performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
+        mark("endDumpTypes");
+        measure("Dump types", "beginDumpTypes", "endDumpTypes");
     }
 
     export function dumpLegend() {
@@ -339,6 +348,7 @@ namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
 }
 
 // define after tracingEnabled is initialized
+/* @internal */
 export const startTracing = tracingEnabled.startTracing;
+/* @internal */
 export const dumpTracingLegend = tracingEnabled.dumpLegend;
-}

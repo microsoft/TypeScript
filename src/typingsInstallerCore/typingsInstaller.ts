@@ -1,10 +1,16 @@
-namespace ts.server.typingsInstaller {
+import { MapLike, noop, resolveModuleName, combinePaths, ModuleResolutionKind, compareStringsCaseInsensitive, Comparison, ESMap, FileWatcher, JsTyping, GetCanonicalFileName, WatchFactory, Path, createGetCanonicalFileName, getWatchFactory, WatchFactoryHost, WatchLogLevel, clearMap, closeFileWatcher, hasProperty, getBaseFileName, getProperty, Version, mapDefined, mangleScopedPackageName, version, versionMajorMinor, getDirectoryPath, WatchOptions, copyEntries, PollingInterval, fileExtensionIs, Extension, WatchDirectoryFlags, containsPath, directorySeparator } from "./ts";
+import { InstallTypingHost, CloseProject, DiscoverTypings, EventBeginInstallTypes, BeginInstallTypes, EndInstallTypes, EventEndInstallTypes, ActionInvalidate, SetTypings, ActionSet, InvalidateCachedTypings } from "./ts.server";
+import * as ts from "./ts";
 interface NpmConfig {
     devDependencies: MapLike<any>;
 }
 
 interface NpmLock {
-    dependencies: { [packageName: string]: { version: string } };
+    dependencies: {
+        [packageName: string]: {
+            version: string;
+        };
+    };
 }
 
 export interface Log {
@@ -84,17 +90,19 @@ const enum ProjectWatcherType {
     DirectoryWatcher = "DirectoryWatcher"
 }
 
-type ProjectWatchers = ESMap<string, FileWatcher> & { isInvoked?: boolean; };
+type ProjectWatchers = ESMap<string, FileWatcher> & {
+    isInvoked?: boolean;
+};
 
 function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers) {
     return `Project: ${projectName} watcher already invoked: ${watchers.isInvoked}`;
 }
 
 export abstract class TypingsInstaller {
-    private readonly packageNameToTypingLocation = new Map<string, JsTyping.CachedTyping>();
-    private readonly missingTypingsSet = new Set<string>();
-    private readonly knownCachesSet = new Set<string>();
-    private readonly projectWatchers = new Map<string, ProjectWatchers>();
+    private readonly packageNameToTypingLocation = new ts.Map<string, JsTyping.CachedTyping>();
+    private readonly missingTypingsSet = new ts.Set<string>();
+    private readonly knownCachesSet = new ts.Set<string>();
+    private readonly projectWatchers = new ts.Map<string, ProjectWatchers>();
     private safeList: JsTyping.SafeList | undefined;
     readonly pendingRunRequests: PendingRequest[] = [];
     private readonly toCanonicalFileName: GetCanonicalFileName;
@@ -107,13 +115,7 @@ export abstract class TypingsInstaller {
     /*@internal*/
     private readonly watchFactory: WatchFactory<string, ProjectWatchers>;
 
-    constructor(
-        protected readonly installTypingHost: InstallTypingHost,
-        private readonly globalCachePath: string,
-        private readonly safeListPath: Path,
-        private readonly typesMapLocation: Path,
-        private readonly throttleLimit: number,
-        protected readonly log = nullLog) {
+    constructor(protected readonly installTypingHost: InstallTypingHost, private readonly globalCachePath: string, private readonly safeListPath: Path, private readonly typesMapLocation: Path, private readonly throttleLimit: number, protected readonly log = nullLog) {
         this.toCanonicalFileName = createGetCanonicalFileName(installTypingHost.useCaseSensitiveFileNames);
         this.globalCachePackageJsonPath = combinePaths(globalCachePath, "package.json");
         const isLoggingEnabled = this.log.isEnabled();
@@ -163,16 +165,7 @@ export abstract class TypingsInstaller {
         if (this.safeList === undefined) {
             this.initializeSafeList();
         }
-        const discoverTypingsResult = JsTyping.discoverTypings(
-            this.installTypingHost,
-            this.log.isEnabled() ? (s => this.log.writeLine(s)) : undefined,
-            req.fileNames,
-            req.projectRootPath,
-            this.safeList!,
-            this.packageNameToTypingLocation,
-            req.typeAcquisition,
-            req.unresolvedImports,
-            this.typesRegistry);
+        const discoverTypingsResult = JsTyping.discoverTypings(this.installTypingHost, this.log.isEnabled() ? (s => this.log.writeLine(s)) : undefined, req.fileNames, req.projectRootPath, this.safeList!, this.packageNameToTypingLocation, req.typeAcquisition, req.unresolvedImports, this.typesRegistry);
 
         if (this.log.isEnabled()) {
             this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);
@@ -279,22 +272,26 @@ export abstract class TypingsInstaller {
         return mapDefined(typingsToInstall, typing => {
             const typingKey = mangleScopedPackageName(typing);
             if (this.missingTypingsSet.has(typingKey)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
+                if (this.log.isEnabled())
+                    this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
                 return undefined;
             }
             const validationResult = JsTyping.validatePackageName(typing);
             if (validationResult !== JsTyping.NameValidationResult.Ok) {
                 // add typing name to missing set so we won't process it again
                 this.missingTypingsSet.add(typingKey);
-                if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
+                if (this.log.isEnabled())
+                    this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
                 return undefined;
             }
             if (!this.typesRegistry.has(typingKey)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
+                if (this.log.isEnabled())
+                    this.log.writeLine(`'${typing}':: Entry for package '${typingKey}' does not exist in local types registry - skipping...`);
                 return undefined;
             }
             if (this.packageNameToTypingLocation.get(typingKey) && JsTyping.isTypingUpToDate(this.packageNameToTypingLocation.get(typingKey)!, this.typesRegistry.get(typingKey)!)) {
-                if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
+                if (this.log.isEnabled())
+                    this.log.writeLine(`'${typing}':: '${typingKey}' already has an up-to-date typing - skipping...`);
                 return undefined;
             }
             return typingKey;
@@ -339,7 +336,7 @@ export abstract class TypingsInstaller {
             eventId: requestId,
             // qualified explicitly to prevent occasional shadowing
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-            typingsInstallerVersion: ts.version,
+            typingsInstallerVersion: version,
             projectName: req.projectName
         } as BeginInstallTypes);
 
@@ -390,7 +387,7 @@ export abstract class TypingsInstaller {
                     installSuccess: ok,
                     // qualified explicitly to prevent occasional shadowing
                     // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-                    typingsInstallerVersion: ts.version
+                    typingsInstallerVersion: version
                 };
                 this.sendResponse(response);
             }
@@ -415,9 +412,9 @@ export abstract class TypingsInstaller {
         }
 
         let watchers = this.projectWatchers.get(projectName)!;
-        const toRemove = new Map<string, FileWatcher>();
+        const toRemove = new ts.Map<string, FileWatcher>();
         if (!watchers) {
-            watchers = new Map();
+            watchers = new ts.Map();
             this.projectWatchers.set(projectName, watchers);
         }
         else {
@@ -541,5 +538,4 @@ export abstract class TypingsInstaller {
 /* @internal */
 export function typingsName(packageName: string): string {
     return `@types/${packageName}@ts${versionMajorMinor}`;
-}
 }

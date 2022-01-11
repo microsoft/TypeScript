@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { TscWatchCompileChange, checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout, verifyTscWatch, createWatchedSystem, libFile } from "../../ts.tscWatch";
+import { TestFSWithWatch, libContent } from "../../ts";
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {
         return {
@@ -19,14 +20,11 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
         scenario: "noEmitOnError",
         subScenario: "does not emit any files on error",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () => createWatchedSystem(
-            [
+        sys: () => createWatchedSystem([
                 ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
                     .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
                 { path: libFile.path, content: libContent }
-            ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError` }
-        ),
+        ], { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError` }),
         changes: [
             noChange,
             change("Fix Syntax error", `import { A } from "../shared/types/db";
@@ -43,4 +41,3 @@ const a: string = "hello";`),
         baselineIncremental: true
     });
 });
-}

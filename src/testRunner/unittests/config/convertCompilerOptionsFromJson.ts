@@ -1,4 +1,6 @@
-namespace ts {
+import { FormatDiagnosticsHost, createGetCanonicalFileName, CompilerOptions, Diagnostic, convertCompilerOptionsFromJson, parseJsonText, ParseConfigHost, parseJsonSourceFileConfigFileContent, Diagnostics, formatDiagnostic, ModuleKind, ScriptTarget } from "../../ts";
+import { FileSystem } from "../../vfs";
+import * as fakes from "../../fakes";
 describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     const formatDiagnosticHost: FormatDiagnosticsHost = {
         getCurrentDirectory: () => "/apath/",
@@ -45,7 +47,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         const result = parseJsonText(configFileName, fileText);
         assert(!!result.endOfFileToken);
         assert.equal(!!result.parseDiagnostics.length, isExpectedResultWithParsingFailure(expectedResult));
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
+        const host: ParseConfigHost = new fakes.ParseConfigHost(new FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
         const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
         expectedResult.compilerOptions.configFilePath = configFileName;
 
@@ -85,8 +87,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
 
     // tsconfig.json tests
     it("Convert correctly format tsconfig.json to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -94,8 +95,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: ["es5", "es2015.core", "es2015.symbol"]
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -104,13 +104,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert correctly format tsconfig.json with allowJs is false to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -119,8 +117,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     allowJs: false,
                     lib: ["es5", "es2015.core", "es2015.symbol"]
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -130,13 +127,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert incorrect option of jsx to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -144,8 +139,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     jsx: ""
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -160,21 +154,18 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert incorrect option of module to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "",
                     target: "es5",
                     noImplicitAny: false,
                     sourceMap: false,
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     noImplicitAny: false,
@@ -188,21 +179,18 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert incorrect option of newLine to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     newLine: "",
                     target: "es5",
                     noImplicitAny: false,
                     sourceMap: false,
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     noImplicitAny: false,
@@ -216,20 +204,17 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert incorrect option of target to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     target: "",
                     noImplicitAny: false,
                     sourceMap: false,
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     noImplicitAny: false,
                     sourceMap: false,
@@ -242,20 +227,17 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert incorrect option of module-resolution to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     moduleResolution: "",
                     noImplicitAny: false,
                     sourceMap: false,
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     noImplicitAny: false,
                     sourceMap: false,
@@ -268,13 +250,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert incorrect option of libs to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -282,8 +262,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: ["es5", "es2015.core", "incorrectLib"]
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -299,13 +278,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert empty string option of libs to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -313,8 +290,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: ["es5", ""]
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -330,13 +306,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert empty string option of libs to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -344,8 +318,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: [""]
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -361,13 +334,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert trailing-whitespace string option of libs to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -375,8 +346,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: ["   "]
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -392,13 +362,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                     category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert empty option of libs to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -406,8 +374,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: []
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     module: ModuleKind.CommonJS,
                     target: ScriptTarget.ES5,
@@ -416,18 +383,15 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     lib: []
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert incorrectly format tsconfig.json to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     modu: "commonjs",
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {},
                 errors: [{
                     file: undefined,
@@ -437,41 +401,34 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Unknown_compiler_option_0.code,
                     category: Diagnostics.Unknown_compiler_option_0.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert default tsconfig.json to compiler-options ", () => {
-        assertCompilerOptions({}, "tsconfig.json",
-            {
+        assertCompilerOptions({}, "tsconfig.json", {
                 compilerOptions: {},
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert negative numbers in tsconfig.json ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     allowJs: true,
                     maxNodeModuleJsDepth: -1
                 }
-            }, "tsconfig.json",
-            {
+        }, "tsconfig.json", {
                 compilerOptions: {
                     allowJs: true,
                     maxNodeModuleJsDepth: -1
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     // jsconfig.json
     it("Convert correctly format jsconfig.json to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -479,8 +436,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     sourceMap: false,
                     lib: ["es5", "es2015.core", "es2015.symbol"]
                 }
-            }, "jsconfig.json",
-            {
+        }, "jsconfig.json", {
                 compilerOptions: {
                     allowJs: true,
                     maxNodeModuleJsDepth: 2,
@@ -494,13 +450,11 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert correctly format jsconfig.json with allowJs is false to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     module: "commonjs",
                     target: "es5",
@@ -509,8 +463,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     allowJs: false,
                     lib: ["es5", "es2015.core", "es2015.symbol"]
                 }
-            }, "jsconfig.json",
-            {
+        }, "jsconfig.json", {
                 compilerOptions: {
                     allowJs: false,
                     maxNodeModuleJsDepth: 2,
@@ -524,20 +477,16 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert incorrectly format jsconfig.json to compiler-options ", () => {
-        assertCompilerOptions(
-            {
+        assertCompilerOptions({
                 compilerOptions: {
                     modu: "commonjs",
                 }
-            }, "jsconfig.json",
-            {
-                compilerOptions:
-                {
+        }, "jsconfig.json", {
+            compilerOptions: {
                     allowJs: true,
                     maxNodeModuleJsDepth: 2,
                     allowSyntheticDefaultImports: true,
@@ -552,15 +501,12 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     code: Diagnostics.Unknown_compiler_option_0.code,
                     category: Diagnostics.Unknown_compiler_option_0.category
                 }]
-            }
-        );
     });
 
+    });
     it("Convert default jsconfig.json to compiler-options ", () => {
-        assertCompilerOptions({}, "jsconfig.json",
-            {
-                compilerOptions:
-                {
+        assertCompilerOptions({}, "jsconfig.json", {
+            compilerOptions: {
                     allowJs: true,
                     maxNodeModuleJsDepth: 2,
                     allowSyntheticDefaultImports: true,
@@ -568,10 +514,9 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     noEmit: true
                 },
                 errors: []
-            }
-        );
     });
 
+    });
     it("Convert tsconfig options when there are multiple invalid strings", () => {
         assertCompilerOptionsWithJsonText(`{
   "compilerOptions": {
@@ -592,9 +537,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     ]
   }
 }
-`,
-        "tsconfig.json",
-        {
+`, "tsconfig.json", {
             compilerOptions: {
                 target: undefined,
                 module: ModuleKind.ESNext,
@@ -712,4 +655,3 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         });
     });
 });
-}

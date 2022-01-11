@@ -1,5 +1,7 @@
+import { Path, PackageJsonInfo, Ternary, getDirectoryPath, combinePaths, forEachAncestorDirectory, tryFileExists, Debug, createPackageJsonInfo } from "./ts";
+import { ProjectService } from "./ts.server";
+import * as ts from "./ts";
 /*@internal*/
-namespace ts.server {
 export interface PackageJsonCache {
     addOrUpdate(fileName: Path): void;
     forEach(action: (info: PackageJsonInfo, fileName: Path) => void): void;
@@ -10,9 +12,10 @@ export interface PackageJsonCache {
     searchDirectoryAndAncestors(directory: Path): void;
 }
 
+/* @internal */
 export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
-    const packageJsons = new Map<string, PackageJsonInfo>();
-    const directoriesWithoutPackageJson = new Map<string, true>();
+    const packageJsons = new ts.Map<string, PackageJsonInfo>();
+    const directoriesWithoutPackageJson = new ts.Map<string, true>();
     return {
         addOrUpdate,
         forEach: packageJsons.forEach.bind(packageJsons),
@@ -52,5 +55,4 @@ export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
             directoriesWithoutPackageJson.has(directory) ? Ternary.False :
             Ternary.Maybe;
     }
-}
 }

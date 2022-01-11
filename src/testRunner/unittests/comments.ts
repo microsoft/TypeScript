@@ -1,4 +1,4 @@
-namespace ts {
+import { getLeadingCommentRanges, SyntaxKind } from "../ts";
 describe("comment parsing", () => {
     const withShebang = `#! node
 /** comment */
@@ -29,4 +29,3 @@ describe("comment parsing", () => {
         assert.strictEqual(result![0].kind, SyntaxKind.SingleLineCommentTrivia);
     });
 });
-}

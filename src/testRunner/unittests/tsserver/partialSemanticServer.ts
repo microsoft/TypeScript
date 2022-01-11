@@ -1,28 +1,30 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createSession, openFilesForSession, checkNumberOfProjects, checkProjectActualFiles, checkWatchedFiles, checkWatchedDirectories, protocol, protocolFileLocationFromSubstring, createLoggerWithInMemoryLogs, verifyGetErrRequest, baselineTsserverLogs, closeFilesForSession } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
+import { LanguageServiceMode, emptyArray, ScriptElementKind, Completions } from "../../ts";
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
     function setup() {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/a.ts`,
+            path: `${projectRoot}/a.ts`,
             content: `import { y, cc } from "./b";
 import { something } from "something";
 class c { prop = "hello"; foo() { return this.prop; } }`
         };
         const file2: File = {
-            path: `${tscWatch.projectRoot}/b.ts`,
+            path: `${projectRoot}/b.ts`,
             content: `export { cc } from "./c";
 import { something } from "something";
                 export const y = 10;`
         };
         const file3: File = {
-            path: `${tscWatch.projectRoot}/c.ts`,
+            path: `${projectRoot}/c.ts`,
             content: `export const cc = 10;`
         };
         const something: File = {
-            path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+            path: `${projectRoot}/node_modules/something/index.d.ts`,
             content: "export const something = 10;"
         };
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
@@ -113,11 +115,11 @@ import { something } from "something";
 
     it("allows syntactic diagnostic commands", () => {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/a.ts`,
+            path: `${projectRoot}/a.ts`,
             content: `if (a < (b + c) { }`
         };
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: `{}`
         };
         const expectedErrorMessage = "')' expected.";
@@ -167,27 +169,27 @@ import { something } from "something";
 
     it("should not include referenced files from unopened files", () => {
         const file1: File = {
-            path: `${tscWatch.projectRoot}/a.ts`,
+            path: `${projectRoot}/a.ts`,
             content: `///<reference path="b.ts"/>
-///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+///<reference path="${projectRoot}/node_modules/something/index.d.ts"/>
 function fooA() { }`
         };
         const file2: File = {
-            path: `${tscWatch.projectRoot}/b.ts`,
+            path: `${projectRoot}/b.ts`,
             content: `///<reference path="./c.ts"/>
-///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+///<reference path="${projectRoot}/node_modules/something/index.d.ts"/>
 function fooB() { }`
         };
         const file3: File = {
-            path: `${tscWatch.projectRoot}/c.ts`,
+            path: `${projectRoot}/c.ts`,
             content: `function fooC() { }`
         };
         const something: File = {
-            path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+            path: `${projectRoot}/node_modules/something/index.d.ts`,
             content: "function something() {}"
         };
         const configFile: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: "{}"
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
@@ -263,4 +265,3 @@ function fooB() { }`
         }]);
     });
 });
-}

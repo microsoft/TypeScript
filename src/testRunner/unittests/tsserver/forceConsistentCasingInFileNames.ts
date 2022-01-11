@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createServerHost, libFile, createSession, openFilesForSession, checkNumberOfProjects, configuredProjectAt, createLoggerWithInMemoryLogs, verifyGetErrRequest, closeFilesForSession, protocol, protocolTextSpanFromSubstring, baselineTsserverLogs } from "../../ts.projectSystem";
+import { projectRoot } from "../../ts.tscWatch";
 describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
     it("works when extends is specified with a case insensitive file system", () => {
         const rootPath = "/Users/username/dev/project";
@@ -44,15 +45,15 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
     it("works when renaming file with different casing", () => {
         const loggerFile: File = {
-            path: `${tscWatch.projectRoot}/Logger.ts`,
+            path: `${projectRoot}/Logger.ts`,
             content: `export class logger { }`
         };
         const anotherFile: File = {
-            path: `${tscWatch.projectRoot}/another.ts`,
+            path: `${projectRoot}/another.ts`,
             content: `import { logger } from "./Logger"; new logger();`
         };
         const tsconfig: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: { forceConsistentCasingInFileNames: true }
             })
@@ -60,16 +61,16 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
         const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
-        openFilesForSession([{ file: loggerFile, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: loggerFile, projectRootPath: projectRoot }], session);
         verifyGetErrRequest({ session, host, files: [loggerFile] });
 
         const newLoggerPath = loggerFile.path.toLowerCase();
         host.renameFile(loggerFile.path, newLoggerPath);
         closeFilesForSession([loggerFile], session);
-        openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: projectRoot }], session);
 
         // Apply edits for rename
-        openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: anotherFile, projectRootPath: projectRoot }], session);
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
             arguments: {
@@ -77,10 +78,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
                     fileName: anotherFile.path,
                     textChanges: [{
                         newText: "./logger",
-                        ...protocolTextSpanFromSubstring(
-                            anotherFile.content,
-                            "./Logger"
-                        )
+                                ...protocolTextSpanFromSubstring(anotherFile.content, "./Logger")
                     }]
                 }]
             }
@@ -93,15 +91,15 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
     it("when changing module name with different casing", () => {
         const loggerFile: File = {
-            path: `${tscWatch.projectRoot}/Logger.ts`,
+            path: `${projectRoot}/Logger.ts`,
             content: `export class logger { }`
         };
         const anotherFile: File = {
-            path: `${tscWatch.projectRoot}/another.ts`,
+            path: `${projectRoot}/another.ts`,
             content: `import { logger } from "./Logger"; new logger();`
         };
         const tsconfig: File = {
-            path: `${tscWatch.projectRoot}/tsconfig.json`,
+            path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: { forceConsistentCasingInFileNames: true }
             })
@@ -109,7 +107,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
         const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
-        openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
+        openFilesForSession([{ file: anotherFile, projectRootPath: projectRoot }], session);
         verifyGetErrRequest({ session, host, files: [anotherFile] });
 
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
@@ -119,10 +117,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
                     fileName: anotherFile.path,
                     textChanges: [{
                         newText: "./logger",
-                        ...protocolTextSpanFromSubstring(
-                            anotherFile.content,
-                            "./Logger"
-                        )
+                                ...protocolTextSpanFromSubstring(anotherFile.content, "./Logger")
                     }]
                 }]
             }
@@ -133,4 +128,3 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         baselineTsserverLogs("forceConsistentCasingInFileNames", "when changing module name with different casing", session);
     });
 });
-}

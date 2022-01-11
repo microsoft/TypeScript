@@ -1,4 +1,4 @@
-namespace ts {
+import { Node, EmitNode, isParseTreeNode, SyntaxKind, getSourceFileOfNode, getParseTreeNode, Debug, EmitFlags, SourceFile, SourceMapRange, TextRange, SynthesizedComment, append, AccessExpression, EmitHelper, some, appendIfUnique, orderedRemoveItem, SnippetElement } from "../ts";
 /**
  * Associates a node with the current transformation, initializing
  * various transient transformation properties.
@@ -236,7 +236,8 @@ export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
 export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
     const sourceEmitNode = source.emitNode;
     const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
-    if (!some(sourceEmitHelpers)) return;
+    if (!some(sourceEmitHelpers))
+        return;
 
     const targetEmitNode = getOrCreateEmitNode(target);
     let helpersRemoved = 0;
@@ -278,5 +279,4 @@ export function setSnippetElement<T extends Node>(node: T, snippet: SnippetEleme
 export function ignoreSourceNewlines<T extends Node>(node: T): T {
     getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
     return node;
-}
 }

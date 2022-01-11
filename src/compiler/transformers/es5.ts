@@ -1,5 +1,5 @@
+import { TransformationContext, EmitHint, Node, JsxEmit, SyntaxKind, chainBundle, SourceFile, JsxOpeningElement, JsxClosingElement, JsxSelfClosingElement, getOriginalNodeId, isPropertyAccessExpression, isPropertyAssignment, PropertyAccessExpression, Expression, isPrivateIdentifier, setTextRange, PropertyAssignment, isIdentifier, Identifier, nodeIsSynthesized, stringToToken, idText } from "../ts";
 /*@internal*/
-namespace ts {
 /**
  * Transforms ES5 syntax into ES3 syntax.
  *
@@ -118,5 +118,4 @@ export function transformES5(context: TransformationContext) {
         }
         return undefined;
     }
-}
 }

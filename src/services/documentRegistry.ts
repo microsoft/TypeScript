@@ -1,4 +1,5 @@
-namespace ts {
+import { CompilerOptions, IScriptSnapshot, ScriptKind, SourceFile, Path, ESMap, createGetCanonicalFileName, arrayFrom, toPath, Debug, ensureScriptKind, ScriptTarget, getEmitScriptTarget, getOrUpdate, createLanguageServiceSourceFile, updateLanguageServiceSourceFile, firstDefinedIterator, identity, sourceFileAffectingCompilerOptions, getCompilerOptionValue } from "./ts";
+import * as ts from "./ts";
 /**
  * The document registry represents a store of SourceFile objects that can be shared between
  * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
@@ -29,21 +30,8 @@ export interface DocumentRegistry {
      * @param version Current version of the file. Only used if the file was not found
      * in the registry and a new one was created.
      */
-    acquireDocument(
-        fileName: string,
-        compilationSettings: CompilerOptions,
-        scriptSnapshot: IScriptSnapshot,
-        version: string,
-        scriptKind?: ScriptKind): SourceFile;
-
-    acquireDocumentWithKey(
-        fileName: string,
-        path: Path,
-        compilationSettings: CompilerOptions,
-        key: DocumentRegistryBucketKey,
-        scriptSnapshot: IScriptSnapshot,
-        version: string,
-        scriptKind?: ScriptKind): SourceFile;
+    acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
+    acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
 
     /**
      * Request an updated version of an already existing SourceFile with a given fileName
@@ -57,21 +45,8 @@ export interface DocumentRegistry {
      * @param scriptSnapshot Text of the file.
      * @param version Current version of the file.
      */
-    updateDocument(
-        fileName: string,
-        compilationSettings: CompilerOptions,
-        scriptSnapshot: IScriptSnapshot,
-        version: string,
-        scriptKind?: ScriptKind): SourceFile;
-
-    updateDocumentWithKey(
-        fileName: string,
-        path: Path,
-        compilationSettings: CompilerOptions,
-        key: DocumentRegistryBucketKey,
-        scriptSnapshot: IScriptSnapshot,
-        version: string,
-        scriptKind?: ScriptKind): SourceFile;
+    updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
+    updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
 
     getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
     /**
@@ -102,7 +77,10 @@ export interface DocumentRegistry {
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
     /*@internal*/
-    getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [string, number | undefined][];
+    getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [
+        string,
+        number | undefined
+    ][];
 
     reportStats(): string;
 }
@@ -113,7 +91,9 @@ export interface ExternalDocumentCache {
     getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined;
 }
 
-export type DocumentRegistryBucketKey = string & { __bucketKey: any };
+export type DocumentRegistryBucketKey = string & {
+    __bucketKey: any;
+};
 
 interface DocumentRegistryEntry {
     sourceFile: SourceFile;
@@ -137,13 +117,17 @@ export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, curr
 export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
     // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
     // for those settings.
-    const buckets = new Map<DocumentRegistryBucketKey, ESMap<Path, BucketEntry>>();
+    const buckets = new ts.Map<DocumentRegistryBucketKey, ESMap<Path, BucketEntry>>();
     const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
     function reportStats() {
         const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
             const entries = buckets.get(name)!;
-            const sourceFiles: { name: string; scriptKind: ScriptKind, refCount: number; }[] = [];
+            const sourceFiles: {
+                name: string;
+                scriptKind: ScriptKind;
+                refCount: number;
+            }[] = [];
             entries.forEach((entry, name) => {
                 if (isDocumentRegistryEntry(entry)) {
                     sourceFiles.push({
@@ -191,18 +175,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         return entry;
     }
 
-    function acquireOrUpdateDocument(
-        fileName: string,
-        path: Path,
-        compilationSettings: CompilerOptions,
-        key: DocumentRegistryBucketKey,
-        scriptSnapshot: IScriptSnapshot,
-        version: string,
-        acquiring: boolean,
-        scriptKind?: ScriptKind): SourceFile {
+    function acquireOrUpdateDocument(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, acquiring: boolean, scriptKind?: ScriptKind): SourceFile {
         scriptKind = ensureScriptKind(fileName, scriptKind);
         const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
-        const bucket = getOrUpdate(buckets, key, () => new Map());
+        const bucket = getOrUpdate(buckets, key, () => new ts.Map());
         const bucketEntry = bucket.get(path);
         let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
         if (!entry && externalCache) {
@@ -234,8 +210,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
             // return it as is.
             if (entry.sourceFile.version !== version) {
-                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                    scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
+                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
                 if (externalCache) {
                     externalCache.setDocument(key, path, entry.sourceFile);
                 }
@@ -259,7 +234,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
                 bucket.set(path, entry!);
             }
             else if (isDocumentRegistryEntry(bucketEntry)) {
-                const scriptKindMap = new Map<ScriptKind, DocumentRegistryEntry>();
+                const scriptKindMap = new ts.Map<ScriptKind, DocumentRegistryEntry>();
                 scriptKindMap.set(bucketEntry.sourceFile.scriptKind, bucketEntry);
                 scriptKindMap.set(scriptKind!, entry!);
                 bucket.set(path, scriptKindMap);
@@ -297,7 +272,10 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     }
 
     function getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind) {
-        return arrayFrom(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
+        return arrayFrom(buckets.entries(), ([key, bucket]): [
+            string,
+            number | undefined
+        ] => {
             const bucketEntry = bucket.get(path);
             const entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
             return [key, entry && entry.languageServiceRefCount];
@@ -319,5 +297,4 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
 
 function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
     return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
-}
 }

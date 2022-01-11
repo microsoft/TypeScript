@@ -1,20 +1,25 @@
+import { PerformanceHooks, Performance, Debug, noop, timestamp, System, sys, tryGetNativePerformanceHooks } from "./ts";
+import * as ts from "./ts";
 /*@internal*/
 /** Performance measurements for the compiler. */
-namespace ts.performance {
 let perfHooks: PerformanceHooks | undefined;
 // when set, indicates the implementation of `Performance` to use for user timing.
 // when unset, indicates user timing is unavailable or disabled.
+/* @internal */
 let performanceImpl: Performance | undefined;
 
+/* @internal */
 export interface Timer {
     enter(): void;
     exit(): void;
 }
 
+/* @internal */
 export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
     return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
 }
 
+/* @internal */
 export function createTimer(measureName: string, startMarkName: string, endMarkName: string): Timer {
     let enterCount = 0;
     return {
@@ -39,19 +44,26 @@ export function createTimer(measureName: string, startMarkName: string, endMarkN
     }
 }
 
+/* @internal */
 export const nullTimer: Timer = { enter: noop, exit: noop };
 
+/* @internal */
 let enabled = false;
+/* @internal */
 let timeorigin = timestamp();
-const marks = new Map<string, number>();
-const counts = new Map<string, number>();
-const durations = new Map<string, number>();
+/* @internal */
+const marks = new ts.Map<string, number>();
+/* @internal */
+const counts = new ts.Map<string, number>();
+/* @internal */
+const durations = new ts.Map<string, number>();
 
 /**
  * Marks a performance event.
  *
  * @param markName The name of the mark.
  */
+/* @internal */
 export function mark(markName: string) {
     if (enabled) {
         const count = counts.get(markName) ?? 0;
@@ -70,6 +82,7 @@ export function mark(markName: string) {
  * @param endMarkName The name of the ending mark. If not supplied, the current timestamp is
  *      used.
  */
+/* @internal */
 export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
     if (enabled) {
         const end = (endMarkName !== undefined ? marks.get(endMarkName) : undefined) ?? timestamp();
@@ -85,6 +98,7 @@ export function measure(measureName: string, startMarkName?: string, endMarkName
  *
  * @param markName The name of the mark.
  */
+/* @internal */
 export function getCount(markName: string) {
     return counts.get(markName) || 0;
 }
@@ -94,6 +108,7 @@ export function getCount(markName: string) {
  *
  * @param measureName The name of the measure whose durations should be accumulated.
  */
+/* @internal */
 export function getDuration(measureName: string) {
     return durations.get(measureName) || 0;
 }
@@ -103,6 +118,7 @@ export function getDuration(measureName: string) {
  *
  * @param cb The action to perform for each measure
  */
+/* @internal */
 export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
     durations.forEach((duration, measureName) => cb(measureName, duration));
 }
@@ -110,11 +126,13 @@ export function forEachMeasure(cb: (measureName: string, duration: number) => vo
 /**
  * Indicates whether the performance API is enabled.
  */
+/* @internal */
 export function isEnabled() {
     return enabled;
 }
 
 /** Enables (and resets) performance measurements for the compiler. */
+/* @internal */
 export function enable(system: System = sys) {
     if (!enabled) {
         enabled = true;
@@ -134,6 +152,7 @@ export function enable(system: System = sys) {
 }
 
 /** Disables performance measurements for the compiler. */
+/* @internal */
 export function disable() {
     if (enabled) {
         marks.clear();
@@ -142,5 +161,4 @@ export function disable() {
         performanceImpl = undefined;
         enabled = false;
     }
-}
 }

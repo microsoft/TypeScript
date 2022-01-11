@@ -1,116 +1,134 @@
-namespace ts {
+import { ESMap, TextChangeRange, FileReference, Path, GetEffectiveTypeRootsHost, CompilerOptions, ScriptKind, ProjectReference, ResolvedProjectReference, SourceFile, ResolvedModule, ModuleKind, ResolvedModuleWithFailedLookupLocations, ResolvedTypeReferenceDirective, HasInvalidatedResolution, HasChangedAutomaticTypeDirectiveNames, SymlinkCache, CustomTransformers, DocumentPositionMapper, SourceFileLike, ExportInfoMap, ModuleSpecifierCache, CompilerHost, Program, ParsedCommandLine, DiagnosticWithLocation, Diagnostic, TextSpan, UserPreferences, Symbol, DocumentHighlights, LineAndCharacter, SourceMapper, TextRange, EmitOutput, CancellationToken } from "./ts";
+import { TextChangesContext } from "./ts.textChanges";
+import * as ts from "./ts";
+declare module "../compiler/types" {
 export interface Node {
-    getSourceFile(): SourceFile;
-    getChildCount(sourceFile?: SourceFile): number;
-    getChildAt(index: number, sourceFile?: SourceFile): Node;
-    getChildren(sourceFile?: SourceFile): Node[];
+        getSourceFile(): ts.SourceFile;
+        getChildCount(sourceFile?: ts.SourceFile): number;
+        getChildAt(index: number, sourceFile?: ts.SourceFile): ts.Node;
+        getChildren(sourceFile?: ts.SourceFile): ts.Node[];
     /* @internal */
-    getChildren(sourceFile?: SourceFileLike): Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
-    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        getChildren(sourceFile?: ts.SourceFileLike): ts.Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
+        getStart(sourceFile?: ts.SourceFile, includeJsDocComment?: boolean): number;
     /* @internal */
-    getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
+        getStart(sourceFile?: ts.SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
     getFullStart(): number;
     getEnd(): number;
-    getWidth(sourceFile?: SourceFileLike): number;
+        getWidth(sourceFile?: ts.SourceFileLike): number;
     getFullWidth(): number;
-    getLeadingTriviaWidth(sourceFile?: SourceFile): number;
-    getFullText(sourceFile?: SourceFile): string;
-    getText(sourceFile?: SourceFile): string;
-    getFirstToken(sourceFile?: SourceFile): Node | undefined;
+        getLeadingTriviaWidth(sourceFile?: ts.SourceFile): number;
+        getFullText(sourceFile?: ts.SourceFile): string;
+        getText(sourceFile?: ts.SourceFile): string;
+        getFirstToken(sourceFile?: ts.SourceFile): ts.Node | undefined;
     /* @internal */
-    getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    getLastToken(sourceFile?: SourceFile): Node | undefined;
+        getFirstToken(sourceFile?: ts.SourceFileLike): ts.Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        getLastToken(sourceFile?: ts.SourceFile): ts.Node | undefined;
     /* @internal */
-    getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        getLastToken(sourceFile?: ts.SourceFileLike): ts.Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     // See ts.forEachChild for documentation.
-    forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+        forEachChild<T>(cbNode: (node: ts.Node) => T | undefined, cbNodeArray?: (nodes: ts.NodeArray<ts.Node>) => T | undefined): T | undefined;
 }
 
+}
+declare module "../compiler/types" {
 export interface Identifier {
     readonly text: string;
 }
 
+}
+declare module "../compiler/types" {
 export interface PrivateIdentifier {
     readonly text: string;
 }
 
+}
+declare module "../compiler/types" {
 export interface Symbol {
     readonly name: string;
-    getFlags(): SymbolFlags;
-    getEscapedName(): __String;
+        getFlags(): ts.SymbolFlags;
+        getEscapedName(): ts.__String;
     getName(): string;
-    getDeclarations(): Declaration[] | undefined;
-    getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        getDeclarations(): ts.Declaration[] | undefined;
+        getDocumentationComment(typeChecker: ts.TypeChecker | undefined): SymbolDisplayPart[];
     /* @internal */
-    getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
-    getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
+        getContextualDocumentationComment(context: ts.Node | undefined, checker: ts.TypeChecker | undefined): SymbolDisplayPart[];
+        getJsDocTags(checker?: ts.TypeChecker): JSDocTagInfo[];
 }
 
+}
+declare module "../compiler/types" {
 export interface Type {
-    getFlags(): TypeFlags;
-    getSymbol(): Symbol | undefined;
-    getProperties(): Symbol[];
-    getProperty(propertyName: string): Symbol | undefined;
-    getApparentProperties(): Symbol[];
-    getCallSignatures(): readonly Signature[];
-    getConstructSignatures(): readonly Signature[];
-    getStringIndexType(): Type | undefined;
-    getNumberIndexType(): Type | undefined;
-    getBaseTypes(): BaseType[] | undefined;
-    getNonNullableType(): Type;
-    /*@internal*/ getNonOptionalType(): Type;
+        getFlags(): ts.TypeFlags;
+        getSymbol(): ts.Symbol | undefined;
+        getProperties(): ts.Symbol[];
+        getProperty(propertyName: string): ts.Symbol | undefined;
+        getApparentProperties(): ts.Symbol[];
+        getCallSignatures(): readonly ts.Signature[];
+        getConstructSignatures(): readonly ts.Signature[];
+        getStringIndexType(): ts.Type | undefined;
+        getNumberIndexType(): ts.Type | undefined;
+        getBaseTypes(): ts.BaseType[] | undefined;
+        getNonNullableType(): ts.Type;
+        /*@internal*/ getNonOptionalType(): ts.Type;
     /*@internal*/ isNullableType(): boolean;
-    getConstraint(): Type | undefined;
-    getDefault(): Type | undefined;
-
-    isUnion(): this is UnionType;
-    isIntersection(): this is IntersectionType;
-    isUnionOrIntersection(): this is UnionOrIntersectionType;
-    isLiteral(): this is LiteralType;
-    isStringLiteral(): this is StringLiteralType;
-    isNumberLiteral(): this is NumberLiteralType;
-    isTypeParameter(): this is TypeParameter;
-    isClassOrInterface(): this is InterfaceType;
-    isClass(): this is InterfaceType;
-    isIndexType(): this is IndexType;
+        getConstraint(): ts.Type | undefined;
+        getDefault(): ts.Type | undefined;
+        isUnion(): this is ts.UnionType;
+        isIntersection(): this is ts.IntersectionType;
+        isUnionOrIntersection(): this is ts.UnionOrIntersectionType;
+        isLiteral(): this is ts.LiteralType;
+        isStringLiteral(): this is ts.StringLiteralType;
+        isNumberLiteral(): this is ts.NumberLiteralType;
+        isTypeParameter(): this is ts.TypeParameter;
+        isClassOrInterface(): this is ts.InterfaceType;
+        isClass(): this is ts.InterfaceType;
+        isIndexType(): this is ts.IndexType;
 }
 
+}
+declare module "../compiler/types" {
 export interface TypeReference {
-    typeArguments?: readonly Type[];
+        typeArguments?: readonly ts.Type[];
 }
 
+}
+declare module "../compiler/types" {
 export interface Signature {
-    getDeclaration(): SignatureDeclaration;
-    getTypeParameters(): TypeParameter[] | undefined;
-    getParameters(): Symbol[];
-    getTypeParameterAtPosition(pos: number): Type;
-    getReturnType(): Type;
-    getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        getDeclaration(): ts.SignatureDeclaration;
+        getTypeParameters(): ts.TypeParameter[] | undefined;
+        getParameters(): ts.Symbol[];
+        getTypeParameterAtPosition(pos: number): ts.Type;
+        getReturnType(): ts.Type;
+        getDocumentationComment(typeChecker: ts.TypeChecker | undefined): SymbolDisplayPart[];
     getJsDocTags(): JSDocTagInfo[];
 }
 
+}
+declare module "../compiler/types" {
 export interface SourceFile {
     /* @internal */ version: string;
     /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-    /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
-
-    /* @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
-
-    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        /* @internal */ nameTable: ts.UnderscoreEscapedMap<number> | undefined;
+        /* @internal */ getNamedDeclarations(): ESMap<string, readonly ts.Declaration[]>;
+        getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
     getLineEndOfPosition(pos: number): number;
     getLineStarts(): readonly number[];
     getPositionOfLineAndCharacter(line: number, character: number): number;
-    update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
-    /* @internal */ sourceMapper?: DocumentPositionMapper;
+        update(newText: string, textChangeRange: ts.TextChangeRange): ts.SourceFile;
+        /* @internal */ sourceMapper?: ts.DocumentPositionMapper;
 }
 
+}
+declare module "../compiler/types" {
 export interface SourceFileLike {
-    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
 }
 
+}
+declare module "../compiler/types" {
 export interface SourceMapSource {
-    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineAndCharacterOfPosition(pos: number): ts.LineAndCharacter;
+    }
 }
 
 /**
@@ -191,7 +209,7 @@ export const enum PackageJsonDependencyGroup {
     DevDependencies      = 1 << 1,
     PeerDependencies     = 1 << 2,
     OptionalDependencies = 1 << 3,
-    All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
+    All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies
 }
 
 /* @internal */
@@ -215,7 +233,7 @@ export interface FormattingHost {
 export const enum PackageJsonAutoImportPreference {
     Off,
     On,
-    Auto,
+    Auto
 }
 
 export interface PerformanceEvent {
@@ -226,7 +244,7 @@ export interface PerformanceEvent {
 export enum LanguageServiceMode {
     Semantic,
     PartialSemantic,
-    Syntactic,
+    Syntactic
 }
 
 export interface IncompleteCompletionsCache {
@@ -319,7 +337,9 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
 /* @internal */
 export const emptyOptions = {};
 
-export type WithMetadata<T> = T & { metadata?: unknown; };
+export type WithMetadata<T> = T & {
+    metadata?: unknown;
+};
 
 export const enum SemanticClassificationFormat {
     Original = "original",
@@ -431,15 +451,7 @@ export interface LanguageService {
      * @param preferences User settings, can be undefined for backwards compatibility
      * @param data `data` property from the completion entry
      */
-    getCompletionEntryDetails(
-        fileName: string,
-        position: number,
-        entryName: string,
-        formatOptions: FormatCodeOptions | FormatCodeSettings | undefined,
-        source: string | undefined,
-        preferences: UserPreferences | undefined,
-        data: CompletionEntryData | undefined,
-    ): CompletionEntryDetails | undefined;
+    getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): CompletionEntryDetails | undefined;
 
     getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
 
@@ -484,7 +496,7 @@ export interface LanguageService {
     provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
     provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
-    provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[]
+    provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
 
     getOutliningSpans(fileName: string): OutliningSpan[];
     getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -549,7 +561,10 @@ export interface JsxClosingTagInfo {
     readonly newText: string;
 }
 
-export interface CombinedCodeFixScope { type: "file"; fileName: string; }
+export interface CombinedCodeFixScope {
+    type: "file";
+    fileName: string;
+}
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {
     skipDestructiveCodeActions?: boolean;
@@ -565,7 +580,7 @@ export const enum CompletionTriggerKind {
     TriggerCharacter = 2,
 
     /** Completion was re-triggered as the current completion list is incomplete. */
-    TriggerForIncompleteCompletions = 3,
+    TriggerForIncompleteCompletions = 3
 }
 
 export interface GetCompletionsAtPositionOptions extends UserPreferences {
@@ -584,7 +599,7 @@ export interface GetCompletionsAtPositionOptions extends UserPreferences {
 export interface InlayHintsOptions extends UserPreferences {
     readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
     readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-    readonly includeInlayFunctionParameterTypeHints?: boolean,
+    readonly includeInlayFunctionParameterTypeHints?: boolean;
     readonly includeInlayVariableTypeHints?: boolean;
     readonly includeInlayPropertyDeclarationTypeHints?: boolean;
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
@@ -598,10 +613,7 @@ export interface SignatureHelpItemsOptions {
     triggerReason?: SignatureHelpTriggerReason;
 }
 
-export type SignatureHelpTriggerReason =
-    | SignatureHelpInvokedReason
-    | SignatureHelpCharacterTypedReason
-    | SignatureHelpRetriggeredReason;
+export type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
 
 /**
  * Signals that the user manually requested signature help.
@@ -717,7 +729,7 @@ export interface CallHierarchyOutgoingCall {
 export const enum InlayHintKind {
     Type = "Type",
     Parameter = "Parameter",
-    Enum = "Enum",
+    Enum = "Enum"
 }
 
 export interface InlayHint {
@@ -900,7 +912,7 @@ export const enum HighlightSpanKind {
     none = "none",
     definition = "definition",
     reference = "reference",
-    writtenReference = "writtenReference",
+    writtenReference = "writtenReference"
 }
 
 export interface HighlightSpan {
@@ -926,13 +938,13 @@ export interface NavigateToItem {
 export enum IndentStyle {
     None = 0,
     Block = 1,
-    Smart = 2,
+    Smart = 2
 }
 
 export enum SemicolonPreference {
     Ignore = "ignore",
     Insert = "insert",
-    Remove = "remove",
+    Remove = "remove"
 }
 
 /* @deprecated - consider using EditorSettings instead */
@@ -1075,7 +1087,7 @@ export enum SymbolDisplayPartKind {
     regularExpressionLiteral,
     link,
     linkName,
-    linkText,
+    linkText
 }
 
 export interface SymbolDisplayPart {
@@ -1310,7 +1322,7 @@ export const enum EndOfLineState {
     InDoubleQuoteStringLiteral,
     InTemplateHeadOrNoSubstitutionTemplate,
     InTemplateMiddleOrTail,
-    InTemplateSubstitutionPosition,
+    InTemplateSubstitutionPosition
 }
 
 export enum TokenClass {
@@ -1323,7 +1335,7 @@ export enum TokenClass {
     NumberLiteral,
     BigIntLiteral,
     StringLiteral,
-    RegExpLiteral,
+    RegExpLiteral
 }
 
 export interface ClassificationResult {
@@ -1470,7 +1482,7 @@ export const enum ScriptElementKind {
     linkName = "link name",
 
     /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
-    linkText = "link text",
+    linkText = "link text"
 }
 
 export const enum ScriptElementKindModifier {
@@ -1497,7 +1509,7 @@ export const enum ScriptElementKindModifier {
     mjsModifier = ".mjs",
     dctsModifier = ".d.cts",
     ctsModifier = ".cts",
-    cjsModifier = ".cjs",
+    cjsModifier = ".cjs"
 }
 
 export const enum ClassificationTypeNames {
@@ -1526,7 +1538,7 @@ export const enum ClassificationTypeNames {
     jsxSelfClosingTagName = "jsx self closing tag name",
     jsxAttribute = "jsx attribute",
     jsxText = "jsx text",
-    jsxAttributeStringLiteralValue = "jsx attribute string literal value",
+    jsxAttributeStringLiteralValue = "jsx attribute string literal value"
 }
 
 export const enum ClassificationType {
@@ -1554,7 +1566,7 @@ export const enum ClassificationType {
     jsxAttribute = 22,
     jsxText = 23,
     jsxAttributeStringLiteralValue = 24,
-    bigintLiteral = 25,
+    bigintLiteral = 25
 }
 
 /** @internal */
@@ -1566,7 +1578,7 @@ export interface CodeFixRegistration {
 }
 
 /** @internal */
-export interface CodeFixContextBase extends textChanges.TextChangesContext {
+export interface CodeFixContextBase extends TextChangesContext {
     sourceFile: SourceFile;
     program: Program;
     cancellationToken: CancellationToken;
@@ -1598,7 +1610,7 @@ export interface Refactor {
 }
 
 /** @internal */
-export interface RefactorContext extends textChanges.TextChangesContext {
+export interface RefactorContext extends TextChangesContext {
     file: SourceFile;
     startPosition: number;
     endPosition?: number;
@@ -1616,5 +1628,4 @@ export interface InlayHintsContext {
     host: LanguageServiceHost;
     span: TextSpan;
     preferences: InlayHintsOptions;
-}
 }

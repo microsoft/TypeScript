@@ -1,16 +1,6 @@
+import { Signature, Type, TypePredicate, ObjectType, ResolvedType, Symbol, Node, TypeParameter, EntityNameOrEntityNameExpression, Identifier, TypeReference, SymbolWalker, getOwnValues, clear, TypeFlags, ObjectFlags, MappedType, InterfaceType, UnionOrIntersectionType, IndexType, IndexedAccessType, forEach, getSymbolId, SyntaxKind, TypeQueryNode } from "./ts";
 /** @internal */
-namespace ts {
-export function createGetSymbolWalker(
-    getRestTypeOfSignature: (sig: Signature) => Type,
-    getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
-    getReturnTypeOfSignature: (sig: Signature) => Type,
-    getBaseTypes: (type: Type) => Type[],
-    resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
-    getTypeOfSymbol: (sym: Symbol) => Type,
-    getResolvedSymbol: (node: Node) => Symbol,
-    getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
-    getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
-    getTypeArguments: (type: TypeReference) => readonly Type[]) {
+export function createGetSymbolWalker(getRestTypeOfSignature: (sig: Signature) => Type, getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined, getReturnTypeOfSignature: (sig: Signature) => Type, getBaseTypes: (type: Type) => Type[], resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType, getTypeOfSymbol: (sym: Symbol) => Type, getResolvedSymbol: (node: Node) => Symbol, getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined, getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier, getTypeArguments: (type: TypeReference) => readonly Type[]) {
 
     return getSymbolWalker;
 
@@ -54,7 +44,8 @@ export function createGetSymbolWalker(
             // Reuse visitSymbol to visit the type's symbol,
             //  but be sure to bail on recuring into the type if accept declines the symbol.
             const shouldBail = visitSymbol(type.symbol);
-            if (shouldBail) return;
+            if (shouldBail)
+                return;
 
             // Visit the type's related types, if any
             if (type.flags & TypeFlags.Object) {
@@ -186,5 +177,4 @@ export function createGetSymbolWalker(
             return false;
         }
     }
-}
 }

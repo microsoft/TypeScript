@@ -1,4 +1,5 @@
-namespace ts.tscWatch {
+import { libFile, createWatchedSystem, createWatchOfFilesAndCompilerOptions, getDiagnosticOfFileFromProgram, checkOutputErrorsInitial, checkOutputErrorsIncremental, getDiagnosticModuleNotFoundOfFile, verifyTscWatch, runQueuedTimeoutCallbacks, File, projectRoot, Watch, SymLink } from "../../ts.tscWatch";
+import { ModuleKind, Diagnostics, notImplemented, emptyArray, noop } from "../../ts";
 describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";
     it("works", () => {
@@ -529,4 +530,3 @@ declare namespace NodeJS {
         });
     });
 });
-}

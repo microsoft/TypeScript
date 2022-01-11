@@ -1,10 +1,7 @@
+import { TransformationContext, chainBundle, SourceFile, visitEachChild, Node, VisitResult, TransformFlags, SyntaxKind, CallExpression, Debug, isSyntheticReference, isOptionalChain, BinaryExpression, DeleteExpression, OptionalChain, isNonNullChain, isTaggedTemplateExpression, cast, skipPartiallyEmittedExpressions, ParenthesizedExpression, Expression, AccessExpression, visitNode, isExpression, isSimpleCopiableExpression, isIdentifier, isParenthesizedExpression, skipParentheses, visitNodes, setTextRange, isCallChain, OuterExpressionKinds, isGeneratedIdentifier, addEmitFlags, EmitFlags, setOriginalNode } from "../ts";
 /*@internal*/
-namespace ts {
 export function transformES2020(context: TransformationContext) {
-    const {
-        factory,
-        hoistVariableDeclaration,
-    } = context;
+    const { factory, hoistVariableDeclaration, } = context;
 
     return chainBundle(context, transformSourceFile);
 
@@ -156,18 +153,11 @@ export function transformES2020(context: TransformationContext) {
                             leftThisArg = factory.cloneNode(leftThisArg);
                             addEmitFlags(leftThisArg, EmitFlags.NoComments);
                         }
-                        rightExpression = factory.createFunctionCallCall(
-                            rightExpression,
-                            leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
-                            visitNodes(segment.arguments, visitor, isExpression)
-                        );
+                        rightExpression = factory.createFunctionCallCall(rightExpression, leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg, visitNodes(segment.arguments, visitor, isExpression));
                     }
                     else {
-                        rightExpression = factory.createCallExpression(
-                            rightExpression,
-                            /*typeArguments*/ undefined,
-                            visitNodes(segment.arguments, visitor, isExpression)
-                        );
+                        rightExpression = factory.createCallExpression(rightExpression, 
+                        /*typeArguments*/ undefined, visitNodes(segment.arguments, visitor, isExpression));
                     }
                     break;
             }
@@ -182,19 +172,7 @@ export function transformES2020(context: TransformationContext) {
     }
 
     function createNotNullCondition(left: Expression, right: Expression, invert?: boolean) {
-        return factory.createBinaryExpression(
-            factory.createBinaryExpression(
-                left,
-                factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                factory.createNull()
-            ),
-            factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
-            factory.createBinaryExpression(
-                right,
-                factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                factory.createVoidZero()
-            )
-        );
+        return factory.createBinaryExpression(factory.createBinaryExpression(left, factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken), factory.createNull()), factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken), factory.createBinaryExpression(right, factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken), factory.createVoidZero()));
     }
 
     function transformNullishCoalescingExpression(node: BinaryExpression) {
@@ -204,13 +182,9 @@ export function transformES2020(context: TransformationContext) {
             right = factory.createTempVariable(hoistVariableDeclaration);
             left = factory.createAssignment(right, left);
         }
-        return setTextRange(factory.createConditionalExpression(
-            createNotNullCondition(left, right),
-            /*questionToken*/ undefined,
-            right,
-            /*colonToken*/ undefined,
-            visitNode(node.right, visitor, isExpression),
-        ), node);
+        return setTextRange(factory.createConditionalExpression(createNotNullCondition(left, right), 
+        /*questionToken*/ undefined, right, 
+        /*colonToken*/ undefined, visitNode(node.right, visitor, isExpression)), node);
     }
 
     function visitDeleteExpression(node: DeleteExpression) {
@@ -218,5 +192,4 @@ export function transformES2020(context: TransformationContext) {
             ? setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
             : factory.updateDeleteExpression(node, visitNode(node.expression, visitor, isExpression));
     }
-}
 }

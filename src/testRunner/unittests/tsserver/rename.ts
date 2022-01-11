@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { File, createSession, createServerHost, openFilesForSession, executeSessionRequest, protocol, protocolFileLocationFromSubstring, protocolTextSpanFromSubstring, protocolRenameSpanFromSubstring } from "../../ts.projectSystem";
+import { ScriptElementKind, ScriptElementKindModifier } from "../../ts";
 describe("unittests:: tsserver:: rename", () => {
     it("works with fileToRename", () => {
         const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
@@ -263,4 +264,3 @@ describe("unittests:: tsserver:: rename", () => {
         });
     });
 });
-}

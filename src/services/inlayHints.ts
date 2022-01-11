@@ -1,20 +1,24 @@
+import { InlayHintsOptions, InlayHintsContext, InlayHint, Node, SyntaxKind, textSpanIntersectsWith, isTypeNode, isVariableDeclaration, isPropertyDeclaration, isEnumMember, isCallExpression, isNewExpression, isFunctionLikeDeclaration, hasContextSensitiveParameters, forEachChild, FunctionDeclaration, ArrowFunction, FunctionExpression, MethodDeclaration, GetAccessorDeclaration, isArrowFunction, isFunctionExpression, isFunctionDeclaration, isMethodDeclaration, isGetAccessorDeclaration, InlayHintKind, EnumMember, Type, SymbolFlags, VariableDeclaration, PropertyDeclaration, isBindingPattern, getEffectiveTypeAnnotationNode, CallExpression, NewExpression, Signature, skipParentheses, unescapeLeadingUnderscores, Expression, __String, isIdentifier, isPropertyAccessExpression, isIdentifierText, getLanguageVariant, getLeadingCommentRanges, some, PrefixUnaryExpression, isLiteralExpression, isInfinityOrNaNString, Identifier, findChildOfKind, getEffectiveReturnTypeNode, FunctionLikeDeclaration, Symbol, isParameter, NodeBuilderFlags, TypeFormatFlags, PrinterOptions, createPrinter, usingSingleLineStringWriter, Debug, EmitHint } from "./ts";
 /* @internal */
-namespace ts.InlayHints {
 
 const maxHintsLength = 30;
 
+/* @internal */
 const leadingParameterNameCommentRegexFactory = (name: string) => {
     return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
 };
 
+/* @internal */
 function shouldShowParameterNameHints(preferences: InlayHintsOptions) {
     return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
 }
 
+/* @internal */
 function shouldShowLiteralParameterNameHintsOnly(preferences: InlayHintsOptions) {
     return preferences.includeInlayParameterNameHints === "literals";
 }
 
+/* @internal */
 export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     const { file, program, span, cancellationToken, preferences } = context;
     const sourceFileText = file.text;
@@ -319,5 +323,4 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     function isUndefined(name: __String) {
         return name === "undefined";
     }
-}
 }

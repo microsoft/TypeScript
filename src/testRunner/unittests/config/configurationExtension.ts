@@ -1,6 +1,8 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { ParseConfigHost } from "../../fakes";
+import { Diagnostic, DiagnosticCategory, flattenDiagnosticMessageText, forEach, readConfigFile, parseJsonConfigFileContent, readJsonConfigFile, parseJsonSourceFileConfigFileContent, CompilerOptions, combinePaths, ModuleKind } from "../../ts";
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
-    return new vfs.FileSystem(ignoreCase, {
+    return new FileSystem(ignoreCase, {
         cwd,
         files: {
             [root]: {
@@ -168,7 +170,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     compilerOptions: {
                         module: "system"
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null,
                     files: ["../main.ts"]
                 }),
                 "dev/configs/fifth.json": JSON.stringify({
@@ -190,12 +192,14 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
 }
 
 const caseInsensitiveBasePath = "c:/dev/";
-const caseInsensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"));
+const caseInsensitiveHost = new ParseConfigHost(createFileSystem(/*ignoreCase*/ true, caseInsensitiveBasePath, "c:/"));
 
 const caseSensitiveBasePath = "/dev/";
-const caseSensitiveHost = new fakes.ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
-
-function verifyDiagnostics(actual: Diagnostic[], expected: { code: number; messageText: string; }[]) {
+const caseSensitiveHost = new ParseConfigHost(createFileSystem(/*ignoreCase*/ false, caseSensitiveBasePath, "/"));
+function verifyDiagnostics(actual: Diagnostic[], expected: {
+    code: number;
+    messageText: string;
+}[]) {
     assert.isTrue(expected.length === actual.length, `Expected error: ${JSON.stringify(expected)}. Actual error: ${JSON.stringify(actual)}.`);
     for (let i = 0; i < actual.length; i++) {
         const actualError = actual[i];
@@ -207,7 +211,11 @@ function verifyDiagnostics(actual: Diagnostic[], expected: { code: number; messa
 }
 
 describe("unittests:: config:: configurationExtension", () => {
-    forEach<[string, string, fakes.ParseConfigHost], void>([
+    forEach<[
+        string,
+        string,
+        ParseConfigHost
+    ], void>([
         ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
         ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]
     ], ([testName, basePath, host]) => {
@@ -244,7 +252,10 @@ describe("unittests:: config:: configurationExtension", () => {
             });
         }
 
-        function testFailure(name: string, entry: string, expectedDiagnostics: { code: number; messageText: string; }[]) {
+        function testFailure(name: string, entry: string, expectedDiagnostics: {
+            code: number;
+            messageText: string;
+        }[]) {
             it(name, () => {
                 const parsed = getParseCommandLine(entry);
                 verifyDiagnostics(parsed.errors, expectedDiagnostics);
@@ -351,4 +362,3 @@ describe("unittests:: config:: configurationExtension", () => {
         });
     });
 });
-}

@@ -1,18 +1,24 @@
+import { Identifier, Symbol, StringLiteral, SourceFile, TypeChecker, CancellationToken, ModuleDeclaration, ModuleBlock, AnyImportOrReExport, ValidImportTypeNode, CallExpression, ESMap, nodeSeenTracker, isExternalModuleAugmentation, getSourceFileOfNode, SyntaxKind, isImportCall, VariableDeclaration, hasSyntacticModifier, ModifierFlags, isDefaultImport, Debug, ImportCall, findAncestor, Node, some, ImportEqualsDeclaration, ImportDeclaration, SymbolFlags, isImportTypeNode, getSymbolId, getFirstIdentifier, symbolName, isNamedExports, symbolEscapedNameNoDefault, NamedImportsOrExports, __String, InternalSymbolName, isExportDeclaration, StringLiteralLike, FileReference, Program, Statement, forEach, importFromModuleSpecifier, ExportDeclaration, isStringLiteral, isBinaryExpression, isImportEqualsDeclaration, isNamespaceExport, isExportAssignment, isJSDocTypedefTag, ExportAssignment, BinaryExpression, getAssignmentDeclarationKind, AssignmentDeclarationKind, getNameOfAccessExpression, cast, isAccessExpression, isSourceFile, isVariableDeclaration, isBindingElement, walkUpBindingElementsAndPatterns, BindingElement, isCatchClause, isVariableStatement, ImportSpecifier, ImportClause, NamespaceImport, isInJSFile, isRequireVariableDeclaration, isExternalModuleSymbol, isExportSpecifier, isPropertyAccessExpression, isModuleExportsAccessExpression, isPrivateIdentifier, isShorthandPropertyAssignment } from "./ts";
+import * as ts from "./ts";
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 /* @internal */
-namespace ts.FindAllReferences {
 export interface ImportsResult {
     /** For every import of the symbol, the location and local symbol for the import. */
-    importSearches: readonly [Identifier, Symbol][];
+    importSearches: readonly [
+        Identifier,
+        Symbol
+    ][];
     /** For rename imports/exports `{ foo as bar }`, `foo` is not a local, so it may be added as a reference immediately without further searching. */
     singleReferences: readonly (Identifier | StringLiteral)[];
     /** List of source files that may (or may not) use the symbol via a namespace. (For UMD modules this is every file.) */
     indirectUsers: readonly SourceFile[];
 }
+/* @internal */
 export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
 /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
+/* @internal */
+export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFilesSet: ts.ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
     const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
     return (exportSymbol, exportInfo, isForRename) => {
         const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);
@@ -21,30 +27,41 @@ export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFi
 }
 
 /** Info about an exported symbol to perform recursive search on. */
+/* @internal */
 export interface ExportInfo {
     exportingModuleSymbol: Symbol;
     exportKind: ExportKind;
 }
 
-export const enum ExportKind { Named, Default, ExportEquals }
-
-export const enum ImportExport { Import, Export }
-
-interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
+/* @internal */
+export const enum ExportKind {
+    Named,
+    Default,
+    ExportEquals
+}
+/* @internal */
+export const enum ImportExport {
+    Import,
+    Export
+}
+/* @internal */
+interface AmbientModuleDeclaration extends ModuleDeclaration {
+    body?: ModuleBlock;
+}
+/* @internal */
 type SourceFileLike = SourceFile | AmbientModuleDeclaration;
 // Identifier for the case of `const x = require("y")`.
+/* @internal */
 type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier;
+/* @internal */
 type ImporterOrCallExpression = Importer | CallExpression;
 
 /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
-function getImportersForExport(
-    sourceFiles: readonly SourceFile[],
-    sourceFilesSet: ReadonlySet<string>,
-    allDirectImports: ESMap<string, ImporterOrCallExpression[]>,
-    { exportingModuleSymbol, exportKind }: ExportInfo,
-    checker: TypeChecker,
-    cancellationToken: CancellationToken | undefined,
-): { directImports: Importer[], indirectUsers: readonly SourceFile[] } {
+/* @internal */
+function getImportersForExport(sourceFiles: readonly SourceFile[], sourceFilesSet: ts.ReadonlySet<string>, allDirectImports: ESMap<string, ImporterOrCallExpression[]>, { exportingModuleSymbol, exportKind }: ExportInfo, checker: TypeChecker, cancellationToken: CancellationToken | undefined): {
+    directImports: Importer[];
+    indirectUsers: readonly SourceFile[];
+} {
     const markSeenDirectImport = nodeSeenTracker<ImporterOrCallExpression>();
     const markSeenIndirectUser = nodeSeenTracker<SourceFileLike>();
     const directImports: Importer[] = [];
@@ -82,7 +99,8 @@ function getImportersForExport(
                     continue;
                 }
 
-                if (cancellationToken) cancellationToken.throwIfCancellationRequested();
+                if (cancellationToken)
+                    cancellationToken.throwIfCancellationRequested();
 
                 switch (direct.kind) {
                     case SyntaxKind.CallExpression:
@@ -157,7 +175,8 @@ function getImportersForExport(
 
     function isExported(node: Node, stopAtAmbientModule = false) {
         return findAncestor(node, node => {
-            if (stopAtAmbientModule && isAmbientModuleDeclaration(node)) return "quit";
+            if (stopAtAmbientModule && isAmbientModuleDeclaration(node))
+                return "quit";
             return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
         });
     }
@@ -165,7 +184,8 @@ function getImportersForExport(
     function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
         if (exportKind === ExportKind.ExportEquals) {
             // This is a direct import, not import-as-namespace.
-            if (!alreadyAddedDirect) directImports.push(importDeclaration);
+            if (!alreadyAddedDirect)
+                directImports.push(importDeclaration);
         }
         else if (!isAvailableThroughGlobal) {
             const sourceFileLike = getSourceFileLikeForImportDeclaration(importDeclaration);
@@ -183,12 +203,15 @@ function getImportersForExport(
     function addIndirectUser(sourceFileLike: SourceFileLike, addTransitiveDependencies = false): void {
         Debug.assert(!isAvailableThroughGlobal);
         const isNew = markSeenIndirectUser(sourceFileLike);
-        if (!isNew) return;
+        if (!isNew)
+            return;
         indirectUserDeclarations!.push(sourceFileLike); // TODO: GH#18217
 
-        if (!addTransitiveDependencies) return;
+        if (!addTransitiveDependencies)
+            return;
         const moduleSymbol = checker.getMergedSymbol(sourceFileLike.symbol);
-        if (!moduleSymbol) return;
+        if (!moduleSymbol)
+            return;
         Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
         const directImports = getDirectImports(moduleSymbol);
         if (directImports) {
@@ -210,8 +233,12 @@ function getImportersForExport(
  * The returned `importSearches` will result in the entire source file being searched.
  * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
  */
+/* @internal */
 function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-    const importSearches: [Identifier, Symbol][] = [];
+    const importSearches: [
+        Identifier,
+        Symbol
+    ][] = [];
     const singleReferences: (Identifier | StringLiteral)[] = [];
     function addSearch(location: Identifier, symbol: Symbol): void {
         importSearches.push([location, symbol]);
@@ -339,22 +366,33 @@ function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: S
 }
 
 /** Returns 'true' is the namespace 'name' is re-exported from this module, and 'false' if it is only used locally. */
+/* @internal */
 function findNamespaceReExports(sourceFileLike: SourceFileLike, name: Identifier, checker: TypeChecker): boolean {
     const namespaceImportSymbol = checker.getSymbolAtLocation(name);
 
     return !!forEachPossibleImportOrExportStatement(sourceFileLike, statement => {
-        if (!isExportDeclaration(statement)) return;
+        if (!isExportDeclaration(statement))
+            return;
         const { exportClause, moduleSpecifier } = statement;
         return !moduleSpecifier && exportClause && isNamedExports(exportClause) &&
             exportClause.elements.some(element => checker.getExportSpecifierLocalTargetSymbol(element) === namespaceImportSymbol);
     });
 }
 
+/* @internal */
 export type ModuleReference =
     /** "import" also includes require() calls. */
-    | { kind: "import", literal: StringLiteralLike }
+{
+    kind: "import";
+    literal: StringLiteralLike;
+}
     /** <reference path> or <reference types> */
-    | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
+ | {
+    kind: "reference";
+    referencingFile: SourceFile;
+    ref: FileReference;
+};
+/* @internal */
 export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
     const refs: ModuleReference[] = [];
     const checker = program.getTypeChecker();
@@ -385,11 +423,13 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
 }
 
 /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
+/* @internal */
 function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): ESMap<string, ImporterOrCallExpression[]> {
-    const map = new Map<string, ImporterOrCallExpression[]>();
+    const map = new ts.Map<string, ImporterOrCallExpression[]>();
 
     for (const sourceFile of sourceFiles) {
-        if (cancellationToken) cancellationToken.throwIfCancellationRequested();
+        if (cancellationToken)
+            cancellationToken.throwIfCancellationRequested();
         forEachImport(sourceFile, (importDecl, moduleSpecifier) => {
             const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
             if (moduleSymbol) {
@@ -407,12 +447,14 @@ function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeCh
 }
 
 /** Iterates over all statements at the top level or in module declarations. Returns the first truthy result. */
+/* @internal */
 function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLike, action: (statement: Statement) => T) {
     return forEach(sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements, statement => // TODO: GH#18217
         action(statement) || (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)));
 }
 
 /** Calls `action` for each import, re-export, or require() in a file. */
+/* @internal */
 function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteralLike) => void): void {
     if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
         for (const i of sourceFile.imports) {
@@ -443,10 +485,12 @@ function forEachImport(sourceFile: SourceFile, action: (importStatement: Importe
     }
 }
 
+/* @internal */
 export interface ImportedSymbol {
     kind: ImportExport.Import;
     symbol: Symbol;
 }
+/* @internal */
 export interface ExportedSymbol {
     kind: ImportExport.Export;
     symbol: Symbol;
@@ -460,6 +504,7 @@ export interface ExportedSymbol {
  * This doesn't handle export specifiers; that is done in `getReferencesAtExportSpecifier`.
  * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
  */
+/* @internal */
 export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: TypeChecker, comingFromExport: boolean): ImportedSymbol | ExportedSymbol | undefined {
     return comingFromExport ? getExport() : getExport() || getImport();
 
@@ -519,7 +564,8 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
 
         function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol | undefined {
             // Get the symbol for the `export =` node; its parent is the module it's the export of.
-            if (!ex.symbol.parent) return undefined;
+            if (!ex.symbol.parent)
+                return undefined;
             const exportKind = ex.isExportEquals ? ExportKind.ExportEquals : ExportKind.Default;
             return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol: ex.symbol.parent, exportKind } };
         }
@@ -544,11 +590,13 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
 
     function getImport(): ImportedSymbol | undefined {
         const isImport = isNodeImport(node);
-        if (!isImport) return undefined;
+        if (!isImport)
+            return undefined;
 
         // A symbol being imported is always an alias. So get what that aliases to find the local symbol.
         let importedSymbol = checker.getImmediateAliasedSymbol(symbol);
-        if (!importedSymbol) return undefined;
+        if (!importedSymbol)
+            return undefined;
 
         // Search on the local symbol in the exporting module, not the exported symbol.
         importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
@@ -577,6 +625,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
     }
 }
 
+/* @internal */
 function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
     if (importedSymbol.flags & SymbolFlags.Alias) {
         return Debug.checkDefined(checker.getImmediateAliasedSymbol(importedSymbol));
@@ -597,6 +646,7 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
 // If a reference is a class expression, the exported node would be its parent.
 // If a reference is a variable declaration, the exported node would be the variable statement.
+/* @internal */
 function getExportNode(parent: Node, node: Node): Node | undefined {
     const declaration = isVariableDeclaration(parent) ? parent : isBindingElement(parent) ? walkUpBindingElementsAndPatterns(parent) : undefined;
     if (declaration) {
@@ -608,6 +658,7 @@ function getExportNode(parent: Node, node: Node): Node | undefined {
     }
 }
 
+/* @internal */
 function isNodeImport(node: Node): boolean {
     const { parent } = node;
     switch (parent.kind) {
@@ -627,15 +678,18 @@ function isNodeImport(node: Node): boolean {
     }
 }
 
+/* @internal */
 export function getExportInfo(exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker): ExportInfo | undefined {
     const moduleSymbol = exportSymbol.parent;
-    if (!moduleSymbol) return undefined; // This can happen if an `export` is not at the top-level (which is a compile error).
+    if (!moduleSymbol)
+        return undefined; // This can happen if an `export` is not at the top-level (which is a compile error).
     const exportingModuleSymbol = checker.getMergedSymbol(moduleSymbol); // Need to get merged symbol in case there's an augmentation.
     // `export` may appear in a namespace. In that case, just rely on global search.
     return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
 }
 
 /** If at an export specifier, go to the symbol it refers to. */
+/* @internal */
 function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol {
     // For `export { foo } from './bar", there's nothing to skip, because it does not create a new alias. But `export { foo } does.
     if (symbol.declarations) {
@@ -657,10 +711,12 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
     return symbol;
 }
 
+/* @internal */
 function getContainingModuleSymbol(importer: Importer, checker: TypeChecker): Symbol {
     return checker.getMergedSymbol(getSourceFileLikeForImportDeclaration(importer).symbol);
 }
 
+/* @internal */
 function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): SourceFileLike {
     if (node.kind === SyntaxKind.CallExpression) {
         return node.getSourceFile();
@@ -674,11 +730,16 @@ function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): 
     return cast(parent.parent, isAmbientModuleDeclaration);
 }
 
+/* @internal */
 function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaration {
     return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
 }
 
-function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral } } {
+/* @internal */
+function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & {
+    moduleReference: {
+        expression: StringLiteral;
+    };
+} {
     return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
-}
 }

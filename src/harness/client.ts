@@ -1,4 +1,6 @@
-namespace ts.server {
+import { LanguageServiceHost, RenameInfo, RenameLocation, Debug, LanguageService, computeLineStarts, getSnapshotText, computePositionOfLineAndCharacter, computeLineAndCharacterOfPosition, TextChange, UserPreferences, FormatCodeSettings, QuickInfo, CompletionInfo, CompletionEntry, ScriptElementKind, FormatCodeOptions, CompletionEntryDetails, Symbol, notImplemented, NavigateToItem, PatternMatchKind, DefinitionInfo, DefinitionInfoAndBoundSpan, ImplementationLocation, ReferencedSymbol, ReferenceEntry, EmitOutput, DiagnosticWithLocation, Diagnostic, SourceFile, firstDefined, DiagnosticCategory, isString, RenameInfoOptions, identity, RenameInfoSuccess, createTextSpanFromBounds, RenameInfoFailure, NavigationBarItem, NavigationTree, map, TextSpan, JSDocTagInfo, textPart, SignatureHelpItems, SignatureHelpItem, DocumentHighlights, OutliningSpan, TodoCommentDescriptor, TodoComment, DocCommentTemplateOptions, TextInsertion, CodeFixAction, CodeActionCommand, InlayHint, InlayHintKind, TextRange, ApplicableRefactorInfo, RefactorEditInfo, FileTextChanges, OrganizeImportsArgs, EditorOptions, ClassifiedSpan, Classifications, SemanticClassificationFormat, CallHierarchyItem, mapOneOrMany, CallHierarchyIncomingCall, CallHierarchyOutgoingCall, Program } from "./ts";
+import { protocol, CommandNames } from "./ts.server";
+import * as ts from "./ts";
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;
 }
@@ -35,7 +37,7 @@ export function extractMessage(message: string): string {
 
 export class SessionClient implements LanguageService {
     private sequence = 0;
-    private lineMaps = new Map<string, number[]>();
+    private lineMaps = new ts.Map<string, number[]>();
     private messages: string[] = [];
     private lastRenameEntry: RenameEntry | undefined;
 
@@ -194,7 +196,7 @@ export class SessionClient implements LanguageService {
         const response = this.processResponse<protocol.ProjectInfoResponse>(request);
 
         return {
-            configFileName: response.body!.configFileName, // TODO: GH#18217
+            configFileName: response.body!.configFileName,
             fileNames: response.body!.fileNames
         };
     }
@@ -210,13 +212,18 @@ export class SessionClient implements LanguageService {
             isGlobalCompletion: response.body!.isGlobalCompletion,
             isMemberCompletion: response.body!.isMemberCompletion,
             isNewIdentifierLocation: response.body!.isNewIdentifierLocation,
-            entries: response.body!.entries.map<CompletionEntry>(entry => { // TODO: GH#18217
+            entries: response.body!.entries.map<CompletionEntry>(entry => {
                 if (entry.replacementSpan !== undefined) {
                     const res: CompletionEntry = { ...entry, data: entry.data as any, replacementSpan: this.decodeSpan(entry.replacementSpan, fileName) };
                     return res;
                 }
 
-                return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
+                return entry as {
+                    name: string;
+                    kind: ScriptElementKind;
+                    kindModifiers: string;
+                    sortText: string;
+                }; // TODO: GH#18217
             })
         };
     }
@@ -243,7 +250,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.NavtoRequest>(CommandNames.Navto, args);
         const response = this.processResponse<protocol.NavtoResponse>(request);
 
-        return response.body!.map(entry => ({ // TODO: GH#18217
+        return response.body!.map(entry => ({
             name: entry.name,
             containerName: entry.containerName || "",
             containerKind: entry.containerKind || ScriptElementKind.unknown,
@@ -287,7 +294,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.Definition, args);
         const response = this.processResponse<protocol.DefinitionResponse>(request);
 
-        return response.body!.map(entry => ({ // TODO: GH#18217
+        return response.body!.map(entry => ({
             containerKind: ScriptElementKind.unknown,
             containerName: "",
             fileName: entry.file,
@@ -324,7 +331,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
         const response = this.processResponse<protocol.TypeDefinitionResponse>(request);
 
-        return response.body!.map(entry => ({ // TODO: GH#18217
+        return response.body!.map(entry => ({
             containerKind: ScriptElementKind.unknown,
             containerName: "",
             fileName: entry.file,
@@ -340,7 +347,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.ImplementationRequest>(CommandNames.Implementation, args);
         const response = this.processResponse<protocol.ImplementationResponse>(request);
 
-        return response.body!.map(entry => ({ // TODO: GH#18217
+        return response.body!.map(entry => ({
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
@@ -361,7 +368,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.References, args);
         const response = this.processResponse<protocol.ReferencesResponse>(request);
 
-        return response.body!.refs.map(entry => ({ // TODO: GH#18217
+        return response.body!.refs.map(entry => ({
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             isWriteAccess: entry.isWriteAccess,
@@ -373,7 +380,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.FileReferencesRequest>(CommandNames.FileReferences, { file: fileName });
         const response = this.processResponse<protocol.FileReferencesResponse>(request);
 
-        return response.body!.refs.map(entry => ({ // TODO: GH#18217
+        return response.body!.refs.map(entry => ({
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             isWriteAccess: entry.isWriteAccess,
@@ -404,8 +411,7 @@ export class SessionClient implements LanguageService {
         const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
         return (response.body as protocol.DiagnosticWithLinePosition[]).map((entry): DiagnosticWithLocation => {
-            const category = firstDefined(Object.keys(DiagnosticCategory), id =>
-                isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined);
+            const category = firstDefined(Object.keys(DiagnosticCategory), id => isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined);
             return {
                 file: fakeSourceFile,
                 start: entry.start,
@@ -529,17 +535,19 @@ export class SessionClient implements LanguageService {
         return this.decodeNavigationTree(response.body!, file, lineMap); // TODO: GH#18217
     }
 
-    private decodeSpan(span: protocol.TextSpan & { file: string }): TextSpan;
+    private decodeSpan(span: protocol.TextSpan & {
+        file: string;
+    }): TextSpan;
     private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap?: number[]): TextSpan;
-    private decodeSpan(span: protocol.TextSpan & { file: string }, fileName?: string, lineMap?: number[]): TextSpan {
+    private decodeSpan(span: protocol.TextSpan & {
+        file: string;
+    }, fileName?: string, lineMap?: number[]): TextSpan {
         if (span.start.line === 1 && span.start.offset === 1 && span.end.line === 1 && span.end.offset === 1) {
             return { start: 0, length: 0 };
         }
         fileName = fileName || span.file;
         lineMap = lineMap || this.getLineMap(fileName);
-        return createTextSpanFromBounds(
-            this.lineOffsetToPosition(fileName, span.start, lineMap),
-            this.lineOffsetToPosition(fileName, span.end, lineMap));
+        return createTextSpanFromBounds(this.lineOffsetToPosition(fileName, span.start, lineMap), this.lineOffsetToPosition(fileName, span.end, lineMap));
     }
 
     private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
@@ -581,7 +589,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.OccurrencesRequest>(CommandNames.Occurrences, args);
         const response = this.processResponse<protocol.OccurrencesResponse>(request);
 
-        return response.body!.map(entry => ({ // TODO: GH#18217
+        return response.body!.map(entry => ({
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             isWriteAccess: entry.isWriteAccess,
@@ -595,7 +603,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
         const response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
 
-        return response.body!.map(item => ({ // TODO: GH#18217
+        return response.body!.map(item => ({
             fileName: item.file,
             highlightSpans: item.highlightSpans.map(span => ({
                 textSpan: this.decodeSpan(span, item.file),
@@ -658,7 +666,7 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.InlayHintsRequest>(CommandNames.ProvideInlayHints, args);
         const response = this.processResponse<protocol.InlayHintsResponse>(request);
 
-        return response.body!.map(item => ({ // TODO: GH#18217
+        return response.body!.map(item => ({
             ...item,
             kind: item.kind as InlayHintKind,
             position: this.lineOffsetToPosition(file, item.position),
@@ -682,7 +690,10 @@ export class SessionClient implements LanguageService {
         return { file, startLine, startOffset, endLine, endOffset };
     }
 
-    private createFileLocationRequestArgsWithEndLineAndOffset(file: string, start: number, end: number): protocol.FileLocationRequestArgs & { endLine: number, endOffset: number } {
+    private createFileLocationRequestArgsWithEndLineAndOffset(file: string, start: number, end: number): protocol.FileLocationRequestArgs & {
+        endLine: number;
+        endOffset: number;
+    } {
         const { line, offset } = this.positionToOneBasedLineOffset(file, start);
         const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(file, end);
         return { file, line, offset, endLine, endOffset };
@@ -696,12 +707,7 @@ export class SessionClient implements LanguageService {
         return response.body!; // TODO: GH#18217
     }
 
-    getEditsForRefactor(
-        fileName: string,
-        _formatOptions: FormatCodeSettings,
-        positionOrRange: number | TextRange,
-        refactorName: string,
-        actionName: string): RefactorEditInfo {
+    getEditsForRefactor(fileName: string, _formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo {
 
         const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
         args.refactor = refactorName;
@@ -891,5 +897,4 @@ export class SessionClient implements LanguageService {
     dispose(): void {
         throw new Error("dispose is not available through the server layer.");
     }
-}
 }

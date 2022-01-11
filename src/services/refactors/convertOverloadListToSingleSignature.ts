@@ -1,23 +1,30 @@
+import { Diagnostics, RefactorContext, ApplicableRefactorInfo, emptyArray, RefactorEditInfo, SyntaxKind, factory, Debug, MethodSignature, MethodDeclaration, CallSignatureDeclaration, ConstructorDeclaration, ConstructSignatureDeclaration, FunctionDeclaration, NodeArray, ParameterDeclaration, isFunctionLikeDeclaration, map, TupleTypeNode, setEmitFlags, some, length, getSyntheticLeadingComments, EmitFlags, NamedTupleMember, isIdentifier, setTextRange, displayPartsToString, setSyntheticLeadingComments, Node, SourceFile, Program, getTokenAtPosition, findAncestor, every, getSourceFileOfNode, mapDefined } from "../ts";
+import { registerRefactor } from "../ts.refactor";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 const refactorName = "Convert overload list to single signature";
+/* @internal */
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
 
+/* @internal */
 const functionOverloadAction = {
     name: refactorName,
     description: refactorDescription,
     kind: "refactor.rewrite.function.overloadList",
 };
+/* @internal */
 registerRefactor(refactorName, {
     kinds: [functionOverloadAction.kind],
     getEditsForAction,
     getAvailableActions
 });
 
+/* @internal */
 function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
     const { file, startPosition, program } = context;
     const info = getConvertableOverloadListAtPosition(file, startPosition, program);
-    if (!info) return emptyArray;
+    if (!info)
+        return emptyArray;
 
     return [{
         name: refactorName,
@@ -26,10 +33,12 @@ function getAvailableActions(context: RefactorContext): readonly ApplicableRefac
     }];
 }
 
+/* @internal */
 function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
     const { file, startPosition, program } = context;
     const signatureDecls = getConvertableOverloadListAtPosition(file, startPosition, program);
-    if (!signatureDecls) return undefined;
+    if (!signatureDecls)
+        return undefined;
 
     const checker = program.getTypeChecker();
 
@@ -37,72 +46,27 @@ function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefin
     let updated = lastDeclaration;
     switch (lastDeclaration.kind) {
         case SyntaxKind.MethodSignature: {
-            updated = factory.updateMethodSignature(
-                lastDeclaration,
-                lastDeclaration.modifiers,
-                lastDeclaration.name,
-                lastDeclaration.questionToken,
-                lastDeclaration.typeParameters,
-                getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.type,
-            );
+            updated = factory.updateMethodSignature(lastDeclaration, lastDeclaration.modifiers, lastDeclaration.name, lastDeclaration.questionToken, lastDeclaration.typeParameters, getNewParametersForCombinedSignature(signatureDecls), lastDeclaration.type);
             break;
         }
         case SyntaxKind.MethodDeclaration: {
-            updated = factory.updateMethodDeclaration(
-                lastDeclaration,
-                lastDeclaration.decorators,
-                lastDeclaration.modifiers,
-                lastDeclaration.asteriskToken,
-                lastDeclaration.name,
-                lastDeclaration.questionToken,
-                lastDeclaration.typeParameters,
-                getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.type,
-                lastDeclaration.body
-            );
+            updated = factory.updateMethodDeclaration(lastDeclaration, lastDeclaration.decorators, lastDeclaration.modifiers, lastDeclaration.asteriskToken, lastDeclaration.name, lastDeclaration.questionToken, lastDeclaration.typeParameters, getNewParametersForCombinedSignature(signatureDecls), lastDeclaration.type, lastDeclaration.body);
             break;
         }
         case SyntaxKind.CallSignature: {
-            updated = factory.updateCallSignature(
-                lastDeclaration,
-                lastDeclaration.typeParameters,
-                getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.type,
-            );
+            updated = factory.updateCallSignature(lastDeclaration, lastDeclaration.typeParameters, getNewParametersForCombinedSignature(signatureDecls), lastDeclaration.type);
             break;
         }
         case SyntaxKind.Constructor: {
-            updated = factory.updateConstructorDeclaration(
-                lastDeclaration,
-                lastDeclaration.decorators,
-                lastDeclaration.modifiers,
-                getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.body
-            );
+            updated = factory.updateConstructorDeclaration(lastDeclaration, lastDeclaration.decorators, lastDeclaration.modifiers, getNewParametersForCombinedSignature(signatureDecls), lastDeclaration.body);
             break;
         }
         case SyntaxKind.ConstructSignature: {
-            updated = factory.updateConstructSignature(
-                lastDeclaration,
-                lastDeclaration.typeParameters,
-                getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.type,
-            );
+            updated = factory.updateConstructSignature(lastDeclaration, lastDeclaration.typeParameters, getNewParametersForCombinedSignature(signatureDecls), lastDeclaration.type);
             break;
         }
         case SyntaxKind.FunctionDeclaration: {
-            updated = factory.updateFunctionDeclaration(
-                lastDeclaration,
-                lastDeclaration.decorators,
-                lastDeclaration.modifiers,
-                lastDeclaration.asteriskToken,
-                lastDeclaration.name,
-                lastDeclaration.typeParameters,
-                getNewParametersForCombinedSignature(signatureDecls),
-                lastDeclaration.type,
-                lastDeclaration.body
-            );
+            updated = factory.updateFunctionDeclaration(lastDeclaration, lastDeclaration.decorators, lastDeclaration.modifiers, lastDeclaration.asteriskToken, lastDeclaration.name, lastDeclaration.typeParameters, getNewParametersForCombinedSignature(signatureDecls), lastDeclaration.type, lastDeclaration.body);
             break;
         }
         default: return Debug.failBadSyntaxKind(lastDeclaration, "Unhandled signature kind in overload list conversion refactoring");
@@ -112,7 +76,7 @@ function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefin
         return; // No edits to apply, do nothing
     }
 
-    const edits = textChanges.ChangeTracker.with(context, t => {
+    const edits = ChangeTracker.with(context, t => {
         t.replaceNodeRange(file, signatureDecls[0], signatureDecls[signatureDecls.length - 1], updated);
     });
 
@@ -127,12 +91,8 @@ function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefin
         return factory.createNodeArray([
             factory.createParameterDeclaration(
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                factory.createToken(SyntaxKind.DotDotDotToken),
-                "args",
-                /*questionToken*/ undefined,
-                factory.createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple))
-            )
+            /*modifiers*/ undefined, factory.createToken(SyntaxKind.DotDotDotToken), "args", 
+            /*questionToken*/ undefined, factory.createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple)))
         ]);
     }
 
@@ -143,12 +103,7 @@ function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefin
 
     function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {
         Debug.assert(isIdentifier(p.name)); // This is checked during refactoring applicability checking
-        const result = setTextRange(factory.createNamedTupleMember(
-            p.dotDotDotToken,
-            p.name,
-            p.questionToken,
-            p.type || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
-        ), p);
+        const result = setTextRange(factory.createNamedTupleMember(p.dotDotDotToken, p.name, p.questionToken, p.type || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)), p);
         const parameterDocComment = p.symbol && p.symbol.getDocumentationComment(checker);
         if (parameterDocComment) {
             const newComment = displayPartsToString(parameterDocComment);
@@ -170,6 +125,7 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
 
 }
 
+/* @internal */
 function isConvertableSignatureDeclaration(d: Node): d is MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration {
     switch (d.kind) {
         case SyntaxKind.MethodSignature:
@@ -183,6 +139,7 @@ function isConvertableSignatureDeclaration(d: Node): d is MethodSignature | Meth
     return false;
 }
 
+/* @internal */
 function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: number, program: Program) {
     const node = getTokenAtPosition(file, startPosition);
     const containingDecl = findAncestor(node, isConvertableSignatureDeclaration);
@@ -222,5 +179,4 @@ function getConvertableOverloadListAtPosition(file: SourceFile, startPosition: n
     }
 
     return signatureDecls;
-}
 }

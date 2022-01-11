@@ -1,6 +1,7 @@
-namespace ts {
+import { FileSystem } from "../../vfs";
+import { loadProjectFromDisk, verifyTsc, verifyTscSerializedIncrementalEdits, replaceText, noChangeOnlyRuns } from "../../ts";
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
-    let projFs: vfs.FileSystem;
+    let projFs: FileSystem;
     before(() => {
         projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
     });
@@ -79,4 +80,3 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project importJ
         incrementalScenarios: noChangeOnlyRuns
     });
 });
-}

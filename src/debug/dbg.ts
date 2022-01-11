@@ -1,38 +1,52 @@
+import * as Debug from "./Debug";
 /// <reference lib="es2019" />
 
 /* @internal */
-namespace Debug {
 interface Node {
     kind: number;
 }
 
+/* @internal */
 type FunctionExpression = Node;
+/* @internal */
 type ArrowFunction = Node;
+/* @internal */
 type MethodDeclaration = Node;
+/* @internal */
 type Expression = Node;
+/* @internal */
 type SourceFile = Node;
+/* @internal */
 type VariableDeclaration = Node;
+/* @internal */
 type BindingElement = Node;
+/* @internal */
 type CallExpression = Node;
+/* @internal */
 type BinaryExpression = Node;
 
+/* @internal */
 interface SwitchStatement extends Node {
     caseBlock: CaseBlock;
 }
 
+/* @internal */
 interface CaseBlock extends Node {
     clauses: (CaseClause | DefaultClause)[];
 }
 
+/* @internal */
 interface CaseClause extends Node {
     _caseclauseBrand: any;
     expression: Expression;
 }
 
+/* @internal */
 interface DefaultClause extends Node {
     _defaultClauseBrand: any;
 }
 
+/* @internal */
 interface TypeScriptModule {
     readonly SyntaxKind: {
         readonly CaseClause: number;
@@ -40,21 +54,21 @@ interface TypeScriptModule {
     };
 
     readonly FlowFlags: {
-        readonly Unreachable: number,
-        readonly Start: number,
-        readonly BranchLabel: number,
-        readonly LoopLabel: number,
-        readonly Assignment: number,
-        readonly TrueCondition: number,
-        readonly FalseCondition: number,
-        readonly SwitchClause: number,
-        readonly ArrayMutation: number,
-        readonly Call: number,
-        readonly ReduceLabel: number,
-        readonly Referenced: number,
-        readonly Shared: number,
-        readonly Label: number,
-        readonly Condition: number,
+        readonly Unreachable: number;
+        readonly Start: number;
+        readonly BranchLabel: number;
+        readonly LoopLabel: number;
+        readonly Assignment: number;
+        readonly TrueCondition: number;
+        readonly FalseCondition: number;
+        readonly SwitchClause: number;
+        readonly ArrayMutation: number;
+        readonly Call: number;
+        readonly ReduceLabel: number;
+        readonly Referenced: number;
+        readonly Shared: number;
+        readonly Label: number;
+        readonly Condition: number;
     };
 
     getSourceFileOfNode(node: Node): SourceFile;
@@ -62,45 +76,44 @@ interface TypeScriptModule {
     isDefaultClause(node: Node): node is DefaultClause;
 }
 
-type FlowNode =
-    | FlowStart
-    | FlowLabel
-    | FlowAssignment
-    | FlowCall
-    | FlowCondition
-    | FlowSwitchClause
-    | FlowArrayMutation
-    | FlowReduceLabel
-    ;
+/* @internal */
+type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCall | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowReduceLabel;
+/* @internal */
 
 interface FlowNodeBase {
     flags: FlowFlags;
     id?: number;
 }
 
+/* @internal */
 interface FlowStart extends FlowNodeBase {
     node?: FunctionExpression | ArrowFunction | MethodDeclaration;
 }
 
+/* @internal */
 interface FlowLabel extends FlowNodeBase {
     antecedents: FlowNode[] | undefined;
 }
 
+/* @internal */
 interface FlowAssignment extends FlowNodeBase {
     node: Expression | VariableDeclaration | BindingElement;
     antecedent: FlowNode;
 }
 
+/* @internal */
 interface FlowCall extends FlowNodeBase {
     node: CallExpression;
     antecedent: FlowNode;
 }
 
+/* @internal */
 interface FlowCondition extends FlowNodeBase {
     node: Expression;
     antecedent: FlowNode;
 }
 
+/* @internal */
 interface FlowSwitchClause extends FlowNodeBase {
     switchStatement: SwitchStatement;
     clauseStart: number;
@@ -108,23 +121,31 @@ interface FlowSwitchClause extends FlowNodeBase {
     antecedent: FlowNode;
 }
 
+/* @internal */
 interface FlowArrayMutation extends FlowNodeBase {
     node: CallExpression | BinaryExpression;
     antecedent: FlowNode;
 }
 
+/* @internal */
 export interface FlowReduceLabel extends FlowNodeBase {
     target: FlowLabel;
     antecedents: FlowNode[];
     antecedent: FlowNode;
 }
 
+/* @internal */
 type FlowFlags = number;
+/* @internal */
 let FlowFlags: TypeScriptModule["FlowFlags"];
+/* @internal */
 let getSourceFileOfNode: TypeScriptModule["getSourceFileOfNode"];
+/* @internal */
 let getSourceTextOfNodeFromSourceFile: TypeScriptModule["getSourceTextOfNodeFromSourceFile"];
+/* @internal */
 let isDefaultClause: TypeScriptModule["isDefaultClause"];
 
+/* @internal */
 export function init(ts: TypeScriptModule) {
     FlowFlags = ts.FlowFlags;
     getSourceFileOfNode = ts.getSourceFileOfNode;
@@ -132,8 +153,10 @@ export function init(ts: TypeScriptModule) {
     isDefaultClause = ts.isDefaultClause;
 }
 
+/* @internal */
 let nextDebugFlowId = -1;
 
+/* @internal */
 function getDebugFlowNodeId(f: FlowNode) {
     if (!f.id) {
         f.id = nextDebugFlowId;
@@ -142,6 +165,7 @@ function getDebugFlowNodeId(f: FlowNode) {
     return f.id;
 }
 
+/* @internal */
 export function formatControlFlowGraph(flowNode: FlowNode) {
     const enum BoxCharacter {
         lr = "─",
@@ -154,7 +178,7 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
         udl = "┤",
         dlr = "┬",
         ulr = "┴",
-        udlr = "╫",
+        udlr = "╫"
     }
 
     const enum Connection {
@@ -175,7 +199,7 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
         DownLeftRight = Down | LeftRight,
         UpDownLeftRight = UpDown | LeftRight,
 
-        NoChildren = 1 << 4,
+        NoChildren = 1 << 4
     }
 
     interface FlowGraphNode {
@@ -194,16 +218,14 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
         target: FlowGraphNode;
     }
 
-    const hasAntecedentFlags =
-        FlowFlags.Assignment |
+    const hasAntecedentFlags = FlowFlags.Assignment |
         FlowFlags.Condition |
         FlowFlags.SwitchClause |
         FlowFlags.ArrayMutation |
         FlowFlags.Call |
         FlowFlags.ReduceLabel;
 
-    const hasNodeFlags =
-        FlowFlags.Start |
+    const hasNodeFlags = FlowFlags.Start |
         FlowFlags.Assignment |
         FlowFlags.Call |
         FlowFlags.Condition |
@@ -227,15 +249,21 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
         return !!(f.flags & FlowFlags.SwitchClause);
     }
 
-    function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedents: FlowNode[] } {
+    function hasAntecedents(f: FlowNode): f is FlowLabel & {
+        antecedents: FlowNode[];
+    } {
         return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedents;
     }
 
-    function hasAntecedent(f: FlowNode): f is Extract<FlowNode, { antecedent: FlowNode }> {
+    function hasAntecedent(f: FlowNode): f is Extract<FlowNode, {
+        antecedent: FlowNode;
+    }> {
         return !!(f.flags & hasAntecedentFlags);
     }
 
-    function hasNode(f: FlowNode): f is Extract<FlowNode, { node?: Node }> {
+    function hasNode(f: FlowNode): f is Extract<FlowNode, {
+        node?: Node;
+    }> {
         return !!(f.flags & hasNodeFlags);
     }
 
@@ -335,7 +363,8 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
             node.endLane = lane;
             const children = getChildren(node);
             for (let i = 0; i < children.length; i++) {
-                if (i > 0) lane++;
+                if (i > 0)
+                    lane++;
                 const child = children[i];
                 computeLanes(child, lane);
                 if (child.endLane > node.endLane) {
@@ -347,17 +376,28 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
     }
 
     function getHeader(flags: FlowFlags) {
-        if (flags & FlowFlags.Start) return "Start";
-        if (flags & FlowFlags.BranchLabel) return "Branch";
-        if (flags & FlowFlags.LoopLabel) return "Loop";
-        if (flags & FlowFlags.Assignment) return "Assignment";
-        if (flags & FlowFlags.TrueCondition) return "True";
-        if (flags & FlowFlags.FalseCondition) return "False";
-        if (flags & FlowFlags.SwitchClause) return "SwitchClause";
-        if (flags & FlowFlags.ArrayMutation) return "ArrayMutation";
-        if (flags & FlowFlags.Call) return "Call";
-        if (flags & FlowFlags.ReduceLabel) return "ReduceLabel";
-        if (flags & FlowFlags.Unreachable) return "Unreachable";
+        if (flags & FlowFlags.Start)
+            return "Start";
+        if (flags & FlowFlags.BranchLabel)
+            return "Branch";
+        if (flags & FlowFlags.LoopLabel)
+            return "Loop";
+        if (flags & FlowFlags.Assignment)
+            return "Assignment";
+        if (flags & FlowFlags.TrueCondition)
+            return "True";
+        if (flags & FlowFlags.FalseCondition)
+            return "False";
+        if (flags & FlowFlags.SwitchClause)
+            return "SwitchClause";
+        if (flags & FlowFlags.ArrayMutation)
+            return "ArrayMutation";
+        if (flags & FlowFlags.Call)
+            return "Call";
+        if (flags & FlowFlags.ReduceLabel)
+            return "ReduceLabel";
+        if (flags & FlowFlags.Unreachable)
+            return "Unreachable";
         throw new Error();
     }
 
@@ -406,9 +446,12 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 let connector: Connection = Connection.Right;
-                if (child.lane === node.lane) connector |= Connection.Left;
-                if (i > 0) connector |= Connection.Up;
-                if (i < children.length - 1) connector |= Connection.Down;
+                if (child.lane === node.lane)
+                    connector |= Connection.Left;
+                if (i > 0)
+                    connector |= Connection.Up;
+                if (i < children.length - 1)
+                    connector |= Connection.Down;
                 connectors[node.level][child.lane] |= connector;
             }
             if (children.length === 0) {
@@ -418,8 +461,10 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
             for (let i = 0; i < parents.length; i++) {
                 const parent = parents[i];
                 let connector: Connection = Connection.Left;
-                if (i > 0) connector |= Connection.Up;
-                if (i < parents.length - 1) connector |= Connection.Down;
+                if (i > 0)
+                    connector |= Connection.Up;
+                if (i < parents.length - 1)
+                    connector |= Connection.Down;
                 connectors[node.level - 1][parent.lane] |= connector;
             }
         }
@@ -431,8 +476,10 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
                 const above = lane > 0 ? connectors[column][lane - 1] : 0;
                 let connector = connectors[column][lane];
                 if (!connector) {
-                    if (left & Connection.Right) connector |= Connection.LeftRight;
-                    if (above & Connection.Down) connector |= Connection.UpDown;
+                    if (left & Connection.Right)
+                        connector |= Connection.LeftRight;
+                    if (above & Connection.Down)
+                        connector |= Connection.UpDown;
                     connectors[column][lane] = connector;
                 }
             }
@@ -509,8 +556,11 @@ export function formatControlFlowGraph(flowNode: FlowNode) {
 }
 
 // Export as a module. NOTE: Can't use module exports as this is built using --outFile
-declare const module: { exports: {} };
+/* @internal */
+declare const module: {
+    exports: {};
+};
+/* @internal */
 if (typeof module !== "undefined" && module.exports) {
     module.exports = Debug;
-}
 }

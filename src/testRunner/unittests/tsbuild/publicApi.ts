@@ -1,4 +1,8 @@
-namespace ts {
+import { TscCompileSystem, getFsWithTime, loadProjectFromFiles, toPathWithSystem, commandLineCallbacks, createSolutionBuilderHost, createDiagnosticReporter, createBuilderStatusReporter, getErrorSummaryText, createSolutionBuilder, ExitStatus, emptyArray, BuildKind, CustomTransformers, TransformerFactory, SourceFile, visitEachChild, Node, VisitResult, SyntaxKind, FunctionDeclaration, addSyntheticLeadingComment, VariableStatement, verifyTscBaseline } from "../../ts";
+import { System, patchHostForBuildInfoReadWrite } from "../../fakes";
+import { baselinePrograms } from "../../ts.tscWatch";
+import { formatPatch } from "../../vfs";
+import * as ts from "../../ts";
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
     before(() => {
@@ -35,12 +39,12 @@ export function f22() { } // trailing`,
         const fs = inputFs.shadow();
 
         // Create system
-        sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
-        fakes.patchHostForBuildInfoReadWrite(sys);
+        sys = new System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        const writtenFiles = sys.writtenFiles = new Set();
+        const writtenFiles = sys.writtenFiles = new ts.Set();
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
             const path = toPathWithSystem(sys, fileName);
@@ -49,13 +53,8 @@ export function f22() { } // trailing`,
             return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
         const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined, originalWriteFile);
-        const buildHost = createSolutionBuilderHost(
-            sys,
-                /*createProgram*/ undefined,
-            createDiagnosticReporter(sys, /*pretty*/ true),
-            createBuilderStatusReporter(sys, /*pretty*/ true),
-            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
-        );
+        const buildHost = createSolutionBuilderHost(sys, 
+        /*createProgram*/ undefined, createDiagnosticReporter(sys, /*pretty*/ true), createBuilderStatusReporter(sys, /*pretty*/ true), (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)));
         buildHost.afterProgramEmitAndDiagnostics = cb;
         buildHost.afterEmitBundle = cb;
         const builder = createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
@@ -63,7 +62,7 @@ export function f22() { } // trailing`,
         sys.exit(exitStatus);
         sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
         const baseline: string[] = [];
-        tscWatch.baselinePrograms(baseline, getPrograms, emptyArray, /*baselineDependencies*/ false);
+        baselinePrograms(baseline, getPrograms, emptyArray, /*baselineDependencies*/ false);
         sys.write(baseline.join("\n"));
         fs.makeReadonly();
         sys.baseLine = () => {
@@ -72,12 +71,12 @@ export function f22() { } // trailing`,
             return {
                 file: `tsbuild/$publicAPI/${BuildKind.Initial}/${"build with custom transformers".split(" ").join("-")}.js`,
                 text: `Input::
-${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
+${baseFsPatch ? formatPatch(baseFsPatch) : ""}
 
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`
+${patch ? formatPatch(patch) : ""}`
             };
         };
 
@@ -121,4 +120,3 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     });
     verifyTscBaseline(() => sys);
 });
-}

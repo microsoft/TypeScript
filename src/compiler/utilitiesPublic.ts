@@ -1,4 +1,4 @@
-namespace ts {
+import { pathIsRelative, isRootedDiskPath, Diagnostic, SortedReadonlyArray, sortAndDeduplicate, compareDiagnostics, CompilerOptions, getEmitScriptTarget, ScriptTarget, TextSpan, TextRange, TextChangeRange, Declaration, SyntaxKind, Node, ParameterDeclaration, ConstructorDeclaration, Identifier, hasSyntacticModifier, ModifierFlags, BindingName, BindingPattern, every, BindingElement, isOmittedExpression, VariableDeclaration, isBindingElement, getEffectiveModifierFlags, getEffectiveModifierFlagsAlwaysIncludeJSDoc, NodeFlags, Push, createCompilerDiagnostic, Diagnostics, contains, setUILocale, normalizePath, getDirectoryPath, combinePaths, setLocalizedDiagnosticMessages, __String, CharacterCodes, PrivateIdentifier, Symbol, JSDocTypedefTag, JSDocEnumTag, BinaryExpression, PropertyAccessExpression, ElementAccessExpression, isIdentifier, Expression, isVariableStatement, some, NamedDeclaration, DeclarationName, JSDocPropertyLikeTag, CallExpression, getAssignmentDeclarationKind, AssignmentDeclarationKind, getElementOrPropertyAccessArgumentExpressionOrName, AccessExpression, BindableObjectDefinePropertyCall, ExportAssignment, isBindableStaticElementAccessExpression, isFunctionExpression, isArrowFunction, isClassExpression, isPropertyAssignment, isBinaryExpression, isAccessExpression, isVariableDeclaration, JSDocParameterTag, isJSDocParameterTag, Debug, emptyArray, TypeParameterDeclaration, JSDocTemplateTag, isJSDocTemplateTag, FunctionLikeDeclaration, SignatureDeclaration, JSDocAugmentsTag, isJSDocAugmentsTag, JSDocImplementsTag, isJSDocImplementsTag, JSDocClassTag, isJSDocClassTag, JSDocPublicTag, isJSDocPublicTag, JSDocPrivateTag, isJSDocPrivateTag, JSDocProtectedTag, isJSDocProtectedTag, JSDocReadonlyTag, isJSDocReadonlyTag, JSDocOverrideTag, isJSDocOverrideTag, JSDocDeprecatedTag, isJSDocDeprecatedTag, isJSDocEnumTag, JSDocThisTag, isJSDocThisTag, JSDocReturnTag, isJSDocReturnTag, JSDocTypeTag, isJSDocTypeTag, TypeNode, isParameter, find, isTypeLiteralNode, isCallSignatureDeclaration, isFunctionTypeNode, isJSDocFunctionType, JSDocTag, JSDocContainer, getJSDocCommentsAndTags, flatMap, isJSDoc, NodeArray, JSDocComment, entityNameToString, DeclarationWithTypeParameters, isJSDocSignature, isJSDocTypeAlias, isInJSFile, getJSDocTypeParameterDeclarations, MemberName, AccessorDeclaration, PropertyAccessChain, isPropertyAccessExpression, ElementAccessChain, isElementAccessExpression, CallChain, isCallExpression, NonNullChain, OptionalChainRoot, isNonNullExpression, OptionalChain, isTypeReferenceNode, skipOuterExpressions, OuterExpressionKinds, BreakOrContinueStatement, NamedExportBindings, UnparsedTextLike, UnparsedNode, LiteralToken, LiteralExpression, TemplateLiteralToken, TemplateMiddle, TemplateTail, ImportSpecifier, ExportSpecifier, isImportSpecifier, isExportSpecifier, TypeOnlyAliasDeclaration, ImportOrExportSpecifier, NamespaceImport, ImportClause, ImportEqualsDeclaration, AssertionKey, isStringLiteral, StringLiteral, GeneratedIdentifier, GeneratedIdentifierFlags, PrivateClassElementDeclaration, isPropertyDeclaration, isPrivateIdentifier, PrivateIdentifierPropertyAccessExpression, Modifier, modifierToFlag, EntityName, PropertyName, ClassStaticBlockDeclaration, isClassStaticBlockDeclaration, BooleanLiteral, isSourceFile, isModuleBlock, isBlock, ClassElement, ClassLikeDeclaration, MethodDeclaration, TypeElement, ObjectLiteralElementLike, isTypeNodeKind, FunctionTypeNode, ConstructorTypeNode, AssignmentPattern, ArrayBindingElement, BindingOrAssignmentElement, BindingOrAssignmentElementTarget, BindingOrAssignmentPattern, ObjectBindingOrAssignmentPattern, ObjectBindingOrAssignmentElement, ArrayBindingOrAssignmentPattern, QualifiedName, ImportTypeNode, CallLikeExpression, NewExpression, TemplateLiteral, LeftHandSideExpression, UnaryExpression, PrefixUnaryExpression, PostfixUnaryExpression, AssertionExpression, NotEmittedStatement, PartiallyEmittedExpression, isNotEmittedStatement, isPartiallyEmittedExpression, IterationStatement, LabeledStatement, isExportAssignment, isExportDeclaration, Statement, isAnyImportOrReExport, isAmbientModule, ForInOrOfStatement, ConciseBody, FunctionBody, ForInitializer, isVariableDeclarationList, ModuleBody, NamespaceBody, JSDocNamespaceBody, NamedImportBindings, ModuleDeclaration, EnumDeclaration, DeclarationStatement, Block, isFunctionBlock, ModuleReference, JsxTagNameExpression, JsxChild, JsxAttributeLike, JsxExpression, JsxOpeningLikeElement, CaseOrDefaultClause, isJSDocTypeLiteral, SetAccessorDeclaration, GetAccessorDeclaration, HasJSDoc, HasType, HasInitializer, HasExpressionInitializer, ObjectLiteralElement, TypeReferenceType, isWhiteSpaceLike, StringLiteralLike, JSDocLink, JSDocLinkCode, JSDocLinkPlain } from "./ts";
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1
     // An external module name is "relative" if the first term is "." or "..".
@@ -257,7 +257,10 @@ export function getTypeParameterOwner(d: Declaration): Declaration | undefined {
     }
 }
 
-export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
+export type ParameterPropertyDeclaration = ParameterDeclaration & {
+    parent: ConstructorDeclaration;
+    name: Identifier;
+};
 export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
     return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
 }
@@ -329,10 +332,12 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
  * Checks to see if the locale is in the appropriate format,
  * and if it is, attempts to set the appropriate language.
  */
-export function validateLocaleAndSetLanguage(
-    locale: string,
-    sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
-    errors?: Push<Diagnostic>) {
+export function validateLocaleAndSetLanguage(locale: string, sys: {
+    getExecutingFilePath(): string;
+    resolvePath(path: string): string;
+    fileExists(fileName: string): boolean;
+    readFile(fileName: string): string | undefined;
+}, errors?: Push<Diagnostic>) {
     const lowerCaseLocale = locale.toLowerCase();
     const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
 
@@ -567,7 +572,9 @@ export function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier 
 }
 
 /** @internal */
-export function isNamedDeclaration(node: Node): node is NamedDeclaration & { name: DeclarationName } {
+export function isNamedDeclaration(node: Node): node is NamedDeclaration & {
+    name: DeclarationName;
+} {
     return !!(node as NamedDeclaration).name; // A 'name' property should always be a DeclarationName.
 }
 
@@ -619,7 +626,8 @@ export function getNonAssignedNameOfDeclaration(declaration: Declaration | Expre
 }
 
 export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
-    if (declaration === undefined) return undefined;
+    if (declaration === undefined)
+        return undefined;
     return getNonAssignedNameOfDeclaration(declaration) ||
         (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
 }
@@ -687,8 +695,7 @@ export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): reado
 
 function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
     const name = param.name.escapedText;
-    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
-        isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+    return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag => isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
 }
 
 /**
@@ -985,7 +992,9 @@ export function isOptionalChainRoot(node: Node): node is OptionalChainRoot {
  * Determines whether a node is the expression preceding an optional chain (i.e. `a` in `a?.b`).
  */
 /* @internal */
-export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & { parent: OptionalChainRoot } {
+export function isExpressionOfOptionalChainRoot(node: Node): node is Expression & {
+    parent: OptionalChainRoot;
+} {
     return isOptionalChainRoot(node.parent) && node.parent.expression === node;
 }
 
@@ -1816,7 +1825,8 @@ export function isStatement(node: Node): node is Statement {
 }
 
 function isBlockStatement(node: Node): node is Block {
-    if (node.kind !== SyntaxKind.Block) return false;
+    if (node.kind !== SyntaxKind.Block)
+        return false;
     if (node.parent !== undefined) {
         if (node.parent.kind === SyntaxKind.TryStatement || node.parent.kind === SyntaxKind.CatchClause) {
             return false;
@@ -1972,7 +1982,7 @@ export function isTypeReferenceType(node: Node): node is TypeReferenceType {
     return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
 }
 
-const MAX_SMI_X86 = 0x3fff_ffff;
+const MAX_SMI_X86 = 1073741823;
 /* @internal */
 export function guessIndentation(lines: string[]) {
     let indentation = MAX_SMI_X86;
@@ -2002,6 +2012,4 @@ export function isStringLiteralLike(node: Node): node is StringLiteralLike {
 
 export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
     return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
-}
-// #endregion
 }

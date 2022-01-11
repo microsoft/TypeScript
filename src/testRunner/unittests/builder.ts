@@ -1,4 +1,4 @@
-namespace ts {
+import { NamedSourceText, SourceText, newProgram, Program, BuilderProgramHost, returnTrue, EmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, CancellationToken, OperationCanceledException, ProgramWithSourceTexts, updateProgram, updateProgramText } from "../ts";
 describe("unittests:: builder", () => {
     it("emits dependent files", () => {
         const files: NamedSourceText[] = [
@@ -126,5 +126,4 @@ function updateProgramFile(program: ProgramWithSourceTexts, fileName: string, fi
     return updateProgram(program, program.getRootFileNames(), program.getCompilerOptions(), files => {
         updateProgramText(files, fileName, fileContent);
     });
-}
 }

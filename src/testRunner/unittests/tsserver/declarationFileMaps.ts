@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { DocumentSpanFromSubstring, textSpanFromSubstring, File, TestSession, openFilesForSession, closeFilesForSession, createServerHost, createSession, checkNumberOfProjects, checkProjectActualFiles, executeSessionRequest, protocol, protocolFileLocationFromSubstring, protocolFileSpanWithContextFromSubstring, protocolTextSpanFromSubstring, CommandNames, protocolFileSpanFromSubstring, makeReferenceItem, protocolLocationFromSubstring, protocolRenameSpanFromSubstring } from "../../ts.projectSystem";
+import { DocumentSpan, RenameLocation, ReferenceEntry, Debug, getFileEmitOutput, OutputFile, CompilerOptions, RawSourceMap, ScriptElementKind, ReferencedSymbol, keywordPart, SyntaxKind, spacePart, displayPart, SymbolDisplayPartKind, punctuationPart, ScriptElementKindModifier } from "../../ts";
+import { NormalizedPath } from "../../ts.server";
 function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): DocumentSpan {
     const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;
     return {
@@ -26,7 +28,7 @@ function makeReferenceEntry({ isDefinition, ...rest }: MakeReferenceEntry): Refe
 
 function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
     openFilesForSession([file], session);
-    const project = Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+    const project = Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as NormalizedPath, /*ensureProject*/ false));
     const program = project.getCurrentProgram()!;
     const output = getFileEmitOutput(program, Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
     closeFilesForSession([file], session);
@@ -264,7 +266,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 file: aTs,
                 text: "fnA",
                 contextText: "export function fnA() {}"
-            })]);
+            })
+        ]);
         verifySingleInferredProject(session);
     });
 
@@ -425,8 +428,12 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         verifyATsConfigWhenOpened(session);
     });
 
-    interface ReferencesFullRequest extends protocol.FileLocationRequest { readonly command: protocol.CommandTypes.ReferencesFull; }
-    interface ReferencesFullResponse extends protocol.Response { readonly body: readonly ReferencedSymbol[]; }
+    interface ReferencesFullRequest extends protocol.FileLocationRequest {
+        readonly command: protocol.CommandTypes.ReferencesFull;
+    }
+    interface ReferencesFullResponse extends protocol.Response {
+        readonly body: readonly ReferencedSymbol[];
+    }
 
     it("findAllReferencesFull", () => {
         const session = makeSampleProjects();
@@ -585,7 +592,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 canRename: true,
                 displayName: "fnA",
                 fileToRename: undefined,
-                fullDisplayName: '"/a/bin/a".fnA', // Ideally this would use the original source's path instead of the declaration file's path.
+                fullDisplayName: '"/a/bin/a".fnA',
                 kind: ScriptElementKind.functionElement,
                 kindModifiers: [ScriptElementKindModifier.exportedModifier, ScriptElementKindModifier.ambientModifier].join(","),
                 triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
@@ -733,13 +740,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         checkNumberOfProjects(service, { inferredProjects: 1 });
 
         // Inlined so does not jump to aTs
-        assert.deepEqual(
-            executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
-                session,
-                protocol.CommandTypes.DefinitionAndBoundSpan,
-                protocolFileLocationFromSubstring(userTs, "fnA()")
-            ),
-            {
+        assert.deepEqual(executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()")), {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
                 definitions: [
                     protocolFileSpanWithContextFromSubstring({
@@ -748,17 +749,10 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                         contextText: "export declare function fnA(): void;"
                     })
                 ],
-            }
-        );
+        });
 
         // Not inlined, jumps to bTs
-        assert.deepEqual(
-            executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
-                session,
-                protocol.CommandTypes.DefinitionAndBoundSpan,
-                protocolFileLocationFromSubstring(userTs, "fnB()")
-            ),
-            {
+        assert.deepEqual(executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnB()")), {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnB"),
                 definitions: [
                     protocolFileSpanWithContextFromSubstring({
@@ -767,10 +761,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                         contextText: "export function fnB() {}"
                     })
                 ],
-            }
-        );
+        });
 
         verifySingleInferredProject(session);
     });
 });
-}

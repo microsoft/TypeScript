@@ -1,33 +1,38 @@
+import { Diagnostics, Node, SourceFile, Program, getTokenAtPosition, findAncestor, isForInOrOfStatement, isBinaryExpression, SyntaxKind, isExpressionStatement, isArrayLiteralExpression, every, tryAddToSet, Expression, TypeChecker, isIdentifier, isAssignmentExpression } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
 const fixId = "addMissingConst";
+/* @internal */
 const errorCodes = [
     Diagnostics.Cannot_find_name_0.code,
     Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer.code
 ];
 
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToAddMissingConst(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
         if (changes.length > 0) {
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_const_to_unresolved_variable, fixId, Diagnostics.Add_const_to_all_unresolved_variables)];
         }
     },
     fixIds: [fixId],
     getAllCodeActions: context => {
-        const fixedNodes = new Set<Node>();
+        const fixedNodes = new ts.Set<Node>();
         return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, context.program, fixedNodes));
     },
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
+/* @internal */
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: ts.Set<Node>) {
     const token = getTokenAtPosition(sourceFile, pos);
-    const forInitializer = findAncestor(token, node =>
-        isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
-        isPossiblyPartOfDestructuring(node) ? false : "quit"
-    );
-    if (forInitializer) return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
+    const forInitializer = findAncestor(token, node => isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
+        isPossiblyPartOfDestructuring(node) ? false : "quit");
+    if (forInitializer)
+        return applyChange(changeTracker, forInitializer, sourceFile, fixedNodes);
 
     const parent = token.parent;
     if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken && isExpressionStatement(parent.parent)) {
@@ -43,10 +48,8 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         return applyChange(changeTracker, parent, sourceFile, fixedNodes);
     }
 
-    const commaExpression = findAncestor(token, node =>
-        isExpressionStatement(node.parent) ? true :
-        isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit"
-    );
+    const commaExpression = findAncestor(token, node => isExpressionStatement(node.parent) ? true :
+        isPossiblyPartOfCommaSeperatedInitializer(node) ? false : "quit");
     if (commaExpression) {
         const checker = program.getTypeChecker();
         if (!expressionCouldBeVariableDeclaration(commaExpression, checker)) {
@@ -57,12 +60,14 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     }
 }
 
-function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: Set<Node>) {
+/* @internal */
+function applyChange(changeTracker: ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: ts.Set<Node>) {
     if (!fixedNodes || tryAddToSet(fixedNodes, initializer)) {
         changeTracker.insertModifierBefore(sourceFile, SyntaxKind.ConstKeyword, initializer);
     }
 }
 
+/* @internal */
 function isPossiblyPartOfDestructuring(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.Identifier:
@@ -76,14 +81,15 @@ function isPossiblyPartOfDestructuring(node: Node): boolean {
     }
 }
 
+/* @internal */
 function arrayElementCouldBeVariableDeclaration(expression: Expression, checker: TypeChecker): boolean {
-    const identifier =
-        isIdentifier(expression) ? expression :
+    const identifier = isIdentifier(expression) ? expression :
         isAssignmentExpression(expression, /*excludeCompoundAssignment*/ true) && isIdentifier(expression.left) ? expression.left :
         undefined;
     return !!identifier && !checker.getSymbolAtLocation(identifier);
 }
 
+/* @internal */
 function isPossiblyPartOfCommaSeperatedInitializer(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.Identifier:
@@ -95,6 +101,7 @@ function isPossiblyPartOfCommaSeperatedInitializer(node: Node): boolean {
     }
 }
 
+/* @internal */
 function expressionCouldBeVariableDeclaration(expression: Node, checker: TypeChecker): boolean {
     if (!isBinaryExpression(expression)) {
         return false;
@@ -107,5 +114,4 @@ function expressionCouldBeVariableDeclaration(expression: Node, checker: TypeChe
     return expression.operatorToken.kind === SyntaxKind.EqualsToken
         && isIdentifier(expression.left)
         && !checker.getSymbolAtLocation(expression.left);
-}
 }

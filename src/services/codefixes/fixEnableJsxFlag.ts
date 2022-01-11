@@ -1,7 +1,11 @@
+import { Diagnostics, TsConfigSourceFile, factory } from "../ts";
+import { registerCodeFix, createCodeFixActionWithoutFixAll, codeFixAll, setJsonCompilerOptionValue } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixID = "fixEnableJsxFlag";
+/* @internal */
 const errorCodes = [Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixEnableJsxFlag(context) {
@@ -10,16 +14,13 @@ registerCodeFix({
             return undefined;
         }
 
-        const changes = textChanges.ChangeTracker.with(context, changeTracker =>
-            doChange(changeTracker, configFile)
-        );
+        const changes = ChangeTracker.with(context, changeTracker => doChange(changeTracker, configFile));
         return [
             createCodeFixActionWithoutFixAll(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
         ];
     },
     fixIds: [fixID],
-    getAllCodeActions: context =>
-        codeFixAll(context, errorCodes, changes => {
+    getAllCodeActions: context => codeFixAll(context, errorCodes, changes => {
             const { configFile } = context.program.getCompilerOptions();
             if (configFile === undefined) {
                 return undefined;
@@ -29,7 +30,7 @@ registerCodeFix({
         })
 });
 
-function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
+/* @internal */
+function doChange(changeTracker: ChangeTracker, configFile: TsConfigSourceFile) {
     setJsonCompilerOptionValue(changeTracker, configFile, "jsx", factory.createStringLiteral("react"));
-}
 }

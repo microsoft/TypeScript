@@ -1,4 +1,5 @@
-namespace ts {
+import { VersionRange, Version, emptyArray, Comparison } from "../ts";
+import * as Utils from "../Utils";
 import theory = Utils.theory;
 describe("unittests:: semver", () => {
     describe("VersionRange", () => {
@@ -25,7 +26,13 @@ describe("unittests:: semver", () => {
         it(">= works with prerelease", assertVersionRange(">=3.8.0-0", ["3.8", "3.9", "4.0"], ["3.6", "3.7"]));
     });
     describe("Version", () => {
-        function assertVersion(version: Version, [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?]) {
+        function assertVersion(version: Version, [major, minor, patch, prerelease, build]: [
+            number,
+            number,
+            number,
+            string[]?,
+            string[]?
+        ]) {
             assert.strictEqual(version.major, major);
             assert.strictEqual(version.minor, minor);
             assert.strictEqual(version.patch, patch);
@@ -248,4 +255,3 @@ describe("unittests:: semver", () => {
         ]);
     });
 });
-}

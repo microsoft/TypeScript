@@ -1,4 +1,5 @@
-namespace ts.projectSystem {
+import { createServerHost, createProjectService, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, libFile, checkNumberOfProjects, checkWatchedFiles, checkWatchedDirectories, getTypeRootsFromLocation, File, TestServerHost, TestProjectService, checkProjectActualFiles, getConfigFilesToWatch, checkWatchedFilesDetailed } from "../../ts.projectSystem";
+import { getDirectoryPath, Debug, emptyArray } from "../../ts";
 describe("unittests:: tsserver:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {
         const f1 = {
@@ -185,4 +186,3 @@ describe("unittests:: tsserver:: searching for config file", () => {
         });
     });
 });
-}

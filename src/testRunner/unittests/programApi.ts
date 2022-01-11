@@ -1,7 +1,12 @@
-namespace ts {
+import { Path, arrayFrom, mapDefinedIterator, CompilerOptions, NewLineKind, createProgram, ScriptTarget, createSourceFile, sys, ModuleKind, emptyOptions, Program, ScriptKind, ExpressionStatement, AsExpression, ImportDeclaration } from "../ts";
+import { TextDocument } from "../documents";
+import { CompilerHost } from "../fakes";
+import { createFromFileSystem } from "../vfs";
+import { IO } from "../Harness";
+import * as ts from "../ts";
 function verifyMissingFilePaths(missingPaths: readonly Path[], expected: readonly string[]) {
     assert.isDefined(missingPaths);
-    const map = new Set(expected);
+    const map = new ts.Set(expected);
     for (const missing of missingPaths) {
         const value = map.has(missing);
         assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
@@ -20,24 +25,19 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
     const emptyFileName = "empty.ts";
     const emptyFileRelativePath = "./" + emptyFileName;
 
-    const emptyFile = new documents.TextDocument(emptyFileName, "");
+    const emptyFile = new TextDocument(emptyFileName, "");
 
     const referenceFileName = "reference.ts";
     const referenceFileRelativePath = "./" + referenceFileName;
 
-    const referenceFile = new documents.TextDocument(referenceFileName,
-        "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
+    const referenceFile = new TextDocument(referenceFileName, "/// <reference path=\"d:/imaginary/nonexistent1.ts\"/>\n" + // Absolute
         "/// <reference path=\"./nonexistent2.ts\"/>\n" + // Relative
         "/// <reference path=\"nonexistent3.ts\"/>\n" + // Unqualified
         "/// <reference path=\"nonexistent4\"/>\n"   // No extension
     );
 
-    const testCompilerHost = new fakes.CompilerHost(
-        vfs.createFromFileSystem(
-            Harness.IO,
-            /*ignoreCase*/ true,
-            { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" }),
-        { newLine: NewLineKind.LineFeed });
+    const testCompilerHost = new CompilerHost(createFromFileSystem(IO, 
+    /*ignoreCase*/ true, { documents: [emptyFile, referenceFile], cwd: "d:\\pretend\\" }), { newLine: NewLineKind.LineFeed });
 
     it("handles no missing root files", () => {
         const program = createProgram([emptyFileRelativePath], options, testCompilerHost);
@@ -104,7 +104,7 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
                 bar: string = 'baz';
             }`;
 
-        const host: CompilerHost = {
+        const host: ts.CompilerHost = {
             getSourceFile: (fileName: string, languageVersion: ScriptTarget, _onError?: (message: string) => void) => {
                 return fileName === "test.ts" ? createSourceFile(fileName, testSource, languageVersion) : undefined;
             },
@@ -130,29 +130,28 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
 describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
     it("works on redirect files", () => {
         // In this example '/node_modules/foo/index.d.ts' will redirect to '/node_modules/bar/node_modules/foo/index.d.ts'.
-        const a = new documents.TextDocument("/a.ts", 'import * as bar from "bar"; import * as foo from "foo";');
-        const bar = new documents.TextDocument("/node_modules/bar/index.d.ts", 'import * as foo from "foo";');
+        const a = new TextDocument("/a.ts", 'import * as bar from "bar"; import * as foo from "foo";');
+        const bar = new TextDocument("/node_modules/bar/index.d.ts", 'import * as foo from "foo";');
         const fooPackageJsonText = '{ "name": "foo", "version": "1.2.3" }';
         const fooIndexText = "export const x: number;";
-        const barFooPackage = new documents.TextDocument("/node_modules/bar/node_modules/foo/package.json", fooPackageJsonText);
-        const barFooIndex = new documents.TextDocument("/node_modules/bar/node_modules/foo/index.d.ts", fooIndexText);
-        const fooPackage = new documents.TextDocument("/node_modules/foo/package.json", fooPackageJsonText);
-        const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", fooIndexText);
-
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex], cwd: "/" });
-        const program = createProgram(["/a.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+        const barFooPackage = new TextDocument("/node_modules/bar/node_modules/foo/package.json", fooPackageJsonText);
+        const barFooIndex = new TextDocument("/node_modules/bar/node_modules/foo/index.d.ts", fooIndexText);
+        const fooPackage = new TextDocument("/node_modules/foo/package.json", fooPackageJsonText);
+        const fooIndex = new TextDocument("/node_modules/foo/index.d.ts", fooIndexText);
+        const fs = createFromFileSystem(IO, /*ignoreCase*/ false, { documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex], cwd: "/" });
+        const program = createProgram(["/a.ts"], emptyOptions, new CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
         assertIsExternal(program, [a, bar, barFooIndex, fooIndex], f => f !== a);
     });
 
     it('works on `/// <reference types="" />`', () => {
-        const a = new documents.TextDocument("/a.ts", '/// <reference types="foo" />');
-        const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", "declare const foo: number;");
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, fooIndex], cwd: "/" });
-        const program = createProgram(["/a.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+        const a = new TextDocument("/a.ts", '/// <reference types="foo" />');
+        const fooIndex = new TextDocument("/node_modules/foo/index.d.ts", "declare const foo: number;");
+        const fs = createFromFileSystem(IO, /*ignoreCase*/ false, { documents: [a, fooIndex], cwd: "/" });
+        const program = createProgram(["/a.ts"], emptyOptions, new CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
         assertIsExternal(program, [a, fooIndex], f => f !== a);
     });
 
-    function assertIsExternal(program: Program, files: readonly documents.TextDocument[], isExternalExpected: (file: documents.TextDocument) => boolean): void {
+    function assertIsExternal(program: Program, files: readonly TextDocument[], isExternalExpected: (file: TextDocument) => boolean): void {
         for (const file of files) {
             const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
             const expected = isExternalExpected(file);
@@ -163,11 +162,10 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
 
 describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => {
     it("works on projects that have .json files", () => {
-        const main = new documents.TextDocument("/main.ts", 'export { version } from "./package.json";');
-        const pkg = new documents.TextDocument("/package.json", '{"version": "1.0.0"}');
-
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
-        const program = createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+        const main = new TextDocument("/main.ts", 'export { version } from "./package.json";');
+        const pkg = new TextDocument("/package.json", '{"version": "1.0.0"}');
+        const fs = createFromFileSystem(IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
+        const program = createProgram(["/main.ts"], { resolveJsonModule: true }, new CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
 
         const json = program.getSourceFile("/package.json")!;
         assert.equal(json.scriptKind, ScriptKind.JSON);
@@ -181,10 +179,9 @@ describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => 
 
 describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
     it("does not produce errors on `as const` it would not normally produce on the command line", () => {
-        const main = new documents.TextDocument("/main.ts", "0 as const");
-
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
-        const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+        const main = new TextDocument("/main.ts", "0 as const");
+        const fs = createFromFileSystem(IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
+        const program = createProgram(["/main.ts"], {}, new CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
         const typeChecker = program.getDiagnosticsProducingTypeChecker();
         const sourceFile = program.getSourceFile("main.ts")!;
         typeChecker.getTypeAtLocation(((sourceFile.statements[0] as ExpressionStatement).expression as AsExpression).type);
@@ -192,11 +189,10 @@ describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / 
         assert.isEmpty(diag);
     });
     it("getSymbolAtLocation does not cause additional error to be added on module resolution failure", () => {
-        const main = new documents.TextDocument("/main.ts", "import \"./module\";");
-        const mod = new documents.TextDocument("/module.d.ts", "declare const foo: any;");
-
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
-        const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+        const main = new TextDocument("/main.ts", "import \"./module\";");
+        const mod = new TextDocument("/module.d.ts", "declare const foo: any;");
+        const fs = createFromFileSystem(IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
+        const program = createProgram(["/main.ts"], {}, new CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
 
         const sourceFile = program.getSourceFile("main.ts")!;
         const typeChecker = program.getDiagnosticsProducingTypeChecker();
@@ -207,17 +203,15 @@ describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / 
 
 describe("unittests:: programApi:: CompilerOptions relative paths", () => {
     it("resolves relative paths by getCurrentDirectory", () => {
-        const main = new documents.TextDocument("/main.ts", "import \"module\";");
-        const mod = new documents.TextDocument("/lib/module.ts", "declare const foo: any;");
-
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
+        const main = new TextDocument("/main.ts", "import \"module\";");
+        const mod = new TextDocument("/lib/module.ts", "declare const foo: any;");
+        const fs = createFromFileSystem(IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
         const program = createProgram(["./main.ts"], {
             paths: { "*": ["./lib/*"] }
-        }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+        }, new CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
 
         assert.isEmpty(program.getConfigFileParsingDiagnostics());
         assert.isEmpty(program.getGlobalDiagnostics());
         assert.isEmpty(program.getSemanticDiagnostics());
     });
 });
-}

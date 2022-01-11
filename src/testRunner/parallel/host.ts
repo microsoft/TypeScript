@@ -1,4 +1,8 @@
-namespace Harness.Parallel.Host {
+import { findUpFile } from "../Utils";
+import { configOption, IO, TestRunnerKind, runners, workerCount, noColors, TestConfig, lightMode, runUnitTests, stackTraceLimit, globalTimeout, taskConfigsFolder, keepFailed } from "../Harness";
+import { Task, ErrorInfo, TestInfo, TaskTimeout, ParallelClientMessage, ParallelHostMessage, shimNoopTestInterface } from "../Harness.Parallel";
+import { combinePaths, Debug } from "../ts";
+import * as ts from "../ts";
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");
     const Base = Mocha.reporters.Base;
@@ -14,7 +18,7 @@ export function start() {
     const { statSync } = require("fs") as typeof import("fs");
 
     // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-    const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests");
+    const FailedTestReporter = require(findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests");
 
     const perfdataFileNameFragment = ".parallelperf";
     const perfData = readSavedPerfData(configOption);
@@ -53,7 +57,9 @@ export function start() {
     interface Worker {
         process: import("child_process").ChildProcess;
         accumulatedOutput: string;
-        currentTasks?: { file: string }[];
+        currentTasks?: {
+            file: string;
+        }[];
         timer?: any;
     }
 
@@ -79,7 +85,8 @@ export function start() {
         private _lineCount: number;
         private _progressBars: ProgressBar[];
         constructor(options?: Partial<ProgressBarsOptions>) {
-            if (!options) options = {};
+            if (!options)
+                options = {};
             const open = options.open || "[";
             const close = options.close || "]";
             const complete = options.complete || "▬";
@@ -174,7 +181,9 @@ export function start() {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
 
-    function readSavedPerfData(target?: string): { [testHash: string]: number } | undefined {
+    function readSavedPerfData(target?: string): {
+        [testHash: string]: number;
+    } | undefined {
         const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
@@ -186,7 +195,9 @@ export function start() {
         return `tsrunner-${runner}://${test}`;
     }
 
-    function startDelayed(perfData: { [testHash: string]: number } | undefined, totalCost: number) {
+    function startDelayed(perfData: {
+        [testHash: string]: number;
+    } | undefined, totalCost: number) {
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
@@ -236,22 +247,26 @@ export function start() {
         let passingFiles = 0;
         let failingFiles = 0;
         let errorResults: ErrorInfo[] = [];
-        let passingResults: { name: string[] }[] = [];
+        let passingResults: {
+            name: string[];
+        }[] = [];
         let totalPassing = 0;
         const startDate = new Date();
 
-        const progressBars = new ProgressBars({ noColors: Harness.noColors }); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+        const progressBars = new ProgressBars({ noColors: noColors }); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
         const progressUpdateInterval = 1 / progressBars._options.width;
         let nextProgress = progressUpdateInterval;
 
-        const newPerfData: { [testHash: string]: number } = {};
+        const newPerfData: {
+            [testHash: string]: number;
+        } = {};
 
         const workers: Worker[] = [];
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests: Harness.runUnitTests, stackTraceLimit: Harness.stackTraceLimit, timeout: globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
-            const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
+            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests: runUnitTests, stackTraceLimit: stackTraceLimit, timeout: globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            const configPath = combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
             const worker: Worker = {
                 process: fork(__filename, [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
@@ -361,7 +376,11 @@ export function start() {
         // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
         if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
-            const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
+            const batches: {
+                runner: TestRunnerKind | "unittest";
+                file: string;
+                size: number;
+            }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
             let scheduledTotal = 0;
             batcher: while (true) {
@@ -407,7 +426,7 @@ export function start() {
                 }
                 else { // Out of batches, send off just one test
                     const payload = tasks.pop()!;
-                    ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                    Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
                     worker.currentTasks = [payload];
                     worker.process.send({ type: "test", payload });
                 }
@@ -448,13 +467,7 @@ export function start() {
                 progressColor = "fail";
             }
 
-            progressBars.update(
-                0,
-                percentComplete,
-                progressColor,
-                title,
-                titleColor
-            );
+            progressBars.update(0, percentComplete, progressColor, title, titleColor);
         }
 
         function outputFinalResult() {
@@ -463,17 +476,17 @@ export function start() {
                     start: {
                         configurable: true, enumerable: true,
                         get() { return startDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        set(_: Date) { }
                     },
                     end: {
                         configurable: true, enumerable: true,
                         get() { return endDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        set(_: Date) { }
                     },
                     duration: {
                         configurable: true, enumerable: true,
                         get() { return duration; },
-                        set(_: number) { /*do nothing*/ }
+                        set(_: number) { }
                     }
                 });
             }
@@ -487,7 +500,8 @@ export function start() {
                 function getSuite(parent: RemoteSuite, titlePath: string[]): Mocha.Suite {
                     const title = titlePath[0];
                     let suite = parent.suiteMap.get(title);
-                    if (!suite) parent.addSuite(suite = new RemoteSuite(title));
+                    if (!suite)
+                        parent.addSuite(suite = new RemoteSuite(title));
                     return titlePath.length === 1 ? suite : getSuite(suite, titlePath.slice(1));
                 }
             }
@@ -549,19 +563,21 @@ export function start() {
                 failedTestReporter = new FailedTestReporter(replayRunner, {
                     reporterOptions: {
                         file: path.resolve(".failed-tests"),
-                        keepFailed: Harness.keepFailed // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                        keepFailed: keepFailed // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                     }
                 });
             }
 
             const savedUseColors = Base.useColors;
-            if (noColors) Base.useColors = false;
+            if (noColors)
+                Base.useColors = false;
             replayRunner.started = true;
             replayRunner.emit("start");
             replaySuite(replayRunner, rebuildSuite(errorResults, passingResults));
             replayRunner.emit("end");
             consoleReporter.epilogue();
-            if (noColors) Base.useColors = savedUseColors;
+            if (noColors)
+                Base.useColors = savedUseColors;
 
             // eslint-disable-next-line no-null/no-null
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
@@ -588,8 +604,10 @@ export function start() {
     }
 
     function minMax(value: number, min: number, max: number) {
-        if (value < min) return min;
-        if (value > max) return max;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
         return value;
     }
 
@@ -625,5 +643,4 @@ export function start() {
 
     // eslint-disable-next-line no-restricted-globals
     setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
-}
 }

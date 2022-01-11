@@ -1,4 +1,7 @@
-namespace ts.server {
+import { ScriptVersionCache, ServerHost, AbsolutePositionAndLineText, maxFileSize, NormalizedPath, Project, isConfiguredProject, isInferredProject, Errors, ExternalProject, ConfiguredProject, InferredProject, isExternalProject, ProjectKind } from "./ts.server";
+import { Debug, IScriptSnapshot, ScriptSnapshot, TextSpan, createTextSpanFromBounds, computePositionOfLineAndCharacter, computeLineAndCharacterOfPosition, hasTSFileExtension, computeLineStarts, LineInfo, getLineInfo, stringContains, getBaseFileName, directorySeparator, DocumentRegistryBucketKey, SourceFile, FileWatcher, Path, FormatCodeSettings, SourceFileLike, DocumentPositionMapper, ScriptKind, getScriptKindFromFileName, contains, unorderedRemoveItem, FileWatcherEventKind, clear, getDefaultFormatCodeSettings, assign, emptyOptions, getSnapshotText, forEach, some, isString, closeFileWatcherOf } from "./ts";
+import { Location, UserPreferences } from "./ts.server.protocol";
+import * as ts from "./ts";
 export interface ScriptInfoVersion {
     svc: number;
     text: number;
@@ -196,7 +199,7 @@ export class TextStorage {
         return this.svc!.lineOffsetToPosition(line, offset);
     }
 
-    positionToLineOffset(position: number): protocol.Location {
+    positionToLineOffset(position: number): Location {
         if (!this.useScriptVersionCacheIfValidOrOpen()) {
             const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
             return { line: line + 1, offset: character + 1 };
@@ -204,7 +207,10 @@ export class TextStorage {
         return this.svc!.positionToLineOffset(position);
     }
 
-    private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
+    private getFileTextAndSize(tempFileName?: string): {
+        text: string;
+        fileSize?: number;
+    } {
         let text: string;
         const fileName = tempFileName || this.info.fileName;
         const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
@@ -286,7 +292,7 @@ export interface DocumentRegistrySourceFileCache {
 /*@internal*/
 export interface SourceMapFileWatcher {
     watcher: FileWatcher;
-    sourceInfos?: Set<Path>;
+    sourceInfos?: ts.Set<Path>;
 }
 
 export class ScriptInfo {
@@ -295,7 +301,7 @@ export class ScriptInfo {
      */
     readonly containingProjects: Project[] = [];
     private formatSettings: FormatCodeSettings | undefined;
-    private preferences: protocol.UserPreferences | undefined;
+    private preferences: UserPreferences | undefined;
 
     /* @internal */
     fileWatcher: FileWatcher | undefined;
@@ -324,17 +330,11 @@ export class ScriptInfo {
     /*@internal*/
     declarationInfoPath?: Path;
     /*@internal*/
-    sourceInfos?: Set<Path>;
+    sourceInfos?: ts.Set<Path>;
     /*@internal*/
     documentPositionMapper?: DocumentPositionMapper | false;
 
-    constructor(
-        private readonly host: ServerHost,
-        readonly fileName: NormalizedPath,
-        readonly scriptKind: ScriptKind,
-        public readonly hasMixedContent: boolean,
-        readonly path: Path,
-        initialVersion?: ScriptInfoVersion) {
+    constructor(private readonly host: ServerHost, readonly fileName: NormalizedPath, readonly scriptKind: ScriptKind, public readonly hasMixedContent: boolean, readonly path: Path, initialVersion?: ScriptInfoVersion) {
         this.isDynamic = isDynamicFileName(fileName);
 
         this.textStorage = new TextStorage(host, this, initialVersion);
@@ -425,7 +425,7 @@ export class ScriptInfo {
     }
 
     getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-    getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
+    getPreferences(): UserPreferences | undefined { return this.preferences; }
 
     attachToProject(project: Project): boolean {
         const isNew = !this.isAttached(project);
@@ -524,10 +524,13 @@ export class ScriptInfo {
                                 index !== this.containingProjects.length - 1) {
                                 defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
                             }
-                            if (defaultConfiguredProject === project) return project;
-                            if (!firstNonSourceOfProjectReferenceRedirect) firstNonSourceOfProjectReferenceRedirect = project;
+                            if (defaultConfiguredProject === project)
+                                return project;
+                            if (!firstNonSourceOfProjectReferenceRedirect)
+                                firstNonSourceOfProjectReferenceRedirect = project;
                         }
-                        if (!firstConfiguredProject) firstConfiguredProject = project;
+                        if (!firstConfiguredProject)
+                            firstConfiguredProject = project;
                     }
                     else if (!firstExternalProject && isExternalProject(project)) {
                         firstExternalProject = project;
@@ -550,7 +553,7 @@ export class ScriptInfo {
         }
     }
 
-    setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
+    setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void {
         if (formatSettings) {
             if (!this.formatSettings) {
                 this.formatSettings = getDefaultFormatCodeSettings(this.host.newLine);
@@ -644,7 +647,7 @@ export class ScriptInfo {
         return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
     }
 
-    positionToLineOffset(position: number): protocol.Location {
+    positionToLineOffset(position: number): Location {
         failIfInvalidPosition(position);
         const location = this.textStorage.positionToLineOffset(position);
         failIfInvalidLocation(location);
@@ -681,11 +684,10 @@ function failIfInvalidPosition(position: number) {
     Debug.assert(position >= 0, `Expected position to be non-negative.`);
 }
 
-function failIfInvalidLocation(location: protocol.Location) {
+function failIfInvalidLocation(location: Location) {
     Debug.assert(typeof location.line === "number", `Expected line ${location.line} to be a number.`);
     Debug.assert(typeof location.offset === "number", `Expected offset ${location.offset} to be a number.`);
 
     Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
     Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
-}
 }

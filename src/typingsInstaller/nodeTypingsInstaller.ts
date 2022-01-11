@@ -1,6 +1,9 @@
-namespace ts.server.typingsInstaller {
+import { Log, TypingsInstaller, RequestCompletedAction, installNpmPackages } from "./ts.server.typingsInstaller";
+import { nowString, InstallTypingHost, InitializationFailedResponse, Arguments, TypingInstallerRequestUnion, TypesRegistryResponse, EventTypesRegistry, PackageInstalledResponse, ActionPackageInstalled, TypingInstallerResponseUnion, findArgument, hasArgument } from "./ts.server";
+import { sys, MapLike, ESMap, getEntries, combinePaths, normalizeSlashes, toPath, createGetCanonicalFileName, stringContains, Debug, version, forEachAncestorDirectory, getDirectoryPath } from "./ts";
+import * as ts from "./ts";
 const fs: {
-    appendFileSync(file: string, content: string): void
+    appendFileSync(file: string, content: string): void;
 } = require("fs");
 
 const path: {
@@ -17,7 +20,8 @@ class FileLog implements Log {
         return typeof this.logFile === "string";
     };
     writeLine = (text: string) => {
-        if (typeof this.logFile !== "string") return;
+        if (typeof this.logFile !== "string")
+            return;
 
         try {
             fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
@@ -51,17 +55,17 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
         if (log.isEnabled()) {
             log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
         }
-        return new Map<string, MapLike<string>>();
+        return new ts.Map<string, MapLike<string>>();
     }
     try {
         const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
-        return new Map(getEntries(content.entries));
+        return new ts.Map(getEntries(content.entries));
     }
     catch (e) {
         if (log.isEnabled()) {
             log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(e as Error).message}, ${(e as Error).stack}`);
         }
-        return new Map<string, MapLike<string>>();
+        return new ts.Map<string, MapLike<string>>();
     }
 }
 
@@ -84,13 +88,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
     private delayedInitializationError: InitializationFailedResponse | undefined;
 
     constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, validateDefaultNpmLocation: boolean, throttleLimit: number, log: Log) {
-        super(
-            sys,
-            globalTypingsCacheLocation,
-            typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-            typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-            throttleLimit,
-            log);
+        super(sys, globalTypingsCacheLocation, typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)), throttleLimit, log);
         this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
         // If the NPM path contains spaces and isn't wrapped in quotes, do so.
@@ -145,7 +143,9 @@ export class NodeTypingsInstaller extends TypingsInstaller {
                     this.closeProject(req);
                     break;
                 case "typesRegistry": {
-                    const typesRegistry: { [key: string]: MapLike<string> } = {};
+                    const typesRegistry: {
+                        [key: string]: MapLike<string>;
+                    } = {};
                     this.typesRegistry.forEach((value, key) => {
                         typesRegistry[key] = value;
                     });
@@ -251,5 +251,4 @@ function indent(newline: string, str: string | undefined): string {
     return str && str.length
         ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
         : "";
-}
 }

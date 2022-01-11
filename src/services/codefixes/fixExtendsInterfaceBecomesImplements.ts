@@ -1,24 +1,31 @@
+import { Diagnostics, SourceFile, getTokenAtPosition, getContainingClass, SyntaxKind, Node, HeritageClause, factory, isWhiteSpaceSingleLine } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../ts.codefix";
+import { ChangeTracker } from "../ts.textChanges";
 /* @internal */
-namespace ts.codefix {
 const fixId = "extendsInterfaceBecomesImplements";
+/* @internal */
 const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile } = context;
         const nodes = getNodes(sourceFile, context.span.start);
-        if (!nodes) return undefined;
+        if (!nodes)
+            return undefined;
         const { extendsToken, heritageClauses } = nodes;
-        const changes = textChanges.ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
+        const changes = ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
         return [createCodeFixAction(fixId, changes, Diagnostics.Change_extends_to_implements, fixId, Diagnostics.Change_all_extended_interfaces_to_implements)];
     },
     fixIds: [fixId],
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const nodes = getNodes(diag.file, diag.start);
-        if (nodes) doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
+        if (nodes)
+            doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
     }),
 });
 
+/* @internal */
 function getNodes(sourceFile: SourceFile, pos: number) {
     const token = getTokenAtPosition(sourceFile, pos);
     const heritageClauses = getContainingClass(token)!.heritageClauses!;
@@ -26,7 +33,8 @@ function getNodes(sourceFile: SourceFile, pos: number) {
     return extendsToken.kind === SyntaxKind.ExtendsKeyword ? { extendsToken, heritageClauses } : undefined;
 }
 
-function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
+/* @internal */
+function doChanges(changes: ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
     changes.replaceNode(sourceFile, extendsToken, factory.createToken(SyntaxKind.ImplementsKeyword));
 
     // If there is already an implements clause, replace the implements keyword with a comma.
@@ -48,5 +56,4 @@ function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, e
 
         changes.deleteRange(sourceFile, { pos: implementsToken.getStart(), end });
     }
-}
 }

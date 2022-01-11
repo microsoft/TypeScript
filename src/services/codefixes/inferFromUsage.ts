@@ -1,6 +1,11 @@
+import { Diagnostics, getTokenAtPosition, Declaration, returnTrue, getNameOfDeclaration, nodeSeenTracker, Node, DiagnosticMessage, isSetAccessorDeclaration, getContainingFunction, SourceFile, Program, CancellationToken, NodeSeenTracker, LanguageServiceHost, UserPreferences, isParameterPropertyModifier, SyntaxKind, isVariableDeclaration, isPropertyDeclaration, isPropertySignature, isPropertyAccessExpression, getTypeNodeIfAccessible, factory, cast, isExpressionStatement, isParameter, isGetAccessorDeclaration, isIdentifier, Debug, VariableDeclaration, PropertyDeclaration, PropertySignature, ParameterDeclaration, SignatureDeclaration, isInJSFile, isArrowFunction, findChildOfKind, first, last, TypeNode, SetAccessorDeclaration, firstOrUndefined, Type, tryCast, isVariableStatement, getEmitScriptTarget, ScriptTarget, forEach, mapDefined, getJSDocType, setEmitFlags, EmitFlags, isFunctionExpression, map, PropertyName, Token, Identifier, PrivateIdentifier, UnderscoreEscapedMap, __String, flatMap, isRestParameter, emptyArray, Expression, isRightSideOfQualifiedNameOrPropertyAccess, PrefixUnaryExpression, BinaryExpression, CaseOrDefaultClause, CallExpression, NewExpression, PropertyAccessExpression, ElementAccessExpression, PropertyAssignment, ShorthandPropertyAssignment, isExpressionNode, isCallExpression, TypeFlags, isAssignmentExpression, escapeLeadingUnderscores, getObjectFlags, ObjectFlags, AnonymousType, UnionReduction, createMultiMap, SignatureKind, IndexKind, mapEntries, SymbolFlags, TransientSymbol, length, Symbol, Signature, forEachEntry, TypeReference, singleOrUndefined, UnionOrIntersectionType, SymbolLinks, createSymbolTable, SignatureFlags } from "../ts";
+import { registerCodeFix, createCodeFixAction, codeFixAll, createImportAdder, ImportAdder, tryGetAutoImportableReferenceFromTypeNode } from "../ts.codefix";
+import { ChangeTracker, isThisTypeAnnotatable, ThisTypeAnnotatable, TypeAnnotatable } from "../ts.textChanges";
+import { getReferenceEntriesForNode, EntryKind } from "../ts.FindAllReferences";
+import * as ts from "../ts";
 /* @internal */
-namespace ts.codefix {
 const fixId = "inferFromUsage";
+/* @internal */
 const errorCodes = [
     // Variable declarations
     Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code,
@@ -46,6 +51,7 @@ const errorCodes = [
     // Function expressions and declarations
     Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code,
 ];
+/* @internal */
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
@@ -53,8 +59,8 @@ registerCodeFix({
 
         const token = getTokenAtPosition(sourceFile, start);
         let declaration: Declaration | undefined;
-        const changes = textChanges.ChangeTracker.with(context, changes => {
-            declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences);
+        const changes = ChangeTracker.with(context, changes => {
+            declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, returnTrue, host, preferences);
         });
         const name = declaration && getNameOfDeclaration(declaration);
         return !name || changes.length === 0 ? undefined
@@ -70,6 +76,7 @@ registerCodeFix({
     },
 });
 
+/* @internal */
 function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
     switch (errorCode) {
         case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
@@ -86,6 +93,7 @@ function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
 }
 
 /** Map suggestion code to error code */
+/* @internal */
 function mapSuggestionDiagnostic(errorCode: number) {
     switch (errorCode) {
         case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_but_a_better_type_may_be_inferred_from_usage.code:
@@ -108,7 +116,8 @@ function mapSuggestionDiagnostic(errorCode: number) {
     return errorCode;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
+/* @internal */
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
     if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
         return undefined;
     }
@@ -191,7 +200,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, to
 
         // Function 'this'
         case Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code:
-            if (textChanges.isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
+            if (isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
                 annotateThis(changes, sourceFile, containingFunction, program, host, cancellationToken);
                 declaration = containingFunction;
             }
@@ -205,30 +214,15 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, to
     return declaration;
 }
 
-function annotateVariableDeclaration(
-    changes: textChanges.ChangeTracker,
-    importAdder: ImportAdder,
-    sourceFile: SourceFile,
-    declaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
-    program: Program,
-    host: LanguageServiceHost,
-    cancellationToken: CancellationToken,
-): void {
+/* @internal */
+function annotateVariableDeclaration(changes: ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: VariableDeclaration | PropertyDeclaration | PropertySignature, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
     if (isIdentifier(declaration.name)) {
         annotate(changes, importAdder, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program, host);
     }
 }
 
-function annotateParameters(
-    changes: textChanges.ChangeTracker,
-    importAdder: ImportAdder,
-    sourceFile: SourceFile,
-    parameterDeclaration: ParameterDeclaration,
-    containingFunction: SignatureDeclaration,
-    program: Program,
-    host: LanguageServiceHost,
-    cancellationToken: CancellationToken,
-): void {
+/* @internal */
+function annotateParameters(changes: ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, parameterDeclaration: ParameterDeclaration, containingFunction: SignatureDeclaration, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
     if (!isIdentifier(parameterDeclaration.name)) {
         return;
     }
@@ -241,17 +235,20 @@ function annotateParameters(
     }
     else {
         const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
-        if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+        if (needParens)
+            changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
         for (const { declaration, type } of parameterInferences) {
             if (declaration && !declaration.type && !declaration.initializer) {
                 annotate(changes, importAdder, sourceFile, declaration, type, program, host);
             }
         }
-        if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+        if (needParens)
+            changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
     }
 }
 
-function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
+/* @internal */
+function annotateThis(changes: ChangeTracker, sourceFile: SourceFile, containingFunction: ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
     const references = getFunctionReferences(containingFunction, sourceFile, program, cancellationToken);
     if (!references || !references.length) {
         return;
@@ -270,22 +267,15 @@ function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile
     }
 }
 
-function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
+/* @internal */
+function annotateJSDocThis(changes: ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
     changes.addJSDocTags(sourceFile, containingFunction, [
         factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
     ]);
 }
 
-function annotateSetAccessor(
-    changes: textChanges.ChangeTracker,
-    importAdder: ImportAdder,
-    sourceFile: SourceFile,
-    setAccessorDeclaration: SetAccessorDeclaration,
-    program: Program,
-    host: LanguageServiceHost,
-    cancellationToken: CancellationToken,
-
-): void {
+/* @internal */
+function annotateSetAccessor(changes: ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
     const param = firstOrUndefined(setAccessorDeclaration.parameters);
     if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
         let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken);
@@ -301,7 +291,8 @@ function annotateSetAccessor(
     }
 }
 
-function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
+/* @internal */
+function annotate(changes: ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
     const typeNode = getTypeNodeIfAccessible(type, declaration, program, host);
     if (typeNode) {
         if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
@@ -319,14 +310,8 @@ function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, 
     }
 }
 
-function tryReplaceImportTypeNodeWithAutoImport(
-    typeNode: TypeNode,
-    declaration: textChanges.TypeAnnotatable,
-    sourceFile: SourceFile,
-    changes: textChanges.ChangeTracker,
-    importAdder: ImportAdder,
-    scriptTarget: ScriptTarget
-): boolean {
+/* @internal */
+function tryReplaceImportTypeNodeWithAutoImport(typeNode: TypeNode, declaration: TypeAnnotatable, sourceFile: SourceFile, changes: ChangeTracker, importAdder: ImportAdder, scriptTarget: ScriptTarget): boolean {
     const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
         forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
@@ -335,7 +320,8 @@ function tryReplaceImportTypeNodeWithAutoImport(
     return false;
 }
 
-function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
+/* @internal */
+function annotateJSDocParameters(changes: ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
     const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
     if (!signature) {
         return;
@@ -376,23 +362,24 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
         }
     }
     else {
-        const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
-            factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, /*comment*/ undefined));
+        const paramTags = map(inferences, ({ name, typeNode, isOptional }) => factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, /*comment*/ undefined));
         changes.addJSDocTags(sourceFile, signature, paramTags);
     }
 }
 
+/* @internal */
 function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
     // Position shouldn't matter since token is not a SourceFile.
-    return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
-        entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
+    return mapDefined(getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry => entry.kind !== EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
 }
 
+/* @internal */
 function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {
     const references = getReferences(token, program, cancellationToken);
     return inferTypeFromReferences(program, references, cancellationToken).single();
 }
 
+/* @internal */
 function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken) {
     const references = getFunctionReferences(func, sourceFile, program, cancellationToken);
     return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
@@ -402,6 +389,7 @@ function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile:
         }));
 }
 
+/* @internal */
 function getFunctionReferences(containingFunction: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
     let searchToken;
     switch (containingFunction.kind) {
@@ -429,15 +417,19 @@ function getFunctionReferences(containingFunction: SignatureDeclaration, sourceF
     return getReferences(searchToken, program, cancellationToken);
 }
 
+/* @internal */
 interface ParameterInference {
     readonly declaration: ParameterDeclaration;
     readonly type: Type;
     readonly isOptional?: boolean;
 }
 
+/* @internal */
 function inferTypeFromReferences(program: Program, references: readonly Identifier[], cancellationToken: CancellationToken) {
     const checker = program.getTypeChecker();
-    const builtinConstructors: { [s: string]: (t: Type) => Type } = {
+    const builtinConstructors: {
+        [s: string]: (t: Type) => Type;
+    } = {
         string: () => checker.getStringType(),
         number: () => checker.getNumberType(),
         Array: t => checker.createArrayType(t),
@@ -494,7 +486,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function combineUsages(usages: Usage[]): Usage {
-        const combinedProperties = new Map<__String, Usage[]>();
+        const combinedProperties = new ts.Map<__String, Usage[]>();
         for (const u of usages) {
             if (u.properties) {
                 u.properties.forEach((p, name) => {
@@ -505,7 +497,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
                 });
             }
         }
-        const properties = new Map<__String, Usage>();
+        const properties = new ts.Map<__String, Usage>();
         combinedProperties.forEach((ps, name) => {
             properties.set(name, combineUsages(ps));
         });
@@ -814,7 +806,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     function inferTypeFromPropertyAccessExpression(parent: PropertyAccessExpression, usage: Usage): void {
         const name = escapeLeadingUnderscores(parent.name.text);
         if (!usage.properties) {
-            usage.properties = new Map();
+            usage.properties = new ts.Map();
         }
         const propertyUsage = usage.properties.get(name) || createEmptyUsage();
         calculateUsageOfNode(parent, propertyUsage);
@@ -873,7 +865,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function combineTypes(inferences: readonly Type[]): Type {
-        if (!inferences.length) return checker.getAnyType();
+        if (!inferences.length)
+            return checker.getAnyType();
 
         // 1. string or number individually override string | number
         // 2. non-any, non-void overrides any or void
@@ -891,7 +884,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             {
                 high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
                 low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous)
-            }];
+            }
+        ];
         let good = removeLowPriorityInferences(inferences, priorities);
         const anons = good.filter(i => getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
         if (anons.length) {
@@ -936,14 +930,11 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             return [name, s];
         });
         const indexInfos = [];
-        if (stringIndices.length) indexInfos.push(checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly));
-        if (numberIndices.length) indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
-        return checker.createAnonymousType(
-            anons[0].symbol,
-            members as UnderscoreEscapedMap<TransientSymbol>,
-            calls,
-            constructs,
-            indexInfos);
+        if (stringIndices.length)
+            indexInfos.push(checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly));
+        if (numberIndices.length)
+            indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
+        return checker.createAnonymousType(anons[0].symbol, members as UnderscoreEscapedMap<TransientSymbol>, calls, constructs, indexInfos);
     }
 
     function inferTypes(usage: Usage): Type[] {
@@ -984,7 +975,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function inferStructuralType(usage: Usage) {
-        const members = new Map<__String, Symbol>();
+        const members = new ts.Map<__String, Symbol>();
         if (usage.properties) {
             usage.properties.forEach((u, name) => {
                 const symbol = checker.createSymbol(SymbolFlags.Property, name);
@@ -999,7 +990,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function inferNamedTypesFromProperties(usage: Usage): Type[] {
-        if (!usage.properties || !usage.properties.size) return [];
+        if (!usage.properties || !usage.properties.size)
+            return [];
         const types = builtins.filter(t => allPropertiesAreAssignableToUsage(t, usage));
         if (0 < types.length && types.length < 3) {
             return types.map(t => inferInstantiationFromUsage(t, usage));
@@ -1008,7 +1000,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     }
 
     function allPropertiesAreAssignableToUsage(type: Type, usage: Usage) {
-        if (!usage.properties) return false;
+        if (!usage.properties)
+            return false;
         return !forEachEntry(usage.properties, (propUsage, name) => {
             const source = checker.getTypeOfPropertyOfType(type, name as string);
             if (!source) {
@@ -1035,7 +1028,8 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         }
         const generic = (type as TypeReference).target;
         const singleTypeParameter = singleOrUndefined(generic.typeParameters);
-        if (!singleTypeParameter) return type;
+        if (!singleTypeParameter)
+            return type;
 
         const types: Type[] = [];
         usage.properties.forEach((propUsage, name) => {
@@ -1129,5 +1123,4 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             (usage.candidateThisTypes || (usage.candidateThisTypes = [])).push(type);
         }
     }
-}
 }

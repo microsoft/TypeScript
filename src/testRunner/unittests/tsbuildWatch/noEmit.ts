@@ -1,19 +1,17 @@
-namespace ts.tscWatch {
+import { verifyTscWatch, createWatchedSystem, libFile, projectRoot, checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout } from "../../ts.tscWatch";
+import { libContent } from "../../ts";
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
     verifyTscWatch({
         scenario: "noEmit",
         subScenario: "does not go in loop when watching when no files are emitted",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () => createWatchedSystem(
-            [
+        sys: () => createWatchedSystem([
                 libFile,
                 { path: `${projectRoot}/a.js`, content: "" },
                 { path: `${projectRoot}/b.ts`, content: "" },
                 { path: `${projectRoot}/tsconfig.json`, content: JSON.stringify({ compilerOptions: { allowJs: true, noEmit: true } }) },
                 { path: libFile.path, content: libContent }
-            ],
-            { currentDirectory: projectRoot }
-        ),
+        ], { currentDirectory: projectRoot }),
         changes: [
             {
                 caption: "No change",
@@ -31,4 +29,3 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
         baselineIncremental: true
     });
 });
-}

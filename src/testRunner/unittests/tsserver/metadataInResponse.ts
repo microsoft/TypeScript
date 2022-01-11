@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { TestServerHost, protocol, mapOutputToJson, TestSession, File, createServerHost, createSession, openFilesForSession } from "../../ts.projectSystem";
+import { server, ScriptElementKind, Completions } from "../../ts";
+import { PluginCreateInfo } from "../../ts.server";
+import { LanguageService } from "../../Harness";
 describe("unittests:: tsserver:: with metadata in response", () => {
     const metadata = "Extra Info";
     function verifyOutput(host: TestServerHost, expectedResponse: protocol.Response) {
@@ -13,8 +16,7 @@ describe("unittests:: tsserver:: with metadata in response", () => {
         session.onMessage(JSON.stringify(command));
         verifyOutput(host, expectedResponseBody ?
             { seq: 0, type: "response", command: command.command!, request_seq: command.seq, success: true, body: expectedResponseBody, metadata } :
-            { seq: 0, type: "response", command: command.command!, request_seq: command.seq, success: false, message: "No content available." }
-        );
+            { seq: 0, type: "response", command: command.command!, request_seq: command.seq, success: false, message: "No content available." });
     }
 
     const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
@@ -30,8 +32,8 @@ describe("unittests:: tsserver:: with metadata in response", () => {
             assert.equal(moduleName, "myplugin");
             return {
                 module: () => ({
-                    create(info: server.PluginCreateInfo) {
-                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                    create(info: PluginCreateInfo) {
+                        const proxy = LanguageService.makeDefaultProxy(info);
                         proxy.getCompletionsAtPosition = (filename, position, options) => {
                             const result = info.languageService.getCompletionsAtPosition(filename, position, options);
                             if (result) {
@@ -100,4 +102,3 @@ describe("unittests:: tsserver:: with metadata in response", () => {
         });
     });
 });
-}
