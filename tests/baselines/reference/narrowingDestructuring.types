@@ -111,7 +111,7 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 
         const { kind, ...r1 } = t;
 >kind : "a"
->r1 : { a: string; }
+>r1 : Omit<T, "kind">
 >t : { kind: "a"; a: string; }
 
         const r2 = (({ kind, ...rest }) => rest)(t);

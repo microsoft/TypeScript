@@ -33663,11 +33663,11 @@ namespace ts {
         }
 
         function checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+            if (checkMode && checkMode !== CheckMode.Normal) {
+                return checkExpression(node, checkMode);
+            }
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                if (checkMode && checkMode !== CheckMode.Normal) {
-                    return checkExpression(node, checkMode);
-                }
                 // When computing a type that we're going to cache, we need to ignore any ongoing control flow
                 // analysis because variables may have transient types in indeterminable states. Moving flowLoopStart
                 // to the top of the stack ensures all transient types are computed from a known point.
