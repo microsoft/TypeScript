@@ -549,3 +549,78 @@ function ff1() {
 >'str3' : "str3"
 }
 
+// Repro from #47368
+
+type ArgMap = { a: number, b: string };
+>ArgMap : ArgMap
+>a : number
+>b : string
+
+type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
+>Func : Func<K>
+>x : ArgMap[K]
+
+type Funcs = { [K in keyof ArgMap]: Func<K> };
+>Funcs : Funcs
+
+function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f1 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
+>funcs : Funcs
+>key : K
+>arg : ArgMap[K]
+
+    funcs[key](arg);
+>funcs[key](arg) : void
+>funcs[key] : Funcs[K]
+>funcs : Funcs
+>key : K
+>arg : ArgMap[K]
+}
+
+function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f2 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
+>funcs : Funcs
+>key : K
+>arg : ArgMap[K]
+
+    const func = funcs[key];  // Type Funcs[K]
+>func : Funcs[K]
+>funcs[key] : Funcs[K]
+>funcs : Funcs
+>key : K
+
+    func(arg);
+>func(arg) : void
+>func : Funcs[K]
+>arg : ArgMap[K]
+}
+
+function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f3 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
+>funcs : Funcs
+>key : K
+>arg : ArgMap[K]
+
+    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+>func : Func<K>
+>funcs[key] : Funcs[K]
+>funcs : Funcs
+>key : K
+
+    func(arg);
+>func(arg) : void
+>func : Func<K>
+>arg : ArgMap[K]
+}
+
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+>f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
+>x : Func<"b"> | Func<"a">
+>y : Funcs[K]
+
+    x = y;
+>x = y : Funcs[K]
+>x : Func<"b"> | Func<"a">
+>y : Funcs[K]
+}
+

@@ -159,3 +159,27 @@ function ff1() {
     const x1 = apply('sum', 1, 2)
     const x2 = apply('concat', 'str1', 'str2', 'str3' )
 }
+
+// Repro from #47368
+
+type ArgMap = { a: number, b: string };
+type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
+type Funcs = { [K in keyof ArgMap]: Func<K> };
+
+function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+    funcs[key](arg);
+}
+
+function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+    const func = funcs[key];  // Type Funcs[K]
+    func(arg);
+}
+
+function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+    func(arg);
+}
+
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+    x = y;
+}
