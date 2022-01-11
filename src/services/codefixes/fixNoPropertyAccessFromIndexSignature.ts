@@ -8,7 +8,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixId],
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixNoPropertyAccessFromIndexSignature(context) {
             const { sourceFile, span, preferences } = context;
             const property = getPropertyAccessExpression(sourceFile, span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property, preferences));

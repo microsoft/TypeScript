@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToAnnotateWithTypeFromJSDoc(context) {
             const decl = getDeclaration(context.sourceFile, context.span.start);
             if (!decl) return;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));

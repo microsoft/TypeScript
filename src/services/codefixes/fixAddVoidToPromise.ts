@@ -8,7 +8,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixId],
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToAddVoidToPromise(context) {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span, context.program));
             if (changes.length > 0) {
                 return [createCodeFixAction(fixName, changes, Diagnostics.Add_void_to_Promise_resolved_without_a_value, fixId, Diagnostics.Add_void_to_all_Promises_resolved_without_a_value)];

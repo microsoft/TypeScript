@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixImplicitThis(context) {
             const { sourceFile, program, span } = context;
             let diagnostic: DiagnosticAndArguments | undefined;
             const changes = textChanges.ChangeTracker.with(context, t => {

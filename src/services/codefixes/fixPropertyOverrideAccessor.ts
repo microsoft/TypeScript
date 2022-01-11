@@ -7,7 +7,7 @@ namespace ts.codefix {
     const fixId = "fixPropertyOverrideAccessor";
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixPropertyOverrideAccessor(context) {
             const edits = doChange(context.sourceFile, context.span.start, context.span.length, context.errorCode, context);
             if (edits) {
                 return [createCodeFixAction(fixId, edits, Diagnostics.Generate_get_and_set_accessors, fixId, Diagnostics.Generate_get_and_set_accessors_for_all_overriding_properties)];

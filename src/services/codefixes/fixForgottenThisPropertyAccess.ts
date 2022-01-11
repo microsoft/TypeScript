@@ -9,7 +9,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixForgottenThisPropertyAccess(context) {
             const { sourceFile } = context;
             const info = getInfo(sourceFile, context.span.start, context.errorCode);
             if (!info) {

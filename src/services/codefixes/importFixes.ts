@@ -15,7 +15,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixMissingImport(context) {
             const { errorCode, preferences, sourceFile, span, program } = context;
             const info = getFixesInfo(context, errorCode, span.start, /*useAutoImportProvider*/ true);
             if (!info) return undefined;

@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToSwitchFromExtendsInInterfaceToImplements(context) {
             const { sourceFile } = context;
             const nodes = getNodes(sourceFile, context.span.start);
             if (!nodes) return undefined;

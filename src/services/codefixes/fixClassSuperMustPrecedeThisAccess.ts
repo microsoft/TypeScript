@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToClassSuperMustPrecedeThisAccess(context) {
             const { sourceFile, span } = context;
             const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;

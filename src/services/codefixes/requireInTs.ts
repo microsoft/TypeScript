@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToConvertRequireToImportInTs(context) {
             const info = getInfo(context.sourceFile, context.program, context.span.start);
             if (!info) {
                 return undefined;

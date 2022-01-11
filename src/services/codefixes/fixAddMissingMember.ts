@@ -17,7 +17,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixMissingMember(context) {
             const typeChecker = context.program.getTypeChecker();
             const info = getInfo(context.sourceFile, context.span.start, context.errorCode, typeChecker, context.program);
             if (!info) {

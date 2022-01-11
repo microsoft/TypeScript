@@ -5,7 +5,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixJSDocTypes(context) {
             const { sourceFile } = context;
             const checker = context.program.getTypeChecker();
             const info = getInfo(sourceFile, context.span.start, checker);

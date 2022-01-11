@@ -19,7 +19,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixSpelling(context) {
             const { sourceFile, errorCode } = context;
             const info = getInfo(sourceFile, context.span.start, context, errorCode);
             if (!info) return undefined;

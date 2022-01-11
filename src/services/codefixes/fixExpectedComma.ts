@@ -6,7 +6,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixExpectedComma(context) {
             const { sourceFile } = context;
             const info = getInfo(sourceFile, context.span.start, context.errorCode);
             if (!info) return undefined;

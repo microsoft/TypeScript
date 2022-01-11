@@ -17,7 +17,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixUnusedIdentifier(context) {
             const { errorCode, sourceFile, program, cancellationToken } = context;
             const checker = program.getTypeChecker();
             const sourceFiles = program.getSourceFiles();

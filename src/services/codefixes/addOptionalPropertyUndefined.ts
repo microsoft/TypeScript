@@ -10,7 +10,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToAddOptionalPropertyUndefined(context) {
             const typeChecker = context.program.getTypeChecker();
             const toAdd = getPropertiesToAdd(context.sourceFile, context.span, typeChecker);
             if (!toAdd.length) {

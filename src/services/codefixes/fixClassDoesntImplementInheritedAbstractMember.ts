@@ -7,7 +7,7 @@ namespace ts.codefix {
     const fixId = "fixClassDoesntImplementInheritedAbstractMember";
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixClassDoesntImplementInheritedAbstractMember(context) {
             const { sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
                 addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));

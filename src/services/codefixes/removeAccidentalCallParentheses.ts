@@ -6,7 +6,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToRemoveAccidentalCallParentheses(context) {
             const callExpression = findAncestor(getTokenAtPosition(context.sourceFile, context.span.start), isCallExpression);
             if (!callExpression) {
                 return undefined;

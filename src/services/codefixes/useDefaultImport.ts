@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.Import_may_be_converted_to_a_default_import.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToUseDefaultImport(context) {
             const { sourceFile, span: { start } } = context;
             const info = getInfo(sourceFile, start);
             if (!info) return undefined;

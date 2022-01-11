@@ -48,7 +48,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToInferFromUsage(context) {
             const { sourceFile, program, span: { start }, errorCode, cancellationToken, host, preferences } = context;
 
             const token = getTokenAtPosition(sourceFile, start);

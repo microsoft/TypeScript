@@ -7,7 +7,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixAwaitInSyncFunction(context) {
             const { sourceFile, span } = context;
             const nodes = getNodes(sourceFile, span.start);
             if (!nodes) return undefined;

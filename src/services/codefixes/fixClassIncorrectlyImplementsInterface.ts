@@ -7,7 +7,7 @@ namespace ts.codefix {
     const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixClassIncorrectlyImplementsInterface(context) {
             const { sourceFile, span } = context;
             const classDeclaration = getClass(sourceFile, span.start);
             return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {

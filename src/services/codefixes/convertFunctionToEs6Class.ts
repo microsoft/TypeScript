@@ -4,7 +4,7 @@ namespace ts.codefix {
     const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
     registerCodeFix({
         errorCodes,
-        getCodeActions(context: CodeFixContext) {
+        getCodeActions: function getCodeActionsToConvertFunctionToEs6Class(context: CodeFixContext) {
             const changes = textChanges.ChangeTracker.with(context, t =>
                 doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];

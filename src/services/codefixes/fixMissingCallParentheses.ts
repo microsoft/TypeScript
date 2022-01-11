@@ -8,7 +8,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixId],
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixMissingCallParentheses(context) {
             const { sourceFile, span } = context;
             const callName = getCallName(sourceFile, span.start);
             if (!callName) return;

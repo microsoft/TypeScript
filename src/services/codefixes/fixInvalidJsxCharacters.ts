@@ -11,7 +11,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         fixIds: [fixIdExpression, fixIdHtmlEntity],
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToFixInvalidJsxCharacters_expression(context) {
             const { sourceFile, preferences, span } = context;
             const changeToExpression = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ false));
             const changeToHtmlEntity = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ true));

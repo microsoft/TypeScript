@@ -5,7 +5,7 @@ namespace ts.codefix {
     let codeActionSucceeded = true;
     registerCodeFix({
         errorCodes,
-        getCodeActions(context: CodeFixContext) {
+        getCodeActions: function getCodeActionsToConvertToAsyncFunction(context: CodeFixContext) {
             codeActionSucceeded = true;
             const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
             return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
