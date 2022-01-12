@@ -59,19 +59,29 @@ namespace ts.moduleSpecifiers {
         };
     }
 
+    // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
+    // Because when this is called by the file renamer, `importingSourceFile` is the file being renamed,
+    // while `importingSourceFileName` its *new* name. We need a source file just to get its
+    // `impliedNodeFormat` and to detect certain preferences from existing import module specifiers.
     export function updateModuleSpecifier(
         compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
         oldImportSpecifier: string,
     ): string | undefined {
-        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferencesForUpdate(compilerOptions, oldImportSpecifier, importingSourceFileName, host), {});
+        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferencesForUpdate(compilerOptions, oldImportSpecifier, importingSourceFileName, host), {});
         if (res === oldImportSpecifier) return undefined;
         return res;
     }
 
-    // Note: importingSourceFile is just for usesJsExtensionOnImports
+    // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
+    // Because when this is called by the declaration emitter, `importingSourceFile` is the implementation
+    // file, but `importingSourceFileName` and `toFileName` refer to declaration files (the former to the
+    // one currently being produced; the latter to the one being imported). We need an implementation file
+    // just to get its `impliedNodeFormat` and to detect certain preferences from existing import module
+    // specifiers.
     export function getModuleSpecifier(
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
@@ -79,24 +89,25 @@ namespace ts.moduleSpecifiers {
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
     ): string {
-        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferences(host, {}, compilerOptions, importingSourceFile), {});
+        return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferences(host, {}, compilerOptions, importingSourceFile), {});
     }
 
     export function getNodeModulesPackageName(
         compilerOptions: CompilerOptions,
-        importingSourceFileName: Path,
+        importingSourceFile: SourceFile,
         nodeModulesFileName: string,
         host: ModuleSpecifierResolutionHost,
         preferences: UserPreferences,
     ): string | undefined {
-        const info = getInfo(importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(importingSourceFileName, nodeModulesFileName, host, preferences);
+        const info = getInfo(importingSourceFile.path, host);
+        const modulePaths = getAllModulePaths(importingSourceFile.path, nodeModulesFileName, host, preferences);
         return firstDefined(modulePaths,
-            modulePath => tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions, /*packageNameOnly*/ true));
+            modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, /*packageNameOnly*/ true));
     }
 
     function getModuleSpecifierWorker(
         compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
@@ -105,7 +116,7 @@ namespace ts.moduleSpecifiers {
     ): string {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host, userPreferences);
-        return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions)) ||
+        return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions)) ||
             getLocalModuleSpecifier(toFileName, info, compilerOptions, host, preferences);
     }
 
@@ -222,7 +233,7 @@ namespace ts.moduleSpecifiers {
         let pathsSpecifiers: string[] | undefined;
         let relativeSpecifiers: string[] | undefined;
         for (const modulePath of modulePaths) {
-            const specifier = tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions);
+            const specifier = tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions);
             nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
@@ -639,7 +650,7 @@ namespace ts.moduleSpecifiers {
             : removeFileExtension(relativePath);
     }
 
-    function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions, packageNameOnly?: boolean): string | undefined {
+    function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile , host: ModuleSpecifierResolutionHost, options: CompilerOptions, packageNameOnly?: boolean): string | undefined {
         if (!host.fileExists || !host.readFile) {
             return undefined;
         }
@@ -706,11 +717,19 @@ namespace ts.moduleSpecifiers {
             let moduleFileToTry = path;
             if (host.fileExists(packageJsonPath)) {
                 const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
-                // TODO: Inject `require` or `import` condition based on the intended import mode
                 if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
-                    const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string" ? tryGetModuleNameFromExports(options, path, packageRootPath, packageJsonContent.name, packageJsonContent.exports, ["node", "types"]) : undefined;
+                    // `conditions` *could* be made to go against `importingSourceFile.impliedNodeFormat` if something wanted to generate
+                    // an ImportEqualsDeclaration in an ESM-implied file or an ImportCall in a CJS-implied file. But since this function is
+                    // usually called to conjure an import out of thin air, we don't have an existing usage to call `getModeForUsageAtIndex`
+                    // with, so for now we just stick with the mode of the file.
+                    const conditions = ["node", importingSourceFile.impliedNodeFormat === ModuleKind.ESNext ? "import" : "require", "types"];
+                    const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
+                        ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
+                        : undefined;
                     if (fromExports) {
-                        const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry) ? fromExports : { moduleFileToTry: removeFileExtension(fromExports.moduleFileToTry) + tryGetJSExtensionForFile(fromExports.moduleFileToTry, options) };
+                        const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry)
+                            ? fromExports
+                            : { moduleFileToTry: removeFileExtension(fromExports.moduleFileToTry) + tryGetJSExtensionForFile(fromExports.moduleFileToTry, options) };
                         return { ...withJsExtension, verbatimFromExports: true };
                     }
                     if (packageJsonContent.exports) {
@@ -835,8 +854,8 @@ namespace ts.moduleSpecifiers {
 
     function getPathRelativeToRootDirs(path: string, rootDirs: readonly string[], getCanonicalFileName: GetCanonicalFileName): string | undefined {
         return firstDefined(rootDirs, rootDir => {
-            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName)!; // TODO: GH#18217
-            return isPathRelativeToParent(relativePath) ? undefined : relativePath;
+            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+            return relativePath !== undefined && isPathRelativeToParent(relativePath) ? undefined : relativePath;
         });
     }
 
