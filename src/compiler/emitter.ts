@@ -3102,7 +3102,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.name.emitNode?.typeNode ? node.name.emitNode.typeNode.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -5325,6 +5325,10 @@ namespace ts {
                 commentsDisabled = false;
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            const typeNode = getTypeNode(node);
+            if(typeNode){
+                emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            }
         }
 
         function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {
