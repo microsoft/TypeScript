@@ -713,8 +713,46 @@ namespace ts.Completions {
             }
         }
 
-        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
-        if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+        const isJSXAttributeCompletion = contextToken && forEachAncestor(contextToken, (n) => {
+            if (isJsxAttributeLike(n)) {
+                return true;
+            }
+
+            if (isJsxFragment(n) || isJsxOpeningFragment(n) || isJsxClosingFragment(n)) {
+                return false;
+            }
+
+            if (isJsxOpeningElement(n) || isJsxSelfClosingElement(n) || isJsxClosingElement(n)) {
+                if (contextToken.getEnd() <= n.tagName.getFullStart()) {
+                    // Definitely completing part of the tag name.
+                    return false;
+                }
+
+                if (rangeContainsRange(n.tagName, contextToken)) {
+                    // We are to the right of the tag name, as the context is there.
+                    // figure out where we are based on where the location is.
+
+                    if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
+                        // Unfinished dotted tag name.
+                        return false;
+                    }
+
+                    if (!rangeContainsRange(n, location)) {
+                        // Unclosed JSX element; location is entirely outside the element.
+                        return true;
+                    }
+
+                    if (n.tagName.getEnd() <= location.getFullStart()) {
+                        // After existing attributes, so is another attribute.
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+
+        if (isJSXAttributeCompletion && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
@@ -759,7 +797,7 @@ namespace ts.Completions {
         // entries (like JavaScript identifier entries).
         return {
             name,
-            kind,
+            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source,
