@@ -3,8 +3,8 @@ namespace ts.SymbolDisplay {
     const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
     // TODO(drosen): use contextual SemanticMeaning.
-    export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node, contextToken?: Node): ScriptElementKind {
-        const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location, contextToken);
+    export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
+        const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         if (result !== ScriptElementKind.unknown) {
             return result;
         }
@@ -25,7 +25,7 @@ namespace ts.SymbolDisplay {
         return result;
     }
 
-    function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node, contextToken?: Node): ScriptElementKind {
+    function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
         const roots = typeChecker.getRootSymbols(symbol);
         // If this is a method from a mapped type, leave as a method so long as it still has a call signature.
         if (roots.length === 1
@@ -84,78 +84,10 @@ namespace ts.SymbolDisplay {
                 return unionPropertyKind;
             }
 
-            if (contextToken) {
-                const result = getSymbolKindOfJsxTagNameOrAttribute(location, contextToken);
-                if (result !== ScriptElementKind.unknown) {
-                    return result;
-                }
-            }
-
-            if (isJsxAttribute(location) || location.parent && isJsxAttribute(location.parent) && location.parent.name === location) {
-                return ScriptElementKind.jsxAttribute;
-            }
-
-            // TODO(jakebailey): Delete the below code, once the edge cases it handles are handled above.
-
-            // If we requested completions after `x.` at the top-level, we may be at a source file location.
-            switch (location.parent && location.parent.kind) {
-                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                    return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
-                case SyntaxKind.JsxAttribute:
-                    return ScriptElementKind.jsxAttribute;
-                default:
-                    return ScriptElementKind.memberVariableElement;
-            }
+            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
-    }
-
-    function getSymbolKindOfJsxTagNameOrAttribute(location: Node, contextToken: Node): ScriptElementKind {
-        const symbolKindFromContext = forEachAncestor(contextToken, (n) => {
-            if (isJsxAttributeLike(n)) {
-                return ScriptElementKind.jsxAttribute;
-            }
-
-            if (isJsxFragment(n) || isJsxOpeningFragment(n) || isJsxClosingFragment(n)) {
-                return "quit";
-            }
-
-            if (isJsxOpeningElement(n) || isJsxSelfClosingElement(n) || isJsxClosingElement(n)) {
-                if (contextToken.getEnd() <= n.tagName.getFullStart()) {
-                    // Definitely completing part of the tag name.
-                    return ScriptElementKind.jsxTagName;
-                }
-
-                if (rangeContainsRange(n.tagName, contextToken)) {
-                    // We are to the right of the tag name, as the context is there.
-                    // figure out where we are based on where the location is.
-
-                    // TODO(jakebailey): This seems hacky.
-                    if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
-                        // Unfinished dotted tag name.
-                        return ScriptElementKind.jsxTagName;
-                    }
-
-                    if (!rangeContainsRange(n, location)) {
-                        // Unclosed JSX element; location is entirely outside the element.
-                        return ScriptElementKind.jsxAttribute;
-                    }
-
-                    if (n.tagName.getEnd() <= location.getFullStart()) {
-                        // After existing attributes, so is another attribute.
-                        return ScriptElementKind.jsxAttribute;
-                    }
-                }
-
-                return "quit";
-            }
-        });
-
-        return symbolKindFromContext || ScriptElementKind.unknown;
     }
 
     function getNormalizedSymbolModifiers(symbol: Symbol) {
@@ -202,12 +134,12 @@ namespace ts.SymbolDisplay {
 
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
-        location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol, contextToken?: Node): SymbolDisplayPartsDocumentationAndSymbolKind {
+        location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] = [];
         let tags: JSDocTagInfo[] = [];
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
-        let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location, contextToken) : ScriptElementKind.unknown;
+        let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
         let hasAddedSymbolInfo = false;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location);
         let type: Type | undefined;
@@ -289,7 +221,6 @@ namespace ts.SymbolDisplay {
 
                     switch (symbolKind) {
                         case ScriptElementKind.jsxAttribute:
-                        case ScriptElementKind.jsxTagName:
                         case ScriptElementKind.memberVariableElement:
                         case ScriptElementKind.variableElement:
                         case ScriptElementKind.constElement:
@@ -562,7 +493,6 @@ namespace ts.SymbolDisplay {
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
                         symbolKind === ScriptElementKind.jsxAttribute ||
-                        symbolKind === ScriptElementKind.jsxTagName ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
                         isThisExpression) {
@@ -603,7 +533,7 @@ namespace ts.SymbolDisplay {
                 }
             }
             else {
-                symbolKind = getSymbolKind(typeChecker, symbol, location, contextToken);
+                symbolKind = getSymbolKind(typeChecker, symbol, location);
             }
         }
 

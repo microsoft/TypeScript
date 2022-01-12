@@ -62,7 +62,7 @@ verify.completions(
                 insertText: "className={$1}",
                 isSnippet: true,
                 sortText: completion.SortText.OptionalMember,
-                text: "(JSX attribute) className?: string"
+                text: "(property) className?: string"
             }
         ],
         preferences: {

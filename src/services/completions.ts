@@ -739,8 +739,47 @@ namespace ts.Completions {
             }
         }
 
-        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location, contextToken);
-        if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+        const isJSXAttributeCompletion = contextToken && forEachAncestor(contextToken, (n) => {
+            if (isJsxAttributeLike(n)) {
+                return true;
+            }
+
+            if (isJsxFragment(n) || isJsxOpeningFragment(n) || isJsxClosingFragment(n)) {
+                return false;
+            }
+
+            if (isJsxOpeningElement(n) || isJsxSelfClosingElement(n) || isJsxClosingElement(n)) {
+                if (contextToken.getEnd() <= n.tagName.getFullStart()) {
+                    // Definitely completing part of the tag name.
+                    return false;
+                }
+
+                if (rangeContainsRange(n.tagName, contextToken)) {
+                    // We are to the right of the tag name, as the context is there.
+                    // figure out where we are based on where the location is.
+
+                    // TODO(jakebailey): This seems hacky.
+                    if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
+                        // Unfinished dotted tag name.
+                        return false;
+                    }
+
+                    if (!rangeContainsRange(n, location)) {
+                        // Unclosed JSX element; location is entirely outside the element.
+                        return true;
+                    }
+
+                    if (n.tagName.getEnd() <= location.getFullStart()) {
+                        // After existing attributes, so is another attribute.
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+
+        if (isJSXAttributeCompletion && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
@@ -785,7 +824,7 @@ namespace ts.Completions {
         // entries (like JavaScript identifier entries).
         return {
             name,
-            kind,
+            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source,
@@ -1402,7 +1441,7 @@ namespace ts.Completions {
             case "symbol": {
                 const { symbol, location, contextToken, origin, previousToken } = symbolCompletion;
                 const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(name, location, contextToken, origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, data, source);
-                return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay, contextToken); // TODO: GH#18217
+                return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
                 const { literal } = symbolCompletion;
@@ -1420,10 +1459,10 @@ namespace ts.Completions {
         return createCompletionDetails(name, ScriptElementKindModifier.none, kind, [displayPart(name, kind2)]);
     }
 
-    export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[], contextToken?: Node): CompletionEntryDetails {
+    export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
         const { displayParts, documentation, symbolKind, tags } =
             checker.runWithCancellationToken(cancellationToken, checker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All, /*alias*/ undefined, contextToken)
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All, /*alias*/ undefined)
             );
         return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
     }

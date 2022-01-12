@@ -6593,8 +6593,8 @@ declare namespace ts {
         externalModuleName = "external module name",
         /**
          * <JsxTagName attribute1 attribute2={0} />
+         * @deprecated
          */
-        jsxTagName = "JSX tag name",
         jsxAttribute = "JSX attribute",
         /** String literal */
         string = "string",

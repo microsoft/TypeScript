@@ -28,14 +28,14 @@ verify.completions(
         exact: [
             "propString",
             "propx",
-            { name: "optional", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+            { name: "optional", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
         ]
     },
     {
         marker: "3",
         exact: [
             "propString",
-            { name: "optional", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+            { name: "optional", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
         ]
     },
     { marker: "4", exact: "propString" },
