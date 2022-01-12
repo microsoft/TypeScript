@@ -1402,7 +1402,7 @@ namespace ts.Completions {
             case "symbol": {
                 const { symbol, location, contextToken, origin, previousToken } = symbolCompletion;
                 const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(name, location, contextToken, origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, data, source);
-                return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
+                return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay, contextToken); // TODO: GH#18217
             }
             case "literal": {
                 const { literal } = symbolCompletion;
@@ -1420,10 +1420,10 @@ namespace ts.Completions {
         return createCompletionDetails(name, ScriptElementKindModifier.none, kind, [displayPart(name, kind2)]);
     }
 
-    export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
+    export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[], contextToken?: Node): CompletionEntryDetails {
         const { displayParts, documentation, symbolKind, tags } =
             checker.runWithCancellationToken(cancellationToken, checker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All, /*alias*/ undefined, contextToken)
             );
         return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
     }

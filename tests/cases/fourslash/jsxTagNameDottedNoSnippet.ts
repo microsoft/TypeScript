@@ -38,16 +38,17 @@
 ////    </Foo>
 ////}
 
+var preferences: FourSlashInterface.UserPreferences = {
+    jsxAttributeCompletionStyle: "braces",
+    includeCompletionsWithSnippetText: true,
+    includeCompletionsWithInsertText: true,
+}; 
+
 verify.completions(
-    {
-        marker: test.markers(),
-        includes: [
-            { name: "Foo", insertText: undefined, isSnippet: undefined }
-        ],
-        preferences: {
-            jsxAttributeCompletionStyle: "braces",
-            includeCompletionsWithSnippetText: true,
-            includeCompletionsWithInsertText: true,
-        },
-    }
+    { marker: "1", preferences, includes: { name: "Foo", text: "const Foo: NestedInterface" } },
+    { marker: "2", preferences, includes: { name: "Foo", text: "const Foo: NestedInterface" } },
+    { marker: "3", preferences, includes: { name: "Foo", text: "(JSX tag name) NestedInterface.Foo: NestedInterface" } },
+    { marker: "4", preferences, includes: { name: "Foo", text: "(JSX tag name) NestedInterface.Foo: NestedInterface" } },
+    { marker: "5", preferences, includes: { name: "Foo", text: "(JSX tag name) NestedInterface.Foo: NestedInterface" } },
+    { marker: "6", preferences, includes: { name: "Foo", text: "(JSX tag name) NestedInterface.Foo: NestedInterface" } },
 )

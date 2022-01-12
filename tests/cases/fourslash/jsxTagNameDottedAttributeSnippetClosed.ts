@@ -57,7 +57,13 @@ verify.completions(
     {
         marker: test.markers(),
         includes: [
-            { name: "className", insertText: 'className={$1}', isSnippet: true, sortText: completion.SortText.OptionalMember }
+            {
+                name: "className",
+                insertText: "className={$1}",
+                isSnippet: true,
+                sortText: completion.SortText.OptionalMember,
+                text: "(JSX attribute) className?: string"
+            }
         ],
         preferences: {
             jsxAttributeCompletionStyle: "braces",

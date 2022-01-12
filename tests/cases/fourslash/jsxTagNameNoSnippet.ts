@@ -22,16 +22,14 @@
 ////    </>;
 ////}
 
+var preferences: FourSlashInterface.UserPreferences = {
+    jsxAttributeCompletionStyle: "braces",
+    includeCompletionsWithSnippetText: true,
+    includeCompletionsWithInsertText: true,
+}; 
+
 verify.completions(
-    {
-        marker: test.markers(),
-        includes: [
-            { name: "button", insertText: undefined, isSnippet: undefined }
-        ],
-        preferences: {
-            jsxAttributeCompletionStyle: "braces",
-            includeCompletionsWithSnippetText: true,
-            includeCompletionsWithInsertText: true,
-        }
-    }
-);
+    { marker: "1", preferences, includes: { name: "button", text: "(JSX tag name) JSX.IntrinsicElements.button: any" } },
+    { marker: "2", preferences, includes: { name: "button", text: "(JSX tag name) JSX.IntrinsicElements.button: any" } },
+    { marker: "3", preferences, includes: { name: "button", text: "(JSX tag name) JSX.IntrinsicElements.button: any" } },
+)

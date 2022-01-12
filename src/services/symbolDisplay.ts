@@ -202,12 +202,12 @@ namespace ts.SymbolDisplay {
 
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
-        location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+        location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol, contextToken?: Node): SymbolDisplayPartsDocumentationAndSymbolKind {
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] = [];
         let tags: JSDocTagInfo[] = [];
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
-        let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
+        let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location, contextToken) : ScriptElementKind.unknown;
         let hasAddedSymbolInfo = false;
         const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location);
         let type: Type | undefined;
@@ -289,6 +289,7 @@ namespace ts.SymbolDisplay {
 
                     switch (symbolKind) {
                         case ScriptElementKind.jsxAttribute:
+                        case ScriptElementKind.jsxTagName:
                         case ScriptElementKind.memberVariableElement:
                         case ScriptElementKind.variableElement:
                         case ScriptElementKind.constElement:
@@ -561,6 +562,7 @@ namespace ts.SymbolDisplay {
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
                         symbolKind === ScriptElementKind.jsxAttribute ||
+                        symbolKind === ScriptElementKind.jsxTagName ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
                         isThisExpression) {
@@ -601,7 +603,7 @@ namespace ts.SymbolDisplay {
                 }
             }
             else {
-                symbolKind = getSymbolKind(typeChecker, symbol, location);
+                symbolKind = getSymbolKind(typeChecker, symbol, location, contextToken);
             }
         }
 
