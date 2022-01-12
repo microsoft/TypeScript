@@ -1106,16 +1106,16 @@ namespace ts {
      * If position === end, returns the preceding token if includeItemAtEndPosition(previousToken) === true
      */
     export function getTouchingToken(sourceFile: SourceFile, position: number, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, () => false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false);
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
     export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
-        return getTokenAtPositionWorker(sourceFile, position, () => true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false);
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, /*includeEndPosition*/ false);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: (n: Node) => boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean): Node {
         let current: Node = sourceFile;
         let foundToken: Node | undefined;
         outer: while (true) {
@@ -1145,7 +1145,7 @@ namespace ts {
                 // position and whose end is greater than the position.
 
 
-                const start = allowPositionInLeadingTrivia(children[middle]) ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
+                const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
                     return Comparison.GreaterThan;
                 }
@@ -1180,7 +1180,7 @@ namespace ts {
         }
 
         function nodeContainsPosition(node: Node) {
-            const start = allowPositionInLeadingTrivia(node) ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+            const start = allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
             if (start > position) {
                 // If this child begins after position, then all subsequent children will as well.
                 return false;
