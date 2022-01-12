@@ -2156,11 +2156,6 @@ namespace ts.server {
         }
 
         /*@internal*/
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile) {
-            return this.hostProject.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, _options, containingSourceFile);
-        }
-
-        /*@internal*/
         getModuleResolutionCache() {
             return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
         }
