@@ -1983,7 +1983,9 @@ namespace ts.server {
                 }
             }
 
-            hostProject.log(`AutoImportProviderProject: found ${rootNames?.length || 0} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
+            if (rootNames?.length) {
+                hostProject.log(`AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
+            }
             return rootNames || ts.emptyArray;
 
             function addDependency(dependency: string) {

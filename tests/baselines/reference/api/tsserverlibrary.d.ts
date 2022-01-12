@@ -9874,6 +9874,7 @@ declare namespace ts.server {
         writeFile(fileName: string, content: string): void;
         fileExists(file: string): boolean;
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModuleFull | undefined)[];
+        getModuleResolutionCache(): ModuleResolutionCache | undefined;
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         directoryExists(path: string): boolean;
