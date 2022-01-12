@@ -758,7 +758,6 @@ namespace ts.Completions {
                     // We are to the right of the tag name, as the context is there.
                     // figure out where we are based on where the location is.
 
-                    // TODO(jakebailey): This seems hacky.
                     if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
                         // Unfinished dotted tag name.
                         return false;
