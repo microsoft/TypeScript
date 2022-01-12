@@ -1409,7 +1409,10 @@
         "category": "Error",
         "code": 1471
     },
-
+    "An import declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1472
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -7236,9 +7239,5 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
-    },
-    "An import declaration can only be used at the top level of a module.": {
-        "category": "Error",
-        "code": 18042
     }
 }
