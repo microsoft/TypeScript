@@ -29,7 +29,7 @@ var preferences: FourSlashInterface.UserPreferences = {
 }; 
 
 verify.completions(
-    { marker: "1", preferences, includes: { name: "button", text: "(JSX attribute) JSX.IntrinsicElements.button: any" } },
-    { marker: "2", preferences, includes: { name: "button", text: "(JSX attribute) JSX.IntrinsicElements.button: any" } },
-    { marker: "3", preferences, includes: { name: "button", text: "(JSX attribute) JSX.IntrinsicElements.button: any" } },
+    { marker: "1", preferences, includes: { name: "button", text: "(property) JSX.IntrinsicElements.button: any" } },
+    { marker: "2", preferences, includes: { name: "button", text: "(property) JSX.IntrinsicElements.button: any" } },
+    { marker: "3", preferences, includes: { name: "button", text: "(property) JSX.IntrinsicElements.button: any" } },
 )

@@ -1457,6 +1457,7 @@ namespace ts {
 
         /**
          * <JsxTagName attribute1 attribute2={0} />
+         * @deprecated
          */
         jsxAttribute = "JSX attribute",
 
