@@ -542,3 +542,44 @@ class SqlTable<T> {
     }
 }
 
+// Repro from #46495
+
+interface Button {
+    type: "button";
+>type : "button"
+
+    text: string;
+>text : string
+}
+
+interface Checkbox {
+    type: "checkbox";
+>type : "checkbox"
+
+    isChecked: boolean;
+>isChecked : boolean
+}
+
+type Control = Button | Checkbox;
+>Control : Control
+
+function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
+>update : <T extends Control, K extends keyof T>(control: T | undefined, key: K, value: T[K]) => void
+>control : T | undefined
+>key : K
+>value : T[K]
+
+    if (control !== undefined) {
+>control !== undefined : boolean
+>control : T | undefined
+>undefined : undefined
+
+        control[key] = value;
+>control[key] = value : T[K]
+>control[key] : T[K]
+>control : T
+>key : K
+>value : T[K]
+    }
+}
+

@@ -646,6 +646,7 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
@@ -668,7 +669,10 @@ declare namespace FourSlashInterface {
         readonly isNewIdentifierLocation?: boolean;
         readonly isGlobalCompletion?: boolean;
         readonly optionalReplacementSpan?: Range;
+        /** Must provide all completion entries in order. */
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        /** Must provide all completion entries, but order doesn't matter. */
+        readonly unsorted?: readonly ExpectedCompletionEntry[];
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
@@ -831,6 +835,9 @@ declare function classification(format: "original"): FourSlashInterface.Classifi
 declare function classification(format: "2020"): FourSlashInterface.ModernClassificationFactory;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    interface GlobalsPlusOptions {
+        noLib?: boolean;
+    }
     export const enum SortText {
         LocalDeclarationPriority = "10",
         LocationPriority = "11",
@@ -849,7 +856,8 @@ declare namespace completion {
         DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
-        ThisProperty = "ThisProperty/"
+        ThisProperty = "ThisProperty/",
+        ClassMemberSnippet = "ClassMemberSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;
@@ -860,13 +868,15 @@ declare namespace completion {
     export const insideMethodKeywords: ReadonlyArray<Entry>;
     export const insideMethodInJsKeywords: ReadonlyArray<Entry>;
     export const globalsVars: ReadonlyArray<Entry>;
-    export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
-    export function globalsInJsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
-    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
-    export function globalsInJsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export function sorted(entries: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsInJsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsInJsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const keywordsWithUndefined: ReadonlyArray<Entry>;
     export const keywords: ReadonlyArray<Entry>;
     export const typeKeywords: ReadonlyArray<Entry>;
+    export function typeKeywordsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
     export const globalTypes: ReadonlyArray<Entry>;
     export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
     export const typeAssertionKeywords: ReadonlyArray<Entry>;
@@ -874,8 +884,10 @@ declare namespace completion {
     export const classElementInJsKeywords: ReadonlyArray<Entry>;
     export const constructorParameterKeywords: ReadonlyArray<Entry>;
     export const functionMembers: ReadonlyArray<Entry>;
-    export const stringMembers: ReadonlyArray<Entry>;
+    export function functionMembersPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const functionMembersWithPrototype: ReadonlyArray<Entry>;
+    export function functionMembersWithPrototypePlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const stringMembers: ReadonlyArray<Entry>;
     export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
     export const statementKeywords: ReadonlyArray<Entry>;
     export const statementInJsKeywords: ReadonlyArray<Entry>;

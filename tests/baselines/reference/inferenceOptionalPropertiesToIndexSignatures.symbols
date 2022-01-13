@@ -72,7 +72,7 @@ const query = Object.entries(obj).map(
 >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >Object.entries(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.object.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 16, 5))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

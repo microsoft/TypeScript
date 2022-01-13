@@ -128,9 +128,9 @@ namespace ts {
             }
 
             SetShim = ShimCollections.createSetShim(getIterator);
-            afterEach(() => {
-                SetShim = undefined!;
-            });
+        });
+        afterEach(() => {
+            SetShim = undefined!;
         });
 
         it("iterates values in insertion order and handles changes with string keys", () => {

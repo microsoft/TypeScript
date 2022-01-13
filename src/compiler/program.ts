@@ -818,6 +818,101 @@ namespace ts {
         }
     }
 
+    /** @internal */
+    export const plainJSErrors: Set<number> = new Set([
+        // binder errors
+        Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
+        Diagnostics.A_module_cannot_have_multiple_default_exports.code,
+        Diagnostics.Another_export_default_is_here.code,
+        Diagnostics.The_first_export_default_is_here.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode.code,
+        Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here.code,
+        Diagnostics.constructor_is_a_reserved_word.code,
+        Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode.code,
+        Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode.code,
+        Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode.code,
+        Diagnostics.Invalid_use_of_0_in_strict_mode.code,
+        Diagnostics.A_label_is_not_allowed_here.code,
+        Diagnostics.Octal_literals_are_not_allowed_in_strict_mode.code,
+        Diagnostics.with_statements_are_not_allowed_in_strict_mode.code,
+        // grammar errors
+        Diagnostics.A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement.code,
+        Diagnostics.A_break_statement_can_only_jump_to_a_label_of_an_enclosing_statement.code,
+        Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name.code,
+        Diagnostics.A_class_member_cannot_have_the_0_keyword.code,
+        Diagnostics.A_comma_expression_is_not_allowed_in_a_computed_property_name.code,
+        Diagnostics.A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement.code,
+        Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement.code,
+        Diagnostics.A_continue_statement_can_only_jump_to_a_label_of_an_enclosing_iteration_statement.code,
+        Diagnostics.A_default_clause_cannot_appear_more_than_once_in_a_switch_statement.code,
+        Diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration.code,
+        Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context.code,
+        Diagnostics.A_destructuring_declaration_must_have_an_initializer.code,
+        Diagnostics.A_get_accessor_cannot_have_parameters.code,
+        Diagnostics.A_rest_element_cannot_contain_a_binding_pattern.code,
+        Diagnostics.A_rest_element_cannot_have_a_property_name.code,
+        Diagnostics.A_rest_element_cannot_have_an_initializer.code,
+        Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern.code,
+        Diagnostics.A_rest_parameter_cannot_have_an_initializer.code,
+        Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list.code,
+        Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma.code,
+        Diagnostics.A_return_statement_can_only_be_used_within_a_function_body.code,
+        Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.code,
+        Diagnostics.A_set_accessor_cannot_have_rest_parameter.code,
+        Diagnostics.A_set_accessor_must_have_exactly_one_parameter.code,
+        Diagnostics.An_export_declaration_can_only_be_used_in_a_module.code,
+        Diagnostics.An_export_declaration_cannot_have_modifiers.code,
+        Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module.code,
+        Diagnostics.An_import_declaration_cannot_have_modifiers.code,
+        Diagnostics.An_object_member_cannot_be_declared_optional.code,
+        Diagnostics.Argument_of_dynamic_import_cannot_be_spread_element.code,
+        Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable.code,
+        Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause.code,
+        Diagnostics.Catch_clause_variable_cannot_have_an_initializer.code,
+        Diagnostics.Class_decorators_can_t_be_used_with_static_private_identifier_Consider_removing_the_experimental_decorator.code,
+        Diagnostics.Classes_can_only_extend_a_single_class.code,
+        Diagnostics.Classes_may_not_have_a_field_named_constructor.code,
+        Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern.code,
+        Diagnostics.Duplicate_label_0.code,
+        Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments.code,
+        Diagnostics.For_await_loops_cannot_be_used_inside_a_class_static_block.code,
+        Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression.code,
+        Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name.code,
+        Diagnostics.JSX_expressions_may_not_use_the_comma_operator_Did_you_mean_to_write_an_array.code,
+        Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names.code,
+        Diagnostics.Jump_target_cannot_cross_function_boundary.code,
+        Diagnostics.Line_terminator_not_permitted_before_arrow.code,
+        Diagnostics.Modifiers_cannot_appear_here.code,
+        Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement.code,
+        Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement.code,
+        Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.code,
+        Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression.code,
+        Diagnostics.Property_0_is_not_accessible_outside_class_1_because_it_has_a_private_identifier.code,
+        Diagnostics.Tagged_template_expressions_are_not_permitted_in_an_optional_chain.code,
+        Diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_async.code,
+        Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer.code,
+        Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer.code,
+        Diagnostics.Trailing_comma_not_allowed.code,
+        Diagnostics.Variable_declaration_list_cannot_be_empty.code,
+        Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses.code,
+        Diagnostics._0_expected.code,
+        Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2.code,
+        Diagnostics._0_list_cannot_be_empty.code,
+        Diagnostics._0_modifier_already_seen.code,
+        Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration.code,
+        Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element.code,
+        Diagnostics._0_modifier_cannot_appear_on_a_parameter.code,
+        Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind.code,
+        Diagnostics._0_modifier_cannot_be_used_here.code,
+        Diagnostics._0_modifier_must_precede_1_modifier.code,
+        Diagnostics.const_declarations_can_only_be_declared_inside_a_block.code,
+        Diagnostics.const_declarations_must_be_initialized.code,
+        Diagnostics.extends_clause_already_seen.code,
+        Diagnostics.let_declarations_can_only_be_declared_inside_a_block.code,
+        Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations.code,
+    ]);
+
     /**
      * Determine if source file needs to be re-created even if its text hasn't changed
      */
@@ -1577,6 +1672,7 @@ namespace ts {
                 newSourceFile.originalFileName = oldSourceFile.originalFileName;
                 newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
                 newSourceFile.fileName = oldSourceFile.fileName;
+                newSourceFile.impliedNodeFormat = oldSourceFile.impliedNodeFormat;
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
                 if (packageName !== undefined) {
@@ -1674,8 +1770,8 @@ namespace ts {
                 const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
                 const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFile);
                 // ensure that types resolutions are still correct
-                const typeReferenceEesolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, oldSourceFile, typeDirectiveIsEqualTo);
-                if (typeReferenceEesolutionsChanged) {
+                const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, oldSourceFile, typeDirectiveIsEqualTo);
+                if (typeReferenceResolutionsChanged) {
                     structureIsReused = StructureIsReused.SafeModules;
                     newSourceFile.resolvedTypeReferenceDirectiveNames = zipToModeAwareCache(newSourceFile, typesReferenceDirectives, typeReferenceResolutions);
                 }
@@ -2004,15 +2100,25 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
-                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
+                const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+                const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
+                const isPlainJs = isJs && !sourceFile.checkJsDirective && options.checkJs === undefined;
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
-                // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                    || sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
-                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+                // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
+                // - plain JS: .js files with no // ts-check and checkJs: undefined
+                // - check JS: .js files with either // ts-check or checkJs: true
+                // - external: files that are added by plugins
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                        || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                if (isPlainJs) {
+                    bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
+                    checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
+                }
+                // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
+                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
 
@@ -3160,6 +3266,21 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            const isNightly = stringContains(version, "-dev") || stringContains(version, "-insiders");
+            if (!isNightly) {
+                if (getEmitModuleKind(options) === ModuleKind.Node12) {
+                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "node12");
+                }
+                else if (getEmitModuleKind(options) === ModuleKind.NodeNext) {
+                    createOptionValueDiagnostic("module", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "module", "nodenext");
+                }
+                else if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12) {
+                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "moduleResolution", "node12");
+                }
+                else if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
+                    createOptionValueDiagnostic("moduleResolution", Diagnostics.Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next, "moduleResolution", "nodenext");
+                }
+            }
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
@@ -3333,7 +3454,9 @@ namespace ts {
             }
 
             if (options.resolveJsonModule) {
-                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
+                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
+                    getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node12 &&
+                    getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
                 // Any emit other than common js, amd, es2015 or esnext is error
@@ -3694,8 +3817,8 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
-        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0?: string) {
-            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
+        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0?: string, arg1?: string) {
+            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
         }
 
         function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {

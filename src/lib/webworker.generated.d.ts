@@ -477,7 +477,7 @@ interface RequestInit {
     /** An AbortSignal to set request's signal. */
     signal?: AbortSignal | null;
     /** Can only be null. Used to disassociate request from any Window. */
-    window?: any;
+    window?: null;
 }
 
 interface ResponseInit {
@@ -671,7 +671,7 @@ interface AbortSignal extends EventTarget {
 declare var AbortSignal: {
     prototype: AbortSignal;
     new(): AbortSignal;
-    // abort(): AbortSignal;
+    // abort(): AbortSignal; - To be re-added in the future
 };
 
 interface AbstractWorkerEventMap {
@@ -752,7 +752,10 @@ declare var ByteLengthQueuingStrategy: {
     new(init: QueuingStrategyInit): ByteLengthQueuingStrategy;
 };
 
-/** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. */
+/**
+ * Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+ * Available only in secure contexts.
+ */
 interface Cache {
     add(request: RequestInfo): Promise<void>;
     addAll(requests: RequestInfo[]): Promise<void>;
@@ -768,7 +771,10 @@ declare var Cache: {
     new(): Cache;
 };
 
-/** The storage for Cache objects. */
+/**
+ * The storage for Cache objects.
+ * Available only in secure contexts.
+ */
 interface CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
@@ -876,6 +882,7 @@ declare var CountQueuingStrategy: {
 
 /** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. */
 interface Crypto {
+    /** Available only in secure contexts. */
     readonly subtle: SubtleCrypto;
     getRandomValues<T extends ArrayBufferView | null>(array: T): T;
 }
@@ -885,7 +892,10 @@ declare var Crypto: {
     new(): Crypto;
 };
 
-/** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. */
+/**
+ * The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
+ * Available only in secure contexts.
+ */
 interface CryptoKey {
     readonly algorithm: KeyAlgorithm;
     readonly extractable: boolean;
@@ -2137,6 +2147,7 @@ interface NavigatorOnLine {
     readonly onLine: boolean;
 }
 
+/** Available only in secure contexts. */
 interface NavigatorStorage {
     readonly storage: StorageManager;
 }
@@ -2431,7 +2442,10 @@ declare var PromiseRejectionEvent: {
     new(type: string, eventInitDict: PromiseRejectionEventInit): PromiseRejectionEvent;
 };
 
-/** This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription. */
+/**
+ * This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription.
+ * Available only in secure contexts.
+ */
 interface PushEvent extends ExtendableEvent {
     readonly data: PushMessageData | null;
 }
@@ -2441,7 +2455,10 @@ declare var PushEvent: {
     new(type: string, eventInitDict?: PushEventInit): PushEvent;
 };
 
-/** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. */
+/**
+ * This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
+ * Available only in secure contexts.
+ */
 interface PushManager {
     getSubscription(): Promise<PushSubscription | null>;
     permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
@@ -2454,7 +2471,10 @@ declare var PushManager: {
     readonly supportedContentEncodings: ReadonlyArray<string>;
 };
 
-/** This Push API interface provides methods which let you retrieve the push data sent by a server in various formats. */
+/**
+ * This Push API interface provides methods which let you retrieve the push data sent by a server in various formats.
+ * Available only in secure contexts.
+ */
 interface PushMessageData {
     arrayBuffer(): ArrayBuffer;
     blob(): Blob;
@@ -2467,7 +2487,10 @@ declare var PushMessageData: {
     new(): PushMessageData;
 };
 
-/** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. */
+/**
+ * This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
+ * Available only in secure contexts.
+ */
 interface PushSubscription {
     readonly endpoint: string;
     readonly options: PushSubscriptionOptions;
@@ -2481,6 +2504,7 @@ declare var PushSubscription: {
     new(): PushSubscription;
 };
 
+/** Available only in secure contexts. */
 interface PushSubscriptionOptions {
     readonly applicationServerKey: ArrayBuffer | null;
 }
@@ -2498,7 +2522,6 @@ interface ReadableStream<R = any> {
     pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
     pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
     tee(): [ReadableStream<R>, ReadableStream<R>];
-    forEach(callbackfn: (value: any, key: number, parent: ReadableStream<R>) => void, thisArg?: any): void;
 }
 
 declare var ReadableStream: {
@@ -2613,7 +2636,10 @@ interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
     "statechange": Event;
 }
 
-/** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. */
+/**
+ * This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
+ * Available only in secure contexts.
+ */
 interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
@@ -2637,7 +2663,10 @@ interface ServiceWorkerContainerEventMap {
     "messageerror": MessageEvent;
 }
 
-/** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. */
+/**
+ * The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
+ * Available only in secure contexts.
+ */
 interface ServiceWorkerContainer extends EventTarget {
     readonly controller: ServiceWorker | null;
     oncontrollerchange: ((this: ServiceWorkerContainer, ev: Event) => any) | null;
@@ -2698,7 +2727,10 @@ interface ServiceWorkerRegistrationEventMap {
     "updatefound": Event;
 }
 
-/** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. */
+/**
+ * This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
+ * Available only in secure contexts.
+ */
 interface ServiceWorkerRegistration extends EventTarget {
     readonly active: ServiceWorker | null;
     readonly installing: ServiceWorker | null;
@@ -2743,6 +2775,7 @@ declare var SharedWorkerGlobalScope: {
     new(): SharedWorkerGlobalScope;
 };
 
+/** Available only in secure contexts. */
 interface StorageManager {
     estimate(): Promise<StorageEstimate>;
     persisted(): Promise<boolean>;
@@ -2753,7 +2786,10 @@ declare var StorageManager: {
     new(): StorageManager;
 };
 
-/** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
+/**
+ * This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
+ * Available only in secure contexts.
+ */
 interface SubtleCrypto {
     decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, key: CryptoKey, data: BufferSource): Promise<any>;
     deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length: number): Promise<ArrayBuffer>;
@@ -5030,6 +5066,7 @@ declare var WindowClient: {
 };
 
 interface WindowOrWorkerGlobalScope {
+    /** Available only in secure contexts. */
     readonly caches: CacheStorage;
     readonly crossOriginIsolated: boolean;
     readonly crypto: Crypto;
@@ -5352,7 +5389,8 @@ declare namespace WebAssembly {
 
     var CompileError: {
         prototype: CompileError;
-        new(): CompileError;
+        new(message?: string): CompileError;
+        (message?: string): CompileError;
     };
 
     interface Global {
@@ -5379,7 +5417,8 @@ declare namespace WebAssembly {
 
     var LinkError: {
         prototype: LinkError;
-        new(): LinkError;
+        new(message?: string): LinkError;
+        (message?: string): LinkError;
     };
 
     interface Memory {
@@ -5408,7 +5447,8 @@ declare namespace WebAssembly {
 
     var RuntimeError: {
         prototype: RuntimeError;
-        new(): RuntimeError;
+        new(message?: string): RuntimeError;
+        (message?: string): RuntimeError;
     };
 
     interface Table {
@@ -5485,7 +5525,7 @@ interface PerformanceObserverCallback {
 }
 
 interface QueuingStrategySize<T = any> {
-    (chunk?: T): number;
+    (chunk: T): number;
 }
 
 interface TransformerFlushCallback<O> {
@@ -5560,6 +5600,7 @@ declare function importScripts(...urls: (string | URL)[]): void;
 /** Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise. */
 declare function dispatchEvent(event: Event): boolean;
 declare var fonts: FontFaceSet;
+/** Available only in secure contexts. */
 declare var caches: CacheStorage;
 declare var crossOriginIsolated: boolean;
 declare var crypto: Crypto;
@@ -5648,7 +5689,7 @@ type MediaDecodingType = "file" | "media-source" | "webrtc";
 type MediaEncodingType = "record" | "webrtc";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
-type PermissionName = "geolocation" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock";
+type PermissionName = "geolocation" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock" | "xr-spatial-tracking";
 type PermissionState = "denied" | "granted" | "prompt";
 type PredefinedColorSpace = "display-p3" | "srgb";
 type PremultiplyAlpha = "default" | "none" | "premultiply";

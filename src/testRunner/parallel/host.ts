@@ -14,7 +14,7 @@ namespace Harness.Parallel.Host {
         const { statSync } = require("fs") as typeof import("fs");
 
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-        const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
+        const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests");
 
         const perfdataFileNameFragment = ".parallelperf";
         const perfData = readSavedPerfData(configOption);

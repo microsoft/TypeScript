@@ -236,10 +236,28 @@ const obj2 = {
 
 let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 
+// Repro from #46480
+
+export type Spacing =
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+
+export type SpacingShorthand =
+    | `${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+
+const test1: SpacingShorthand = "0 0 0";
+
 
 //// [templateLiteralTypes1.js]
 "use strict";
 // Template types example from #12754
+exports.__esModule = true;
 var createScopedActionType = function (scope) { return function (type) { return "".concat(scope, "/").concat(type); }; };
 var createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
 var MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
@@ -274,243 +292,10 @@ var obj2 = {
     ]
 };
 var make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
+var spacing = "s12";
+var test1 = "0 0 0";
 
 
 //// [templateLiteralTypes1.d.ts]
-declare const createScopedActionType: <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`;
-declare const createActionInMyScope: <T extends string>(type: T) => `MyScope/${T}`;
-declare const MY_ACTION: "MyScope/MY_ACTION";
-declare type EventName<S extends string> = `${S}Changed`;
-declare type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
-declare type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
-declare type ToString<T extends string | number | boolean | bigint> = `${T}`;
-declare type TS1 = ToString<'abc' | 42 | true | -1234n>;
-declare type TL1<T extends string> = `a${T}b${T}c`;
-declare type TL2<U extends string> = TL1<`x${U}y`>;
-declare type TL3 = TL2<'o'>;
-declare type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
-declare type TCA1 = Cases<'bar'>;
-declare type TCA2 = Cases<'BAR'>;
-declare function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`): void;
-declare function fa1<T>(x: T, y: {
-    [P in keyof T]: T[P];
-}, z: {
-    [P in keyof T & string as `p_${P}`]: T[P];
-}): void;
-declare function fa2<T, U extends T, A extends string, B extends A>(x: {
-    [P in B as `p_${P}`]: T;
-}, y: {
-    [Q in A as `p_${Q}`]: U;
-}): void;
-declare type Join<T extends unknown[], D extends string> = T extends [] ? '' : T extends [string | number | boolean | bigint] ? `${T[0]}` : T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` : string;
-declare type TJ1 = Join<[1, 2, 3, 4], '.'>;
-declare type TJ2 = Join<['foo', 'bar', 'baz'], '-'>;
-declare type TJ3 = Join<[], '.'>;
-declare type MatchPair<S extends string> = S extends `[${infer A},${infer B}]` ? [A, B] : unknown;
-declare type T20 = MatchPair<'[1,2]'>;
-declare type T21 = MatchPair<'[foo,bar]'>;
-declare type T22 = MatchPair<' [1,2]'>;
-declare type T23 = MatchPair<'[123]'>;
-declare type T24 = MatchPair<'[1,2,3,4]'>;
-declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Lowercase<T>}` : SnakeToPascalCase<S>;
-declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` : never;
-declare type RR0 = SnakeToPascalCase<'hello_world_foo'>;
-declare type RR1 = SnakeToPascalCase<'FOO_BAR_BAZ'>;
-declare type RR2 = SnakeToCamelCase<'hello_world_foo'>;
-declare type RR3 = SnakeToCamelCase<'FOO_BAR_BAZ'>;
-declare type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer R}` ? [`${A}${B}`, R] : unknown;
-declare type T25 = FirstTwoAndRest<'abcde'>;
-declare type T26 = FirstTwoAndRest<'ab'>;
-declare type T27 = FirstTwoAndRest<'a'>;
-declare type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
-declare type HexColor<S extends string> = S extends `#${infer R1}${infer R2}${infer G1}${infer G2}${infer B1}${infer B2}` ? [
-    R1,
-    R2,
-    G1,
-    G2,
-    B1,
-    B2
-] extends [HexDigit, HexDigit, HexDigit, HexDigit, HexDigit, HexDigit] ? S : never : never;
-declare type TH1 = HexColor<'#8080FF'>;
-declare type TH2 = HexColor<'#80c0ff'>;
-declare type TH3 = HexColor<'#8080F'>;
-declare type TH4 = HexColor<'#8080FFF'>;
-declare type Trim<S extends string> = S extends ` ${infer T}` ? Trim<T> : S extends `${infer T} ` ? Trim<T> : S;
-declare type TR1 = Trim<'xx   '>;
-declare type TR2 = Trim<'   xx'>;
-declare type TR3 = Trim<'   xx   '>;
-declare type Split<S extends string, D extends string> = string extends S ? string[] : S extends '' ? [] : S extends `${infer T}${D}${infer U}` ? [T, ...Split<U, D>] : [
-    S
-];
-declare type T40 = Split<'foo', '.'>;
-declare type T41 = Split<'foo.bar.baz', '.'>;
-declare type T42 = Split<'foo.bar', ''>;
-declare type T43 = Split<any, '.'>;
-declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2];
-declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1];
-declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0];
-declare function getProp(obj: object, path: string): unknown;
-declare let p1: {
-    readonly b: {
-        readonly c: 42;
-        readonly d: "hello";
-    };
-};
-declare let p2: {
-    readonly c: 42;
-    readonly d: "hello";
-};
-declare let p3: "hello";
-declare type PropType<T, Path extends string> = string extends Path ? unknown : Path extends keyof T ? T[Path] : Path extends `${infer K}.${infer R}` ? K extends keyof T ? PropType<T[K], R> : unknown : unknown;
-declare function getPropValue<T, P extends string>(obj: T, path: P): PropType<T, P>;
-declare const s: string;
-declare const obj: {
-    a: {
-        b: {
-            c: number;
-            d: string;
-        };
-    };
-};
-declare type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
-declare type S2<S extends string> = S;
-declare type TV1 = `${infer X}`;
-declare type Chars<S extends string> = string extends S ? string[] : S extends `${infer C0}${infer C1}${infer C2}${infer C3}${infer C4}${infer C5}${infer C6}${infer C7}${infer C8}${infer C9}${infer R}` ? [C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, ...Chars<R>] : S extends `${infer C}${infer R}` ? [C, ...Chars<R>] : S extends '' ? [] : never;
-declare type L1 = Chars<'FooBarBazThisIsALongerString'>;
-declare type Foo<T> = T extends `*${infer S}*` ? S : never;
-declare type TF1 = Foo<any>;
-declare type TF2 = Foo<string>;
-declare type TF3 = Foo<'abc'>;
-declare type TF4 = Foo<'*abc*'>;
-declare type A = any;
-declare type U1 = {
-    a1: A;
-} | {
-    b1: A;
-} | {
-    c1: A;
-} | {
-    d1: A;
-} | {
-    e1: A;
-} | {
-    f1: A;
-} | {
-    g1: A;
-} | {
-    h1: A;
-} | {
-    i1: A;
-} | {
-    j1: A;
-};
-declare type U2 = {
-    a2: A;
-} | {
-    b2: A;
-} | {
-    c2: A;
-} | {
-    d2: A;
-} | {
-    e2: A;
-} | {
-    f2: A;
-} | {
-    g2: A;
-} | {
-    h2: A;
-} | {
-    i2: A;
-} | {
-    j2: A;
-};
-declare type U3 = {
-    a3: A;
-} | {
-    b3: A;
-} | {
-    c3: A;
-} | {
-    d3: A;
-} | {
-    e3: A;
-} | {
-    f3: A;
-} | {
-    g3: A;
-} | {
-    h3: A;
-} | {
-    i3: A;
-} | {
-    j3: A;
-};
-declare type U4 = {
-    a4: A;
-} | {
-    b4: A;
-} | {
-    c4: A;
-} | {
-    d4: A;
-} | {
-    e4: A;
-} | {
-    f4: A;
-} | {
-    g4: A;
-} | {
-    h4: A;
-} | {
-    i4: A;
-} | {
-    j4: A;
-};
-declare type U5 = {
-    a5: A;
-} | {
-    b5: A;
-} | {
-    c5: A;
-} | {
-    d5: A;
-} | {
-    e5: A;
-} | {
-    f5: A;
-} | {
-    g5: A;
-} | {
-    h5: A;
-} | {
-    i5: A;
-} | {
-    j5: A;
-};
-declare type U100000 = U1 & U2 & U3 & U4 & U5;
-declare type Digits = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-declare type D100000 = `${Digits}${Digits}${Digits}${Digits}${Digits}`;
-declare type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
-declare type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];
-declare type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
-declare type AA<T extends number, Q extends number> = [
-    true,
-    true
-] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
-declare type BB = AA<-2, -2>;
-declare type PathKeys<T> = T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> : T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> : never;
-declare type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
-declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
-declare const obj2: {
-    readonly name: "John";
-    readonly age: 42;
-    readonly cars: readonly [{
-        readonly make: "Ford";
-        readonly age: 10;
-    }, {
-        readonly make: "Trabant";
-        readonly age: 35;
-    }];
-};
-declare let make: "Trabant";
+export declare type Spacing = `0` | `${number}px` | `${number}rem` | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+export declare type SpacingShorthand = `${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;

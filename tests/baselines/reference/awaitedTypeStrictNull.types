@@ -75,6 +75,14 @@ interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
 type T17 = Awaited<BadPromise1>; // error
 >T17 : any
 
+// https://github.com/microsoft/TypeScript/issues/46934
+type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
+>T18 : number
+>then : (cb: (value: number, other: {}) => void) => any
+>cb : (value: number, other: {}) => void
+>value : number
+>other : {}
+
 // https://github.com/microsoft/TypeScript/issues/33562
 type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 >MaybePromise : MaybePromise<T>
@@ -105,9 +113,9 @@ async function main() {
     ] = await Promise.all([
 >await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
 >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, MaybePromise<true>]
 
         MaybePromise(1),

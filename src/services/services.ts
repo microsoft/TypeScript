@@ -500,6 +500,9 @@ namespace ts {
         isClass(): this is InterfaceType {
             return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
+        isIndexType(): this is IndexType {
+            return !!(this.flags & TypeFlags.Index);
+        }
         /**
          * This polyfills `referenceType.typeArguments` for API consumers
          */
@@ -544,6 +547,16 @@ namespace ts {
         }
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
+        }
+        getTypeParameterAtPosition(pos: number): Type {
+            const type = this.checker.getParameterType(this, pos);
+            if (type.isIndexType() && isThisTypeParameter(type.type)) {
+                const constraint = type.type.getConstraint();
+                if (constraint) {
+                    return this.checker.getIndexType(constraint);
+                }
+            }
+            return type;
         }
 
         getDocumentationComment(): SymbolDisplayPart[] {
@@ -599,10 +612,11 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
+        if (hasStaticModifier(declaration)) return;
+
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
-        if (!classOrInterfaceDeclaration) {
-            return;
-        }
+        if (!classOrInterfaceDeclaration) return;
+
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
@@ -1592,7 +1606,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions): CompletionInfo | undefined {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions, formattingSettings?: FormatCodeSettings): CompletionInfo | undefined {
             // Convert from deprecated options names to new names
             const fullPreferences: UserPreferences = {
                 ...identity<UserPreferences>(options), // avoid excess property check
@@ -1609,7 +1623,8 @@ namespace ts {
                 fullPreferences,
                 options.triggerCharacter,
                 options.triggerKind,
-                cancellationToken);
+                cancellationToken,
+                formattingSettings && formatting.getFormatContext(formattingSettings, host));
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {

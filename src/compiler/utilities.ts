@@ -20,21 +20,6 @@ namespace ts {
         return undefined;
     }
 
-    /**
-     * Create a new escaped identifier map.
-     * @deprecated Use `new Map<__String, T>()` instead.
-     */
-    export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<__String, T>();
-    }
-
-    /**
-     * @deprecated Use `!!map?.size` instead
-     */
-    export function hasEntries(map: ReadonlyCollection<any> | undefined): map is ReadonlyCollection<any> {
-        return !!map && !!map.size;
-    }
-
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
         const result = new Map<__String, Symbol>();
         if (symbols) {
@@ -606,6 +591,7 @@ namespace ts {
                 AsyncIterableIterator: emptyArray,
                 AsyncGenerator: emptyArray,
                 AsyncGeneratorFunction: emptyArray,
+                NumberFormat: ["formatToParts"]
             },
             es2019: {
                 Array: ["flat", "flatMap"],
@@ -627,8 +613,22 @@ namespace ts {
                 PromiseConstructor: ["any"],
                 String: ["replaceAll"]
             },
-            esnext: {
-                NumberFormat: ["formatToParts"]
+            es2022: {
+                Array: ["at"],
+                String: ["at"],
+                Int8Array: ["at"],
+                Uint8Array: ["at"],
+                Uint8ClampedArray: ["at"],
+                Int16Array: ["at"],
+                Uint16Array: ["at"],
+                Int32Array: ["at"],
+                Uint32Array: ["at"],
+                Float32Array: ["at"],
+                Float64Array: ["at"],
+                BigInt64Array: ["at"],
+                BigUint64Array: ["at"],
+                ObjectConstructor: ["hasOwn"],
+                Error: ["cause"]
             }
         };
     }
@@ -3189,7 +3189,7 @@ namespace ts {
         return undefined;
     }
 
-    export function isKeyword(token: SyntaxKind): boolean {
+    export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
@@ -3374,7 +3374,7 @@ namespace ts {
         return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
-    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+    export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }
@@ -6196,6 +6196,8 @@ namespace ts {
             case ModuleKind.ES2020:
             case ModuleKind.ES2022:
             case ModuleKind.ESNext:
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
                 return true;
             default:
                 return false;
@@ -6266,7 +6268,7 @@ namespace ts {
     }
 
     export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
-        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 : compilerOptions.useDefineForClassFields;
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
@@ -6333,8 +6335,6 @@ namespace ts {
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
         setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
         setSymlinkedFile(symlinkPath: Path, real: string): void;
-        /*@internal*/
-        setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
         /**
          * @internal
          * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
@@ -6370,16 +6370,6 @@ namespace ts {
                         (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
-                }
-            },
-            setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
-                this.setSymlinkedFile(toPath(symlink, cwd, getCanonicalFileName), real);
-                const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
-                if (commonResolved && commonOriginal) {
-                    this.setSymlinkedDirectory(commonOriginal, {
-                        real: commonResolved,
-                        realPath: toPath(commonResolved, cwd, getCanonicalFileName),
-                    });
                 }
             },
             setSymlinksFromResolutions(files, typeReferenceDirectives) {
@@ -6650,7 +6640,7 @@ namespace ts {
     }
 
     /** @param path directory of the tsconfig.json */
-    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string, directoryExists: (path: string) => boolean): string[] {
+    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
@@ -6666,9 +6656,7 @@ namespace ts {
         const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
-            if (directoryExists(basePath)) {
-                visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
-            }
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
 
         return flatten(results);
@@ -7007,18 +6995,6 @@ namespace ts {
         }
         return { min, max };
     }
-
-    /** @deprecated Use `ReadonlySet<TNode>` instead. */
-    export type ReadonlyNodeSet<TNode extends Node> = ReadonlySet<TNode>;
-
-    /** @deprecated Use `Set<TNode>` instead. */
-    export type NodeSet<TNode extends Node> = Set<TNode>;
-
-    /** @deprecated Use `ReadonlyMap<TNode, TValue>` instead. */
-    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyESMap<TNode, TValue>;
-
-    /** @deprecated Use `Map<TNode, TValue>` instead. */
-    export type NodeMap<TNode extends Node, TValue> = ESMap<TNode, TValue>;
 
     export function rangeOfNode(node: Node): TextRange {
         return { pos: getTokenPosOfNode(node), end: node.end };
@@ -7450,5 +7426,44 @@ namespace ts {
 
     export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
+    }
+
+    export function escapeSnippetText(text: string): string {
+        return text.replace(/\$/gm, () => "\\$");
+    }
+
+    export function isNumericLiteralName(name: string | __String) {
+        // The intent of numeric names is that
+        //     - they are names with text in a numeric form, and that
+        //     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
+        //         acquired by applying the abstract 'ToNumber' operation on the name's text.
+        //
+        // The subtlety is in the latter portion, as we cannot reliably say that anything that looks like a numeric literal is a numeric name.
+        // In fact, it is the case that the text of the name must be equal to 'ToString(numLit)' for this to hold.
+        //
+        // Consider the property name '"0xF00D"'. When one indexes with '0xF00D', they are actually indexing with the value of 'ToString(0xF00D)'
+        // according to the ECMAScript specification, so it is actually as if the user indexed with the string '"61453"'.
+        // Thus, the text of all numeric literals equivalent to '61543' such as '0xF00D', '0xf00D', '0170015', etc. are not valid numeric names
+        // because their 'ToString' representation is not equal to their original text.
+        // This is motivated by ECMA-262 sections 9.3.1, 9.8.1, 11.1.5, and 11.2.1.
+        //
+        // Here, we test whether 'ToString(ToNumber(name))' is exactly equal to 'name'.
+        // The '+' prefix operator is equivalent here to applying the abstract ToNumber operation.
+        // Applying the 'toString()' method on a number gives us the abstract ToString operation on a number.
+        //
+        // Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
+        // This is desired behavior, because when indexing with them as numeric entities, you are indexing
+        // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
+        return (+name).toString() === name;
+    }
+
+    export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote?: boolean, stringNamed?: boolean) {
+        return isIdentifierText(name, target) ? factory.createIdentifier(name) :
+            !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+            factory.createStringLiteral(name, !!singleQuote);
+    }
+
+    export function isThisTypeParameter(type: Type): boolean {
+        return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
     }
 }

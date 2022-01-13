@@ -24,7 +24,7 @@ namespace ts.refactor {
             extractToInterfaceAction.kind,
             extractToTypeDefAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -51,7 +51,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToExtractType(context, actionName): RefactorEditInfo {
             const { file, } = context;
             const info = getRangeToExtract(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");
@@ -145,8 +145,8 @@ namespace ts.refactor {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
                     const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    if (symbol?.declarations) {
-                        const declaration = cast(first(symbol.declarations), isTypeParameterDeclaration);
+                    const declaration = tryCast(symbol?.declarations?.[0], isTypeParameterDeclaration);
+                    if (declaration) {
                         if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
                             pushIfUnique(result, declaration);
                         }
