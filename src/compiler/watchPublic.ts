@@ -273,6 +273,7 @@ namespace ts {
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
         let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
+        let reportWatchDiagnosticOnCreateProgram: DiagnosticMessage | undefined; // Diagnostic message to report in synchronizeProgram before new program creation
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
@@ -280,21 +281,12 @@ namespace ts {
 
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const currentDirectory = host.getCurrentDirectory();
-        const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram: realCreateProgram } = host;
+        const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram } = host;
         let { rootFiles: rootFileNames, options: compilerOptions, watchOptions, projectReferences } = host;
         let wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined;
         let configFileParsingDiagnostics: Diagnostic[] | undefined;
         let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
-
-        let reportWatchDiagnosticOnCreateProgram: DiagnosticMessage | undefined;
-        const createProgram: CreateProgram<T> = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
-            if (reportWatchDiagnosticOnCreateProgram) {
-                reportWatchDiagnostic(reportWatchDiagnosticOnCreateProgram);
-                reportWatchDiagnosticOnCreateProgram = undefined;
-            }
-            return realCreateProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
-        };
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
@@ -443,11 +435,17 @@ namespace ts {
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution || changesAffectResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
+                    if (reportWatchDiagnosticOnCreateProgram) {
+                        reportWatchDiagnostic(reportWatchDiagnosticOnCreateProgram);
+                    }
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
                     hasChangedConfigFileParsingErrors = false;
                 }
             }
             else {
+                if (reportWatchDiagnosticOnCreateProgram) {
+                    reportWatchDiagnostic(reportWatchDiagnosticOnCreateProgram);
+                }
                 createNewProgram(hasInvalidatedResolution);
             }
 
