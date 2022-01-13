@@ -87,8 +87,6 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
-
 Reloading new file names and options
 Synchronizing program
 
