@@ -1371,11 +1371,9 @@ namespace ts {
          *
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
-         * @param insertionIndex How far after a found property to splice the expression statement, if not the end of the array.
          */
-        function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression, insertionIndex?: number) {
-            for (let i = 0; i < properties.length; i += 1) {
-                const property = properties[i];
+        function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
+            for (const property of properties) {
                 const expression = isClassStaticBlockDeclaration(property) ?
                     transformClassStaticBlockDeclaration(property) :
                     transformProperty(property, receiver);
@@ -1393,12 +1391,7 @@ namespace ts {
                 setSyntheticLeadingComments(expression, undefined);
                 setSyntheticTrailingComments(expression, undefined);
 
-                if (insertionIndex !== undefined) {
-                    statements.splice(i + insertionIndex, 0, statement);
-                }
-                else {
-                    statements.push(statement);
-                }
+                statements.push(statement);
             }
         }
 

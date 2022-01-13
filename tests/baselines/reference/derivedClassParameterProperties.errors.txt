@@ -17,7 +17,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     class Derived extends Base {
         constructor(y: string) {
             var a = 1;
-            super(); // ok
+            super();
         }
     }
     
@@ -30,7 +30,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     
     class Derived3 extends Base {
         constructor(public y: string) {
-            super(); // ok
+            super();
             var a = 1;
         }
     }
@@ -46,7 +46,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
     class Derived5 extends Base {
         a = 1;
         constructor(y: string) {
-            super(); // ok
+            super();
             var b = 2;
         }
     }
@@ -58,7 +58,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             var b = 2;
-            super(); // error: "super" has to be called before "this" accessing
+            super();
         }
     }
     
@@ -86,7 +86,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
         a = 1;
         b: number;
         constructor(y: string) {
-            super(); // ok
+            super();
             this.a = 3;
             this.b = 3;        
         }
@@ -119,7 +119,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassP
         a = 1;
         b: number;
         constructor(y: string) {
-            super(); // ok
+            super();
             this.a = 3;
             this.b = 3;
         }
