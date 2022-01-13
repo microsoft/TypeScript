@@ -280,12 +280,21 @@ namespace ts {
 
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const currentDirectory = host.getCurrentDirectory();
-        const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram } = host;
+        const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram: realCreateProgram } = host;
         let { rootFiles: rootFileNames, options: compilerOptions, watchOptions, projectReferences } = host;
         let wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined;
         let configFileParsingDiagnostics: Diagnostic[] | undefined;
         let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
+
+        let reportWatchDiagnosticOnCreateProgram: DiagnosticMessage | undefined;
+        const createProgram: CreateProgram<T> = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
+            if (reportWatchDiagnosticOnCreateProgram) {
+                reportWatchDiagnostic(reportWatchDiagnosticOnCreateProgram);
+                reportWatchDiagnosticOnCreateProgram = undefined;
+            }
+            return realCreateProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
+        };
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
@@ -665,7 +674,7 @@ namespace ts {
 
         function updateProgramWithWatchStatus() {
             timerToUpdateProgram = undefined;
-            reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            reportWatchDiagnosticOnCreateProgram = Diagnostics.File_change_detected_Starting_incremental_compilation;
             updateProgram();
         }
 
