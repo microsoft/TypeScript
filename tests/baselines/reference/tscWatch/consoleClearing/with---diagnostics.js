@@ -72,11 +72,11 @@ FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source fil
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
 Synchronizing program
+[[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
+
 CreatingProgramWith::
   roots: ["/f.ts"]
   options: {"watch":true,"diagnostics":true}
-[[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
-
 [[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
 
