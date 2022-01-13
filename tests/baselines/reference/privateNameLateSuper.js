@@ -1,21 +1,21 @@
-//// [privateNameBadSuper.ts]
-class B {};
+//// [privateNameLateSuper.ts]
+class B {}
 class A extends B {
-  #x;
-  constructor() {
-    this;
-    super();
-  }
+    #x;
+    constructor() {
+        void 0;
+        super();
+    }
 }
 
-//// [privateNameBadSuper.js]
+
+//// [privateNameLateSuper.js]
 var _A_x;
 class B {
 }
-;
 class A extends B {
     constructor() {
-        this;
+        void 0;
         super();
         _A_x.set(this, void 0);
     }
