@@ -405,8 +405,8 @@ namespace ts.moduleSpecifiers {
 
     function getPathRelativeToRootDirs(path: string, rootDirs: ReadonlyArray<string>, getCanonicalFileName: GetCanonicalFileName): string | undefined {
         return firstDefined(rootDirs, rootDir => {
-            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName)!; // TODO: GH#18217
-            return isPathRelativeToParent(relativePath) ? undefined : relativePath;
+            const relativePath = getRelativePathIfInDirectory(path, rootDir, getCanonicalFileName);
+            return relativePath !== undefined && isPathRelativeToParent(relativePath) ? undefined : relativePath;
         });
     }
 
