@@ -1,14 +1,14 @@
 /// <reference path="./fourslash.ts" />
 
 // @allowJs: true
-// @module: commonjs
 // @Filename: /library.js
-//// export function aaa() {}
-//// export function bbb() {}
+//// module.exports.aaa = function() {}
+//// module.exports.bbb = function() {}
 
 // @Filename: /foo.js
-//// var a = require("./library").aaa;
-//// bbb/**/
+//// var aaa = require("./library.js").aaa;
+//// aaa();
+//// /**/bbb
 
 goTo.marker();
-verify.codeFixAvailable();
+verify.getAndApplyCodeFix(ts.Diagnostics.Cannot_find_name_0.code);
