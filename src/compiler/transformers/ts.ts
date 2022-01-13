@@ -1511,6 +1511,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                     return factory.createIdentifier("Boolean");
 
+                case SyntaxKind.TemplateLiteralType:
                 case SyntaxKind.StringKeyword:
                     return factory.createIdentifier("String");
 
