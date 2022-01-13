@@ -1815,5 +1815,29 @@ import { x } from "../b";`),
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "when creating extensionless file",
+            commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+            sys: () => {
+                const module1: File = {
+                    path: `${projectRoot}/index.ts`,
+                    content: ``
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: `{}`
+                };
+                return createWatchedSystem([module1, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Create foo in project root",
+                    change: sys => sys.writeFile(`${projectRoot}/foo`, ``),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
     });
 }
