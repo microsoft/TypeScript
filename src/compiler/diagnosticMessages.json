@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '}' to match the '{' token here.": {
+    "The parser expected to find a '}' to match the '{' token here:": {
         "category": "Error",
         "code": 1007
     },
@@ -980,7 +980,7 @@
         "category": "Error",
         "code": 1338
     },
-    "Module '{0}' does not refer to a value, but is used as a value here.": {
+    "Module '{0}' does not refer to a value, but is used as a value here:": {
         "category": "Error",
         "code": 1339
     },
@@ -1012,7 +1012,7 @@
         "category": "Error",
         "code": 1347
     },
-    "Non-simple parameter declared here.": {
+    "Non-simple parameter declared here:": {
         "category": "Error",
         "code": 1348
     },
@@ -1108,11 +1108,11 @@
         "category": "Error",
         "code": 1375
     },
-    "'{0}' was imported here.": {
+    "'{0}' was imported here:": {
         "category": "Message",
         "code": 1376
     },
-    "'{0}' was exported here.": {
+    "'{0}' was exported here:": {
         "category": "Message",
         "code": 1377
     },
@@ -1196,7 +1196,7 @@
         "category": "Message",
         "code": 1398
     },
-    "File is included via import here.": {
+    "File is included via import here:": {
         "category": "Message",
         "code": 1399
     },
@@ -1204,7 +1204,7 @@
         "category": "Message",
         "code": 1400
     },
-    "File is included via reference here.": {
+    "File is included via reference here:": {
         "category": "Message",
         "code": 1401
     },
@@ -1216,7 +1216,7 @@
         "category": "Message",
         "code": 1403
     },
-    "File is included via type library reference here.": {
+    "File is included via type library reference here:": {
         "category": "Message",
         "code": 1404
     },
@@ -1224,7 +1224,7 @@
         "category": "Message",
         "code": 1405
     },
-    "File is included via library reference here.": {
+    "File is included via library reference here:": {
         "category": "Message",
         "code": 1406
     },
@@ -1232,7 +1232,7 @@
         "category": "Message",
         "code": 1407
     },
-    "File is matched by include pattern specified here.": {
+    "File is matched by include pattern specified here:": {
         "category": "Message",
         "code": 1408
     },
@@ -1240,7 +1240,7 @@
         "category": "Message",
         "code": 1409
     },
-    "File is matched by 'files' list specified here.": {
+    "File is matched by 'files' list specified here:": {
         "category": "Message",
         "code": 1410
     },
@@ -1252,7 +1252,7 @@
         "category": "Message",
         "code": 1412
     },
-    "File is output from referenced project specified here.": {
+    "File is output from referenced project specified here:": {
         "category": "Message",
         "code": 1413
     },
@@ -1264,7 +1264,7 @@
         "category": "Message",
         "code": 1415
     },
-    "File is source from referenced project specified here.": {
+    "File is source from referenced project specified here:": {
         "category": "Message",
         "code": 1416
     },
@@ -1276,7 +1276,7 @@
         "category": "Message",
         "code": 1418
     },
-    "File is entry point of type library specified here.": {
+    "File is entry point of type library specified here:": {
         "category": "Message",
         "code": 1419
     },
@@ -1292,7 +1292,7 @@
         "category": "Message",
         "code": 1422
     },
-    "File is library specified here.": {
+    "File is library specified here:": {
         "category": "Message",
         "code": 1423
     },
@@ -1304,7 +1304,7 @@
         "category": "Message",
         "code": 1425
     },
-    "File is default library for target specified here.": {
+    "File is default library for target specified here:": {
         "category": "Message",
         "code": 1426
     },
@@ -2824,7 +2824,7 @@
         "category": "Error",
         "code": 2692
     },
-    "'{0}' only refers to a type, but is being used as a value here.": {
+    "'{0}' only refers to a type, but is being used as a value here:": {
         "category": "Error",
         "code": 2693
     },
@@ -2861,7 +2861,7 @@
         "category": "Error",
         "code": 2701
     },
-    "'{0}' only refers to a type, but is being used as a namespace here.": {
+    "'{0}' only refers to a type, but is being used as a namespace here:": {
         "category": "Error",
         "code": 2702
     },
@@ -3053,7 +3053,7 @@
         "category": "Error",
         "code": 2749
     },
-    "The implementation signature is declared here.": {
+    "The implementation signature is declared here:": {
         "category": "Error",
         "code": 2750
     },
@@ -3061,11 +3061,11 @@
         "category": "Error",
         "code": 2751
     },
-    "The first export default is here.": {
+    "The first export default is here:": {
         "category": "Error",
         "code": 2752
     },
-    "Another export default is here.": {
+    "Another export default is here:": {
         "category": "Error",
         "code": 2753
     },
@@ -3137,7 +3137,7 @@
         "category": "Error",
         "code": 2770
     },
-    "The last overload is declared here.": {
+    "The last overload is declared here:": {
         "category": "Error",
         "code": 2771
     },
@@ -3245,7 +3245,7 @@
         "category": "Error",
         "code": 2797
     },
-    "The declaration was marked as deprecated here.": {
+    "The declaration was marked as deprecated here:": {
         "category": "Error",
         "code": 2798
     },
@@ -4724,7 +4724,7 @@
         "category": "Message",
         "code": 6203
     },
-    "and here.": {
+    "and here:": {
         "category": "Message",
         "code": 6204
     },
@@ -6169,7 +6169,7 @@
         "category": "Error",
         "code": 8033
     },
-    "The tag was first specified here.": {
+    "The tag was first specified here:": {
         "category": "Error",
         "code": 8034
     },

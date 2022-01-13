@@ -420,9 +420,6 @@ namespace ts {
             lineContent = lineContent.slice(whitespaceToTrim); // remove preceding whitespaces
             lineContent = lineContent.replace(/\t/g, " ");   // convert tabs to single spaces
 
-            // TODO: the extra characters for the grey bar has confusing issues
-            // const gutterLine = ForegroundColorEscapeSequences.Grey + "|" + resetEscapeSequence;
-
             // Output the gutter and the actual contents of the line.
             const gutterLine = "|";
             context += indent + padLeft(gutterLine, gutterWidth) + gutterSeparator;
@@ -471,6 +468,8 @@ namespace ts {
         let output = "";
         for (const diagnostic of diagnostics) {
             const diagnosticCode = "TS" + diagnostic.code;
+            const diagnosticCatName = diagnosticCategoryName(diagnostic, /* lowerCase */ false);
+            const diagnosticCatNameColored = formatColorAndReset(diagnosticCatName, getCategoryFormat(diagnostic.category));
             if (diagnostic.file) {
                 const { file, start } = diagnostic;
                 const location = formatLocation(file, start!, host); // TODO: GH#18217
@@ -478,16 +477,19 @@ namespace ts {
                 const locationLength = location.replace(/\u001b[[0-9]+m/g, "").length;
                 const codeLength = diagnosticCode.length;
 
-                output += bullet + location;
+                output += formatColorAndReset(bullet, getCategoryFormat(diagnostic.category)) + location;
                 // Separate the error code from the location by a space on thinner terminals
                 // and those of unknown length, or right-align it on wider terminals.
                 const defaultPad = codeLength + 1;
-                let padWidth = terminalWidth < 60 ? defaultPad : terminalWidth - (bullet.length + locationLength + codeLength);
+                let padWidth = terminalWidth < 60 ? defaultPad : terminalWidth - (bullet.length + locationLength + codeLength + diagnosticCatName.length + 2);
                 if (padWidth < diagnosticCode.length) padWidth = defaultPad;
-                output += padLeft(diagnosticCode, padWidth);
+                output += padLeft(diagnosticCatNameColored, padWidth + (diagnosticCatNameColored.length - diagnosticCatName.length));
+                output += " " + diagnosticCode;
 
                 output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, indent, getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
                 output += host.getNewLine();
+            } else {
+                output += formatColorAndReset(bullet, getCategoryFormat(diagnostic.category)) + " " + diagnosticCatNameColored + " " + diagnosticCode ;
             }
 
             let diagnosticText = flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine(), 0, /*pretty*/ true);
@@ -498,7 +500,7 @@ namespace ts {
             if (diagnostic.relatedInformation) {
                 output += host.getNewLine();
                 for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
-                    output += trimStringStart(flattenDiagnosticMessageText(messageText, host.getNewLine(), 0, /*pretty*/ true));
+                    output += indent + trimStringStart(flattenDiagnosticMessageText(messageText, host.getNewLine(), 0, /*pretty*/ true));
                     // output += host.getNewLine();
                     if (file) {
                         output += " " + formatLocation(file, start!, host); // TODO: GH#18217
@@ -855,8 +857,8 @@ namespace ts {
         // binder errors
         Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
         Diagnostics.A_module_cannot_have_multiple_default_exports.code,
-        Diagnostics.Another_export_default_is_here.code,
-        Diagnostics.The_first_export_default_is_here.code,
+        Diagnostics.Another_export_default_is_here_Colon.code,
+        Diagnostics.The_first_export_default_is_here_Colon.code,
         Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module.code,
         Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode.code,
         Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here.code,
@@ -3669,16 +3671,16 @@ namespace ts {
                 let message: DiagnosticMessage;
                 switch (reason.kind) {
                     case FileIncludeKind.Import:
-                        message = Diagnostics.File_is_included_via_import_here;
+                        message = Diagnostics.File_is_included_via_import_here_Colon;
                         break;
                     case FileIncludeKind.ReferenceFile:
-                        message = Diagnostics.File_is_included_via_reference_here;
+                        message = Diagnostics.File_is_included_via_reference_here_Colon;
                         break;
                     case FileIncludeKind.TypeReferenceDirective:
-                        message = Diagnostics.File_is_included_via_type_library_reference_here;
+                        message = Diagnostics.File_is_included_via_type_library_reference_here_Colon;
                         break;
                     case FileIncludeKind.LibReferenceDirective:
-                        message = Diagnostics.File_is_included_via_library_reference_here;
+                        message = Diagnostics.File_is_included_via_library_reference_here_Colon;
                         break;
                     default:
                         Debug.assertNever(reason);
@@ -3701,14 +3703,14 @@ namespace ts {
                     const matchedByFiles = getMatchedFileSpec(program, fileName);
                     if (matchedByFiles) {
                         configFileNode = getTsConfigPropArrayElementValue(options.configFile, "files", matchedByFiles);
-                        message = Diagnostics.File_is_matched_by_files_list_specified_here;
+                        message = Diagnostics.File_is_matched_by_files_list_specified_here_Colon;
                         break;
                     }
                     const matchedByInclude = getMatchedIncludeSpec(program, fileName);
                     // Could be additional files specified as roots
                     if (!matchedByInclude) return undefined;
                     configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude);
-                    message = Diagnostics.File_is_matched_by_include_pattern_specified_here;
+                    message = Diagnostics.File_is_matched_by_include_pattern_specified_here_Colon;
                     break;
                 case FileIncludeKind.SourceFromProjectReference:
                 case FileIncludeKind.OutputFromProjectReference:
@@ -3725,24 +3727,24 @@ namespace ts {
                             sourceFile,
                             referencesSyntax.elements[index],
                             reason.kind === FileIncludeKind.OutputFromProjectReference ?
-                                Diagnostics.File_is_output_from_referenced_project_specified_here :
-                                Diagnostics.File_is_source_from_referenced_project_specified_here,
+                                Diagnostics.File_is_output_from_referenced_project_specified_here_Colon :
+                                Diagnostics.File_is_source_from_referenced_project_specified_here_Colon,
                         ) :
                         undefined;
                 case FileIncludeKind.AutomaticTypeDirectiveFile:
                     if (!options.types) return undefined;
                     configFileNode = getOptionsSyntaxByArrayElementValue("types", reason.typeReference);
-                    message = Diagnostics.File_is_entry_point_of_type_library_specified_here;
+                    message = Diagnostics.File_is_entry_point_of_type_library_specified_here_Colon;
                     break;
                 case FileIncludeKind.LibFile:
                     if (reason.index !== undefined) {
                         configFileNode = getOptionsSyntaxByArrayElementValue("lib", options.lib![reason.index]);
-                        message = Diagnostics.File_is_library_specified_here;
+                        message = Diagnostics.File_is_library_specified_here_Colon;
                         break;
                     }
                     const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
                     configFileNode = target ? getOptionsSyntaxByValue("target", target) : undefined;
-                    message = Diagnostics.File_is_default_library_for_target_specified_here;
+                    message = Diagnostics.File_is_default_library_for_target_specified_here_Colon;
                     break;
                 default:
                     Debug.assertNever(reason);

@@ -520,10 +520,10 @@ namespace ts {
                             const decl = getNameOfDeclaration(declaration) || declaration;
                             const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
                             file.bindDiagnostics.push(
-                                multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
+                                multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here_Colon : Diagnostics.and_here_Colon)) : diag
                             );
                             if (multipleDefaultExports) {
-                                relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
+                                relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here_Colon));
                             }
                         });
 

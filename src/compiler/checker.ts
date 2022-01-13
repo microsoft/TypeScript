@@ -1186,7 +1186,7 @@ namespace ts {
             if (deprecatedTag) {
                 addRelatedInfo(
                     diagnostic,
-                    createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here)
+                    createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here_Colon)
                 );
             }
             // We call `addRelatedInfo()` before adding the diagnostic to prevent duplicates.
@@ -1359,7 +1359,7 @@ namespace ts {
                 if (adjustedNode === errorNode) continue;
                 err.relatedInformation = err.relatedInformation || [];
                 const leadingMessage = createDiagnosticForNode(adjustedNode, Diagnostics._0_was_also_declared_here_Colon, symbolName);
-                const followOnMessage = createDiagnosticForNode(adjustedNode, Diagnostics.and_here);
+                const followOnMessage = createDiagnosticForNode(adjustedNode, Diagnostics.and_here_Colon);
                 if (length(err.relatedInformation) >= 5 || some(err.relatedInformation, r => compareDiagnostics(r, followOnMessage) === Comparison.EqualTo || compareDiagnostics(r, leadingMessage) === Comparison.EqualTo)) continue;
                 addRelatedInfo(err, !length(err.relatedInformation) ? leadingMessage : followOnMessage);
             }
@@ -2256,7 +2256,7 @@ namespace ts {
                 diagnostic,
                 createDiagnosticForNode(
                     typeOnlyDeclaration,
-                    typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
+                    typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier ? Diagnostics._0_was_exported_here_Colon : Diagnostics._0_was_imported_here_Colon,
                     unescapedName));
         }
 
@@ -2396,7 +2396,7 @@ namespace ts {
                             return true;
                         }
                     }
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here, unescapeLeadingUnderscores(name));
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here_Colon, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
@@ -2430,7 +2430,7 @@ namespace ts {
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
                 if (isPrimitiveTypeName(name)) {
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Colon, unescapeLeadingUnderscores(name));
                     return true;
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
@@ -2443,7 +2443,7 @@ namespace ts {
                         error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0, rawName, rawName === "K" ? "P" : "K");
                     }
                     else {
-                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, rawName);
+                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Colon, rawName);
                     }
                     return true;
                 }
@@ -2631,8 +2631,8 @@ namespace ts {
                     ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
                     : Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type;
                 const relatedMessage = isExport
-                    ? Diagnostics._0_was_exported_here
-                    : Diagnostics._0_was_imported_here;
+                    ? Diagnostics._0_was_exported_here_Colon
+                    : Diagnostics._0_was_imported_here_Colon;
 
                 const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name.escapedText);
                 addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
@@ -2924,7 +2924,7 @@ namespace ts {
                     if (localSymbol.declarations) {
                         addRelatedInfo(diagnostic,
                             ...map(localSymbol.declarations, (decl, index) =>
-                                createDiagnosticForNode(decl, index === 0 ? Diagnostics._0_is_declared_here_Colon : Diagnostics.and_here, declarationName)));
+                                createDiagnosticForNode(decl, index === 0 ? Diagnostics._0_is_declared_here_Colon : Diagnostics.and_here_Colon, declarationName)));
                     }
                 }
             }
@@ -15883,7 +15883,7 @@ namespace ts {
                     }
                     else {
                         const errorMessage = targetMeaning === SymbolFlags.Value
-                            ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here
+                            ? Diagnostics.Module_0_does_not_refer_to_a_value_but_is_used_as_a_value_here_Colon
                             : Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0;
 
                         error(node, errorMessage, node.argument.literal.text);
@@ -30066,7 +30066,7 @@ namespace ts {
                         if (diags) {
                             for (const d of diags) {
                                 if (last.declaration && candidatesForArgumentError.length > 3) {
-                                    addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here));
+                                    addRelatedInfo(d, createDiagnosticForNode(last.declaration, Diagnostics.The_last_overload_is_declared_here_Colon));
                                 }
                                 addImplementationSuccessElaboration(last, d);
                                 diagnostics.add(d);
@@ -35362,7 +35362,7 @@ namespace ts {
                         if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
                             addRelatedInfo(
                                 error(signature.declaration, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature),
-                                createDiagnosticForNode(bodyDeclaration, Diagnostics.The_implementation_signature_is_declared_here)
+                                createDiagnosticForNode(bodyDeclaration, Diagnostics.The_implementation_signature_is_declared_here_Colon)
                             );
                             break;
                         }
@@ -42887,7 +42887,7 @@ namespace ts {
                         });
 
                         const diagnostics = nonSimpleParameters.map((parameter, index) => (
-                            index === 0 ? createDiagnosticForNode(parameter, Diagnostics.Non_simple_parameter_declared_here) : createDiagnosticForNode(parameter, Diagnostics.and_here)
+                            index === 0 ? createDiagnosticForNode(parameter, Diagnostics.Non_simple_parameter_declared_here_Colon) : createDiagnosticForNode(parameter, Diagnostics.and_here_Colon)
                         )) as [DiagnosticWithLocation, ...DiagnosticWithLocation[]];
                         addRelatedInfo(error(useStrictDirective, Diagnostics.use_strict_directive_cannot_be_used_with_non_simple_parameter_list), ...diagnostics);
                         return true;
