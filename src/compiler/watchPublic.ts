@@ -452,6 +452,7 @@ namespace ts {
             }
 
             changesAffectResolution = false; // reset for next sync
+            reportWatchDiagnosticOnCreateProgram = undefined;
 
             if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
