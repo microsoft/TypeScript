@@ -115,13 +115,13 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
-[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
-
 Reloading new file names and options
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/client/folder1/module1.ts","/user/username/projects/myproject/client/linktofolder2/module2.ts","/user/username/projects/myproject/client/linktofolder2/module3.ts"]
   options: {"baseUrl":"/user/username/projects/myproject/client","paths":{"*":["*"]},"pathsBasePath":"/user/username/projects/myproject","watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
+
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/client/linktofolder2/module3.ts 250 undefined Source file
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.js :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/folder2/module3.js
