@@ -75,6 +75,8 @@ namespace ts {
                     return getEmitScriptTarget(compilerOptions) >= ModuleKind.ES2020 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(node as ImportDeclaration);
+                case SyntaxKind.CallExpression:
+                    return visitCallExpression(node as CallExpression);
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.ExportDeclaration:
@@ -185,21 +187,53 @@ namespace ts {
             return statements;
         }
 
+        function appendModuleExtensionWhenNeeded(path: string) {
+            if (path.startsWith('.') || path.startsWith('/')) {
+                if (!path.endsWith('.js') &&
+                    !path.endsWith('.mjs') &&
+                    !path.endsWith('.json') &&
+                    !path.endsWith('.css') &&
+                    !path.endsWith('.' + compilerOptions.appendModuleExtension)) {
+                    return path + '.' + compilerOptions.appendModuleExtension;
+                }
+            }
+            return path;
+        }
+
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<ImportDeclaration> {
             // append `.js` (or another extension specified in options) to relative imports
             if (getAppendModuleExtension(compilerOptions))
             {
                 if (isStringLiteral(node.moduleSpecifier)) {
-                    if (node.moduleSpecifier.text.startsWith('.') || node.moduleSpecifier.text.startsWith('/')) {
-                        if (!node.moduleSpecifier.text.endsWith('.js') &&
-                            !node.moduleSpecifier.text.endsWith('.json') &&
-                            !node.moduleSpecifier.text.endsWith('.css')) {
-                            return factory.createImportDeclaration(
-                                node.decorators,
-                                node.modifiers,
-                                node.importClause,
-                                factory.createStringLiteral(node.moduleSpecifier.text + '.' + compilerOptions.appendModuleExtension, node.moduleSpecifier.singleQuote),
-                                node.assertClause);
+                    const newPath = appendModuleExtensionWhenNeeded(node.moduleSpecifier.text);
+                    if (node.moduleSpecifier.text !== newPath) {
+                        return factory.createImportDeclaration(
+                            node.decorators,
+                            node.modifiers,
+                            node.importClause,
+                            factory.createStringLiteral(newPath, node.moduleSpecifier.singleQuote),
+                            node.assertClause);
+                    }
+                }
+            }
+            return node;
+        }
+
+        function visitCallExpression(node: CallExpression): VisitResult<CallExpression> {
+            // append `.js` (or another extension specified in options) to relative imports
+            if (getAppendModuleExtension(compilerOptions))
+            {
+                if (isImportKeyword(node.expression)) {
+                    if (node.arguments.length && isStringLiteral(node.arguments[0])) {
+                        const pathLiteral = node.arguments[0];
+                        const newPath = appendModuleExtensionWhenNeeded(pathLiteral.text);
+                        if (pathLiteral.text !== newPath) {
+                            const newArgs = [factory.createStringLiteral(newPath, pathLiteral.singleQuote), ...node.arguments.slice(1)];
+                            node = factory.createCallExpression(
+                                node.expression,
+                                node.typeArguments,
+                                newArgs)
+
                         }
                     }
                 }
@@ -213,6 +247,23 @@ namespace ts {
         }
 
         function visitExportDeclaration(node: ExportDeclaration) {
+            // append `.js` (or another extension specified in options) to relative exports
+            if (getAppendModuleExtension(compilerOptions))
+            {
+                if (node.moduleSpecifier && isStringLiteral(node.moduleSpecifier)) {
+                    const newPath = appendModuleExtensionWhenNeeded(node.moduleSpecifier.text);
+                    if (node.moduleSpecifier.text !== newPath) {
+                        node = factory.createExportDeclaration(
+                            node.decorators,
+                            node.modifiers,
+                            node.isTypeOnly,
+                            node.exportClause,
+                            factory.createStringLiteral(newPath, node.moduleSpecifier.singleQuote),
+                            node.assertClause);
+                    }
+                }
+            }
+
             // `export * as ns` only needs to be transformed in ES2015
             if (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015) {
                 return node;
