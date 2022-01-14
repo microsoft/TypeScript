@@ -6,17 +6,16 @@ class A extends B {
 >A : A
 >B : B
 
-    #x;
+  #x;
 >#x : any
 
-    constructor() {
-        void 0; // Error: 'super' call must  come first
->void 0 : undefined
->0 : 0
+  constructor() {
+    this;
+>this : this
 
-        super();
+    super();
 >super() : void
 >super : typeof B
-    }
+  }
 }
 
