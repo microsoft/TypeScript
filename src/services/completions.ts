@@ -456,6 +456,7 @@ namespace ts.Completions {
             isJsxInitializer,
             isTypeOnlyLocation,
             isJsxIdentifierExpected,
+            isRightOfOpenTag,
             importCompletionNode,
             insideJsDocTagTypeExpression,
             symbolToSortTextIdMap,
@@ -495,7 +496,9 @@ namespace ts.Completions {
                 importCompletionNode,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
-                symbolToSortTextIdMap
+                symbolToSortTextIdMap,
+                isJsxIdentifierExpected,
+                isRightOfOpenTag,
             );
             getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries); // TODO: GH#18217
         }
@@ -526,7 +529,9 @@ namespace ts.Completions {
                 importCompletionNode,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
-                symbolToSortTextIdMap
+                symbolToSortTextIdMap,
+                isJsxIdentifierExpected,
+                isRightOfOpenTag,
             );
         }
 
@@ -669,6 +674,8 @@ namespace ts.Completions {
         preferences: UserPreferences,
         completionKind: CompletionKind,
         formatContext: formatting.FormatContext | undefined,
+        isJsxIdentifierExpected: boolean | undefined,
+        isRightOfOpenTag: boolean | undefined,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan = getReplacementSpanForContextToken(replacementToken);
@@ -744,46 +751,7 @@ namespace ts.Completions {
             }
         }
 
-        const isJSXAttributeCompletion = contextToken && forEachAncestor(contextToken, (n) => {
-            if (isJsxAttributeLike(n)) {
-                return true;
-            }
-
-            if (isJsxFragment(n) || isJsxOpeningFragment(n) || isJsxClosingFragment(n)) {
-                return false;
-            }
-
-            if (isJsxOpeningElement(n) || isJsxSelfClosingElement(n) || isJsxClosingElement(n)) {
-                if (contextToken.getEnd() <= n.tagName.getFullStart()) {
-                    // Definitely completing part of the tag name.
-                    return false;
-                }
-
-                if (rangeContainsRange(n.tagName, contextToken)) {
-                    // We are to the right of the tag name, as the context is there.
-                    // figure out where we are based on where the location is.
-
-                    if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
-                        // Unfinished dotted tag name.
-                        return false;
-                    }
-
-                    if (!rangeContainsRange(n, location)) {
-                        // Unclosed JSX element; location is entirely outside the element.
-                        return true;
-                    }
-
-                    if (n.tagName.getEnd() <= location.getFullStart()) {
-                        // After existing attributes, so is another attribute.
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        });
-
-        if (isJSXAttributeCompletion && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+        if (isJsxIdentifierExpected && !isRightOfOpenTag && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
@@ -1224,6 +1192,8 @@ namespace ts.Completions {
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
         symbolToSortTextIdMap?: SymbolSortTextIdMap,
+        isJsxIdentifierExpected?: boolean,
+        isRightOfOpenTag?: boolean,
     ): UniqueNameSet {
         const start = timestamp();
         const variableDeclaration = getVariableDeclaration(location);
@@ -1266,6 +1236,8 @@ namespace ts.Completions {
                 preferences,
                 kind,
                 formatContext,
+                isJsxIdentifierExpected,
+                isRightOfOpenTag,
             );
             if (!entry) {
                 continue;
@@ -1618,6 +1590,7 @@ namespace ts.Completions {
         readonly isTypeOnlyLocation: boolean;
         /** In JSX tag name and attribute names, identifiers like "my-tag" or "aria-name" is valid identifier. */
         readonly isJsxIdentifierExpected: boolean;
+        readonly isRightOfOpenTag: boolean;
         readonly importCompletionNode?: Node;
         readonly hasUnresolvedAutoImports?: boolean;
     }
@@ -2025,6 +1998,7 @@ namespace ts.Completions {
             symbolToSortTextIdMap,
             isTypeOnlyLocation,
             isJsxIdentifierExpected,
+            isRightOfOpenTag,
             importCompletionNode,
             hasUnresolvedAutoImports,
         };
