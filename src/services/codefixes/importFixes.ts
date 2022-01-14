@@ -684,7 +684,7 @@ namespace ts.codefix {
         return Comparison.EqualTo;
     }
 
-    const notDotOrSlashPattern = /[^.\/]/g;
+    const notDotOrSlashPattern = /[^.\/]/;
     function isOnlyDotsAndSlashes(path: string) {
         return !notDotOrSlashPattern.test(path);
     }
