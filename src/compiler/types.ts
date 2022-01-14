@@ -6099,6 +6099,7 @@ namespace ts {
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
+        appendModuleExtension ?: 'js' | 'mjs';
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;

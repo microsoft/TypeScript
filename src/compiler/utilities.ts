@@ -6161,6 +6161,12 @@ namespace ts {
             ScriptTarget.ES3;
     }
 
+    export function getAppendModuleExtension(compilerOptions: {module?: CompilerOptions["module"], appendModuleExtension ?: CompilerOptions["appendModuleExtension"]}) {
+        return compilerOptions.appendModuleExtension &&
+            (compilerOptions.module === ModuleKind.Node12 ||
+             compilerOptions.module === ModuleKind.NodeNext);
+    }
+
     export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :

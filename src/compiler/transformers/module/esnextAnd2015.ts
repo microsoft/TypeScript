@@ -73,6 +73,8 @@ namespace ts {
                     // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
                     // is available, just because the output is reasonable for a node-like runtime.
                     return getEmitScriptTarget(compilerOptions) >= ModuleKind.ES2020 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
+                case SyntaxKind.ImportDeclaration:
+                    return visitImportDeclaration(node as ImportDeclaration);
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.ExportDeclaration:
@@ -181,6 +183,28 @@ namespace ts {
                 ));
             }
             return statements;
+        }
+
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<ImportDeclaration> {
+            // append `.js` (or another extension specified in options) to relative imports
+            if (getAppendModuleExtension(compilerOptions))
+            {
+                if (isStringLiteral(node.moduleSpecifier)) {
+                    if (node.moduleSpecifier.text.startsWith('.') || node.moduleSpecifier.text.startsWith('/')) {
+                        if (!node.moduleSpecifier.text.endsWith('.js') &&
+                            !node.moduleSpecifier.text.endsWith('.json') &&
+                            !node.moduleSpecifier.text.endsWith('.css')) {
+                            return factory.createImportDeclaration(
+                                node.decorators,
+                                node.modifiers,
+                                node.importClause,
+                                factory.createStringLiteral(node.moduleSpecifier.text + '.' + compilerOptions.appendModuleExtension, node.moduleSpecifier.singleQuote),
+                                node.assertClause);
+                        }
+                    }
+                }
+            }
+            return node;
         }
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {
