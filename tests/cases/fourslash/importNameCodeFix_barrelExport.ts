@@ -25,5 +25,5 @@
 //// export * from "./a";
 
 // Module specifiers made up of only "." and ".." components are deprioritized
-verify.importFixModuleSpecifiers("sibling", ["./a", "."]);
+verify.importFixModuleSpecifiers("sibling", ["./a", ".", ".."]);
 verify.importFixModuleSpecifiers("parent", ["../foo", "../foo/a", ".."]);
