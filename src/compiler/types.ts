@@ -4669,6 +4669,11 @@ namespace ts {
     }
 
     /* @internal */
+    export interface AccessedOrBareRequireVariableDeclaration extends VariableDeclaration {
+        readonly initializer: RequireOrImportCall | AccessExpression;
+    }
+
+    /* @internal */
     export interface RequireVariableStatement extends VariableStatement {
         readonly declarationList: RequireVariableDeclarationList;
     }
