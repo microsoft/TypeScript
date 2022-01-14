@@ -39431,7 +39431,7 @@ namespace ts {
             }
         }
 
-        function isConstantMemberAccess(node: Expression): node is ElementAccessExpression | PropertyAccessExpression {
+        function isConstantMemberAccess(node: Expression): node is AccessExpression {
             const type = getTypeOfExpression(node);
             if(!type.symbol) {
                 return false;
