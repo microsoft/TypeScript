@@ -34731,33 +34731,41 @@ namespace ts {
                         error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
 
-                    // The first statement in the body of a constructor (excluding prologue directives) must be a super call
-                    // if both of the following are true:
+                    // A super call must be root-level in a constructor if both of the following are true:
                     // - The containing class is a derived class.
                     // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.
-                    const superCallShouldBeFirst =
+
+                    const superCallShouldBeRootLevel =
                         (getEmitScriptTarget(compilerOptions) !== ScriptTarget.ESNext || !useDefineForClassFields) &&
                         (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                          some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
-                    // Skip past any prologue directives to find the first statement
-                    // to ensure that it was a super call.
-                    if (superCallShouldBeFirst) {
-                        const statements = node.body!.statements;
-                        let superCallStatement: ExpressionStatement | undefined;
-
-                        for (const statement of statements) {
-                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((statement as ExpressionStatement).expression)) {
-                                superCallStatement = statement as ExpressionStatement;
-                                break;
-                            }
-                            if (!isPrologueDirective(statement)) {
-                                break;
-                            }
+                    if (superCallShouldBeRootLevel) {
+                        // Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional
+                        // See GH #8277
+                        if (!superCallIsRootLevelInConstructor(superCall, node.body!)) {
+                            error(superCall, Diagnostics.A_super_call_must_be_a_root_level_statement_within_a_constructor_of_a_derived_class_that_contains_initialized_properties_parameter_properties_or_private_identifiers);
                         }
-                        if (!superCallStatement) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_parameter_properties_or_private_identifiers);
+                        // Skip past any prologue directives to check statements for referring to 'super' or 'this' before a super call
+                        else {
+                            let superCallStatement: ExpressionStatement | undefined;
+
+                            for (const statement of node.body!.statements) {
+                                if (isExpressionStatement(statement) && isSuperCall(skipOuterExpressions(statement.expression))) {
+                                    superCallStatement = statement;
+                                    break;
+                                }
+                                if (!isPrologueDirective(statement) && nodeImmediatelyReferencesSuperOrThis(statement)) {
+                                    break;
+                                }
+                            }
+
+                            // Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional
+                            // See GH #8277
+                            if (superCallStatement === undefined) {
+                                error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_to_refer_to_super_or_this_when_a_derived_class_contains_initialized_properties_parameter_properties_or_private_identifiers);
+                            }
                         }
                     }
                 }
@@ -34765,6 +34773,23 @@ namespace ts {
                     error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
                 }
             }
+        }
+
+        function superCallIsRootLevelInConstructor(superCall: Node, body: Block) {
+            const superCallParent = walkUpParenthesizedExpressions(superCall.parent);
+            return isExpressionStatement(superCallParent) && superCallParent.parent === body;
+        }
+
+        function nodeImmediatelyReferencesSuperOrThis(node: Node): boolean {
+            if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
+                return true;
+            }
+
+            if (isThisContainerOrFunctionBlock(node)) {
+                return false;
+            }
+
+            return !!forEachChild(node, nodeImmediatelyReferencesSuperOrThis);
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {

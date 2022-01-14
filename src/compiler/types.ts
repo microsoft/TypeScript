@@ -7813,9 +7813,10 @@ namespace ts {
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
          * @param source origin statements array
          * @param target result statements array
+         * @param statementOffset The offset at which to begin the copy.
          * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
          */
-        /* @internal */ copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean): number;
+        /* @internal */ copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, ensureUseStrict?: boolean): number;
         /**
          * Copies only the custom prologue-directives into target statement-array.
          * @param source origin statements array

@@ -5885,7 +5885,7 @@ namespace ts {
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
         function copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
-            const offset = copyStandardPrologue(source, target, ensureUseStrict);
+            const offset = copyStandardPrologue(source, target, 0, ensureUseStrict);
             return copyCustomPrologue(source, target, offset, visitor);
         }
 
@@ -5901,12 +5901,13 @@ namespace ts {
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
          * @param source origin statements array
          * @param target result statements array
+         * @param statementOffset The offset at which to begin the copy.
          * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
+         * @returns Count of how many directive statements were copied.
          */
-        function copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean): number {
+        function copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset = 0, ensureUseStrict?: boolean): number {
             Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
             let foundUseStrict = false;
-            let statementOffset = 0;
             const numStatements = source.length;
             while (statementOffset < numStatements) {
                 const statement = source[statementOffset];

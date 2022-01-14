@@ -1249,10 +1249,28 @@ namespace ts {
 
             resumeLexicalEnvironment();
 
-            let indexOfFirstStatement = 0;
+            const needsSyntheticConstructor = !constructor && isDerivedClass;
+            let indexOfFirstStatementAfterSuper = 0;
+            let prologueStatementCount = 0;
+            let superStatementIndex = -1;
             let statements: Statement[] = [];
 
-            if (!constructor && isDerivedClass) {
+            if (constructor?.body?.statements) {
+                prologueStatementCount = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+                superStatementIndex = findSuperStatementIndex(constructor.body.statements, prologueStatementCount);
+
+                // If there was a super call, visit existing statements up to and including it
+                if (superStatementIndex >= 0) {
+                    indexOfFirstStatementAfterSuper = superStatementIndex + 1;
+                    statements = [
+                        ...statements.slice(0, prologueStatementCount),
+                        ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuper - prologueStatementCount),
+                        ...statements.slice(prologueStatementCount),
+                    ];
+                }
+            }
+
+            if (needsSyntheticConstructor) {
                 // Add a synthetic `super` call:
                 //
                 //  super(...arguments);
@@ -1268,9 +1286,6 @@ namespace ts {
                 );
             }
 
-            if (constructor) {
-                indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(factory, constructor, statements, visitor);
-            }
             // Add the property initializers. Transforms this:
             //
             //  public x = 1;
@@ -1281,26 +1296,52 @@ namespace ts {
             //      this.x = 1;
             //  }
             //
+            // If we do useDefineForClassFields, they'll be converted elsewhere.
+            // We instead *remove* them from the transformed output at this stage.
+            let parameterPropertyDeclarationCount = 0;
             if (constructor?.body) {
-                let afterParameterProperties = findIndex(constructor.body.statements, s => !isParameterPropertyDeclaration(getOriginalNode(s), constructor), indexOfFirstStatement);
-                if (afterParameterProperties === -1) {
-                    afterParameterProperties = constructor.body.statements.length;
+                if (useDefineForClassFields) {
+                    statements = statements.filter(statement => !isParameterPropertyDeclaration(getOriginalNode(statement), constructor));
                 }
-                if (afterParameterProperties > indexOfFirstStatement) {
-                    if (!useDefineForClassFields) {
-                        addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement, afterParameterProperties - indexOfFirstStatement));
+                else {
+                    for (const statement of constructor.body.statements) {
+                        if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                            parameterPropertyDeclarationCount++;
+                        }
                     }
-                    indexOfFirstStatement = afterParameterProperties;
+                    if (parameterPropertyDeclarationCount > 0) {
+                        const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount);
+
+                        // If there was a super() call found, add parameter properties immediately after it
+                        if (superStatementIndex >= 0) {
+                            addRange(statements, parameterProperties);
+                        }
+                        // If a synthetic super() call was added, add them just after it
+                        else if (needsSyntheticConstructor) {
+                            statements = [
+                                statements[0],
+                                ...parameterProperties,
+                                ...statements.slice(1),
+                            ];
+                        }
+                        // Since there wasn't a super() call, add them to the top of the constructor
+                        else {
+                            statements = [...parameterProperties, ...statements];
+                        }
+
+                        indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
+                    }
                 }
             }
+
             const receiver = factory.createThis();
             // private methods can be called in property initializers, they should execute first.
             addMethodStatements(statements, privateMethodsAndAccessors, receiver);
             addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
 
-            // Add existing statements, skipping the initial super call.
+            // Add existing statements after the initial prologues and super call
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatement));
+                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuper + prologueStatementCount));
             }
 
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -1315,6 +1356,14 @@ namespace ts {
                 ),
                 /*location*/ constructor ? constructor.body : undefined
             );
+
+            function visitBodyStatement(statement: Node) {
+                if (useDefineForClassFields && isParameterPropertyDeclaration(getOriginalNode(statement), constructor!)) {
+                    return undefined;
+                }
+
+                return visitor(statement);
+            }
         }
 
         /**
@@ -1335,11 +1384,13 @@ namespace ts {
                 setSourceMapRange(statement, moveRangePastModifiers(property));
                 setCommentRange(statement, property);
                 setOriginalNode(statement, property);
+
                 // `setOriginalNode` *copies* the `emitNode` from `property`, so now both
                 // `statement` and `expression` have a copy of the synthesized comments.
                 // Drop the comments from expression to avoid printing them twice.
                 setSyntheticLeadingComments(expression, undefined);
                 setSyntheticTrailingComments(expression, undefined);
+
                 statements.push(statement);
             }
         }
