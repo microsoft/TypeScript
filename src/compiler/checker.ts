@@ -741,7 +741,7 @@ namespace ts {
 
         const tupleTypes = new Map<string, GenericType>();
         const unionTypes = new Map<string, UnionType>();
-        const intersectionTypes = new Map<string, IntersectionType>();
+        const intersectionTypes = new Map<string, Type>();
         const stringLiteralTypes = new Map<string, StringLiteralType>();
         const numberLiteralTypes = new Map<number, NumberLiteralType>();
         const bigIntLiteralTypes = new Map<string, BigIntLiteralType>();
@@ -14358,19 +14358,20 @@ namespace ts {
                 return types[0];
             }
             const id = getTypeListId(types) + getAliasId(aliasSymbol, aliasTypeArguments);
-            let type = intersectionTypes.get(id);
-            if (!type) {
-                type = createType(TypeFlags.Intersection) as IntersectionType;
-                type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-                type.types = types;
-                type.aliasSymbol = aliasSymbol;
-                type.aliasTypeArguments = aliasTypeArguments;
-                if (types.length === 2 && types[0].flags & TypeFlags.BooleanLiteral && types[1].flags & TypeFlags.BooleanLiteral) {
-                    type.flags |= TypeFlags.Boolean;
-                    (type as IntersectionType & IntrinsicType).intrinsicName = "boolean";
-                }
-                intersectionTypes.set(id, type);
+            const existingType = intersectionTypes.get(id);
+            if (existingType) {
+                return existingType;
             }
+            const type = createType(TypeFlags.Intersection) as IntersectionType;
+            type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+            type.types = types;
+            type.aliasSymbol = aliasSymbol;
+            type.aliasTypeArguments = aliasTypeArguments;
+            if (types.length === 2 && types[0].flags & TypeFlags.BooleanLiteral && types[1].flags & TypeFlags.BooleanLiteral) {
+                type.flags |= TypeFlags.Boolean;
+                (type as IntersectionType & IntrinsicType).intrinsicName = "boolean";
+            }
+            intersectionTypes.set(id, type);
             return type;
         }
 
@@ -14613,7 +14614,7 @@ namespace ts {
                 return typeSet[0];
             }
             const id = getTypeListId(typeSet) + getAliasId(aliasSymbol, aliasTypeArguments);
-            let result: Type | undefined = intersectionTypes.get(id);
+            let result = intersectionTypes.get(id);
             if (!result) {
                 if (includes & TypeFlags.Union) {
                     if (intersectUnionsOfPrimitiveTypes(typeSet)) {
@@ -14648,7 +14649,7 @@ namespace ts {
                 else {
                     result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
-                intersectionTypes.set(id, result as IntersectionType);
+                intersectionTypes.set(id, result);
             }
             return result;
         }
