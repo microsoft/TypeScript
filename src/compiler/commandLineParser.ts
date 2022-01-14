@@ -1238,6 +1238,18 @@ namespace ts {
             category: Diagnostics.Editor_Support,
 
         },
+        {
+            name: "moduleDetection",
+            type: new Map(getEntries({
+                auto: ModuleDetectionKind.Auto,
+                legacy: ModuleDetectionKind.Legacy,
+                force: ModuleDetectionKind.Force,
+            })),
+            affectsModuleResolution: true,
+            description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
+            category: Diagnostics.Language_and_Environment,
+            defaultValueDescription: Diagnostics.auto_Colon_Assume_jsx_containing_under_react_jsx_or_esm_mode_under_module_Colon_node12_files_are_modules_along_with_files_with_imports_exports_or_import_meta,
+        }
     ];
 
     /* @internal */

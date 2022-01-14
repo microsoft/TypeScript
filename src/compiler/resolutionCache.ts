@@ -49,7 +49,7 @@ namespace ts {
     interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
     }
 
-    export interface ResolutionCacheHost extends ModuleResolutionHost {
+    export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
         toPath(fileName: string): Path;
         getCanonicalFileName: GetCanonicalFileName;
         getCompilationSettings(): CompilerOptions;
@@ -65,7 +65,6 @@ namespace ts {
         writeLog(s: string): void;
         getCurrentProgram(): Program | undefined;
         fileIsOpen(filePath: Path): boolean;
-        getCompilerHost?(): CompilerHost | undefined;
         onDiscoveredSymlink?(): void;
     }
 

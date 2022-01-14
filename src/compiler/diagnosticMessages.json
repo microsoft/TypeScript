@@ -1409,6 +1409,14 @@
         "category": "Error",
         "code": 1471
     },
+    "Control what method is used to detect module-format JS files.": {
+        "category": "Message",
+        "code": 1472
+    },
+    "\"auto\": Assume jsx-containing (under react-jsx) or esm mode (under module: node12+) files are modules, along with files with imports, exports, or import.meta.": {
+        "category": "Message",
+        "code": 1473
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

@@ -60,6 +60,41 @@ namespace ts {
             text.charCodeAt(start + 3) !== CharacterCodes.slash;
     }
 
+    /*@internal*/
+    export function isFileProbablyExternalModule(sourceFile: SourceFile) {
+        // Try to use the first top-level import/export when available, then
+        // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
+        return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
+            getImportMetaIfNecessary(sourceFile);
+    }
+
+    function isAnExternalModuleIndicatorNode(node: Node) {
+        return hasModifierOfKind(node, SyntaxKind.ExportKeyword)
+            || isImportEqualsDeclaration(node) && isExternalModuleReference(node.moduleReference)
+            || isImportDeclaration(node)
+            || isExportAssignment(node)
+            || isExportDeclaration(node) ? node : undefined;
+    }
+
+    function getImportMetaIfNecessary(sourceFile: SourceFile) {
+        return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
+            walkTreeForExternalModuleIndicators(sourceFile) :
+            undefined;
+    }
+
+    function walkTreeForExternalModuleIndicators(node: Node): Node | undefined {
+        return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
+    }
+
+    /** Do not use hasModifier inside the parser; it relies on parent pointers. Use this instead. */
+    function hasModifierOfKind(node: Node, kind: SyntaxKind) {
+        return some(node.modifiers, m => m.kind === kind);
+    }
+
+    function isImportMeta(node: Node): boolean {
+        return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
+    }
+
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -638,17 +673,41 @@ namespace ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+    export interface CreateSourceFileOptions {
+        languageVersion: ScriptTarget;
+        /**
+         * Controls the format the file is detected as - this can be derived from only the path
+         * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
+         * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node12` or `nodenext`.
+         */
+        impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        /**
+         * Controls how module-y-ness is set for the given file. Usually the result of calling
+         * `getSetExternalModuleIndicator` on a valid `CompilerOptions` object. If not present, the default
+         * check specified by `isFileProbablyExternalModule` will be used to set the field.
+         */
+        setExternalModuleIndicator?: (file: SourceFile) => void;
+    }
+
+    function setExternalModuleIndicator(sourceFile: SourceFile) {
+        sourceFile.externalModuleIndicator = isFileProbablyExternalModule(sourceFile);
+    }
+
+    export function createSourceFile(fileName: string, sourceText: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeParse");
         let result: SourceFile;
 
         perfLogger.logStartParseSourceFile(fileName);
+        const languageVersion = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.languageVersion : languageVersionOrOptions;
         if (languageVersion === ScriptTarget.JSON) {
-            result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON);
+            result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop);
         }
         else {
-            result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
+            const overrideSetExternalModuleIndicator = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.setExternalModuleIndicator : undefined;
+            const format = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
+            const setIndicator = format !== undefined ? (file: SourceFile) => (file.impliedNodeFormat = format, void (overrideSetExternalModuleIndicator || setExternalModuleIndicator)(file)) : overrideSetExternalModuleIndicator;
+            result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator);
         }
         perfLogger.logStopParseSourceFile();
 
@@ -847,7 +906,7 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+        export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind, setExternalModuleIndicatorOverride?: (file: SourceFile) => void): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
@@ -863,7 +922,7 @@ namespace ts {
 
             initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 
-            const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind);
+            const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind, setExternalModuleIndicatorOverride || setExternalModuleIndicator);
 
             clearState();
 
@@ -951,7 +1010,7 @@ namespace ts {
             }
 
             // Set source file so that errors will be reported with this file name
-            const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken, sourceFlags);
+            const sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false, statements, endOfFileToken, sourceFlags, noop);
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
@@ -1035,7 +1094,7 @@ namespace ts {
             topLevel = true;
         }
 
-        function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
+        function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind, setExternalModuleIndicator: (file: SourceFile) => void): SourceFile {
             const isDeclarationFile = isDeclarationFileName(fileName);
             if (isDeclarationFile) {
                 contextFlags |= NodeFlags.Ambient;
@@ -1050,7 +1109,7 @@ namespace ts {
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
             const endOfFileToken = addJSDocComment(parseTokenNode<EndOfFileToken>());
 
-            const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken, sourceFlags);
+            const sourceFile = createSourceFile(fileName, languageVersion, scriptKind, isDeclarationFile, statements, endOfFileToken, sourceFlags, setExternalModuleIndicator);
 
             // A member of ReadonlyArray<T> isn't assignable to a member of T[] (and prevents a direct cast) - but this is where we set up those members so they can be readonly in the future
             processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
@@ -1209,28 +1268,42 @@ namespace ts {
             setParentRecursive(rootNode, /*incremental*/ true);
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean, statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile {
+        function createSourceFile(
+            fileName: string,
+            languageVersion: ScriptTarget,
+            scriptKind: ScriptKind,
+            isDeclarationFile: boolean,
+            statements: readonly Statement[],
+            endOfFileToken: EndOfFileToken,
+            flags: NodeFlags,
+            setExternalModuleIndicator: (sourceFile: SourceFile) => void): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
             let sourceFile = factory.createSourceFile(statements, endOfFileToken, flags);
             setTextRangePosWidth(sourceFile, 0, sourceText.length);
-            setExternalModuleIndicator(sourceFile);
+            setFields(sourceFile);
 
             // If we parsed this as an external module, it may contain top-level await
             if (!isDeclarationFile && isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
                 sourceFile = reparseTopLevelAwait(sourceFile);
+                setFields(sourceFile);
             }
 
-            sourceFile.text = sourceText;
-            sourceFile.bindDiagnostics = [];
-            sourceFile.bindSuggestionDiagnostics = undefined;
-            sourceFile.languageVersion = languageVersion;
-            sourceFile.fileName = fileName;
-            sourceFile.languageVariant = getLanguageVariant(scriptKind);
-            sourceFile.isDeclarationFile = isDeclarationFile;
-            sourceFile.scriptKind = scriptKind;
-
             return sourceFile;
+
+            function setFields(sourceFile: SourceFile) {
+                sourceFile.text = sourceText;
+                sourceFile.bindDiagnostics = [];
+                sourceFile.bindSuggestionDiagnostics = undefined;
+                sourceFile.languageVersion = languageVersion;
+                sourceFile.fileName = fileName;
+                sourceFile.languageVariant = getLanguageVariant(scriptKind);
+                sourceFile.isDeclarationFile = isDeclarationFile;
+                sourceFile.scriptKind = scriptKind;
+
+                setExternalModuleIndicator(sourceFile);
+                sourceFile.setExternalModuleIndicator = setExternalModuleIndicator;
+            }
         }
 
         function setContextFlag(val: boolean, flag: NodeFlags) {
@@ -7551,41 +7624,6 @@ namespace ts {
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function setExternalModuleIndicator(sourceFile: SourceFile) {
-            // Try to use the first top-level import/export when available, then
-            // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
-            sourceFile.externalModuleIndicator =
-                    forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
-                    getImportMetaIfNecessary(sourceFile);
-        }
-
-        function isAnExternalModuleIndicatorNode(node: Node) {
-            return hasModifierOfKind(node, SyntaxKind.ExportKeyword)
-                || isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference)
-                || isImportDeclaration(node)
-                || isExportAssignment(node)
-                || isExportDeclaration(node) ? node : undefined;
-        }
-
-        function getImportMetaIfNecessary(sourceFile: SourceFile) {
-            return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
-                walkTreeForExternalModuleIndicators(sourceFile) :
-                undefined;
-        }
-
-        function walkTreeForExternalModuleIndicators(node: Node): Node | undefined {
-            return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
-        }
-
-        /** Do not use hasModifier inside the parser; it relies on parent pointers. Use this instead. */
-        function hasModifierOfKind(node: Node, kind: SyntaxKind) {
-            return some(node.modifiers, m => m.kind === kind);
-        }
-
-        function isImportMeta(node: Node): boolean {
-            return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
-        }
-
         const enum ParsingContext {
             SourceElements,            // Elements in source file
             BlockStatements,           // Statements in block
@@ -7628,7 +7666,7 @@ namespace ts {
                 currentToken = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
 
-                const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken), NodeFlags.None);
+                const sourceFile = createSourceFile("file.js", ScriptTarget.Latest, ScriptKind.JS, /*isDeclarationFile*/ false, [], factory.createToken(SyntaxKind.EndOfFileToken), NodeFlags.None, noop);
                 const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
                 if (jsDocDiagnostics) {
                     sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
@@ -8672,7 +8710,7 @@ namespace ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind);
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator);
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -8736,7 +8774,7 @@ namespace ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind);
+            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind, sourceFile.setExternalModuleIndicator);
             result.commentDirectives = getNewCommentDirectives(
                 sourceFile.commentDirectives,
                 result.commentDirectives,
