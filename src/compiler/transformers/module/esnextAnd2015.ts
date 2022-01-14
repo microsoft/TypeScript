@@ -189,7 +189,9 @@ namespace ts {
 
         function appendModuleExtensionWhenNeeded(path: string) {
             if (path.startsWith('.') || path.startsWith('/')) {
-                if (!path.endsWith('.js') &&
+                if (path.endsWith('.ts')) {
+                    return path.slice(0, -2) + compilerOptions.appendModuleExtension;
+                } else if (!path.endsWith('.js') &&
                     !path.endsWith('.mjs') &&
                     !path.endsWith('.json') &&
                     !path.endsWith('.css') &&
