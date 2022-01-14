@@ -1,14 +1,21 @@
 /// <reference path="./fourslash.ts" />
 
-// @allowJs: true
-// @Filename: /library.js
+// @module: commonjs
+// @checkJs: true
+
+// @Filename: ./library.js
 //// module.exports.aaa = function() {}
 //// module.exports.bbb = function() {}
 
-// @Filename: /foo.js
+// @Filename: ./foo.js
 //// var aaa = require("./library.js").aaa;
 //// aaa();
-//// /**/bbb
+//// /*$*/bbb
 
-goTo.marker();
-verify.getAndApplyCodeFix(ts.Diagnostics.Cannot_find_name_0.code);
+goTo.marker("$")
+verify.codeFixAvailable([
+    { description: "Import 'bbb' from module \"./library.js\"" },
+    { description: "Ignore this error message" },
+    { description: "Disable checking for this file" },
+    { description: "Convert to ES module" },
+]);
