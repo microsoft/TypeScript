@@ -24108,7 +24108,7 @@ namespace ts {
                 }
                 // If type is intersection, add the symbol to the first anonymous object component of the intersection
                 if (isIntersectionType(type)) {
-                    const objectSubtype = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous) as ObjectType | undefined;
+                    const objectSubtype = type.types.find(t => getObjectFlags(t) & ObjectFlags.Anonymous) as ObjectType | undefined;
                     if (objectSubtype) {
                         const restOfIntersection = filterUnionOrIntersectionType(type, t => t !== objectSubtype);
                         return createIntersectionType([restOfIntersection, widenObjectType(objectSubtype, newSymbol)]);
