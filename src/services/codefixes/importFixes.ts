@@ -678,9 +678,15 @@ namespace ts.codefix {
         if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
             return compareBooleans(allowsImportingSpecifier(b.moduleSpecifier), allowsImportingSpecifier(a.moduleSpecifier))
                 || compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, program)
+                || compareBooleans(isOnlyDotsAndSlashes(a.moduleSpecifier), isOnlyDotsAndSlashes(b.moduleSpecifier))
                 || compareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier);
         }
         return Comparison.EqualTo;
+    }
+
+    const notDotOrSlashPattern = /[^.\/]/;
+    function isOnlyDotsAndSlashes(path: string) {
+        return !notDotOrSlashPattern.test(path);
     }
 
     function compareNodeCoreModuleSpecifiers(a: string, b: string, importingFile: SourceFile, program: Program): Comparison {
