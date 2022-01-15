@@ -1,0 +1,19 @@
+=== tests/cases/compiler/computedPropertyNameWithElementAccessExpression.ts ===
+// https://github.com/microsoft/TypeScript/issues/25083
+
+enum Type {
+>Type : Symbol(Type, Decl(computedPropertyNameWithElementAccessExpression.ts, 0, 0))
+
+  Foo = 'foo'
+>Foo : Symbol(Type.Foo, Decl(computedPropertyNameWithElementAccessExpression.ts, 2, 11))
+}
+
+type TypeMap = {
+>TypeMap : Symbol(TypeMap, Decl(computedPropertyNameWithElementAccessExpression.ts, 4, 1))
+
+  [Type["Foo"]]: any
+>[Type["Foo"]] : Symbol([Type["Foo"]], Decl(computedPropertyNameWithElementAccessExpression.ts, 6, 16))
+>Type : Symbol(Type, Decl(computedPropertyNameWithElementAccessExpression.ts, 0, 0))
+>"Foo" : Symbol(Type.Foo, Decl(computedPropertyNameWithElementAccessExpression.ts, 2, 11))
+}
+

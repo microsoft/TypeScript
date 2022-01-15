@@ -1,0 +1,21 @@
+=== tests/cases/compiler/computedPropertyNameWithElementAccessExpression.ts ===
+// https://github.com/microsoft/TypeScript/issues/25083
+
+enum Type {
+>Type : Type
+
+  Foo = 'foo'
+>Foo : Type.Foo
+>'foo' : "foo"
+}
+
+type TypeMap = {
+>TypeMap : TypeMap
+
+  [Type["Foo"]]: any
+>[Type["Foo"]] : any
+>Type["Foo"] : Type
+>Type : typeof Type
+>"Foo" : "Foo"
+}
+
