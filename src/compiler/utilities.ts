@@ -3364,11 +3364,21 @@ namespace ts {
         return !!name && isDynamicName(name);
     }
 
+    export function getComputedPropertyNameExpression(name: ComputedPropertyName): Expression {
+        return isElementAccessExpression(name.expression)
+                    ? skipParentheses(name.expression.argumentExpression)
+                    : name.expression;
+    }
+
     export function isDynamicName(name: DeclarationName): boolean {
         if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
             return false;
         }
-        const expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
+
+        const expr = isElementAccessExpression(name)
+        ? skipParentheses(name.argumentExpression)
+        : getComputedPropertyNameExpression(name);
+
         return !isStringOrNumericLiteralLike(expr) &&
             !isSignedNumericLiteral(expr);
     }
@@ -3382,7 +3392,7 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
-                const nameExpression = name.expression;
+                const nameExpression = getComputedPropertyNameExpression(name);
                 if (isStringOrNumericLiteralLike(nameExpression)) {
                     return escapeLeadingUnderscores(nameExpression.text);
                 }

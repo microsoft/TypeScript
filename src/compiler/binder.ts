@@ -337,7 +337,7 @@ namespace ts {
                     return (isGlobalScopeAugmentation(node as ModuleDeclaration) ? "__global" : `"${moduleName}"`) as __String;
                 }
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
-                    const nameExpression = name.expression;
+                    const nameExpression = getComputedPropertyNameExpression(name);
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
                     if (isStringOrNumericLiteralLike(nameExpression)) {
                         return escapeLeadingUnderscores(nameExpression.text);
