@@ -4704,6 +4704,16 @@ namespace ts {
 
     }
 
+    export function isEmittableComment(text: string,currPos: number,comment: string){
+        const linesBefore= text.substring(0, currPos);
+        const lines = linesBefore.split("\n");
+        const lastLine= lines[lines.length-1];
+        if(lastLine.replace(comment,"").length >0){
+            return false;
+        }
+      return true;
+    }
+
     export function writeCommentRange(text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
         if (text.charCodeAt(commentPos + 1) === CharacterCodes.asterisk) {
             const firstCommentLineAndCharacter = computeLineAndCharacterOfPosition(lineMap, commentPos);
@@ -4765,7 +4775,7 @@ namespace ts {
         }
         else {
             // Single line comment of style //....
-            writer.writeComment(text.substring(commentPos, commentEnd));
+            if(isEmittableComment(text,commentPos,text.substring(commentPos, commentEnd))) writer.writeComment(text.substring(commentPos, commentEnd));
         }
     }
 
