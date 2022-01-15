@@ -614,7 +614,7 @@ namespace ts.server {
     /*@internal*/
     export function updateProjectIfDirty(project: Project) {
         project.invalidateResolutionsOfFailedLookupLocations();
-        return project.dirty && project.updateGraph();
+        return !project.dirty || project.updateGraph();
     }
 
     function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
@@ -1192,7 +1192,7 @@ namespace ts.server {
             let hasChanges = this.pendingEnsureProjectForOpenFiles;
             this.pendingProjectUpdates.clear();
             const updateGraph = (project: Project) => {
-                hasChanges = updateProjectIfDirty(project) || hasChanges;
+                hasChanges = !updateProjectIfDirty(project) || hasChanges;
             };
 
             this.externalProjects.forEach(updateGraph);
