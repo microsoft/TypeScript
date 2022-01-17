@@ -1648,15 +1648,26 @@ namespace ts {
                 }
 
                 function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
-                    // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
-                    // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
-                    return event === "rename" &&
-                        (!relativeName ||
-                            relativeName === lastDirectoryPart ||
-                            (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
-                        !fileSystemEntryExists(fileOrDirectory, entryKind) ?
-                        invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
-                        callback(event, relativeName);
+                    // On unix systems, fs.watch places a watch on an inode. When a rename occurs, it is possible that the underlying inode has changed.
+                    // Just to be safe, always create a new watch on a rename event.
+                    if (event === "rename") {
+                        // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
+                        // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
+                        if ((!relativeName ||
+                                relativeName === lastDirectoryPart ||
+                                (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
+                            !fileSystemEntryExists(fileOrDirectory, entryKind)) {
+                            return invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry);
+                        }
+                        else {
+                            if (watcher) {
+                                sysLog(`sysLog:: ${relativeName}:: Resetting watch on present file after rename event`);
+                                watcher.close();
+                                watcher = watchPresentFileSystemEntryWithFsWatchFile();
+                            }
+                        }
+                    }
+                    return callback(event, relativeName);
                 }
 
                 /**
