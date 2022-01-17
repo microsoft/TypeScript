@@ -8,37 +8,33 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: function getCodeActionsForStrictClassInitializationErrors(context) {
-            const propertyDeclaration = getPropertyDeclaration(context.sourceFile, context.span.start);
-            if (!propertyDeclaration) return;
+            const info = getInfo(context.sourceFile, context.span.start);
+            if (!info) return;
 
-            const result = [
-                getActionForAddMissingUndefinedType(context, propertyDeclaration),
-                getActionForAddMissingDefiniteAssignmentAssertion(context, propertyDeclaration)
-            ];
-
-            append(result, getActionForAddMissingInitializer(context, propertyDeclaration));
-
+            const result: CodeFixAction[] = [];
+            append(result, getActionForAddMissingUndefinedType(context, info));
+            append(result, getActionForAddMissingDefiniteAssignmentAssertion(context, info));
+            append(result, getActionForAddMissingInitializer(context, info));
             return result;
         },
         fixIds: [fixIdAddDefiniteAssignmentAssertions, fixIdAddUndefinedType, fixIdAddInitializer],
         getAllCodeActions: context => {
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const propertyDeclaration = getPropertyDeclaration(diag.file, diag.start);
-                if (!propertyDeclaration) return;
+                const info = getInfo(diag.file, diag.start);
+                if (!info) return;
 
                 switch (context.fixId) {
                     case fixIdAddDefiniteAssignmentAssertions:
-                        addDefiniteAssignmentAssertion(changes, diag.file, propertyDeclaration);
+                        addDefiniteAssignmentAssertion(changes, diag.file, info.prop);
                         break;
                     case fixIdAddUndefinedType:
-                        addUndefinedType(changes, diag.file, propertyDeclaration);
+                        addUndefinedType(changes, diag.file, info);
                         break;
                     case fixIdAddInitializer:
                         const checker = context.program.getTypeChecker();
-                        const initializer = getInitializer(checker, propertyDeclaration);
+                        const initializer = getInitializer(checker, info.prop);
                         if (!initializer) return;
-
-                        addInitializer(changes, diag.file, propertyDeclaration, initializer);
+                        addInitializer(changes, diag.file, info.prop, initializer);
                         break;
                     default:
                         Debug.fail(JSON.stringify(context.fixId));
@@ -47,14 +43,27 @@ namespace ts.codefix {
         },
     });
 
-    function getPropertyDeclaration(sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
-        const token = getTokenAtPosition(sourceFile, pos);
-        return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
+    interface Info {
+        prop: PropertyDeclaration;
+        type: TypeNode;
+        isJs: boolean;
     }
 
-    function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
-        const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration));
-        return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
+    function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
+        const token = getTokenAtPosition(sourceFile, pos);
+        if (isIdentifier(token) && isPropertyDeclaration(token.parent)) {
+            const type = getEffectiveTypeAnnotationNode(token.parent);
+            if (type) {
+                return { type, prop: token.parent, isJs: isInJSFile(token.parent) };
+            }
+        }
+        return undefined;
+    }
+
+    function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, info: Info): CodeFixAction | undefined {
+        if (info.isJs) return undefined;
+        const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop));
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, info.prop.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
     }
 
     function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
@@ -70,25 +79,32 @@ namespace ts.codefix {
         changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
     }
 
-    function getActionForAddMissingUndefinedType(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
-        const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
-        return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
+    function getActionForAddMissingUndefinedType(context: CodeFixContext, info: Info): CodeFixAction {
+        const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, info));
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, info.prop.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
     }
 
-    function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
+    function addUndefinedType(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info): void {
         const undefinedTypeNode = factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
-        const type = propertyDeclaration.type!; // TODO: GH#18217
-        const types = isUnionTypeNode(type) ? type.types.concat(undefinedTypeNode) : [type, undefinedTypeNode];
-        changeTracker.replaceNode(propertyDeclarationSourceFile, type, factory.createUnionTypeNode(types));
+        const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode) : [info.type, undefinedTypeNode];
+        const unionTypeNode = factory.createUnionTypeNode(types);
+        if (info.isJs) {
+            changeTracker.addJSDocTags(sourceFile, info.prop, [factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(unionTypeNode))]);
+        }
+        else {
+            changeTracker.replaceNode(sourceFile, info.type, unionTypeNode);
+        }
     }
 
-    function getActionForAddMissingInitializer(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction | undefined {
+    function getActionForAddMissingInitializer(context: CodeFixContext, info: Info): CodeFixAction | undefined {
+        if (info.isJs) return undefined;
+
         const checker = context.program.getTypeChecker();
-        const initializer = getInitializer(checker, propertyDeclaration);
+        const initializer = getInitializer(checker, info.prop);
         if (!initializer) return undefined;
 
-        const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, propertyDeclaration, initializer));
-        return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
+        const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, info.prop, initializer));
+        return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, info.prop.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
     }
 
     function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
