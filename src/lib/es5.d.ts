@@ -4354,6 +4354,7 @@ declare namespace Intl {
     interface NumberFormatOptions {
         localeMatcher?: string | undefined;
         style?: string | undefined;
+        currency?: string | undefined;
         currencySign?: string | undefined;
         useGrouping?: boolean | undefined;
         minimumIntegerDigits?: number | undefined;
