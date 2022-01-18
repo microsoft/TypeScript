@@ -502,7 +502,11 @@ namespace ts.textChanges {
                 if (merged) oldTags[i] = merged;
                 return !!merged;
             }));
-            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...oldTags, ...unmergedNewTags]));
+            const tags = [...oldTags, ...unmergedNewTags];
+            const jsDoc = singleOrUndefined(parent.jsDoc);
+            const comment = jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && !length(comments) ? undefined :
+                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+            const tag = factory.createJSDocComment(comment, factory.createNodeArray(tags));
             const host = updateJSDocHost(parent);
             this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
@@ -967,6 +971,8 @@ namespace ts.textChanges {
             }
             case SyntaxKind.JSDocReturnTag:
                 return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+            case SyntaxKind.JSDocTypeTag:
+                return factory.createJSDocTypeTag(/*tagName*/ undefined, (newTag as JSDocTypeTag).typeExpression, oldTag.comment);
         }
     }
 

@@ -286,6 +286,8 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
+        /* Lets the Program from a AutoImportProviderProject use its host project's ModuleResolutionCache */
+        /* @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
         /*
          * Required for full import and type reference completions.

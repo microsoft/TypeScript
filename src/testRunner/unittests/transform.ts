@@ -599,6 +599,63 @@ module MyModule {
         }, exports => {
             assert.equal(exports.stringLength, 5);
         });
+
+        function addStaticFieldWithComment(context: TransformationContext) {
+            return (sourceFile: SourceFile): SourceFile => {
+                return visitNode(sourceFile, rootTransform, isSourceFile);
+            };
+            function rootTransform<T extends Node>(node: T): Node {
+                if (isClassLike(node)) {
+                    const newMembers = [factory.createPropertyDeclaration(/* decorators */ undefined, [factory.createModifier(SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, factory.createStringLiteral("x"))];
+                    setSyntheticLeadingComments(newMembers[0], [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    return isClassDeclaration(node) ?
+                        factory.updateClassDeclaration(
+                            node, node.decorators,
+                            /* modifierFlags */ undefined, node.name,
+                            node.typeParameters, node.heritageClauses,
+                            newMembers) :
+                        factory.updateClassExpression(
+                            node, node.decorators,
+                            /* modifierFlags */ undefined, node.name,
+                            node.typeParameters, node.heritageClauses,
+                            newMembers);
+                }
+                return visitEachChild(node, rootTransform, context);
+            }
+        }
+
+        testBaseline("transformSyntheticCommentOnStaticFieldInClassDeclaration", () => {
+            return transpileModule(`
+declare const Decorator: any;
+@Decorator
+class MyClass {
+}
+`, {
+                transformers: {
+                    before: [addStaticFieldWithComment],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+        });
+
+        testBaseline("transformSyntheticCommentOnStaticFieldInClassExpression", () => {
+            return transpileModule(`
+const MyClass = class {
+};
+`, {
+                transformers: {
+                    before: [addStaticFieldWithComment],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+        });
+
     });
 }
 

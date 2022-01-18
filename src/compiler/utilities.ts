@@ -1669,6 +1669,34 @@ namespace ts {
         }
     }
 
+    /**
+     * @returns Whether the node creates a new 'this' scope for its children.
+     */
+    export function isThisContainerOrFunctionBlock(node: Node): boolean {
+        switch (node.kind) {
+            // Arrow functions use the same scope, but may do so in a "delayed" manner
+            // For example, `const getThis = () => this` may be before a super() call in a derived constructor
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.PropertyDeclaration:
+                return true;
+            case SyntaxKind.Block:
+                switch (node.parent.kind) {
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        // Object properties can have computed names; only method-like bodies start a new scope
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return false;
+        }
+    }
+
     export function isInTopLevelContext(node: Node) {
         // The name of a class or function declaration is a BindingIdentifier in its surrounding scope.
         if (isIdentifier(node) && (isClassDeclaration(node.parent) || isFunctionDeclaration(node.parent)) && node.parent.name === node) {
@@ -6363,8 +6391,6 @@ namespace ts {
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
         setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
         setSymlinkedFile(symlinkPath: Path, real: string): void;
-        /*@internal*/
-        setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
         /**
          * @internal
          * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
@@ -6400,16 +6426,6 @@ namespace ts {
                         (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
-                }
-            },
-            setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
-                this.setSymlinkedFile(toPath(symlink, cwd, getCanonicalFileName), real);
-                const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
-                if (commonResolved && commonOriginal) {
-                    this.setSymlinkedDirectory(commonOriginal, {
-                        real: commonResolved,
-                        realPath: toPath(commonResolved, cwd, getCanonicalFileName),
-                    });
                 }
             },
             setSymlinksFromResolutions(files, typeReferenceDirectives) {

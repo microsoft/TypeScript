@@ -96,7 +96,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -212,7 +212,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

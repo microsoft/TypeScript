@@ -1017,31 +1017,35 @@ namespace ts {
             const statements: Statement[] = [];
             resumeLexicalEnvironment();
 
+            // In derived classes, there may be code before the necessary super() call
+            // We'll remove pre-super statements to be tacked on after the rest of the body
+            const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
+            const { superCall, superStatementIndex } = findSuperCallAndStatementIndex(constructor.body.statements, existingPrologue);
+            const postSuperStatementsStart = superStatementIndex === -1 ? existingPrologue.length : superStatementIndex + 1;
+
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
             // The assumption is that no prior step in the pipeline has added any prologue directives.
-            let statementOffset = 0;
-            if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, /*ensureUseStrict*/ false);
-            addDefaultValueAssignmentsIfNeeded(statements, constructor);
-            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
-            if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor);
+            let statementOffset = postSuperStatementsStart;
+            if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, statementOffset, /*ensureUseStrict*/ false);
+            if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
-            // If the first statement is a call to `super()`, visit the statement directly
+            // If there already exists a call to `super()`, visit the statement directly
             let superCallExpression: Expression | undefined;
             if (hasSynthesizedSuper) {
                 superCallExpression = createDefaultSuperCallOrThis();
             }
-            else if (isDerivedClass && statementOffset < constructor.body.statements.length) {
-                const firstStatement = constructor.body.statements[statementOffset];
-                if (isExpressionStatement(firstStatement) && isSuperCall(firstStatement.expression)) {
-                    superCallExpression = visitImmediateSuperCallInBody(firstStatement.expression);
-                }
+            else if (superCall) {
+                superCallExpression = visitSuperCallInBody(superCall);
             }
 
             if (superCallExpression) {
                 hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
-                statementOffset++; // skip this statement, we will add it after visiting the rest of the body.
             }
+
+            // Add parameter defaults at the beginning of the output, with prologue statements
+            addDefaultValueAssignmentsIfNeeded(prologue, constructor);
+            addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
 
             // visit the remaining statements
             addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
@@ -1049,8 +1053,8 @@ namespace ts {
             factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
-            if (isDerivedClass) {
-                if (superCallExpression && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+            if (isDerivedClass || superCallExpression) {
+                if (superCallExpression && postSuperStatementsStart === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                     // following representation:
                     //
@@ -1099,9 +1103,19 @@ namespace ts {
                     // })(Base);
                     // ```
 
-                    // Since the `super()` call was the first statement, we insert the `this` capturing call to
-                    // `super()` at the top of the list of `statements` (after any pre-existing custom prologues).
-                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                    // If the super() call is the first statement, we can directly create and assign its result to `_this`
+                    if (superStatementIndex <= existingPrologue.length) {
+                        insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                    }
+                    // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
+                    // * A prologue `var _this = this;`, in case the constructor accesses this before super()
+                    // * If it exists, a reassignment to that `_this` of the super() call
+                    else {
+                        insertCaptureThisForNode(prologue, constructor, createActualThis());
+                        if (superCallExpression) {
+                            insertSuperThisCaptureThisForNode(statements, superCallExpression);
+                        }
+                    }
 
                     if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
                         statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
@@ -1126,19 +1140,41 @@ namespace ts {
                 insertCaptureThisForNodeIfNeeded(prologue, constructor);
             }
 
-            const block = factory.createBlock(
+            const body = factory.createBlock(
                 setTextRange(
                     factory.createNodeArray(
-                        concatenate(prologue, statements)
+                        [
+                            ...existingPrologue,
+                            ...prologue,
+                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex)),
+                            ...statements
+                        ]
                     ),
                     /*location*/ constructor.body.statements
                 ),
                 /*multiLine*/ true
             );
 
-            setTextRange(block, constructor.body);
+            setTextRange(body, constructor.body);
+            return body;
+        }
 
-            return block;
+        function findSuperCallAndStatementIndex(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
+            for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
+                const superCall = getSuperCallFromStatement(originalBodyStatements[i]);
+                if (superCall) {
+                    // With a super() call, split the statements into pre-super() and 'body' (post-super())
+                    return {
+                        superCall,
+                        superStatementIndex: i,
+                    };
+                }
+            }
+
+            // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
+            return {
+                superStatementIndex: -1,
+            };
         }
 
         /**
@@ -1509,6 +1545,25 @@ namespace ts {
                 return true;
             }
             return false;
+        }
+
+        /**
+         * Assigns the `this` in a constructor to the result of its `super()` call.
+         *
+         * @param statements Statements in the constructor body.
+         * @param superExpression Existing `super()` call for the constructor.
+         */
+        function insertSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
+            enableSubstitutionsForCapturedThis();
+            const assignSuperExpression = factory.createExpressionStatement(
+                factory.createBinaryExpression(
+                    factory.createThis(),
+                    SyntaxKind.EqualsToken,
+                    superExpression
+                )
+            );
+            insertStatementAfterCustomPrologue(statements, assignSuperExpression);
+            setCommentRange(assignSuperExpression, getOriginalNode(superExpression).parent);
         }
 
         function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
@@ -1919,7 +1974,7 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
-                statementOffset = factory.copyStandardPrologue(body.statements, prologue, /*ensureUseStrict*/ false);
+                statementOffset = factory.copyStandardPrologue(body.statements, prologue, 0, /*ensureUseStrict*/ false);
                 statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedFunction);
                 statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedVariableStatement);
             }
@@ -3822,7 +3877,7 @@ namespace ts {
             );
         }
 
-        function visitImmediateSuperCallInBody(node: CallExpression) {
+        function visitSuperCallInBody(node: CallExpression) {
             return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
         }
 

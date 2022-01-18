@@ -36,7 +36,7 @@ System.register(["react/jsx-runtime"], function (exports_1, context_1) {
                 function Component() {
                 }
                 Component.prototype.render = function () {
-                    return _jsx("div", { children: null /* preserved */ }, void 0);
+                    return _jsx("div", { children: null /* preserved */ });
                 };
                 return Component;
             }());
