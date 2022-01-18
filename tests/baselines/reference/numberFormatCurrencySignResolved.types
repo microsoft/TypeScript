@@ -1,8 +1,8 @@
-=== tests/cases/conformance/es2020/numberFormatCurrencySign.ts ===
-const str = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999);
->str : string
->new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999) : string
->new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format : { (value: number): string; (value: number | bigint): string; }
+=== tests/cases/conformance/es2020/numberFormatCurrencySignResolved.ts ===
+const options = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+>options : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
 >new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
 >Intl.NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; }
 >Intl : typeof Intl
@@ -15,6 +15,11 @@ const str = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD',
 >'NZD' : "NZD"
 >currencySign : string
 >'accounting' : "accounting"
->format : { (value: number): string; (value: number | bigint): string; }
->999999 : 999999
+>resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+
+const currencySign = options.currencySign;
+>currencySign : string | undefined
+>options.currencySign : string | undefined
+>options : Intl.ResolvedNumberFormatOptions
+>currencySign : string | undefined
 
