@@ -5886,7 +5886,7 @@ namespace ts {
     }
 
     // eslint-disable-next-line prefer-const
-    export let objectAllocator: ObjectAllocator = {
+    export const objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => Node as any,
         getTokenConstructor: () => Token as any,
         getIdentifierConstructor: () => Identifier as any,
@@ -5899,18 +5899,25 @@ namespace ts {
     };
 
     export function setObjectAllocator(alloc: ObjectAllocator) {
-        objectAllocator = alloc;
+        Object.assign(objectAllocator, alloc);
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
     }
 
-    export let localizedDiagnosticMessages: MapLike<string> | undefined;
+    let localizedDiagnosticMessages: MapLike<string> | undefined;
 
     /* @internal */
     export function setLocalizedDiagnosticMessages(messages: typeof localizedDiagnosticMessages) {
         localizedDiagnosticMessages = messages;
+    }
+
+    /* @internal */
+    export function maybeSetLocalizedDiagnosticMessages(getMessages: undefined | (() => typeof localizedDiagnosticMessages)) {
+        if (!localizedDiagnosticMessages && getMessages) {
+            localizedDiagnosticMessages = getMessages();
+        }
     }
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
