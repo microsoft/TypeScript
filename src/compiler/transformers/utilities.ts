@@ -299,35 +299,32 @@ namespace ts {
     }
 
     /**
-     * Adds super call and preceding prologue directives into the list of statements.
-     *
-     * @param ctor The constructor node.
-     * @param result The list of statements.
-     * @param visitor The visitor to apply to each node added to the result array.
-     * @returns index of the statement that follows super call
+     * @returns Contained super() call from descending into the statement ignoring parentheses, if that call exists.
      */
-    export function addPrologueDirectivesAndInitialSuperCall(factory: NodeFactory, ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
-        if (ctor.body) {
-            const statements = ctor.body.statements;
-            // add prologue directives to the list (if any)
-            const index = factory.copyPrologue(statements, result, /*ensureUseStrict*/ false, visitor);
-            if (index === statements.length) {
-                // list contains nothing but prologue directives (or empty) - exit
-                return index;
-            }
-
-            const superIndex = findIndex(statements, s => isExpressionStatement(s) && isSuperCall(s.expression), index);
-            if (superIndex > -1) {
-                for (let i = index; i <= superIndex; i++) {
-                    result.push(visitNode(statements[i], visitor, isStatement));
-                }
-                return superIndex + 1;
-            }
-
-            return index;
+    export function getSuperCallFromStatement(statement: Statement) {
+        if (!isExpressionStatement(statement)) {
+            return undefined;
         }
 
-        return 0;
+        const expression = skipParentheses(statement.expression);
+        return isSuperCall(expression)
+            ? expression
+            : undefined;
+    }
+
+    /**
+     * @returns The index (after prologue statements) of a super call, or -1 if not found.
+     */
+    export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
+        for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
+            const statement = statements[i];
+
+            if (getSuperCallFromStatement(statement)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     /**

@@ -58,7 +58,7 @@ export const App = () => <div propA={true}></div>;
 /a/lib/tsc.js -i --explainFiles
 Output::
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -96,7 +96,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -172,13 +172,13 @@ Output::
 [7m [0m [91m                              ~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
   Matched by include pattern '**/*' in 'tsconfig.json'
 
-Found 1 error.
+Found 1 error in /users/username/projects/project/index.tsx:1
 
 
 
@@ -212,7 +212,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

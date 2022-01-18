@@ -5,4 +5,5 @@ export class Q {
     set bet(arg: DoesNotExist) {}
 >bet : Symbol(Q.bet, Decl(accessorDeclarationEmitVisibilityErrors.ts, 0, 16))
 >arg : Symbol(arg, Decl(accessorDeclarationEmitVisibilityErrors.ts, 1, 12))
+>DoesNotExist : Symbol(DoesNotExist)
 }

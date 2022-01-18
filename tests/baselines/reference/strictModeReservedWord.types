@@ -59,28 +59,28 @@ function foo() {
 >public : number
 
     var b: public.bar;
->b : any
+>b : public.bar
 >public : any
 
     function foo(x: private.x) { }
->foo : (x: any) => void
->x : any
+>foo : (x: private.x) => void
+>x : private.x
 >private : any
 
     function foo1(x: private.package.x) { }
->foo1 : (x: any) => void
->x : any
+>foo1 : (x: private.package.x) => void
+>x : private.package.x
 >private : any
 >package : any
 
     function foo2(x: private.package.protected) { }
->foo2 : (x: any) => void
->x : any
+>foo2 : (x: private.package.protected) => void
+>x : private.package.protected
 >private : any
 >package : any
 
     let b: interface.package.implements.B;
->b : any
+>b : interface.package.implements.B
 >interface : any
 >package : any
 >implements : any

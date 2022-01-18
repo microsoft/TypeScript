@@ -61,7 +61,7 @@
         "codefixes/annotateWithTypeFromJSDoc.ts",
         "codefixes/convertFunctionToEs6Class.ts",
         "codefixes/convertToAsyncFunction.ts",
-        "codefixes/convertToEs6Module.ts",
+        "codefixes/convertToEsModule.ts",
         "codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "codefixes/convertToTypeOnlyExport.ts",
         "codefixes/convertToTypeOnlyImport.ts",

@@ -9,11 +9,11 @@
 //// }
 //// class MyClass {
 ////   props: {
-////     [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}name|]?: string;|]
+////     /*1*/name?: string;
 ////     size?: number;
 //// }
 ////
 ////
-//// var x = <MyClass [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}name|]='hello'|]/>;
+//// var x = <MyClass name='hello'/>;
 
-verify.singleReferenceGroup("(property) name?: string", "name");
+verify.baselineFindAllReferences('1')

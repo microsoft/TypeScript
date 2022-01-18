@@ -48,20 +48,24 @@ var validPlain: string = 'nope';
 (({ a: true } as const).a === false); // <-- compiles (as expected via comment)
 >({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 35, 3))
 >a : Symbol(a, Decl(ts-expect-error.ts, 35, 3))
+>const : Symbol(const)
 >a : Symbol(a, Decl(ts-expect-error.ts, 35, 3))
 
 (({ a: true } as const).a === false); // Should error
 >({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 36, 3))
 >a : Symbol(a, Decl(ts-expect-error.ts, 36, 3))
+>const : Symbol(const)
 >a : Symbol(a, Decl(ts-expect-error.ts, 36, 3))
 
 (({ a: true } as const).a === false); // error
 >({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 38, 3))
 >a : Symbol(a, Decl(ts-expect-error.ts, 38, 3))
+>const : Symbol(const)
 >a : Symbol(a, Decl(ts-expect-error.ts, 38, 3))
 
 (({ a: true } as const).a === false); // error
 >({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
 >a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
+>const : Symbol(const)
 >a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
 

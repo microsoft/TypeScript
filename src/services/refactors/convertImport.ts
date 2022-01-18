@@ -18,7 +18,7 @@ namespace ts.refactor {
             namespaceToNamedAction.kind,
             namedToNamespaceAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(context): readonly ApplicableRefactorInfo[] {
             const info = getImportToConvert(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -39,7 +39,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === namespaceToNamedAction.name || actionName === namedToNamespaceAction.name, "Unexpected action name");
             const info = getImportToConvert(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
@@ -116,7 +116,7 @@ namespace ts.refactor {
 
         const importSpecifiers: ImportSpecifier[] = [];
         exportNameToImportName.forEach((name, propertyName) => {
-            importSpecifiers.push(factory.createImportSpecifier(name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
+            importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
         });
 
         const importDecl = toConvert.parent.parent;
@@ -191,13 +191,13 @@ namespace ts.refactor {
         changes.replaceNode(sourceFile, toConvert, factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
         if (neededNamedImports.size) {
             const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element =>
-                factory.createImportSpecifier(element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
+                factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
             changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
         }
     }
 
     function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
         return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
-            factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier);
+            factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*assertClause*/ undefined);
     }
 }

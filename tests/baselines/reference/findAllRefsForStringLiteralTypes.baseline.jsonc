@@ -1,0 +1,95 @@
+// === /a.ts ===
+// type Options = "/*FIND ALL REFS*/[|option 1|]" | "option 2";
+// let myOption: Options = "[|option 1|]";
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "option 1",
+      "textSpan": {
+        "start": 16,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "\"option 1\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 8
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      },
+      {
+        "textSpan": {
+          "start": 65,
+          "length": 8
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// type Options = "[|option 1|]" | "option 2";
+// let myOption: Options = "/*FIND ALL REFS*/[|option 1|]";
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "option 1",
+      "textSpan": {
+        "start": 65,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "\"option 1\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 8
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      },
+      {
+        "textSpan": {
+          "start": 65,
+          "length": 8
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      }
+    ]
+  }
+]

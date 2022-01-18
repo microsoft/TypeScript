@@ -70,7 +70,7 @@ Project '/user/username/projects/myproject/packages/consumer/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../emit-composite/src/testModule.js
 	  Imported via './testModule' from file '../emit-composite/src/index.js'
 	../emit-composite/src/index.js

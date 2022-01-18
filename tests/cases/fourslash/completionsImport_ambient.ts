@@ -19,14 +19,11 @@
 
 verify.completions({
   marker: "",
-  exact: [
-    completion.globalThisEntry,
-    ...completion.globalsVars,
+  exact: completion.globalsPlus([
     {
       name: "foo",
       sortText: completion.SortText.GlobalsOrKeywords
     },
-    completion.undefinedVarEntry,
     {
       name: "Bar",
       source: "path1",
@@ -39,8 +36,7 @@ verify.completions({
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     },
-    ...completion.statementKeywordsWithTypes
-  ],
+  ]),
   preferences: {
     includeCompletionsForModuleExports: true
   }

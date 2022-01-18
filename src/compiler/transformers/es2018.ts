@@ -282,7 +282,7 @@ namespace ts {
         function visitYieldExpression(node: YieldExpression) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 if (node.asteriskToken) {
-                    const expression = visitNode(Debug.assertDefined(node.expression), visitor, isExpression);
+                    const expression = visitNode(Debug.checkDefined(node.expression), visitor, isExpression);
 
                     return setOriginalNode(
                         setTextRange(

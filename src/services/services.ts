@@ -401,6 +401,12 @@ namespace ts {
         public kind!: SyntaxKind.PrivateIdentifier;
         public escapedText!: __String;
         public symbol!: Symbol;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _updateExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
         constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
             super(pos, end);
         }
@@ -494,6 +500,9 @@ namespace ts {
         isClass(): this is InterfaceType {
             return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
+        isIndexType(): this is IndexType {
+            return !!(this.flags & TypeFlags.Index);
+        }
         /**
          * This polyfills `referenceType.typeArguments` for API consumers
          */
@@ -538,6 +547,16 @@ namespace ts {
         }
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
+        }
+        getTypeParameterAtPosition(pos: number): Type {
+            const type = this.checker.getParameterType(this, pos);
+            if (type.isIndexType() && isThisTypeParameter(type.type)) {
+                const constraint = type.type.getConstraint();
+                if (constraint) {
+                    return this.checker.getIndexType(constraint);
+                }
+            }
+            return type;
         }
 
         getDocumentationComment(): SymbolDisplayPart[] {
@@ -593,10 +612,11 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
+        if (hasStaticModifier(declaration)) return;
+
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
-        if (!classOrInterfaceDeclaration) {
-            return;
-        }
+        if (!classOrInterfaceDeclaration) return;
+
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
@@ -642,8 +662,8 @@ namespace ts {
         public languageVariant!: LanguageVariant;
         public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
         private namedDeclarations: ESMap<string, Declaration[]> | undefined;
@@ -1586,7 +1606,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions): CompletionInfo | undefined {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions, formattingSettings?: FormatCodeSettings): CompletionInfo | undefined {
             // Convert from deprecated options names to new names
             const fullPreferences: UserPreferences = {
                 ...identity<UserPreferences>(options), // avoid excess property check
@@ -1603,7 +1623,8 @@ namespace ts {
                 fullPreferences,
                 options.triggerCharacter,
                 options.triggerKind,
-                cancellationToken);
+                cancellationToken,
+                formattingSettings && formatting.getFormatContext(formattingSettings, host));
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -1744,6 +1765,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
+            if (!Rename.nodeIsEligibleForRename(node)) return undefined;
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
                 return [openingElement, closingElement].map((node): RenameLocation => {
@@ -1763,7 +1785,7 @@ namespace ts {
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, (entry, node, checker) => FindAllReferences.toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
         }
 
         function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
@@ -1784,7 +1806,8 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
+            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r, moduleSymbol));
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
@@ -2088,9 +2111,14 @@ namespace ts {
             const token = findPrecedingToken(position, sourceFile);
             if (!token) return undefined;
             const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
-                : isJsxText(token) ? token.parent : undefined;
+                : isJsxText(token) && isJsxElement(token.parent) ? token.parent : undefined;
             if (element && isUnclosedTag(element)) {
                 return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
+            }
+            const fragment = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningFragment(token.parent) ? token.parent.parent
+                : isJsxText(token) && isJsxFragment(token.parent) ? token.parent : undefined;
+            if (fragment && isUnclosedFragment(fragment)) {
+                return { newText: "</>" };
             }
         }
 
@@ -2332,6 +2360,10 @@ namespace ts {
         function isUnclosedTag({ openingElement, closingElement, parent }: JsxElement): boolean {
             return !tagNamesAreEquivalent(openingElement.tagName, closingElement.tagName) ||
                 isJsxElement(parent) && tagNamesAreEquivalent(openingElement.tagName, parent.openingElement.tagName) && isUnclosedTag(parent);
+        }
+
+        function isUnclosedFragment({ closingFragment, parent }: JsxFragment): boolean {
+            return !!(closingFragment.flags & NodeFlags.ThisNodeHasError) || (isJsxFragment(parent) && isUnclosedFragment(parent));
         }
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {

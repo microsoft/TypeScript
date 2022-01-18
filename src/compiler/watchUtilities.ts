@@ -184,7 +184,7 @@ namespace ts {
             const rootResult = tryReadDirectory(rootDir, rootDirPath);
             let rootSymLinkResult: FileSystemEntries | undefined;
             if (rootResult !== undefined) {
-                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath, directoryExists);
+                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
             }
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
@@ -499,7 +499,7 @@ namespace ts {
             // If its declaration directory: its not ignored if not excluded by config
             if (options.declarationDir) return false;
         }
-        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensions)) {
+        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensionsFlat)) {
             return false;
         }
 

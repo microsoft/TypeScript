@@ -45,5 +45,8 @@
     class H { }
     class I { }
     
-Found 2 errors.
+Found 2 errors in 2 files.
 
+Errors  Files
+     1  tests/cases/compiler/file1.ts:1
+     1  tests/cases/compiler/file2.ts:1

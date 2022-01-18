@@ -72,6 +72,7 @@ namespace ts {
         isTypeParameter(): this is TypeParameter;
         isClassOrInterface(): this is InterfaceType;
         isClass(): this is InterfaceType;
+        isIndexType(): this is IndexType;
     }
 
     export interface TypeReference {
@@ -82,6 +83,7 @@ namespace ts {
         getDeclaration(): SignatureDeclaration;
         getTypeParameters(): TypeParameter[] | undefined;
         getParameters(): Symbol[];
+        getTypeParameterAtPosition(pos: number): Type;
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
@@ -275,8 +277,8 @@ namespace ts {
          *
          * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
-        getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
@@ -414,8 +416,9 @@ namespace ts {
          * @param position A zero-based index of the character where you want the entries
          * @param options An object describing how the request was triggered and what kinds
          * of code actions can be returned with the completions.
+         * @param formattingSettings settings needed for calling formatting functions.
          */
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined, formattingSettings?: FormatCodeSettings): WithMetadata<CompletionInfo> | undefined;
 
         /**
          * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
@@ -1187,23 +1190,31 @@ namespace ts {
         entries: CompletionEntry[];
     }
 
-    export interface CompletionEntryData {
+    export interface CompletionEntryDataAutoImport {
+        /**
+         * The name of the property or export in the module's symbol table. Differs from the completion name
+         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+         */
+        exportName: string;
+        moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
         /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
         ambientModuleName?: string;
         /** True if the export was found in the package.json AutoImportProvider */
         isPackageJsonImport?: true;
-        /**
-         * The name of the property or export in the module's symbol table. Differs from the completion name
-         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
-         */
-        exportName: string;
-        /**
-         * Set for auto imports with eagerly resolved module specifiers.
-         */
-        moduleSpecifier?: string;
     }
+
+    export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
+        /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
+        exportMapKey: string;
+    }
+
+    export interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
+        moduleSpecifier: string;
+    }
+
+    export type CompletionEntryData = CompletionEntryDataUnresolved | CompletionEntryDataResolved;
 
     // see comments in protocol.ts
     export interface CompletionEntry {
@@ -1481,6 +1492,12 @@ namespace ts {
         jsModifier = ".js",
         jsxModifier = ".jsx",
         jsonModifier = ".json",
+        dmtsModifier = ".d.mts",
+        mtsModifier = ".mts",
+        mjsModifier = ".mjs",
+        dctsModifier = ".d.cts",
+        ctsModifier = ".cts",
+        cjsModifier = ".cjs",
     }
 
     export const enum ClassificationTypeNames {

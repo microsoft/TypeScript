@@ -1365,7 +1365,7 @@ namespace ts {
         }
 
         function maybeBindExpressionFlowIfCall(node: Expression) {
-            // A top level or LHS of comma expression call expression with a dotted function name and at least one argument
+            // A top level or comma expression call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
             if (node.kind === SyntaxKind.CallExpression) {
                 const call = node as CallExpression;
@@ -1550,24 +1550,29 @@ namespace ts {
                 return state;
             }
 
-            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onLeft(left: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(left);
+                    const maybeBound = maybeBind(left);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(left);
+                    }
+                    return maybeBound;
                 }
             }
 
-            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, _node: BinaryExpression) {
                 if (!state.skip) {
-                    if (operatorToken.kind === SyntaxKind.CommaToken) {
-                        maybeBindExpressionFlowIfCall(node.left);
-                    }
                     bind(operatorToken);
                 }
             }
 
-            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onRight(right: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(right);
+                    const maybeBound = maybeBind(right);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(right);
+                    }
+                    return maybeBound;
                 }
             }
 
@@ -2066,12 +2071,6 @@ namespace ts {
                         seen.set(identifier.escapedText, currentKind);
                         continue;
                     }
-
-                    if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
-                        const span = getErrorSpanForNode(file, identifier);
-                        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                            Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
-                    }
                 }
             }
 
@@ -2341,7 +2340,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
+            if (languageVersion < ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -2374,7 +2373,7 @@ namespace ts {
 
         function checkStrictModeLabeledStatement(node: LabeledStatement) {
             // Grammar checking for labeledStatement
-            if (inStrictMode && options.target! >= ScriptTarget.ES2015) {
+            if (inStrictMode && getEmitScriptTarget(options) >= ScriptTarget.ES2015) {
                 if (isDeclarationStatement(node.statement) || isVariableStatement(node.statement)) {
                     errorOnFirstToken(node.label, Diagnostics.A_label_is_not_allowed_here);
                 }
@@ -2947,6 +2946,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
@@ -3388,7 +3388,7 @@ namespace ts {
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
             if (isJSDocTemplateTag(node.parent)) {
-                const container = find((node.parent.parent as JSDoc).tags!, isJSDocTypeAlias) || getHostSignatureFromJSDoc(node.parent); // TODO: GH#18217
+                const container = getEffectiveContainerForJSDocTemplateTag(node.parent);
                 if (container) {
                     if (!container.locals) {
                         container.locals = createSymbolTable();

@@ -111,7 +111,7 @@ namespace ts.Rename {
         return createTextSpan(start, width);
     }
 
-    function nodeIsEligibleForRename(node: Node): boolean {
+    export function nodeIsEligibleForRename(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:

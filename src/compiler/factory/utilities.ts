@@ -481,7 +481,7 @@ namespace ts {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
             let namedBindings: NamedImportBindings | undefined;
             const moduleKind = getEmitModuleKind(compilerOptions);
-            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+            if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                 // use named imports
                 const helpers = getEmitHelpers(sourceFile);
                 if (helpers) {
@@ -500,8 +500,8 @@ namespace ts {
                         // NOTE: We don't need to care about global import collisions as this is a module.
                         namedBindings = nodeFactory.createNamedImports(
                             map(helperNames, name => isFileLevelUniqueName(sourceFile, name)
-                                ? nodeFactory.createImportSpecifier(/*propertyName*/ undefined, nodeFactory.createIdentifier(name))
-                                : nodeFactory.createImportSpecifier(nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
+                                ? nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, nodeFactory.createIdentifier(name))
+                                : nodeFactory.createImportSpecifier(/*isTypeOnly*/ false, nodeFactory.createIdentifier(name), helperFactory.getUnscopedHelperName(name))
                             )
                         );
                         const parseNode = getOriginalNode(sourceFile, isSourceFile);
@@ -522,7 +522,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
-                    nodeFactory.createStringLiteral(externalHelpersModuleNameText)
+                    nodeFactory.createStringLiteral(externalHelpersModuleNameText),
+                     /*assertClause*/ undefined
                 );
                 addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
                 return externalHelpersImportDeclaration;
@@ -538,9 +539,9 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
+            let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind < ModuleKind.ES2015;
+                && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {

@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: esnext, es2022
 
 const nums = [1, 2, 3].map(n => Promise.resolve(n))
 
