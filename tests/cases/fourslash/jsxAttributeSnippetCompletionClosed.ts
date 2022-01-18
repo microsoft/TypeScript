@@ -60,15 +60,15 @@ var preferences: FourSlashInterface.UserPreferences = {
 }; 
 
 verify.completions(
-    { marker: "1", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "2", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "3", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "4", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "5", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "6", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "7", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "8", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "9", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "10", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
-    { marker: "11", preferences, includes: { name: "className", insertText: "className={$1}", text: "(JSX attribute) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "1", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "2", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "3", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "4", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "5", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "6", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "7", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "8", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "9", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "10", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
+    { marker: "11", preferences, includes: { name: "className", insertText: "className={$1}", text: "(property) className?: string", isSnippet: true, sortText: completion.SortText.OptionalMember } },
 )

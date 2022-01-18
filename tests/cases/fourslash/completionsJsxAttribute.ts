@@ -17,8 +17,8 @@
 ////<div /**/></div>;
 
 const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
-    { name: "bar", kind: "JSX attribute", kindModifiers: "declare", text: "(JSX attribute) bar: string" },
-    { name: "foo", kind: "JSX attribute", kindModifiers: "declare", text: "(JSX attribute) foo: boolean", documentation: "Doc" },
+    { name: "bar", kind: "property", kindModifiers: "declare", text: "(property) bar: string" },
+    { name: "foo", kind: "property", kindModifiers: "declare", text: "(property) foo: boolean", documentation: "Doc" },
 ];
 verify.completions({ marker: "", exact });
 edit.insert("f");

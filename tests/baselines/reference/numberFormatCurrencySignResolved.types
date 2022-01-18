@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es2020/numberFormatCurrencySignResolved.ts ===
+const options = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+>options : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; new (locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions | undefined): string[]; }
+>'en-NZ' : "en-NZ"
+>{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: string; currency: string; currencySign: string; }
+>style : string
+>'currency' : "currency"
+>currency : string
+>'NZD' : "NZD"
+>currencySign : string
+>'accounting' : "accounting"
+>resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+
+const currencySign = options.currencySign;
+>currencySign : string | undefined
+>options.currencySign : string | undefined
+>options : Intl.ResolvedNumberFormatOptions
+>currencySign : string | undefined
+

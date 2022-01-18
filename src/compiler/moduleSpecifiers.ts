@@ -45,7 +45,7 @@ namespace ts.moduleSpecifiers {
         && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
             return false;
         }
-        return getImpliedNodeFormatForFile(importingSourceFileName, /*packageJsonInfoCache*/ undefined, getModuleResolutionHost(host), compilerOptions) !== ModuleKind.CommonJS;
+        return getImpliedNodeFormatForFile(importingSourceFileName, host.getPackageJsonInfoCache?.(), getModuleResolutionHost(host), compilerOptions) !== ModuleKind.CommonJS;
     }
 
     function getModuleResolutionHost(host: ModuleSpecifierResolutionHost): ModuleResolutionHost {
@@ -715,8 +715,9 @@ namespace ts.moduleSpecifiers {
             const packageRootPath = path.substring(0, packageRootIndex);
             const packageJsonPath = combinePaths(packageRootPath, "package.json");
             let moduleFileToTry = path;
-            if (host.fileExists(packageJsonPath)) {
-                const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
+            const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
+            if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
+                const packageJsonContent = cachedPackageJson?.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
                 if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
                     // `conditions` *could* be made to go against `importingSourceFile.impliedNodeFormat` if something wanted to generate
                     // an ImportEqualsDeclaration in an ESM-implied file or an ImportCall in a CJS-implied file. But since this function is

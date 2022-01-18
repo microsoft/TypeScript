@@ -476,6 +476,10 @@ namespace ts.server {
             return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, containingSourceFile);
         }
 
+        getModuleResolutionCache(): ModuleResolutionCache | undefined {
+            return this.resolutionCache.getModuleResolutionCache();
+        }
+
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined {
             return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
         }
@@ -1915,6 +1919,7 @@ namespace ts.server {
                 return ts.emptyArray;
             }
 
+            const start = timestamp();
             let dependencyNames: Set<string> | undefined;
             let rootNames: string[] | undefined;
             const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
@@ -1924,13 +1929,13 @@ namespace ts.server {
                 packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
             }
 
+            let dependenciesAdded = 0;
             if (dependencyNames) {
-                let dependenciesAdded = 0;
                 const symlinkCache = hostProject.getSymlinkCache();
                 for (const name of arrayFrom(dependencyNames.keys())) {
                     // Avoid creating a large project that would significantly slow down time to editor interactivity
                     if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
-                        hostProject.log(`Auto-import provider attempted to add more than ${this.maxDependencies} dependencies.`);
+                        hostProject.log(`AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`);
                         return ts.emptyArray;
                     }
 
@@ -1978,6 +1983,9 @@ namespace ts.server {
                 }
             }
 
+            if (rootNames?.length) {
+                hostProject.log(`AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
+            }
             return rootNames || ts.emptyArray;
 
             function addDependency(dependency: string) {
@@ -2145,6 +2153,11 @@ namespace ts.server {
         /*@internal*/
         getSymlinkCache() {
             return this.hostProject.getSymlinkCache();
+        }
+
+        /*@internal*/
+        getModuleResolutionCache() {
+            return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
         }
     }
 
