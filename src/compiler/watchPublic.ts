@@ -273,7 +273,7 @@ namespace ts {
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
         let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
-        let reportWatchDiagnosticOnCreateProgram: DiagnosticMessage | undefined; // Diagnostic message to report in synchronizeProgram before new program creation
+        let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..."
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
@@ -435,22 +435,22 @@ namespace ts {
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution || changesAffectResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
-                    if (reportWatchDiagnosticOnCreateProgram) {
-                        reportWatchDiagnostic(reportWatchDiagnosticOnCreateProgram);
+                    if (reportFileChangeDetectedOnCreateProgram) {
+                        reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
                     }
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
                     hasChangedConfigFileParsingErrors = false;
                 }
             }
             else {
-                if (reportWatchDiagnosticOnCreateProgram) {
-                    reportWatchDiagnostic(reportWatchDiagnosticOnCreateProgram);
+                if (reportFileChangeDetectedOnCreateProgram) {
+                    reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
                 }
                 createNewProgram(hasInvalidatedResolution);
             }
 
             changesAffectResolution = false; // reset for next sync
-            reportWatchDiagnosticOnCreateProgram = undefined;
+            reportFileChangeDetectedOnCreateProgram = false;
 
             if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
@@ -673,7 +673,7 @@ namespace ts {
 
         function updateProgramWithWatchStatus() {
             timerToUpdateProgram = undefined;
-            reportWatchDiagnosticOnCreateProgram = Diagnostics.File_change_detected_Starting_incremental_compilation;
+            reportFileChangeDetectedOnCreateProgram = true;
             updateProgram();
         }
 
