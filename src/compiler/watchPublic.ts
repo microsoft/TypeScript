@@ -273,7 +273,7 @@ namespace ts {
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
         let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
-        let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..."
+        let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
