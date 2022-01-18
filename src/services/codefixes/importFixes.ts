@@ -303,7 +303,8 @@ namespace ts.codefix {
 
     function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, symbolName: string, program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol || info.symbol.parent === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
-        return getBestFix(getImportFixes(exportInfos, symbolName, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences), sourceFile, program, host, preferences);
+        const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
+        return getBestFix(getImportFixes(exportInfos, symbolName, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences), sourceFile, program, packageJsonImportFilter);
     }
 
     function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -369,6 +370,7 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         preferences: UserPreferences,
+        packageJsonImportFilter?: PackageJsonImportFilter,
         fromCacheOnly?: boolean,
     ): { exportInfo?: SymbolExportInfo, moduleSpecifier: string, computedWithoutCacheCount: number } | undefined {
         const { fixes, computedWithoutCacheCount } = getNewImportFixes(
@@ -381,7 +383,7 @@ namespace ts.codefix {
             host,
             preferences,
             fromCacheOnly);
-        const result = getBestFix(fixes, importingFile, program, host, preferences);
+        const result = getBestFix(fixes, importingFile, program, packageJsonImportFilter || createPackageJsonImportFilter(importingFile, preferences, host));
         return result && { ...result, computedWithoutCacheCount };
     }
 
@@ -652,24 +654,23 @@ namespace ts.codefix {
         const info = errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getFixesInfoForUMDImport(context, symbolToken)
             : isIdentifier(symbolToken) ? getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider) : undefined;
-        return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, context.host, context.preferences) };
+        const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
+        return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, packageJsonImportFilter) };
     }
 
-    function sortFixes(fixes: readonly ImportFix[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost, preferences: UserPreferences): readonly ImportFix[] {
-        const { allowsImportingSpecifier } = createPackageJsonImportFilter(sourceFile, preferences, host);
-        return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, sourceFile, program, allowsImportingSpecifier));
+    function sortFixes(fixes: readonly ImportFix[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter): readonly ImportFix[] {
+        return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier));
     }
 
-    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost, preferences: UserPreferences): T | undefined {
+    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter): T | undefined {
         if (!some(fixes)) return;
         // These will always be placed first if available, and are better than other kinds
         if (fixes[0].kind === ImportFixKind.UseNamespace || fixes[0].kind === ImportFixKind.AddToExisting) {
             return fixes[0];
         }
-        const { allowsImportingSpecifier } = createPackageJsonImportFilter(sourceFile, preferences, host);
         return fixes.reduce((best, fix) =>
             // Takes true branch of conditional if `fix` is better than `best`
-            compareModuleSpecifiers(fix, best, sourceFile, program, allowsImportingSpecifier) === Comparison.LessThan ? fix : best
+            compareModuleSpecifiers(fix, best, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier) === Comparison.LessThan ? fix : best
         );
     }
 
