@@ -242,10 +242,19 @@ namespace ts {
             const nonWhitespaceChildren = getSemanticJsxChildren(children);
             const isStaticChildren =
                 length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
-            const args: Expression[] = [tagName, objectProperties, !keyAttr ? factory.createVoidZero() : transformJsxAttributeInitializer(keyAttr.initializer)];
+            const args: Expression[] = [tagName, objectProperties];
+            // function jsx(type, config, maybeKey) {}
+            // "maybeKey" is optional. It is acceptable to use "_jsx" without a third argument
+            if (keyAttr) {
+                args.push(transformJsxAttributeInitializer(keyAttr.initializer));
+            }
             if (compilerOptions.jsx === JsxEmit.ReactJSXDev) {
                 const originalFile = getOriginalNode(currentSourceFile);
                 if (originalFile && isSourceFile(originalFile)) {
+                    // "maybeKey" has to be replaced with "void 0" to not break the jsxDEV signature
+                    if (keyAttr === undefined) {
+                        args.push(factory.createVoidZero());
+                    }
                     // isStaticChildren development flag
                     args.push(isStaticChildren ? factory.createTrue() : factory.createFalse());
                     // __source development flag
@@ -259,6 +268,7 @@ namespace ts {
                     args.push(factory.createThis());
                 }
             }
+
             const element = setTextRange(
                 factory.createCallExpression(getJsxFactoryCallee(isStaticChildren), /*typeArguments*/ undefined, args),
                 location
