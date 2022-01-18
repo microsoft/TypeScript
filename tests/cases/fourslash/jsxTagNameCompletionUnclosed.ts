@@ -47,8 +47,8 @@ var preferences: FourSlashInterface.UserPreferences = {
 verify.completions(
     { marker: "1", preferences, includes: { name: "Foo", text: "const Foo: NestedInterface" } },
     { marker: "2", preferences, includes: { name: "Foo", text: "const Foo: NestedInterface" } },
-    { marker: "3", preferences, includes: { name: "Foo", text: "(JSX attribute) NestedInterface.Foo: NestedInterface" } },
+    { marker: "3", preferences, includes: { name: "Foo", text: "(property) NestedInterface.Foo: NestedInterface" } },
     { marker: "4", preferences, includes: { name: "Foo", text: "(property) NestedInterface.Foo: NestedInterface" } },
-    { marker: "5", preferences, includes: { name: "Foo", text: "(JSX attribute) NestedInterface.Foo: NestedInterface" } },
+    { marker: "5", preferences, includes: { name: "Foo", text: "(property) NestedInterface.Foo: NestedInterface" } },
     { marker: "6", preferences, includes: { name: "Foo", text: "(property) NestedInterface.Foo: NestedInterface" } },
 )
