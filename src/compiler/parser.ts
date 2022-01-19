@@ -6080,14 +6080,7 @@ namespace ts {
             // one out no matter what.
             let finallyBlock: Block | undefined;
             if (!catchClause || token() === SyntaxKind.FinallyKeyword) {
-                const catchOrFinallyExpectedMessage: DiagnosticMessage = {
-                    code: 1005,
-                    category: DiagnosticCategory.Error,
-                    key: "_0_expected_1005",
-                    message: "'catch' or 'finally' expected."
-                };
-
-                parseExpected(SyntaxKind.FinallyKeyword, catchOrFinallyExpectedMessage);
+                parseExpected(SyntaxKind.FinallyKeyword, Diagnostics.catch_or_finally_expected);
                 finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 

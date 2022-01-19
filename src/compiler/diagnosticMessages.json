@@ -435,6 +435,10 @@
         "category": "Error",
         "code": 1144
     },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1145
+    },
     "Declaration expected.": {
         "category": "Error",
         "code": 1146
