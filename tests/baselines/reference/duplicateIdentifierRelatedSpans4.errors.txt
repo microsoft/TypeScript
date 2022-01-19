@@ -50,5 +50,5 @@
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  tests/cases/compiler/file1.ts:1
-     1  tests/cases/compiler/file2.ts:1
+     1  tests/cases/compiler/file1.ts[90m:1[0m
+     1  tests/cases/compiler/file2.ts[90m:1[0m
