@@ -2543,6 +2543,15 @@ namespace ts.Completions {
             }
 
             if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
+                // <Component<string> /**/ />
+                // <Component<string> /**/ ><Component>
+                // - contextToken: GreaterThanToken (before cursor)
+                // - location: JsxSelfClosingElement or JsxOpeningElement
+                // - contextToken.parent === location
+                if (location === contextToken.parent && (location.kind === SyntaxKind.JsxOpeningElement || location.kind === SyntaxKind.JsxSelfClosingElement)) {
+                    return false;
+                }
+
                 if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
                     // Two possibilities:
                     //   1. <div>/**/
