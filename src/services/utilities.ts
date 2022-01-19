@@ -1297,7 +1297,7 @@ namespace ts {
 
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
-                        const candidate = findRightmostChildNodeWithTokens(n, /*exclusiveStartPosition*/ i, sourceFile);
+                        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i, sourceFile, n.kind);
                         return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
@@ -1313,7 +1313,7 @@ namespace ts {
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
-            const candidate = findRightmostChildNodeWithTokens(n, /*exclusiveStartPosition*/ children.length, sourceFile);
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
             return candidate && findRightmostToken(candidate, sourceFile);
         }
     }
@@ -1332,20 +1332,21 @@ namespace ts {
             return n;
         }
 
-        const candidate = findRightmostChildNodeWithTokens(n, /*exclusiveStartPosition*/ children.length, sourceFile);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile, n.kind);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
 
     /**
-     * Finds the rightmost child to the left of `n.children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
+     * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
      */
-    function findRightmostChildNodeWithTokens(n: Node, exclusiveStartPosition: number, sourceFile: SourceFile): Node | undefined {
-        const children = n.getChildren(sourceFile);
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFile, parentKind: SyntaxKind): Node | undefined {
         for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
             const child = children[i];
 
-            if (i === 0 && isWhiteSpaceOnlyJsxText(child)) {
-                Debug.assert(!(isJsxElement(n) || isJsxSelfClosingElement(n)), "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+            if (isWhiteSpaceOnlyJsxText(child)) {
+                if (parentKind === SyntaxKind.JsxText || parentKind === SyntaxKind.JsxSelfClosingElement) {
+                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                }
             }
             else if (nodeHasTokens(children[i], sourceFile)) {
                 return children[i];
