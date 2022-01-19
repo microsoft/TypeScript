@@ -435,10 +435,6 @@
         "category": "Error",
         "code": 1144
     },
-    "'catch' or 'finally' expected.": {
-        "category": "Error",
-        "code": 1145
-    },
     "Declaration expected.": {
         "category": "Error",
         "code": 1146
@@ -1412,6 +1408,10 @@
     "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
         "category": "Error",
         "code": 1471
+    },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
     },
 
     "The types of '{0}' are incompatible between these types.": {
