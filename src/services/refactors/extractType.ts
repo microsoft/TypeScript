@@ -24,7 +24,7 @@ namespace ts.refactor {
             extractToInterfaceAction.kind,
             extractToTypeDefAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -51,7 +51,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToExtractType(context, actionName): RefactorEditInfo {
             const { file, } = context;
             const info = getRangeToExtract(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");

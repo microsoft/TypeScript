@@ -703,7 +703,7 @@ namespace ts {
             /*createProgram*/ undefined,
             reportDiagnostic,
             createBuilderStatusReporter(sys, pretty),
-            createReportErrorSummary(sys, pretty)
+            createReportErrorSummary(sys, buildOptions)
         );
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -712,9 +712,10 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function createReportErrorSummary(sys: System, pretty: boolean): ReportEmitErrorSummary | undefined {
-        return pretty ?
-            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine)) :
+    function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
+        const outputUtils = createOutputUtils(sys, options);
+        return outputUtils.pretty() ?
+            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
             undefined;
     }
 
@@ -725,7 +726,6 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { fileNames, options, projectReferences } = config;
-        const outputUtils = createOutputUtils(sys, options);
 
         const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
         const currentDirectory = host.getCurrentDirectory();
@@ -745,7 +745,7 @@ namespace ts {
             program,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
-            createReportErrorSummary(sys, outputUtils.pretty())
+            createReportErrorSummary(sys, options)
         );
         reportStatistics(sys, program);
         cb(program);
@@ -759,7 +759,6 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
-        const outputUtils = createOutputUtils(sys, options);
         enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
         const host = createIncrementalCompilerHost(options, sys);
         const exitStatus = ts.performIncrementalCompilation({
@@ -770,7 +769,7 @@ namespace ts {
             configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
             projectReferences,
             reportDiagnostic,
-            reportErrorSummary: createReportErrorSummary(sys, outputUtils.pretty()),
+            reportErrorSummary: createReportErrorSummary(sys, options),
             afterProgramEmitAndDiagnostics: builderProgram => {
                 reportStatistics(sys, builderProgram.getProgram());
                 cb(builderProgram);
