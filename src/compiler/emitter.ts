@@ -397,7 +397,6 @@ namespace ts {
                 inlineSources: compilerOptions.inlineSources,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 writeBundleFileInfo: !!bundleBuildInfo,
-                useTerminalHrefs: false,
                 relativeToBuildInfo
             };
 
@@ -3278,37 +3277,12 @@ namespace ts {
             }
         }
 
-        function emitTerminalLinkForName(identifier: Node, symbol: Symbol | undefined) {
-            console.log("-=");
-
-            if (!symbol || !symbol.declarations || !symbol.declarations.length) {
-                emit(identifier);
-            }
-            else {
-                console.log("---");
-                const parts = createOutputUtils(sys, {}).getHyperlinkParts();
-                writer.rawWrite(parts.prefix);
-                emit(identifier);
-                writer.rawWrite(parts.separator);
-                const firstDeclaration = symbol.declarations[0];
-                const sourceFile = getSourceFileOfNode(firstDeclaration);
-                writer.rawWrite("file://" + sourceFile.fileName);
-                writer.rawWrite(parts.suffix);
-            }
-        }
-
         function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-            console.log("-");
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             writeKeyword("interface");
             writeSpace();
-            if (printerOptions.useTerminalHrefs) {
-                emitTerminalLinkForName(node.name, node.symbol);
-            }
-            else {
-                emit(node.name);
-            }
+            emit(node.name);
             emitTypeParameters(node, node.typeParameters);
             emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
             writeSpace();
@@ -4194,17 +4168,10 @@ namespace ts {
         }
 
         function emitTypeAnnotation(node: TypeNode | undefined) {
-            writePunctuation(":");
-            writeSpace();
-            debugger
             if (node) {
-                if (printerOptions.useTerminalHrefs) {
-                    emitTerminalLinkForName(node, node.symbol);
-                }
-                else {
-                    emit(node);
-                }
-                // emit(node);
+                writePunctuation(":");
+                writeSpace();
+                emit(node);
             }
         }
 

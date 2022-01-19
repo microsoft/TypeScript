@@ -372,7 +372,7 @@ namespace ts {
         const tsIconLength = 5;
 
         const tsIconFirstLine = output.tsBrandingBlueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = output.tsBrandingBlueString(output.brightWhite(padLeft("TS ", tsIconLength)));
+        const tsIconSecondLine = output.tsBrandingBlueBackground(output.brightWhite(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
         if (terminalWidth >= message.length + tsIconLength) {
             // right align of the icon is 120 at most.

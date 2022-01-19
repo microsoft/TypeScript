@@ -8,9 +8,6 @@ namespace ts {
         Cyan = "\u001b[96m",
         Reset = "\u001b[0m",
     }
-
-    /* @internal */
-
     /* @internal */
     export function createOutputUtils(
         sys: System,

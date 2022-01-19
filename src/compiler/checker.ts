@@ -4651,9 +4651,8 @@ namespace ts {
             if (typeNode === undefined) return Debug.fail("should always get typenode");
             // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
             // Otherwise, we always strip comments out.
-            const options: PrinterOptions = { removeComments: type !== unresolvedType, useTerminalHrefs: true };
-            console.log("TTS", type.symbol && type.symbol.escapedName);
-            // debugger
+            const options: PrinterOptions = { removeComments: type !== unresolvedType };
+
             const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
@@ -4673,7 +4672,6 @@ namespace ts {
                 leftStr = getTypeNameForErrorDisplay(left);
                 rightStr = getTypeNameForErrorDisplay(right);
             }
-            debugger
             return [leftStr, rightStr];
         }
 
