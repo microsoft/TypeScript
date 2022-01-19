@@ -96,7 +96,7 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mb.ts[0m:[93m1[0m:[93m43[0m TS1149
+[91m● [0m[96mb.ts[0m:[93m1[0m:[93m43[0m  [91mError[0m TS1149
 | import {C} from './a'; import * as A from './A';
   [91m                                          ▔▔▔▔▔[0m
 File name '/A.ts' differs from already included file name '/a.ts' only in casing.
@@ -105,11 +105,10 @@ File name '/A.ts' differs from already included file name '/a.ts' only in casing
     Imported via './a' from file '/b.ts'
     Imported via './A' from file '/b.ts'
 
-File is included via import here.
-[96mb.ts[0m:[93m1[0m:[93m17[0m
+File is included via import here: [96mb.ts[0m:[93m1[0m:[93m17[0m
 
-| import {C} from './a'; import * as A from './A';
-  [96m                ▔▔▔▔▔[0m
+  | import {C} from './a'; import * as A from './A';
+    [96m                ▔▔▔▔▔[0m
 [[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
 
 

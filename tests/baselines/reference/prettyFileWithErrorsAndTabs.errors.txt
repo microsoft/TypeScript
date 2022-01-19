@@ -1,14 +1,14 @@
-● [96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m3[0m:[93m9[0m TS2322
-|   const x: string = 12;
-  [91m        ▔[0m
+[91m● [0m[96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m3[0m:[93m9[0m  [91mError[0m TS2322
+| const x: string = 12;
+  [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
-● [96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m4[0m:[93m9[0m TS2322
-|   const y: string = 12;
-  [91m        ▔[0m
+[91m● [0m[96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m4[0m:[93m9[0m  [91mError[0m TS2322
+| const y: string = 12;
+  [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
-● [96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m5[0m:[93m9[0m TS2322
-|   const z: string = 12;
-  [91m        ▔[0m
+[91m● [0m[96mtests/cases/compiler/prettyFileWithErrorsAndTabs.ts[0m:[93m5[0m:[93m9[0m  [91mError[0m TS2322
+| const z: string = 12;
+  [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
 
 
@@ -26,7 +26,5 @@ Type 'number' is not assignable to type 'string'.
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     	}
     }
-Found 3 errors in 1 file.
+Found 3 errors in the same file, starting at: tests/cases/compiler/prettyFileWithErrorsAndTabs.ts[90m:3[0m
 
-Errors  Files
-     3  tests/cases/compiler/prettyFileWithErrorsAndTabs.ts:3

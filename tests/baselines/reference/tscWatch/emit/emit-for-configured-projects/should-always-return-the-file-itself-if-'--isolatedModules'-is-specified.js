@@ -36,7 +36,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-● [96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m TS1208
+[91m● [0m[96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1208
 | interface GlobalFoo { age: number }
   [91m▔▔▔▔▔▔▔▔▔[0m
 'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
@@ -142,7 +142,7 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m TS1208
+[91m● [0m[96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1208
 | interface GlobalFoo { age: number }
   [91m▔▔▔▔▔▔▔▔▔[0m
 'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.

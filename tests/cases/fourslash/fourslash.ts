@@ -772,7 +772,7 @@ declare namespace FourSlashInterface {
     export interface VerifyInlayHintsOptions {
         text: string;
         position: number;
-        kind?: VerifyInlayHintKind;
+        kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

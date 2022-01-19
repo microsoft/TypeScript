@@ -10,11 +10,11 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     };
     registerRefactor(refactorName, {
         kinds: [convertStringAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertToTemplateString,
+        getAvailableActions: getRefactorActionsToConvertToTemplateString
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertToTemplateString(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
@@ -48,7 +48,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return node;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertToTemplateString(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
 

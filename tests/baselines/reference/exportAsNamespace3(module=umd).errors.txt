@@ -11,11 +11,11 @@ tests/cases/conformance/es2020/modules/1.ts(3,1): error TS2448: Block-scoped var
     ns.a;
     ~~
 !!! error TS2448: Block-scoped variable 'ns' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es2020/modules/1.ts:4:5: 'ns' is declared here.
+!!! related TS2728 tests/cases/conformance/es2020/modules/1.ts:4:5: 'ns' is declared here:
     ns.b;
     ~~
 !!! error TS2448: Block-scoped variable 'ns' used before its declaration.
-!!! related TS2728 tests/cases/conformance/es2020/modules/1.ts:4:5: 'ns' is declared here.
+!!! related TS2728 tests/cases/conformance/es2020/modules/1.ts:4:5: 'ns' is declared here:
     let ns = {a: 1, b: 2}
     ns.a;
     ns.b;

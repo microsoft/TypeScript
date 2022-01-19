@@ -51,7 +51,7 @@ tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.t
         try { } catch (x) { var x: string; }
                                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'boolean', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts:4:13: 'x' was also declared here.
+!!! related TS6203 tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts:4:13: 'x' was also declared here:
         try { } catch (x) { var x: boolean; }
     
         try { } catch ({ x }) { } // should be OK

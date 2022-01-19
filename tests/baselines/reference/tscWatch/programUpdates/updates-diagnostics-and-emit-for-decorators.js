@@ -31,12 +31,12 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-● [96ma.ts[0m:[93m1[0m:[93m1[0m TS1371
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1371
 | import {B} from './b'
   [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
 
-● [96ma.ts[0m:[93m3[0m:[93m14[0m TS1219
+[91m● [0m[96ma.ts[0m:[93m3[0m:[93m14[0m  [91mError[0m TS1219
 | export class A {
   [91m             ▔[0m
 Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
@@ -115,7 +115,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m1[0m:[93m1[0m TS1371
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1371
 | import {B} from './b'
   [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.

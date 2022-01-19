@@ -9,5 +9,5 @@ tests/cases/compiler/b.ts(1,10): error TS2459: Module '"./a"' declares 'Foo' loc
     import { Foo } from './a';
              ~~~
 !!! error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
-!!! related TS2728 tests/cases/compiler/a.ts:2:11: 'Foo' is declared here.
+!!! related TS2728 tests/cases/compiler/a.ts:2:11: 'Foo' is declared here:
     

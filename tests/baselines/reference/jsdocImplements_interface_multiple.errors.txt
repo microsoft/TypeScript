@@ -30,7 +30,7 @@
           ~~~~~~~~~
 !!! error TS2420: Class 'BadSquare' incorrectly implements interface 'Drawable'.
 !!! error TS2420:   Property 'draw' is missing in type 'BadSquare' but required in type 'Drawable'.
-!!! related TS2728 /defs.d.ts:2:5: 'draw' is declared here.
+!!! related TS2728 /defs.d.ts:2:5: 'draw' is declared here:
         size() {
             return 0;
         }

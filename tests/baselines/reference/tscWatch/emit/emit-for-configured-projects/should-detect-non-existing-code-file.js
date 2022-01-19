@@ -25,12 +25,12 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-● [96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m TS6053
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./moduleFile2.ts" />
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/moduleFile2.ts' not found.
 
-● [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m TS2304
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
 | export var x = Foo();
   [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
@@ -95,17 +95,17 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m TS6053
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./moduleFile2.ts" />
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/moduleFile2.ts' not found.
 
-● [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m TS2304
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
 | export var x = Foo();export var yy = Foo();
   [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-● [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m TS2304
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m  [91mError[0m TS2304
 | export var x = Foo();export var yy = Foo();
   [91m                                     ▔▔▔[0m
 Cannot find name 'Foo'.
@@ -168,12 +168,12 @@ Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m TS2304
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m  [91mError[0m TS2304
 | export var x = Foo();export var yy = Foo();
   [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
 
-● [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m TS2304
+[91m● [0m[96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m38[0m  [91mError[0m TS2304
 | export var x = Foo();export var yy = Foo();
   [91m                                     ▔▔▔[0m
 Cannot find name 'Foo'.

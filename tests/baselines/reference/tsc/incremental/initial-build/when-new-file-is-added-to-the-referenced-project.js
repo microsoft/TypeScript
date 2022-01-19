@@ -102,15 +102,14 @@ class class3 {}
 
 Output::
 /lib/tsc -i -p src/projects/project2
-File '/src/projects/project1/class3.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/src/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/src/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-File is output from referenced project specified here.
-[96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+File is output from referenced project specified here: [96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-| {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-  [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 
@@ -205,15 +204,14 @@ Input::
 
 Output::
 /lib/tsc -i -p src/projects/project2
-File '/src/projects/project1/class3.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/src/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/src/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-File is output from referenced project specified here.
-[96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+File is output from referenced project specified here: [96msrc/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-| {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-  [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 
 Found 1 error.
 

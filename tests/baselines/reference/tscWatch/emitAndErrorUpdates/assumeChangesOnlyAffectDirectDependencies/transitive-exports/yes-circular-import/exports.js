@@ -134,7 +134,11 @@ exports.__esModule = true;
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -150,7 +154,11 @@ __exportStar(require("./tools.interface"), exports);
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -196,7 +204,11 @@ exports.Data = Data;
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -236,9 +248,9 @@ Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m TS2322
-|             title: "title"
-  [91m            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m  [91mError[0m TS2322
+| title: "title"
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Type '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
@@ -326,9 +338,9 @@ Output::
 >> Screen clear
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m TS2322
-|             title: "title"
-  [91m            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m  [91mError[0m TS2322
+| title: "title"
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Type '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
@@ -401,9 +413,9 @@ Output::
 >> Screen clear
 [[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m TS2322
-|             title: "title"
-  [91m            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m  [91mError[0m TS2322
+| title: "title"
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Type '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 

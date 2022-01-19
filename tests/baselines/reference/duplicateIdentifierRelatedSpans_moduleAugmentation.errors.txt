@@ -7,8 +7,8 @@
     export const x = 0;
                  ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x'.
-!!! related TS6203 /dir/b.ts:4:18: 'x' was also declared here.
-!!! related TS6204 /dir/b.ts:8:18: and here.
+!!! related TS6203 /dir/b.ts:4:18: 'x' was also declared here:
+!!! related TS6204 /dir/b.ts:8:18: and here:
     
 ==== /dir/b.ts (2 errors) ====
     export {};
@@ -17,13 +17,13 @@
         export const x = 0;
                      ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x'.
-!!! related TS6203 /dir/a.ts:1:14: 'x' was also declared here.
+!!! related TS6203 /dir/a.ts:1:14: 'x' was also declared here:
     }
     
     declare module "../dir/a" {
         export const x = 0;
                      ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x'.
-!!! related TS6203 /dir/a.ts:1:14: 'x' was also declared here.
+!!! related TS6203 /dir/a.ts:1:14: 'x' was also declared here:
     }
     

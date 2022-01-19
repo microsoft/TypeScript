@@ -1,58 +1,52 @@
-● [96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m TS2300
-|         duplicate1: () => string;
-  [91m        ▔▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m  [91mError[0m TS2300
+| duplicate1: () => string;
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'duplicate1'.
 
-'duplicate1' was also declared here.
-[96mtests/cases/compiler/file2.ts[0m:[93m4[0m:[93m9[0m
+'duplicate1' was also declared here: [96mtests/cases/compiler/file2.ts[0m:[93m4[0m:[93m9[0m
 
-|         duplicate1(): number;
-  [96m        ▔▔▔▔▔▔▔▔▔▔[0m● [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m TS2300
-|         duplicate2: () => string;
-  [91m        ▔▔▔▔▔▔▔▔▔▔[0m
+  | duplicate1(): number;
+    [96m▔▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m  [91mError[0m TS2300
+| duplicate2: () => string;
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'duplicate2'.
 
-'duplicate2' was also declared here.
-[96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m
+'duplicate2' was also declared here: [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m
 
-|         duplicate2(): number;
-  [96m        ▔▔▔▔▔▔▔▔▔▔[0m● [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m TS2300
-|         duplicate3: () => string;
-  [91m        ▔▔▔▔▔▔▔▔▔▔[0m
+  | duplicate2(): number;
+    [96m▔▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m  [91mError[0m TS2300
+| duplicate3: () => string;
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'duplicate3'.
 
-'duplicate3' was also declared here.
-[96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m
+'duplicate3' was also declared here: [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m
 
-|         duplicate3(): number;
-  [96m        ▔▔▔▔▔▔▔▔▔▔[0m● [96mtests/cases/compiler/file2.ts[0m:[93m4[0m:[93m9[0m TS2300
-|         duplicate1(): number;
-  [91m        ▔▔▔▔▔▔▔▔▔▔[0m
+  | duplicate3(): number;
+    [96m▔▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mtests/cases/compiler/file2.ts[0m:[93m4[0m:[93m9[0m  [91mError[0m TS2300
+| duplicate1(): number;
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'duplicate1'.
 
-'duplicate1' was also declared here.
-[96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m
+'duplicate1' was also declared here: [96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m
 
-|         duplicate1: () => string;
-  [96m        ▔▔▔▔▔▔▔▔▔▔[0m● [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m TS2300
-|         duplicate2(): number;
-  [91m        ▔▔▔▔▔▔▔▔▔▔[0m
+  | duplicate1: () => string;
+    [96m▔▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m  [91mError[0m TS2300
+| duplicate2(): number;
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'duplicate2'.
 
-'duplicate2' was also declared here.
-[96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m
+'duplicate2' was also declared here: [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m
 
-|         duplicate2: () => string;
-  [96m        ▔▔▔▔▔▔▔▔▔▔[0m● [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m TS2300
-|         duplicate3(): number;
-  [91m        ▔▔▔▔▔▔▔▔▔▔[0m
+  | duplicate2: () => string;
+    [96m▔▔▔▔▔▔▔▔▔▔[0m[91m● [0m[96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m  [91mError[0m TS2300
+| duplicate3(): number;
+  [91m▔▔▔▔▔▔▔▔▔▔[0m
 Duplicate identifier 'duplicate3'.
 
-'duplicate3' was also declared here.
-[96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m
+'duplicate3' was also declared here: [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m
 
-|         duplicate3: () => string;
-  [96m        ▔▔▔▔▔▔▔▔▔▔[0m
+  | duplicate3: () => string;
+    [96m▔▔▔▔▔▔▔▔▔▔[0m
 
 ==== tests/cases/compiler/file1.ts (3 errors) ====
     declare global {
@@ -60,15 +54,15 @@ Duplicate identifier 'duplicate3'.
             duplicate1: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
-!!! related TS6203 tests/cases/compiler/file2.ts:4:9: 'duplicate1' was also declared here.
+!!! related TS6203 tests/cases/compiler/file2.ts:4:9: 'duplicate1' was also declared here:
             duplicate2: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
-!!! related TS6203 tests/cases/compiler/file2.ts:5:9: 'duplicate2' was also declared here.
+!!! related TS6203 tests/cases/compiler/file2.ts:5:9: 'duplicate2' was also declared here:
             duplicate3: () => string;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
-!!! related TS6203 tests/cases/compiler/file2.ts:6:9: 'duplicate3' was also declared here.
+!!! related TS6203 tests/cases/compiler/file2.ts:6:9: 'duplicate3' was also declared here:
         }
     }
     export {}
@@ -79,15 +73,15 @@ Duplicate identifier 'duplicate3'.
             duplicate1(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate1'.
-!!! related TS6203 tests/cases/compiler/file1.ts:3:9: 'duplicate1' was also declared here.
+!!! related TS6203 tests/cases/compiler/file1.ts:3:9: 'duplicate1' was also declared here:
             duplicate2(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate2'.
-!!! related TS6203 tests/cases/compiler/file1.ts:4:9: 'duplicate2' was also declared here.
+!!! related TS6203 tests/cases/compiler/file1.ts:4:9: 'duplicate2' was also declared here:
             duplicate3(): number;
             ~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'duplicate3'.
-!!! related TS6203 tests/cases/compiler/file1.ts:5:9: 'duplicate3' was also declared here.
+!!! related TS6203 tests/cases/compiler/file1.ts:5:9: 'duplicate3' was also declared here:
         }
     }
     export {}
@@ -95,5 +89,5 @@ Duplicate identifier 'duplicate3'.
 Found 6 errors in 2 files.
 
 Errors  Files
-     3  tests/cases/compiler/file1.ts:3
-     3  tests/cases/compiler/file2.ts:4
+     3  tests/cases/compiler/file1.ts[90m:3[0m
+     3  tests/cases/compiler/file2.ts[90m:4[0m

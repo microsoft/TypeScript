@@ -13,5 +13,5 @@
     const d: D = {};
           ~
 !!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
-!!! related TS2728 /a.ts:1:11: 'a' is declared here.
+!!! related TS2728 /a.ts:1:11: 'a' is declared here:
     

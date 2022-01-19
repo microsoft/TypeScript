@@ -25,7 +25,7 @@ Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
-● [96ma.ts[0m:[93m2[0m:[93m21[0m TS2610
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m21[0m  [91mError[0m TS2610
 | class D extends C { prop = 1; }
   [91m                    ▔▔▔▔[0m
 'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
@@ -89,7 +89,7 @@ Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m2[0m:[93m21[0m TS2610
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m21[0m  [91mError[0m TS2610
 | class D extends C { prop = 1; }
   [91m                    ▔▔▔▔[0m
 'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.

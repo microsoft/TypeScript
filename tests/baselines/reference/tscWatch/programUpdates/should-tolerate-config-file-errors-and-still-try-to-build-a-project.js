@@ -33,9 +33,9 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-● [96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m TS5023
-|                             "allowAnything": true
-  [91m                            ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+[91m● [0m[96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m  [91mError[0m TS5023
+| "allowAnything": true
+  [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Unknown compiler option 'allowAnything'.
 
 [[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.

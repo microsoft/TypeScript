@@ -22,14 +22,14 @@ Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
-● [96ma/b/commonFile1.ts[0m:[93m1[0m:[93m22[0m TS6053
+[91m● [0m[96ma/b/commonFile1.ts[0m:[93m1[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="commonFile2.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/a/b/commonFile2.ts' not found.
 
-● [96ma/b/commonFile1.ts[0m:[93m2[0m:[93m29[0m TS2304
-|                     let x = y
-  [91m                            ▔[0m
+[91m● [0m[96ma/b/commonFile1.ts[0m:[93m2[0m:[93m29[0m  [91mError[0m TS2304
+| let x = y
+  [91m        ▔[0m
 Cannot find name 'y'.
 
 [[90m12:00:16 AM[0m] Found 2 errors. Watching for file changes.

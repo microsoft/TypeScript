@@ -176,7 +176,7 @@ Output::
 >> Screen clear
 [[90m12:00:44 AM[0m] Starting compilation in watch mode...
 
-● [96msrc/index.ts[0m:[93m1[0m:[93m51[0m TS2339
+[91m● [0m[96msrc/index.ts[0m:[93m1[0m:[93m51[0m  [91mError[0m TS2339
 | import classNames from "classnames"; classNames().foo;
   [91m                                                  ▔▔▔[0m
 Property 'foo' does not exist on type 'Result'.

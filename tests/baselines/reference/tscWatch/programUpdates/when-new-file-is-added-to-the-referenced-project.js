@@ -171,24 +171,23 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
-
 Synchronizing program
 Reloading new file names and options
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
+
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
-File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-File is output from referenced project specified here.
-[96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+File is output from referenced project specified here: [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-| {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-  [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -251,9 +250,9 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/pro
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
@@ -424,24 +423,23 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/pro
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
 [[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
-File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
   The file is in the program because:
     Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
 
-File is output from referenced project specified here.
-[96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+File is output from referenced project specified here: [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
 
-| {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
-  [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [96m                                                                    ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:01:18 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -550,9 +548,9 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/pro
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
 [[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}

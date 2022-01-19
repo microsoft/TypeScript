@@ -16,6 +16,6 @@ tests/cases/compiler/functionOverloads41.ts(4,14): error TS2769: No overload mat
 !!! error TS2769:     Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 !!! error TS2769:   Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
 !!! error TS2769:     Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
-!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:1:19: 'a' is declared here.
-!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:2:19: 'a' is declared here.
+!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:1:19: 'a' is declared here:
+!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:2:19: 'a' is declared here:
     

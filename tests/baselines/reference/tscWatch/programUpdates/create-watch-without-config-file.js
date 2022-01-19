@@ -27,14 +27,14 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-● [96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m TS2305
-|                 import {f} from "./module"
-  [91m                        ▔[0m
+[91m● [0m[96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m  [91mError[0m TS2305
+| import {f} from "./module"
+  [91m        ▔[0m
 Module '"./module"' has no exported member 'f'.
 
-● [96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m TS2584
-|                 console.log(f)
-  [91m                ▔▔▔▔▔▔▔[0m
+[91m● [0m[96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m  [91mError[0m TS2584
+| console.log(f)
+  [91m▔▔▔▔▔▔▔[0m
 Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
 [[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.

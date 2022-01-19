@@ -30,7 +30,7 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-● [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m TS4094
+[91m● [0m[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m  [91mError[0m TS4094
 | export var myClassWithError = class {
   [91m           ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Property 'p' of exported class expression may not be private or protected.

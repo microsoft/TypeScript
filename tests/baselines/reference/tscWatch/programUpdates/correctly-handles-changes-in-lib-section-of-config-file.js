@@ -28,7 +28,7 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-● [96msrc/app.ts[0m:[93m1[0m:[93m8[0m TS2583
+[91m● [0m[96msrc/app.ts[0m:[93m1[0m:[93m8[0m  [91mError[0m TS2583
 | var x: Promise<string>;
   [91m       ▔▔▔▔▔▔▔[0m
 Cannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.

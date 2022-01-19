@@ -127,13 +127,13 @@ Input::
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
 
 Output::
-● [96mindex.tsx[0m:[93m1[0m:[93m19[0m TS2354
+[91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2354
 | export const x = {...{}};
   [91m                  ▔▔▔▔▔[0m
 This syntax requires an imported helper but module 'tslib' cannot be found.
 
 
-Found 1 error in /users/username/projects/project/index.tsx:1
+Found 1 error in index.tsx[90m:1[0m
 
 
 

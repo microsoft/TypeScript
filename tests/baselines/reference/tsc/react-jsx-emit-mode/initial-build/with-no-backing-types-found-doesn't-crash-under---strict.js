@@ -41,13 +41,13 @@ export const App = () => <div propA={true}></div>;
 
 Output::
 /lib/tsc --p src/project --strict
-● [96msrc/project/src/index.tsx[0m:[93m1[0m:[93m26[0m TS7016
+[91m● [0m[96msrc/project/src/index.tsx[0m:[93m1[0m:[93m26[0m  [91mError[0m TS7016
 | export const App = () => <div propA={true}></div>;
   [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Could not find a declaration file for module 'react/jsx-runtime'. '/src/project/node_modules/react/jsx-runtime.js' implicitly has an 'any' type.
 
 
-Found 1 error in /src/project/src/index.tsx:1
+Found 1 error in src/project/src/index.tsx[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -57,7 +57,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

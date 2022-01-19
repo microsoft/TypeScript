@@ -54,16 +54,16 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 function Todo(prop) {
-    return (0, _a.jsx)("div", { children: prop.key.toString() + prop.todo }, void 0);
+    return (0, _a.jsx)("div", { children: prop.key.toString() + prop.todo });
 }
 function TodoList(_a) {
     var todos = _a.todos;
-    return (0, _b.jsxs)("div", { children: __spreadArray([], (0, _a.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) }, void 0);
+    return (0, _b.jsxs)("div", { children: __spreadArray([], (0, _a.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 }
 function TodoListNoError(_a) {
     var todos = _a.todos;
     // any is not checked
-    return (0, _b.jsxs)("div", { children: __spreadArray([], (0, _a.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) }, void 0);
+    return (0, _b.jsxs)("div", { children: __spreadArray([], (0, _a.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
 }
 var x;
-(0, _a.jsx)(TodoList, __assign({}, x), void 0);
+(0, _a.jsx)(TodoList, __assign({}, x));

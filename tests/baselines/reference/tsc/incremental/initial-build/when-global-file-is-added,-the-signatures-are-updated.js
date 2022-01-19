@@ -36,12 +36,12 @@ function main() { }
 
 Output::
 /lib/tsc --p src/project
-● [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
 
-● [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
@@ -50,8 +50,8 @@ File '/src/project/src/fileNotFound.ts' not found.
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  /src/project/src/anotherFileWithSameReferenes.ts:2
-     1  /src/project/src/main.ts:2
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -188,12 +188,12 @@ Input::
 
 Output::
 /lib/tsc --p src/project
-● [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
 
-● [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
@@ -202,8 +202,8 @@ File '/src/project/src/fileNotFound.ts' not found.
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  /src/project/src/anotherFileWithSameReferenes.ts:2
-     1  /src/project/src/main.ts:2
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -233,12 +233,12 @@ something();
 
 Output::
 /lib/tsc --p src/project
-● [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
 
-● [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
@@ -247,8 +247,8 @@ File '/src/project/src/fileNotFound.ts' not found.
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  /src/project/src/anotherFileWithSameReferenes.ts:2
-     1  /src/project/src/main.ts:2
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -363,12 +363,12 @@ something();something();
 
 Output::
 /lib/tsc --p src/project
-● [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
 
-● [96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/main.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
@@ -377,8 +377,8 @@ File '/src/project/src/fileNotFound.ts' not found.
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  /src/project/src/anotherFileWithSameReferenes.ts:2
-     1  /src/project/src/main.ts:2
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -489,12 +489,12 @@ function foo() { return 20; }
 
 Output::
 /lib/tsc --p src/project
-● [96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/anotherFileWithSameReferenes.ts[0m:[93m2[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
 
-● [96msrc/project/src/main.ts[0m:[93m3[0m:[93m22[0m TS6053
+[91m● [0m[96msrc/project/src/main.ts[0m:[93m3[0m:[93m22[0m  [91mError[0m TS6053
 | /// <reference path="./fileNotFound.ts"/>
   [91m                     ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 File '/src/project/src/fileNotFound.ts' not found.
@@ -503,8 +503,8 @@ File '/src/project/src/fileNotFound.ts' not found.
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  /src/project/src/anotherFileWithSameReferenes.ts:2
-     1  /src/project/src/main.ts:3
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:3[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}

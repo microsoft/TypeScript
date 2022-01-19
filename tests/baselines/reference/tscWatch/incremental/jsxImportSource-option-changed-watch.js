@@ -119,7 +119,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -191,7 +191,7 @@ Output::
 >> Screen clear
 [[90m12:00:50 AM[0m] Starting compilation in watch mode...
 
-● [96mindex.tsx[0m:[93m1[0m:[93m31[0m TS2322
+[91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m31[0m  [91mError[0m TS2322
 | export const App = () => <div propA={true}></div>;
   [91m                              ▔▔▔▔▔[0m
 Type '{ propA: boolean; }' is not assignable to type '{ propB?: boolean; }'.
@@ -255,7 +255,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

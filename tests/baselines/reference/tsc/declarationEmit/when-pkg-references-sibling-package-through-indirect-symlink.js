@@ -57,7 +57,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -p pkg3 --explainFiles
 Output::
-● [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m TS2742
+[91m● [0m[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2742
 | export const ADMIN = MetadataAccessor.create<boolean>('1');
   [91m             ▔▔▔▔▔[0m
 The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
@@ -78,7 +78,7 @@ pkg3/src/keys.ts
 pkg3/src/index.ts
   Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
 
-Found 1 error in /user/username/projects/myproject/pkg3/src/keys.ts:2
+Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
 
@@ -114,7 +114,11 @@ exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];

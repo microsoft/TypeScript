@@ -129,7 +129,7 @@ Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/myproject/src/file2.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
     Matched by include pattern '**/*' in '/user/username/projects/myproject/tsconfig.json'
 
@@ -184,7 +184,7 @@ Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
-● [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m TS2307
+[91m● [0m[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2307
 | import { x } from "./file2";
   [91m                  ▔▔▔▔▔▔▔▔▔[0m
 Cannot find module './file2' or its corresponding type declarations.

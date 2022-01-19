@@ -10,7 +10,7 @@ tests/cases/conformance/salsa/plainJSReservedStrict.js(3,7): error TS1100: Inval
 !!! error TS1100: Invalid use of 'eval' in strict mode.
           ~~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'eval'.
-!!! related TS6203 /.ts/lib.es5.d.ts:32:18: 'eval' was also declared here.
+!!! related TS6203 /.ts/lib.es5.d.ts:32:18: 'eval' was also declared here:
     const arguments = 2
           ~~~~~~~~~
 !!! error TS1100: Invalid use of 'arguments' in strict mode.

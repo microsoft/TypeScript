@@ -105,13 +105,13 @@ Input::
 //// [/users/username/projects/project/globals.d.ts] deleted
 
 Output::
-● [96mindex.ts[0m:[93m1[0m:[93m13[0m TS2304
+[91m● [0m[96mindex.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS2304
 | console.log(Config.value);
   [91m            ▔▔▔▔▔▔[0m
 Cannot find name 'Config'.
 
 
-Found 1 error in /users/username/projects/project/index.ts:1
+Found 1 error in index.ts[90m:1[0m
 
 
 

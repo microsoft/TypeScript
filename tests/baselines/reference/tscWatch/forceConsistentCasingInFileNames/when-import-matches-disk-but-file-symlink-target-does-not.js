@@ -36,7 +36,7 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-● [96mb.ts[0m:[93m2[0m:[93m19[0m TS1149
+[91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS1149
 | import { a } from "./Xy";
   [91m                  ▔▔▔▔▔▔[0m
 File name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
@@ -142,7 +142,7 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mb.ts[0m:[93m2[0m:[93m19[0m TS1149
+[91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS1149
 | import { a } from "./Xy";
   [91m                  ▔▔▔▔▔▔[0m
 File name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.

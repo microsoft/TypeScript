@@ -30,13 +30,13 @@ import { x } from "../utils";
 
 Output::
 /lib/tsc --p src/project
-● [96msrc/project/tsconfig.json[0m:[93m1[0m:[93m16[0m TS6310
+[91m● [0m[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m16[0m  [91mError[0m TS6310
 | {"references":[{"path":"../utils"}]}
   [91m               ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Referenced project '/src/utils' may not disable emit.
 
 
-Found 1 error in src/project/tsconfig.json:1
+Found 1 error in src/project/tsconfig.json[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

@@ -27,7 +27,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-● [96mfile2.ts[0m:[93m1[0m:[93m14[0m TS2322
+[91m● [0m[96mfile2.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
 | export const y: string = 20;
   [91m             ▔[0m
 Type 'number' is not assignable to type 'string'.
@@ -157,7 +157,7 @@ Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] Starting compilation in watch mode...
 
-● [96mfile2.ts[0m:[93m1[0m:[93m14[0m TS2322
+[91m● [0m[96mfile2.ts[0m:[93m1[0m:[93m14[0m  [91mError[0m TS2322
 | export const y: string = 20;
   [91m             ▔[0m
 Type 'number' is not assignable to type 'string'.

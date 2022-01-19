@@ -15,9 +15,9 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json
-● [96msrc/tsconfig.json[0m:[93m8[0m:[93m9[0m TS1005
-|         "b.ts"
-  [91m        ▔▔▔▔▔▔[0m
+[91m● [0m[96msrc/tsconfig.json[0m:[93m8[0m:[93m9[0m  [91mError[0m TS1005
+| "b.ts"
+  [91m▔▔▔▔▔▔[0m
 ',' expected.
 
 

@@ -24,16 +24,15 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-● [96ma/b/tsconfig.json[0m:[93m1[0m:[93m2[0m TS1005
+[91m● [0m[96ma/b/tsconfig.json[0m:[93m1[0m:[93m2[0m  [91mError[0m TS1005
 | {
   [91m [0m
 '}' expected.
 
-The parser expected to find a '}' to match the '{' token here.
-[96ma/b/tsconfig.json[0m:[93m1[0m:[93m1[0m
+The parser expected to find a '}' to match the '{' token here: [96ma/b/tsconfig.json[0m:[93m1[0m:[93m1[0m
 
-| {
-  [96m▔[0m
+  | {
+    [96m▔[0m
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
 

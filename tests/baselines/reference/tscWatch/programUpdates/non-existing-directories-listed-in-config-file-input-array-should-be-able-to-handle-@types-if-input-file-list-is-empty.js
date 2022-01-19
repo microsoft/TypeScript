@@ -30,7 +30,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-● [96mtsconfig.json[0m:[93m1[0m:[93m24[0m TS18002
+[91m● [0m[96mtsconfig.json[0m:[93m1[0m:[93m24[0m   [91mError[0m TS18002
 | {"compiler":{},"files":[]}
   [91m                       ▔▔[0m
 The 'files' list in config file '/a/tsconfig.json' is empty.

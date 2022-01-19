@@ -99,7 +99,7 @@ Output::
     * src/core/tsconfig.json
     * src/tsconfig.json
 
-Project references may not form a circular graph. Cycle detected: /src/tsconfig.json
+[91m● [0m [91mError[0m TS6202Project references may not form a circular graph. Cycle detected: /src/tsconfig.json
 /src/core/tsconfig.json
 /src/zoo/tsconfig.json
 /src/animals/tsconfig.json

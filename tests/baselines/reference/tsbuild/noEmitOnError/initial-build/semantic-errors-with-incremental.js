@@ -40,7 +40,7 @@ export { }
 
 Output::
 /lib/tsc --b /src/tsconfig.json --incremental
-● [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+[91m● [0m[96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
 | const a: string = 10;
   [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
@@ -166,7 +166,7 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json --incremental
-● [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+[91m● [0m[96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
 | const a: string = 10;
   [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.

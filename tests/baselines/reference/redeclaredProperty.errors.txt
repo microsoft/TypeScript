@@ -11,7 +11,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/redeclaredProperty.ts
       d = this.b;
                ~
 !!! error TS2729: Property 'b' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/redeclaredProperty.ts:6:3: 'b' is declared here.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/redeclaredProperty.ts:6:3: 'b' is declared here:
     
       constructor() {
         super();

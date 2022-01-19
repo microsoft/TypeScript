@@ -100,7 +100,7 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-● [96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m TS1261
+[91m● [0m[96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m  [91mError[0m TS1261
 | import { logger } from "./Logger"; new logger();
   [91m                       ▔▔▔▔▔▔▔▔▔▔[0m
 Already included file name '/user/username/projects/myproject/Logger.ts' differs from file name '/user/username/projects/myproject/logger.ts' only in casing.

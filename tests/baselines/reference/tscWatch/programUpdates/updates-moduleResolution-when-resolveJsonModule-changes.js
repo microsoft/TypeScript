@@ -27,7 +27,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-● [96ma.ts[0m:[93m1[0m:[93m23[0m TS2732
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m23[0m  [91mError[0m TS2732
 | import * as data from './data.json'
   [91m                      ▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module './data.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.

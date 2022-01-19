@@ -148,13 +148,13 @@ export {}; declare module "classnames" { interface Result {} }
 
 
 Output::
-● [96msrc/index.ts[0m:[93m1[0m:[93m51[0m TS2339
+[91m● [0m[96msrc/index.ts[0m:[93m1[0m:[93m51[0m  [91mError[0m TS2339
 | import classNames from "classnames"; classNames().foo;
   [91m                                                  ▔▔▔[0m
 Property 'foo' does not exist on type 'Result'.
 
 
-Found 1 error in /users/username/projects/project/src/index.ts:1
+Found 1 error in src/index.ts[90m:1[0m
 
 
 

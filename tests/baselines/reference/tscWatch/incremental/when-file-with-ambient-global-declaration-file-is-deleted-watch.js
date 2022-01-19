@@ -125,7 +125,7 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] Starting compilation in watch mode...
 
-● [96mindex.ts[0m:[93m1[0m:[93m13[0m TS2304
+[91m● [0m[96mindex.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS2304
 | console.log(Config.value);
   [91m            ▔▔▔▔▔▔[0m
 Cannot find name 'Config'.

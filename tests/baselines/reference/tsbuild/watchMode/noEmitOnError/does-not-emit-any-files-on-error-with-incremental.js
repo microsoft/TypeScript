@@ -51,16 +51,15 @@ Output::
 
 [[90m12:00:34 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-● [96msrc/main.ts[0m:[93m4[0m:[93m1[0m TS1005
+[91m● [0m[96msrc/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
 | ;
   [91m▔[0m
 ',' expected.
 
-The parser expected to find a '}' to match the '{' token here.
-[96msrc/main.ts[0m:[93m2[0m:[93m11[0m
+The parser expected to find a '}' to match the '{' token here: [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
 
-| const a = {
-  [96m          ▔[0m
+  | const a = {
+    [96m          ▔[0m
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -110,16 +109,15 @@ Output::
 
 [[90m12:00:41 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-● [96msrc/main.ts[0m:[93m4[0m:[93m1[0m TS1005
+[91m● [0m[96msrc/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
 | ;
   [91m▔[0m
 ',' expected.
 
-The parser expected to find a '}' to match the '{' token here.
-[96msrc/main.ts[0m:[93m2[0m:[93m11[0m
+The parser expected to find a '}' to match the '{' token here: [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
 
-| const a = {
-  [96m          ▔[0m
+  | const a = {
+    [96m          ▔[0m
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -310,7 +308,7 @@ Output::
 
 [[90m12:01:15 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-● [96msrc/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+[91m● [0m[96msrc/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
 | const a: string = 10;
   [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
@@ -441,7 +439,7 @@ Output::
 
 [[90m12:01:28 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-● [96msrc/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+[91m● [0m[96msrc/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
 | const a: string = 10;
   [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.

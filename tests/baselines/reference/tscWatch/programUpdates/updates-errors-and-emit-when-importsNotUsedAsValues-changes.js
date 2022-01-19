@@ -155,7 +155,7 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mb.ts[0m:[93m1[0m:[93m1[0m TS1371
+[91m● [0m[96mb.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1371
 | import {C} from './a';
   [91m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.

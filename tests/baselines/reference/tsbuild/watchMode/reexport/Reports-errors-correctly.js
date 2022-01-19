@@ -166,7 +166,11 @@ export interface Session {
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -271,16 +275,15 @@ Output::
 
 [[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-● [96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m TS2741
+[91m● [0m[96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m  [91mError[0m TS2741
 | export const session: Session = {
   [91m             ▔▔▔▔▔▔▔[0m
 Property 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
-'bar' is declared here.
-[96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
+'bar' is declared here: [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
 
-|     bar: number;
-  [96m    ▔▔▔[0m
+  | bar: number;
+    [96m▔▔▔[0m
 [[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
 
 

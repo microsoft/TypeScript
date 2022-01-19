@@ -54,7 +54,7 @@ export function f22() { } // trailing`,
                     /*createProgram*/ undefined,
                 createDiagnosticReporter(sys, /*pretty*/ true),
                 createBuilderStatusReporter(sys, /*pretty*/ true),
-                (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine))
+                (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
             );
             buildHost.afterProgramEmitAndDiagnostics = cb;
             buildHost.afterEmitBundle = cb;

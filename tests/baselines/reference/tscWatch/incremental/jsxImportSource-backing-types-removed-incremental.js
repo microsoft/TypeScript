@@ -73,7 +73,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -141,13 +141,13 @@ Input::
 //// [/users/username/projects/project/node_modules/react/package.json] deleted
 
 Output::
-● [96mindex.tsx[0m:[93m1[0m:[93m26[0m TS2307
+[91m● [0m[96mindex.tsx[0m:[93m1[0m:[93m26[0m  [91mError[0m TS2307
 | export const App = () => <div propA={true}></div>;
   [91m                         ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module 'react/jsx-runtime' or its corresponding type declarations.
 
 
-Found 1 error in /users/username/projects/project/index.tsx:1
+Found 1 error in index.tsx[90m:1[0m
 
 
 

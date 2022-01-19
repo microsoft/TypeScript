@@ -66,12 +66,12 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
 !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
 !!! related TS6502 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
-!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
-!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here:
+!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here:
                                         ~
 !!! error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
 !!! error TS2345:   Property 'x' is missing in type 'D' but required in type 'A'.
-!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
+!!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here:
     
     var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

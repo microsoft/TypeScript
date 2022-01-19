@@ -31,6 +31,6 @@
           ~~
 !!! error TS2420: Class 'B3' incorrectly implements interface 'A'.
 !!! error TS2420:   Property 'mNumber' is missing in type 'B3' but required in type 'A'.
-!!! related TS2728 /defs.d.ts:2:5: 'mNumber' is declared here.
+!!! related TS2728 /defs.d.ts:2:5: 'mNumber' is declared here:
     }
     

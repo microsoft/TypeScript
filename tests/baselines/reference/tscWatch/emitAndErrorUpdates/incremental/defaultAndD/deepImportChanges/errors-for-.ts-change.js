@@ -223,7 +223,7 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m4[0m:[93m17[0m TS2339
+[91m● [0m[96ma.ts[0m:[93m4[0m:[93m17[0m  [91mError[0m TS2339
 | console.log(b.c.d);
   [91m                ▔[0m
 Property 'd' does not exist on type 'C'.
@@ -540,7 +540,7 @@ Output::
 >> Screen clear
 [[90m12:01:41 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m4[0m:[93m17[0m TS2339
+[91m● [0m[96ma.ts[0m:[93m4[0m:[93m17[0m  [91mError[0m TS2339
 | console.log(b.c.d);
   [91m                ▔[0m
 Property 'd' does not exist on type 'C'.

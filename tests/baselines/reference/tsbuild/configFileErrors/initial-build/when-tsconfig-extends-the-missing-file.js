@@ -33,13 +33,13 @@ Input::
 
 Output::
 /lib/tsc --b /src/tsconfig.json
-Cannot read file '/src/foobar.json'.
+[91m● [0m [91mError[0m TS5083Cannot read file '/src/foobar.json'.
 
-No inputs were found in config file '/src/tsconfig.first.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
+[91m● [0m [91mError[0m TS18003No inputs were found in config file '/src/tsconfig.first.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
 
-Cannot read file '/src/foobar.json'.
+[91m● [0m [91mError[0m TS5083Cannot read file '/src/foobar.json'.
 
-No inputs were found in config file '/src/tsconfig.second.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
+[91m● [0m [91mError[0m TS18003No inputs were found in config file '/src/tsconfig.second.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
 
 
 Found 4 errors.

@@ -80,26 +80,24 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m2[0m:[93m8[0m TS2300
-|   type foo = number;
-  [91m       ▔▔▔[0m
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m8[0m  [91mError[0m TS2300
+| type foo = number;
+  [91m     ▔▔▔[0m
 Duplicate identifier 'foo'.
 
-'foo' was also declared here.
-[96mb.ts[0m:[93m2[0m:[93m8[0m
+'foo' was also declared here: [96mb.ts[0m:[93m2[0m:[93m8[0m
 
-|   type foo = number;
-  [96m       ▔▔▔[0m
-● [96mb.ts[0m:[93m2[0m:[93m8[0m TS2300
-|   type foo = number;
-  [91m       ▔▔▔[0m
+  | type foo = number;
+    [96m     ▔▔▔[0m
+[91m● [0m[96mb.ts[0m:[93m2[0m:[93m8[0m  [91mError[0m TS2300
+| type foo = number;
+  [91m     ▔▔▔[0m
 Duplicate identifier 'foo'.
 
-'foo' was also declared here.
-[96ma.ts[0m:[93m2[0m:[93m8[0m
+'foo' was also declared here: [96ma.ts[0m:[93m2[0m:[93m8[0m
 
-|   type foo = number;
-  [96m       ▔▔▔[0m
+  | type foo = number;
+    [96m     ▔▔▔[0m
 [[90m12:00:33 AM[0m] Found 2 errors. Watching for file changes.
 
 

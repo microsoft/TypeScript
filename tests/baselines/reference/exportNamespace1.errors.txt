@@ -15,5 +15,5 @@ tests/cases/conformance/externalModules/typeOnly/d.ts(2,5): error TS1362: 'A' ca
     new A(); // Error
         ~
 !!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:1:15: 'A' was exported here.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:1:15: 'A' was exported here:
     

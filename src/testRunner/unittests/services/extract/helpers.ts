@@ -107,14 +107,14 @@ namespace ts {
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-            const infos = refactor.extractSymbol.getAvailableActions(context);
+            const infos = refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
             const actions = find(infos, info => info.description === description.message)!.actions;
 
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);
             data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
             for (const action of actions) {
-                const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
+                const { renameLocation, edits } = refactor.extractSymbol.getRefactorEditsToExtractSymbol(context, action.name)!;
                 assert.lengthOf(edits, 1);
                 data.push(`// ==SCOPE::${action.description}==`);
                 const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
@@ -170,7 +170,7 @@ namespace ts {
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-            const infos = refactor.extractSymbol.getAvailableActions(context);
+            const infos = refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
             assert.isUndefined(find(infos, info => info.description === description.message));
         });
     }

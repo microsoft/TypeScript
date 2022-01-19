@@ -3509,7 +3509,7 @@ namespace ts {
                     ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
-        if (isImplicitGlob(spec)) {
+        if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
             return {
                 key: useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec),
                 flags: WatchDirectoryFlags.Recursive

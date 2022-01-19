@@ -78,7 +78,7 @@ Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m2[0m:[93m1[0m TS2531
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2531
 | foo().hello
   [91m▔▔▔▔▔[0m
 Object is possibly 'null'.
@@ -130,7 +130,7 @@ Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m2[0m:[93m1[0m TS2531
+[91m● [0m[96ma.ts[0m:[93m2[0m:[93m1[0m  [91mError[0m TS2531
 | foo().hello
   [91m▔▔▔▔▔[0m
 Object is possibly 'null'.

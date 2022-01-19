@@ -13,6 +13,6 @@
 
 verify.quickInfos({
     1: "function ComponentWithTwoAttributes<T, U>(l: {\n    key1: T;\n    value: U;\n}): JSX.Element",
-    2: "(JSX attribute) key1: T",
-    3: "(JSX attribute) value: U",
+    2: "(property) key1: T",
+    3: "(property) value: U",
 });

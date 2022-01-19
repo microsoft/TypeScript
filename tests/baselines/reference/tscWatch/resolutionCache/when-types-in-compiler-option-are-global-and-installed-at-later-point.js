@@ -24,15 +24,14 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-Cannot find type definition file for '@myapp/ts-types'.
+[91m● [0m [91mError[0m TS2688Cannot find type definition file for '@myapp/ts-types'.
   The file is in the program because:
     Entry point of type library '@myapp/ts-types' specified in compilerOptions
 
-File is entry point of type library specified here.
-[96muser/username/projects/myproject/tsconfig.json[0m:[93m1[0m:[93m46[0m
+File is entry point of type library specified here: [96muser/username/projects/myproject/tsconfig.json[0m:[93m1[0m:[93m46[0m
 
-| {"compilerOptions":{"module":"none","types":["@myapp/ts-types"]}}
-  [96m                                             ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"module":"none","types":["@myapp/ts-types"]}}
+    [96m                                             ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 

@@ -24,7 +24,7 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
-● [96mindex.ts[0m:[93m1[0m:[93m13[0m TS6133
+[91m● [0m[96mindex.ts[0m:[93m1[0m:[93m13[0m  [91mError[0m TS6133
 | const fn = (a: string, b: string) => b;
   [91m            ▔[0m
 'a' is declared but its value is never read.

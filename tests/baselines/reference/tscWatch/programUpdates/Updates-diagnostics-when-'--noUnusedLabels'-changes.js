@@ -75,7 +75,7 @@ Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma.ts[0m:[93m1[0m:[93m1[0m TS7028
+[91m● [0m[96ma.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS7028
 | label: while (1) {}
   [91m▔▔▔▔▔[0m
 Unused label.

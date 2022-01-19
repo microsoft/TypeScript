@@ -73,7 +73,7 @@ Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
-Cannot read file '/user/username/projects/sample1/logic/tsconfig.json'.
+[91m● [0m [91mError[0m TS5083Cannot read file '/user/username/projects/sample1/logic/tsconfig.json'.
 
 [[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
 

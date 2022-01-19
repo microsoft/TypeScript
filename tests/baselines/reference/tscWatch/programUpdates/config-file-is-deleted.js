@@ -84,10 +84,7 @@ Input::
 //// [/a/b/tsconfig.json] deleted
 
 Output::
->> Screen clear
-[[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
-
-Cannot read file '/a/b/tsconfig.json'.
+[91m● [0m [91mError[0m TS5083Cannot read file '/a/b/tsconfig.json'.
 
 
 

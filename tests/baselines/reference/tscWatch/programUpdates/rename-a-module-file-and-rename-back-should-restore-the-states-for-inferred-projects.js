@@ -90,7 +90,7 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m TS2307
+[91m● [0m[96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m  [91mError[0m TS2307
 | import * as T from "./moduleFile"; T.bar();
   [91m                   ▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 Cannot find module './moduleFile' or its corresponding type declarations.

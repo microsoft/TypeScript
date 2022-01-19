@@ -284,6 +284,8 @@ namespace ts {
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
+        /* Lets the Program from a AutoImportProviderProject use its host project's ModuleResolutionCache */
+        /* @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
         /*
          * Required for full import and type reference completions.
@@ -1457,6 +1459,7 @@ namespace ts {
 
         /**
          * <JsxTagName attribute1 attribute2={0} />
+         * @deprecated
          */
         jsxAttribute = "JSX attribute",
 

@@ -128,35 +128,34 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-Cannot find global type 'Array'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Array'.
 
-Cannot find global type 'Boolean'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Boolean'.
 
-Cannot find global type 'CallableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'CallableFunction'.
 
-Cannot find global type 'Function'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Function'.
 
-Cannot find global type 'IArguments'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'IArguments'.
 
-Cannot find global type 'NewableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'NewableFunction'.
 
-Cannot find global type 'Number'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Number'.
 
-Cannot find global type 'Object'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Object'.
 
-Cannot find global type 'RegExp'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'RegExp'.
 
-Cannot find global type 'String'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'String'.
 
-File '/a/lib/lib.es2016.full.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/a/lib/lib.es2016.full.d.ts' not found.
   The file is in the program because:
     Default library for target 'es2016'
 
-File is default library for target specified here.
-[96mtsconfig.json[0m:[93m14[0m:[93m15[0m
+File is default library for target specified here: [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
 
- |     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-   [96m              ▔▔▔▔▔▔▔▔[0m
+  | "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    [96m          ▔▔▔▔▔▔▔▔[0m
 [[90m12:00:40 AM[0m] Found 11 errors. Watching for file changes.
 
 
@@ -263,35 +262,34 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-Cannot find global type 'Array'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Array'.
 
-Cannot find global type 'Boolean'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Boolean'.
 
-Cannot find global type 'CallableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'CallableFunction'.
 
-Cannot find global type 'Function'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Function'.
 
-Cannot find global type 'IArguments'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'IArguments'.
 
-Cannot find global type 'NewableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'NewableFunction'.
 
-Cannot find global type 'Number'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Number'.
 
-Cannot find global type 'Object'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Object'.
 
-Cannot find global type 'RegExp'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'RegExp'.
 
-Cannot find global type 'String'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'String'.
 
-File '/a/lib/lib.es2016.full.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/a/lib/lib.es2016.full.d.ts' not found.
   The file is in the program because:
     Default library for target 'es2016'
 
-File is default library for target specified here.
-[96mtsconfig.json[0m:[93m14[0m:[93m15[0m
+File is default library for target specified here: [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
 
- |     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-   [96m              ▔▔▔▔▔▔▔▔[0m
+  | "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    [96m          ▔▔▔▔▔▔▔▔[0m
 [[90m12:00:48 AM[0m] Found 11 errors. Watching for file changes.
 
 

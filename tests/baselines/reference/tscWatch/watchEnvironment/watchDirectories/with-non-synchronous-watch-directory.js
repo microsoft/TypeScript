@@ -127,7 +127,7 @@ Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
-● [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m TS2307
+[91m● [0m[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2307
 | import { x } from "file2";
   [91m                  ▔▔▔▔▔▔▔[0m
 Cannot find module 'file2' or its corresponding type declarations.
@@ -181,7 +181,7 @@ Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
-● [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m TS2307
+[91m● [0m[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m  [91mError[0m TS2307
 | import { x } from "file2";
   [91m                  ▔▔▔▔▔▔▔[0m
 Cannot find module 'file2' or its corresponding type declarations.

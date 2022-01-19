@@ -41,16 +41,15 @@ Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
-File name '/user/username/projects/myproject/node_modules/react/Jsx-runtime/index.d.ts' differs from already included file name '/user/username/projects/myproject/node_modules/react/jsx-Runtime/index.d.ts' only in casing.
+[91m● [0m [91mError[0m TS1149File name '/user/username/projects/myproject/node_modules/react/Jsx-runtime/index.d.ts' differs from already included file name '/user/username/projects/myproject/node_modules/react/jsx-Runtime/index.d.ts' only in casing.
   The file is in the program because:
     Part of 'files' list in tsconfig.json
     Imported via "react/jsx-runtime" from file '/user/username/projects/myproject/index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 
-File is matched by 'files' list specified here.
-[96mtsconfig.json[0m:[93m1[0m:[93m115[0m
+File is matched by 'files' list specified here: [96mtsconfig.json[0m:[93m1[0m:[93m115[0m
 
-| {"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/jsx-Runtime/index.d.ts","index.tsx"]}
-  [96m                                                                                                                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
+  | {"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/jsx-Runtime/index.d.ts","index.tsx"]}
+    [96m                                                                                                                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 node_modules/react/jsx-Runtime/index.d.ts
@@ -106,7 +105,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

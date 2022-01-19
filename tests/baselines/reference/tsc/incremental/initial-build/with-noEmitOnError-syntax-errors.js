@@ -42,18 +42,17 @@ export { }
 
 Output::
 /lib/tsc --incremental -p src
-● [96msrc/src/main.ts[0m:[93m4[0m:[93m1[0m TS1005
+[91m● [0m[96msrc/src/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
 | ;
   [91m▔[0m
 ',' expected.
 
-The parser expected to find a '}' to match the '{' token here.
-[96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
+The parser expected to find a '}' to match the '{' token here: [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
 
-| const a = {
-  [96m          ▔[0m
+  | const a = {
+    [96m          ▔[0m
 
-Found 1 error in /src/src/main.ts:4
+Found 1 error in src/src/main.ts[90m:4[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -161,18 +160,17 @@ Input::
 
 Output::
 /lib/tsc --incremental -p src
-● [96msrc/src/main.ts[0m:[93m4[0m:[93m1[0m TS1005
+[91m● [0m[96msrc/src/main.ts[0m:[93m4[0m:[93m1[0m  [91mError[0m TS1005
 | ;
   [91m▔[0m
 ',' expected.
 
-The parser expected to find a '}' to match the '{' token here.
-[96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
+The parser expected to find a '}' to match the '{' token here: [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
 
-| const a = {
-  [96m          ▔[0m
+  | const a = {
+    [96m          ▔[0m
 
-Found 1 error in /src/src/main.ts:4
+Found 1 error in src/src/main.ts[90m:4[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]

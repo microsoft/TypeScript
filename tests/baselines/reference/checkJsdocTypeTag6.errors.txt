@@ -15,7 +15,7 @@ tests/cases/conformance/jsdoc/test.js(10,12): error TS8030: The type of a functi
     var g = function (prop) {
         ~
 !!! error TS2741: Property 'prop' is missing in type '(prop: any) => void' but required in type '{ prop: string; }'.
-!!! related TS2728 tests/cases/conformance/jsdoc/test.js:6:14: 'prop' is declared here.
+!!! related TS2728 tests/cases/conformance/jsdoc/test.js:6:14: 'prop' is declared here:
     }
     
     /** @type {(a: number) => number} */

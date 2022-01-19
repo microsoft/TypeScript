@@ -1,63 +1,59 @@
-● [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m TS2300
+[91m● [0m[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m  [91mError[0m TS2300
 | /** @typedef {number} Foo */
   [91m                      ▔▔▔[0m
 Duplicate identifier 'Foo'.
 
-'Foo' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m
+'Foo' was also declared here: [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m
 
-| class Foo { } // should error
-  [96m      ▔▔▔[0m● [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m TS2451
+  | class Foo { } // should error
+    [96m      ▔▔▔[0m[91m● [0m[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2451
 | class Bar {}
   [91m      ▔▔▔[0m
 Cannot redeclare block-scoped variable 'Bar'.
 
-'Bar' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m
+'Bar' was also declared here: [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m
 
-| const Bar = 3;
-  [96m      ▔▔▔[0m● [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m TS2300
+  | const Bar = 3;
+    [96m      ▔▔▔[0m[91m● [0m[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m  [91mError[0m TS2300
 | class Foo { } // should error
   [91m      ▔▔▔[0m
 Duplicate identifier 'Foo'.
 
-'Foo' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m
+'Foo' was also declared here: [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m
 
-| /** @typedef {number} Foo */
-  [96m                      ▔▔▔[0m● [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m TS2451
+  | /** @typedef {number} Foo */
+    [96m                      ▔▔▔[0m[91m● [0m[96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2451
 | const Bar = 3;
   [91m      ▔▔▔[0m
 Cannot redeclare block-scoped variable 'Bar'.
 
-'Bar' was also declared here.
-[96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m
+'Bar' was also declared here: [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m
 
-| class Bar {}
-  [96m      ▔▔▔[0m
+  | class Bar {}
+    [96m      ▔▔▔[0m
 
 ==== tests/cases/conformance/jsdoc/mod1.js (2 errors) ====
     /** @typedef {number} Foo */
                           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
-!!! related TS6203 tests/cases/conformance/jsdoc/mod2.js:1:7: 'Foo' was also declared here.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod2.js:1:7: 'Foo' was also declared here:
     class Bar {}
           ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
-!!! related TS6203 tests/cases/conformance/jsdoc/mod2.js:2:7: 'Bar' was also declared here.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod2.js:2:7: 'Bar' was also declared here:
     
 ==== tests/cases/conformance/jsdoc/mod2.js (2 errors) ====
     class Foo { } // should error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
-!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:1:23: 'Foo' was also declared here.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:1:23: 'Foo' was also declared here:
     const Bar = 3;
           ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
-!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:2:7: 'Bar' was also declared here.
+!!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:2:7: 'Bar' was also declared here:
     
 Found 4 errors in 2 files.
 
 Errors  Files
-     2  tests/cases/conformance/jsdoc/mod1.js:1
-     2  tests/cases/conformance/jsdoc/mod2.js:1
+     2  tests/cases/conformance/jsdoc/mod1.js[90m:1[0m
+     2  tests/cases/conformance/jsdoc/mod2.js[90m:1[0m

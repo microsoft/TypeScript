@@ -573,3 +573,105 @@ function ff1() {
 >apply : Symbol(apply, Decl(correlatedUnions.ts, 150, 5))
 }
 
+// Repro from #47368
+
+type ArgMap = { a: number, b: string };
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>a : Symbol(a, Decl(correlatedUnions.ts, 161, 15))
+>b : Symbol(b, Decl(correlatedUnions.ts, 161, 26))
+
+type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
+>Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
+>K : Symbol(K, Decl(correlatedUnions.ts, 162, 10))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>x : Symbol(x, Decl(correlatedUnions.ts, 162, 37))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 162, 10))
+
+type Funcs = { [K in keyof ArgMap]: Func<K> };
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>K : Symbol(K, Decl(correlatedUnions.ts, 163, 16))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
+>K : Symbol(K, Decl(correlatedUnions.ts, 163, 16))
+
+function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f1 : Symbol(f1, Decl(correlatedUnions.ts, 163, 46))
+>K : Symbol(K, Decl(correlatedUnions.ts, 165, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 165, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>key : Symbol(key, Decl(correlatedUnions.ts, 165, 49))
+>K : Symbol(K, Decl(correlatedUnions.ts, 165, 12))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 165, 57))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 165, 12))
+
+    funcs[key](arg);
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 165, 36))
+>key : Symbol(key, Decl(correlatedUnions.ts, 165, 49))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 165, 57))
+}
+
+function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f2 : Symbol(f2, Decl(correlatedUnions.ts, 167, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 169, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 169, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>key : Symbol(key, Decl(correlatedUnions.ts, 169, 49))
+>K : Symbol(K, Decl(correlatedUnions.ts, 169, 12))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 169, 57))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 169, 12))
+
+    const func = funcs[key];  // Type Funcs[K]
+>func : Symbol(func, Decl(correlatedUnions.ts, 170, 9))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 169, 36))
+>key : Symbol(key, Decl(correlatedUnions.ts, 169, 49))
+
+    func(arg);
+>func : Symbol(func, Decl(correlatedUnions.ts, 170, 9))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 169, 57))
+}
+
+function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
+>f3 : Symbol(f3, Decl(correlatedUnions.ts, 172, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 174, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>key : Symbol(key, Decl(correlatedUnions.ts, 174, 49))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 174, 57))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+
+    const func: Func<K> = funcs[key];  // Error, Funcs[K] not assignable to Func<K>
+>func : Symbol(func, Decl(correlatedUnions.ts, 175, 9))
+>Func : Symbol(Func, Decl(correlatedUnions.ts, 161, 39))
+>K : Symbol(K, Decl(correlatedUnions.ts, 174, 12))
+>funcs : Symbol(funcs, Decl(correlatedUnions.ts, 174, 36))
+>key : Symbol(key, Decl(correlatedUnions.ts, 174, 49))
+
+    func(arg);
+>func : Symbol(func, Decl(correlatedUnions.ts, 175, 9))
+>arg : Symbol(arg, Decl(correlatedUnions.ts, 174, 57))
+}
+
+function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
+>f4 : Symbol(f4, Decl(correlatedUnions.ts, 177, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 179, 12))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>x : Symbol(x, Decl(correlatedUnions.ts, 179, 36))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>ArgMap : Symbol(ArgMap, Decl(correlatedUnions.ts, 157, 1))
+>y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
+>Funcs : Symbol(Funcs, Decl(correlatedUnions.ts, 162, 59))
+>K : Symbol(K, Decl(correlatedUnions.ts, 179, 12))
+
+    x = y;
+>x : Symbol(x, Decl(correlatedUnions.ts, 179, 36))
+>y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
+}
+

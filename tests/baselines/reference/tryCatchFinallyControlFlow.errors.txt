@@ -273,7 +273,7 @@ tests/cases/compiler/tryCatchFinallyControlFlow.ts(255,9): error TS7027: Unreach
             x;  // Unreachable
             ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
-!!! related TS2728 tests/cases/compiler/tryCatchFinallyControlFlow.ts:248:11: 'x' is declared here.
+!!! related TS2728 tests/cases/compiler/tryCatchFinallyControlFlow.ts:248:11: 'x' is declared here:
             ~~
 !!! error TS7027: Unreachable code detected.
         })();

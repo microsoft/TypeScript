@@ -137,7 +137,7 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m TS2304
+[91m● [0m[96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m  [91mError[0m TS2304
 | export let y = Foo();
   [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
@@ -208,7 +208,7 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m TS2304
+[91m● [0m[96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m  [91mError[0m TS2304
 | export let y = Foo();
   [91m               ▔▔▔[0m
 Cannot find name 'Foo'.
@@ -350,17 +350,17 @@ Output::
 >> Screen clear
 [[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
-● [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m TS2305
+[91m● [0m[96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m  [91mError[0m TS2305
 | import {Foo} from "./moduleFile1";let y = Foo();
   [91m        ▔▔▔[0m
 Module '"./moduleFile1"' has no exported member 'Foo'.
 
-● [96ma/b/file1Consumer2.ts[0m:[93m1[0m:[93m9[0m TS2305
+[91m● [0m[96ma/b/file1Consumer2.ts[0m:[93m1[0m:[93m9[0m  [91mError[0m TS2305
 | import {Foo} from "./moduleFile1"; let z = 10;
   [91m        ▔▔▔[0m
 Module '"./moduleFile1"' has no exported member 'Foo'.
 
-● [96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m16[0m TS2304
+[91m● [0m[96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m16[0m  [91mError[0m TS2304
 | export let y = Foo();
   [91m               ▔▔▔[0m
 Cannot find name 'Foo'.

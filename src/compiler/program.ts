@@ -488,7 +488,8 @@ namespace ts {
 
                 output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, indent, getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
                 output += host.getNewLine();
-            } else {
+            }
+            else {
                 output += formatColorAndReset(bullet, getCategoryFormat(diagnostic.category)) + " " + diagnosticCatNameColored + " " + diagnosticCode ;
             }
 

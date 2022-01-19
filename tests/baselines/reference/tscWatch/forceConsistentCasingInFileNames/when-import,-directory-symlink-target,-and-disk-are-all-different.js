@@ -36,7 +36,7 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
-● [96mb.ts[0m:[93m2[0m:[93m19[0m TS2792
+[91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS2792
 | import { a } from "./yX/a";
   [91m                  ▔▔▔▔▔▔▔▔[0m
 Cannot find module './yX/a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
@@ -152,7 +152,7 @@ Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-● [96mb.ts[0m:[93m2[0m:[93m19[0m TS2792
+[91m● [0m[96mb.ts[0m:[93m2[0m:[93m19[0m  [91mError[0m TS2792
 | import { a } from "./yX/a";
   [91m                  ▔▔▔▔▔▔▔▔[0m
 Cannot find module './yX/a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?

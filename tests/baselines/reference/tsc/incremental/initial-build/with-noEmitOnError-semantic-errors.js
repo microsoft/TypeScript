@@ -40,13 +40,13 @@ export { }
 
 Output::
 /lib/tsc --incremental -p src
-● [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+[91m● [0m[96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
 | const a: string = 10;
   [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
 
 
-Found 1 error in /src/src/main.ts:2
+Found 1 error in src/src/main.ts[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -166,13 +166,13 @@ Input::
 
 Output::
 /lib/tsc --incremental -p src
-● [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m TS2322
+[91m● [0m[96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m  [91mError[0m TS2322
 | const a: string = 10;
   [91m      ▔[0m
 Type 'number' is not assignable to type 'string'.
 
 
-Found 1 error in /src/src/main.ts:2
+Found 1 error in src/src/main.ts[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]

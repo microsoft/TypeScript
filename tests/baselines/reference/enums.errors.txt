@@ -22,11 +22,11 @@
     SyntaxKind.ImportClause;
     ~~~~~~~~~~
 !!! error TS1361: 'SyntaxKind' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:15: 'SyntaxKind' was imported here.
+!!! related TS1376 /b.ts:1:15: 'SyntaxKind' was imported here:
     SymbolFlags.Type;
     ~~~~~~~~~~~
 !!! error TS1361: 'SymbolFlags' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:27: 'SymbolFlags' was imported here.
+!!! related TS1376 /b.ts:1:27: 'SymbolFlags' was imported here:
     let kind: SyntaxKind.ImportClause;
     let flags: SymbolFlags;
     
