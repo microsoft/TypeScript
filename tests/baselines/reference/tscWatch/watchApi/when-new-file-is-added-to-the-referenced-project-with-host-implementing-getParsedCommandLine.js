@@ -133,11 +133,11 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Synchronizing program
+Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
 
 12:00:43 AM - File change detected. Starting incremental compilation...
 
-Synchronizing program
-Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
