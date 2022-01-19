@@ -58,7 +58,7 @@ namespace ts.codefix {
             });
             const name = declaration && getNameOfDeclaration(declaration);
             return !name || changes.length === 0 ? undefined
-                : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), name.getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
+                : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), getTextOfNode(name)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
@@ -141,7 +141,7 @@ namespace ts.codefix {
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
                 if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && markSeen(symbol.valueDeclaration)) {
-                    annotateVariableDeclaration(changes, importAdder, sourceFile, symbol.valueDeclaration, program, host, cancellationToken);
+                    annotateVariableDeclaration(changes, importAdder, getSourceFileOfNode(symbol.valueDeclaration), symbol.valueDeclaration, program, host, cancellationToken);
                     importAdder.writeFixes(changes);
                     return symbol.valueDeclaration;
                 }
