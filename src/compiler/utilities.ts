@@ -2046,7 +2046,7 @@ namespace ts {
     }
 
     export function getExternalModuleRequireArgument(node: Node) {
-        return isAccessedOrBareRequireVariableDeclaration(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+        return isVariableDeclarationInitializedToBareOrAccessedRequire(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -2120,7 +2120,7 @@ namespace ts {
     /**
      * Like `isRequireVariableDeclaration` but allows things like `require("...").foo.bar` or `require("...")["baz"]`.
      */
-    export function isAccessedOrBareRequireVariableDeclaration(node: Node): node is AccessedOrBareRequireVariableDeclaration {
+    export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> {
         return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
     }
 

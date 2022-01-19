@@ -4664,14 +4664,12 @@ namespace ts {
     export type RequireOrImportCall = CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
 
     /* @internal */
-    export interface RequireVariableDeclaration extends VariableDeclaration {
-        readonly initializer: RequireOrImportCall;
+    export interface VariableDeclarationInitializedTo<T extends Expression> extends VariableDeclaration {
+        readonly initializer: T;
     }
 
     /* @internal */
-    export interface AccessedOrBareRequireVariableDeclaration extends VariableDeclaration {
-        readonly initializer: RequireOrImportCall | AccessExpression;
-    }
+    export type RequireVariableDeclaration = VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
     export interface RequireVariableStatement extends VariableStatement {

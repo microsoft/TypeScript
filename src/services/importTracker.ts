@@ -621,7 +621,7 @@ namespace ts.FindAllReferences {
                 Debug.assert((parent as ImportClause | NamespaceImport).name === node);
                 return true;
             case SyntaxKind.BindingElement:
-                return isInJSFile(node) && isAccessedOrBareRequireVariableDeclaration(parent);
+                return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent);
             default:
                 return false;
         }
