@@ -1344,8 +1344,8 @@ namespace ts {
             const child = children[i];
 
             if (isWhiteSpaceOnlyJsxText(child)) {
-                if (parentKind === SyntaxKind.JsxText || parentKind === SyntaxKind.JsxSelfClosingElement) {
-                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+                if (i === 0 && (parentKind === SyntaxKind.JsxText || parentKind === SyntaxKind.JsxSelfClosingElement)) {
+                    Debug.fail("`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
                 }
             }
             else if (nodeHasTokens(children[i], sourceFile)) {
