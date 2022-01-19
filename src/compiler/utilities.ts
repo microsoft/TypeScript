@@ -2113,12 +2113,12 @@ namespace ts {
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireVariableDeclaration(node: Node): node is RequireVariableDeclaration {
+    export function isVariableDeclarationInitializedToRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall> {
         return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ false);
     }
 
     /**
-     * Like `isRequireVariableDeclaration` but allows things like `require("...").foo.bar` or `require("...")["baz"]`.
+     * Like {@link isVariableDeclarationInitializedToRequire} but allows things like `require("...").foo.bar` or `require("...")["baz"]`.
      */
     export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> {
         return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
@@ -2136,7 +2136,7 @@ namespace ts {
     export function isRequireVariableStatement(node: Node): node is RequireVariableStatement {
         return isVariableStatement(node)
             && node.declarationList.declarations.length > 0
-            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl));
+            && every(node.declarationList.declarations, decl => isVariableDeclarationInitializedToRequire(decl));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {

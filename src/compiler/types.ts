@@ -4639,7 +4639,7 @@ namespace ts {
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
     /* @internal */
-    export type AnyImportOrRequire = AnyImportSyntax | RequireVariableDeclaration;
+    export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
     export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
@@ -4669,16 +4669,13 @@ namespace ts {
     }
 
     /* @internal */
-    export type RequireVariableDeclaration = VariableDeclarationInitializedTo<RequireOrImportCall>;
-
-    /* @internal */
     export interface RequireVariableStatement extends VariableStatement {
         readonly declarationList: RequireVariableDeclarationList;
     }
 
     /* @internal */
     export interface RequireVariableDeclarationList extends VariableDeclarationList {
-        readonly declarations: NodeArray<RequireVariableDeclaration>;
+        readonly declarations: NodeArray<VariableDeclarationInitializedTo<RequireOrImportCall>>;
     }
 
     /* @internal */
