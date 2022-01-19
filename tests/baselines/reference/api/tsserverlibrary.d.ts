@@ -91,6 +91,8 @@ declare namespace ts {
     }
 }
 declare namespace ts {
+}
+declare namespace ts {
     export type Path = string & {
         __pathBrand: any;
     };

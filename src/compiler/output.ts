@@ -13,18 +13,30 @@ namespace ts {
         sys: System,
         options?: CompilerOptions | BuildOptions
     ) {
+        let pretty: boolean;
+        if (!options || typeof options.pretty === "undefined") {
+            pretty = defaultToPretty();
+        }
+        else {
+            pretty = options.pretty;
+        }
+
+        // Basically an identity function which returns the string passed in
+        const returnString = (str: string) => str;
+
         return {
-            // Pretty means color support in general
             pretty,
-            formatColorAndReset,
+
+            hyperlink: pretty ? hyperlink : returnString,
             supportsHyperlinks,
-            bold,
-            hyperlink,
             getHyperlinkParts,
+
+            formatColorAndReset: pretty ? formatColorAndReset : returnString,
+            bold: pretty ? bold : returnString,
             tsconfigLinkForOptionName,
-            brightWhite,
-            tsBrandingBlueString,
-            tsBrandingBlueBackground,
+            brightWhite: pretty ? brightWhite : returnString,
+            tsBrandingBlueString: pretty ? tsBrandingBlueString : returnString,
+            tsBrandingBlueBackground: pretty ? tsBrandingBlueBackground : returnString,
         };
 
         function tsconfigLinkForOptionName(option: string) {
@@ -98,13 +110,6 @@ namespace ts {
                 sys.writeOutputIsTTY() &&
                 !sys.getEnvironmentVariable("NO_COLOR")
             );
-        }
-
-        function pretty() {
-            if (!options || typeof options.pretty === "undefined") {
-                return defaultToPretty();
-            }
-            return options.pretty;
         }
 
         function supportsHyperlinks() {

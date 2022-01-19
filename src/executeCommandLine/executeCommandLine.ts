@@ -372,7 +372,7 @@ namespace ts {
         const tsIconLength = 5;
 
         const tsIconFirstLine = output.tsBrandingBlueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = output.tsBrandingBlueBackground(output.brightWhite(padLeft("TS ", tsIconLength)));
+        const tsIconSecondLine = output.tsBrandingBlueString(output.brightWhite(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
         if (terminalWidth >= message.length + tsIconLength) {
             // right align of the icon is 120 at most.
@@ -404,7 +404,7 @@ namespace ts {
     ) {
         let reportDiagnostic = createDiagnosticReporter(sys);
         const outputUtils = createOutputUtils(sys, commandLine.options);
-        const pretty = outputUtils.pretty();
+        const pretty = outputUtils.pretty;
 
         if (commandLine.options.build) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
@@ -648,7 +648,7 @@ namespace ts {
         errors: Diagnostic[]
     ) {
         const outputUtils = createOutputUtils(sys, buildOptions);
-        const pretty = outputUtils.pretty();
+        const pretty = outputUtils.pretty;
 
         // Update to pretty if host supports it
         const reportDiagnostic = updateReportDiagnostic(
@@ -714,7 +714,7 @@ namespace ts {
 
     function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
         const outputUtils = createOutputUtils(sys, options);
-        return outputUtils.pretty() ?
+        return outputUtils.pretty ?
             (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
             undefined;
     }
@@ -829,7 +829,7 @@ namespace ts {
         watchOptionsToExtend: WatchOptions | undefined,
         extendedConfigCache: Map<ExtendedConfigCacheEntry>,
     ) {
-        const pretty = createOutputUtils(system, configParseResult.options).pretty();
+        const pretty = createOutputUtils(system, configParseResult.options).pretty;
         const watchCompilerHost = createWatchCompilerHostOfConfigFile({
             configFileName: configParseResult.options.configFilePath!,
             optionsToExtend,
@@ -852,7 +852,7 @@ namespace ts {
         options: CompilerOptions,
         watchOptions: WatchOptions | undefined,
     ) {
-        const pretty = createOutputUtils(system, options).pretty();
+        const pretty = createOutputUtils(system, options).pretty;
         const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions({
             rootFiles,
             options,
