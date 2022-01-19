@@ -13,7 +13,7 @@ tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'createEleme
             return <div />;
                     ~~~
 !!! error TS2552: Cannot find name 'createElement'. Did you mean 'frameElement'?
-!!! related TS2728 /.ts/lib.dom.d.ts:17166:13: 'frameElement' is declared here.
+!!! related TS2728 /.ts/lib.dom.d.ts:17249:13: 'frameElement' is declared here.
         }
     }
     
