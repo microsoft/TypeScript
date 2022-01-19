@@ -1409,6 +1409,10 @@
         "category": "Error",
         "code": 1471
     },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
