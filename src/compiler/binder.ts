@@ -2408,7 +2408,7 @@ namespace ts {
                 return;
             }
             setParent(node, parent);
-            if (tracing) (node as unknown as TracingNode).TracingPath = file.path;
+            if (tracing) (node as TracingNode).TracingPath = file.path;
             const saveInStrictMode = inStrictMode;
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,

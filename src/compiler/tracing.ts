@@ -342,7 +342,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
     export const startTracing = tracingEnabled.startTracing;
     export const dumpTracingLegend = tracingEnabled.dumpLegend;
 
-    export interface TracingNode extends Node {
-        TracingPath: Path;
+    export interface TracingNode {
+        TracingPath?: Path;
     }
 }
