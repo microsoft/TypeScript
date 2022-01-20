@@ -2219,7 +2219,7 @@ namespace ts {
         const e = isBinaryExpression(initializer)
             && (initializer.operatorToken.kind === SyntaxKind.BarBarToken || initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
             && getExpandoInitializer(initializer.right, isPrototypeAssignment);
-        if (e && isSameEntityName(name, (initializer as BinaryExpression).left)) {
+        if (e && isSameEntityName(name, (initializer).left)) {
             return e;
         }
     }

@@ -654,7 +654,7 @@ namespace ts {
                                 if (text === undefined) {
                                     const parseNode = getParseTreeNode(this);
                                     const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                    text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode!, includeTrivia) : "";
+                                    text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
                                     map?.set(this, text);
                                 }
                                 return text;
