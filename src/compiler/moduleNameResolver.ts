@@ -977,7 +977,7 @@ namespace ts {
                 perFolderCache.set(moduleName, resolutionMode, result);
                 if (!isExternalModuleNameRelative(moduleName)) {
                     // put result in per-module name cache
-                    cache!.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
+                    cache.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
                 }
             }
         }
