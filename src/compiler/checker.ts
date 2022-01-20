@@ -8703,7 +8703,7 @@ namespace ts {
 
             const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
             const isOptional = includeOptionality && (
-                isProperty && !!(declaration).questionToken ||
+                isProperty && !!declaration.questionToken ||
                 isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
                 isOptionalJSDocPropertyLikeTag(declaration));
 
@@ -27895,7 +27895,7 @@ namespace ts {
                 // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
                 const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
                 const jsxFactoryNamespace = getJsxNamespace(node);
-                const jsxFactoryLocation = isNodeOpeningLikeElement ? (node).tagName : node;
+                const jsxFactoryLocation = isNodeOpeningLikeElement ? node.tagName : node;
 
                 // allow null as jsxFragmentFactory
                 let jsxFactorySym: Symbol | undefined;
