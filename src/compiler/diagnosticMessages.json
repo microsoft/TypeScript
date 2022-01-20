@@ -3369,6 +3369,10 @@
         "category": "Error",
         "code": 2836
     },
+    "Import assertion values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2837
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

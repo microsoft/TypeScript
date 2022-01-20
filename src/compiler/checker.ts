@@ -39786,6 +39786,16 @@ namespace ts {
                     return false;
                 }
             }
+            if (!isImportEqualsDeclaration(node) && node.assertClause) {
+                let hasError = false;
+                for (const clause of node.assertClause.elements) {
+                    if (!isStringLiteral(clause.value)) {
+                        hasError = true;
+                        error(clause.value, Diagnostics.Import_assertion_values_must_be_string_literal_expressions);
+                    }
+                }
+                return !hasError;
+            }
             return true;
         }
 
