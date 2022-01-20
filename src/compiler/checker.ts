@@ -3472,7 +3472,7 @@ namespace ts {
                 && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 // If there's a resolutionDiagnostic we need to report it even if a sourceFile is found.
-                if(resolutionDiagnostic) {
+                if (resolutionDiagnostic) {
                     error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
                 }
                 if (sourceFile.symbol) {
