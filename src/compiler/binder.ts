@@ -211,6 +211,8 @@ namespace ts {
         // state used for emit helpers
         let emitFlags: NodeFlags;
 
+        let attachTracingPaths: boolean;
+
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places or if we hit a class/namespace
@@ -245,6 +247,8 @@ namespace ts {
             inStrictMode = bindInStrictMode(file, opts);
             classifiableNames = new Set();
             symbolCount = 0;
+
+            attachTracingPaths = !!tracing;
 
             Symbol = objectAllocator.getSymbolConstructor();
 
@@ -2408,7 +2412,7 @@ namespace ts {
                 return;
             }
             setParent(node, parent);
-            if (tracing) (node as TracingNode).TracingPath = file.path;
+            if (attachTracingPaths) (node as TracingNode).TracingPath = file.path;
             const saveInStrictMode = inStrictMode;
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,
