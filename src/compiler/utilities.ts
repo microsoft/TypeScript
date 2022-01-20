@@ -2074,7 +2074,7 @@ namespace ts {
     }
 
     export function getExternalModuleRequireArgument(node: Node) {
-        return isRequireVariableDeclaration(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+        return isVariableDeclarationInitializedToBareOrAccessedRequire(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -2141,17 +2141,30 @@ namespace ts {
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireVariableDeclaration(node: Node): node is RequireVariableDeclaration {
+    export function isVariableDeclarationInitializedToRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall> {
+        return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ false);
+    }
+
+    /**
+     * Like {@link isVariableDeclarationInitializedToRequire} but allows things like `require("...").foo.bar` or `require("...")["baz"]`.
+     */
+    export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> {
+        return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
+    }
+
+    function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
         if (node.kind === SyntaxKind.BindingElement) {
             node = node.parent.parent;
         }
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), /*requireStringLiteralLikeArgument*/ true);
+        return isVariableDeclaration(node) &&
+            !!node.initializer &&
+            isRequireCall(allowAccessedRequire ? getLeftmostAccessExpression(node.initializer) : node.initializer, /*requireStringLiteralLikeArgument*/ true);
     }
 
     export function isRequireVariableStatement(node: Node): node is RequireVariableStatement {
         return isVariableStatement(node)
             && node.declarationList.declarations.length > 0
-            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl));
+            && every(node.declarationList.declarations, decl => isVariableDeclarationInitializedToRequire(decl));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -2247,7 +2260,7 @@ namespace ts {
         const e = isBinaryExpression(initializer)
             && (initializer.operatorToken.kind === SyntaxKind.BarBarToken || initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
             && getExpandoInitializer(initializer.right, isPrototypeAssignment);
-        if (e && isSameEntityName(name, (initializer as BinaryExpression).left)) {
+        if (e && isSameEntityName(name, initializer.left)) {
             return e;
         }
     }
@@ -5886,7 +5899,7 @@ namespace ts {
     }
 
     // eslint-disable-next-line prefer-const
-    export let objectAllocator: ObjectAllocator = {
+    export const objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => Node as any,
         getTokenConstructor: () => Token as any,
         getIdentifierConstructor: () => Identifier as any,
@@ -5899,18 +5912,27 @@ namespace ts {
     };
 
     export function setObjectAllocator(alloc: ObjectAllocator) {
-        objectAllocator = alloc;
+        Object.assign(objectAllocator, alloc);
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
     }
 
-    export let localizedDiagnosticMessages: MapLike<string> | undefined;
+    let localizedDiagnosticMessages: MapLike<string> | undefined;
 
     /* @internal */
     export function setLocalizedDiagnosticMessages(messages: typeof localizedDiagnosticMessages) {
         localizedDiagnosticMessages = messages;
+    }
+
+    /* @internal */
+    // If the localized messages json is unset, and if given function use it to set the json
+
+    export function maybeSetLocalizedDiagnosticMessages(getMessages: undefined | (() => typeof localizedDiagnosticMessages)) {
+        if (!localizedDiagnosticMessages && getMessages) {
+            localizedDiagnosticMessages = getMessages();
+        }
     }
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {

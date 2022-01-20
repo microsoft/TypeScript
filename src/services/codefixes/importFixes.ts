@@ -537,7 +537,7 @@ namespace ts.codefix {
         const importKind = getImportKind(importingFile, exportKind, compilerOptions);
         return mapDefined(importingFile.imports, (moduleSpecifier): FixAddToExistingImportInfo | undefined => {
             const i = importFromModuleSpecifier(moduleSpecifier);
-            if (isRequireVariableDeclaration(i.parent)) {
+            if (isVariableDeclarationInitializedToRequire(i.parent)) {
                 return checker.resolveExternalModuleName(moduleSpecifier) === moduleSymbol ? { declaration: i.parent, importKind, symbol, targetFlags } : undefined;
             }
             if (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration) {

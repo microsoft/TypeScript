@@ -2257,7 +2257,7 @@ namespace ts.Completions {
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
             const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.Completions);
-            symbols = concatenate(symbols, filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties));
+            symbols = concatenate(symbols, filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer.attributes, typeChecker), jsxContainer.attributes.properties));
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -3587,8 +3587,8 @@ namespace ts.Completions {
 
     export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
         const hasCompletionsType = completionsType && completionsType !== contextualType;
-        const type = hasCompletionsType && !(completionsType!.flags & TypeFlags.AnyOrUnknown)
-            ? checker.getUnionType([contextualType, completionsType!])
+        const type = hasCompletionsType && !(completionsType.flags & TypeFlags.AnyOrUnknown)
+            ? checker.getUnionType([contextualType, completionsType])
             : contextualType;
 
         const properties = getApparentProperties(type, obj, checker);

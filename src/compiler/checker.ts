@@ -2596,7 +2596,7 @@ namespace ts {
                     && isAliasableOrJsExpression(node.parent.right)
                 || node.kind === SyntaxKind.ShorthandPropertyAssignment
                 || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
-                || isRequireVariableDeclaration(node);
+                || isVariableDeclarationInitializedToBareOrAccessedRequire(node);
         }
 
         function isAliasableOrJsExpression(e: Expression) {
@@ -8704,7 +8704,7 @@ namespace ts {
 
             const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
             const isOptional = includeOptionality && (
-                isProperty && !!(declaration as PropertyDeclaration | PropertySignature).questionToken ||
+                isProperty && !!declaration.questionToken ||
                 isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
                 isOptionalJSDocPropertyLikeTag(declaration));
 
@@ -27886,7 +27886,7 @@ namespace ts {
             const isNodeOpeningLikeElement = isJsxOpeningLikeElement(node);
 
             if (isNodeOpeningLikeElement) {
-                checkGrammarJsxElement(node as JsxOpeningLikeElement);
+                checkGrammarJsxElement(node);
             }
 
             checkJsxPreconditions(node);
@@ -27896,7 +27896,7 @@ namespace ts {
                 // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
                 const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
                 const jsxFactoryNamespace = getJsxNamespace(node);
-                const jsxFactoryLocation = isNodeOpeningLikeElement ? (node as JsxOpeningLikeElement).tagName : node;
+                const jsxFactoryLocation = isNodeOpeningLikeElement ? node.tagName : node;
 
                 // allow null as jsxFragmentFactory
                 let jsxFactorySym: Symbol | undefined;
@@ -27926,9 +27926,9 @@ namespace ts {
             }
 
             if (isNodeOpeningLikeElement) {
-                const jsxOpeningLikeNode = node as JsxOpeningLikeElement;
+                const jsxOpeningLikeNode = node ;
                 const sig = getResolvedSignature(jsxOpeningLikeNode);
-                checkDeprecatedSignature(sig, node as JsxOpeningLikeElement);
+                checkDeprecatedSignature(sig, node);
                 checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
             }
         }
@@ -36988,7 +36988,7 @@ namespace ts {
                     // Don't validate for-in initializer as it is already an error
                     const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                     if (needCheckInitializer) {
-                        const initializerType = checkExpressionCached(node.initializer!);
+                        const initializerType = checkExpressionCached(node.initializer);
                         if (strictNullChecks && needCheckWidenedType) {
                             checkNonNullNonVoidType(initializerType, node);
                         }
@@ -37010,7 +37010,7 @@ namespace ts {
             }
             // For a commonjs `const x = require`, validate the alias and exit
             const symbol = getSymbolOfNode(node);
-            if (symbol.flags & SymbolFlags.Alias && isRequireVariableDeclaration(node)) {
+            if (symbol.flags & SymbolFlags.Alias && isVariableDeclarationInitializedToBareOrAccessedRequire(node)) {
                 checkAliasSymbol(node);
                 return;
             }

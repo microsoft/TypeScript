@@ -4639,7 +4639,7 @@ namespace ts {
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
     /* @internal */
-    export type AnyImportOrRequire = AnyImportSyntax | RequireVariableDeclaration;
+    export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
     export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
@@ -4664,8 +4664,8 @@ namespace ts {
     export type RequireOrImportCall = CallExpression & { expression: Identifier, arguments: [StringLiteralLike] };
 
     /* @internal */
-    export interface RequireVariableDeclaration extends VariableDeclaration {
-        readonly initializer: RequireOrImportCall;
+    export interface VariableDeclarationInitializedTo<T extends Expression> extends VariableDeclaration {
+        readonly initializer: T;
     }
 
     /* @internal */
@@ -4675,7 +4675,7 @@ namespace ts {
 
     /* @internal */
     export interface RequireVariableDeclarationList extends VariableDeclarationList {
-        readonly declarations: NodeArray<RequireVariableDeclaration>;
+        readonly declarations: NodeArray<VariableDeclarationInitializedTo<RequireOrImportCall>>;
     }
 
     /* @internal */
