@@ -229,10 +229,6 @@ namespace ts {
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
 
-        const setTracingPath = tracing
-            ? (n: Node) => (n as TracingNode).TracingPath = file.path
-            : undefined;
-
         /**
          * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
          * If so, the node _must_ be in the current file (as that's the only way anything could have traversed to it to yield it as the error node)
@@ -2412,7 +2408,7 @@ namespace ts {
                 return;
             }
             setParent(node, parent);
-            setTracingPath?.(node);
+            if (tracing) (node as unknown as TracingNode).TracingPath = file.path;
             const saveInStrictMode = inStrictMode;
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,
