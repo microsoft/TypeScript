@@ -3467,8 +3467,14 @@ namespace ts {
             const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
             const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
-            const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
+            const sourceFile = resolvedModule
+                && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
+                && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
+                // If there's a resolutionDiagnostic we need to report it even if a sourceFile is found.
+                if (resolutionDiagnostic) {
+                    error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
+                }
                 if (sourceFile.symbol) {
                     if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                         errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
