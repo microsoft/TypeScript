@@ -5320,10 +5320,7 @@ namespace ts {
         function parseJsxClosingFragment(inExpressionContext: boolean): JsxClosingFragment {
             const pos = getNodePos();
             parseExpected(SyntaxKind.LessThanSlashToken);
-            if (tokenIsIdentifierOrKeyword(token())) {
-                parseErrorAtRange(parseJsxElementName(), Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
-            }
-            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+            if (parseExpected(SyntaxKind.GreaterThanToken, Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment, /*shouldAdvance*/ false)) {
                 // manually advance the scanner in order to look for jsx text inside jsx
                 if (inExpressionContext) {
                     nextToken();
