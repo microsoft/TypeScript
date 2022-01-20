@@ -5927,6 +5927,8 @@ namespace ts {
     }
 
     /* @internal */
+    // If the localized messages json is unset, and if given function use it to set the json
+
     export function maybeSetLocalizedDiagnosticMessages(getMessages: undefined | (() => typeof localizedDiagnosticMessages)) {
         if (!localizedDiagnosticMessages && getMessages) {
             localizedDiagnosticMessages = getMessages();
