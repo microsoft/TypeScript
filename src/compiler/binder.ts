@@ -230,7 +230,7 @@ namespace ts {
         const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
 
         const setTracingPath = tracing
-            ? (n: any) => n["__tracingPath"] = file.path
+            ? (n: Node) => (n as TracingNode).TracingPath = file.path
             : undefined;
 
         /**
