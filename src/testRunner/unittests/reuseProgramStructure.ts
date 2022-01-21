@@ -234,7 +234,7 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
@@ -245,7 +245,7 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
@@ -264,7 +264,7 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
