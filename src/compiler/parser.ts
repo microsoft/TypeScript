@@ -4147,7 +4147,7 @@ namespace ts {
             return parseOptional(SyntaxKind.EqualsToken) ? parseAssignmentExpressionOrHigher() : undefined;
         }
 
-        function parseAssignmentExpressionOrHigher(parsingConditionalTrueSide = false): Expression {
+        function parseAssignmentExpressionOrHigher(parsingConditionalTrueSide?: boolean): Expression {
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -4272,7 +4272,7 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined, parsingConditionalTrueSide = false): ArrowFunction {
+        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined, parsingConditionalTrueSide?: boolean): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             const parameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
@@ -4292,7 +4292,7 @@ namespace ts {
             return addJSDocComment(finishNode(node, pos));
         }
 
-        function tryParseParenthesizedArrowFunctionExpression(parsingConditionalTrueSide = false): Expression | undefined {
+        function tryParseParenthesizedArrowFunctionExpression(parsingConditionalTrueSide?: boolean): Expression | undefined {
             const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -4451,7 +4451,7 @@ namespace ts {
             }
         }
 
-        function parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalTrueSide = false): ArrowFunction | undefined {
+        function parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalTrueSide?: boolean): ArrowFunction | undefined {
             const tokenPos = scanner.getTokenPos();
             if (notParenthesizedArrow?.has(tokenPos)) {
                 return undefined;
@@ -4465,7 +4465,7 @@ namespace ts {
             return result;
         }
 
-        function tryParseAsyncSimpleArrowFunctionExpression(parsingConditionalTrueSide = false): ArrowFunction | undefined {
+        function tryParseAsyncSimpleArrowFunctionExpression(parsingConditionalTrueSide?: boolean): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
                 if (lookAhead(isUnParenthesizedAsyncArrowFunctionWorker) === Tristate.True) {
@@ -4499,7 +4499,7 @@ namespace ts {
             return Tristate.False;
         }
 
-        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, parsingConditionalTrueSide = false): ArrowFunction | undefined {
+        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, parsingConditionalTrueSide?: boolean): ArrowFunction | undefined {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiersForArrowFunction();
@@ -4579,7 +4579,7 @@ namespace ts {
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function parseArrowFunctionExpressionBody(isAsync: boolean, parsingConditionalTrueSide = false): Block | Expression {
+        function parseArrowFunctionExpressionBody(isAsync: boolean, parsingConditionalTrueSide?: boolean): Block | Expression {
             if (token() === SyntaxKind.OpenBraceToken) {
                 return parseFunctionBlock(isAsync ? SignatureFlags.Await : SignatureFlags.None);
             }
