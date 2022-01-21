@@ -1614,7 +1614,7 @@ namespace ts {
         readonly type?: TypeNode;
     }
 
-    export interface TypeQueryNode extends TypeNode {
+    export interface TypeQueryNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeQuery;
         readonly exprName: EntityName;
     }
@@ -2444,9 +2444,8 @@ namespace ts {
         readonly expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
+    export interface ExpressionWithTypeArguments extends LeftHandSideExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
-        readonly parent: HeritageClause | JSDocAugmentsTag | JSDocImplementsTag;
         readonly expression: LeftHandSideExpression;
     }
 
@@ -7239,8 +7238,8 @@ namespace ts {
         updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         /** @deprecated */
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        createTypeQueryNode(exprName: EntityName): TypeQueryNode;
-        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
+        createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
+        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
         createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;

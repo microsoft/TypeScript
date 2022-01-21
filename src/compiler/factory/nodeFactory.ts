@@ -1839,17 +1839,19 @@ namespace ts {
         }
 
         // @api
-        function createTypeQueryNode(exprName: EntityName) {
+        function createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]) {
             const node = createBaseNode<TypeQueryNode>(SyntaxKind.TypeQuery);
             node.exprName = exprName;
+            node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
         // @api
-        function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
+        function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]) {
             return node.exprName !== exprName
-                ? update(createTypeQueryNode(exprName), node)
+                || node.typeArguments !== typeArguments
+                ? update(createTypeQueryNode(exprName, typeArguments), node)
                 : node;
         }
 

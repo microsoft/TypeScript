@@ -1531,6 +1531,7 @@ namespace ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NonNullExpression:
+            case SyntaxKind.ExpressionWithTypeArguments:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
                 return true;

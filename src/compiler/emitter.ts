@@ -1727,6 +1727,8 @@ namespace ts {
                         return emitAsExpression(node as AsExpression);
                     case SyntaxKind.NonNullExpression:
                         return emitNonNullExpression(node as NonNullExpression);
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
                     case SyntaxKind.MetaProperty:
                         return emitMetaProperty(node as MetaProperty);
                     case SyntaxKind.SyntheticExpression:
@@ -2227,6 +2229,7 @@ namespace ts {
             writeKeyword("typeof");
             writeSpace();
             emit(node.exprName);
+            emitTypeArguments(node, node.typeArguments);
         }
 
         function emitTypeLiteral(node: TypeLiteralNode) {

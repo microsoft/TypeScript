@@ -753,6 +753,7 @@ namespace ts {
         const templateLiteralTypes = new Map<string, TemplateLiteralType>();
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
+        const instantiatedFunctionTypes = new Map<string, Type>();
         const subtypeReductionCache = new Map<string, Type[]>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
@@ -4569,7 +4570,7 @@ namespace ts {
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
             if (entityName.parent.kind === SyntaxKind.TypeQuery ||
-                isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent) ||
+                entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
                 entityName.parent.kind === SyntaxKind.ComputedPropertyName) {
                 // Typeof value
                 meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
@@ -13635,7 +13636,7 @@ namespace ts {
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
-                const type = isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) : checkExpression(node.exprName);
+                const type = checkExpressionWithTypeArguments(node);
                 links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(type));
             }
             return links.resolvedType;
@@ -31399,6 +31400,62 @@ namespace ts {
                 getNonNullableType(checkExpression(node.expression));
         }
 
+        function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
+            checkGrammarExpressionWithTypeArguments(node);
+            const exprType = node.kind === SyntaxKind.ExpressionWithTypeArguments ? checkExpression(node.expression) :
+                isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) :
+                checkExpression(node.exprName);
+            const typeArguments = node.typeArguments;
+            if (!some(typeArguments)) {
+                return exprType;
+            }
+            let funcType = getApparentType(exprType);
+            if (funcType === silentNeverType || isErrorType(funcType)) {
+                return funcType;
+            }
+            let signatureMatch = false;
+            let typeArgumentError = false;
+            const result = getInstantiatedType(funcType);
+            if (!signatureMatch) {
+                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(funcType)));
+                return exprType;
+            }
+            const key = `${getTypeId(exprType)},${getTypeListId(map(typeArguments, getTypeFromTypeNode))}`;
+            return instantiatedFunctionTypes.get(key) || (instantiatedFunctionTypes.set(key, result), result);
+
+            function getInstantiatedType(type: Type): Type {
+                if (type.flags & TypeFlags.Object) {
+                    const resolved = resolveStructuredTypeMembers(type as ObjectType);
+                    const callSignatures = sameMap(filter(resolved.callSignatures, isApplicableSignature), getInstantiatedSignature);
+                    const constructSignatures = sameMap(filter(resolved.constructSignatures, isApplicableSignature), getInstantiatedSignature);
+                    return createAnonymousType(undefined, resolved.members, callSignatures, constructSignatures, resolved.indexInfos);
+                }
+                if (type.flags & TypeFlags.Union) {
+                    return mapType(type, getInstantiatedType);
+                }
+                if (type.flags & TypeFlags.Intersection) {
+                    return getIntersectionType(sameMap((type as IntersectionType).types, getInstantiatedType));
+                }
+                return type;
+            }
+
+            function isApplicableSignature(signature: Signature) {
+                return !!signature.typeParameters && hasCorrectTypeArgumentArity(signature, typeArguments);
+            }
+
+            function getInstantiatedSignature(signature: Signature) {
+                if (!typeArgumentError) {
+                    signatureMatch = true;
+                    const typeArgumentTypes = checkTypeArguments(signature, typeArguments!, /*reportErrors*/ true);
+                    if (typeArgumentTypes) {
+                        return getSignatureInstantiation(signature, typeArgumentTypes, isInJSFile(signature.declaration));
+                    }
+                    typeArgumentError = true;
+                }
+                return signature;
+            }
+        }
+
         function checkMetaProperty(node: MetaProperty): Type {
             checkGrammarMetaProperty(node);
 
@@ -34151,6 +34208,8 @@ namespace ts {
                     return checkAssertion(node as AssertionExpression);
                 case SyntaxKind.NonNullExpression:
                     return checkNonNullAssertion(node as NonNullExpression);
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return checkExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
                 case SyntaxKind.MetaProperty:
                     return checkMetaProperty(node as MetaProperty);
                 case SyntaxKind.DeleteExpression:
@@ -43025,7 +43084,7 @@ namespace ts {
             return some(types, checkGrammarExpressionWithTypeArguments);
         }
 
-        function checkGrammarExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
+        function checkGrammarExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
             return checkGrammarTypeArguments(node, node.typeArguments);
         }
 

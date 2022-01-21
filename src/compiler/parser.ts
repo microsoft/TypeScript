@@ -180,7 +180,8 @@ namespace ts {
                     visitNode(cbNode, (node as TypePredicateNode).parameterName) ||
                     visitNode(cbNode, (node as TypePredicateNode).type);
             case SyntaxKind.TypeQuery:
-                return visitNode(cbNode, (node as TypeQueryNode).exprName);
+                return visitNode(cbNode, (node as TypeQueryNode).exprName) ||
+                    visitNodes(cbNode, cbNodes, (node as TypeQueryNode).typeArguments);
             case SyntaxKind.TypeLiteral:
                 return visitNodes(cbNode, cbNodes, (node as TypeLiteralNode).members);
             case SyntaxKind.ArrayType:
@@ -3078,7 +3079,9 @@ namespace ts {
         function parseTypeQuery(): TypeQueryNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.TypeOfKeyword);
-            return finishNode(factory.createTypeQueryNode(parseEntityName(/*allowReservedWords*/ true)), pos);
+            const entityName = parseEntityName(/*allowReservedWords*/ true);
+            const typeArguments = tryParseTypeArguments();
+            return finishNode(factory.createTypeQueryNode(entityName, typeArguments), pos);
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
@@ -5485,13 +5488,16 @@ namespace ts {
                             expression = parseTaggedTemplateRest(pos, expression, questionDotToken, typeArguments);
                             continue;
                         }
-
-                        const argumentList = parseArgumentList();
-                        const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
-                            factory.createCallChain(expression, questionDotToken, typeArguments, argumentList) :
-                            factory.createCallExpression(expression, typeArguments, argumentList);
-                        expression = finishNode(callExpr, pos);
-                        continue;
+                        if (questionDotToken || token() === SyntaxKind.OpenParenToken) {
+                            const argumentList = parseArgumentList();
+                            const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
+                                factory.createCallChain(expression, questionDotToken, typeArguments, argumentList) :
+                                factory.createCallExpression(expression, typeArguments, argumentList);
+                            expression = finishNode(callExpr, pos);
+                            continue;
+                        }
+                        expression = finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
+                        break;
                     }
                 }
                 else if (token() === SyntaxKind.OpenParenToken) {
@@ -5551,6 +5557,7 @@ namespace ts {
                 // these are the only tokens can legally follow a type argument
                 // list. So we definitely want to treat them as type arg lists.
                 // falls through
+                case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.DotToken:                       // foo<x>.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
@@ -5574,7 +5581,6 @@ namespace ts {
                     // treat it as such.
                     return true;
 
-                case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.OpenBraceToken:                 // foo<x> {
                 // We don't want to treat these as type arguments.  Otherwise we'll parse this
                 // as an invocation expression.  Instead, we want to parse out the expression
@@ -5792,18 +5798,13 @@ namespace ts {
             }
 
             const expressionPos = getNodePos();
-            let expression: MemberExpression = parsePrimaryExpression();
-            let typeArguments;
-            while (true) {
-                expression = parseMemberExpressionRest(expressionPos, expression, /*allowOptionalChain*/ false);
-                typeArguments = tryParse(parseTypeArgumentsInExpression);
-                if (isTemplateStartOfTaggedTemplate()) {
-                    Debug.assert(!!typeArguments,
-                        "Expected a type argument list; all plain tagged template starts should be consumed in 'parseMemberExpressionRest'");
-                    expression = parseTaggedTemplateRest(expressionPos, expression, /*optionalChain*/ undefined, typeArguments);
-                    typeArguments = undefined;
-                }
-                break;
+            let expression = parseMemberExpressionRest(expressionPos, parsePrimaryExpression(), /*allowOptionalChain*/ false);
+            let typeArguments = tryParse(parseTypeArgumentsInExpression);
+            if (isTemplateStartOfTaggedTemplate()) {
+                Debug.assert(!!typeArguments,
+                    "Expected a type argument list; all plain tagged template starts should be consumed in 'parseMemberExpressionRest'");
+                expression = parseTaggedTemplateRest(expressionPos, expression, /*optionalChain*/ undefined, typeArguments);
+                typeArguments = undefined;
             }
 
             let argumentsArray: NodeArray<Expression> | undefined;
@@ -7070,6 +7071,9 @@ namespace ts {
         function parseExpressionWithTypeArguments(): ExpressionWithTypeArguments {
             const pos = getNodePos();
             const expression = parseLeftHandSideExpressionOrHigher();
+            if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                return expression as ExpressionWithTypeArguments;
+            }
             const typeArguments = tryParseTypeArguments();
             return finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
         }

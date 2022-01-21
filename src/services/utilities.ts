@@ -200,7 +200,7 @@ namespace ts {
             case SyntaxKind.ImportType:
                 return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node.parent as ExpressionWithTypeArguments);
+                return isPartOfTypeNode(node.parent);
         }
 
         return false;
