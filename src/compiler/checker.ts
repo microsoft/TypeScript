@@ -134,6 +134,9 @@ namespace ts {
         EmptyObjectStrictFacts = All & ~(EQUndefined | EQNull | EQUndefinedOrNull),
         AllTypeofNE = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined,
         EmptyObjectFacts = All,
+        // Masks
+        OrFactsMask = TypeofEQFunction | TypeofEQObject | TypeofNEObject,
+        AndFactsMask = All & ~OrFactsMask,
     }
 
     const typeofEQFacts: ReadonlyESMap<string, TypeFacts> = new Map(getEntries({
@@ -22992,9 +22995,22 @@ namespace ts {
                 // When an intersection contains a primitive type we ignore object type constituents as they are
                 // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
                 ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
-                return reduceLeft((type as UnionType).types, (facts, t) => facts & getTypeFacts(t, ignoreObjects), TypeFacts.All);
+                return getIntersectionTypeFacts(type as IntersectionType, ignoreObjects);
             }
             return TypeFacts.All;
+        }
+
+        function getIntersectionTypeFacts(type: IntersectionType, ignoreObjects: boolean): TypeFacts {
+            // When computing the type facts of an intersection type, certain type facts are computed as `and`
+            // and others are computed as `or`.
+            let oredFacts = TypeFacts.None;
+            let andedFacts = TypeFacts.All;
+            for (const t of type.types) {
+                const f = getTypeFacts(t, ignoreObjects);
+                oredFacts |= f;
+                andedFacts &= f;
+            }
+            return oredFacts & TypeFacts.OrFactsMask | andedFacts & TypeFacts.AndFactsMask;
         }
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
