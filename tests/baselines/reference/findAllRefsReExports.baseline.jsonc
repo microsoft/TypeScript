@@ -1,0 +1,8165 @@
+// === /b.ts ===
+// export { [|foo|] as [|bar|] } from "./a";
+
+// === /c.ts ===
+// export { [|foo|] as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /a.ts ===
+// export function /*FIND ALL REFS*/[|foo|](): void {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function foo(): void",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// export { /*FIND ALL REFS*/[|foo|] as [|bar|] } from "./a";
+
+// === /c.ts ===
+// export { [|foo|] as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /a.ts ===
+// export function [|foo|](): void {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function foo(): void",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// export { [|foo|] as [|bar|] } from "./a";
+
+// === /c.ts ===
+// export { /*FIND ALL REFS*/[|foo|] as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /a.ts ===
+// export function [|foo|](): void {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function foo(): void",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import baz from "./c";
+// import { default as bang } from "./c";
+// import boom from "./d";
+// [|bar|](); baz(); bang(); boom();
+
+// === /b.ts ===
+// export { foo as /*FIND ALL REFS*/[|bar|] } from "./a";
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /e.ts ===
+// import { /*FIND ALL REFS*/[|bar|] } from "./b";
+// import baz from "./c";
+// import { default as bang } from "./c";
+// import boom from "./d";
+// [|bar|](); baz(); bang(); boom();
+
+// === /b.ts ===
+// export { foo as [|bar|] } from "./a";
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import baz from "./c";
+// import { default as bang } from "./c";
+// import boom from "./d";
+// /*FIND ALL REFS*/[|bar|](); baz(); bang(); boom();
+
+// === /b.ts ===
+// export { foo as [|bar|] } from "./a";
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as /*FIND ALL REFS*/[|default|] } from "./a";
+
+// === /e.ts ===
+// import { bar } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// bar(); [|baz|](); [|bang|](); [|boom|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { bar } from "./b";
+// import [|baz|] from "./c";
+// import { /*FIND ALL REFS*/[|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// bar(); [|baz|](); [|bang|](); [|boom|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { /*FIND ALL REFS*/[|default|] } from "./c";
+
+// === /b.ts ===
+// export { [|foo|] as [|bar|] } from "./a";
+
+// === /c.ts ===
+// export { [|foo|] as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /a.ts ===
+// export function [|foo|](): void {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function foo(): void",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { bar } from "./b";
+// import /*FIND ALL REFS*/[|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// bar(); [|baz|](); [|bang|](); [|boom|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { bar } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// bar(); /*FIND ALL REFS*/[|baz|](); [|bang|](); [|boom|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /e.ts ===
+// import { bar } from "./b";
+// import baz from "./c";
+// import { default as /*FIND ALL REFS*/[|bang|] } from "./c";
+// import boom from "./d";
+// bar(); baz(); [|bang|](); boom();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /e.ts ===
+// import { bar } from "./b";
+// import baz from "./c";
+// import { default as [|bang|] } from "./c";
+// import boom from "./d";
+// bar(); baz(); /*FIND ALL REFS*/[|bang|](); boom();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /b.ts ===
+// export { [|foo|] as [|bar|] } from "./a";
+
+// === /c.ts ===
+// export { [|foo|] as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import /*FIND ALL REFS*/[|boom|] from "./d";
+// [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /a.ts ===
+// export function [|foo|](): void {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function foo(): void",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /b.ts ===
+// export { [|foo|] as [|bar|] } from "./a";
+
+// === /c.ts ===
+// export { [|foo|] as [|default|] } from "./a";
+
+// === /e.ts ===
+// import { [|bar|] } from "./b";
+// import [|baz|] from "./c";
+// import { [|default|] as [|bang|] } from "./c";
+// import [|boom|] from "./d";
+// [|bar|](); [|baz|](); [|bang|](); /*FIND ALL REFS*/[|boom|]();
+
+// === /a.ts ===
+// export function [|foo|](): void {}
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function boom(): void\nimport boom",
+      "textSpan": {
+        "start": 96,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boom",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 89,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 96,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 135,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/d.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 7
+        },
+        "fileName": "/d.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "function",
+      "name": "function foo(): void",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 30
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 30
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nexport bar",
+      "textSpan": {
+        "start": 16,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 33
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 33
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bar(): void\nimport bar",
+      "textSpan": {
+        "start": 9,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bar",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 26
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 113,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c.ts",
+      "kind": "alias",
+      "name": "(alias) function foo(): void\nexport default",
+      "textSpan": {
+        "start": 16,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 7
+        },
+        "fileName": "/c.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 7
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function baz(): void\nimport baz",
+      "textSpan": {
+        "start": 34,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "baz",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 27,
+        "length": 22
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 27,
+          "length": 22
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/e.ts",
+      "kind": "alias",
+      "name": "(alias) function bang(): void\nimport bang",
+      "textSpan": {
+        "start": 70,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "bang",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 38
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 38
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 4
+        },
+        "fileName": "/e.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

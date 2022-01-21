@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 var utils_1 = require("./utils");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return utils_1.bar; } });
-utils_1.foo();
+(0, utils_1.foo)();
 var obj;
 
 

@@ -1,0 +1,101 @@
+=== tests/cases/compiler/useUnknownInCatchVariables01.ts ===
+try {
+    // ...
+}
+catch (e) {
+>e : unknown
+
+    // error!
+    void e.toUpperCase();
+>void e.toUpperCase() : undefined
+>e.toUpperCase() : any
+>e.toUpperCase : any
+>e : unknown
+>toUpperCase : any
+
+    void e++;
+>void e++ : undefined
+>e++ : number
+>e : unknown
+
+    void e();
+>void e() : undefined
+>e() : any
+>e : unknown
+
+    if (typeof e === "string") {
+>typeof e === "string" : boolean
+>typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>e : unknown
+>"string" : "string"
+
+        // works!
+        // We've narrowed 'e' down to the type 'string'.
+        console.log(e.toUpperCase());
+>console.log(e.toUpperCase()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>e.toUpperCase() : string
+>e.toUpperCase : () => string
+>e : string
+>toUpperCase : () => string
+    }
+    if (e instanceof Error) {
+>e instanceof Error : boolean
+>e : unknown
+>Error : ErrorConstructor
+
+        e.stack?.toUpperCase();
+>e.stack?.toUpperCase() : string
+>e.stack?.toUpperCase : () => string
+>e.stack : string
+>e : Error
+>stack : string
+>toUpperCase : () => string
+    }
+    if (typeof e === "number") {
+>typeof e === "number" : boolean
+>typeof e : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>e : unknown
+>"number" : "number"
+
+        e.toExponential();
+>e.toExponential() : string
+>e.toExponential : (fractionDigits?: number) => string
+>e : number
+>toExponential : (fractionDigits?: number) => string
+
+        e++;
+>e++ : number
+>e : number
+    }
+}
+
+
+try {
+    // ...
+}
+catch (e: any) {
+>e : any
+
+    // All are allowed.
+    void e.toUpperCase();
+>void e.toUpperCase() : undefined
+>e.toUpperCase() : any
+>e.toUpperCase : any
+>e : any
+>toUpperCase : any
+
+    void e.toExponential();
+>void e.toExponential() : undefined
+>e.toExponential() : any
+>e.toExponential : any
+>e : any
+>toExponential : any
+
+    void e();
+>void e() : undefined
+>e() : any
+>e : any
+}

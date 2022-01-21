@@ -58,10 +58,10 @@ type K00 = keyof any;  // string
 >K00 : string | number | symbol
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "valueOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
->K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
+>K02 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
 
 type K03 = keyof boolean;  // "valueOf"
 >K03 : "valueOf"
@@ -86,7 +86,7 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : keyof Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : number | keyof Shape[]
+>K11 : keyof Shape[]
 
 type K12 = keyof Dictionary<Shape>;  // string
 >K12 : string | number
@@ -98,10 +98,10 @@ type K14 = keyof Object;  // "constructor" | "toString" | ...
 >K14 : keyof Object
 
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
->K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
+>K15 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : number | keyof [string, number]
+>K16 : keyof [string, number]
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"

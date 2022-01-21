@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -103,6 +109,20 @@ declare module ts {
         ambientModuleName?: string;
         isPackageJsonImport?: true;
         exportName: string;
+    }
+
+    interface CompilerOptions {
+        module?: string;
+        target?: string;
+        jsx?: string;
+        allowJs?: boolean;
+        maxNodeModulesJsDepth?: number;
+        strictNullChecks?: boolean;
+        sourceMap?: boolean;
+        allowSyntheticDefaultImports?: boolean;
+        allowNonTsExtensions?: boolean;
+        resolveJsonModule?: boolean;
+        [key: string]: string | number | boolean | undefined;
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
@@ -187,14 +207,16 @@ declare namespace FourSlashInterface {
         markerName(m: Marker): string;
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesInFile(fileName?: string): Range[];
         spans(): Array<{ start: number, length: number }>;
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
     }
-    class plugins {
+    class config {
         configurePlugin(pluginName: string, configuration: any): void;
+        setCompilerOptionsForInferredProjects(options: ts.CompilerOptions)
     }
     class goTo {
         marker(name?: string | Marker): void;
@@ -301,15 +323,9 @@ declare namespace FourSlashInterface {
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineFindAllReferences(...markerNames: string[]): void;
         baselineGetFileReferences(fileName: string): void;
-        noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
-        /**
-         * @deprecated Use baselineFindAllReferences instead
-         * For each of starts, asserts the ranges that are referenced from there.
-         * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
-         */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
+        /** @deprecated Use baselineFindAllReferences instead */
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(...texts: string[]): void;
@@ -395,6 +411,10 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
+        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
+            start: number;
+            length: number;
+        }, preference?: InlayHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -625,17 +645,34 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
+        /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+    }
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
         readonly isNewIdentifierLocation?: boolean;
         readonly isGlobalCompletion?: boolean;
         readonly optionalReplacementSpan?: Range;
+        /** Must provide all completion entries in order. */
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        /** Must provide all completion entries, but order doesn't matter. */
+        readonly unsorted?: readonly ExpectedCompletionEntry[];
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
@@ -732,6 +769,14 @@ declare namespace FourSlashInterface {
         readonly commands?: ReadonlyArray<{}>;
     }
 
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: ts.InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
     interface VerifyNavigateToOptions {
         readonly pattern: string;
         readonly fileName?: string;
@@ -779,7 +824,7 @@ declare namespace FourSlashInterface {
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
-declare var plugins: FourSlashInterface.plugins;
+declare var config: FourSlashInterface.config;
 declare var goTo: FourSlashInterface.goTo;
 declare var verify: FourSlashInterface.verify;
 declare var edit: FourSlashInterface.edit;
@@ -790,25 +835,29 @@ declare function classification(format: "original"): FourSlashInterface.Classifi
 declare function classification(format: "2020"): FourSlashInterface.ModernClassificationFactory;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    interface GlobalsPlusOptions {
+        noLib?: boolean;
+    }
     export const enum SortText {
-        LocalDeclarationPriority = "0",
-        LocationPriority = "1",
-        OptionalMember = "2",
-        MemberDeclaredBySpreadAssignment = "3",
-        SuggestedClassMembers = "4",
-        GlobalsOrKeywords = "5",
-        AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7",
-        DeprecatedLocalDeclarationPriority = "8",
-        DeprecatedLocationPriority = "9",
-        DeprecatedOptionalMember = "10",
-        DeprecatedMemberDeclaredBySpreadAssignment = "11",
-        DeprecatedSuggestedClassMembers = "12",
-        DeprecatedGlobalsOrKeywords = "13",
-        DeprecatedAutoImportSuggestions = "14"
+        LocalDeclarationPriority = "10",
+        LocationPriority = "11",
+        OptionalMember = "12",
+        MemberDeclaredBySpreadAssignment = "13",
+        SuggestedClassMembers = "14",
+        GlobalsOrKeywords = "15",
+        AutoImportSuggestions = "16",
+        JavascriptIdentifiers = "17",
+        DeprecatedLocalDeclarationPriority = "18",
+        DeprecatedLocationPriority = "19",
+        DeprecatedOptionalMember = "20",
+        DeprecatedMemberDeclaredBySpreadAssignment = "21",
+        DeprecatedSuggestedClassMembers = "22",
+        DeprecatedGlobalsOrKeywords = "23",
+        DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
-        ThisProperty = "ThisProperty/"
+        ThisProperty = "ThisProperty/",
+        ClassMemberSnippet = "ClassMemberSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;
@@ -819,13 +868,15 @@ declare namespace completion {
     export const insideMethodKeywords: ReadonlyArray<Entry>;
     export const insideMethodInJsKeywords: ReadonlyArray<Entry>;
     export const globalsVars: ReadonlyArray<Entry>;
-    export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
-    export function globalsInJsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
-    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
-    export function globalsInJsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export function sorted(entries: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsInJsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsInJsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const keywordsWithUndefined: ReadonlyArray<Entry>;
     export const keywords: ReadonlyArray<Entry>;
     export const typeKeywords: ReadonlyArray<Entry>;
+    export function typeKeywordsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
     export const globalTypes: ReadonlyArray<Entry>;
     export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
     export const typeAssertionKeywords: ReadonlyArray<Entry>;
@@ -833,8 +884,10 @@ declare namespace completion {
     export const classElementInJsKeywords: ReadonlyArray<Entry>;
     export const constructorParameterKeywords: ReadonlyArray<Entry>;
     export const functionMembers: ReadonlyArray<Entry>;
-    export const stringMembers: ReadonlyArray<Entry>;
+    export function functionMembersPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export const functionMembersWithPrototype: ReadonlyArray<Entry>;
+    export function functionMembersWithPrototypePlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const stringMembers: ReadonlyArray<Entry>;
     export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
     export const statementKeywords: ReadonlyArray<Entry>;
     export const statementInJsKeywords: ReadonlyArray<Entry>;

@@ -1,0 +1,227 @@
+// === /b.ts ===
+// import { x } from "/*FIND ALL REFS*/[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("[|../a|]");
+
+// === /d.ts ===
+// /// <reference path="[|./a.ts|]" />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "module",
+      "name": "module \"/a\"",
+      "textSpan": {
+        "start": 0,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"/a\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 24
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 4
+        },
+        "fileName": "/c/sub.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 21,
+          "length": 6
+        },
+        "fileName": "/d.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// import { x } from "[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("/*FIND ALL REFS*/[|../a|]");
+
+// === /d.ts ===
+// /// <reference path="[|./a.ts|]" />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "module",
+      "name": "module \"/a\"",
+      "textSpan": {
+        "start": 0,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"/a\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 24
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 4
+        },
+        "fileName": "/c/sub.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 21,
+          "length": 6
+        },
+        "fileName": "/d.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// import { x } from "[|./a|]";
+
+// === /c/sub.js ===
+// const a = require("[|../a|]");
+
+// === /d.ts ===
+// /// <reference path="/*FIND ALL REFS*/[|./a.ts|]" />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "module",
+      "name": "module \"/a\"",
+      "textSpan": {
+        "start": 0,
+        "length": 19
+      },
+      "displayParts": [
+        {
+          "text": "module",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "\"/a\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 3
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 24
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 4
+        },
+        "fileName": "/c/sub.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 26
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 21,
+          "length": 6
+        },
+        "fileName": "/d.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

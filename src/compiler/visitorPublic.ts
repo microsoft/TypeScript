@@ -475,6 +475,15 @@ namespace ts {
                     visitParameterList(node.parameters, visitor, context, nodesVisitor),
                     visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                Debug.type<ClassStaticBlockDeclaration>(node);
+                context.startLexicalEnvironment();
+                context.suspendLexicalEnvironment();
+                return factory.updateClassStaticBlockDeclaration(node,
+                        nodesVisitor(node.decorators, visitor, isDecorator),
+                        nodesVisitor(node.modifiers, visitor, isModifier),
+                        visitFunctionBody(node.body, visitor, context, nodeVisitor));
+
             case SyntaxKind.CallSignature:
                 Debug.type<CallSignatureDeclaration>(node);
                 return factory.updateCallSignature(node,
@@ -620,7 +629,8 @@ namespace ts {
                     nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration),
                     nodeVisitor(node.nameType, visitor, isTypeNode),
                     nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken),
-                    nodeVisitor(node.type, visitor, isTypeNode));
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodesVisitor(node.members, visitor, isTypeElement));
 
             case SyntaxKind.LiteralType:
                 Debug.type<LiteralTypeNode>(node);
@@ -1067,7 +1077,20 @@ namespace ts {
                     nodesVisitor(node.decorators, visitor, isDecorator),
                     nodesVisitor(node.modifiers, visitor, isModifier),
                     nodeVisitor(node.importClause, visitor, isImportClause),
-                    nodeVisitor(node.moduleSpecifier, visitor, isExpression));
+                    nodeVisitor(node.moduleSpecifier, visitor, isExpression),
+                    nodeVisitor(node.assertClause, visitor, isAssertClause));
+
+            case SyntaxKind.AssertClause:
+                Debug.type<AssertClause>(node);
+                return factory.updateAssertClause(node,
+                    nodesVisitor(node.elements, visitor, isAssertEntry),
+                    node.multiLine);
+
+            case SyntaxKind.AssertEntry:
+                Debug.type<AssertEntry>(node);
+                return factory.updateAssertEntry(node,
+                    nodeVisitor(node.name, visitor, isAssertionKey),
+                    nodeVisitor(node.value, visitor, isExpressionNode));
 
             case SyntaxKind.ImportClause:
                 Debug.type<ImportClause>(node);
@@ -1094,6 +1117,7 @@ namespace ts {
             case SyntaxKind.ImportSpecifier:
                 Debug.type<ImportSpecifier>(node);
                 return factory.updateImportSpecifier(node,
+                    node.isTypeOnly,
                     nodeVisitor(node.propertyName, visitor, isIdentifier),
                     nodeVisitor(node.name, visitor, isIdentifier));
 
@@ -1111,7 +1135,8 @@ namespace ts {
                     nodesVisitor(node.modifiers, visitor, isModifier),
                     node.isTypeOnly,
                     nodeVisitor(node.exportClause, visitor, isNamedExportBindings),
-                    nodeVisitor(node.moduleSpecifier, visitor, isExpression));
+                    nodeVisitor(node.moduleSpecifier, visitor, isExpression),
+                    nodeVisitor(node.assertClause, visitor, isAssertClause));
 
             case SyntaxKind.NamedExports:
                 Debug.type<NamedExports>(node);
@@ -1121,6 +1146,7 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
                 Debug.type<ExportSpecifier>(node);
                 return factory.updateExportSpecifier(node,
+                    node.isTypeOnly,
                     nodeVisitor(node.propertyName, visitor, isIdentifier),
                     nodeVisitor(node.name, visitor, isIdentifier));
 

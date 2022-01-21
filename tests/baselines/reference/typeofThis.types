@@ -1,0 +1,424 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts ===
+class Test {
+>Test : Test
+
+    data = {};
+>data : {}
+>{} : {}
+
+    constructor() {
+        var copy: typeof this.data = {};
+>copy : {}
+>this.data : {}
+>this : any
+>data : {}
+>{} : {}
+    }
+}
+
+class Test1 {
+>Test1 : Test1
+
+    data = { foo: '' };
+>data : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+    ['this'] = '';
+>['this'] : string
+>'this' : "this"
+>'' : ""
+
+    constructor() {
+        var copy: typeof this.data = { foo: '' };
+>copy : { foo: string; }
+>this.data : { foo: string; }
+>this : any
+>data : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        var foo: typeof this.data.foo = '';
+>foo : string
+>this.data.foo : string
+>this.data : { foo: string; }
+>this : any
+>data : { foo: string; }
+>foo : string
+>'' : ""
+
+        var self: typeof this = this;
+>self : this
+>this : any
+>this : this
+
+        self.data;
+>self.data : { foo: string; }
+>self : this
+>data : { foo: string; }
+
+        var str: typeof this.this = '';
+>str : string
+>this.this : string
+>this : any
+>this : string
+>'' : ""
+    }
+}
+
+
+function Test2() {
+>Test2 : () => void
+
+    let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+}
+
+function Test3(this: { no: number }) {
+>Test3 : (this: {    no: number;}) => void
+>this : { no: number; }
+>no : number
+
+    let x: typeof this.no = 1;
+>x : number
+>this.no : number
+>this : { no: number; }
+>no : number
+>1 : 1
+}
+
+function Test4(this: { no: number } | undefined) {
+>Test4 : (this: {    no: number;} | undefined) => void
+>this : { no: number; } | undefined
+>no : number
+
+    let x: typeof this.no = 1;
+>x : number
+>this.no : number
+>this : { no: number; } | undefined
+>no : number
+>1 : 1
+}
+
+class Test5 {
+>Test5 : Test5
+
+    no = 1;
+>no : number
+>1 : 1
+
+    f = () => {
+>f : () => void
+>() => {        // should not capture this.        let x: typeof this.no = 1;    } : () => void
+
+        // should not capture this.
+        let x: typeof this.no = 1;
+>x : number
+>this.no : number
+>this : any
+>no : number
+>1 : 1
+    }
+}
+
+namespace Test6 {
+>Test6 : typeof Test6
+
+    export let f = () => {
+>f : () => void
+>() => {        let x: typeof this.no = 1;    } : () => void
+
+        let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+    }
+}
+
+module Test7 {
+>Test7 : typeof Test7
+
+    export let f = () => {
+>f : () => void
+>() => {        let x: typeof this.no = 1;    } : () => void
+
+        let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+    }
+}
+
+const Test8 = () => {
+>Test8 : () => void
+>() => {    let x: typeof this.no = 1;} : () => void
+
+    let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+}
+
+class Test9 {
+>Test9 : Test9
+
+    no = 0;
+>no : number
+>0 : 0
+
+    this = 0;
+>this : number
+>0 : 0
+
+    f() {
+>f : () => void
+
+        if (this instanceof Test9D1) {
+>this instanceof Test9D1 : boolean
+>this : this
+>Test9D1 : typeof Test9D1
+
+            const d1: typeof this = this;
+>d1 : this & Test9D1
+>this : any
+>this : this & Test9D1
+
+            d1.f1();
+>d1.f1() : void
+>d1.f1 : () => void
+>d1 : this & Test9D1
+>f1 : () => void
+        }
+
+        if (this instanceof Test9D2) {
+>this instanceof Test9D2 : boolean
+>this : this
+>Test9D2 : typeof Test9D2
+
+            const d2: typeof this = this;
+>d2 : this & Test9D2
+>this : any
+>this : this & Test9D2
+
+            d2.f2();
+>d2.f2() : void
+>d2.f2 : () => void
+>d2 : this & Test9D2
+>f2 : () => void
+        }
+    }
+
+    g() {
+>g : () => void
+
+        if (this.no === 1) {
+>this.no === 1 : boolean
+>this.no : number
+>this : this
+>no : number
+>1 : 1
+
+            const no: typeof this.no = this.no;
+>no : 1
+>this.no : 1
+>this : any
+>no : 1
+>this.no : 1
+>this : this
+>no : 1
+        }
+
+        if (this.this === 1) {
+>this.this === 1 : boolean
+>this.this : number
+>this : this
+>this : number
+>1 : 1
+
+            const no: typeof this.this = this.this;
+>no : 1
+>this.this : 1
+>this : any
+>this : 1
+>this.this : 1
+>this : this
+>this : 1
+        }
+    }
+}
+
+class Test9D1 {
+>Test9D1 : Test9D1
+
+    f1() {}
+>f1 : () => void
+}
+
+class Test9D2 {
+>Test9D2 : Test9D2
+
+    f2() {}
+>f2 : () => void
+}
+
+class Test10 {
+>Test10 : Test10
+
+    a?: { b?: string }
+>a : { b?: string | undefined; } | undefined
+>b : string | undefined
+
+    foo() {
+>foo : () => void
+
+        let a: typeof this.a = undefined as any;
+>a : { b?: string | undefined; } | undefined
+>this.a : { b?: string | undefined; } | undefined
+>this : any
+>a : { b?: string | undefined; } | undefined
+>undefined as any : any
+>undefined : undefined
+
+        if (this.a) {
+>this.a : { b?: string | undefined; } | undefined
+>this : this
+>a : { b?: string | undefined; } | undefined
+
+            let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
+>a : { b?: string | undefined; }
+>this.a : { b?: string | undefined; }
+>this : any
+>a : { b?: string | undefined; }
+>undefined as any : any
+>undefined : undefined
+
+            let b: typeof this.a.b = undefined as any;
+>b : string | undefined
+>this.a.b : string | undefined
+>this.a : { b?: string | undefined; }
+>this : any
+>a : { b?: string | undefined; }
+>b : string | undefined
+>undefined as any : any
+>undefined : undefined
+
+            if (this.a.b) {
+>this.a.b : string | undefined
+>this.a : { b?: string | undefined; }
+>this : this
+>a : { b?: string | undefined; }
+>b : string | undefined
+
+                let b: typeof this.a.b = undefined as any;   // should narrow to string
+>b : string
+>this.a.b : string
+>this.a : { b?: string | undefined; }
+>this : any
+>a : { b?: string | undefined; }
+>b : string
+>undefined as any : any
+>undefined : undefined
+            }
+        }
+    }
+}
+
+class Test11 {
+>Test11 : Test11
+
+    this?: { x?: string };
+>this : { x?: string | undefined; } | undefined
+>x : string | undefined
+    
+    foo() {
+>foo : () => void
+
+        const o = this;
+>o : this
+>this : this
+
+        let bar: typeof o.this = {};
+>bar : { x?: string | undefined; } | undefined
+>o.this : { x?: string | undefined; } | undefined
+>o : this
+>this : { x?: string | undefined; } | undefined
+>{} : {}
+
+        if (o.this && o.this.x) {
+>o.this && o.this.x : string | undefined
+>o.this : { x?: string | undefined; } | undefined
+>o : this
+>this : { x?: string | undefined; } | undefined
+>o.this.x : string | undefined
+>o.this : { x?: string | undefined; }
+>o : this
+>this : { x?: string | undefined; }
+>x : string | undefined
+
+            let y: string = o.this.x;   // should narrow to string
+>y : string
+>o.this.x : string
+>o.this : { x?: string | undefined; }
+>o : this
+>this : { x?: string | undefined; }
+>x : string
+        }
+    }
+}
+
+class Tests12 {
+>Tests12 : Tests12
+
+    test1() { // OK
+>test1 : () => void
+
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+
+    test2() { // OK
+>test2 : () => void
+
+        for (;;) {}
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+
+    test3() { // expected no compile errors
+>test3 : () => void
+
+        for (const dummy in []) {}
+>dummy : string
+>[] : never[]
+
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+
+    test4() { // expected no compile errors
+>test4 : () => void
+
+        for (const dummy of []) {}
+>dummy : never
+>[] : never[]
+
+        type Test = typeof this;
+>Test : this
+>this : any
+    }
+}

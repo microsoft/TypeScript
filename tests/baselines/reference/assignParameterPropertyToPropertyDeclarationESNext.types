@@ -145,4 +145,31 @@ class G {
     constructor(public p1: number) {}
 >p1 : number
 }
+class H {
+>H : H
+
+    constructor(public p1: C) {}
+>p1 : C
+
+    public p2 = () => {
+>p2 : () => string
+>() => {        return this.p1.foo;    } : () => string
+
+        return this.p1.foo;
+>this.p1.foo : string
+>this.p1 : C
+>this : this
+>p1 : C
+>foo : string
+    }
+
+    public p3 = () => this.p1.foo;
+>p3 : () => string
+>() => this.p1.foo : () => string
+>this.p1.foo : string
+>this.p1 : C
+>this : this
+>p1 : C
+>foo : string
+}
 

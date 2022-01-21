@@ -1,0 +1,82 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts ===
+class C {
+>C : C
+
+    static {
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+
+        return 1;
+>1 : 1
+    }
+}
+
+async function f1 () {
+>f1 : () => Promise<void>
+
+    class C {
+>C : C
+
+        static {
+            await 1;
+>await 1 : 1
+>1 : 1
+
+            async function ff () {
+>ff : () => Promise<void>
+
+                await 1;
+>await 1 : 1
+>1 : 1
+            }
+        }
+    }
+}
+
+function * f2 () {
+>f2 : () => {}
+
+    class C {
+>C : C
+
+        static {
+            yield 1;
+>yield 1 : any
+>1 : 1
+
+            function * ff () {
+>ff : () => {}
+
+                yield 1;
+>yield 1 : any
+>1 : 1
+            }
+        }
+    }
+}
+
+function f3 () {
+>f3 : () => void
+
+    class C {
+>C : C
+
+        static {
+            return 1;
+>1 : 1
+
+            function ff () {
+>ff : () => number
+
+                return 1
+>1 : 1
+            }
+        }
+    }
+}
+

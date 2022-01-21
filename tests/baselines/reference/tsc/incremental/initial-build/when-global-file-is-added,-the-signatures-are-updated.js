@@ -47,8 +47,11 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -64,6 +67,12 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/filePresent.ts
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/project/src/filepresent.ts (used version)
+/src/project/src/anotherfilewithsamereferenes.ts (used version)
+/src/project/src/main.ts (used version)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
@@ -190,8 +199,11 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -203,6 +215,8 @@ Program files::
 /src/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 
 
@@ -230,8 +244,11 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -247,6 +264,11 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/filePresent.ts
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts] file written with same contents
@@ -352,8 +374,11 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:2[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -366,6 +391,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/main.d.ts] file written with same contents
@@ -472,8 +500,11 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
+Errors  Files
+     1  src/project/src/anotherFileWithSameReferenes.ts[90m:2[0m
+     1  src/project/src/main.ts[90m:3[0m
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -491,6 +522,12 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/newFile.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/newfile.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts] file written with same contents
@@ -630,6 +667,13 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/newFile.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/filenotfound.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
+/src/project/src/newfile.ts (computed .d.ts)
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
@@ -773,6 +817,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/main.d.ts] file written with same contents

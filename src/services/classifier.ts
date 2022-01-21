@@ -1075,6 +1075,10 @@ namespace ts {
                             }
                             return;
                     }
+
+                    if (isConstTypeReference(token.parent)) {
+                        return ClassificationType.keyword;
+                    }
                 }
                 return ClassificationType.identifier;
             }

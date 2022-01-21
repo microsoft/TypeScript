@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createClassStaticBlockDeclaration,
+            updateClassStaticBlockDeclaration,
             createTemplateLiteralTypeSpan,
             updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
@@ -287,6 +289,10 @@ namespace ts {
             updateImportDeclaration,
             createImportClause,
             updateImportClause,
+            createAssertClause,
+            updateAssertClause,
+            createAssertEntry,
+            updateAssertEntry,
             createNamespaceImport,
             updateNamespaceImport,
             createNamespaceExport,
@@ -494,8 +500,11 @@ namespace ts {
             createArraySliceCall,
             createArrayConcatCall,
             createObjectDefinePropertyCall,
+            createReflectGetCall,
+            createReflectSetCall,
             createPropertyDescriptor,
             createCallBinding,
+            createAssignmentTargetWrapper,
 
             // Utilities
             inlineExpressions,
@@ -525,12 +534,25 @@ namespace ts {
                 elements = [];
             }
             else if (isNodeArray(elements)) {
-                // Ensure the transform flags have been aggregated for this NodeArray
-                if (elements.transformFlags === undefined) {
-                    aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
+                    // Ensure the transform flags have been aggregated for this NodeArray
+                    if (elements.transformFlags === undefined) {
+                        aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                    }
+                    Debug.attachNodeArrayDebugInfo(elements);
+                    return elements;
                 }
-                Debug.attachNodeArrayDebugInfo(elements);
-                return elements;
+
+                // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
+                // array with the same elements, text range, and transform flags but with the updated
+                // value for `hasTrailingComma`
+                const array = elements.slice() as MutableNodeArray<T>;
+                array.pos = elements.pos;
+                array.end = elements.end;
+                array.hasTrailingComma = hasTrailingComma;
+                array.transformFlags = elements.transformFlags;
+                Debug.attachNodeArrayDebugInfo(array);
+                return array;
             }
 
             // Since the element list of a node array is typically created by starting with an empty array and
@@ -983,8 +1005,10 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                     transformFlags = TransformFlags.ContainsTypeScript;
                     break;
-                case SyntaxKind.StaticKeyword:
                 case SyntaxKind.SuperKeyword:
+                    transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
+                    break;
+                case SyntaxKind.StaticKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ThisKeyword:
@@ -1039,19 +1063,19 @@ namespace ts {
         // @api
         function createModifiersFromModifierFlags(flags: ModifierFlags) {
             const result: Modifier[] = [];
-            if (flags & ModifierFlags.Export) { result.push(createModifier(SyntaxKind.ExportKeyword)); }
-            if (flags & ModifierFlags.Ambient) { result.push(createModifier(SyntaxKind.DeclareKeyword)); }
-            if (flags & ModifierFlags.Default) { result.push(createModifier(SyntaxKind.DefaultKeyword)); }
-            if (flags & ModifierFlags.Const) { result.push(createModifier(SyntaxKind.ConstKeyword)); }
-            if (flags & ModifierFlags.Public) { result.push(createModifier(SyntaxKind.PublicKeyword)); }
-            if (flags & ModifierFlags.Private) { result.push(createModifier(SyntaxKind.PrivateKeyword)); }
-            if (flags & ModifierFlags.Protected) { result.push(createModifier(SyntaxKind.ProtectedKeyword)); }
-            if (flags & ModifierFlags.Abstract) { result.push(createModifier(SyntaxKind.AbstractKeyword)); }
-            if (flags & ModifierFlags.Static) { result.push(createModifier(SyntaxKind.StaticKeyword)); }
-            if (flags & ModifierFlags.Override) { result.push(createModifier(SyntaxKind.OverrideKeyword)); }
-            if (flags & ModifierFlags.Readonly) { result.push(createModifier(SyntaxKind.ReadonlyKeyword)); }
-            if (flags & ModifierFlags.Async) { result.push(createModifier(SyntaxKind.AsyncKeyword)); }
-            return result;
+            if (flags & ModifierFlags.Export) result.push(createModifier(SyntaxKind.ExportKeyword));
+            if (flags & ModifierFlags.Ambient) result.push(createModifier(SyntaxKind.DeclareKeyword));
+            if (flags & ModifierFlags.Default) result.push(createModifier(SyntaxKind.DefaultKeyword));
+            if (flags & ModifierFlags.Const) result.push(createModifier(SyntaxKind.ConstKeyword));
+            if (flags & ModifierFlags.Public) result.push(createModifier(SyntaxKind.PublicKeyword));
+            if (flags & ModifierFlags.Private) result.push(createModifier(SyntaxKind.PrivateKeyword));
+            if (flags & ModifierFlags.Protected) result.push(createModifier(SyntaxKind.ProtectedKeyword));
+            if (flags & ModifierFlags.Abstract) result.push(createModifier(SyntaxKind.AbstractKeyword));
+            if (flags & ModifierFlags.Static) result.push(createModifier(SyntaxKind.StaticKeyword));
+            if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
+            if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
+            if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
+            return result.length ? result : undefined;
         }
 
         //
@@ -1399,6 +1423,38 @@ namespace ts {
                 || node.type !== type
                 || node.body !== body
                 ? updateBaseFunctionLikeDeclaration(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+                : node;
+        }
+
+        // @api
+        function createClassStaticBlockDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
+                SyntaxKind.ClassStaticBlockDeclaration,
+                decorators,
+                modifiers,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined
+            );
+            node.body = body;
+            node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
+            return node;
+        }
+
+        // @api
+        function updateClassStaticBlockDeclaration(
+            node: ClassStaticBlockDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            return node.decorators !== decorators
+                || node.modifier !== modifiers
+                || node.body !== body
+                ? update(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
                 : node;
         }
 
@@ -2056,25 +2112,27 @@ namespace ts {
         }
 
         // @api
-        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
             const node = createBaseNode<MappedTypeNode>(SyntaxKind.MappedType);
             node.readonlyToken = readonlyToken;
             node.typeParameter = typeParameter;
             node.nameType = nameType;
             node.questionToken = questionToken;
             node.type = type;
+            node.members = members && createNodeArray(members);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
         // @api
-        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, members: readonly TypeElement[] | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
                 || node.nameType !== nameType
                 || node.questionToken !== questionToken
                 || node.type !== type
-                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), node)
+                || node.members !== members
+                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), node)
                 : node;
         }
 
@@ -2184,7 +2242,12 @@ namespace ts {
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
             const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
-            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements));
+            // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpresion]` so that
+            // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
+            // a trailing comma.
+            const lastElement = elements && lastOrUndefined(elements);
+            const elementsArray = createNodeArray(elements, lastElement && isOmittedExpression(lastElement) ? true : undefined);
+            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
             node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.elements);
             return node;
@@ -2572,7 +2635,7 @@ namespace ts {
                 propagateChildFlags(node.equalsGreaterThanToken) |
                 TransformFlags.ContainsES2015;
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                node.transformFlags |= TransformFlags.ContainsES2017;
+                node.transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis;
             }
             return node;
         }
@@ -2667,6 +2730,14 @@ namespace ts {
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPrefixUnary(operand);
             node.transformFlags |= propagateChildFlags(node.operand);
+            // Only set this flag for non-generated identifiers and non-"local" names. See the
+            // comment in `visitPreOrPostfixUnaryExpression` in module.ts
+            if ((operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken) &&
+                isIdentifier(node.operand) &&
+                !isGeneratedIdentifier(node.operand) &&
+                !isLocalName(node.operand)) {
+                node.transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
+            }
             return node;
         }
 
@@ -2682,7 +2753,14 @@ namespace ts {
             const node = createBaseExpression<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPostfixUnary(operand);
-            node.transformFlags = propagateChildFlags(node.operand);
+            node.transformFlags |= propagateChildFlags(node.operand);
+            // Only set this flag for non-generated identifiers and non-"local" names. See the
+            // comment in `visitPreOrPostfixUnaryExpression` in module.ts
+            if (isIdentifier(node.operand) &&
+                !isGeneratedIdentifier(node.operand) &&
+                !isLocalName(node.operand)) {
+                node.transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
+            }
             return node;
         }
 
@@ -3867,7 +3945,8 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
-            moduleSpecifier: Expression
+            moduleSpecifier: Expression,
+            assertClause: AssertClause | undefined
         ): ImportDeclaration {
             const node = createBaseDeclaration<ImportDeclaration>(
                 SyntaxKind.ImportDeclaration,
@@ -3876,6 +3955,7 @@ namespace ts {
             );
             node.importClause = importClause;
             node.moduleSpecifier = moduleSpecifier;
+            node.assertClause = assertClause;
             node.transformFlags |=
                 propagateChildFlags(node.importClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -3889,13 +3969,15 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
-            moduleSpecifier: Expression
+            moduleSpecifier: Expression,
+            assertClause: AssertClause | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
-                ? update(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier), node)
+                || node.assertClause !== assertClause
+                ? update(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier, assertClause), node)
                 : node;
         }
 
@@ -3921,6 +4003,40 @@ namespace ts {
                 || node.name !== name
                 || node.namedBindings !== namedBindings
                 ? update(createImportClause(isTypeOnly, name, namedBindings), node)
+                : node;
+        }
+
+        // @api
+        function createAssertClause(elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
+            const node = createBaseNode<AssertClause>(SyntaxKind.AssertClause);
+            node.elements = createNodeArray(elements);
+            node.multiLine = multiLine;
+            node.transformFlags |= TransformFlags.ContainsESNext;
+            return node;
+        }
+
+        // @api
+        function updateAssertClause(node: AssertClause, elements: readonly AssertEntry[], multiLine?: boolean): AssertClause {
+            return node.elements !== elements
+                || node.multiLine !== multiLine
+                ? update(createAssertClause(elements, multiLine), node)
+                : node;
+        }
+
+        // @api
+        function createAssertEntry(name: AssertionKey, value: Expression): AssertEntry {
+            const node = createBaseNode<AssertEntry>(SyntaxKind.AssertEntry);
+            node.name = name;
+            node.value = value;
+            node.transformFlags |= TransformFlags.ContainsESNext;
+            return node;
+        }
+
+        // @api
+        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry {
+            return node.name !== name
+                || node.value !== value
+                ? update(createAssertEntry(name, value), node)
                 : node;
         }
 
@@ -3975,8 +4091,9 @@ namespace ts {
         }
 
         // @api
-        function createImportSpecifier(propertyName: Identifier | undefined, name: Identifier) {
+        function createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
             const node = createBaseNode<ImportSpecifier>(SyntaxKind.ImportSpecifier);
+            node.isTypeOnly = isTypeOnly;
             node.propertyName = propertyName;
             node.name = name;
             node.transformFlags |=
@@ -3987,10 +4104,11 @@ namespace ts {
         }
 
         // @api
-        function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
-            return node.propertyName !== propertyName
+        function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+            return node.isTypeOnly !== isTypeOnly
+                || node.propertyName !== propertyName
                 || node.name !== name
-                ? update(createImportSpecifier(propertyName, name), node)
+                ? update(createImportSpecifier(isTypeOnly, propertyName, name), node)
                 : node;
         }
 
@@ -4035,7 +4153,8 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
-            moduleSpecifier?: Expression
+            moduleSpecifier?: Expression,
+            assertClause?: AssertClause
         ) {
             const node = createBaseDeclaration<ExportDeclaration>(
                 SyntaxKind.ExportDeclaration,
@@ -4045,6 +4164,7 @@ namespace ts {
             node.isTypeOnly = isTypeOnly;
             node.exportClause = exportClause;
             node.moduleSpecifier = moduleSpecifier;
+            node.assertClause = assertClause;
             node.transformFlags |=
                 propagateChildFlags(node.exportClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -4059,14 +4179,16 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
-            moduleSpecifier: Expression | undefined
+            moduleSpecifier: Expression | undefined,
+            assertClause: AssertClause | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.isTypeOnly !== isTypeOnly
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
-                ? update(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier), node)
+                || node.assertClause !== assertClause
+                ? update(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
                 : node;
         }
 
@@ -4087,8 +4209,9 @@ namespace ts {
         }
 
         // @api
-        function createExportSpecifier(propertyName: string | Identifier | undefined, name: string | Identifier) {
+        function createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier) {
             const node = createBaseNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
+            node.isTypeOnly = isTypeOnly;
             node.propertyName = asName(propertyName);
             node.name = asName(name);
             node.transformFlags |=
@@ -4099,10 +4222,11 @@ namespace ts {
         }
 
         // @api
-        function updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
-            return node.propertyName !== propertyName
+        function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+            return node.isTypeOnly !== isTypeOnly
+                || node.propertyName !== propertyName
                 || node.name !== name
-                ? update(createExportSpecifier(propertyName, name), node)
+                ? update(createExportSpecifier(isTypeOnly, propertyName, name), node)
                 : node;
         }
 
@@ -4867,14 +4991,16 @@ namespace ts {
         }
 
         // @api
-        function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
+        function createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block) {
             const node = createBaseNode<CatchClause>(SyntaxKind.CatchClause);
-            variableDeclaration = !isString(variableDeclaration) ? variableDeclaration : createVariableDeclaration(
-                variableDeclaration,
-                /*exclamationToken*/ undefined,
-                /*type*/ undefined,
-                /*initializer*/ undefined
-            );
+            if (typeof variableDeclaration === "string" || variableDeclaration && !isVariableDeclaration(variableDeclaration)) {
+                variableDeclaration = createVariableDeclaration(
+                    variableDeclaration,
+                    /*exclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined
+                );
+            }
             node.variableDeclaration = variableDeclaration;
             node.block = block;
             node.transformFlags |=
@@ -5055,6 +5181,7 @@ namespace ts {
             node.transformFlags =
                 propagateChildrenFlags(node.statements) |
                 propagateChildFlags(node.endOfFileToken);
+            node.impliedNodeFormat = source.impliedNodeFormat;
             return node;
         }
 
@@ -5367,7 +5494,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 createNamedExports([
-                    createExportSpecifier(/*propertyName*/ undefined, exportName)
+                    createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, exportName)
                 ])
             );
         }
@@ -5383,6 +5510,15 @@ namespace ts {
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
+            // Preserve the optionality of `object`.
+            if (isCallChain(object)) {
+                return createCallChain(
+                    createPropertyAccessChain(object, /*questionDotToken*/ undefined, methodName),
+                    /*questionDotToken*/ undefined,
+                    /*typeArguments*/ undefined,
+                    argumentsList
+                );
+            }
             return createCallExpression(
                 createPropertyAccessExpression(object, methodName),
                 /*typeArguments*/ undefined,
@@ -5416,6 +5552,14 @@ namespace ts {
 
         function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
             return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+        }
+
+        function createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "get", receiver ? [target, propertyKey, receiver] : [target, propertyKey]);
+        }
+
+        function createReflectSetCall(target: Expression, propertyKey: Expression, value: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "set", receiver ? [target, propertyKey, value, receiver] : [target, propertyKey, value]);
         }
 
         function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
@@ -5593,6 +5737,34 @@ namespace ts {
             return { target, thisArg };
         }
 
+        function createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression {
+            return createPropertyAccessExpression(
+                // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
+                createParenthesizedExpression(
+                    createObjectLiteralExpression([
+                        createSetAccessorDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            "value",
+                            [createParameterDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*dotDotDotToken*/ undefined,
+                                paramName,
+                                /*questionToken*/ undefined,
+                                /*type*/ undefined,
+                                /*initializer*/ undefined
+                            )],
+                            createBlock([
+                                createExpressionStatement(expression)
+                            ])
+                        )
+                    ])
+                ),
+                "value"
+            );
+        }
+
         function inlineExpressions(expressions: readonly Expression[]) {
             // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
             // stack size exceeded" errors.
@@ -5713,7 +5885,7 @@ namespace ts {
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
         function copyPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
-            const offset = copyStandardPrologue(source, target, ensureUseStrict);
+            const offset = copyStandardPrologue(source, target, 0, ensureUseStrict);
             return copyCustomPrologue(source, target, offset, visitor);
         }
 
@@ -5729,12 +5901,13 @@ namespace ts {
          * Copies only the standard (string-expression) prologue-directives into the target statement-array.
          * @param source origin statements array
          * @param target result statements array
+         * @param statementOffset The offset at which to begin the copy.
          * @param ensureUseStrict boolean determining whether the function need to add prologue-directives
+         * @returns Count of how many directive statements were copied.
          */
-        function copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, ensureUseStrict?: boolean): number {
+        function copyStandardPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset = 0, ensureUseStrict?: boolean): number {
             Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
             let foundUseStrict = false;
-            let statementOffset = 0;
             const numStatements = source.length;
             while (statementOffset < numStatements) {
                 const statement = source[statementOffset];
@@ -5908,32 +6081,36 @@ namespace ts {
 
         function updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
         function updateModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
+            let modifierArray;
             if (typeof modifiers === "number") {
-                modifiers = createModifiersFromModifierFlags(modifiers);
+                modifierArray = createModifiersFromModifierFlags(modifiers);
             }
-            return isParameter(node) ? updateParameterDeclaration(node, node.decorators, modifiers, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
-                isPropertySignature(node) ? updatePropertySignature(node, modifiers, node.name, node.questionToken, node.type) :
-                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, node.decorators, modifiers, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
-                isMethodSignature(node) ? updateMethodSignature(node, modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
-                isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
-                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifiers, node.parameters, node.body) :
-                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.type, node.body) :
-                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.body) :
-                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type) :
-                isFunctionExpression(node) ? updateFunctionExpression(node, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isArrowFunction(node) ? updateArrowFunction(node, modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
-                isClassExpression(node) ? updateClassExpression(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isVariableStatement(node) ? updateVariableStatement(node, modifiers, node.declarationList) :
-                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isClassDeclaration(node) ? updateClassDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
-                isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
-                isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.name, node.moduleReference) :
-                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
-                isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
-                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :
+            else {
+                modifierArray = modifiers;
+            }
+            return isParameter(node) ? updateParameterDeclaration(node, node.decorators, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+                isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :
+                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, node.decorators, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+                isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
+                isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifierArray, node.parameters, node.body) :
+                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.type, node.body) :
+                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.body) :
+                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifierArray, node.parameters, node.type) :
+                isFunctionExpression(node) ? updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
+                isClassExpression(node) ? updateClassExpression(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
+                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isClassDeclaration(node) ? updateClassDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.type) :
+                isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifierArray, node.name, node.members) :
+                isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifierArray, node.name, node.body) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
+                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
+                isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifierArray, node.expression) :
+                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
                 Debug.assertNever(node);
         }
 
@@ -6031,7 +6208,7 @@ namespace ts {
         }
 
         let token = rawTextScanner.scan();
-        if (token === SyntaxKind.CloseBracketToken) {
+        if (token === SyntaxKind.CloseBraceToken) {
             token = rawTextScanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
         }
 
@@ -6215,7 +6392,7 @@ namespace ts {
             sourceMapText = mapTextOrStripInternal as string;
         }
         const node = oldFileOfCurrentEmit ?
-            parseOldFileOfCurrentEmit(Debug.assertDefined(bundleFileInfo)) :
+            parseOldFileOfCurrentEmit(Debug.checkDefined(bundleFileInfo)) :
             parseUnparsedSourceFile(bundleFileInfo, stripInternal, length);
         node.fileName = fileName;
         node.sourceMapPath = sourceMapPath;
@@ -6415,13 +6592,13 @@ namespace ts {
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
-            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationPath = Debug.checkDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
             node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
-                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationText: { get() { return definedTextGetter(Debug.checkDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
                 buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });
@@ -6479,7 +6656,7 @@ namespace ts {
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-        if (flags) destEmitNode.flags = flags;
+        if (flags) destEmitNode.flags = flags & ~EmitFlags.Immutable;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);

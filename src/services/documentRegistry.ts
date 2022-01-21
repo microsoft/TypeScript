@@ -201,7 +201,7 @@ namespace ts {
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
-            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
+            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
             const bucket = getOrUpdate(buckets, key, () => new Map());
             const bucketEntry = bucket.get(path);
             let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);

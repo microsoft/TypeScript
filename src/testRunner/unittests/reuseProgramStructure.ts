@@ -175,7 +175,7 @@ namespace ts {
         return true;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ESMap<string, T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ModeAwareCache<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file!);
@@ -184,21 +184,22 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(mapsAreEqual(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(mapEqualToCache(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
     /** True if the maps have the same keys and values. */
-    function mapsAreEqual<T>(left: ESMap<string, T>, right: ESMap<string, T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
-        if (left === right) return true;
+    function mapEqualToCache<T>(left: ESMap<string, T>, right: ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+        if (left as any === right) return true; // given the type mismatch (the tests never pass a cache), this'll never be true
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
-            if (!right.has(leftKey)) return true;
-            const rightValue = right.get(leftKey)!;
+            if (!right.has(leftKey, /*mode*/ undefined)) return true;
+            const rightValue = right.get(leftKey, /*mode*/ undefined)!;
             return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
         });
         if (someInLeftHasNoMatch) return false;
-        const someInRightHasNoMatch = forEachKey(right, rightKey => !left.has(rightKey));
+        let someInRightHasNoMatch = false;
+        right.forEach((_, rightKey) => someInRightHasNoMatch = someInRightHasNoMatch || !left.has(rightKey));
         return !someInRightHasNoMatch;
     }
 
@@ -262,7 +263,7 @@ namespace ts {
         it("fails if change affects type references", () => {
             const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
             const program2 = updateProgram(program1, ["a.ts"], { types: ["b"] }, noop);
-            assert.equal(program2.structureIsReused, StructureIsReused.Not);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("succeeds if change doesn't affect type references", () => {
@@ -383,7 +384,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram('import * as aa from "a";');
             });
-            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a", /*mode*/ undefined), "'a' is not an unresolved module after re-use");
         });
 
         it("works with updated SourceFiles", () => {
@@ -406,7 +407,7 @@ namespace ts {
                 }
             };
             const program2 = createProgram(["/a.ts"], options, updateHost, program1);
-            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a", /*mode*/ undefined), "'a' is not an unresolved module after re-use");
             assert.strictEqual(sourceFile.statements[2].getSourceFile(), sourceFile, "parent pointers are not altered");
         });
 
@@ -677,8 +678,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'."
                 ], "program2: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -701,8 +702,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'."
                 ], "program3: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -726,8 +727,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_4: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -767,8 +768,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_6: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -787,8 +788,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_7 should reuse module resolutions in f2 since it is unchanged");
             }
         });

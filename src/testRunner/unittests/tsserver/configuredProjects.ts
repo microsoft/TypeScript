@@ -879,9 +879,10 @@ declare var console: {
 };`
             };
             const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
-            const session = createSession(host, { canUseEvents: true, });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([fooIndex, barIndex], session);
-            verifyGetErrRequestNoErrors({ session, host, files: [barIndex, fooIndex] });
+            verifyGetErrRequest({ session, host, files: [barIndex, fooIndex] });
+            baselineTsserverLogs("configuredProjects", "when multiple projects are open detects correct default project", session);
         });
 
         it("when file name starts with ^", () => {
@@ -921,7 +922,7 @@ declare var console: {
                 path: `${tscWatch.projectRoot}/src/sub/fooBar.ts`,
                 content: "export function fooBar() { }"
             };
-            function verifySessionWorker({ withExclude, openFileBeforeCreating, checkProjectBeforeError, checkProjectAfterError, }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+            function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
                 const host = createServerHost([
                     foo, bar, libFile, { path: `${tscWatch.projectRoot}/src/sub` },
                     withExclude ?
@@ -935,7 +936,8 @@ declare var console: {
                         config
                 ]);
                 const session = createSession(host, {
-                    canUseEvents: true
+                    canUseEvents: true,
+                    logger: createLoggerWithInMemoryLogs(),
                 });
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: protocol.CommandTypes.Open,
@@ -959,9 +961,7 @@ declare var console: {
                 if (openFileBeforeCreating) {
                     host.writeFile(fooBar.path, fooBar.content);
                 }
-                const service = session.getProjectService();
-                checkProjectBeforeError(service);
-                verifyGetErrRequestNoErrors({
+                verifyGetErrRequest({
                     session,
                     host,
                     files: errorOnNewFileBeforeOldFile ?
@@ -969,13 +969,11 @@ declare var console: {
                         [foo, fooBar],
                     existingTimeouts: withExclude ? 0 : 2
                 });
-                checkProjectAfterError(service);
+                baselineTsserverLogs("configuredProjects", `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`, session);
             }
             interface VerifySession {
                 withExclude?: boolean;
                 openFileBeforeCreating: boolean;
-                checkProjectBeforeError: (service: server.ProjectService) => void;
-                checkProjectAfterError: (service: server.ProjectService) => void;
             }
             function verifySession(input: VerifySession) {
                 it("when error on new file are asked before old one", () => {
@@ -986,27 +984,14 @@ declare var console: {
                     verifySessionWorker(input, /*errorOnNewFileBeforeOldFile*/ false);
                 });
             }
-            function checkFooBarInInferredProject(service: server.ProjectService) {
-                checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, libFile.path, config.path]);
-                checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
-            }
-            function checkFooBarInConfiguredProject(service: server.ProjectService) {
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
-            }
             describe("when new file creation directory watcher is invoked before file is opened in editor", () => {
                 verifySession({
                     openFileBeforeCreating: false,
-                    checkProjectBeforeError: checkFooBarInConfiguredProject,
-                    checkProjectAfterError: checkFooBarInConfiguredProject
                 });
                 describe("when new file is excluded from config", () => {
                     verifySession({
                         withExclude: true,
                         openFileBeforeCreating: false,
-                        checkProjectBeforeError: checkFooBarInInferredProject,
-                        checkProjectAfterError: checkFooBarInInferredProject
                     });
                 });
             });
@@ -1014,23 +999,11 @@ declare var console: {
             describe("when new file creation directory watcher is invoked after file is opened in editor", () => {
                 verifySession({
                     openFileBeforeCreating: true,
-                    checkProjectBeforeError: checkFooBarInInferredProject,
-                    checkProjectAfterError: service => {
-                        // Both projects exist but fooBar is in configured project after the update
-                        // Inferred project is yet to be updated so still has fooBar
-                        checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
-                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
-                        checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
-                        assert.isTrue(service.inferredProjects[0].dirty);
-                        assert.equal(service.inferredProjects[0].getRootFilesMap().size, 0);
-                    }
                 });
                 describe("when new file is excluded from config", () => {
                     verifySession({
                         withExclude: true,
                         openFileBeforeCreating: true,
-                        checkProjectBeforeError: checkFooBarInInferredProject,
-                        checkProjectAfterError: checkFooBarInInferredProject
                     });
                 });
             });

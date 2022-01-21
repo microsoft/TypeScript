@@ -9,6 +9,6 @@
 
 const replacementSpan = test.ranges()[0]
 verify.completions({ marker: "1", exact: [
+    { name: "bar", replacementSpan },
     { name: "foo", replacementSpan },
-    { name: "bar", replacementSpan }
 ] });

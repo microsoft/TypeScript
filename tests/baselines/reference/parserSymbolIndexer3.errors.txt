@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer3.ts(2,13): error TS1023: An index signature parameter type must be either 'string' or 'number'.
-
-
-==== tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer3.ts (1 errors) ====
-    class C {
-        static [s: symbol]: string;
-                ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
-    }

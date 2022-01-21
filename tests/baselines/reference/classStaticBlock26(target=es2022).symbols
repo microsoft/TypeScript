@@ -1,0 +1,44 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock26.ts, 0, 0))
+
+    static {
+        await; // illegal
+    }
+    static {
+        await (1); // illegal
+    }
+    static {
+        ({ [await]: 1 }); // illegal
+>[await] : Symbol([await], Decl(classStaticBlock26.ts, 8, 10))
+    }
+    static {
+        class D {
+>D : Symbol(D, Decl(classStaticBlock26.ts, 10, 12))
+
+            [await] = 1; // illegal (computed property names are evaluated outside of a class body
+>[await] : Symbol(D[await], Decl(classStaticBlock26.ts, 11, 17))
+
+        };
+    }
+    static {
+        ({ await }); // illegal short-hand property reference
+>await : Symbol(await, Decl(classStaticBlock26.ts, 16, 10))
+    }
+    static {
+        await: // illegal, 'await' cannot be used as a label
+        break await; // illegal, 'await' cannot be used as a label
+    }
+    static {
+        function f(await) { }
+>f : Symbol(f, Decl(classStaticBlock26.ts, 22, 12))
+>await : Symbol(await, Decl(classStaticBlock26.ts, 23, 19))
+
+        const ff = (await) => { }
+>ff : Symbol(ff, Decl(classStaticBlock26.ts, 24, 13))
+
+        const fff = await => { }
+>fff : Symbol(fff, Decl(classStaticBlock26.ts, 25, 13))
+    }
+}
+

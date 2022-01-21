@@ -12,15 +12,13 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.globalsPlus([
         {
             name: "Test2",
             text: "(alias) function Test2(): void\nimport Test2",
             kind: "alias",
             kindModifiers: "export"
         },
-        completion.globalThisEntry,
-        completion.undefinedVarEntry,
         {
             name: "Test1",
             source: "/a",
@@ -31,8 +29,7 @@ verify.completions({
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
-        ...completion.statementKeywordsWithTypes,
-    ],
+    ], { noLib: true }),
     preferences: { includeCompletionsForModuleExports: true },
 });
 

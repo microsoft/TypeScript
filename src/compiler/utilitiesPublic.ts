@@ -11,9 +11,11 @@ namespace ts {
     }
 
     export function getDefaultLibFileName(options: CompilerOptions): string {
-        switch (options.target) {
+        switch (getEmitScriptTarget(options)) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2022:
+                return "lib.es2022.full.d.ts";
             case ScriptTarget.ES2021:
                 return "lib.es2021.full.d.ts";
             case ScriptTarget.ES2020:
@@ -1126,11 +1128,11 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
-    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
         switch (node.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
+                return (node as ImportOrExportSpecifier).isTypeOnly || (node as ImportOrExportSpecifier).parent.parent.isTypeOnly;
             case SyntaxKind.NamespaceImport:
                 return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
@@ -1139,6 +1141,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    export function isAssertionKey(node: Node): node is AssertionKey {
+        return isStringLiteral(node) || isIdentifier(node);
     }
 
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
@@ -1228,8 +1234,18 @@ namespace ts {
     }
 
     /* @internal */
+    export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
+        return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
+    }
+
+    /* @internal */
     export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
         return node && isFunctionLikeDeclarationKind(node.kind);
+    }
+
+    /* @internal */
+    export function isBooleanLiteral(node: Node): node is BooleanLiteral {
+        return node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword;
     }
 
     function isFunctionLikeDeclarationKind(kind: SyntaxKind): boolean {
@@ -1278,6 +1294,7 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.SemicolonClassElement;
     }
 
@@ -1414,6 +1431,18 @@ namespace ts {
         return false;
     }
 
+    /* @internal */
+    export function isObjectBindingOrAssignmentElement(node: Node): node is ObjectBindingOrAssignmentElement {
+        switch (node.kind) {
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyAssignment: // AssignmentProperty
+            case SyntaxKind.ShorthandPropertyAssignment: // AssignmentProperty
+            case SyntaxKind.SpreadAssignment: // AssignmentRestProperty
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Determines whether a node is an ArrayBindingOrAssignmentPattern
      */
@@ -1489,6 +1518,7 @@ namespace ts {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier: // technically this is only an Expression if it's in a `#field in expr` BinaryExpression
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
@@ -1683,6 +1713,7 @@ namespace ts {
             || kind === SyntaxKind.BindingElement
             || kind === SyntaxKind.ClassDeclaration
             || kind === SyntaxKind.ClassExpression
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.EnumMember

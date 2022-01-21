@@ -174,7 +174,9 @@ namespace ts.textChanges {
             return node.getStart(sourceFile);
         }
         if (leadingTriviaOption === LeadingTriviaOption.StartLine) {
-            return getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile);
+            const startPos = node.getStart(sourceFile);
+            const pos = getLineStartPositionForPosition(startPos, sourceFile);
+            return rangeContainsPosition(node, pos) ? pos : startPos;
         }
         if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
             const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
@@ -490,6 +492,31 @@ namespace ts.textChanges {
             const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
             const indent = sourceFile.text.slice(startPosition, fnStart);
             this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
+        }
+
+        public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
+            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
+            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
+                const merged = tryMergeJsdocTags(tag, newTag);
+                if (merged) oldTags[i] = merged;
+                return !!merged;
+            }));
+            const tags = [...oldTags, ...unmergedNewTags];
+            const jsDoc = singleOrUndefined(parent.jsDoc);
+            const comment = jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && !length(comments) ? undefined :
+                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+            const tag = factory.createJSDocComment(comment, factory.createNodeArray(tags));
+            const host = updateJSDocHost(parent);
+            this.insertJsdocCommentBefore(sourceFile, host, tag);
+        }
+
+        public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
+            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
+            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
+            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(filter(oldTags, predicate) || emptyArray)]));
+            const host = updateJSDocHost(parent);
+            this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
@@ -918,6 +945,37 @@ namespace ts.textChanges {
         }
     }
 
+    function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
+        if (parent.kind !== SyntaxKind.ArrowFunction) {
+            return parent;
+        }
+        const jsDocNode = parent.parent.kind === SyntaxKind.PropertyDeclaration ?
+            parent.parent as HasJSDoc :
+            parent.parent.parent as HasJSDoc;
+        jsDocNode.jsDoc = parent.jsDoc;
+        jsDocNode.jsDocCache = parent.jsDocCache;
+        return jsDocNode;
+    }
+
+    function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
+        if (oldTag.kind !== newTag.kind) {
+            return undefined;
+        }
+        switch (oldTag.kind) {
+            case SyntaxKind.JSDocParameterTag: {
+                const oldParam = oldTag as JSDocParameterTag;
+                const newParam = newTag as JSDocParameterTag;
+                return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
+                    : undefined;
+            }
+            case SyntaxKind.JSDocReturnTag:
+                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+            case SyntaxKind.JSDocTypeTag:
+                return factory.createJSDocTypeTag(/*tagName*/ undefined, (newTag as JSDocTypeTag).typeExpression, oldTag.comment);
+        }
+    }
+
     // find first non-whitespace position in the leading trivia of the node
     function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
@@ -991,22 +1049,13 @@ namespace ts.textChanges {
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
             const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
-                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options!.joiner || newLineCharacter) // TODO: GH#18217
+                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + noIndent
                  + ((!options.suffix || endsWith(noIndent, options.suffix))
                     ? "" : options.suffix);
-        }
-
-        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
-            const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
-            const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
-            return {
-                ...options,
-                semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
-            };
         }
 
         /** Note: this may mutate `nodeIn`. */
@@ -1022,7 +1071,12 @@ namespace ts.textChanges {
                 delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const file: SourceFileLike = {
+                text,
+                getLineAndCharacterOfPosition(pos) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                }
+            };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }
@@ -1030,7 +1084,7 @@ namespace ts.textChanges {
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
-            const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+            const newLine = getNewLineKind(newLineCharacter);
             createPrinter({
                 newLine,
                 neverAsciiEscape: true,
@@ -1053,8 +1107,8 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
-    function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
+    export function assignPositionsToNode(node: Node): Node {
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         setTextRangePosEnd(newNode, getPos(node), getEnd(node));
@@ -1074,7 +1128,7 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    function createWriter(newLine: string): TextChangesWriter {
+    export function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine);

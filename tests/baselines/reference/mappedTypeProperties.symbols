@@ -1,0 +1,93 @@
+=== tests/cases/conformance/types/mapped/mappedTypeProperties.ts ===
+export type PlaceType = 'openSky' | 'roofed' | 'garage'
+>PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
+
+type Before = {
+>Before : Symbol(Before, Decl(mappedTypeProperties.ts, 0, 55))
+
+    model: 'hour' | 'day';
+>model : Symbol(model, Decl(mappedTypeProperties.ts, 1, 15))
+
+    [placeType in PlaceType]: void;
+>[placeType in PlaceType] : Symbol([placeType in PlaceType], Decl(mappedTypeProperties.ts, 2, 26))
+}
+
+type After = {
+>After : Symbol(After, Decl(mappedTypeProperties.ts, 4, 1))
+
+    [placeType in PlaceType]: void;
+>placeType : Symbol(placeType, Decl(mappedTypeProperties.ts, 7, 5))
+>PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
+
+    model: 'hour' | 'day'
+>model : Symbol(model, Decl(mappedTypeProperties.ts, 7, 35))
+}
+
+type AfterQuestion = {
+>AfterQuestion : Symbol(AfterQuestion, Decl(mappedTypeProperties.ts, 9, 1))
+
+    [placeType in PlaceType]?: void;
+>placeType : Symbol(placeType, Decl(mappedTypeProperties.ts, 12, 5))
+>PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
+
+    model: 'hour' | 'day';
+>model : Symbol(model, Decl(mappedTypeProperties.ts, 12, 36))
+}
+type AfterMethod = {
+>AfterMethod : Symbol(AfterMethod, Decl(mappedTypeProperties.ts, 14, 1))
+
+    [placeType in PlaceType]?: void;
+>placeType : Symbol(placeType, Decl(mappedTypeProperties.ts, 16, 5))
+>PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
+
+    model(duration: number): 'hour' | 'day';
+>model : Symbol(model, Decl(mappedTypeProperties.ts, 16, 36))
+>duration : Symbol(duration, Decl(mappedTypeProperties.ts, 17, 10))
+}
+
+type AfterImplicit = {
+>AfterImplicit : Symbol(AfterImplicit, Decl(mappedTypeProperties.ts, 18, 1))
+
+    [placeType in PlaceType]
+>placeType : Symbol(placeType, Decl(mappedTypeProperties.ts, 21, 5))
+>PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
+
+    model: 'hour' | 'day';
+>model : Symbol(model, Decl(mappedTypeProperties.ts, 21, 28))
+}
+type AfterImplicitQ = {
+>AfterImplicitQ : Symbol(AfterImplicitQ, Decl(mappedTypeProperties.ts, 23, 1))
+
+    [placeType in PlaceType]?
+>placeType : Symbol(placeType, Decl(mappedTypeProperties.ts, 25, 5))
+>PlaceType : Symbol(PlaceType, Decl(mappedTypeProperties.ts, 0, 0))
+
+    model: 'hour' | 'day'
+>model : Symbol(model, Decl(mappedTypeProperties.ts, 25, 29))
+}
+
+interface I {
+>I : Symbol(I, Decl(mappedTypeProperties.ts, 27, 1))
+
+    [P in PlaceType]: any
+>[P in PlaceType] : Symbol(I[P in PlaceType], Decl(mappedTypeProperties.ts, 29, 13))
+}
+class C {
+>C : Symbol(C, Decl(mappedTypeProperties.ts, 31, 1))
+
+    [P in PlaceType]: any
+>[P in PlaceType] : Symbol(C[P in PlaceType], Decl(mappedTypeProperties.ts, 32, 9))
+}
+const D = class {
+>D : Symbol(D, Decl(mappedTypeProperties.ts, 35, 5))
+
+    [P in PlaceType]: any
+>[P in PlaceType] : Symbol(D[P in PlaceType], Decl(mappedTypeProperties.ts, 35, 17))
+}
+const E = class {
+>E : Symbol(E, Decl(mappedTypeProperties.ts, 38, 5))
+
+    [P in 'a' | 'b']: any
+>[P in 'a' | 'b'] : Symbol(E[P in 'a' | 'b'], Decl(mappedTypeProperties.ts, 38, 17))
+}
+

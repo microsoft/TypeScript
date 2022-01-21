@@ -23,15 +23,34 @@ describe("unittests:: services:: Colorization", () => {
         return undefined;
     }
 
-    function punctuation(text: string, position?: number) { return createClassification(text, ts.TokenClass.Punctuation, position); }
-    function keyword(text: string, position?: number) { return createClassification(text, ts.TokenClass.Keyword, position); }
-    function operator(text: string, position?: number) { return createClassification(text, ts.TokenClass.Operator, position); }
-    function comment(text: string, position?: number) { return createClassification(text, ts.TokenClass.Comment, position); }
-    function whitespace(text: string, position?: number) { return createClassification(text, ts.TokenClass.Whitespace, position); }
-    function identifier(text: string, position?: number) { return createClassification(text, ts.TokenClass.Identifier, position); }
-    function numberLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.NumberLiteral, position); }
-    function stringLiteral(text: string, position?: number) { return createClassification(text, ts.TokenClass.StringLiteral, position); }
-    function finalEndOfLineState(value: number): ClassificationEntry { return { value, classification: undefined!, position: 0 }; } // TODO: GH#18217
+    function punctuation(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.Punctuation, position);
+    }
+    function keyword(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.Keyword, position);
+    }
+    function operator(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.Operator, position);
+    }
+    function comment(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.Comment, position);
+    }
+    function whitespace(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.Whitespace, position);
+    }
+    function identifier(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.Identifier, position);
+    }
+    function numberLiteral(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.NumberLiteral, position);
+    }
+    function stringLiteral(text: string, position?: number) {
+        return createClassification(text, ts.TokenClass.StringLiteral, position);
+    }
+    function finalEndOfLineState(value: number): ClassificationEntry {
+        // TODO: GH#18217
+        return { value, classification: undefined!, position: 0 };
+    }
     function createClassification(value: string, classification: ts.TokenClass, position?: number): ClassificationEntry {
         return { value, classification, position };
     }

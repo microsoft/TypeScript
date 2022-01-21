@@ -360,8 +360,10 @@ type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
 >T62 : Symbol(T62, Decl(inferTypes1.ts, 82, 58))
 >T : Symbol(T, Decl(inferTypes1.ts, 83, 9))
+>U : Symbol(U)
 >U : Symbol(U, Decl(inferTypes1.ts, 83, 30))
 >U : Symbol(U, Decl(inferTypes1.ts, 83, 30))
+>U : Symbol(U)
 
 type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
 >T63 : Symbol(T63, Decl(inferTypes1.ts, 83, 44))

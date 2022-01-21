@@ -77,7 +77,8 @@ namespace ts {
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode,
-            reportNonlocalAugmentation
+            reportNonlocalAugmentation,
+            reportNonSerializableProperty
         };
         let errorNameNode: DeclarationName | undefined;
         let errorFallbackNode: Declaration | undefined;
@@ -171,33 +172,40 @@ namespace ts {
             }
         }
 
+        function errorDeclarationNameWithFallback() {
+            return errorNameNode ? declarationNameToString(errorNameNode) :
+                errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
+                errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
+                "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
+        }
+
         function reportInaccessibleUniqueSymbolError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     "unique symbol"));
             }
         }
 
         function reportCyclicStructureError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode)));
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback()));
             }
         }
 
         function reportInaccessibleThisError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     "this"));
             }
         }
 
         function reportLikelyUnsafeImportRequiredError(specifier: string) {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     specifier));
             }
         }
@@ -218,6 +226,12 @@ namespace ts {
                         createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
                     ));
                 }
+            }
+        }
+
+        function reportNonSerializableProperty(propertyName: string) {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
             }
         }
 
@@ -380,7 +394,6 @@ namespace ts {
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            /*preferences*/ undefined,
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -570,6 +583,8 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                     return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
             }
             return false;
         }
@@ -717,7 +732,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     decl.modifiers,
                     decl.importClause,
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    /*assertClause*/ undefined
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -729,7 +745,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined);
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -739,7 +755,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -754,7 +770,8 @@ namespace ts {
                         visibleDefaultBinding,
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    /*assertClause*/ undefined
                 );
             }
             // Augmentation of export depends on import
@@ -764,7 +781,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     decl.modifiers,
                     /*importClause*/ undefined,
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    /*assertClause*/ undefined
                 );
             }
             // Nothing visible
@@ -860,7 +878,7 @@ namespace ts {
             }
 
             if (canProduceDiagnostic && !suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input);
             }
 
             if (isTypeQueryNode(input)) {
@@ -1055,7 +1073,7 @@ namespace ts {
 
             function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
                 if (returnValue && canProduceDiagnostic && hasDynamicName(input as Declaration)) {
-                    checkName(input as DeclarationDiagnosticProducing);
+                    checkName(input);
                 }
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
@@ -1099,6 +1117,7 @@ namespace ts {
                         input.isTypeOnly,
                         input.exportClause,
                         rewriteModuleSpecifier(input, input.moduleSpecifier),
+                        /*assertClause*/ undefined
                     );
                 }
                 case SyntaxKind.ExportAssignment: {
@@ -1237,7 +1256,7 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 /*isTypeOnly*/ false,
                                 factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
-                                    return factory.createExportSpecifier(gen, exp);
+                                    return factory.createExportSpecifier(/*isTypeOnly*/ false, gen, exp);
                                 }))
                             ));
                         }
@@ -1591,7 +1610,7 @@ namespace ts {
     }
 
     // Elide "public" modifier, as it is the default
-    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] {
+    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
         return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
     }
 

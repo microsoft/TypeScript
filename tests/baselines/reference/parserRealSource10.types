@@ -607,11 +607,11 @@ module TypeScript {
 
                     public text: string, public ers: ErrorRecoverySet) { }
 >text : string
->ers : any
+>ers : ErrorRecoverySet
     }
 
     function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >tokenId : TokenID
 >reservation : number
 >binopPrecedence : number
@@ -623,7 +623,7 @@ module TypeScript {
 
         text: string, ers: ErrorRecoverySet) {
 >text : string
->ers : any
+>ers : ErrorRecoverySet
 
         if (tokenId !== undefined) {
 >tokenId !== undefined : boolean
@@ -646,7 +646,7 @@ module TypeScript {
 >unopPrecedence : number
 >unopNodeType : number
 >text : string
->ers : any
+>ers : ErrorRecoverySet
 
             if (binopNodeType != NodeType.None) {
 >binopNodeType != NodeType.None : boolean
@@ -688,7 +688,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Any, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "any", ErrorRecoverySet.PrimType);
 >setTokenInfo(TokenID.Any, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "any", ErrorRecoverySet.PrimType) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Any : TokenID.Any
 >TokenID : typeof TokenID
 >Any : TokenID.Any
@@ -714,7 +714,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Bool, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "boolean", ErrorRecoverySet.PrimType);
 >setTokenInfo(TokenID.Bool, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "boolean", ErrorRecoverySet.PrimType) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Bool : TokenID.Bool
 >TokenID : typeof TokenID
 >Bool : TokenID.Bool
@@ -740,7 +740,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Break, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "break", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Break, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "break", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Break : TokenID.Break
 >TokenID : typeof TokenID
 >Break : TokenID.Break
@@ -766,7 +766,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Case, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "case", ErrorRecoverySet.SCase);
 >setTokenInfo(TokenID.Case, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "case", ErrorRecoverySet.SCase) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Case : TokenID.Case
 >TokenID : typeof TokenID
 >Case : TokenID.Case
@@ -792,7 +792,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Catch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "catch", ErrorRecoverySet.Catch);
 >setTokenInfo(TokenID.Catch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "catch", ErrorRecoverySet.Catch) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Catch : TokenID.Catch
 >TokenID : typeof TokenID
 >Catch : TokenID.Catch
@@ -818,7 +818,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Class, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "class", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Class, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "class", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Class : TokenID.Class
 >TokenID : typeof TokenID
 >Class : TokenID.Class
@@ -844,7 +844,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Const, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "const", ErrorRecoverySet.Var);
 >setTokenInfo(TokenID.Const, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "const", ErrorRecoverySet.Var) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Const : TokenID.Const
 >TokenID : typeof TokenID
 >Const : TokenID.Const
@@ -870,7 +870,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Continue, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "continue", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Continue, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "continue", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Continue : TokenID.Continue
 >TokenID : typeof TokenID
 >Continue : TokenID.Continue
@@ -896,7 +896,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Debugger, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.Debugger, "debugger", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Debugger, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.Debugger, "debugger", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Debugger : TokenID.Debugger
 >TokenID : typeof TokenID
 >Debugger : TokenID.Debugger
@@ -922,7 +922,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Default, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "default", ErrorRecoverySet.SCase);
 >setTokenInfo(TokenID.Default, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "default", ErrorRecoverySet.SCase) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Default : TokenID.Default
 >TokenID : typeof TokenID
 >Default : TokenID.Default
@@ -948,7 +948,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Delete, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Delete, "delete", ErrorRecoverySet.Prefix);
 >setTokenInfo(TokenID.Delete, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Delete, "delete", ErrorRecoverySet.Prefix) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Delete : TokenID.Delete
 >TokenID : typeof TokenID
 >Delete : TokenID.Delete
@@ -974,7 +974,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Do, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "do", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Do, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "do", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Do : TokenID.Do
 >TokenID : typeof TokenID
 >Do : TokenID.Do
@@ -1000,7 +1000,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Else, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "else", ErrorRecoverySet.Else);
 >setTokenInfo(TokenID.Else, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "else", ErrorRecoverySet.Else) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Else : TokenID.Else
 >TokenID : typeof TokenID
 >Else : TokenID.Else
@@ -1026,7 +1026,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Enum, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "enum", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Enum, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "enum", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Enum : TokenID.Enum
 >TokenID : typeof TokenID
 >Enum : TokenID.Enum
@@ -1052,7 +1052,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Export, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "export", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Export, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "export", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Export : TokenID.Export
 >TokenID : typeof TokenID
 >Export : TokenID.Export
@@ -1078,7 +1078,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Extends, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "extends", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Extends, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "extends", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Extends : TokenID.Extends
 >TokenID : typeof TokenID
 >Extends : TokenID.Extends
@@ -1104,7 +1104,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Declare, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "declare", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Declare, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "declare", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Declare : TokenID.Declare
 >TokenID : typeof TokenID
 >Declare : TokenID.Declare
@@ -1130,7 +1130,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.False, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "false", ErrorRecoverySet.RLit);
 >setTokenInfo(TokenID.False, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "false", ErrorRecoverySet.RLit) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.False : TokenID.False
 >TokenID : typeof TokenID
 >False : TokenID.False
@@ -1156,7 +1156,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Finally, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "finally", ErrorRecoverySet.Catch);
 >setTokenInfo(TokenID.Finally, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "finally", ErrorRecoverySet.Catch) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Finally : TokenID.Finally
 >TokenID : typeof TokenID
 >Finally : TokenID.Finally
@@ -1182,7 +1182,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.For, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "for", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.For, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "for", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.For : TokenID.For
 >TokenID : typeof TokenID
 >For : TokenID.For
@@ -1208,7 +1208,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Function, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "function", ErrorRecoverySet.Func);
 >setTokenInfo(TokenID.Function, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "function", ErrorRecoverySet.Func) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Function : TokenID.Function
 >TokenID : typeof TokenID
 >Function : TokenID.Function
@@ -1234,7 +1234,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Constructor, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "constructor", ErrorRecoverySet.Func);
 >setTokenInfo(TokenID.Constructor, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "constructor", ErrorRecoverySet.Func) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Constructor : TokenID.Constructor
 >TokenID : typeof TokenID
 >Constructor : TokenID.Constructor
@@ -1260,7 +1260,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Get, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "get", ErrorRecoverySet.Func);
 >setTokenInfo(TokenID.Get, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "get", ErrorRecoverySet.Func) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Get : TokenID.Get
 >TokenID : typeof TokenID
 >Get : TokenID.Get
@@ -1286,7 +1286,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Set, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "set", ErrorRecoverySet.Func);
 >setTokenInfo(TokenID.Set, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "set", ErrorRecoverySet.Func) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Set : TokenID.Set
 >TokenID : typeof TokenID
 >Set : TokenID.Set
@@ -1312,7 +1312,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.If, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "if", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.If, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "if", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.If : TokenID.If
 >TokenID : typeof TokenID
 >If : TokenID.If
@@ -1338,7 +1338,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Implements, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "implements", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Implements, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "implements", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Implements : TokenID.Implements
 >TokenID : typeof TokenID
 >Implements : TokenID.Implements
@@ -1364,7 +1364,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Import, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "import", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Import, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "import", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Import : TokenID.Import
 >TokenID : typeof TokenID
 >Import : TokenID.Import
@@ -1390,7 +1390,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.In, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.In, OperatorPrecedence.None, NodeType.None, "in", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.In, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.In, OperatorPrecedence.None, NodeType.None, "in", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.In : TokenID.In
 >TokenID : typeof TokenID
 >In : TokenID.In
@@ -1416,7 +1416,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.InstanceOf, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.InstOf, OperatorPrecedence.None, NodeType.None, "instanceof", ErrorRecoverySet.BinOp);
 >setTokenInfo(TokenID.InstanceOf, Reservation.TypeScriptAndJS, OperatorPrecedence.Relational, NodeType.InstOf, OperatorPrecedence.None, NodeType.None, "instanceof", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.InstanceOf : TokenID.InstanceOf
 >TokenID : typeof TokenID
 >InstanceOf : TokenID.InstanceOf
@@ -1442,7 +1442,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Interface, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "interface", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Interface, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "interface", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Interface : TokenID.Interface
 >TokenID : typeof TokenID
 >Interface : TokenID.Interface
@@ -1468,7 +1468,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Let, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "let", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Let, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "let", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Let : TokenID.Let
 >TokenID : typeof TokenID
 >Let : TokenID.Let
@@ -1494,7 +1494,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Module, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "module", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Module, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "module", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Module : TokenID.Module
 >TokenID : typeof TokenID
 >Module : TokenID.Module
@@ -1520,7 +1520,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.New, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "new", ErrorRecoverySet.PreOp);
 >setTokenInfo(TokenID.New, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "new", ErrorRecoverySet.PreOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.New : TokenID.New
 >TokenID : typeof TokenID
 >New : TokenID.New
@@ -1546,7 +1546,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Number, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "number", ErrorRecoverySet.PrimType);
 >setTokenInfo(TokenID.Number, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "number", ErrorRecoverySet.PrimType) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Number : TokenID.Number
 >TokenID : typeof TokenID
 >Number : TokenID.Number
@@ -1572,7 +1572,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Null, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "null", ErrorRecoverySet.RLit);
 >setTokenInfo(TokenID.Null, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "null", ErrorRecoverySet.RLit) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Null : TokenID.Null
 >TokenID : typeof TokenID
 >Null : TokenID.Null
@@ -1598,7 +1598,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Package, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "package", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Package, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "package", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Package : TokenID.Package
 >TokenID : typeof TokenID
 >Package : TokenID.Package
@@ -1624,7 +1624,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Private, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "private", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Private, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "private", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Private : TokenID.Private
 >TokenID : typeof TokenID
 >Private : TokenID.Private
@@ -1650,7 +1650,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Protected, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "protected", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Protected, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "protected", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Protected : TokenID.Protected
 >TokenID : typeof TokenID
 >Protected : TokenID.Protected
@@ -1676,7 +1676,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Public, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "public", ErrorRecoverySet.TypeScriptS);
 >setTokenInfo(TokenID.Public, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "public", ErrorRecoverySet.TypeScriptS) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Public : TokenID.Public
 >TokenID : typeof TokenID
 >Public : TokenID.Public
@@ -1702,7 +1702,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Return, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "return", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Return, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "return", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Return : TokenID.Return
 >TokenID : typeof TokenID
 >Return : TokenID.Return
@@ -1728,7 +1728,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Static, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "static", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Static, Reservation.TypeScriptAndJSFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "static", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Static : TokenID.Static
 >TokenID : typeof TokenID
 >Static : TokenID.Static
@@ -1754,7 +1754,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.String, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "string", ErrorRecoverySet.PrimType);
 >setTokenInfo(TokenID.String, Reservation.TypeScript, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "string", ErrorRecoverySet.PrimType) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.String : TokenID.String
 >TokenID : typeof TokenID
 >String : TokenID.String
@@ -1780,7 +1780,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Super, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "super", ErrorRecoverySet.RLit);
 >setTokenInfo(TokenID.Super, Reservation.TypeScriptAndJSFuture, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "super", ErrorRecoverySet.RLit) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Super : TokenID.Super
 >TokenID : typeof TokenID
 >Super : TokenID.Super
@@ -1806,7 +1806,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Switch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "switch", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Switch, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "switch", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Switch : TokenID.Switch
 >TokenID : typeof TokenID
 >Switch : TokenID.Switch
@@ -1832,7 +1832,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.This, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "this", ErrorRecoverySet.RLit);
 >setTokenInfo(TokenID.This, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "this", ErrorRecoverySet.RLit) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.This : TokenID.This
 >TokenID : typeof TokenID
 >This : TokenID.This
@@ -1858,7 +1858,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Throw, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "throw", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Throw, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "throw", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Throw : TokenID.Throw
 >TokenID : typeof TokenID
 >Throw : TokenID.Throw
@@ -1884,7 +1884,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.True, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "true", ErrorRecoverySet.RLit);
 >setTokenInfo(TokenID.True, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "true", ErrorRecoverySet.RLit) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.True : TokenID.True
 >TokenID : typeof TokenID
 >True : TokenID.True
@@ -1910,7 +1910,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Try, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "try", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.Try, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "try", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Try : TokenID.Try
 >TokenID : typeof TokenID
 >Try : TokenID.Try
@@ -1936,7 +1936,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.TypeOf, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Typeof, "typeof", ErrorRecoverySet.Prefix);
 >setTokenInfo(TokenID.TypeOf, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Typeof, "typeof", ErrorRecoverySet.Prefix) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.TypeOf : TokenID.TypeOf
 >TokenID : typeof TokenID
 >TypeOf : TokenID.TypeOf
@@ -1962,7 +1962,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Var, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "var", ErrorRecoverySet.Var);
 >setTokenInfo(TokenID.Var, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "var", ErrorRecoverySet.Var) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Var : TokenID.Var
 >TokenID : typeof TokenID
 >Var : TokenID.Var
@@ -1988,7 +1988,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Void, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Void, "void", ErrorRecoverySet.Prefix);
 >setTokenInfo(TokenID.Void, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Void, "void", ErrorRecoverySet.Prefix) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Void : TokenID.Void
 >TokenID : typeof TokenID
 >Void : TokenID.Void
@@ -2014,7 +2014,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.With, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.With, "with", ErrorRecoverySet.Stmt);
 >setTokenInfo(TokenID.With, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.With, "with", ErrorRecoverySet.Stmt) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.With : TokenID.With
 >TokenID : typeof TokenID
 >With : TokenID.With
@@ -2040,7 +2040,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.While, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "while", ErrorRecoverySet.While);
 >setTokenInfo(TokenID.While, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "while", ErrorRecoverySet.While) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.While : TokenID.While
 >TokenID : typeof TokenID
 >While : TokenID.While
@@ -2066,7 +2066,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Yield, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "yield", ErrorRecoverySet.None);
 >setTokenInfo(TokenID.Yield, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "yield", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Yield : TokenID.Yield
 >TokenID : typeof TokenID
 >Yield : TokenID.Yield
@@ -2092,7 +2092,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Identifier, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "identifier", ErrorRecoverySet.ID);
 >setTokenInfo(TokenID.Identifier, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "identifier", ErrorRecoverySet.ID) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Identifier : TokenID.Identifier
 >TokenID : typeof TokenID
 >Identifier : TokenID.Identifier
@@ -2118,7 +2118,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.NumberLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "numberLiteral", ErrorRecoverySet.Literal);
 >setTokenInfo(TokenID.NumberLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "numberLiteral", ErrorRecoverySet.Literal) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.NumberLiteral : TokenID.NumberLiteral
 >TokenID : typeof TokenID
 >NumberLiteral : TokenID.NumberLiteral
@@ -2144,7 +2144,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.RegularExpressionLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "regex", ErrorRecoverySet.RegExp);
 >setTokenInfo(TokenID.RegularExpressionLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "regex", ErrorRecoverySet.RegExp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.RegularExpressionLiteral : TokenID.RegularExpressionLiteral
 >TokenID : typeof TokenID
 >RegularExpressionLiteral : TokenID.RegularExpressionLiteral
@@ -2170,7 +2170,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.StringLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "qstring", ErrorRecoverySet.Literal);
 >setTokenInfo(TokenID.StringLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "qstring", ErrorRecoverySet.Literal) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.StringLiteral : TokenID.StringLiteral
 >TokenID : typeof TokenID
 >StringLiteral : TokenID.StringLiteral
@@ -2197,7 +2197,7 @@ module TypeScript {
     // Non-operator non-identifier tokens
     setTokenInfo(TokenID.Semicolon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ";", ErrorRecoverySet.SColon); // ;
 >setTokenInfo(TokenID.Semicolon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ";", ErrorRecoverySet.SColon) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Semicolon : TokenID.Semicolon
 >TokenID : typeof TokenID
 >Semicolon : TokenID.Semicolon
@@ -2223,7 +2223,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.CloseParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ")", ErrorRecoverySet.RParen); // )
 >setTokenInfo(TokenID.CloseParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ")", ErrorRecoverySet.RParen) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.CloseParen : TokenID.CloseParen
 >TokenID : typeof TokenID
 >CloseParen : TokenID.CloseParen
@@ -2249,7 +2249,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.CloseBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "]", ErrorRecoverySet.RBrack); // ]
 >setTokenInfo(TokenID.CloseBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "]", ErrorRecoverySet.RBrack) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.CloseBracket : TokenID.CloseBracket
 >TokenID : typeof TokenID
 >CloseBracket : TokenID.CloseBracket
@@ -2275,7 +2275,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.OpenBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "{", ErrorRecoverySet.LCurly); // {
 >setTokenInfo(TokenID.OpenBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "{", ErrorRecoverySet.LCurly) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.OpenBrace : TokenID.OpenBrace
 >TokenID : typeof TokenID
 >OpenBrace : TokenID.OpenBrace
@@ -2301,7 +2301,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.CloseBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "}", ErrorRecoverySet.RCurly); // }
 >setTokenInfo(TokenID.CloseBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "}", ErrorRecoverySet.RCurly) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.CloseBrace : TokenID.CloseBrace
 >TokenID : typeof TokenID
 >CloseBrace : TokenID.CloseBrace
@@ -2327,7 +2327,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.DotDotDot, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "...", ErrorRecoverySet.None); // ...
 >setTokenInfo(TokenID.DotDotDot, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "...", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.DotDotDot : TokenID.DotDotDot
 >TokenID : typeof TokenID
 >DotDotDot : TokenID.DotDotDot
@@ -2354,7 +2354,7 @@ module TypeScript {
     // Operator non-identifier tokens
     setTokenInfo(TokenID.Comma, Reservation.None, OperatorPrecedence.Comma, NodeType.Comma, OperatorPrecedence.None, NodeType.None, ",", ErrorRecoverySet.Comma); // ,
 >setTokenInfo(TokenID.Comma, Reservation.None, OperatorPrecedence.Comma, NodeType.Comma, OperatorPrecedence.None, NodeType.None, ",", ErrorRecoverySet.Comma) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Comma : TokenID.Comma
 >TokenID : typeof TokenID
 >Comma : TokenID.Comma
@@ -2380,7 +2380,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Equals, Reservation.None, OperatorPrecedence.Assignment, NodeType.Asg, OperatorPrecedence.None, NodeType.None, "=", ErrorRecoverySet.Asg); // =
 >setTokenInfo(TokenID.Equals, Reservation.None, OperatorPrecedence.Assignment, NodeType.Asg, OperatorPrecedence.None, NodeType.None, "=", ErrorRecoverySet.Asg) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Equals : TokenID.Equals
 >TokenID : typeof TokenID
 >Equals : TokenID.Equals
@@ -2406,7 +2406,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.PlusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAdd, OperatorPrecedence.None, NodeType.None, "+=", ErrorRecoverySet.BinOp); // +=
 >setTokenInfo(TokenID.PlusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAdd, OperatorPrecedence.None, NodeType.None, "+=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.PlusEquals : TokenID.PlusEquals
 >TokenID : typeof TokenID
 >PlusEquals : TokenID.PlusEquals
@@ -2432,7 +2432,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.MinusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgSub, OperatorPrecedence.None, NodeType.None, "-=", ErrorRecoverySet.BinOp); // -=
 >setTokenInfo(TokenID.MinusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgSub, OperatorPrecedence.None, NodeType.None, "-=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.MinusEquals : TokenID.MinusEquals
 >TokenID : typeof TokenID
 >MinusEquals : TokenID.MinusEquals
@@ -2458,7 +2458,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.AsteriskEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMul, OperatorPrecedence.None, NodeType.None, "*=", ErrorRecoverySet.BinOp); // *=
 >setTokenInfo(TokenID.AsteriskEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMul, OperatorPrecedence.None, NodeType.None, "*=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.AsteriskEquals : TokenID.AsteriskEquals
 >TokenID : typeof TokenID
 >AsteriskEquals : TokenID.AsteriskEquals
@@ -2484,7 +2484,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.SlashEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgDiv, OperatorPrecedence.None, NodeType.None, "/=", ErrorRecoverySet.BinOp); // /=
 >setTokenInfo(TokenID.SlashEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgDiv, OperatorPrecedence.None, NodeType.None, "/=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.SlashEquals : TokenID.SlashEquals
 >TokenID : typeof TokenID
 >SlashEquals : TokenID.SlashEquals
@@ -2510,7 +2510,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.PercentEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMod, OperatorPrecedence.None, NodeType.None, "%=", ErrorRecoverySet.BinOp); // %=
 >setTokenInfo(TokenID.PercentEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMod, OperatorPrecedence.None, NodeType.None, "%=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.PercentEquals : TokenID.PercentEquals
 >TokenID : typeof TokenID
 >PercentEquals : TokenID.PercentEquals
@@ -2536,7 +2536,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.AmpersandEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAnd, OperatorPrecedence.None, NodeType.None, "&=", ErrorRecoverySet.BinOp); // &=
 >setTokenInfo(TokenID.AmpersandEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAnd, OperatorPrecedence.None, NodeType.None, "&=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.AmpersandEquals : TokenID.AmpersandEquals
 >TokenID : typeof TokenID
 >AmpersandEquals : TokenID.AmpersandEquals
@@ -2562,7 +2562,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.CaretEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgXor, OperatorPrecedence.None, NodeType.None, "^=", ErrorRecoverySet.BinOp); // ^=
 >setTokenInfo(TokenID.CaretEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgXor, OperatorPrecedence.None, NodeType.None, "^=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.CaretEquals : TokenID.CaretEquals
 >TokenID : typeof TokenID
 >CaretEquals : TokenID.CaretEquals
@@ -2588,7 +2588,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.BarEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgOr, OperatorPrecedence.None, NodeType.None, "|=", ErrorRecoverySet.BinOp); // |=
 >setTokenInfo(TokenID.BarEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgOr, OperatorPrecedence.None, NodeType.None, "|=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.BarEquals : TokenID.BarEquals
 >TokenID : typeof TokenID
 >BarEquals : TokenID.BarEquals
@@ -2614,7 +2614,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.LessThanLessThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgLsh, OperatorPrecedence.None, NodeType.None, "<<=", ErrorRecoverySet.BinOp); // <<=
 >setTokenInfo(TokenID.LessThanLessThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgLsh, OperatorPrecedence.None, NodeType.None, "<<=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.LessThanLessThanEquals : TokenID.LessThanLessThanEquals
 >TokenID : typeof TokenID
 >LessThanLessThanEquals : TokenID.LessThanLessThanEquals
@@ -2640,7 +2640,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.GreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRsh, OperatorPrecedence.None, NodeType.None, ">>=", ErrorRecoverySet.BinOp); // >>=
 >setTokenInfo(TokenID.GreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRsh, OperatorPrecedence.None, NodeType.None, ">>=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.GreaterThanGreaterThanEquals : TokenID.GreaterThanGreaterThanEquals
 >TokenID : typeof TokenID
 >GreaterThanGreaterThanEquals : TokenID.GreaterThanGreaterThanEquals
@@ -2666,7 +2666,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRs2, OperatorPrecedence.None, NodeType.None, ">>>=", ErrorRecoverySet.BinOp); // >>>=
 >setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThanEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgRs2, OperatorPrecedence.None, NodeType.None, ">>>=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.GreaterThanGreaterThanGreaterThanEquals : TokenID.GreaterThanGreaterThanGreaterThanEquals
 >TokenID : typeof TokenID
 >GreaterThanGreaterThanGreaterThanEquals : TokenID.GreaterThanGreaterThanGreaterThanEquals
@@ -2692,7 +2692,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Question, Reservation.None, OperatorPrecedence.Conditional, NodeType.ConditionalExpression, OperatorPrecedence.None, NodeType.None, "?", ErrorRecoverySet.BinOp); // ?
 >setTokenInfo(TokenID.Question, Reservation.None, OperatorPrecedence.Conditional, NodeType.ConditionalExpression, OperatorPrecedence.None, NodeType.None, "?", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Question : TokenID.Question
 >TokenID : typeof TokenID
 >Question : TokenID.Question
@@ -2718,7 +2718,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Colon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ":", ErrorRecoverySet.Colon); // :
 >setTokenInfo(TokenID.Colon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ":", ErrorRecoverySet.Colon) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Colon : TokenID.Colon
 >TokenID : typeof TokenID
 >Colon : TokenID.Colon
@@ -2744,7 +2744,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.BarBar, Reservation.None, OperatorPrecedence.LogicalOr, NodeType.LogOr, OperatorPrecedence.None, NodeType.None, "||", ErrorRecoverySet.BinOp); // ||
 >setTokenInfo(TokenID.BarBar, Reservation.None, OperatorPrecedence.LogicalOr, NodeType.LogOr, OperatorPrecedence.None, NodeType.None, "||", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.BarBar : TokenID.BarBar
 >TokenID : typeof TokenID
 >BarBar : TokenID.BarBar
@@ -2770,7 +2770,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.AmpersandAmpersand, Reservation.None, OperatorPrecedence.LogicalAnd, NodeType.LogAnd, OperatorPrecedence.None, NodeType.None, "&&", ErrorRecoverySet.BinOp); // &&
 >setTokenInfo(TokenID.AmpersandAmpersand, Reservation.None, OperatorPrecedence.LogicalAnd, NodeType.LogAnd, OperatorPrecedence.None, NodeType.None, "&&", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.AmpersandAmpersand : TokenID.AmpersandAmpersand
 >TokenID : typeof TokenID
 >AmpersandAmpersand : TokenID.AmpersandAmpersand
@@ -2796,7 +2796,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Bar, Reservation.None, OperatorPrecedence.BitwiseOr, NodeType.Or, OperatorPrecedence.None, NodeType.None, "|", ErrorRecoverySet.BinOp); // |
 >setTokenInfo(TokenID.Bar, Reservation.None, OperatorPrecedence.BitwiseOr, NodeType.Or, OperatorPrecedence.None, NodeType.None, "|", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Bar : TokenID.Bar
 >TokenID : typeof TokenID
 >Bar : TokenID.Bar
@@ -2822,7 +2822,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Caret, Reservation.None, OperatorPrecedence.BitwiseExclusiveOr, NodeType.Xor, OperatorPrecedence.None, NodeType.None, "^", ErrorRecoverySet.BinOp); // ^
 >setTokenInfo(TokenID.Caret, Reservation.None, OperatorPrecedence.BitwiseExclusiveOr, NodeType.Xor, OperatorPrecedence.None, NodeType.None, "^", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Caret : TokenID.Caret
 >TokenID : typeof TokenID
 >Caret : TokenID.Caret
@@ -2848,7 +2848,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.And, Reservation.None, OperatorPrecedence.BitwiseAnd, NodeType.And, OperatorPrecedence.None, NodeType.None, "&", ErrorRecoverySet.BinOp); // &
 >setTokenInfo(TokenID.And, Reservation.None, OperatorPrecedence.BitwiseAnd, NodeType.And, OperatorPrecedence.None, NodeType.None, "&", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.And : TokenID.And
 >TokenID : typeof TokenID
 >And : TokenID.And
@@ -2874,7 +2874,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.EqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eq, OperatorPrecedence.None, NodeType.None, "==", ErrorRecoverySet.BinOp); // ==
 >setTokenInfo(TokenID.EqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eq, OperatorPrecedence.None, NodeType.None, "==", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.EqualsEquals : TokenID.EqualsEquals
 >TokenID : typeof TokenID
 >EqualsEquals : TokenID.EqualsEquals
@@ -2900,7 +2900,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.ExclamationEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Ne, OperatorPrecedence.None, NodeType.None, "!=", ErrorRecoverySet.BinOp); // !=
 >setTokenInfo(TokenID.ExclamationEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Ne, OperatorPrecedence.None, NodeType.None, "!=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.ExclamationEquals : TokenID.ExclamationEquals
 >TokenID : typeof TokenID
 >ExclamationEquals : TokenID.ExclamationEquals
@@ -2926,7 +2926,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.EqualsEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eqv, OperatorPrecedence.None, NodeType.None, "===", ErrorRecoverySet.BinOp); // ===
 >setTokenInfo(TokenID.EqualsEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.Eqv, OperatorPrecedence.None, NodeType.None, "===", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.EqualsEqualsEquals : TokenID.EqualsEqualsEquals
 >TokenID : typeof TokenID
 >EqualsEqualsEquals : TokenID.EqualsEqualsEquals
@@ -2952,7 +2952,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.ExclamationEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.NEqv, OperatorPrecedence.None, NodeType.None, "!==", ErrorRecoverySet.BinOp); // !==
 >setTokenInfo(TokenID.ExclamationEqualsEquals, Reservation.None, OperatorPrecedence.Equality, NodeType.NEqv, OperatorPrecedence.None, NodeType.None, "!==", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.ExclamationEqualsEquals : TokenID.ExclamationEqualsEquals
 >TokenID : typeof TokenID
 >ExclamationEqualsEquals : TokenID.ExclamationEqualsEquals
@@ -2978,7 +2978,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.LessThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Lt, OperatorPrecedence.None, NodeType.None, "<", ErrorRecoverySet.BinOp); // <
 >setTokenInfo(TokenID.LessThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Lt, OperatorPrecedence.None, NodeType.None, "<", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.LessThan : TokenID.LessThan
 >TokenID : typeof TokenID
 >LessThan : TokenID.LessThan
@@ -3004,7 +3004,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.LessThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Le, OperatorPrecedence.None, NodeType.None, "<=", ErrorRecoverySet.BinOp); // <=
 >setTokenInfo(TokenID.LessThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Le, OperatorPrecedence.None, NodeType.None, "<=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.LessThanEquals : TokenID.LessThanEquals
 >TokenID : typeof TokenID
 >LessThanEquals : TokenID.LessThanEquals
@@ -3030,7 +3030,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.GreaterThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Gt, OperatorPrecedence.None, NodeType.None, ">", ErrorRecoverySet.BinOp); // >
 >setTokenInfo(TokenID.GreaterThan, Reservation.None, OperatorPrecedence.Relational, NodeType.Gt, OperatorPrecedence.None, NodeType.None, ">", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.GreaterThan : TokenID.GreaterThan
 >TokenID : typeof TokenID
 >GreaterThan : TokenID.GreaterThan
@@ -3056,7 +3056,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.GreaterThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Ge, OperatorPrecedence.None, NodeType.None, ">=", ErrorRecoverySet.BinOp); // >=
 >setTokenInfo(TokenID.GreaterThanEquals, Reservation.None, OperatorPrecedence.Relational, NodeType.Ge, OperatorPrecedence.None, NodeType.None, ">=", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.GreaterThanEquals : TokenID.GreaterThanEquals
 >TokenID : typeof TokenID
 >GreaterThanEquals : TokenID.GreaterThanEquals
@@ -3082,7 +3082,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.LessThanLessThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Lsh, OperatorPrecedence.None, NodeType.None, "<<", ErrorRecoverySet.BinOp); // <<
 >setTokenInfo(TokenID.LessThanLessThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Lsh, OperatorPrecedence.None, NodeType.None, "<<", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.LessThanLessThan : TokenID.LessThanLessThan
 >TokenID : typeof TokenID
 >LessThanLessThan : TokenID.LessThanLessThan
@@ -3108,7 +3108,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.GreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rsh, OperatorPrecedence.None, NodeType.None, ">>", ErrorRecoverySet.BinOp); // >>
 >setTokenInfo(TokenID.GreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rsh, OperatorPrecedence.None, NodeType.None, ">>", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.GreaterThanGreaterThan : TokenID.GreaterThanGreaterThan
 >TokenID : typeof TokenID
 >GreaterThanGreaterThan : TokenID.GreaterThanGreaterThan
@@ -3134,7 +3134,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rs2, OperatorPrecedence.None, NodeType.None, ">>>", ErrorRecoverySet.BinOp); // >>>
 >setTokenInfo(TokenID.GreaterThanGreaterThanGreaterThan, Reservation.None, OperatorPrecedence.Shift, NodeType.Rs2, OperatorPrecedence.None, NodeType.None, ">>>", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.GreaterThanGreaterThanGreaterThan : TokenID.GreaterThanGreaterThanGreaterThan
 >TokenID : typeof TokenID
 >GreaterThanGreaterThanGreaterThan : TokenID.GreaterThanGreaterThanGreaterThan
@@ -3160,7 +3160,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Plus, Reservation.None, OperatorPrecedence.Additive, NodeType.Add, OperatorPrecedence.Unary, NodeType.Pos, "+", ErrorRecoverySet.AddOp); // +
 >setTokenInfo(TokenID.Plus, Reservation.None, OperatorPrecedence.Additive, NodeType.Add, OperatorPrecedence.Unary, NodeType.Pos, "+", ErrorRecoverySet.AddOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Plus : TokenID.Plus
 >TokenID : typeof TokenID
 >Plus : TokenID.Plus
@@ -3186,7 +3186,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Minus, Reservation.None, OperatorPrecedence.Additive, NodeType.Sub, OperatorPrecedence.Unary, NodeType.Neg, "-", ErrorRecoverySet.AddOp); // -
 >setTokenInfo(TokenID.Minus, Reservation.None, OperatorPrecedence.Additive, NodeType.Sub, OperatorPrecedence.Unary, NodeType.Neg, "-", ErrorRecoverySet.AddOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Minus : TokenID.Minus
 >TokenID : typeof TokenID
 >Minus : TokenID.Minus
@@ -3212,7 +3212,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Asterisk, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mul, OperatorPrecedence.None, NodeType.None, "*", ErrorRecoverySet.BinOp); // *
 >setTokenInfo(TokenID.Asterisk, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mul, OperatorPrecedence.None, NodeType.None, "*", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Asterisk : TokenID.Asterisk
 >TokenID : typeof TokenID
 >Asterisk : TokenID.Asterisk
@@ -3238,7 +3238,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Slash, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Div, OperatorPrecedence.None, NodeType.None, "/", ErrorRecoverySet.BinOp); // /
 >setTokenInfo(TokenID.Slash, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Div, OperatorPrecedence.None, NodeType.None, "/", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Slash : TokenID.Slash
 >TokenID : typeof TokenID
 >Slash : TokenID.Slash
@@ -3264,7 +3264,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Percent, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mod, OperatorPrecedence.None, NodeType.None, "%", ErrorRecoverySet.BinOp); // %
 >setTokenInfo(TokenID.Percent, Reservation.None, OperatorPrecedence.Multiplicative, NodeType.Mod, OperatorPrecedence.None, NodeType.None, "%", ErrorRecoverySet.BinOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Percent : TokenID.Percent
 >TokenID : typeof TokenID
 >Percent : TokenID.Percent
@@ -3290,7 +3290,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Tilde, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Not, "~", ErrorRecoverySet.PreOp); // ~
 >setTokenInfo(TokenID.Tilde, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.Not, "~", ErrorRecoverySet.PreOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Tilde : TokenID.Tilde
 >TokenID : typeof TokenID
 >Tilde : TokenID.Tilde
@@ -3316,7 +3316,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Exclamation, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.LogNot, "!", ErrorRecoverySet.PreOp); // !
 >setTokenInfo(TokenID.Exclamation, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.LogNot, "!", ErrorRecoverySet.PreOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Exclamation : TokenID.Exclamation
 >TokenID : typeof TokenID
 >Exclamation : TokenID.Exclamation
@@ -3342,7 +3342,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.PlusPlus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.IncPre, "++", ErrorRecoverySet.PreOp); // ++
 >setTokenInfo(TokenID.PlusPlus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.IncPre, "++", ErrorRecoverySet.PreOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.PlusPlus : TokenID.PlusPlus
 >TokenID : typeof TokenID
 >PlusPlus : TokenID.PlusPlus
@@ -3368,7 +3368,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.MinusMinus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.DecPre, "--", ErrorRecoverySet.PreOp); // --
 >setTokenInfo(TokenID.MinusMinus, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.Unary, NodeType.DecPre, "--", ErrorRecoverySet.PreOp) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.MinusMinus : TokenID.MinusMinus
 >TokenID : typeof TokenID
 >MinusMinus : TokenID.MinusMinus
@@ -3394,7 +3394,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.OpenParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "(", ErrorRecoverySet.LParen); // (
 >setTokenInfo(TokenID.OpenParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "(", ErrorRecoverySet.LParen) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.OpenParen : TokenID.OpenParen
 >TokenID : typeof TokenID
 >OpenParen : TokenID.OpenParen
@@ -3420,7 +3420,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.OpenBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "[", ErrorRecoverySet.LBrack); // [
 >setTokenInfo(TokenID.OpenBracket, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "[", ErrorRecoverySet.LBrack) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.OpenBracket : TokenID.OpenBracket
 >TokenID : typeof TokenID
 >OpenBracket : TokenID.OpenBracket
@@ -3446,7 +3446,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.Dot, Reservation.None, OperatorPrecedence.Unary, NodeType.None, OperatorPrecedence.None, NodeType.None, ".", ErrorRecoverySet.Dot); // .
 >setTokenInfo(TokenID.Dot, Reservation.None, OperatorPrecedence.Unary, NodeType.None, OperatorPrecedence.None, NodeType.None, ".", ErrorRecoverySet.Dot) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.Dot : TokenID.Dot
 >TokenID : typeof TokenID
 >Dot : TokenID.Dot
@@ -3472,7 +3472,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.EndOfFile, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "<EOF>", ErrorRecoverySet.EOF); // EOF
 >setTokenInfo(TokenID.EndOfFile, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "<EOF>", ErrorRecoverySet.EOF) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.EndOfFile : TokenID.EndOfFile
 >TokenID : typeof TokenID
 >EndOfFile : TokenID.EndOfFile
@@ -3498,7 +3498,7 @@ module TypeScript {
 
     setTokenInfo(TokenID.EqualsGreaterThan, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "=>", ErrorRecoverySet.None); // =>
 >setTokenInfo(TokenID.EqualsGreaterThan, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "=>", ErrorRecoverySet.None) : void
->setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
+>setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: ErrorRecoverySet) => void
 >TokenID.EqualsGreaterThan : TokenID.EqualsGreaterThan
 >TokenID : typeof TokenID
 >EqualsGreaterThan : TokenID.EqualsGreaterThan

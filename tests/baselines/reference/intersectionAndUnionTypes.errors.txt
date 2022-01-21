@@ -5,7 +5,6 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(20,1): e
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(23,1): error TS2322: Type 'A | B' is not assignable to type '(A & B) | (C & D)'.
   Type 'A' is not assignable to type '(A & B) | (C & D)'.
     Type 'A' is not assignable to type 'A & B'.
-      Type 'A' is not assignable to type 'B'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(25,1): error TS2322: Type 'C | D' is not assignable to type '(A & B) | (C & D)'.
   Type 'C' is not assignable to type '(A & B) | (C & D)'.
     Type 'C' is not assignable to type 'C & D'.
@@ -80,7 +79,6 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): e
 !!! error TS2322: Type 'A | B' is not assignable to type '(A & B) | (C & D)'.
 !!! error TS2322:   Type 'A' is not assignable to type '(A & B) | (C & D)'.
 !!! error TS2322:     Type 'A' is not assignable to type 'A & B'.
-!!! error TS2322:       Type 'A' is not assignable to type 'B'.
     x = cnd;  // Ok
     x = cod;
     ~

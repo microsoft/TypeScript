@@ -297,7 +297,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
 Object.defineProperties(IterableWeakMap.prototype, {
 >Object.defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.object.d.ts, --, --))
 >defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
 >IterableWeakMap.prototype : Symbol(IterableWeakMap.prototype)
 >IterableWeakMap : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
@@ -322,7 +322,7 @@ Object.defineProperties(IterableWeakMap.prototype, {
 >value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 89, 23))
 >Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value : Symbol(PropertyDescriptor.value, Decl(lib.es5.d.ts, --, --))
 >Object.getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.object.d.ts, --, --))
 >getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
             IterableWeakMap.prototype,

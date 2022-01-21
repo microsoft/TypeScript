@@ -45,7 +45,7 @@ namespace ts {
         /**
          * Newly computed visible to outside referencedSet
          */
-        currentAffectedFilesExportedModulesMap?: Readonly<BuilderState.ComputingExportedModulesMap> | undefined;
+        currentAffectedFilesExportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
         /**
          * True if the semantic diagnostics were copied from the old state
          */
@@ -113,8 +113,10 @@ namespace ts {
         currentAffectedFilesSignatures: ESMap<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
+         * We need to store the updates separately in case the in-progress build is cancelled
+         * and we need to roll back.
          */
-        currentAffectedFilesExportedModulesMap: BuilderState.ComputingExportedModulesMap | undefined;
+        currentAffectedFilesExportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
         /**
          * Already seen affected files
          */
@@ -212,7 +214,7 @@ namespace ts {
         const copyLibFileDiagnostics = copyDeclarationFileDiagnostics && !compilerOptions.skipDefaultLibCheck === !oldCompilerOptions!.skipDefaultLibCheck;
         state.fileInfos.forEach((info, sourceFilePath) => {
             let oldInfo: Readonly<BuilderState.FileInfo> | undefined;
-            let newReferences: BuilderState.ReferencedSet | undefined;
+            let newReferences: ReadonlySet<Path> | undefined;
 
             // if not using old state, every file is changed
             if (!useOldState ||
@@ -221,7 +223,7 @@ namespace ts {
                 // versions dont match
                 oldInfo.version !== info.version ||
                 // Referenced files changed
-                !hasSameKeys(newReferences = referencedMap && referencedMap.get(sourceFilePath), oldReferencedMap && oldReferencedMap.get(sourceFilePath)) ||
+                !hasSameKeys(newReferences = referencedMap && referencedMap.getValues(sourceFilePath), oldReferencedMap && oldReferencedMap.getValues(sourceFilePath)) ||
                 // Referenced file was deleted in the new program
                 newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))) {
                 // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
@@ -230,8 +232,8 @@ namespace ts {
             else if (canCopySemanticDiagnostics) {
                 const sourceFile = newProgram.getSourceFileByPath(sourceFilePath)!;
 
-                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
-                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
+                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) return;
+                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) return;
 
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
@@ -255,6 +257,14 @@ namespace ts {
             newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
             state.seenAffectedFiles = state.seenAffectedFiles || new Set();
+        }
+        if (useOldState) {
+            // Any time the interpretation of a source file changes, mark it as changed
+            forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => {
+                if (state.fileInfos.has(sourceFilePath) && state.fileInfos.get(sourceFilePath)!.impliedFormat !== info.impliedFormat) {
+                    state.changedFilesSet.add(sourceFilePath);
+                }
+            });
         }
 
         state.buildInfoEmitPending = !!state.changedFilesSet.size;
@@ -311,7 +321,7 @@ namespace ts {
         newState.affectedFilesIndex = state.affectedFilesIndex;
         newState.currentChangedFilePath = state.currentChangedFilePath;
         newState.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures && new Map(state.currentAffectedFilesSignatures);
-        newState.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap && new Map(state.currentAffectedFilesExportedModulesMap);
+        newState.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap?.clone();
         newState.seenAffectedFiles = state.seenAffectedFiles && new Set(state.seenAffectedFiles);
         newState.cleanedDiagnosticsOfLibFiles = state.cleanedDiagnosticsOfLibFiles;
         newState.semanticDiagnosticsFromOldState = state.semanticDiagnosticsFromOldState && new Set(state.semanticDiagnosticsFromOldState);
@@ -384,7 +394,7 @@ namespace ts {
             // Get next batch of affected files
             if (!state.currentAffectedFilesSignatures) state.currentAffectedFilesSignatures = new Map();
             if (state.exportedModulesMap) {
-                if (!state.currentAffectedFilesExportedModulesMap) state.currentAffectedFilesExportedModulesMap = new Map();
+                state.currentAffectedFilesExportedModulesMap ||= BuilderState.createManyToManyPathMap();
             }
             state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value;
@@ -465,7 +475,7 @@ namespace ts {
      * Handle the dts may change, so they need to be added to pending emit if dts emit is enabled,
      * Also we need to make sure signature is updated for these files
      */
-    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
+    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash): void {
         removeSemanticDiagnosticsOf(state, path);
 
         if (!state.changedFilesSet.has(path)) {
@@ -476,6 +486,7 @@ namespace ts {
                 // we need to update the signature to reflect correctness of the signature(which is output d.ts emit) of this file
                 // This ensures that we dont later during incremental builds considering wrong signature.
                 // Eg where this also is needed to ensure that .tsbuildinfo generated by incremental build should be same as if it was first fresh build
+                // But we avoid expensive full shape computation, as using file version as shape is enough for correctness.
                 BuilderState.updateShapeSignature(
                     state,
                     program,
@@ -483,7 +494,8 @@ namespace ts {
                     Debug.checkDefined(state.currentAffectedFilesSignatures),
                     cancellationToken,
                     computeHash,
-                    state.currentAffectedFilesExportedModulesMap
+                    state.currentAffectedFilesExportedModulesMap,
+                    /* useFileVersionAsSignature */ true
                 );
                 // If not dts emit, nothing more to do
                 if (getEmitDeclarations(state.compilerOptions)) {
@@ -491,8 +503,6 @@ namespace ts {
                 }
             }
         }
-
-        return false;
     }
 
     /**
@@ -517,7 +527,7 @@ namespace ts {
     /**
      * Iterate on referencing modules that export entities from affected file
      */
-    function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
+    function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => void) {
         // If there was change in signature (dts output) for the changed file,
         // then only we need to handle pending file emit
         if (!state.exportedModulesMap || !state.changedFilesSet.has(affectedFile.resolvedPath)) {
@@ -536,8 +546,8 @@ namespace ts {
                 const currentPath = queue.pop()!;
                 if (!seenFileNamesMap.has(currentPath)) {
                     seenFileNamesMap.set(currentPath, true);
-                    const result = fn(state, currentPath);
-                    if (result && isChangedSignature(state, currentPath)) {
+                    fn(state, currentPath);
+                    if (isChangedSignature(state, currentPath)) {
                         const currentSourceFile = Debug.checkDefined(state.program).getSourceFileByPath(currentPath)!;
                         queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
@@ -546,21 +556,19 @@ namespace ts {
         }
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+
         const seenFileAndExportsOfFile = new Set<string>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
-            exportedModules &&
-            exportedModules.has(affectedFile.resolvedPath) &&
+        state.currentAffectedFilesExportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return;
-        }
+        );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
-            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
-            exportedModules.has(affectedFile.resolvedPath) &&
+        state.exportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
+            // If the cache had an updated value, skip
+            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
     }
@@ -568,48 +576,39 @@ namespace ts {
     /**
      * Iterate on files referencing referencedPath
      */
-    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
-        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
-            referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath, seenFileAndExportsOfFile, fn)
+    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void): void {
+        state.referencedMap!.getKeys(referencedPath)?.forEach(filePath =>
+            forEachFileAndExportsOfFile(state, filePath, seenFileAndExportsOfFile, fn)
         );
     }
 
     /**
      * fn on file and iterate on anything that exports this file
      */
-    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
+    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void): void {
         if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) {
-            return false;
+            return;
         }
 
-        if (fn(state, filePath)) {
-            // If there are no more diagnostics from old cache, done
-            return true;
-        }
+        fn(state, filePath);
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
-            exportedModules &&
-            exportedModules.has(filePath) &&
+        state.currentAffectedFilesExportedModulesMap.getKeys(filePath)?.forEach(exportedFromPath =>
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return true;
-        }
+        );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
-            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
-            exportedModules.has(filePath) &&
+        state.exportedModulesMap!.getKeys(filePath)?.forEach(exportedFromPath =>
+            // If the cache had an updated value, skip
+            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return true;
-        }
+        );
 
         // Remove diagnostics of files that import this file (without going to exports of referencing files)
-        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
-            referencesInFile.has(filePath) &&
+        state.referencedMap!.getKeys(filePath)?.forEach(referencingFilePath =>
             !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
             fn(state, referencingFilePath) // Dont add to seen since this is not yet done with the export removal
         );
@@ -693,7 +692,7 @@ namespace ts {
             const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
             // Report the bind and check diagnostics from the cache if we already have those diagnostics present
             if (cachedDiagnostics) {
-                return filterSemanticDiagnotics(cachedDiagnostics, state.compilerOptions);
+                return filterSemanticDiagnostics(cachedDiagnostics, state.compilerOptions);
             }
         }
 
@@ -702,12 +701,14 @@ namespace ts {
         if (state.semanticDiagnosticsPerFile) {
             state.semanticDiagnosticsPerFile.set(path, diagnostics);
         }
-        return filterSemanticDiagnotics(diagnostics, state.compilerOptions);
+        return filterSemanticDiagnostics(diagnostics, state.compilerOptions);
     }
 
-    export type ProgramBuildInfoDiagnostic = number | [fileId: number, diagnostics: readonly ReusableDiagnostic[]];
-    export type ProgramBuilderInfoFilePendingEmit = [fileId: number, emitKind: BuilderFileEmit];
-    export type ProgramBuildInfoReferencedMap = [fileId: number, fileIdListId: number][];
+    export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
+    export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
+    export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
+    export type ProgramBuilderInfoFilePendingEmit = [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
+    export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
     export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
         /**
          * Signature is
@@ -725,7 +726,7 @@ namespace ts {
         fileNames: readonly string[];
         fileInfos: readonly ProgramBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
-        fileIdsList?: readonly (readonly number[])[];
+        fileIdsList?: readonly (readonly ProgramBuildInfoFileId[])[];
         referencedMap?: ProgramBuildInfoReferencedMap;
         exportedModulesMap?: ProgramBuildInfoReferencedMap;
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
@@ -740,9 +741,9 @@ namespace ts {
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileNames: string[] = [];
-        const fileNameToFileId = new Map<string, number>();
-        let fileIdsList: (readonly number[])[] | undefined;
-        let fileNamesToFileIdListId: ESMap<string, number> | undefined;
+        const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+        let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
+        let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
             // Ensure fileId
             const fileId = toFileId(key);
@@ -751,31 +752,39 @@ namespace ts {
             const actualSignature = signature ?? value.signature;
             return value.version === actualSignature ?
                 value.affectsGlobalScope ?
-                    { version: value.version, signature: undefined, affectsGlobalScope: true } :
+                    { version: value.version, signature: undefined, affectsGlobalScope: true, impliedFormat: value.impliedFormat } :
                     value.version :
                 actualSignature !== undefined ?
                     signature === undefined ?
                         value :
-                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope } :
-                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope };
+                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
         });
 
         let referencedMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.referencedMap) {
             referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
                 toFileId(key),
-                toFileIdListId(state.referencedMap!.get(key)!)
+                toFileIdListId(state.referencedMap!.getValues(key)!)
             ]);
         }
 
         let exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.exportedModulesMap) {
             exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
-                const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
+                if (state.currentAffectedFilesExportedModulesMap) {
+                    if (state.currentAffectedFilesExportedModulesMap.deletedKeys()?.has(key)) {
+                        return undefined;
+                    }
+
+                    const newValue = state.currentAffectedFilesExportedModulesMap.getValues(key);
+                    if (newValue) {
+                        return [toFileId(key), toFileIdListId(newValue)];
+                    }
+                }
+
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) return [toFileId(key), toFileIdListId(state.exportedModulesMap!.get(key)!)];
-                // Value in cache and has updated value map, use that
-                else if (newValue) return [toFileId(key), toFileIdListId(newValue)];
+                return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
             });
         }
 
@@ -825,22 +834,22 @@ namespace ts {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
         }
 
-        function toFileId(path: Path): number {
+        function toFileId(path: Path): ProgramBuildInfoFileId {
             let fileId = fileNameToFileId.get(path);
             if (fileId === undefined) {
                 fileNames.push(relativeToBuildInfo(path));
-                fileNameToFileId.set(path, fileId = fileNames.length);
+                fileNameToFileId.set(path, fileId = fileNames.length as ProgramBuildInfoFileId);
             }
             return fileId;
         }
 
-        function toFileIdListId(set: ReadonlySet<Path>): number {
+        function toFileIdListId(set: ReadonlySet<Path>): ProgramBuildInfoFileIdListId {
             const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
             const key = fileIds.join();
             let fileIdListId = fileNamesToFileIdListId?.get(key);
             if (fileIdListId === undefined) {
                 (fileIdsList ||= []).push(fileIds);
-                (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length);
+                (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
             }
             return fileIdListId;
         }
@@ -851,8 +860,14 @@ namespace ts {
         const { optionsNameMap } = getOptionsNameMap();
 
         for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
-            const optionInfo = optionsNameMap.get(name.toLowerCase());
-            if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics || name === "skipLibCheck" || name === "skipDefaultLibCheck") {
+            const optionKey = name.toLowerCase();
+            const optionInfo = optionsNameMap.get(optionKey);
+            if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics ||
+                // We need to store `strict`, even though it won't be examined directly, so that the
+                // flags it controls (e.g. `strictNullChecks`) will be retrieved correctly from the buildinfo
+                optionKey === "strict" ||
+                // We need to store these to determine whether `lib` files need to be rechecked.
+                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck") {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(
                     optionInfo,
                     options[name] as CompilerOptionsValue,
@@ -976,8 +991,9 @@ namespace ts {
         oldProgram = undefined;
         oldState = undefined;
 
-        const builderProgram = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
-        builderProgram.getState = () => state;
+        const getState = () => state;
+        const builderProgram = createRedirectedBuilderProgram(getState, configFileParsingDiagnostics);
+        builderProgram.getState = getState;
         builderProgram.backupState = () => {
             Debug.assert(backupState === undefined);
             backupState = cloneBuilderProgramState(state);
@@ -1235,10 +1251,10 @@ namespace ts {
 
     export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): BuilderState.FileInfo {
         return isString(fileInfo) ?
-            { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined } :
+            { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
             isString(fileInfo.signature) ?
                 fileInfo as BuilderState.FileInfo :
-                { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope };
+                { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
@@ -1248,12 +1264,12 @@ namespace ts {
         const filePaths = program.fileNames.map(toPath);
         const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1), toBuilderStateFileInfo(fileInfo)));
+        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1 as ProgramBuildInfoFileId), toBuilderStateFileInfo(fileInfo)));
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-            referencedMap: toMapOfReferencedSet(program.referencedMap),
-            exportedModulesMap: toMapOfReferencedSet(program.exportedModulesMap),
+            referencedMap: toManyToManyPathMap(program.referencedMap),
+            exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
@@ -1293,28 +1309,36 @@ namespace ts {
             return getNormalizedAbsolutePath(path, buildInfoDirectory);
         }
 
-        function toFilePath(fileId: number) {
+        function toFilePath(fileId: ProgramBuildInfoFileId) {
             return filePaths[fileId - 1];
         }
 
-        function toFilePathsSet(fileIdsListId: number) {
+        function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
             return filePathsSetList![fileIdsListId - 1];
         }
 
-        function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
-            return referenceMap && arrayToMap(referenceMap, value => toFilePath(value[0]), value => toFilePathsSet(value[1]));
+        function toManyToManyPathMap(referenceMap: ProgramBuildInfoReferencedMap | undefined): BuilderState.ManyToManyPathMap | undefined {
+            if (!referenceMap) {
+                return undefined;
+            }
+
+            const map = BuilderState.createManyToManyPathMap();
+            referenceMap.forEach(([fileId, fileIdListId]) =>
+                map.set(toFilePath(fileId), toFilePathsSet(fileIdListId))
+            );
+            return map;
         }
     }
 
-    export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
+    export function createRedirectedBuilderProgram(getState: () => { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
         return {
             getState: notImplemented,
             backupState: noop,
             restoreState: noop,
             getProgram,
-            getProgramOrUndefined: () => state.program,
-            releaseProgram: () => state.program = undefined,
-            getCompilerOptions: () => state.compilerOptions,
+            getProgramOrUndefined: () => getState().program,
+            releaseProgram: () => getState().program = undefined,
+            getCompilerOptions: () => getState().compilerOptions,
             getSourceFile: fileName => getProgram().getSourceFile(fileName),
             getSourceFiles: () => getProgram().getSourceFiles(),
             getOptionsDiagnostics: cancellationToken => getProgram().getOptionsDiagnostics(cancellationToken),
@@ -1331,7 +1355,7 @@ namespace ts {
         };
 
         function getProgram() {
-            return Debug.checkDefined(state.program);
+            return Debug.checkDefined(getState().program);
         }
     }
 }

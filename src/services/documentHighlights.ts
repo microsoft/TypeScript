@@ -32,9 +32,10 @@ namespace ts {
             const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
             if (!referenceEntries) return undefined;
             const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+            const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
             return mapDefined(arrayFrom(map.entries()), ([fileName, highlightSpans]) => {
                 if (!sourceFilesSet.has(fileName)) {
-                    if (!program.redirectTargetsMap.has(fileName)) {
+                    if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
                         return undefined;
                     }
                     const redirectTarget = program.getSourceFile(fileName);

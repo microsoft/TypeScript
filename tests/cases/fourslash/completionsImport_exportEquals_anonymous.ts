@@ -25,21 +25,12 @@ const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = {
 verify.completions(
     {
         marker: "0",
-        exact: [
-            completion.globalThisEntry,
-            completion.undefinedVarEntry,
-            ...completion.statementKeywordsWithTypes
-        ],
+        exact: completion.globalsPlus([], { noLib: true }),
         preferences
     },
     {
         marker: "1",
-        exact: [
-            completion.globalThisEntry,
-            completion.undefinedVarEntry,
-            exportEntry,
-            ...completion.statementKeywordsWithTypes
-        ],
+        exact: completion.globalsPlus([exportEntry], { noLib: true }),
         preferences
     }
 );

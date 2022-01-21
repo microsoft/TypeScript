@@ -18,7 +18,7 @@ namespace ts.refactor {
             namespaceToNamedAction.kind,
             namedToNamespaceAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(context): readonly ApplicableRefactorInfo[] {
             const info = getImportToConvert(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -39,7 +39,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === namespaceToNamedAction.name || actionName === namedToNamespaceAction.name, "Unexpected action name");
             const info = getImportToConvert(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
@@ -55,7 +55,10 @@ namespace ts.refactor {
         const token = getTokenAtPosition(file, span.start);
         const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
         if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
-        if (importDecl.getEnd() < span.start + span.length) return undefined;
+
+        const end = span.start + span.length;
+        const nextToken = findNextToken(importDecl, importDecl.parent, file);
+        if (nextToken && end > nextToken.getStart()) return undefined;
 
         const { importClause } = importDecl;
         if (!importClause) {
@@ -113,7 +116,7 @@ namespace ts.refactor {
 
         const importSpecifiers: ImportSpecifier[] = [];
         exportNameToImportName.forEach((name, propertyName) => {
-            importSpecifiers.push(factory.createImportSpecifier(name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
+            importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
         });
 
         const importDecl = toConvert.parent.parent;
@@ -138,13 +141,36 @@ namespace ts.refactor {
         const importDecl = toConvert.parent.parent;
         const { moduleSpecifier } = importDecl;
 
+        const toConvertSymbols: Set<Symbol> = new Set();
+        toConvert.elements.forEach(namedImport => {
+            const symbol = checker.getSymbolAtLocation(namedImport.name);
+            if (symbol) {
+                toConvertSymbols.add(symbol);
+            }
+        });
         const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
-        const namespaceNameConflicts = toConvert.elements.some(element =>
-            FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id =>
-                !!checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true)) || false);
+        function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
+            // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.
+            // A name conflict means that, in a scope where we would like to use the preferred namespace name, there already exists a symbol with that name in that scope.
+            // We are going to use the namespace name in the scopes the named imports being refactored are referenced,
+            // so we look for conflicts by looking at every reference to those named imports.
+            return !!FindAllReferences.Core.eachSymbolReferenceInFile(namedImport.name, checker, sourceFile, id => {
+                const symbol = checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true);
+                if (symbol) { // There already is a symbol with the same name as the preferred namespace name.
+                    if (toConvertSymbols.has(symbol)) { // `preferredName` resolves to a symbol for one of the named import references we are going to transform into namespace import references...
+                        return isExportSpecifier(id.parent); // ...but if this reference is an export specifier, it will not be transformed, so it is a conflict; otherwise, it will be renamed and is not a conflict.
+                    }
+                    return true; // `preferredName` resolves to any other symbol, which will be present in the refactored code and so poses a name conflict.
+                }
+                return false; // There is no symbol with the same name as the preferred namespace name, so no conflict.
+            });
+        }
+        const namespaceNameConflicts = toConvert.elements.some(hasNamespaceNameConflict);
         const namespaceImportName = namespaceNameConflicts ? getUniqueName(preferredName, sourceFile) : preferredName;
 
-        const neededNamedImports: ImportSpecifier[] = [];
+        // Imports that need to be kept as named imports in the refactored code, to avoid changing the semantics.
+        // More specifically, those are named imports that appear in named exports in the original code, e.g. `a` in `import { a } from "m"; export { a }`.
+        const neededNamedImports: Set<ImportSpecifier> = new Set();
 
         for (const element of toConvert.elements) {
             const propertyName = (element.propertyName || element.name).text;
@@ -153,10 +179,8 @@ namespace ts.refactor {
                 if (isShorthandPropertyAssignment(id.parent)) {
                     changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
                 }
-                else if (isExportSpecifier(id.parent) && !id.parent.propertyName) {
-                    if (!neededNamedImports.some(n => n.name === element.name)) {
-                        neededNamedImports.push(factory.createImportSpecifier(element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
-                    }
+                else if (isExportSpecifier(id.parent)) {
+                    neededNamedImports.add(element);
                 }
                 else {
                     changes.replaceNode(sourceFile, id, access);
@@ -165,13 +189,15 @@ namespace ts.refactor {
         }
 
         changes.replaceNode(sourceFile, toConvert, factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
-        if (neededNamedImports.length) {
-            changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, neededNamedImports));
+        if (neededNamedImports.size) {
+            const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values()).map(element =>
+                factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
+            changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
         }
     }
 
     function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
         return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
-            factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier);
+            factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*assertClause*/ undefined);
     }
 }

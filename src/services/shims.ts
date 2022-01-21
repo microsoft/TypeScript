@@ -14,7 +14,9 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
+    return this;
+})();
 
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable no-in-operator */
@@ -149,7 +151,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
-        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
+        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined, formattingSettings: FormatCodeSettings | undefined): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -280,7 +282,7 @@ namespace ts {
         prepareCallHierarchy(fileName: string, position: number): string;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
-
+        provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string;
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
@@ -954,10 +956,10 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined, formattingSettings: FormatCodeSettings | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences}, ${formattingSettings})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings)
             );
         }
 
@@ -1064,6 +1066,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
                 () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
+            );
+        }
+
+        public provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string {
+            return this.forwardJSONCall(
+                `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
+                () => this.languageService.provideInlayHints(fileName, span, preference)
             );
         }
 

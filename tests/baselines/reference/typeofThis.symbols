@@ -1,0 +1,353 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts ===
+class Test {
+>Test : Symbol(Test, Decl(typeofThis.ts, 0, 0))
+
+    data = {};
+>data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
+
+    constructor() {
+        var copy: typeof this.data = {};
+>copy : Symbol(copy, Decl(typeofThis.ts, 3, 11))
+>this.data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
+>data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
+    }
+}
+
+class Test1 {
+>Test1 : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
+
+    data = { foo: '' };
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
+
+    ['this'] = '';
+>['this'] : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+>'this' : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+
+    constructor() {
+        var copy: typeof this.data = { foo: '' };
+>copy : Symbol(copy, Decl(typeofThis.ts, 11, 11))
+>this.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>foo : Symbol(foo, Decl(typeofThis.ts, 11, 38))
+
+        var foo: typeof this.data.foo = '';
+>foo : Symbol(foo, Decl(typeofThis.ts, 12, 11))
+>this.data.foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
+>this.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
+
+        var self: typeof this = this;
+>self : Symbol(self, Decl(typeofThis.ts, 14, 11))
+>this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
+
+        self.data;
+>self.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>self : Symbol(self, Decl(typeofThis.ts, 14, 11))
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+
+        var str: typeof this.this = '';
+>str : Symbol(str, Decl(typeofThis.ts, 17, 11))
+>this.this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+>this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+    }
+}
+
+
+function Test2() {
+>Test2 : Symbol(Test2, Decl(typeofThis.ts, 19, 1))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 23, 7))
+}
+
+function Test3(this: { no: number }) {
+>Test3 : Symbol(Test3, Decl(typeofThis.ts, 24, 1))
+>this : Symbol(this, Decl(typeofThis.ts, 26, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 26, 22))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 27, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 26, 22))
+>this : Symbol(this, Decl(typeofThis.ts, 26, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 26, 22))
+}
+
+function Test4(this: { no: number } | undefined) {
+>Test4 : Symbol(Test4, Decl(typeofThis.ts, 28, 1))
+>this : Symbol(this, Decl(typeofThis.ts, 30, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 30, 22))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 31, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 30, 22))
+>this : Symbol(this, Decl(typeofThis.ts, 30, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 30, 22))
+}
+
+class Test5 {
+>Test5 : Symbol(Test5, Decl(typeofThis.ts, 32, 1))
+
+    no = 1;
+>no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
+
+    f = () => {
+>f : Symbol(Test5.f, Decl(typeofThis.ts, 35, 11))
+
+        // should not capture this.
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 39, 11))
+>this.no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
+>no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
+    }
+}
+
+namespace Test6 {
+>Test6 : Symbol(Test6, Decl(typeofThis.ts, 41, 1))
+
+    export let f = () => {
+>f : Symbol(f, Decl(typeofThis.ts, 44, 14))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 45, 11))
+    }
+}
+
+module Test7 {
+>Test7 : Symbol(Test7, Decl(typeofThis.ts, 47, 1))
+
+    export let f = () => {
+>f : Symbol(f, Decl(typeofThis.ts, 50, 14))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 51, 11))
+    }
+}
+
+const Test8 = () => {
+>Test8 : Symbol(Test8, Decl(typeofThis.ts, 55, 5))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 56, 7))
+}
+
+class Test9 {
+>Test9 : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+
+    no = 0;
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+
+    this = 0;
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+
+    f() {
+>f : Symbol(Test9.f, Decl(typeofThis.ts, 61, 13))
+
+        if (this instanceof Test9D1) {
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>Test9D1 : Symbol(Test9D1, Decl(typeofThis.ts, 84, 1))
+
+            const d1: typeof this = this;
+>d1 : Symbol(d1, Decl(typeofThis.ts, 65, 17))
+
+            d1.f1();
+>d1.f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
+>d1 : Symbol(d1, Decl(typeofThis.ts, 65, 17))
+>f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
+        }
+
+        if (this instanceof Test9D2) {
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>Test9D2 : Symbol(Test9D2, Decl(typeofThis.ts, 88, 1))
+
+            const d2: typeof this = this;
+>d2 : Symbol(d2, Decl(typeofThis.ts, 70, 17))
+
+            d2.f2();
+>d2.f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
+>d2 : Symbol(d2, Decl(typeofThis.ts, 70, 17))
+>f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
+        }
+    }
+
+    g() {
+>g : Symbol(Test9.g, Decl(typeofThis.ts, 73, 5))
+
+        if (this.no === 1) {
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+
+            const no: typeof this.no = this.no;
+>no : Symbol(no, Decl(typeofThis.ts, 77, 17))
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+        }
+
+        if (this.this === 1) {
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+
+            const no: typeof this.this = this.this;
+>no : Symbol(no, Decl(typeofThis.ts, 81, 17))
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+        }
+    }
+}
+
+class Test9D1 {
+>Test9D1 : Symbol(Test9D1, Decl(typeofThis.ts, 84, 1))
+
+    f1() {}
+>f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
+}
+
+class Test9D2 {
+>Test9D2 : Symbol(Test9D2, Decl(typeofThis.ts, 88, 1))
+
+    f2() {}
+>f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
+}
+
+class Test10 {
+>Test10 : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
+
+    a?: { b?: string }
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+
+    foo() {
+>foo : Symbol(Test10.foo, Decl(typeofThis.ts, 95, 22))
+
+        let a: typeof this.a = undefined as any;
+>a : Symbol(a, Decl(typeofThis.ts, 98, 11))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>undefined : Symbol(undefined)
+
+        if (this.a) {
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+
+            let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
+>a : Symbol(a, Decl(typeofThis.ts, 100, 15))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>undefined : Symbol(undefined)
+
+            let b: typeof this.a.b = undefined as any;
+>b : Symbol(b, Decl(typeofThis.ts, 101, 15))
+>this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>undefined : Symbol(undefined)
+
+            if (this.a.b) {
+>this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+
+                let b: typeof this.a.b = undefined as any;   // should narrow to string
+>b : Symbol(b, Decl(typeofThis.ts, 104, 19))
+>this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>undefined : Symbol(undefined)
+            }
+        }
+    }
+}
+
+class Test11 {
+>Test11 : Symbol(Test11, Decl(typeofThis.ts, 108, 1))
+
+    this?: { x?: string };
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+    
+    foo() {
+>foo : Symbol(Test11.foo, Decl(typeofThis.ts, 111, 26))
+
+        const o = this;
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11, Decl(typeofThis.ts, 108, 1))
+
+        let bar: typeof o.this = {};
+>bar : Symbol(bar, Decl(typeofThis.ts, 115, 11))
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+
+        if (o.this && o.this.x) {
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o.this.x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+
+            let y: string = o.this.x;   // should narrow to string
+>y : Symbol(y, Decl(typeofThis.ts, 118, 15))
+>o.this.x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+        }
+    }
+}
+
+class Tests12 {
+>Tests12 : Symbol(Tests12, Decl(typeofThis.ts, 121, 1))
+
+    test1() { // OK
+>test1 : Symbol(Tests12.test1, Decl(typeofThis.ts, 123, 15))
+
+        type Test = typeof this;
+>Test : Symbol(Test, Decl(typeofThis.ts, 124, 13))
+    }
+
+    test2() { // OK
+>test2 : Symbol(Tests12.test2, Decl(typeofThis.ts, 126, 5))
+
+        for (;;) {}
+        type Test = typeof this;
+>Test : Symbol(Test, Decl(typeofThis.ts, 129, 19))
+    }
+
+    test3() { // expected no compile errors
+>test3 : Symbol(Tests12.test3, Decl(typeofThis.ts, 131, 5))
+
+        for (const dummy in []) {}
+>dummy : Symbol(dummy, Decl(typeofThis.ts, 134, 18))
+
+        type Test = typeof this;
+>Test : Symbol(Test, Decl(typeofThis.ts, 134, 34))
+    }
+
+    test4() { // expected no compile errors
+>test4 : Symbol(Tests12.test4, Decl(typeofThis.ts, 136, 5))
+
+        for (const dummy of []) {}
+>dummy : Symbol(dummy, Decl(typeofThis.ts, 139, 18))
+
+        type Test = typeof this;
+>Test : Symbol(Test, Decl(typeofThis.ts, 139, 34))
+    }
+}

@@ -6,11 +6,13 @@ namespace ts {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
         const checker = program.getTypeChecker();
+        const isCommonJSFile = sourceFile.impliedNodeFormat === ModuleKind.CommonJS || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cts, Extension.Cjs]) ;
 
-        if (sourceFile.commonJsModuleIndicator &&
-            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+        if (!isCommonJSFile &&
+            sourceFile.commonJsModuleIndicator &&
+            (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
             containsTopLevelCommonjs(sourceFile)) {
-            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
+            diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
         }
 
         const isJsFile = isSourceFileJS(sourceFile);
@@ -23,7 +25,7 @@ namespace ts {
                 const importNode = importFromModuleSpecifier(moduleSpecifier);
                 const name = importNameForConvertToDefaultImport(importNode);
                 if (!name) continue;
-                const module = getResolvedModule(sourceFile, moduleSpecifier.text);
+                const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
                 if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
@@ -64,7 +66,7 @@ namespace ts {
         }
     }
 
-    // convertToEs6Module only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
+    // convertToEsModule only works on top-level, so don't trigger it if commonjs code only appears in nested scopes.
     function containsTopLevelCommonjs(sourceFile: SourceFile): boolean {
         return sourceFile.statements.some(statement => {
             switch (statement.kind) {
@@ -139,33 +141,40 @@ namespace ts {
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
     export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
         // ensure outermost call exists and is a promise handler
-        if (!isPromiseHandler(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+        if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
             return false;
         }
 
         // ensure all chained calls are valid
-        let currentNode = node.expression;
+        let currentNode = node.expression.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
-                return false;
+            if (isCallExpression(currentNode)) {
+                if (!hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+                    return false;
+                }
+                currentNode = currentNode.expression.expression;
             }
-            currentNode = currentNode.expression;
+            else {
+                currentNode = currentNode.expression;
+            }
         }
         return true;
     }
 
-    function isPromiseHandler(node: Node): node is CallExpression {
+    function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression } {
         return isCallExpression(node) && (
-            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
-            hasPropertyAccessExpressionWithName(node, "catch"));
+            hasPropertyAccessExpressionWithName(node, "then") ||
+            hasPropertyAccessExpressionWithName(node, "catch") ||
+            hasPropertyAccessExpressionWithName(node, "finally"));
     }
 
-    function hasSupportedNumberOfArguments(node: CallExpression) {
-        if (node.arguments.length > 2) return false;
-        if (node.arguments.length < 2) return true;
-        return some(node.arguments, arg => {
-            return arg.kind === SyntaxKind.NullKeyword ||
-                isIdentifier(arg) && arg.text === "undefined";
+    function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression }) {
+        const name = node.expression.name.text;
+        const maxArguments = name === "then" ? 2 : name === "catch" ? 1 : name === "finally" ? 1 : 0;
+        if (node.arguments.length > maxArguments) return false;
+        if (node.arguments.length < maxArguments) return true;
+        return maxArguments === 1 || some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword || isIdentifier(arg) && arg.text === "undefined";
         });
     }
 
@@ -174,6 +183,11 @@ namespace ts {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+                if (functionFlags & FunctionFlags.Generator) {
+                    return false;
+                }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 // falls through

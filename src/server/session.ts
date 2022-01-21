@@ -473,7 +473,7 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
             if (defaultDefinition) {
                 const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
                     defaultDefinition :
@@ -629,9 +629,7 @@ namespace ts.server {
         CommandNames.CompilerOptionsDiagnosticsFull,
         CommandNames.EncodedSemanticClassificationsFull,
         CommandNames.SemanticDiagnosticsSync,
-        CommandNames.SyntacticDiagnosticsSync,
         CommandNames.SuggestionDiagnosticsSync,
-        CommandNames.Geterr,
         CommandNames.GeterrForProject,
         CommandNames.Reload,
         CommandNames.ReloadProjects,
@@ -775,6 +773,7 @@ namespace ts.server {
                 typesMapLocation: opts.typesMapLocation,
                 syntaxOnly: opts.syntaxOnly,
                 serverMode: opts.serverMode,
+                session: this
             };
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
@@ -941,6 +940,10 @@ namespace ts.server {
                 }
                 return;
             }
+            this.writeMessage(msg);
+        }
+
+        protected writeMessage(msg: protocol.Message) {
             const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
             perfLogger.logEvent(`Response message size: ${msgText.length}`);
             this.host.write(msgText);
@@ -1054,7 +1057,7 @@ namespace ts.server {
 
                 const { fileName, project } = item;
 
-                // Ensure the project is upto date before checking if this file is present in the project
+                // Ensure the project is up to date before checking if this file is present in the project.
                 updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
                     return;
@@ -1065,6 +1068,11 @@ namespace ts.server {
                     return;
                 }
 
+                // Don't provide semantic diagnostics unless we're in full semantic mode.
+                if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                    goNext();
+                    return;
+                }
                 next.immediate(() => {
                     this.semanticCheck(fileName, project);
                     if (this.changeSeq !== seq) {
@@ -1073,13 +1081,12 @@ namespace ts.server {
 
                     if (this.getPreferences(fileName).disableSuggestions) {
                         goNext();
+                        return;
                     }
-                    else {
-                        next.immediate(() => {
-                            this.suggestionCheck(fileName, project);
-                            goNext();
-                        });
-                    }
+                    next.immediate(() => {
+                        this.suggestionCheck(fileName, project);
+                        goNext();
+                    });
                 });
             };
 
@@ -1449,6 +1456,17 @@ namespace ts.server {
             });
         }
 
+        private provideInlayHints(args: protocol.InlayHintsRequestArgs): readonly protocol.InlayHintItem[] {
+            const { file, project } = this.getFileAndProject(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
+
+            return hints.map(hint => ({
+                ...hint,
+                position: scriptInfo.positionToLineOffset(hint.position),
+            }));
+        }
+
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
             this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
         }
@@ -1522,19 +1540,21 @@ namespace ts.server {
             const file = toNormalizedPath(args.file);
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
+            const defaultProject = this.getDefaultProject(args);
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(
+                defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
+
+            if (!renameInfo.canRename) return simplifiedResult ? { info: renameInfo, locs: [] } : [];
 
             const locations = combineProjectOutputForRenameLocations(
                 projects,
-                this.getDefaultProject(args),
+                defaultProject,
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
                 this.getPreferences(file)
             );
             if (!simplifiedResult) return locations;
-
-            const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1826,25 +1846,31 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
-                ...convertUserPreferences(this.getPreferences(file)),
-                triggerCharacter: args.triggerCharacter,
-                includeExternalModuleExports: args.includeExternalModuleExports,
-                includeInsertTextCompletions: args.includeInsertTextCompletions
-            });
+            const completions = project.getLanguageService().getCompletionsAtPosition(
+                file,
+                position,
+                {
+                    ...convertUserPreferences(this.getPreferences(file)),
+                    triggerCharacter: args.triggerCharacter,
+                    triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
+                    includeExternalModuleExports: args.includeExternalModuleExports,
+                    includeInsertTextCompletions: args.includeInsertTextCompletions,
+                },
+                project.projectService.getFormatCodeOptions(file),
+            );
             if (completions === undefined) return undefined;
 
             if (kind === protocol.CommandTypes.CompletionsFull) return completions;
 
             const prefix = args.prefix || "";
-            const entries = stableSort(mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
+            const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                     const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
                 }
-            }), (a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
+            });
 
             if (kind === protocol.CommandTypes.Completions) {
                 if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;
@@ -2095,7 +2121,7 @@ namespace ts.server {
         private getFullNavigateToItems(args: protocol.NavtoRequestArgs): CombineOutputResult<NavigateToItem> {
             const { currentFileOnly, searchValue, maxResultCount, projectFileName } = args;
             if (currentFileOnly) {
-                Debug.assertDefined(args.file);
+                Debug.assertIsDefined(args.file);
                 const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
                 return [{ project, result: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
             }
@@ -2962,6 +2988,9 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
+                return this.requiredResponse(this.provideInlayHints(request.arguments));
+            }
         }));
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

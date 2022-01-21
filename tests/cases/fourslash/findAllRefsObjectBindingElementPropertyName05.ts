@@ -9,5 +9,4 @@
 ////    let x = property1;
 ////}
 
-goTo.marker();
-verify.noReferences("");
+verify.baselineFindAllReferences("");
