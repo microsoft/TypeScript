@@ -4147,7 +4147,7 @@ namespace ts {
             return parseOptional(SyntaxKind.EqualsToken) ? parseAssignmentExpressionOrHigher() : undefined;
         }
 
-        function parseAssignmentExpressionOrHigher(disallowReturnAnnotationInArrow = false): Expression {
+        function parseAssignmentExpressionOrHigher(parsingConditionalTrueSide = false): Expression {
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -4175,7 +4175,7 @@ namespace ts {
             // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(disallowReturnAnnotationInArrow) || tryParseAsyncSimpleArrowFunctionExpression();
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(parsingConditionalTrueSide) || tryParseAsyncSimpleArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -4196,7 +4196,7 @@ namespace ts {
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
             // identifier and the current token is an arrow.
             if (expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
-                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, /*asyncModifier*/ undefined, disallowReturnAnnotationInArrow);
+                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, /*asyncModifier*/ undefined, parsingConditionalTrueSide);
             }
 
             // Now see if we might be in cases '2' or '3'.
@@ -4272,7 +4272,7 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined, disallowReturnAnnotationInArrow = false): ArrowFunction {
+        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined, parsingConditionalTrueSide = false): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             const parameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
@@ -4287,12 +4287,12 @@ namespace ts {
 
             const parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos, parameter.end);
             const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
-            const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, disallowReturnAnnotationInArrow);
+            const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, parsingConditionalTrueSide);
             const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
             return addJSDocComment(finishNode(node, pos));
         }
 
-        function tryParseParenthesizedArrowFunctionExpression(disallowReturnAnnotationInArrow = false): Expression | undefined {
+        function tryParseParenthesizedArrowFunctionExpression(parsingConditionalTrueSide = false): Expression | undefined {
             const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -4304,8 +4304,8 @@ namespace ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             return triState === Tristate.True ?
-                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, disallowReturnAnnotationInArrow) :
-                tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(disallowReturnAnnotationInArrow));
+                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, parsingConditionalTrueSide) :
+                tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalTrueSide));
         }
 
         //  True        -> We definitely expect a parenthesized arrow function here.
@@ -4451,13 +4451,13 @@ namespace ts {
             }
         }
 
-        function parsePossibleParenthesizedArrowFunctionExpression(disallowReturnAnnotationInArrow = false): ArrowFunction | undefined {
+        function parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalTrueSide = false): ArrowFunction | undefined {
             const tokenPos = scanner.getTokenPos();
             if (notParenthesizedArrow?.has(tokenPos)) {
                 return undefined;
             }
 
-            const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false, disallowReturnAnnotationInArrow);
+            const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false, parsingConditionalTrueSide);
             if (!result) {
                 (notParenthesizedArrow || (notParenthesizedArrow = new Set())).add(tokenPos);
             }
@@ -4465,14 +4465,14 @@ namespace ts {
             return result;
         }
 
-        function tryParseAsyncSimpleArrowFunctionExpression(disallowReturnAnnotationInArrow = false): ArrowFunction | undefined {
+        function tryParseAsyncSimpleArrowFunctionExpression(parsingConditionalTrueSide = false): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
                 if (lookAhead(isUnParenthesizedAsyncArrowFunctionWorker) === Tristate.True) {
                     const pos = getNodePos();
                     const asyncModifier = parseModifiersForArrowFunction();
                     const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
-                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, asyncModifier, disallowReturnAnnotationInArrow);
+                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, asyncModifier, parsingConditionalTrueSide);
                 }
             }
             return undefined;
@@ -4499,7 +4499,7 @@ namespace ts {
             return Tristate.False;
         }
 
-        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, disallowReturnAnnotationInArrow = false): ArrowFunction | undefined {
+        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, parsingConditionalTrueSide = false): ArrowFunction | undefined {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiersForArrowFunction();
@@ -4527,7 +4527,7 @@ namespace ts {
                 }
             }
 
-            if (disallowReturnAnnotationInArrow && token() === SyntaxKind.ColonToken) {
+            if (parsingConditionalTrueSide && token() === SyntaxKind.ColonToken) {
                 Debug.assert(!allowAmbiguity);
                 return undefined;
             }
@@ -4571,7 +4571,7 @@ namespace ts {
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function parseArrowFunctionExpressionBody(isAsync: boolean, disallowReturnAnnotationInArrow = false): Block | Expression {
+        function parseArrowFunctionExpressionBody(isAsync: boolean, parsingConditionalTrueSide = false): Block | Expression {
             if (token() === SyntaxKind.OpenBraceToken) {
                 return parseFunctionBlock(isAsync ? SignatureFlags.Await : SignatureFlags.None);
             }
@@ -4601,8 +4601,8 @@ namespace ts {
             const savedTopLevel = topLevel;
             topLevel = false;
             const node = isAsync
-                ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(disallowReturnAnnotationInArrow))
-                : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(disallowReturnAnnotationInArrow));
+                ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(parsingConditionalTrueSide))
+                : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(parsingConditionalTrueSide));
             topLevel = savedTopLevel;
             return node;
         }
@@ -4621,10 +4621,10 @@ namespace ts {
                 factory.createConditionalExpression(
                     leftOperand,
                     questionToken,
-                    doOutsideOfContext(disallowInAndDecoratorContext, () => parseAssignmentExpressionOrHigher(/*disallowReturnAnnotationInArrow*/ true)),
+                    doOutsideOfContext(disallowInAndDecoratorContext, () => parseAssignmentExpressionOrHigher(/*parsingConditionalTrueSide*/ true)),
                     colonToken = parseExpectedToken(SyntaxKind.ColonToken),
                     nodeIsPresent(colonToken)
-                        ? parseAssignmentExpressionOrHigher(/*disallowReturnAnnotationInArrow*/ false)
+                        ? parseAssignmentExpressionOrHigher(/*parsingConditionalTrueSide*/ false)
                         : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken))
                 ),
                 pos
