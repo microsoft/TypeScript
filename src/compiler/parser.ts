@@ -5149,6 +5149,22 @@ namespace ts {
                     }
                     return undefined;
                 case SyntaxKind.LessThanSlashToken:
+                    if (isJsxOpeningFragment(openingTag)) {
+                        const isNotClosingFragment = lookAhead(() => nextToken() !== SyntaxKind.GreaterThanToken);
+                        if (isNotClosingFragment) {
+                            // This looks like a closing element; stick it in as a child with a faked opening element.
+                            const pos = getNodePos();
+                            const missingTagName = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false);
+                            const missingAttributes = finishNode(factory.createJsxAttributes([]), pos);
+                            const missingOpen = finishNode(factory.createJsxOpeningElement(missingTagName, /*typeArguments*/ undefined, missingAttributes), pos);
+                            const missingChildren = createNodeArray([], pos);
+                            const closing = parseJsxClosingElement(missingOpen, /*inExpressionContext*/ false);
+                            // TODO: an actual error message here
+                            parseErrorAtRange(closing, Diagnostics._0_expected, "SOMETHING CORRECT");
+                            return finishNode(factory.createJsxElement(missingOpen, missingChildren, closing), pos);
+                        }
+                    }
+                    return undefined;
                 case SyntaxKind.ConflictMarkerTrivia:
                     return undefined;
                 case SyntaxKind.JsxText:

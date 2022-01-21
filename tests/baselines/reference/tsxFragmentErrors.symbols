@@ -16,5 +16,6 @@ declare var React: any;
 >React : Symbol(React, Decl(file.tsx, 6, 11))
 
 <>hi</div> // Error
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
 <>eof   // Error

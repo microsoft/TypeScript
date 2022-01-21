@@ -1,6 +1,6 @@
-tests/cases/conformance/jsx/file.tsx(9,7): error TS2304: Cannot find name 'div'.
-tests/cases/conformance/jsx/file.tsx(9,7): error TS17015: Expected corresponding closing tag for JSX fragment.
-tests/cases/conformance/jsx/file.tsx(9,11): error TS17014: JSX fragment has no corresponding closing tag.
+tests/cases/conformance/jsx/file.tsx(7,24): error TS17014: JSX fragment has no corresponding closing tag.
+tests/cases/conformance/jsx/file.tsx(9,5): error TS1005: 'SOMETHING CORRECT' expected.
+tests/cases/conformance/jsx/file.tsx(11,1): error TS17014: JSX fragment has no corresponding closing tag.
 tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
 
 
@@ -12,14 +12,14 @@ tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
     	}
     }
     declare var React: any;
+                           
+    
     
     <>hi</div> // Error
-          ~~~
-!!! error TS2304: Cannot find name 'div'.
-          ~~~
-!!! error TS17015: Expected corresponding closing tag for JSX fragment.
-              ~~~~~~~~~
-    
+    ~~
+!!! error TS17014: JSX fragment has no corresponding closing tag.
+        ~~~~~~
+!!! error TS1005: 'SOMETHING CORRECT' expected.
     
     <>eof   // Error
     ~~
