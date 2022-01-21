@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /src/buzz.mts(2,8): error TS2834: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== /src/buzz.mts (1 errors) ====
     // Extensionless relative path dynamic import in an ES module
     import("./foo").then(x => x); // should error, ask for extension

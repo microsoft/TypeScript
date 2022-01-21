@@ -1,9 +1,11 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.mts(1,17): error TS7062: JSON imports are experimental in ES module mode imports.
 tests/cases/conformance/node/index.mts(3,21): error TS7062: JSON imports are experimental in ES module mode imports.
 tests/cases/conformance/node/index.ts(1,17): error TS7062: JSON imports are experimental in ES module mode imports.
 tests/cases/conformance/node/index.ts(3,21): error TS7062: JSON imports are experimental in ES module mode imports.
 
 
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/index.ts (2 errors) ====
     import pkg from "./package.json"
                     ~~~~~~~~~~~~~~~~

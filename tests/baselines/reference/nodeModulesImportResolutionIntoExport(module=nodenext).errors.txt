@@ -1,0 +1,26 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/conformance/node/index.ts (0 errors) ====
+    // esm format file
+    import * as type from "#type";
+    type;
+==== tests/cases/conformance/node/index.mts (0 errors) ====
+    // esm format file
+    import * as type from "#type";
+    type;
+==== tests/cases/conformance/node/index.cts (0 errors) ====
+    // esm format file
+    import * as type from "#type";
+    type;
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": "./index.cjs",
+        "imports": {
+            "#type": "package"
+        }
+    }

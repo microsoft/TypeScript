@@ -1,9 +1,11 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/allowJs/file.js(4,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 tests/cases/conformance/node/allowJs/index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 tests/cases/conformance/node/allowJs/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/subfolder/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/allowJs/subfolder/index.js (1 errors) ====
     // cjs format file
     const a = {};

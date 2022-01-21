@@ -1,0 +1,12 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    declare var dec: any, __decorate: any;
+    @dec export class A {
+    }
+    
+    const o = { a: 1 };
+    const y = { ...o };
+    

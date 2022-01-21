@@ -32,7 +32,12 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:27 AM[0m] Found 0 errors. Watching for file changes.
+[96mproject/tsconfig.json[0m:[93m1[0m:[93m62[0m - [91merror[0m[90m TS4124: [0mCompiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m1[0m {"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
+[7m [0m [91m                                                             ~~~~~~~~~~[0m
+
+[[90m12:00:27 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -44,10 +49,7 @@ Program files::
 /project/src/deps.d.ts
 /project/src/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2020.full.d.ts
-/project/src/deps.d.ts
-/project/src/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.es2020.full.d.ts (used version)
@@ -102,7 +104,12 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[96mproject/tsconfig.json[0m:[93m1[0m:[93m62[0m - [91merror[0m[90m TS4124: [0mCompiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+[7m1[0m {"compilerOptions":{"strict":true,"target":"es2020","module":"nodenext","moduleResolution":"nodenext","outDir":"../dist"}}
+[7m [0m [91m                                                             ~~~~~~~~~~[0m
+
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -114,8 +121,7 @@ Program files::
 /project/src/deps.d.ts
 /project/src/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/project/src/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)

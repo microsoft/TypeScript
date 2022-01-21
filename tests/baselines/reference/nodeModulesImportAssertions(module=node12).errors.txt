@@ -1,3 +1,4 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.ts(1,18): error TS7062: JSON imports are experimental in ES module mode imports.
 tests/cases/conformance/node/index.ts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
 tests/cases/conformance/node/otherc.cts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
@@ -5,6 +6,7 @@ tests/cases/conformance/node/otherc.cts(2,22): error TS7062: JSON imports are ex
 tests/cases/conformance/node/otherc.cts(2,40): error TS1324: Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/index.ts (2 errors) ====
     import json from "./package.json" assert { type: "json" };
                      ~~~~~~~~~~~~~~~~

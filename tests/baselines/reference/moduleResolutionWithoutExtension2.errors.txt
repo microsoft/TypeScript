@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /src/buzz.mts(2,22): error TS2307: Cannot find module './foo' or its corresponding type declarations.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== /src/buzz.mts (1 errors) ====
     // Extensionless relative path cjs import in an ES module
     import foo = require("./foo"); // should error, should not ask for extension

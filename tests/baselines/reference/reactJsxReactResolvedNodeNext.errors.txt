@@ -1,0 +1,22 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/compiler/file.tsx (0 errors) ====
+    export const a = <div></div>;
+==== tests/cases/compiler/node_modules/@types/react/package.json (0 errors) ====
+    {
+        "name": "@types/react",
+        "version": "0.0.1",
+        "main": "",
+        "types": "index.d.ts",
+    }
+==== tests/cases/compiler/node_modules/@types/react/index.d.ts (0 errors) ====
+    declare namespace JSX {
+        interface IntrinsicElements { [x: string]: any; }
+    }
+==== tests/cases/compiler/node_modules/@types/react/jsx-runtime.d.ts (0 errors) ====
+    import './';
+==== tests/cases/compiler/node_modules/@types/react/jsx-dev-runtime.d.ts (0 errors) ====
+    import './';
+    

@@ -1,0 +1,54 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+
+
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
+==== tests/cases/conformance/node/index.ts (0 errors) ====
+    // esm format file
+    import * as mod from "inner";
+    mod.correctVersionApplied;
+    
+==== tests/cases/conformance/node/index.mts (0 errors) ====
+    // esm format file
+    import * as mod from "inner";
+    mod.correctVersionApplied;
+    
+==== tests/cases/conformance/node/index.cts (0 errors) ====
+    // cjs format file
+    import * as mod from "inner";
+    mod.correctVersionApplied;
+    
+==== tests/cases/conformance/node/node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    export const noConditionsApplied = true;
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    export const importConditionApplied = true;
+==== tests/cases/conformance/node/node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const wrongConditionApplied = true;
+==== tests/cases/conformance/node/node_modules/inner/old-types.d.ts (0 errors) ====
+    export const noVersionApplied = true;
+==== tests/cases/conformance/node/node_modules/inner/new-types.d.ts (0 errors) ====
+    export const correctVersionApplied = true;
+==== tests/cases/conformance/node/node_modules/inner/future-types.d.ts (0 errors) ====
+    export const futureVersionApplied = true;
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+    }
+==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            ".": {
+                "types@>=10000": "./future-types.d.ts",
+                "types@>=1": "./new-types.d.ts",
+                "types": "./old-types.d.ts",
+                "import": "./index.mjs",
+                "node": "./index.js"
+            },
+        }
+    }

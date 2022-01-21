@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 /src/bar.cts(4,21): error TS2307: Cannot find module './foo' or its corresponding type declarations.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== /src/bar.cts (1 errors) ====
     // Extensionless relative path import statement in a cjs module
     // Import statements are not allowed in cjs files,

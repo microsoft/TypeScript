@@ -1,3 +1,4 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/allowJs/index.cjs(2,21): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.cjs(3,21): error TS1471: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.cjs(6,21): error TS1471: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
@@ -114,6 +115,7 @@ tests/cases/conformance/node/allowJs/index.mjs(83,21): error TS2834: Relative im
 tests/cases/conformance/node/allowJs/index.mjs(84,21): error TS2835: Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/allowJs/subfolder/index.js (0 errors) ====
     // cjs format file
     const x = 1;

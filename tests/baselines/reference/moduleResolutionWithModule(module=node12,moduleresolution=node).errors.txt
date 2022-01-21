@@ -1,6 +1,8 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/compiler/index.ts(1,20): error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/compiler/node_modules/pkg/package.json (0 errors) ====
     {
         "name": "pkg",

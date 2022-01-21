@@ -1,8 +1,10 @@
+error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/conformance/node/index.cts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 tests/cases/conformance/node/index.mts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 tests/cases/conformance/node/index.ts(2,23): error TS2307: Cannot find module '#type' or its corresponding type declarations.
 
 
+!!! error TS4124: Compiler option 'module' of value 'node12' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/conformance/node/index.ts (1 errors) ====
     // esm format file
     import * as type from "#type";

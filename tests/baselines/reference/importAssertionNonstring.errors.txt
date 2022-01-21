@@ -1,3 +1,4 @@
+error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 tests/cases/compiler/mod.mts(1,52): error TS2837: Import assertion values must be string literal expressions.
 tests/cases/compiler/mod.mts(3,52): error TS2837: Import assertion values must be string literal expressions.
 tests/cases/compiler/mod.mts(5,52): error TS2837: Import assertion values must be string literal expressions.
@@ -6,6 +7,7 @@ tests/cases/compiler/mod.mts(9,52): error TS2837: Import assertion values must b
 tests/cases/compiler/mod.mts(11,66): error TS2837: Import assertion values must be string literal expressions.
 
 
+!!! error TS4124: Compiler option 'module' of value 'nodenext' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.
 ==== tests/cases/compiler/mod.mts (6 errors) ====
     import * as thing1 from "./mod.mjs" assert {field: 0};
                                                        ~
