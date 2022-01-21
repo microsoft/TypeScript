@@ -4527,6 +4527,14 @@ namespace ts {
                 }
             }
 
+            // Given:
+            //     x ? y => ({ y }) : z => ({ z })
+            // We try to parse the body of the first arrow function by looking at:
+            //     ({ y }) : z => ({ z })
+            // This is a valid arrow function with "z" as the return type.
+            //
+            // But, if we're in the true side of a conditional expression, this colon
+            // terminates the true side, so cannot be the return type.
             if (parsingConditionalTrueSide && token() === SyntaxKind.ColonToken) {
                 Debug.assert(!allowAmbiguity);
                 return undefined;
