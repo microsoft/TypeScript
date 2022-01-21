@@ -3156,7 +3156,7 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(opt as CommandLineOptionOfListType, value, basePath, errors);
+                return convertJsonOptionOfListType(opt , value, basePath, errors);
             }
             else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);
@@ -3509,7 +3509,7 @@ namespace ts {
                     ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
-        if (isImplicitGlob(spec)) {
+        if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
             return {
                 key: useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec),
                 flags: WatchDirectoryFlags.Recursive

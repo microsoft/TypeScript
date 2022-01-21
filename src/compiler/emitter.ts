@@ -1051,7 +1051,7 @@ namespace ts {
                 writeLine();
                 const pos = writer.getTextPos();
                 const savedSections = bundleFileInfo && bundleFileInfo.sections;
-                if (savedSections) bundleFileInfo!.sections = [];
+                if (savedSections) bundleFileInfo.sections = [];
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
                 if (bundleFileInfo) {
                     const newSections = bundleFileInfo.sections;

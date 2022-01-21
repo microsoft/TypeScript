@@ -17,15 +17,15 @@ namespace ts.refactor.extractSymbol {
             extractConstantAction.kind,
             extractFunctionAction.kind
         ],
-        getAvailableActions,
-        getEditsForAction
+        getEditsForAction: getRefactorEditsToExtractSymbol,
+        getAvailableActions: getRefactorActionsToExtractSymbol,
     });
 
     /**
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    export function getRefactorActionsToExtractSymbol(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const requestedRefactor = context.kind;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
         const targetRange = rangeToExtract.targetRange;
@@ -168,7 +168,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     /* Exported for tests */
-    export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    export function getRefactorEditsToExtractSymbol(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
         const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
 

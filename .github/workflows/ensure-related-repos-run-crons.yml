@@ -8,7 +8,7 @@ name: Related Repo Commit Bumps
 on:
     schedule:
         # Monthly, https://crontab.guru/#0_0_*_1-12_*
-        - cron: '0 0 * 1-12 *'
+        - cron: '0 0 1 * *'
     workflow_dispatch: {}
 
 jobs:
@@ -18,8 +18,8 @@ jobs:
     steps:
     - name: Configure git and update package-lock.json
       run: |
-        git config user.email "typescriptbot@microsoft.com"
-        git config user.name "TypeScript Bot"
+        git config --global user.email "typescriptbot@microsoft.com"
+        git config --global user.name "TypeScript Bot"
 
     - uses: actions/checkout@v2
       with: 

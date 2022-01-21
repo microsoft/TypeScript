@@ -1259,10 +1259,9 @@ namespace ts {
             : NoopCancellationToken;
 
         const currentDirectory = host.getCurrentDirectory();
-        // Check if the localized messages json is set, otherwise query the host for it
-        if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
-            setLocalizedDiagnosticMessages(host.getLocalizedDiagnosticMessages());
-        }
+
+        // Checks if the localized messages json is set, and if not, query the host for it
+        maybeSetLocalizedDiagnosticMessages(host.getLocalizedDiagnosticMessages?.bind(host));
 
         function log(message: string) {
             if (host.log) {
@@ -1376,6 +1375,7 @@ namespace ts {
                 hasChangedAutomaticTypeDirectiveNames,
                 trace: parseConfigHost.trace,
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
+                getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
                 getParsedCommandLine,

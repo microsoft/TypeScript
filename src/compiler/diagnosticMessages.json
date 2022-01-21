@@ -1409,6 +1409,10 @@
         "category": "Error",
         "code": 1471
     },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1747,7 +1751,7 @@
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
+    "A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -1838,6 +1842,10 @@
     "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
         "category": "Error",
         "code": 2400
+    },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
+        "category": "Error",
+        "code": 2401
     },
     "Expression resolves to '_super' that compiler uses to capture base class reference.": {
         "category": "Error",
@@ -3361,6 +3369,10 @@
         "category": "Error",
         "code": 2836
     },
+    "Import assertion values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2837
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4161,7 +4173,6 @@
         "category": "Message",
         "code": 6041
     },
-    
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4945,7 +4956,7 @@
         "category": "Message",
         "code": 6259
     },
-    "Found {0} errors in 1 file.": {
+    "Found {0} errors in the same file, starting at: {1}": {
         "category": "Message",
         "code": 6260
     },
