@@ -1,11 +1,6 @@
 //// [parserArrowFunctionExpression8.ts]
-x ? x => ({ x }) : x => ({ x })
+x ? y => ({ y }) : z => ({ z })
 
 
 //// [parserArrowFunctionExpression8.js]
-x ? function (x) { return function (_a) {
-    var x = _a.x;
-    return ({ x: x });
-}; }
-    :
-;
+x ? function (y) { return ({ y: y }); } : function (z) { return ({ z: z }); };
