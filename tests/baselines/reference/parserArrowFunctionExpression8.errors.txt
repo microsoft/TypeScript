@@ -1,0 +1,14 @@
+tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts(1,1): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts(1,20): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts(2,1): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts (3 errors) ====
+    x ? x => ({ x }) : x => ({ x })
+    ~
+!!! error TS2304: Cannot find name 'x'.
+                       ~
+!!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
+    
+    
+!!! error TS1005: ':' expected.

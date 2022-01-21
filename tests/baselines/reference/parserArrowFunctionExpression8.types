@@ -1,0 +1,14 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression8.ts ===
+x ? x => ({ x }) : x => ({ x })
+>x ? x => ({ x }) : x => ({ x }) : any
+>x : any
+>x => ({ x }) : x => ({ x }) : (x: any) => ({ x }: { x: any; }) => x
+>x : any
+>({ x }) : x => ({ x }) : ({ x }: { x: any; }) => x
+>x : any
+>({ x }) : { x: any; }
+>{ x } : { x: any; }
+>x : any
+
+> : any
+
