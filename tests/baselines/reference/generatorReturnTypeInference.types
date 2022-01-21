@@ -69,7 +69,7 @@ function* g007() { // Generator<never, void, unknown>
 >g007 : () => Generator<never, void, unknown>
 
     yield never;
->yield never : any
+>yield never : never
 >never : never
 }
 
