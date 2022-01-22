@@ -31409,7 +31409,7 @@ namespace ts {
             if (!some(typeArguments)) {
                 return exprType;
             }
-            let funcType = getApparentType(exprType);
+            const funcType = getApparentType(exprType);
             if (funcType === silentNeverType || isErrorType(funcType)) {
                 return funcType;
             }
