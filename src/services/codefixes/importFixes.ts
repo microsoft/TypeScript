@@ -979,7 +979,7 @@ namespace ts.codefix {
         switch (aliasDeclaration.kind) {
             case SyntaxKind.ImportSpecifier:
                 if (aliasDeclaration.isTypeOnly) {
-                    if (OrganizeImports.importSpecifiersAreSorted(aliasDeclaration.parent.elements)) {
+                    if (aliasDeclaration.parent.elements.length > 1 && OrganizeImports.importSpecifiersAreSorted(aliasDeclaration.parent.elements)) {
                         changes.delete(sourceFile, aliasDeclaration);
                         const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
                         const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier);
