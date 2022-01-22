@@ -1,6 +1,8 @@
 /// <reference path="fourslash.ts" />
 
 // @module: es2015
+// @isolatedModules: true
+// @preserveValueImports: true
 
 // @Filename: /exports.ts
 //// export interface SomeInterface {}
@@ -12,5 +14,5 @@
 
 goTo.marker("");
 verify.importFixAtPosition([
-`import { SomeInterface, SomePig } from "./exports.js";
+`import { SomePig, type SomeInterface } from "./exports.js";
 new SomePig`]);

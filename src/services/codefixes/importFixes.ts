@@ -311,6 +311,13 @@ namespace ts.codefix {
         };
     }
 
+    export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences) {
+        const compilerOptions = program.getCompilerOptions();
+        const symbolName = getSymbolName(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions);
+        const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);
+        return fix && codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, QuotePreference.Double, compilerOptions));
+    }
+
     function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, symbolName: string, program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol || info.symbol.parent === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
         const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
@@ -819,11 +826,17 @@ namespace ts.codefix {
         const parent = symbolToken.parent;
         if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
             const jsxNamespace = checker.getJsxNamespace(sourceFile);
-            if (isIntrinsicJsxName(symbolToken.text) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
+            if (needsJsxNamespaceFix(jsxNamespace, symbolToken, checker)) {
                 return jsxNamespace;
             }
         }
         return symbolToken.text;
+    }
+
+    function needsJsxNamespaceFix(jsxNamespace: string, symbolToken: Identifier, checker: TypeChecker) {
+        if (isIntrinsicJsxName(symbolToken.text)) return true; // If we were triggered by a matching error code on an intrinsic, the error must have been about missing the JSX factory
+        const namespaceSymbol = checker.resolveName(jsxNamespace, symbolToken, SymbolFlags.Value, /*excludeGlobals*/ true);
+        return !namespaceSymbol || some(namespaceSymbol.declarations, isTypeOnlyImportOrExportDeclaration) && !(namespaceSymbol.flags & SymbolFlags.Value);
     }
 
     // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
@@ -966,7 +979,15 @@ namespace ts.codefix {
         switch (aliasDeclaration.kind) {
             case SyntaxKind.ImportSpecifier:
                 if (aliasDeclaration.isTypeOnly) {
-                    changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
+                    if (OrganizeImports.importSpecifiersAreSorted(aliasDeclaration.parent.elements)) {
+                        changes.delete(sourceFile, aliasDeclaration);
+                        const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
+                        const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier);
+                        changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
+                    }
+                    else {
+                        changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
+                    }
                     return aliasDeclaration;
                 }
                 else {
@@ -990,11 +1011,23 @@ namespace ts.codefix {
         function promoteImportClause(importClause: ImportClause) {
             changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(importClause, sourceFile));
             if (convertExistingToTypeOnly) {
-                tryCast(importClause.namedBindings, isNamedImports)?.elements
-                    .filter(e => e !== aliasDeclaration && !e.isTypeOnly)
-                    .forEach(e => {
-                        changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, e);
-                    });
+                const namedImports = tryCast(importClause.namedBindings, isNamedImports);
+                if (namedImports && namedImports.elements.length > 1) {
+                    if (OrganizeImports.importSpecifiersAreSorted(namedImports.elements) &&
+                        aliasDeclaration.kind === SyntaxKind.ImportSpecifier &&
+                        namedImports.elements.indexOf(aliasDeclaration) !== 0
+                    ) {
+                        // The import specifier being promoted will be the only non-type-only,
+                        //  import in the NamedImports, so it should be moved to the front.
+                        changes.delete(sourceFile, aliasDeclaration);
+                        changes.insertImportSpecifierAtIndex(sourceFile, aliasDeclaration, namedImports, 0);
+                    }
+                    for (const element of namedImports.elements) {
+                        if (element !== aliasDeclaration && !element.isTypeOnly) {
+                            changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, element);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1048,17 +1081,7 @@ namespace ts.codefix {
                     const insertionIndex = convertExistingToTypeOnly && !spec.isTypeOnly
                         ? 0
                         : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec);
-                    const prevSpecifier = (clause.namedBindings as NamedImports).elements[insertionIndex - 1];
-                    if (prevSpecifier) {
-                        changes.insertNodeInListAfter(sourceFile, prevSpecifier, spec);
-                    }
-                    else {
-                        changes.insertNodeBefore(
-                            sourceFile,
-                            existingSpecifiers[0],
-                            spec,
-                            !positionsAreOnSameLine(existingSpecifiers[0].getStart(), clause.parent.getStart(), sourceFile));
-                    }
+                    changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
                 }
             }
             else if (existingSpecifiers?.length) {

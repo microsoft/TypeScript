@@ -858,6 +858,7 @@ declare namespace completion {
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/",
         ClassMemberSnippet = "ClassMemberSnippet/",
+        TypeOnlyAlias = "TypeOnlyAlias/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;
