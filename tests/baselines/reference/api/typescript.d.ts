@@ -1720,19 +1720,23 @@ declare namespace ts {
         readonly parent: ImportClause & {
             readonly isTypeOnly: true;
         };
-    } | ImportSpecifier & {
+    } | ImportSpecifier & ({
+        readonly isTypeOnly: true;
+    } | {
         readonly parent: NamedImports & {
             readonly parent: ImportClause & {
                 readonly isTypeOnly: true;
             };
         };
-    } | ExportSpecifier & {
+    }) | ExportSpecifier & ({
+        readonly isTypeOnly: true;
+    } | {
         readonly parent: NamedExports & {
             readonly parent: ExportDeclaration & {
                 readonly isTypeOnly: true;
             };
         };
-    };
+    });
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
