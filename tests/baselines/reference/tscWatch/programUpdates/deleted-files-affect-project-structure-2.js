@@ -125,10 +125,10 @@ Output::
 >> Screen clear
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/b/f1.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module './f2'. '/a/b/f2.js' implicitly has an 'any' type.
-
-[7m1[0m export * from "./f2"
-[7m [0m [91m              ~~~~~~[0m
+[91m● [0m[96ma/b/f1.ts[0m:[93m1[0m:[93m15[0m  [91mError[0m TS7016
+| export * from "./f2"
+  [91m              ▔▔▔▔▔▔[0m
+Could not find a declaration file for module './f2'. '/a/b/f2.js' implicitly has an 'any' type.
 
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 

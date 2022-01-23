@@ -31,4 +31,4 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
     ~~~~~~
 !!! error TS2352: Conversion of type 'C3<T2>' to type 'C4' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:21:5: 'y' is declared here.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:21:5: 'y' is declared here:

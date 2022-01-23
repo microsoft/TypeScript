@@ -24,7 +24,7 @@
 !!! error TS4090:   The file is in the program because:
 !!! error TS4090:     Type library referenced via 'alpha' from file '/node_modules/foo/index.d.ts'
 !!! error TS4090:     Type library referenced via 'alpha' from file '/node_modules/bar/index.d.ts'
-!!! related TS1404 /node_modules/foo/index.d.ts:3:23: File is included via type library reference here.
+!!! related TS1404 /node_modules/foo/index.d.ts:3:23: File is included via type library reference here:
     declare var bar: any;
     
 ==== /node_modules/bar/node_modules/alpha/index.d.ts (0 errors) ====

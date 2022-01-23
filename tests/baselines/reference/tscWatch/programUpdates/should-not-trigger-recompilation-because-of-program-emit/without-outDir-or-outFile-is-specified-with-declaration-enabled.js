@@ -128,35 +128,34 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Array'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Boolean'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'CallableFunction'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Function'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'IArguments'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'NewableFunction'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Number'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Object'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'RegExp'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'String'.
 
-[91merror[0m[90m TS6053: [0mFile '/a/lib/lib.es2016.full.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/a/lib/lib.es2016.full.d.ts' not found.
   The file is in the program because:
     Default library for target 'es2016'
 
-  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
-    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    [7m  [0m [96m              ~~~~~~~~[0m
-    File is default library for target specified here.
+File is default library for target specified here: [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
 
+  | "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    [96m          ▔▔▔▔▔▔▔▔[0m
 [[90m12:00:34 AM[0m] Found 11 errors. Watching for file changes.
 
 
@@ -263,35 +262,34 @@ Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Array'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Boolean'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'CallableFunction'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Function'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'IArguments'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'NewableFunction'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Number'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'Object'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'RegExp'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
+[91m● [0m [91mError[0m TS2318Cannot find global type 'String'.
 
-[91merror[0m[90m TS6053: [0mFile '/a/lib/lib.es2016.full.d.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/a/lib/lib.es2016.full.d.ts' not found.
   The file is in the program because:
     Default library for target 'es2016'
 
-  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
-    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    [7m  [0m [96m              ~~~~~~~~[0m
-    File is default library for target specified here.
+File is default library for target specified here: [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
 
+  | "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    [96m          ▔▔▔▔▔▔▔▔[0m
 [[90m12:00:42 AM[0m] Found 11 errors. Watching for file changes.
 
 

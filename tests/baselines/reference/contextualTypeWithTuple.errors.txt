@@ -44,7 +44,7 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
     objNumTuple = [ {}, 5];
                     ~~
 !!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
-!!! related TS2728 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:5:21: 'a' is declared here.
+!!! related TS2728 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:5:21: 'a' is declared here:
     numStrBoolTuple = numStrTuple;
     ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.

@@ -13,5 +13,5 @@
     new A();
         ~
 !!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 /b.ts:1:15: 'A' was exported here.
+!!! related TS1377 /b.ts:1:15: 'A' was exported here:
     

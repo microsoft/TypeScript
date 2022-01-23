@@ -37,7 +37,7 @@ tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2
 !!! error TS2322:   Types of property 'parent' are incompatible.
 !!! error TS2322:     Type 'Module | Class' is not assignable to type 'Namespace'.
 !!! error TS2322:       Property 'members' is missing in type 'Class' but required in type 'Namespace'.
-!!! related TS2728 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:6:12: 'members' is declared here.
+!!! related TS2728 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts:6:12: 'members' is declared here:
     p = c;
     ~
 !!! error TS2322: Type 'Class' is not assignable to type 'Property'.

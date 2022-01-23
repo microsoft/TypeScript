@@ -86,7 +86,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
        ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
 !!! error TS2345:   Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
-!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: 'z' is declared here.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: 'z' is declared here:
     c1({ z: true });   // Error, implied type is {z:number}?
          ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.

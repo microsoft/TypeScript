@@ -21,11 +21,11 @@
     ns.Class; // Error
     ~~
 !!! error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /a.ts:1:8: 'ns' was imported here.
+!!! related TS1376 /a.ts:1:8: 'ns' was imported here:
     ns.Value; // Error
     ~~
 !!! error TS1361: 'ns' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /a.ts:1:8: 'ns' was imported here.
+!!! related TS1376 /a.ts:1:8: 'ns' was imported here:
     let c: ns.Class;
     let t: ns.Type = "";
     let n: ns.nested.NestedClass = { a: '' };

@@ -85,15 +85,14 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-[91merror[0m[90m TS6053: [0mFile '/a/b/f2.ts' not found.
+[91m● [0m [91mError[0m TS6053File '/a/b/f2.ts' not found.
   The file is in the program because:
     Part of 'files' list in tsconfig.json
 
-  [96ma/b/tsconfig.json[0m:[93m1[0m:[93m40[0m
-    [7m1[0m {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
-    [7m [0m [96m                                       ~~~~~~~[0m
-    File is matched by 'files' list specified here.
+File is matched by 'files' list specified here: [96ma/b/tsconfig.json[0m:[93m1[0m:[93m40[0m
 
+  | {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
+    [96m                                       ▔▔▔▔▔▔▔[0m
 [[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 

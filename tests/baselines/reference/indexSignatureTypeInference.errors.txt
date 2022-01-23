@@ -24,7 +24,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureType
     var v1 = stringMapToArray(numberMap);  // Error expected here
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v1' must be of type 'Function[]', but here has type 'unknown[]'.
-!!! related TS6203 tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts:15:5: 'v1' was also declared here.
+!!! related TS6203 tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts:15:5: 'v1' was also declared here:
                               ~~~~~~~~~
 !!! error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<unknown>'.
 !!! error TS2345:   Index signature for type 'string' is missing in type 'NumberMap<Function>'.

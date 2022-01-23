@@ -79,10 +79,10 @@ Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/b/f1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1148: [0mCannot use imports, exports, or module augmentations when '--module' is 'none'.
-
-[7m1[0m export {}
-[7m [0m [91m~~~~~~~~~[0m
+[91m● [0m[96ma/b/f1.ts[0m:[93m1[0m:[93m1[0m  [91mError[0m TS1148
+| export {}
+  [91m▔▔▔▔▔▔▔▔▔[0m
+Cannot use imports, exports, or module augmentations when '--module' is 'none'.
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 

@@ -84,7 +84,7 @@ Input::
 //// [/a/b/tsconfig.json] deleted
 
 Output::
-[91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
+[91m● [0m [91mError[0m TS5083Cannot read file '/a/b/tsconfig.json'.
 
 
 

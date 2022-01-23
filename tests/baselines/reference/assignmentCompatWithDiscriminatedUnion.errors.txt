@@ -80,7 +80,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
 !!! error TS2322:   Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here:
     }
     
     // Maximum discriminant combinations

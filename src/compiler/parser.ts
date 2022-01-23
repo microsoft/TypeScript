@@ -5740,7 +5740,7 @@ namespace ts {
                 if (lastError && lastError.code === Diagnostics._0_expected.code) {
                     addRelatedInfo(
                         lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here_Colon)
                     );
                 }
             }
@@ -5829,7 +5829,7 @@ namespace ts {
                     if (lastError && lastError.code === Diagnostics._0_expected.code) {
                         addRelatedInfo(
                             lastError,
-                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here_Colon)
                         );
                     }
                 }
@@ -7297,7 +7297,7 @@ namespace ts {
                     if (lastError && lastError.code === Diagnostics._0_expected.code) {
                         addRelatedInfo(
                             lastError,
-                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here_Colon)
                         );
                     }
                 }
@@ -8389,7 +8389,7 @@ namespace ts {
                                     if (lastError) {
                                         addRelatedInfo(
                                             lastError,
-                                            createDetachedDiagnostic(fileName, 0, 0, Diagnostics.The_tag_was_first_specified_here)
+                                            createDetachedDiagnostic(fileName, 0, 0, Diagnostics.The_tag_was_first_specified_here_Colon)
                                         );
                                     }
                                     break;

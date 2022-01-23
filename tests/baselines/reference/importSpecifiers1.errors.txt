@@ -31,7 +31,7 @@
     as; // Error (used in emitting position)
     ~~
 !!! error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /a.ts:2:10: 'as' was imported here.
+!!! related TS1376 /a.ts:2:10: 'as' was imported here:
     
 ==== /b.ts (1 errors) ====
     import { type as as } from "./mod.js";
@@ -48,7 +48,7 @@
     as; // Error (used in emitting position)
     ~~
 !!! error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /c.ts:1:10: 'as' was imported here.
+!!! related TS1376 /c.ts:1:10: 'as' was imported here:
     
 ==== /d.ts (3 errors) ====
     import { type as as as as } from "./mod.js"; // Error
@@ -66,7 +66,7 @@
     as; // Error (used in emitting position)
     ~~
 !!! error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /e.ts:1:10: 'as' was imported here.
+!!! related TS1376 /e.ts:1:10: 'as' was imported here:
     
 ==== /f.ts (10 errors) ====
     import { type import } from "./mod.js"; // Error
@@ -95,11 +95,11 @@
     something; // Error (used in emitting position)
     ~~~~~~~~~
 !!! error TS1361: 'something' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /f.ts:4:10: 'something' was imported here.
+!!! related TS1376 /f.ts:4:10: 'something' was imported here:
     s; // Error (used in emitting position)
     ~
 !!! error TS1361: 's' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /f.ts:5:10: 's' was imported here.
+!!! related TS1376 /f.ts:5:10: 's' was imported here:
     
 ==== /g.ts (1 errors) ====
     import type { type something } from "./mod.js"; // Error

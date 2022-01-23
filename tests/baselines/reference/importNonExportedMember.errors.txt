@@ -10,5 +10,5 @@ tests/cases/compiler/b.ts(1,15): error TS2460: Module '"./a"' declares 'bar' loc
     import { foo, bar } from "./a";
                   ~~~
 !!! error TS2460: Module '"./a"' declares 'bar' locally, but it is exported as 'baz'.
-!!! related TS2728 tests/cases/compiler/a.ts:2:18: 'bar' is declared here.
+!!! related TS2728 tests/cases/compiler/a.ts:2:18: 'bar' is declared here:
     

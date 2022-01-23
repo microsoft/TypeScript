@@ -6,4 +6,4 @@ tests/cases/compiler/identityForSignaturesWithTypeParametersSwitched.ts(2,5): er
     var f: <T, U>(x: U, y: T) => U;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'f' must be of type '<T, U>(x: T, y: U) => T', but here has type '<T, U>(x: U, y: T) => U'.
-!!! related TS6203 tests/cases/compiler/identityForSignaturesWithTypeParametersSwitched.ts:1:5: 'f' was also declared here.
+!!! related TS6203 tests/cases/compiler/identityForSignaturesWithTypeParametersSwitched.ts:1:5: 'f' was also declared here:

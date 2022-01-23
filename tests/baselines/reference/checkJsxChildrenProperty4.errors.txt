@@ -32,7 +32,7 @@ tests/cases/conformance/jsx/file.tsx(39,15): error TS2322: Type '(user: IUser) =
                     <h1>{ user.NAme }</h1>
                                ~~~~
 !!! error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:4:5: 'Name' is declared here.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:4:5: 'Name' is declared here:
                 ) }
             </FetchUser>
         );

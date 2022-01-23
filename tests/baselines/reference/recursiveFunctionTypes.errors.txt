@@ -70,7 +70,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2769: No overload 
     function f6(a: typeof f6): () => number;
              ~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/recursiveFunctionTypes.ts:31:10: The implementation signature is declared here.
+!!! related TS2750 tests/cases/compiler/recursiveFunctionTypes.ts:31:10: The implementation signature is declared here:
     function f6(a?: any) { return f6; }
     
     f6("", 3); // error (arity mismatch)

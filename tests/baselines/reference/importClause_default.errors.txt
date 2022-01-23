@@ -10,10 +10,10 @@
     new A();
         ~
 !!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:8: 'A' was imported here.
+!!! related TS1376 /b.ts:1:8: 'A' was imported here:
     let a: A = { a: '' };
     let b = { A };
               ~
 !!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:8: 'A' was imported here.
+!!! related TS1376 /b.ts:1:8: 'A' was imported here:
     

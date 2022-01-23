@@ -25,5 +25,5 @@
     const x: Abcde = { b: "" };
           ~
 !!! error TS2741: Property 'x' is missing in type '{ b: string; }' but required in type 'Abcde'.
-!!! related TS2728 /test.js:3:3: 'x' is declared here.
+!!! related TS2728 /test.js:3:3: 'x' is declared here:
     

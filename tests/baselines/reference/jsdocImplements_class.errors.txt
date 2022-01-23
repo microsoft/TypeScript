@@ -30,7 +30,7 @@
           ~~
 !!! error TS2720: Class 'B3' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
 !!! error TS2720:   Property 'method' is missing in type 'B3' but required in type 'A'.
-!!! related TS2728 /a.js:3:5: 'method' is declared here.
+!!! related TS2728 /a.js:3:5: 'method' is declared here:
     }
     
     

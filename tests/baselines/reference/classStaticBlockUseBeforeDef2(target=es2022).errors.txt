@@ -7,7 +7,7 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef2.t
             this.x = 1;
                  ~
 !!! error TS2729: Property 'x' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef2.ts:5:12: 'x' is declared here.
+!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef2.ts:5:12: 'x' is declared here:
         }
         static x;
     }

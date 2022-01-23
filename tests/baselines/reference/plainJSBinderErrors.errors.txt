@@ -21,11 +21,11 @@ tests/cases/conformance/salsa/plainJSBinderErrors.js(40,7): error TS1215: Invali
     export default 12
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/conformance/salsa/plainJSBinderErrors.js:2:1: Another export default is here.
+!!! related TS2753 tests/cases/conformance/salsa/plainJSBinderErrors.js:2:1: Another export default is here:
     export default 13
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/conformance/salsa/plainJSBinderErrors.js:1:1: The first export default is here.
+!!! related TS2752 tests/cases/conformance/salsa/plainJSBinderErrors.js:1:1: The first export default is here:
     const await = 1
           ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.

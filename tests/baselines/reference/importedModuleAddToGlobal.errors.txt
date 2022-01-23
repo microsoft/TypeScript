@@ -19,5 +19,5 @@ tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2833: Cannot f
         function hello(): b.B { return null; }
                           ~
 !!! error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
-!!! related TS2728 tests/cases/compiler/importedModuleAddToGlobal.ts:8:8: 'B' is declared here.
+!!! related TS2728 tests/cases/compiler/importedModuleAddToGlobal.ts:8:8: 'B' is declared here:
     }

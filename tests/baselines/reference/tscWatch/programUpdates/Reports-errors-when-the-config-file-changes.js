@@ -81,10 +81,10 @@ Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'haha'.
-
-[7m3[0m                             "haha": 123
-[7m [0m [91m                            ~~~~~~[0m
+[91m● [0m[96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m  [91mError[0m TS5023
+| "haha": 123
+  [91m▔▔▔▔▔▔[0m
+Unknown compiler option 'haha'.
 
 [[90m12:00:23 AM[0m] Found 1 error. Watching for file changes.
 

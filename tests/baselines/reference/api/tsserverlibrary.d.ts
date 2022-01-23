@@ -5013,7 +5013,7 @@ declare namespace ts {
     export function formatDiagnostics(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
     export function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
-    export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
+    export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number, pretty?: boolean): string;
     export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the

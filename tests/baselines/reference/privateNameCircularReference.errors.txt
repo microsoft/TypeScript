@@ -11,7 +11,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameCircularReferenc
 !!! error TS7022: '#foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
                     ~~~~
 !!! error TS2729: Property '#bar' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts:3:5: '#bar' is declared here.
+!!! related TS2728 tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts:3:5: '#bar' is declared here:
         #bar = this.#foo;
         ~~~~
 !!! error TS7022: '#bar' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

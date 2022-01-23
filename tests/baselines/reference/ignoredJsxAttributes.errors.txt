@@ -28,5 +28,5 @@ tests/cases/compiler/ignoredJsxAttributes.tsx(20,11): error TS2741: Property 'fo
     let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
               ~~~~~
 !!! error TS2741: Property 'foo' is missing in type '{ bar: string; "data-yadda": number; }' but required in type 'Props'.
-!!! related TS2728 tests/cases/compiler/ignoredJsxAttributes.tsx:8:5: 'foo' is declared here.
+!!! related TS2728 tests/cases/compiler/ignoredJsxAttributes.tsx:8:5: 'foo' is declared here:
     

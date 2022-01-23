@@ -20,9 +20,9 @@
     new D();
         ~
 !!! error TS1361: 'D' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /c.ts:1:15: 'D' was imported here.
+!!! related TS1376 /c.ts:1:15: 'D' was imported here:
     const d: D = {};
           ~
 !!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
-!!! related TS2728 /a.ts:1:11: 'a' is declared here.
+!!! related TS2728 /a.ts:1:11: 'a' is declared here:
     

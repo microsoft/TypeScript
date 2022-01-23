@@ -35,7 +35,7 @@
     export { CC };
              ~~
 !!! error TS1448: 'CC' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
-!!! related TS1377 /reExportValueAsTypeOnly.ts:1:15: 'CC' was exported here.
+!!! related TS1377 /reExportValueAsTypeOnly.ts:1:15: 'CC' was exported here:
     
 ==== /exportT.ts (0 errors) ====
     export type T = number;

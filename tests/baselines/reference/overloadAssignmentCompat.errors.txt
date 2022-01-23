@@ -38,7 +38,7 @@ tests/cases/compiler/overloadAssignmentCompat.ts(34,10): error TS2394: This over
     function foo():number; 
              ~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/overloadAssignmentCompat.ts:35:10: The implementation signature is declared here.
+!!! related TS2750 tests/cases/compiler/overloadAssignmentCompat.ts:35:10: The implementation signature is declared here:
     function foo():string { return "a" };
     
     

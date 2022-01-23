@@ -11,19 +11,19 @@
     as; // Error (used in emitting position)
     ~~
 !!! error TS1362: 'as' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 /exports.ts:5:10: 'as' was exported here.
+!!! related TS1377 /exports.ts:5:10: 'as' was exported here:
     something; // Error (used in emitting position)
     ~~~~~~~~~
 !!! error TS1362: 'something' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 /exports.ts:6:10: 'something' was exported here.
+!!! related TS1377 /exports.ts:6:10: 'something' was exported here:
     foo; // Error (used in emitting position)
     ~~~
 !!! error TS1362: 'foo' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 /exports.ts:7:10: 'foo' was exported here.
+!!! related TS1377 /exports.ts:7:10: 'foo' was exported here:
     bar; // Error (used in emitting position)
     ~~~
 !!! error TS1362: 'bar' cannot be used as a value because it was exported using 'export type'.
-!!! related TS1377 /exports.ts:8:10: 'bar' was exported here.
+!!! related TS1377 /exports.ts:8:10: 'bar' was exported here:
     
 ==== /exports.ts (1 errors) ====
     const type = 0;

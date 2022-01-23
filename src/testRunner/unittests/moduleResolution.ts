@@ -765,7 +765,7 @@ export = C;
                             "moduleA.ts",
                             `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),
                             `"./ModuleC"`.length,
-                            Diagnostics.File_is_included_via_import_here,
+                            Diagnostics.File_is_included_via_import_here_Colon,
                         ),
                         reportsUnnecessary: undefined,
                         reportsDeprecated: undefined
@@ -776,7 +776,7 @@ export = C;
                             "moduleB.ts",
                             `import a = require("./moduleC")`.indexOf(`"./moduleC"`),
                             `"./moduleC"`.length,
-                            Diagnostics.File_is_included_via_import_here,
+                            Diagnostics.File_is_included_via_import_here_Colon,
                         ),
                         reportsUnnecessary: undefined,
                         reportsDeprecated: undefined
@@ -864,7 +864,7 @@ import b = require("./moduleB");
                                 "moduleA.ts",
                                 `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),
                                 `"./ModuleC"`.length,
-                                Diagnostics.File_is_included_via_import_here,
+                                Diagnostics.File_is_included_via_import_here_Colon,
                             ),
                             reportsUnnecessary: undefined,
                             reportsDeprecated: undefined

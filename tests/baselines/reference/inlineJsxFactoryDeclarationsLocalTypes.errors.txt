@@ -87,7 +87,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     elem = <h></h>; // Expect assignability error here
     ~~~~
 !!! error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
-!!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here:
     
     const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
     
@@ -108,14 +108,14 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
 !!! error TS2786: 'MySFC' cannot be used as a JSX component.
 !!! error TS2786:   Its return type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not a valid JSX element.
 !!! error TS2786:     Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
-!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here:
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
                                             ~~~~~~~
 !!! error TS2786: 'MyClass' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MyClass' is not a valid JSX element.
 !!! error TS2786:     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
-!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here:
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
                                                                    ~~~~~~~
