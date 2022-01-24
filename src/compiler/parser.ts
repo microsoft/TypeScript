@@ -4147,7 +4147,7 @@ namespace ts {
             return parseOptional(SyntaxKind.EqualsToken) ? parseAssignmentExpressionOrHigher() : undefined;
         }
 
-        function parseAssignmentExpressionOrHigher(parsingConditionalTrueSide?: boolean): Expression {
+        function parseAssignmentExpressionOrHigher(parsingConditionalExpression?: boolean): Expression {
             //  AssignmentExpression[in,yield]:
             //      1) ConditionalExpression[?in,?yield]
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
@@ -4175,7 +4175,7 @@ namespace ts {
             // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(parsingConditionalTrueSide) || tryParseAsyncSimpleArrowFunctionExpression();
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(parsingConditionalExpression) || tryParseAsyncSimpleArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -4196,7 +4196,7 @@ namespace ts {
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
             // identifier and the current token is an arrow.
             if (expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
-                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, /*asyncModifier*/ undefined, parsingConditionalTrueSide);
+                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, /*asyncModifier*/ undefined, parsingConditionalExpression);
             }
 
             // Now see if we might be in cases '2' or '3'.
@@ -4272,7 +4272,7 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined, parsingConditionalTrueSide?: boolean): ArrowFunction {
+        function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined, parsingConditionalExpression?: boolean): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
             const parameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
@@ -4287,12 +4287,12 @@ namespace ts {
 
             const parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos, parameter.end);
             const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
-            const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, parsingConditionalTrueSide);
+            const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier, parsingConditionalExpression);
             const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
             return addJSDocComment(finishNode(node, pos));
         }
 
-        function tryParseParenthesizedArrowFunctionExpression(parsingConditionalTrueSide?: boolean): Expression | undefined {
+        function tryParseParenthesizedArrowFunctionExpression(parsingConditionalExpression?: boolean): Expression | undefined {
             const triState = isParenthesizedArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
@@ -4304,8 +4304,8 @@ namespace ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             return triState === Tristate.True ?
-                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, parsingConditionalTrueSide) :
-                tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalTrueSide));
+                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, parsingConditionalExpression) :
+                tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalExpression));
         }
 
         //  True        -> We definitely expect a parenthesized arrow function here.
@@ -4451,13 +4451,13 @@ namespace ts {
             }
         }
 
-        function parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalTrueSide?: boolean): ArrowFunction | undefined {
+        function parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalExpression?: boolean): ArrowFunction | undefined {
             const tokenPos = scanner.getTokenPos();
             if (notParenthesizedArrow?.has(tokenPos)) {
                 return undefined;
             }
 
-            const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false, parsingConditionalTrueSide);
+            const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false, parsingConditionalExpression);
             if (!result) {
                 (notParenthesizedArrow || (notParenthesizedArrow = new Set())).add(tokenPos);
             }
@@ -4465,14 +4465,14 @@ namespace ts {
             return result;
         }
 
-        function tryParseAsyncSimpleArrowFunctionExpression(parsingConditionalTrueSide?: boolean): ArrowFunction | undefined {
+        function tryParseAsyncSimpleArrowFunctionExpression(parsingConditionalExpression?: boolean): ArrowFunction | undefined {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token() === SyntaxKind.AsyncKeyword) {
                 if (lookAhead(isUnParenthesizedAsyncArrowFunctionWorker) === Tristate.True) {
                     const pos = getNodePos();
                     const asyncModifier = parseModifiersForArrowFunction();
                     const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
-                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, asyncModifier, parsingConditionalTrueSide);
+                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, asyncModifier, parsingConditionalExpression);
                 }
             }
             return undefined;
@@ -4499,7 +4499,7 @@ namespace ts {
             return Tristate.False;
         }
 
-        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, parsingConditionalTrueSide?: boolean): ArrowFunction | undefined {
+        function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean, parsingConditionalExpression?: boolean): ArrowFunction | undefined {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiersForArrowFunction();
@@ -4534,8 +4534,10 @@ namespace ts {
             // This is a valid arrow function with "z" as the return type.
             //
             // But, if we're in the true side of a conditional expression, this colon
-            // terminates the true side, so cannot be the return type.
-            if (parsingConditionalTrueSide && token() === SyntaxKind.ColonToken) {
+            // terminates the true side, so cannot be the return type. If we are in the
+            // false side, we may still be within the true side of a parent conditional
+            // expression, so don't allow it to be a return type either.
+            if (parsingConditionalExpression && token() === SyntaxKind.ColonToken) {
                 Debug.assert(!allowAmbiguity);
                 return undefined;
             }
@@ -4579,7 +4581,7 @@ namespace ts {
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function parseArrowFunctionExpressionBody(isAsync: boolean, parsingConditionalTrueSide?: boolean): Block | Expression {
+        function parseArrowFunctionExpressionBody(isAsync: boolean, parsingConditionalExpression?: boolean): Block | Expression {
             if (token() === SyntaxKind.OpenBraceToken) {
                 return parseFunctionBlock(isAsync ? SignatureFlags.Await : SignatureFlags.None);
             }
@@ -4609,8 +4611,8 @@ namespace ts {
             const savedTopLevel = topLevel;
             topLevel = false;
             const node = isAsync
-                ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(parsingConditionalTrueSide))
-                : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(parsingConditionalTrueSide));
+                ? doInAwaitContext(() => parseAssignmentExpressionOrHigher(parsingConditionalExpression))
+                : doOutsideOfAwaitContext(() => parseAssignmentExpressionOrHigher(parsingConditionalExpression));
             topLevel = savedTopLevel;
             return node;
         }
@@ -4629,10 +4631,10 @@ namespace ts {
                 factory.createConditionalExpression(
                     leftOperand,
                     questionToken,
-                    doOutsideOfContext(disallowInAndDecoratorContext, () => parseAssignmentExpressionOrHigher(/*parsingConditionalTrueSide*/ true)),
+                    doOutsideOfContext(disallowInAndDecoratorContext, () => parseAssignmentExpressionOrHigher(/*parsingConditionalExpression*/ true)),
                     colonToken = parseExpectedToken(SyntaxKind.ColonToken),
                     nodeIsPresent(colonToken)
-                        ? parseAssignmentExpressionOrHigher(/*parsingConditionalTrueSide*/ false)
+                        ? parseAssignmentExpressionOrHigher(/*parsingConditionalExpression*/ true)
                         : createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken))
                 ),
                 pos
