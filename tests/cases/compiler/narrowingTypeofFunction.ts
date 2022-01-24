@@ -20,3 +20,9 @@ function f2<T>(x: (T & F) | T & string) {
         x;
     }
 }
+
+function f3(x: { _foo: number } & number) {
+    if (typeof x === "function") {
+        x;
+    }
+}

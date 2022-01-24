@@ -20,6 +20,12 @@ function f2<T>(x: (T & F) | T & string) {
     }
 }
 
+function f3(x: { _foo: number } & number) {
+    if (typeof x === "function") {
+        x;
+    }
+}
+
 //// [narrowingTypeofFunction.js]
 "use strict";
 function f1(a) {
@@ -35,6 +41,11 @@ function f2(x) {
         x;
     }
     else {
+        x;
+    }
+}
+function f3(x) {
+    if (typeof x === "function") {
         x;
     }
 }
