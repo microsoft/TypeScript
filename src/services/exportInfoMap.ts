@@ -32,6 +32,7 @@ namespace ts {
         symbolTableKey: __String;
         moduleName: string;
         moduleFile: SourceFile | undefined;
+        packageName: string | undefined;
 
         // SymbolExportInfo, but optional symbols
         readonly symbol: Symbol | undefined;
@@ -63,6 +64,17 @@ namespace ts {
         let exportInfoId = 1;
         const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
+        /**
+         * Key: node_modules package name (no @types).
+         * Value: path to deepest node_modules folder seen that is
+         * both visible to `usableByFileName` and contains the package.
+         *
+         * Later, we can see if a given SymbolExportInfo is shadowed by
+         * a another installation of the same package in a deeper
+         * node_modules folder by seeing if its path starts with the
+         * value stored here.
+         */
+        const packages = new Map<string, string>();
         let usableByFileName: Path | undefined;
         const cache: ExportInfoMap = {
             isUsableByFile: importingFile => importingFile === usableByFileName,
@@ -77,6 +89,30 @@ namespace ts {
                     cache.clear();
                     usableByFileName = importingFile;
                 }
+
+                let packageName;
+                if (moduleFile) {
+                    const nodeModulesIndex = moduleFile.fileName.indexOf(nodeModulesPathPart);
+                    if (nodeModulesIndex !== -1) {
+                        const isTypes = moduleFile.fileName.substring(nodeModulesIndex + nodeModulesPathPart.length).indexOf("@types/") === 0;
+                        const nextSlash = moduleFile.fileName.indexOf(directorySeparator, nodeModulesIndex + nodeModulesPathPart.length + (isTypes ? "@types/".length : 0) + 1);
+                        packageName = moduleFile.fileName.substring(nodeModulesIndex + nodeModulesPathPart.length + (isTypes ? "@types/".length : 0), nextSlash);
+                        if (startsWith(importingFile, moduleFile.path.substring(0, nodeModulesIndex))) {
+                            const prevDeepestNodeModulesPath = packages.get(packageName);
+                            const nodeModulesPath = moduleFile.fileName.substring(0, nodeModulesIndex + nodeModulesPathPart.length);
+                            if (prevDeepestNodeModulesPath) {
+                                const prevDeepestNodeModulesIndex = prevDeepestNodeModulesPath.indexOf(nodeModulesPathPart);
+                                if (nodeModulesIndex > prevDeepestNodeModulesIndex) {
+                                    packages.set(packageName, nodeModulesPath);
+                                }
+                            }
+                            else {
+                                packages.set(packageName, nodeModulesPath);
+                            }
+                        }
+                    }
+                }
+
                 const isDefault = exportKind === ExportKind.Default;
                 const namedSymbol = isDefault && getLocalSymbolForExportDefault(symbol) || symbol;
                 // 1. A named export must be imported by its key in `moduleSymbol.exports` or `moduleSymbol.members`.
@@ -103,6 +139,7 @@ namespace ts {
                     moduleName,
                     moduleFile,
                     moduleFileName: moduleFile?.fileName,
+                    packageName,
                     exportKind,
                     targetFlags: target.flags,
                     isFromPackageJson,
@@ -119,7 +156,10 @@ namespace ts {
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
-                    action(info.map(rehydrateCachedInfo), symbolName, !!ambientModuleName, key);
+                    const filtered = info.filter(isNotShadowedByDeeperNodeModulesPackage);
+                    if (filtered.length) {
+                        action(filtered.map(rehydrateCachedInfo), symbolName, !!ambientModuleName, key);
+                    }
                 });
             },
             releaseSymbols: () => {
@@ -219,6 +259,12 @@ namespace ts {
                 }
             }
             return true;
+        }
+
+        function isNotShadowedByDeeperNodeModulesPackage(info: CachedSymbolExportInfo) {
+            if (!info.packageName || !info.moduleFileName) return true;
+            const packageDeepestNodeModulesPath = packages.get(info.packageName);
+            return !packageDeepestNodeModulesPath || startsWith(info.moduleFileName, packageDeepestNodeModulesPath);
         }
     }
 
