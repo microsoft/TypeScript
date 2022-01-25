@@ -31413,46 +31413,52 @@ namespace ts {
             if (funcType === silentNeverType || isErrorType(funcType)) {
                 return funcType;
             }
-            let signatureMatch = false;
-            let typeArgumentError = false;
-            const result = getInstantiatedType(funcType);
-            if (!signatureMatch) {
-                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(funcType)));
-                return exprType;
+            let hasSomeApplicableSignature = false;
+            let nonApplicableType: Type | undefined;
+            let hasSignatures: boolean;
+            let hasApplicableSignature: boolean;
+            const result = mapType(funcType, getInstantiatedType);
+            const errorType = hasSomeApplicableSignature ? nonApplicableType : funcType;
+            if (errorType) {
+                diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(errorType)));
             }
             const key = `${getTypeId(exprType)},${getTypeListId(map(typeArguments, getTypeFromTypeNode))}`;
             return instantiatedFunctionTypes.get(key) || (instantiatedFunctionTypes.set(key, result), result);
 
             function getInstantiatedType(type: Type): Type {
+                hasSignatures = false;
+                hasApplicableSignature = false;
+                const result = getInstantiatedTypeWorker(type);
+                hasSomeApplicableSignature ||= hasApplicableSignature;
+                if (hasSignatures && !hasApplicableSignature) {
+                    nonApplicableType ??= type;
+                }
+                return result;
+            }
+
+            function getInstantiatedTypeWorker(type: Type): Type {
                 if (type.flags & TypeFlags.Object) {
                     const resolved = resolveStructuredTypeMembers(type as ObjectType);
-                    const callSignatures = sameMap(filter(resolved.callSignatures, isApplicableSignature), getInstantiatedSignature);
-                    const constructSignatures = sameMap(filter(resolved.constructSignatures, isApplicableSignature), getInstantiatedSignature);
-                    return createAnonymousType(undefined, resolved.members, callSignatures, constructSignatures, resolved.indexInfos);
+                    const callSignatures = getInstantiatedSignatures(resolved.callSignatures);
+                    const constructSignatures = getInstantiatedSignatures(resolved.constructSignatures);
+                    hasSignatures ||= resolved.callSignatures.length !== 0 || resolved.constructSignatures.length !== 0;
+                    hasApplicableSignature ||= callSignatures.length !== 0 || constructSignatures.length !== 0;
+                    if (callSignatures !== resolved.callSignatures || constructSignatures !== resolved.constructSignatures) {
+                        return createAnonymousType(undefined, resolved.members, callSignatures, constructSignatures, resolved.indexInfos);
+                    }
                 }
-                if (type.flags & TypeFlags.Union) {
-                    return mapType(type, getInstantiatedType);
-                }
-                if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(sameMap((type as IntersectionType).types, getInstantiatedType));
+                else if (type.flags & TypeFlags.Intersection) {
+                    return getIntersectionType(sameMap((type as IntersectionType).types, getInstantiatedTypeWorker));
                 }
                 return type;
             }
 
-            function isApplicableSignature(signature: Signature) {
-                return !!signature.typeParameters && hasCorrectTypeArgumentArity(signature, typeArguments);
-            }
-
-            function getInstantiatedSignature(signature: Signature) {
-                if (!typeArgumentError) {
-                    signatureMatch = true;
-                    const typeArgumentTypes = checkTypeArguments(signature, typeArguments!, /*reportErrors*/ true);
-                    if (typeArgumentTypes) {
-                        return getSignatureInstantiation(signature, typeArgumentTypes, isInJSFile(signature.declaration));
-                    }
-                    typeArgumentError = true;
-                }
-                return signature;
+            function getInstantiatedSignatures(signatures: readonly Signature[]) {
+                const applicableSignatures = filter(signatures, sig => !!sig.typeParameters && hasCorrectTypeArgumentArity(sig, typeArguments));
+                return sameMap(applicableSignatures, sig => {
+                    const typeArgumentTypes = checkTypeArguments(sig, typeArguments!, /*reportErrors*/ true);
+                    return typeArgumentTypes ? getSignatureInstantiation(sig, typeArgumentTypes, isInJSFile(sig.declaration)) : sig;
+                });
             }
         }
 
