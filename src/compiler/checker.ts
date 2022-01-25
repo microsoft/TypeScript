@@ -1198,6 +1198,10 @@ namespace ts {
             return diagnostic;
         }
 
+        function isDeprecatedSymbol(symbol: Symbol) {
+            return !!(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Deprecated);
+        }
+
         function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
             const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
             return addDeprecatedSuggestionWorker(declarations, diagnostic);
@@ -15184,7 +15188,7 @@ namespace ts {
                 }
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessFlags & AccessFlags.ReportDeprecated && accessNode && prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
+                    if (accessFlags & AccessFlags.ReportDeprecated && accessNode && prop.declarations && isDeprecatedSymbol(prop) && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                     }
@@ -25143,9 +25147,9 @@ namespace ts {
             }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-            const sourceSymbol = localOrExportSymbol.flags & SymbolFlags.Alias ? resolveAlias(localOrExportSymbol) : localOrExportSymbol;
-            if (sourceSymbol.declarations && getDeclarationNodeFlagsFromSymbol(sourceSymbol) & NodeFlags.Deprecated && isUncalledFunctionReference(node, sourceSymbol)) {
-                addDeprecatedSuggestion(node, sourceSymbol.declarations, node.escapedText as string);
+            const targetSymbol = checkDeprecatedAliasedSymbol(localOrExportSymbol, node);
+            if (isDeprecatedSymbol(targetSymbol) && isUncalledFunctionReference(node, targetSymbol) && targetSymbol.declarations) {
+                addDeprecatedSuggestion(node, targetSymbol.declarations, node.escapedText as string);
             }
 
             let declaration = localOrExportSymbol.valueDeclaration;
@@ -28512,7 +28516,7 @@ namespace ts {
                 }
             }
             else {
-                if (prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
+                if (isDeprecatedSymbol(prop) && isUncalledFunctionReference(node, prop) && prop.declarations) {
                     addDeprecatedSuggestion(right, prop.declarations, right.escapedText as string);
                 }
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -39889,10 +39893,45 @@ namespace ts {
                     }
                 }
 
-                if (isImportSpecifier(node) && target.declarations?.every(d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {
-                    addDeprecatedSuggestion(node.name, target.declarations, symbol.escapedName as string);
+                if (isImportSpecifier(node)) {
+                    const targetSymbol = checkDeprecatedAliasedSymbol(symbol, node);
+                    if (isDeprecatedAliasedSymbol(targetSymbol) && targetSymbol.declarations) {
+                        addDeprecatedSuggestion(node, targetSymbol.declarations, targetSymbol.escapedName as string);
+                    }
                 }
             }
+        }
+
+        function isDeprecatedAliasedSymbol(symbol: Symbol) {
+            return !!symbol.declarations && every(symbol.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
+        }
+
+        function checkDeprecatedAliasedSymbol(symbol: Symbol, location: Node) {
+            if (!(symbol.flags & SymbolFlags.Alias)) return symbol;
+
+            const targetSymbol = resolveAlias(symbol);
+            if (targetSymbol === unknownSymbol) return targetSymbol;
+
+            while (symbol.flags & SymbolFlags.Alias) {
+                const target = getImmediateAliasedSymbol(symbol);
+                if (target) {
+                    if (target === targetSymbol) break;
+                    if (target.declarations && length(target.declarations)) {
+                        if (isDeprecatedAliasedSymbol(target)) {
+                            addDeprecatedSuggestion(location, target.declarations, target.escapedName as string);
+                            break;
+                        }
+                        else {
+                            if (symbol === targetSymbol) break;
+                            symbol = target;
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+            return targetSymbol;
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
