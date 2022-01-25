@@ -513,3 +513,84 @@ function reducer(action: Action) {
     }
 }
 
+// Repro from #46768
+
+type DotString = `${string}.${string}.${string}`;
+>DotString : `${string}.${string}.${string}`
+
+declare function noSpread<P extends DotString>(args: P[]): P;
+>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
+>args : P[]
+
+declare function spread<P extends DotString>(...args: P[]): P;
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>args : P[]
+
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+>noSpread([`1.${'2'}.3`, `1.${'2'}.4`]) : "1.2.3" | "1.2.4"
+>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
+>[`1.${'2'}.3`, `1.${'2'}.4`] : ("1.2.3" | "1.2.4")[]
+>`1.${'2'}.3` : "1.2.3"
+>'2' : "2"
+>`1.${'2'}.4` : "1.2.4"
+>'2' : "2"
+
+noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
+>noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]) : `1.${string}.3` | `1.${string}.4`
+>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
+>[`1.${'2' as string}.3`, `1.${'2' as string}.4`] : (`1.${string}.3` | `1.${string}.4`)[]
+>`1.${'2' as string}.3` : `1.${string}.3`
+>'2' as string : string
+>'2' : "2"
+>`1.${'2' as string}.4` : `1.${string}.4`
+>'2' as string : string
+>'2' : "2"
+
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
+>spread(`1.${'2'}.3`, `1.${'2'}.4`) : "1.2.3" | "1.2.4"
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${'2'}.3` : "1.2.3"
+>'2' : "2"
+>`1.${'2'}.4` : "1.2.4"
+>'2' : "2"
+
+spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
+>spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`) : `1.${string}.3` | `1.${string}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${'2' as string}.3` : `1.${string}.3`
+>'2' as string : string
+>'2' : "2"
+>`1.${'2' as string}.4` : `1.${string}.4`
+>'2' as string : string
+>'2' : "2"
+
+function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
+>ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
+>t : T
+>u : Uppercase<T>
+>u1 : Uppercase<`1.${T}.3`>
+>u2 : Uppercase<`1.${T}.4`>
+
+    spread(`1.${t}.3`, `1.${t}.4`);
+>spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${t}.3` : `1.${T}.3`
+>t : T
+>`1.${t}.4` : `1.${T}.4`
+>t : T
+
+    spread(`1.${u}.3`, `1.${u}.4`);
+>spread(`1.${u}.3`, `1.${u}.4`) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>`1.${u}.3` : `1.${Uppercase<T>}.3`
+>u : Uppercase<T>
+>`1.${u}.4` : `1.${Uppercase<T>}.4`
+>u : Uppercase<T>
+
+    spread(u1, u2);
+>spread(u1, u2) : Uppercase<`1.${T}.3`> | Uppercase<`1.${T}.4`>
+>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
+>u1 : Uppercase<`1.${T}.3`>
+>u2 : Uppercase<`1.${T}.4`>
+}
+

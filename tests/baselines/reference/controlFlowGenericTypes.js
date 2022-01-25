@@ -191,6 +191,26 @@ class SqlTable<T> {
     }
 }
 
+// Repro from #46495
+
+interface Button {
+    type: "button";
+    text: string;
+}
+
+interface Checkbox {
+    type: "checkbox";
+    isChecked: boolean;
+}
+
+type Control = Button | Checkbox;
+
+function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
+    if (control !== undefined) {
+        control[key] = value;
+    }
+}
+
 
 //// [controlFlowGenericTypes.js]
 "use strict";
@@ -343,3 +363,8 @@ var SqlTable = /** @class */ (function () {
     };
     return SqlTable;
 }());
+function update(control, key, value) {
+    if (control !== undefined) {
+        control[key] = value;
+    }
+}

@@ -123,3 +123,24 @@ class Test11 {
         }
     }
 }
+
+class Tests12 {
+    test1() { // OK
+        type Test = typeof this;
+    }
+
+    test2() { // OK
+        for (;;) {}
+        type Test = typeof this;
+    }
+
+    test3() { // expected no compile errors
+        for (const dummy in []) {}
+        type Test = typeof this;
+    }
+
+    test4() { // expected no compile errors
+        for (const dummy of []) {}
+        type Test = typeof this;
+    }
+}

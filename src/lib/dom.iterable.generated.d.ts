@@ -135,6 +135,7 @@ interface NamedNodeMap {
 }
 
 interface Navigator {
+    /** Available only in secure contexts. */
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
     vibrate(pattern: Iterable<number>): boolean;
 }
@@ -168,13 +169,6 @@ interface PluginArray {
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
-}
-
-interface ReadableStream<R = any> {
-    [Symbol.iterator](): IterableIterator<any>;
-    entries(): IterableIterator<[number, any]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<any>;
 }
 
 interface SVGLengthList {
@@ -247,6 +241,13 @@ interface URLSearchParams {
 
 interface WEBGL_draw_buffers {
     drawBuffersWEBGL(buffers: Iterable<GLenum>): void;
+}
+
+interface WEBGL_multi_draw {
+    multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: GLuint, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: GLuint, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLint>, countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: GLuint, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLint>, countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: GLuint, drawcount: GLsizei): void;
 }
 
 interface WebGL2RenderingContextBase {

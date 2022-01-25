@@ -212,7 +212,8 @@ namespace ts {
                     visitNode(cbNode, (node as MappedTypeNode).typeParameter) ||
                     visitNode(cbNode, (node as MappedTypeNode).nameType) ||
                     visitNode(cbNode, (node as MappedTypeNode).questionToken) ||
-                    visitNode(cbNode, (node as MappedTypeNode).type);
+                    visitNode(cbNode, (node as MappedTypeNode).type) ||
+                    visitNodes(cbNode, cbNodes, (node as MappedTypeNode).members);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (node as LiteralTypeNode).literal);
             case SyntaxKind.NamedTupleMember:
@@ -2610,7 +2611,10 @@ namespace ts {
                 case ParsingContext.ObjectLiteralMembers: return parseErrorAtCurrentToken(Diagnostics.Property_assignment_expected);
                 case ParsingContext.ArrayLiteralMembers: return parseErrorAtCurrentToken(Diagnostics.Expression_or_comma_expected);
                 case ParsingContext.JSDocParameters: return parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
-                case ParsingContext.Parameters: return parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
+                case ParsingContext.Parameters:
+                    return isKeyword(token())
+                        ? parseErrorAtCurrentToken(Diagnostics._0_is_not_allowed_as_a_parameter_name, tokenToString(token()))
+                        : parseErrorAtCurrentToken(Diagnostics.Parameter_declaration_expected);
                 case ParsingContext.TypeParameters: return parseErrorAtCurrentToken(Diagnostics.Type_parameter_declaration_expected);
                 case ParsingContext.TypeArguments: return parseErrorAtCurrentToken(Diagnostics.Type_argument_expected);
                 case ParsingContext.TupleElementTypes: return parseErrorAtCurrentToken(Diagnostics.Type_expected);
@@ -3534,8 +3538,9 @@ namespace ts {
             }
             const type = parseTypeAnnotation();
             parseSemicolon();
+            const members = parseList(ParsingContext.TypeMembers, parseTypeMember);
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), pos);
+            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type, members), pos);
         }
 
         function parseTupleElementType() {
@@ -4428,7 +4433,7 @@ namespace ts {
                                     return true;
                             }
                         }
-                        else if (third === SyntaxKind.CommaToken) {
+                        else if (third === SyntaxKind.CommaToken || third === SyntaxKind.EqualsToken) {
                             return true;
                         }
                         return false;
@@ -4534,9 +4539,16 @@ namespace ts {
             //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
             //  - "a ? (b): function() {}" will too, since function() is a valid JSDoc function type.
+            //  - "a ? (b): (function() {})" as well, but inside of a parenthesized type with an arbitrary amount of nesting.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            const hasJSDocFunctionType = type && isJSDocFunctionType(type);
+
+            let unwrappedType = type;
+            while (unwrappedType?.kind === SyntaxKind.ParenthesizedType) {
+                unwrappedType = (unwrappedType as ParenthesizedTypeNode).type;  // Skip parens if need be
+            }
+
+            const hasJSDocFunctionType = unwrappedType && isJSDocFunctionType(unwrappedType);
             if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                     return undefined;
@@ -6068,7 +6080,7 @@ namespace ts {
             // one out no matter what.
             let finallyBlock: Block | undefined;
             if (!catchClause || token() === SyntaxKind.FinallyKeyword) {
-                parseExpected(SyntaxKind.FinallyKeyword);
+                parseExpected(SyntaxKind.FinallyKeyword, Diagnostics.catch_or_finally_expected);
                 finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
@@ -7269,7 +7281,7 @@ namespace ts {
             const pos = getNodePos();
             const name = tokenIsIdentifierOrKeyword(token()) ? parseIdentifierName() : parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
             parseExpected(SyntaxKind.ColonToken);
-            const value = parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
+            const value = parseAssignmentExpressionOrHigher();
             return finishNode(factory.createAssertEntry(name, value), pos);
         }
 
@@ -7277,19 +7289,24 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.AssertKeyword);
             const openBracePosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenBraceToken);
-            const multiLine = scanner.hasPrecedingLineBreak();
-            const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
-            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                    );
+            if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                const multiLine = scanner.hasPrecedingLineBreak();
+                const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
+                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                    const lastError = lastOrUndefined(parseDiagnostics);
+                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                        addRelatedInfo(
+                            lastError,
+                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        );
+                    }
                 }
+                return finishNode(factory.createAssertClause(elements, multiLine), pos);
             }
-            return finishNode(factory.createAssertClause(elements, multiLine), pos);
+            else {
+                const elements = createNodeArray([], getNodePos(), /*end*/ undefined, /*hasTrailingComma*/ false);
+                return finishNode(factory.createAssertClause(elements, /*multiLine*/ false), pos);
+            }
         }
 
         function tokenAfterImportDefinitelyProducesImportDeclaration() {
@@ -8256,8 +8273,9 @@ namespace ts {
                 }
 
                 function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
-                    const isLink = lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link");
-                    const nameExpression = isLink ? undefined : parseJSDocNameReference();
+                    const isMarkdownOrJSDocLink = token() === SyntaxKind.OpenBracketToken
+                        || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link");
+                    const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
                 }

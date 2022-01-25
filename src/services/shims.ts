@@ -151,7 +151,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
-        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
+        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined, formattingSettings: FormatCodeSettings | undefined): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -956,10 +956,10 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined, formattingSettings: FormatCodeSettings | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences}, ${formattingSettings})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings)
             );
         }
 

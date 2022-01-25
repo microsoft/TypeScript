@@ -66,6 +66,7 @@ namespace ts {
         getCurrentProgram(): Program | undefined;
         fileIsOpen(filePath: Path): boolean;
         getCompilerHost?(): CompilerHost | undefined;
+        onDiscoveredSymlink?(): void;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -431,6 +432,9 @@ namespace ts {
                     else {
                         resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference, containingSourceFile);
                         perDirectoryResolution.set(name, mode, resolution);
+                        if (resolutionHost.onDiscoveredSymlink && resolutionIsSymlink(resolution)) {
+                            resolutionHost.onDiscoveredSymlink();
+                        }
                     }
                     resolutionsInFile.set(name, mode, resolution);
                     watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName);
@@ -615,7 +619,7 @@ namespace ts {
         ) {
             if (resolution.refCount) {
                 resolution.refCount++;
-                Debug.assertDefined(resolution.files);
+                Debug.assertIsDefined(resolution.files);
             }
             else {
                 resolution.refCount = 1;
@@ -692,7 +696,7 @@ namespace ts {
             filePath: Path,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
         ) {
-            unorderedRemoveItem(Debug.assertDefined(resolution.files), filePath);
+            unorderedRemoveItem(Debug.checkDefined(resolution.files), filePath);
             resolution.refCount!--;
             if (resolution.refCount) {
                 return;
@@ -794,7 +798,7 @@ namespace ts {
             for (const resolution of resolutions) {
                 if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
                 resolution.isInvalidated = invalidated = true;
-                for (const containingFilePath of Debug.assertDefined(resolution.files)) {
+                for (const containingFilePath of Debug.checkDefined(resolution.files)) {
                     (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
                     hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);
@@ -964,5 +968,12 @@ namespace ts {
             const dirPath = resolutionHost.toPath(dir);
             return dirPath === rootPath || canWatchDirectory(dirPath);
         }
+    }
+
+    function resolutionIsSymlink(resolution: ResolutionWithFailedLookupLocations) {
+        return !!(
+            (resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule?.originalPath ||
+            (resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective?.originalPath
+        );
     }
 }

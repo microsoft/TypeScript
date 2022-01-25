@@ -5,7 +5,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToConvertConstToLet(context) {
             const { sourceFile, span, program } = context;
             const range = getConstTokenRange(sourceFile, span.start, program);
             if (range === undefined) return;

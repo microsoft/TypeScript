@@ -26,27 +26,25 @@
 verify.completions(
     {
         marker: "staticsInsideClassScope",
-        exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
-            { name: "privateStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "publicStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+        exact: completion.functionMembersPlus([
             { name: "privateStaticMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "privateStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "publicStaticMethod", sortText: completion.SortText.LocalDeclarationPriority },
-            ...completion.functionMembers
-        ],
+            { name: "publicStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        ]),
     },
     {
         marker: "instanceMembersInsideClassScope",
-        exact: ["privateInstanceMethod", "publicInstanceMethod", "privateProperty", "publicProperty"],
+        unsorted: ["privateInstanceMethod", "publicInstanceMethod", "privateProperty", "publicProperty"],
     },
     {
         marker: "staticsOutsideClassScope",
-        exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
-            { name: "publicStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+        exact: completion.functionMembersPlus([
             { name: "publicStaticMethod", sortText: completion.SortText.LocalDeclarationPriority },
-            ...completion.functionMembers
-        ],
+            { name: "publicStaticProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        ]),
     },
     {
         marker: "instanceMembersOutsideClassScope",

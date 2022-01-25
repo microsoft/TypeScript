@@ -1,0 +1,43 @@
+=== tests/cases/compiler/noExcessiveStackDepthError.ts ===
+// Repro from #46631
+
+interface FindOperator<T> {
+>FindOperator : Symbol(FindOperator, Decl(noExcessiveStackDepthError.ts, 0, 0))
+>T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 2, 23))
+
+    foo: T;
+>foo : Symbol(FindOperator.foo, Decl(noExcessiveStackDepthError.ts, 2, 27))
+>T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 2, 23))
+}
+
+type FindConditions<T> = {
+>FindConditions : Symbol(FindConditions, Decl(noExcessiveStackDepthError.ts, 4, 1))
+>T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 6, 20))
+
+    [P in keyof T]?: FindConditions<T[P]> | FindOperator<FindConditions<T[P]>>;
+>P : Symbol(P, Decl(noExcessiveStackDepthError.ts, 7, 5))
+>T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 6, 20))
+>FindConditions : Symbol(FindConditions, Decl(noExcessiveStackDepthError.ts, 4, 1))
+>T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 6, 20))
+>P : Symbol(P, Decl(noExcessiveStackDepthError.ts, 7, 5))
+>FindOperator : Symbol(FindOperator, Decl(noExcessiveStackDepthError.ts, 0, 0))
+>FindConditions : Symbol(FindConditions, Decl(noExcessiveStackDepthError.ts, 4, 1))
+>T : Symbol(T, Decl(noExcessiveStackDepthError.ts, 6, 20))
+>P : Symbol(P, Decl(noExcessiveStackDepthError.ts, 7, 5))
+
+};
+
+function foo<Entity>() {
+>foo : Symbol(foo, Decl(noExcessiveStackDepthError.ts, 8, 2))
+>Entity : Symbol(Entity, Decl(noExcessiveStackDepthError.ts, 10, 13))
+
+    var x: FindConditions<any>;
+>x : Symbol(x, Decl(noExcessiveStackDepthError.ts, 11, 7), Decl(noExcessiveStackDepthError.ts, 12, 7))
+>FindConditions : Symbol(FindConditions, Decl(noExcessiveStackDepthError.ts, 4, 1))
+
+    var x: FindConditions<Entity>;  // Excessive stack depth error not expected here
+>x : Symbol(x, Decl(noExcessiveStackDepthError.ts, 11, 7), Decl(noExcessiveStackDepthError.ts, 12, 7))
+>FindConditions : Symbol(FindConditions, Decl(noExcessiveStackDepthError.ts, 4, 1))
+>Entity : Symbol(Entity, Decl(noExcessiveStackDepthError.ts, 10, 13))
+}
+

@@ -2374,6 +2374,7 @@ namespace ts {
                     tokenValue = tokenValue.slice(0, -1);
                     pos--;
                 }
+                return getIdentifierToken();
             }
             return token;
         }

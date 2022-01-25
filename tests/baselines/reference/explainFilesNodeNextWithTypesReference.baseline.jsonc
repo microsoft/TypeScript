@@ -1,0 +1,37 @@
+// === /node_modules/react-hook-form/dist/index.d.ts ===
+// /// <reference types="[|react|]/*FIND ALL REFS*/" />
+// export type Foo = React.Whatever;
+// export function useForm(): any;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/node_modules/react-hook-form/dist/index.d.ts",
+      "kind": "string",
+      "name": "react",
+      "textSpan": {
+        "start": 22,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "\"react\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 22,
+          "length": 5
+        },
+        "fileName": "/node_modules/react-hook-form/dist/index.d.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

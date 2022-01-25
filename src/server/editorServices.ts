@@ -49,24 +49,23 @@ namespace ts.server {
         readonly data: ProjectInfoTelemetryEventData;
     }
 
-    /*
-     * __GDPR__
-     * "projectInfo" : {
-     *      "${include}": ["${TypeScriptCommonProperties}"],
-     *      "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
-     *      "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "files": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "include": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "exclude": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "compileOnSave": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "typeAcquisition": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "configFileName": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "projectType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "languageServiceEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *      "version": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    /* __GDPR__
+        "projectInfo" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
+            "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "files": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "include": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "exclude": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "compileOnSave": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typeAcquisition": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "configFileName": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "projectType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "languageServiceEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "version": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface ProjectInfoTelemetryEventData {
         /** Cryptographically secure hash of project file location. */

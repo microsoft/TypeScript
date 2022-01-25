@@ -10,7 +10,7 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions: context => {
+        getCodeActions: function getCodeActionsToFixNotFoundModule(context) {
             const { host, sourceFile, span: { start } } = context;
             const packageName = tryGetImportedPackageName(sourceFile, start);
             if (packageName === undefined) return undefined;

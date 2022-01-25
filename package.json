@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "4.5.0",
+    "version": "4.6.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -28,6 +28,7 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "packageManager": "npm@6.14.15",
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/browserify": "latest",
@@ -61,7 +62,7 @@
         "browser-resolve": "^1.11.2",
         "browserify": "latest",
         "chai": "latest",
-        "chalk": "latest",
+        "chalk": "^4.1.2",
         "convert-source-map": "latest",
         "del": "5.1.0",
         "diff": "^4.0.2",
@@ -92,7 +93,7 @@
         "q": "latest",
         "source-map-support": "latest",
         "through2": "latest",
-        "typescript": "^4.2.3",
+        "typescript": "^4.5.5",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"

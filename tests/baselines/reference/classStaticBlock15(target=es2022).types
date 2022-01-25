@@ -1,0 +1,34 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts ===
+var _C__1;
+>_C__1 : any
+
+class C {
+>C : C
+
+  static #_1 = 1;
+>#_1 : number
+>1 : 1
+
+  static #_3 = 3;
+>#_3 : number
+>3 : 3
+
+  static #_5 = 5;
+>#_5 : number
+>5 : 5
+
+  static {}
+  static {}
+  static {}
+  static {}
+  static {}
+  static {}
+}
+
+console.log(_C__1)
+>console.log(_C__1) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>_C__1 : any
+

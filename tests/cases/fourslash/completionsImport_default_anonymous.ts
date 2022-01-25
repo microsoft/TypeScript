@@ -16,11 +16,7 @@ const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForM
 verify.completions(
     {
         marker: "0",
-        exact: [
-            completion.globalThisEntry,
-            completion.undefinedVarEntry,
-            ...completion.statementKeywordsWithTypes
-        ],
+        exact: completion.globalsPlus([], { noLib: true }),
         preferences
     },
     {
