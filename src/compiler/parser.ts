@@ -2796,7 +2796,10 @@ namespace ts {
             return createNodeArray(list, pos);
         }
 
-        function parseTemplateExpression(isTaggedTemplate: boolean): TemplateExpression {
+        function parseTemplateExpression(isTaggedTemplate: boolean, isJsxAttributeValue: boolean): TemplateExpression {
+            if (isJsxAttributeValue) {
+                // WIP
+            }
             const pos = getNodePos();
             return finishNode(
                 factory.createTemplateExpression(
@@ -5274,6 +5277,20 @@ namespace ts {
             return finishNode(factory.createJsxExpression(dotDotDotToken, expression), pos);
         }
 
+        function parseJsxAttributeValue() {
+            if (token() !== SyntaxKind.EqualsToken) {
+                return undefined;
+            }
+            const jsxAttributeValueToken = scanJsxAttributeValue();
+            if (jsxAttributeValueToken === SyntaxKind.StringLiteral || jsxAttributeValueToken === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                return parseLiteralNode() as StringLiteral | NoSubstitutionTemplateLiteral;
+            }
+            if (jsxAttributeValueToken === SyntaxKind.TemplateHead) {
+                return parseTemplateExpression(/*isTaggedTemplate*/ false, /*isJsxAttributeValue*/ true);
+            }
+            return parseJsxExpression(/*inExpressionContext*/ true);
+        }
+
         function parseJsxAttribute(): JsxAttribute | JsxSpreadAttribute {
             if (token() === SyntaxKind.OpenBraceToken) {
                 return parseJsxSpreadAttribute();
@@ -5284,9 +5301,7 @@ namespace ts {
             return finishNode(
                 factory.createJsxAttribute(
                     parseIdentifierName(),
-                    token() !== SyntaxKind.EqualsToken ? undefined :
-                    scanJsxAttributeValue() === SyntaxKind.StringLiteral ? parseLiteralNode() as StringLiteral :
-                    parseJsxExpression(/*inExpressionContext*/ true)
+                    parseJsxAttributeValue()
                 ),
                 pos
             );
@@ -5459,7 +5474,7 @@ namespace ts {
                 typeArguments,
                 token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
                     (reScanTemplateHeadOrNoSubstitutionTemplate(), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
-                    parseTemplateExpression(/*isTaggedTemplate*/ true)
+                    parseTemplateExpression(/*isTaggedTemplate*/ true, /*isJsxAttributeValue*/ true)
             );
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
                 (tagExpression as Mutable<Node>).flags |= NodeFlags.OptionalChain;
@@ -5627,7 +5642,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.TemplateHead:
-                    return parseTemplateExpression(/* isTaggedTemplate */ false);
+                    return parseTemplateExpression(/* isTaggedTemplate */ false, /*isJsxAttributeValue*/ true);
                 case SyntaxKind.PrivateIdentifier:
                     return parsePrivateIdentifier();
             }

@@ -1,0 +1,45 @@
+=== tests/cases/conformance/jsx/template/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    foo: string,
+>foo : string
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => JSX.Element
+>p : Prop
+
+    return <div>{p.foo}</div>;
+><div>{p.foo}</div> : JSX.Element
+>div : any
+>p.foo : string
+>p : Prop
+>foo : string
+>div : any
+}
+
+const a = 42;
+>a : 42
+>42 : 42
+
+<Comp foo=`foo` />;
+><Comp foo=`foo` /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+
+<Comp foo=`foo${a}` />;
+><Comp foo=`foo${a}` /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`foo${a}` : string
+>a : 42
+
+<Comp foo=`foo${a}foo` />;
+><Comp foo=`foo${a}foo` /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`foo${a}foo` : string
+>a : 42
+

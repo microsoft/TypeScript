@@ -1880,6 +1880,10 @@ namespace ts {
             || kind === SyntaxKind.JsxExpression;
     }
 
+    export function isStringLiteralOrTemplateExpressionOrJsxExpression(node: Node): node is StringLiteral | TemplateExpression | JsxExpression {
+        return node.kind === SyntaxKind.TemplateExpression || isStringLiteralOrJsxExpression(node);
+    }
+
     export function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement {
         const kind = node.kind;
         return kind === SyntaxKind.JsxOpeningElement

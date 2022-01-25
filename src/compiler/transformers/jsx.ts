@@ -400,7 +400,7 @@ namespace ts {
             return factory.createPropertyAssignment(name, expression);
         }
 
-        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression | undefined): Expression {
+        function transformJsxAttributeInitializer(node: StringLiteral | TemplateLiteral | JsxExpression | undefined): Expression {
             if (node === undefined) {
                 return factory.createTrue();
             }
@@ -410,6 +410,43 @@ namespace ts {
                 const singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
                 const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text, singleQuote);
                 return setTextRange(literal, node);
+            }
+            else if (node.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                return setTextRange(
+                    factory.createNoSubstitutionTemplateLiteral(
+                        tryDecodeEntities(node.text) || node.text
+                    ),
+                    node
+                );
+            }
+            else if (node.kind === SyntaxKind.TemplateExpression) {
+                const newNode = setTextRange(
+                    factory.createTemplateExpression(
+                        setTextRange(
+                            factory.createTemplateHead(
+                                tryDecodeEntities(node.head.text) || node.head.text,
+                                /*rawText*/ undefined,
+                                node.head.templateFlags
+                            ),
+                            node.head
+                        ),
+                        node.templateSpans.map(span => {
+                            return setTextRange(
+                                factory.createTemplateSpan(
+                                    visitNode(span.expression, visitor, isExpression),
+                                    factory.createTemplateTail(
+                                        tryDecodeEntities(span.literal.text) || span.literal.text,
+                                        /*rawText*/ undefined,
+                                        span.literal.templateFlags
+                                    )
+                                ),
+                                span
+                            );
+                        })
+                    ),
+                    node
+                );
+                return newNode;
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 if (node.expression === undefined) {
