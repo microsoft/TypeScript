@@ -1397,11 +1397,11 @@ namespace FourSlash {
             }));
         }
 
-        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string) {
+        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string, expectedTags?: {name: string; text: string;}[]) {
             if (typeof markerName === "string") this.goToMarker(markerName);
             else this.goToRangeStart(markerName);
 
-            this.verifyQuickInfoString(expectedText, expectedDocumentation);
+            this.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
         }
 
         public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
@@ -1420,16 +1420,29 @@ namespace FourSlash {
             }
         }
 
-        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
+        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
             if (expectedDocumentation === "") {
-                throw new Error("Use 'undefined' instead");
+                throw new Error("Use 'undefined' instead of empty string for `expectedDocumentation`");
             }
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
-            const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
+            const actualQuickInfoText = ts.displayPartsToString(actualQuickInfo?.displayParts);
+            const actualQuickInfoDocumentation = ts.displayPartsToString(actualQuickInfo?.documentation);
+            const actualQuickInfoTags = actualQuickInfo?.tags?.map(tag => ({ name: tag.name, text: ts.displayPartsToString(tag.text) }));
 
             assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
             assert.equal(actualQuickInfoDocumentation, expectedDocumentation || "", this.assertionMessageAtLastKnownMarker("quick info doc"));
+            if (!expectedTags) {
+                // Skip if `expectedTags` is not given
+            }
+            else if (!actualQuickInfoTags) {
+                assert.equal(actualQuickInfoTags, expectedTags, this.messageAtLastKnownMarker("QuickInfo tags"));
+            }
+            else {
+                ts.zipWith(expectedTags, actualQuickInfoTags, (expectedTag, actualTag) => {
+                    assert.equal(expectedTag.name, actualTag.name);
+                    assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+                });
+            }
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: TextSpan,

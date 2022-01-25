@@ -44,6 +44,8 @@ namespace ts {
         /* @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
+        /* @internal */
+        getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[];
     }
 
     export interface Type {
