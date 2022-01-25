@@ -192,9 +192,12 @@ namespace ts {
         return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
     }
 
-    export function packageIdToString({ name, subModuleName, version }: PackageId): string {
-        const fullName = subModuleName ? `${name}/${subModuleName}` : name;
-        return `${fullName}@${version}`;
+    export function packageIdToPackageName({ name, subModuleName }: PackageId): string {
+        return subModuleName ? `${name}/${subModuleName}` : name;
+    }
+
+    export function packageIdToString(packageId: PackageId): string {
+        return `${packageIdToPackageName(packageId)}@${packageId.version}`;
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
