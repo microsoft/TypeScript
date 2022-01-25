@@ -30116,7 +30116,7 @@ namespace ts {
                         const diags = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
                         Debug.assert(diags.length > 0, "No errors reported for 3 or fewer overload signatures");
                         const chain = chainDiagnosticMessages(
-                            map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText),
+                            map(diags, createDiagnosticMessageChainFromDiagnostic),
                             Diagnostics.No_overload_matches_this_call);
                         // The below is a spread to guarantee we get a new (mutable) array - our `flatMap` helper tries to do "smart" optimizations where it reuses input
                         // arrays and the emptyArray singleton where possible, which is decidedly not what we want while we're still constructing this diagnostic
