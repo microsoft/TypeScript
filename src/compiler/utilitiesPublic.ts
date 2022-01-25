@@ -1880,6 +1880,7 @@ namespace ts {
             || kind === SyntaxKind.JsxExpression;
     }
 
+    /* @internal */
     export function isStringLiteralOrTemplateExpressionOrJsxExpression(node: Node): node is StringLiteral | TemplateExpression | JsxExpression {
         return node.kind === SyntaxKind.TemplateExpression || isStringLiteralOrJsxExpression(node);
     }

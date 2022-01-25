@@ -1,0 +1,69 @@
+=== tests/cases/conformance/jsx/template/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    foo: string,
+>foo : Symbol(Prop.foo, Decl(file.tsx, 2, 16))
+}
+
+function Comp(p: Prop) {
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>p : Symbol(p, Decl(file.tsx, 6, 14))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    return <div>{p.foo}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>p.foo : Symbol(Prop.foo, Decl(file.tsx, 2, 16))
+>p : Symbol(p, Decl(file.tsx, 6, 14))
+>foo : Symbol(Prop.foo, Decl(file.tsx, 2, 16))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+const a = 42;
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+
+<Comp foo=`&amp;` />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 12, 5))
+
+<Comp foo={`&amp;`} />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 13, 5))
+
+<Comp foo='&amp;' />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 14, 5))
+
+<Comp foo=`&amp;${a}` />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 16, 5))
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+
+<Comp foo={`&amp;${a}`} />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 17, 5))
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+
+<Comp foo={'&amp;' + a} />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 18, 5))
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+
+<Comp foo=`&amp;${a}&amp;` />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 20, 5))
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+
+<Comp foo={`&amp;${a}&amp;`} />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 21, 5))
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+
+<Comp foo={'&amp;' + a + '&amp;'} />;
+>Comp : Symbol(Comp, Decl(file.tsx, 4, 1))
+>foo : Symbol(foo, Decl(file.tsx, 22, 5))
+>a : Symbol(a, Decl(file.tsx, 10, 5))
+

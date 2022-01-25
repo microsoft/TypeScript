@@ -1,0 +1,88 @@
+=== tests/cases/conformance/jsx/template/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    foo: string,
+>foo : string
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => JSX.Element
+>p : Prop
+
+    return <div>{p.foo}</div>;
+><div>{p.foo}</div> : JSX.Element
+>div : any
+>p.foo : string
+>p : Prop
+>foo : string
+>div : any
+}
+
+const a = 42;
+>a : 42
+>42 : 42
+
+<Comp foo=`&amp;` />;
+><Comp foo=`&amp;` /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+
+<Comp foo={`&amp;`} />;
+><Comp foo={`&amp;`} /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`&amp;` : "&amp;"
+
+<Comp foo='&amp;' />;
+><Comp foo='&amp;' /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+
+<Comp foo=`&amp;${a}` />;
+><Comp foo=`&amp;${a}` /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`&amp;${a}` : string
+>a : 42
+
+<Comp foo={`&amp;${a}`} />;
+><Comp foo={`&amp;${a}`} /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`&amp;${a}` : string
+>a : 42
+
+<Comp foo={'&amp;' + a} />;
+><Comp foo={'&amp;' + a} /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>'&amp;' + a : string
+>'&amp;' : "&amp;"
+>a : 42
+
+<Comp foo=`&amp;${a}&amp;` />;
+><Comp foo=`&amp;${a}&amp;` /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`&amp;${a}&amp;` : string
+>a : 42
+
+<Comp foo={`&amp;${a}&amp;`} />;
+><Comp foo={`&amp;${a}&amp;`} /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>`&amp;${a}&amp;` : string
+>a : 42
+
+<Comp foo={'&amp;' + a + '&amp;'} />;
+><Comp foo={'&amp;' + a + '&amp;'} /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>foo : string
+>'&amp;' + a + '&amp;' : string
+>'&amp;' + a : string
+>'&amp;' : "&amp;"
+>a : 42
+>'&amp;' : "&amp;"
+

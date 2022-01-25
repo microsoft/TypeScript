@@ -1373,7 +1373,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
         readonly name: Identifier;
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: StringLiteral | TemplateLiteral | JsxExpression;
     }
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
@@ -3686,8 +3686,8 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: StringLiteral | TemplateLiteral | JsxExpression | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | TemplateLiteral | JsxExpression | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -11179,9 +11179,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. */
     const updateJsxFragment: (node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) => JsxFragment;
     /** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. */
-    const createJsxAttribute: (name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const createJsxAttribute: (name: Identifier, initializer: StringLiteral | TemplateLiteral | JsxExpression | undefined) => JsxAttribute;
     /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
-    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) => JsxAttribute;
+    const updateJsxAttribute: (node: JsxAttribute, name: Identifier, initializer: StringLiteral | TemplateLiteral | JsxExpression | undefined) => JsxAttribute;
     /** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. */
     const createJsxAttributes: (properties: readonly JsxAttributeLike[]) => JsxAttributes;
     /** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. */

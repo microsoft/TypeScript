@@ -2796,10 +2796,7 @@ namespace ts {
             return createNodeArray(list, pos);
         }
 
-        function parseTemplateExpression(isTaggedTemplate: boolean, isJsxAttributeValue: boolean): TemplateExpression {
-            if (isJsxAttributeValue) {
-                // WIP
-            }
+        function parseTemplateExpression(isTaggedTemplate: boolean): TemplateExpression {
             const pos = getNodePos();
             return finishNode(
                 factory.createTemplateExpression(
@@ -5286,7 +5283,7 @@ namespace ts {
                 return parseLiteralNode() as StringLiteral | NoSubstitutionTemplateLiteral;
             }
             if (jsxAttributeValueToken === SyntaxKind.TemplateHead) {
-                return parseTemplateExpression(/*isTaggedTemplate*/ false, /*isJsxAttributeValue*/ true);
+                return parseTemplateExpression(/*isTaggedTemplate*/ false);
             }
             return parseJsxExpression(/*inExpressionContext*/ true);
         }
@@ -5474,7 +5471,7 @@ namespace ts {
                 typeArguments,
                 token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
                     (reScanTemplateHeadOrNoSubstitutionTemplate(), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
-                    parseTemplateExpression(/*isTaggedTemplate*/ true, /*isJsxAttributeValue*/ true)
+                    parseTemplateExpression(/*isTaggedTemplate*/ true)
             );
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
                 (tagExpression as Mutable<Node>).flags |= NodeFlags.OptionalChain;
@@ -5642,7 +5639,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.TemplateHead:
-                    return parseTemplateExpression(/* isTaggedTemplate */ false, /*isJsxAttributeValue*/ true);
+                    return parseTemplateExpression(/* isTaggedTemplate */ false);
                 case SyntaxKind.PrivateIdentifier:
                     return parsePrivateIdentifier();
             }

@@ -1194,7 +1194,7 @@ namespace ts {
                 Debug.type<JsxAttribute>(node);
                 return factory.updateJsxAttribute(node,
                     nodeVisitor(node.name, visitor, isIdentifier),
-                    nodeVisitor(node.initializer, visitor, isExpression));
+                    nodeVisitor(node.initializer, visitor, isStringLiteralOrTemplateExpressionOrJsxExpression));
 
             case SyntaxKind.JsxAttributes:
                 Debug.type<JsxAttributes>(node);
