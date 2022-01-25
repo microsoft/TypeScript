@@ -1,0 +1,26 @@
+=== tests/cases/compiler/parameterDecoratorTarget2.ts ===
+const decorator = (target: A, key: string, index: number) => {};
+>decorator : Symbol(decorator, Decl(parameterDecoratorTarget2.ts, 0, 5))
+>target : Symbol(target, Decl(parameterDecoratorTarget2.ts, 0, 19))
+>A : Symbol(A, Decl(parameterDecoratorTarget2.ts, 0, 64))
+>key : Symbol(key, Decl(parameterDecoratorTarget2.ts, 0, 29))
+>index : Symbol(index, Decl(parameterDecoratorTarget2.ts, 0, 42))
+
+class A {
+>A : Symbol(A, Decl(parameterDecoratorTarget2.ts, 0, 64))
+
+	method(@decorator param1: string) {}
+>method : Symbol(A.method, Decl(parameterDecoratorTarget2.ts, 2, 9))
+>decorator : Symbol(decorator, Decl(parameterDecoratorTarget2.ts, 0, 5))
+>param1 : Symbol(param1, Decl(parameterDecoratorTarget2.ts, 3, 8))
+
+	static staticMethod(@decorator param1: string) {}
+>staticMethod : Symbol(A.staticMethod, Decl(parameterDecoratorTarget2.ts, 3, 37))
+>decorator : Symbol(decorator, Decl(parameterDecoratorTarget2.ts, 0, 5))
+>param1 : Symbol(param1, Decl(parameterDecoratorTarget2.ts, 4, 21))
+
+	constructor(@decorator param1: string) {}
+>decorator : Symbol(decorator, Decl(parameterDecoratorTarget2.ts, 0, 5))
+>param1 : Symbol(param1, Decl(parameterDecoratorTarget2.ts, 5, 13))
+}
+

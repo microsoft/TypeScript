@@ -1,0 +1,22 @@
+tests/cases/compiler/parameterDecoratorTarget2.ts(5,23): error TS2345: Argument of type 'typeof A' is not assignable to parameter of type 'A'.
+  Property 'method' is missing in type 'typeof A' but required in type 'A'.
+tests/cases/compiler/parameterDecoratorTarget2.ts(6,15): error TS2345: Argument of type 'typeof A' is not assignable to parameter of type 'A'.
+
+
+==== tests/cases/compiler/parameterDecoratorTarget2.ts (2 errors) ====
+    const decorator = (target: A, key: string, index: number) => {};
+    
+    class A {
+    	method(@decorator param1: string) {}
+    	static staticMethod(@decorator param1: string) {}
+    	                     ~~~~~~~~~
+!!! error TS2345: Argument of type 'typeof A' is not assignable to parameter of type 'A'.
+!!! error TS2345:   Property 'method' is missing in type 'typeof A' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/parameterDecoratorTarget2.ts:4:2: 'method' is declared here.
+!!! related TS6213 tests/cases/compiler/parameterDecoratorTarget2.ts:5:23: Did you mean to use 'new' with this expression?
+    	constructor(@decorator param1: string) {}
+    	             ~~~~~~~~~
+!!! error TS2345: Argument of type 'typeof A' is not assignable to parameter of type 'A'.
+!!! related TS6213 tests/cases/compiler/parameterDecoratorTarget2.ts:6:15: Did you mean to use 'new' with this expression?
+    }
+    

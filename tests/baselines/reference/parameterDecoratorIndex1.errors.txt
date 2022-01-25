@@ -1,0 +1,15 @@
+tests/cases/compiler/parameterDecoratorIndex1.ts(6,4): error TS2345: Argument of type '1' is not assignable to parameter of type '0'.
+
+
+==== tests/cases/compiler/parameterDecoratorIndex1.ts (1 errors) ====
+    const decorator = (target: any, key: string, index: 0) => {};
+    
+    class A {
+    	method(
+    		@decorator param1: string,
+    		@decorator param2: string
+    		 ~~~~~~~~~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '0'.
+    	) {}
+    }
+    

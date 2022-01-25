@@ -29506,11 +29506,11 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     // A parameter declaration decorator will have three arguments (see
                     // `ParameterDecorator` in core.d.ts).
-                    const func = parent.parent as FunctionLikeDeclaration;
+                    const element = parent.parent as MethodDeclaration | ConstructorDeclaration;
                     return [
-                        createSyntheticExpression(expr, parent.parent.kind === SyntaxKind.Constructor ? getTypeOfSymbol(getSymbolOfNode(func)) : errorType),
-                        createSyntheticExpression(expr, anyType),
-                        createSyntheticExpression(expr, numberType)
+                        createSyntheticExpression(expr, getParentTypeOfClassElement(element)),
+                        createSyntheticExpression(expr, element.kind === SyntaxKind.Constructor ? undefinedType : getClassElementPropertyKeyType(element)),
+                        createSyntheticExpression(expr, getNumberLiteralType(element.parameters.indexOf(parent as ParameterDeclaration)))
                     ];
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -40965,7 +40965,7 @@ namespace ts {
          */
         function getParentTypeOfClassElement(node: ClassElement) {
             const classSymbol = getSymbolOfNode(node.parent)!;
-            return isStatic(node)
+            return isStatic(node) || node.kind === SyntaxKind.Constructor
                 ? getTypeOfSymbol(classSymbol)
                 : getDeclaredTypeOfSymbol(classSymbol);
         }

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/parameterDecoratorKey3.ts ===
+const decorator = (target: any, key: undefined, index: number) => {};
+>decorator : Symbol(decorator, Decl(parameterDecoratorKey3.ts, 0, 5))
+>target : Symbol(target, Decl(parameterDecoratorKey3.ts, 0, 19))
+>key : Symbol(key, Decl(parameterDecoratorKey3.ts, 0, 31))
+>index : Symbol(index, Decl(parameterDecoratorKey3.ts, 0, 47))
+
+class A {
+>A : Symbol(A, Decl(parameterDecoratorKey3.ts, 0, 69))
+
+	constructor(@decorator param1: string) {}
+>decorator : Symbol(decorator, Decl(parameterDecoratorKey3.ts, 0, 5))
+>param1 : Symbol(param1, Decl(parameterDecoratorKey3.ts, 3, 13))
+
+	method(@decorator param1: string) {}
+>method : Symbol(A.method, Decl(parameterDecoratorKey3.ts, 3, 42))
+>decorator : Symbol(decorator, Decl(parameterDecoratorKey3.ts, 0, 5))
+>param1 : Symbol(param1, Decl(parameterDecoratorKey3.ts, 4, 8))
+}
+

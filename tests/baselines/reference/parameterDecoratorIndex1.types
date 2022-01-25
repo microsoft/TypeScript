@@ -1,0 +1,25 @@
+=== tests/cases/compiler/parameterDecoratorIndex1.ts ===
+const decorator = (target: any, key: string, index: 0) => {};
+>decorator : (target: any, key: string, index: 0) => void
+>(target: any, key: string, index: 0) => {} : (target: any, key: string, index: 0) => void
+>target : any
+>key : string
+>index : 0
+
+class A {
+>A : A
+
+	method(
+>method : (param1: string, param2: string) => void
+
+		@decorator param1: string,
+>decorator : (target: any, key: string, index: 0) => void
+>param1 : string
+
+		@decorator param2: string
+>decorator : (target: any, key: string, index: 0) => void
+>param2 : string
+
+	) {}
+}
+

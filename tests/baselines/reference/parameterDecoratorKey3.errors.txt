@@ -1,0 +1,13 @@
+tests/cases/compiler/parameterDecoratorKey3.ts(5,10): error TS2345: Argument of type '"method"' is not assignable to parameter of type 'undefined'.
+
+
+==== tests/cases/compiler/parameterDecoratorKey3.ts (1 errors) ====
+    const decorator = (target: any, key: undefined, index: number) => {};
+    
+    class A {
+    	constructor(@decorator param1: string) {}
+    	method(@decorator param1: string) {}
+    	        ~~~~~~~~~
+!!! error TS2345: Argument of type '"method"' is not assignable to parameter of type 'undefined'.
+    }
+    
