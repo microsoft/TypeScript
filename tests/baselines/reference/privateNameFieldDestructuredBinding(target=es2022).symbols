@@ -1,0 +1,90 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldDestructuredBinding.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+
+    #field = 1;
+>#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+
+    otherObject = new A();
+>otherObject : Symbol(A.otherObject, Decl(privateNameFieldDestructuredBinding.ts, 1, 15))
+>A : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+
+    testObject() {
+>testObject : Symbol(A.testObject, Decl(privateNameFieldDestructuredBinding.ts, 2, 26))
+
+        return { x: 10, y: 6 };
+>x : Symbol(x, Decl(privateNameFieldDestructuredBinding.ts, 4, 16))
+>y : Symbol(y, Decl(privateNameFieldDestructuredBinding.ts, 4, 23))
+    }
+    testArray() {
+>testArray : Symbol(A.testArray, Decl(privateNameFieldDestructuredBinding.ts, 5, 5))
+
+        return [10, 11];
+    }
+    constructor() {
+        let y: number;
+>y : Symbol(y, Decl(privateNameFieldDestructuredBinding.ts, 10, 11))
+
+        ({ x: this.#field, y } = this.testObject());
+>x : Symbol(x, Decl(privateNameFieldDestructuredBinding.ts, 11, 10))
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>y : Symbol(y, Decl(privateNameFieldDestructuredBinding.ts, 11, 26))
+>this.testObject : Symbol(A.testObject, Decl(privateNameFieldDestructuredBinding.ts, 2, 26))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>testObject : Symbol(A.testObject, Decl(privateNameFieldDestructuredBinding.ts, 2, 26))
+
+        ([this.#field, y] = this.testArray());
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>y : Symbol(y, Decl(privateNameFieldDestructuredBinding.ts, 10, 11))
+>this.testArray : Symbol(A.testArray, Decl(privateNameFieldDestructuredBinding.ts, 5, 5))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>testArray : Symbol(A.testArray, Decl(privateNameFieldDestructuredBinding.ts, 5, 5))
+
+        ({ a: this.#field, b: [this.#field] } = { a: 1, b: [2] });
+>a : Symbol(a, Decl(privateNameFieldDestructuredBinding.ts, 13, 10))
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>b : Symbol(b, Decl(privateNameFieldDestructuredBinding.ts, 13, 26))
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>a : Symbol(a, Decl(privateNameFieldDestructuredBinding.ts, 13, 49))
+>b : Symbol(b, Decl(privateNameFieldDestructuredBinding.ts, 13, 55))
+
+        [this.#field, [this.#field]] = [1, [2]];
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+
+        ({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] });
+>a : Symbol(a, Decl(privateNameFieldDestructuredBinding.ts, 15, 10))
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>b : Symbol(b, Decl(privateNameFieldDestructuredBinding.ts, 15, 30))
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>b : Symbol(b, Decl(privateNameFieldDestructuredBinding.ts, 15, 57))
+
+        [this.#field = 2] = [];
+>this.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+
+        [this.otherObject.#field = 2] = [];
+>this.otherObject.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>this.otherObject : Symbol(A.otherObject, Decl(privateNameFieldDestructuredBinding.ts, 1, 15))
+>this : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+>otherObject : Symbol(A.otherObject, Decl(privateNameFieldDestructuredBinding.ts, 1, 15))
+    }
+    static test(_a: A) {
+>test : Symbol(A.test, Decl(privateNameFieldDestructuredBinding.ts, 18, 5))
+>_a : Symbol(_a, Decl(privateNameFieldDestructuredBinding.ts, 19, 16))
+>A : Symbol(A, Decl(privateNameFieldDestructuredBinding.ts, 0, 0))
+
+        [_a.#field] = [2];
+>_a.#field : Symbol(A.#field, Decl(privateNameFieldDestructuredBinding.ts, 0, 9))
+>_a : Symbol(_a, Decl(privateNameFieldDestructuredBinding.ts, 19, 16))
+    }
+}
+

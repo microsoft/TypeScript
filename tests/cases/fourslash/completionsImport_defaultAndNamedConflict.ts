@@ -11,9 +11,7 @@
 
 verify.completions({
   marker: "",
-  exact: [
-    completion.globalThisEntry,
-    completion.undefinedVarEntry,
+  exact: completion.globalsPlus([
     {
       name: "someModule",
       source: "/someModule",
@@ -34,8 +32,7 @@ verify.completions({
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     },
-    ...completion.statementKeywordsWithTypes
-  ],
+  ], { noLib: true }),
   preferences: {
     includeCompletionsForModuleExports: true
   }

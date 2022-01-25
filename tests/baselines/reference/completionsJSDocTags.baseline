@@ -77,141 +77,6 @@
           ]
         },
         {
-          "name": "property1",
-          "kind": "property",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Foo",
-              "kind": "className"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property1",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [],
-          "tags": [
-            {
-              "name": "mytag",
-              "text": [
-                {
-                  "text": "comment1 comment2",
-                  "kind": "text"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "property2",
-          "kind": "property",
-          "kindModifiers": "",
-          "sortText": "11",
-          "displayParts": [
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property",
-              "kind": "text"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Foo",
-              "kind": "className"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "property2",
-              "kind": "propertyName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [],
-          "tags": [
-            {
-              "name": "mytag1",
-              "text": [
-                {
-                  "text": "some comments\nsome more comments about mytag1",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "mytag2",
-              "text": [
-                {
-                  "text": "here all the comments are on a new line",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "mytag3"
-            },
-            {
-              "name": "mytag"
-            }
-          ]
-        },
-        {
           "name": "method3",
           "kind": "method",
           "kindModifiers": "",
@@ -515,6 +380,141 @@
                   "kind": "text"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "property1",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property1",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "mytag",
+              "text": [
+                {
+                  "text": "comment1 comment2",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "property2",
+          "kind": "property",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property2",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "mytag1",
+              "text": [
+                {
+                  "text": "some comments\nsome more comments about mytag1",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "mytag2",
+              "text": [
+                {
+                  "text": "here all the comments are on a new line",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "mytag3"
+            },
+            {
+              "name": "mytag"
             }
           ]
         }

@@ -878,7 +878,7 @@ namespace ts {
             }
 
             if (canProduceDiagnostic && !suppressNewDiagnosticContexts) {
-                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
+                getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input);
             }
 
             if (isTypeQueryNode(input)) {
@@ -1073,7 +1073,7 @@ namespace ts {
 
             function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
                 if (returnValue && canProduceDiagnostic && hasDynamicName(input as Declaration)) {
-                    checkName(input as DeclarationDiagnosticProducing);
+                    checkName(input);
                 }
                 if (isEnclosingDeclaration(input)) {
                     enclosingDeclaration = previousEnclosingDeclaration;
@@ -1610,7 +1610,7 @@ namespace ts {
     }
 
     // Elide "public" modifier, as it is the default
-    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] {
+    function maskModifiers(node: Node, modifierMask?: ModifierFlags, modifierAdditions?: ModifierFlags): Modifier[] | undefined {
         return factory.createModifiersFromModifierFlags(maskModifierFlags(node, modifierMask, modifierAdditions));
     }
 

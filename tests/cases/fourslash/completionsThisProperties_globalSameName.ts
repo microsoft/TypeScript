@@ -14,10 +14,18 @@
 
 verify.completions({
   marker: "",
-  exact: [
+  unsorted: [
     "arguments",
     completion.globalThisEntry,
     ...completion.globalsVars,
+    {
+      name: "foot",
+      insertText: "this.foot",
+      kind: "property",
+      sortText: completion.SortText.SuggestedClassMembers,
+      source: completion.CompletionSource.ThisProperty,
+      text: "(property) Service.foot: number"
+    },
     {
       name: "foot",
       insertText: undefined,
@@ -28,14 +36,6 @@ verify.completions({
     },
     "Service",
     completion.undefinedVarEntry,
-    {
-      name: "foot",
-      insertText: "this.foot",
-      kind: "property",
-      sortText: completion.SortText.SuggestedClassMembers,
-      source: completion.CompletionSource.ThisProperty,
-      text: "(property) Service.foot: number"
-    },
     {
       name: "serve",
       insertText: "this.serve",

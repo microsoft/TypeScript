@@ -1,0 +1,16 @@
+tests/cases/conformance/salsa/plainJSRedeclare.js(1,7): error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+tests/cases/conformance/salsa/plainJSRedeclare.js(2,5): error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+tests/cases/conformance/salsa/plainJSRedeclare.js(2,15): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+
+
+==== tests/cases/conformance/salsa/plainJSRedeclare.js (3 errors) ====
+    const orbitol = 1
+          ~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+    var orbitol = 1 + false
+        ~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'orbitol'.
+                  ~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.
+    orbitol.toExponential()
+    

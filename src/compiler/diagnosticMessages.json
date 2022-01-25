@@ -335,7 +335,7 @@
         "category": "Error",
         "code": 1116
     },
-    "An object literal cannot have multiple properties with the same name in strict mode.": {
+    "An object literal cannot have multiple properties with the same name.": {
         "category": "Error",
         "code": 1117
     },
@@ -1409,6 +1409,10 @@
         "category": "Error",
         "code": 1471
     },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1490,6 +1494,10 @@
     "Type '{0}' recursively references itself as a base type.": {
         "category": "Error",
         "code": 2310
+    },
+    "Cannot find name '{0}'. Did you mean to write this in an async function?": {
+        "category": "Error",
+        "code": 2311
     },
     "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
@@ -1743,7 +1751,7 @@
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
+    "A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -1834,6 +1842,10 @@
     "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
         "category": "Error",
         "code": 2400
+    },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
+        "category": "Error",
+        "code": 2401
     },
     "Expression resolves to '_super' that compiler uses to capture base class reference.": {
         "category": "Error",
@@ -3357,6 +3369,10 @@
         "category": "Error",
         "code": 2836
     },
+    "Import assertion values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2837
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4152,6 +4168,11 @@
         "category": "Message",
         "code": 6040
     },
+    "Errors  Files": {
+        "_locale_notes": "There is a double space, and the order cannot be changed (they're table headings) ^",
+        "category": "Message",
+        "code": 6041
+    },
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4930,6 +4951,18 @@
     "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
         "category": "Error",
         "code": 6258
+    },
+      "Found 1 error in {1}": {
+        "category": "Message",
+        "code": 6259
+    },
+    "Found {0} errors in the same file, starting at: {1}": {
+        "category": "Message",
+        "code": 6260
+    },
+    "Found {0} errors in {1} files.": {
+        "category": "Message",
+        "code": 6261
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {

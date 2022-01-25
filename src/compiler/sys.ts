@@ -499,12 +499,16 @@ namespace ts {
     /*@internal*/
     export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
+    let curSysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+
     /*@internal*/
-    export let sysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
+    export function sysLog(s: string) {
+        return curSysLog(s);
+    }
 
     /*@internal*/
     export function setSysLog(logger: typeof sysLog) {
-        sysLog = logger;
+        curSysLog = logger;
     }
 
     /*@internal*/

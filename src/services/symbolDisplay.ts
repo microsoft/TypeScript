@@ -83,18 +83,8 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            // If we requested completions after `x.` at the top-level, we may be at a source file location.
-            switch (location.parent && location.parent.kind) {
-                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                    return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
-                case SyntaxKind.JsxAttribute:
-                    return ScriptElementKind.jsxAttribute;
-                default:
-                    return ScriptElementKind.memberVariableElement;
-            }
+
+            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
@@ -330,7 +320,7 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
             displayParts.push(operatorPart(SyntaxKind.EqualsToken));
             displayParts.push(spacePart());
-            addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+            addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
         }
         if (symbolFlags & SymbolFlags.Enum) {
             prefixNextMeaning();

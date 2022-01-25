@@ -34,14 +34,14 @@ let x: TodoListProps;
 
 //// [tsxSpreadChildrenInvalidType.js]
 function Todo(prop) {
-    return _jsx("div", { children: prop.key.toString() + prop.todo }, void 0);
+    return _jsx("div", { children: prop.key.toString() + prop.todo });
 }
 function TodoList({ todos }) {
-    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] }, void 0);
+    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] });
 }
 function TodoListNoError({ todos }) {
     // any is not checked
-    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] }, void 0);
+    return _jsxs("div", { children: [..._jsx(Todo, { todo: todos[0].todo }, todos[0].id)] });
 }
 let x;
-_jsx(TodoList, Object.assign({}, x), void 0);
+_jsx(TodoList, Object.assign({}, x));
