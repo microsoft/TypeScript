@@ -1,0 +1,82 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts ===
+declare let f: any;
+>f : any
+
+// Type arguments only permitted at end of member expression
+
+const a1 = f<number>;
+>a1 : any
+>f : any
+
+const a2 = f.g<number>;
+>a2 : any
+>f.g : any
+>f : any
+>g : any
+
+const a3 = f<number>.g;
+>a3 : any
+>f : any
+>g : any
+
+const a4 = f<number>.g<number>;
+>a4 : any
+>f : any
+>g : any
+><number> : number
+> : any
+
+// Type arguments must follow ?. token
+
+const b1 = f?.<number>;
+>b1 : any
+>f?.<number> : any
+>f : any
+
+const b2 = f?.<number>();
+>b2 : any
+>f?.<number>() : any
+>f : any
+
+const b3 = f<number>?.();
+>b3 : boolean
+>f<number>?.() : boolean
+>f<number : boolean
+>f : any
+>number : any
+>?.() : any
+> : any
+
+// Parsed as function call, even though this differs from JavaScript
+
+const x1 = f<true>
+>x1 : any
+>f<true>(true) : any
+>f : any
+>true : true
+
+(true);
+>true : true
+
+// Parsed as relational expression
+
+const x2 = f<true>
+>x2 : boolean
+>f<true>true : boolean
+>f<true : boolean
+>f : any
+>true : true
+
+true;
+>true : true
+
+// Parsed as instantiation expression
+
+const x3 = f<true>;
+>x3 : any
+>f : any
+>true : true
+
+true;
+>true : true
+

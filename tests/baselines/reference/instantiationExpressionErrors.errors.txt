@@ -1,0 +1,91 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(5,14): error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(6,16): error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(7,14): error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(7,21): error TS1005: ',' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(7,22): error TS2451: Cannot redeclare block-scoped variable 'g'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(7,22): error TS7005: Variable 'g' implicitly has an 'any' type.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,14): error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,21): error TS1005: ',' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,22): error TS2451: Cannot redeclare block-scoped variable 'g'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,22): error TS7005: Variable 'g' implicitly has an 'any' type.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,23): error TS1005: ',' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,31): error TS1109: Expression expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(12,12): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(12,23): error TS1005: '(' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,12): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(14,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(14,21): error TS1109: Expression expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,12): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(28,14): error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (19 errors) ====
+    declare let f: any;
+    
+    // Type arguments only permitted at end of member expression
+    
+    const a1 = f<number>;
+                 ~~~~~~
+!!! error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+    const a2 = f.g<number>;
+                   ~~~~~~
+!!! error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+    const a3 = f<number>.g;
+                 ~~~~~~
+!!! error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+                        ~
+!!! error TS1005: ',' expected.
+                         ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'g'.
+                         ~
+!!! error TS7005: Variable 'g' implicitly has an 'any' type.
+    const a4 = f<number>.g<number>;
+                 ~~~~~~
+!!! error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+                        ~
+!!! error TS1005: ',' expected.
+                         ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'g'.
+                         ~
+!!! error TS7005: Variable 'g' implicitly has an 'any' type.
+                          ~
+!!! error TS1005: ',' expected.
+                                  ~
+!!! error TS1109: Expression expected.
+    
+    // Type arguments must follow ?. token
+    
+    const b1 = f?.<number>;
+               ~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+                          ~
+!!! error TS1005: '(' expected.
+    const b2 = f?.<number>();
+               ~~~~~~~~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    const b3 = f<number>?.();
+                 ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                        ~~
+!!! error TS1109: Expression expected.
+    
+    // Parsed as function call, even though this differs from JavaScript
+    
+    const x1 = f<true>
+               ~~~~~~~
+    (true);
+    ~~~~~~
+!!! error TS2347: Untyped function calls may not accept type arguments.
+    
+    // Parsed as relational expression
+    
+    const x2 = f<true>
+    true;
+    
+    // Parsed as instantiation expression
+    
+    const x3 = f<true>;
+                 ~~~~
+!!! error TS2635: Type 'any' has no signatures for which the type argument list is applicable.
+    true;
+    

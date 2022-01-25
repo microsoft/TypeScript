@@ -1,0 +1,62 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts ===
+declare let f: any;
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+// Type arguments only permitted at end of member expression
+
+const a1 = f<number>;
+>a1 : Symbol(a1, Decl(instantiationExpressionErrors.ts, 4, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+const a2 = f.g<number>;
+>a2 : Symbol(a2, Decl(instantiationExpressionErrors.ts, 5, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+const a3 = f<number>.g;
+>a3 : Symbol(a3, Decl(instantiationExpressionErrors.ts, 6, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 6, 21))
+
+const a4 = f<number>.g<number>;
+>a4 : Symbol(a4, Decl(instantiationExpressionErrors.ts, 7, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+>g : Symbol(g, Decl(instantiationExpressionErrors.ts, 7, 21))
+
+// Type arguments must follow ?. token
+
+const b1 = f?.<number>;
+>b1 : Symbol(b1, Decl(instantiationExpressionErrors.ts, 11, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+const b2 = f?.<number>();
+>b2 : Symbol(b2, Decl(instantiationExpressionErrors.ts, 12, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+const b3 = f<number>?.();
+>b3 : Symbol(b3, Decl(instantiationExpressionErrors.ts, 13, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+// Parsed as function call, even though this differs from JavaScript
+
+const x1 = f<true>
+>x1 : Symbol(x1, Decl(instantiationExpressionErrors.ts, 17, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+(true);
+
+// Parsed as relational expression
+
+const x2 = f<true>
+>x2 : Symbol(x2, Decl(instantiationExpressionErrors.ts, 22, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+true;
+
+// Parsed as instantiation expression
+
+const x3 = f<true>;
+>x3 : Symbol(x3, Decl(instantiationExpressionErrors.ts, 27, 5))
+>f : Symbol(f, Decl(instantiationExpressionErrors.ts, 0, 11))
+
+true;
+
