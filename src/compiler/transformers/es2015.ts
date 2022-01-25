@@ -549,6 +549,9 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
 
+                case SyntaxKind.JsxAttribute:
+                    return visitJsxAttribute(node as JsxAttribute);
+
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -583,6 +586,19 @@ namespace ts {
                 const result = visitEachChild(node, visitor, context);
                 convertedLoopState.allowedNonLabeledJumps = savedAllowedNonLabeledJumps;
                 return result;
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitJsxAttribute(node: JsxAttribute) {
+            if (node.initializer && isTemplateExpression(node.initializer)) {
+                return factory.createJsxAttribute(
+                    visitNode(node.name, visitor, isIdentifier),
+                    factory.createJsxExpression(
+                        undefined,
+                        visitNode(node.initializer, visitor, isExpression)
+                    )
+                );
             }
             return visitEachChild(node, visitor, context);
         }
