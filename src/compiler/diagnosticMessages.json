@@ -6474,6 +6474,14 @@
         "category": "Message",
         "code": 90054
     },
+    "Remove 'type' from import declaration from \"{0}\"": {
+        "category": "Message",
+        "code": 90055
+    },
+    "Remove 'type' from import of '{0}' from \"{1}\"": {
+        "category": "Message",
+        "code": 90056
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
