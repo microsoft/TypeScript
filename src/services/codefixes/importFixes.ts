@@ -1130,18 +1130,18 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined, forceUppercase: boolean): string {
-        return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target, forceUppercase);
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined, forceCapitalize: boolean): string {
+        return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target, forceCapitalize);
     }
 
-    export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceUppercase?: boolean): string {
+    export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
         const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
         let res = "";
         let lastCharWasValid = true;
         const firstCharCode = baseName.charCodeAt(0);
         if (isIdentifierStart(firstCharCode, target)) {
             res += String.fromCharCode(firstCharCode);
-            if (forceUppercase) {
+            if (forceCapitalize) {
                 res = res.toUpperCase();
             }
         }
