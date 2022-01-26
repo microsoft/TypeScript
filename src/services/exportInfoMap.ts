@@ -59,7 +59,7 @@ namespace ts {
         getPackageJsonAutoImportProvider(): Program | undefined;
     }
 
-    export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost, scriptTarget: ScriptTarget): ExportInfoMap {
+    export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
         let exportInfoId = 1;
         const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
@@ -88,7 +88,7 @@ namespace ts {
                 //    get a better name.
                 const importedName = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                     ? unescapeLeadingUnderscores(symbolTableKey)
-                    : getNameForExportedSymbol(namedSymbol, scriptTarget);
+                    : getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
 
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
@@ -125,7 +125,7 @@ namespace ts {
                         rehydrated,
                         preferUppercase => {
                             return preferUppercase
-                                ? getNameForExportedSymbol(rehydrated[0].symbol, scriptTarget, /*preferUppercase*/ true)
+                                ? getNameForExportedSymbol(rehydrated[0].symbol, /*scriptTarget*/ undefined, /*preferUppercase*/ true)
                                 : symbolName;
                         },
                         !!ambientModuleName,
@@ -322,7 +322,7 @@ namespace ts {
         const cache = host.getCachedExportInfoMap?.() || createCacheableExportInfoMap({
             getCurrentProgram: () => program,
             getPackageJsonAutoImportProvider: () => host.getPackageJsonAutoImportProvider?.(),
-        }, getEmitScriptTarget(program.getCompilerOptions()));
+        });
 
         if (cache.isUsableByFile(importingFile.path)) {
             host.log?.("getExportInfoMap: cache hit");
