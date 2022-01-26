@@ -2553,15 +2553,10 @@ namespace ts.Completions {
                 }
 
                 if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
-                    // Two possibilities:
-                    //   1. <div>/**/
-                    //      - contextToken: GreaterThanToken (before cursor)
-                    //      - location: JSXElement
-                    //      - different parents (JSXOpeningElement, JSXElement)
-                    //   2. <Component<string> /**/>
-                    //      - contextToken: GreaterThanToken (before cursor)
-                    //      - location: GreaterThanToken (after cursor)
-                    //      - same parent (JSXOpeningElement)
+                    // <div>/**/
+                    // - contextToken: GreaterThanToken (before cursor)
+                    // - location: JSXElement
+                    // - different parents (JSXOpeningElement, JSXElement)
                     return location.parent.kind !== SyntaxKind.JsxOpeningElement;
                 }
 
