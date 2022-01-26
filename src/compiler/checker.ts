@@ -6397,7 +6397,8 @@ namespace ts {
                         includePrivateSymbol?.(sym);
                     }
                     if (isIdentifier(node)) {
-                        const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
+                        const type = getDeclaredTypeOfSymbol(sym);
+                        const name = sym.flags & SymbolFlags.TypeParameter && !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration) ? typeParameterToName(type, context) : factory.cloneNode(node);
                         name.symbol = sym; // for quickinfo, which uses identifier symbol information
                         return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
                     }
