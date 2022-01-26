@@ -5262,7 +5262,7 @@ namespace ts {
                     // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                     // of types allows us to catch circular references to instantiations of the same anonymous type
                     if (!context.visitedTypes) {
-                        context.visitedTypes = new Set();
+                        context.visitedTypes = new Map();
                     }
                     if (id && !context.symbolDepth) {
                         context.symbolDepth = new Map();
@@ -5282,15 +5282,27 @@ namespace ts {
                         return deepCloneOrReuseNode(cachedResult) as TypeNode as T;
                     }
 
-                    let depth: number | undefined;
-                    if (id) {
-                        depth = context.symbolDepth!.get(id) || 0;
-                        if (depth > 10) {
-                            return createElidedInformationPlaceholder(context);
-                        }
-                        context.symbolDepth!.set(id, depth + 1);
+                    let totalDepth = 0;
+
+                    const symbolDepth = id ? context.symbolDepth!.get(id) : undefined;
+                    if (symbolDepth) {
+                        totalDepth += symbolDepth;
                     }
-                    context.visitedTypes.add(typeId);
+
+                    const visitedTypeDepth = context.visitedTypes.get(typeId);
+                    if (visitedTypeDepth) {
+                        totalDepth += visitedTypeDepth;
+                    }
+
+                    if (totalDepth > 10) {
+                        return createElidedInformationPlaceholder(context);
+                    }
+
+                    if (id) {
+                        context.symbolDepth!.set(id, (symbolDepth || 0) + 1);
+                    }
+                    context.visitedTypes.set(typeId, (visitedTypeDepth || 0) + 1);
+
                     const startLength = context.approximateLength;
                     const result = transform(type);
                     const addedLength = context.approximateLength - startLength;
@@ -5301,10 +5313,23 @@ namespace ts {
                         (result as any).addedLength = addedLength;
                         links?.serializedTypes?.set(key, result as TypeNode as TypeNode & {truncating?: boolean, addedLength: number});
                     }
-                    context.visitedTypes.delete(typeId);
-                    if (id) {
-                        context.symbolDepth!.set(id, depth!);
+
+                    if (visitedTypeDepth !== undefined) {
+                        context.visitedTypes.set(typeId, visitedTypeDepth);
                     }
+                    else {
+                        context.visitedTypes.delete(typeId);
+                    }
+
+                    if (id) {
+                        if (symbolDepth !== undefined) {
+                            context.symbolDepth!.set(id, symbolDepth);
+                        }
+                        else {
+                            context.symbolDepth!.delete(id);
+                        }
+                    }
+
                     return result;
 
                     function deepCloneOrReuseNode(node: Node): Node {
@@ -8304,7 +8329,7 @@ namespace ts {
             // State
             encounteredError: boolean;
             reportedDiagnostic: boolean;
-            visitedTypes: Set<number> | undefined;
+            visitedTypes: ESMap<number, number> | undefined;
             symbolDepth: ESMap<string, number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
