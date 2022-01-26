@@ -124,8 +124,10 @@ namespace ts {
                     action(
                         rehydrated,
                         preferCapitalized => {
+                            const { symbol, exportKind } = rehydrated[0];
+                            const namedSymbol = exportKind === ExportKind.Default && getLocalSymbolForExportDefault(symbol) || symbol;
                             return preferCapitalized
-                                ? getNameForExportedSymbol(rehydrated[0].symbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
+                                ? getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
                                 : symbolName;
                         },
                         !!ambientModuleName,
