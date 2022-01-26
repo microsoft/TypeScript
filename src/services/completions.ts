@@ -2543,16 +2543,20 @@ namespace ts.Completions {
             }
 
             if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
+                // <Component<string> /**/ />
+                // <Component<string> /**/ ><Component>
+                // - contextToken: GreaterThanToken (before cursor)
+                // - location: JsxSelfClosingElement or JsxOpeningElement
+                // - contextToken.parent === location
+                if (location === contextToken.parent && (location.kind === SyntaxKind.JsxOpeningElement || location.kind === SyntaxKind.JsxSelfClosingElement)) {
+                    return false;
+                }
+
                 if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
-                    // Two possibilities:
-                    //   1. <div>/**/
-                    //      - contextToken: GreaterThanToken (before cursor)
-                    //      - location: JSXElement
-                    //      - different parents (JSXOpeningElement, JSXElement)
-                    //   2. <Component<string> /**/>
-                    //      - contextToken: GreaterThanToken (before cursor)
-                    //      - location: GreaterThanToken (after cursor)
-                    //      - same parent (JSXOpeningElement)
+                    // <div>/**/
+                    // - contextToken: GreaterThanToken (before cursor)
+                    // - location: JSXElement
+                    // - different parents (JSXOpeningElement, JSXElement)
                     return location.parent.kind !== SyntaxKind.JsxOpeningElement;
                 }
 
