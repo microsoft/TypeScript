@@ -1071,6 +1071,15 @@ namespace ts {
         };
     }
 
+    export function createDiagnosticMessageChainFromDiagnostic(diagnostic: DiagnosticRelatedInformation): DiagnosticMessageChain {
+        return typeof diagnostic.messageText === "string" ? {
+            code: diagnostic.code,
+            category: diagnostic.category,
+            messageText: diagnostic.messageText,
+            next: (diagnostic as DiagnosticMessageChain).next,
+        } : diagnostic.messageText;
+    }
+
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
         return {
             file: sourceFile,
@@ -1247,7 +1256,8 @@ namespace ts {
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction ||
             node.kind === SyntaxKind.ParenthesizedExpression ||
-            node.kind === SyntaxKind.VariableDeclaration) ?
+            node.kind === SyntaxKind.VariableDeclaration ||
+            node.kind === SyntaxKind.ExportSpecifier) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'

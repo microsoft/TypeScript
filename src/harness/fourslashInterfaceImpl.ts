@@ -259,12 +259,12 @@ namespace FourSlashInterface {
             this.state.verifyInlayHints(expected, span, preference);
         }
 
-        public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
+        public quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
+            this.state.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
         }
 
-        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string) {
-            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
+        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
+            this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation, expectedTags);
         }
 
         public quickInfos(namesAndTexts: { [name: string]: string }) {
