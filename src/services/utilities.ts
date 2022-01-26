@@ -3210,13 +3210,19 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
-    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined) {
+    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, forceUppercase?: boolean): { name: string, isSynthesizedFromFileName: boolean } {
         if (!(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default)) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
+            const nameFromDeclaration = firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined);
+            if (nameFromDeclaration) {
+                return { name: nameFromDeclaration, isSynthesizedFromFileName: false };
+            }
+            return {
+                name: codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!forceUppercase),
+                isSynthesizedFromFileName: true,
+            };
         }
-        return symbol.name;
+        return { name: symbol.name, isSynthesizedFromFileName: false };
     }
 
     function getSymbolParentOrFail(symbol: Symbol) {

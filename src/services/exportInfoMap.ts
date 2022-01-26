@@ -47,7 +47,7 @@ namespace ts {
         clear(): void;
         add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, scriptTarget: ScriptTarget, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], name: string, isFromAmbientModule: boolean, key: string) => void): void;
+        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], name: string, isSynthesizedFromFileName: boolean, isFromAmbientModule: boolean, key: string) => void): void;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -86,9 +86,14 @@ namespace ts {
                 // 3. Otherwise, we have a default/namespace import that can be imported by any name, and
                 //    `symbolTableKey` will be something undesirable like `export=` or `default`, so we try to
                 //    get a better name.
-                const importedName = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
-                    ? unescapeLeadingUnderscores(symbolTableKey)
-                    : getNameForExportedSymbol(namedSymbol, scriptTarget);
+                let importedName, isSynthesizedFromFileName = false;
+                if (exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)) {
+                    importedName = unescapeLeadingUnderscores(symbolTableKey);
+                }
+                else {
+                    ({ name: importedName, isSynthesizedFromFileName } = getNameForExportedSymbol(namedSymbol, scriptTarget));
+                }
+
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
                 const target = skipAlias(symbol, checker);
@@ -96,7 +101,14 @@ namespace ts {
                 const storedModuleSymbol = moduleSymbol.flags & SymbolFlags.Transient ? undefined : moduleSymbol;
                 if (!storedSymbol || !storedModuleSymbol) symbols.set(id, [symbol, moduleSymbol]);
 
-                exportInfo.add(key(importedName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
+                const cacheKey = key(
+                    importedName,
+                    isSynthesizedFromFileName,
+                    symbol,
+                    isExternalModuleNameRelative(moduleName) ? undefined : moduleName,
+                    checker);
+
+                exportInfo.add(cacheKey, {
                     id,
                     symbolTableKey,
                     symbolName: importedName,
@@ -118,8 +130,8 @@ namespace ts {
             forEach: (importingFile, action) => {
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
-                    const { symbolName, ambientModuleName } = parseKey(key);
-                    action(info.map(rehydrateCachedInfo), symbolName, !!ambientModuleName, key);
+                    const { symbolName, isSynthesizedFromFileName, ambientModuleName } = parseKey(key);
+                    action(info.map(rehydrateCachedInfo), symbolName, isSynthesizedFromFileName, !!ambientModuleName, key);
                 });
             },
             releaseSymbols: () => {
@@ -188,16 +200,17 @@ namespace ts {
             };
         }
 
-        function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker): string {
+        function key(importedName: string, isSynthesizedFromFileName: boolean, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker): string {
             const moduleKey = ambientModuleName || "";
-            return `${importedName}|${getSymbolId(skipAlias(symbol, checker))}|${moduleKey}`;
+            return `${importedName}|${+isSynthesizedFromFileName}|${getSymbolId(skipAlias(symbol, checker))}|${moduleKey}`;
         }
 
         function parseKey(key: string) {
             const symbolName = key.substring(0, key.indexOf("|"));
+            const isSynthesizedFromFileName = key.charCodeAt(key.indexOf("|", 1) + 1) === CharacterCodes._1;
             const moduleKey = key.substring(key.lastIndexOf("|") + 1);
             const ambientModuleName = moduleKey === "" ? undefined : moduleKey;
-            return { symbolName, ambientModuleName };
+            return { symbolName, isSynthesizedFromFileName, ambientModuleName };
         }
 
         function fileIsGlobalOnly(file: SourceFile) {
@@ -381,12 +394,12 @@ namespace ts {
         if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
     }
 
-    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
+    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string, readonly isSynthesizedFromFileName: boolean } | undefined {
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-        if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
+        if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name, isSynthesizedFromFileName: false };
 
         const name = getNameForExportDefault(defaultExport);
-        if (name !== undefined) return { symbolForMeaning: defaultExport, name };
+        if (name !== undefined) return { symbolForMeaning: defaultExport, name, isSynthesizedFromFileName: false };
 
         if (defaultExport.flags & SymbolFlags.Alias) {
             const aliased = checker.getImmediateAliasedSymbol(defaultExport);
@@ -401,9 +414,9 @@ namespace ts {
 
         if (defaultExport.escapedName !== InternalSymbolName.Default &&
             defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
-            return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
+            return { symbolForMeaning: defaultExport, name: defaultExport.getName(), isSynthesizedFromFileName: false };
         }
-        return { symbolForMeaning: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
+        return { symbolForMeaning: defaultExport, ...getNameForExportedSymbol(defaultExport, compilerOptions.target) };
     }
 
     function getNameForExportDefault(symbol: Symbol): string | undefined {

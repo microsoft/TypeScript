@@ -541,7 +541,7 @@ namespace ts.codefix {
             if (isLiteralImportTypeNode(node) && node.qualifier) {
                 // Symbol for the left-most thing after the dot
                 const firstIdentifier = getFirstIdentifier(node.qualifier);
-                const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+                const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget).name;
                 const qualifier = name !== firstIdentifier.text
                     ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))
                     : node.qualifier;

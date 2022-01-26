@@ -1501,7 +1501,6 @@ namespace ts.Completions {
         source: string | undefined,
     ): CodeActionsAndSourceDisplay {
         if (data?.moduleSpecifier) {
-            const { contextToken, previousToken } = getRelevantTokens(position, sourceFile);
             if (previousToken && getImportStatementCompletionInfo(contextToken || previousToken).replacementNode) {
                 // Import statement completion: 'import c|'
                 return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
@@ -1540,11 +1539,13 @@ namespace ts.Completions {
         const checker = origin.isFromPackageJson ? host.getPackageJsonAutoImportProvider!()!.getTypeChecker() : program.getTypeChecker();
         const { moduleSymbol } = origin;
         const targetSymbol = checker.getMergedSymbol(skipAlias(symbol.exportSymbol || symbol, checker));
+        const isJsxOpeningTagName = contextToken?.kind === SyntaxKind.LessThanToken && isJsxOpeningLikeElement(contextToken.parent);
         const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
             targetSymbol,
             moduleSymbol,
             sourceFile,
-            getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions)),
+            getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions), isJsxOpeningTagName).name,
+            isJsxOpeningTagName,
             host,
             program,
             formatContext,
@@ -2445,12 +2446,25 @@ namespace ts.Completions {
                 preferences,
                 !!importCompletionNode,
                 context => {
-                    exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule, exportMapKey) => {
+                    exportInfo.forEach(sourceFile.path, (info, symbolName, isSynthesizedFromFileName, isFromAmbientModule, exportMapKey) => {
                         if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
                         if (!isTypeOnlyLocation && !importCompletionNode && !(info[0].targetFlags & SymbolFlags.Value)) return;
                         if (isTypeOnlyLocation && !(info[0].targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return;
+
+                        const firstChar = symbolName.charCodeAt(0);
+                        if (isRightOfOpenTag && (firstChar < CharacterCodes.A || firstChar > CharacterCodes.Z)) {
+                            // This is not going to be a valid identifier for a JSX tag name - we can convert it to one
+                            // if the symbol name was generated from a file name (as with unnamed default exports).
+                            if (isSynthesizedFromFileName && CharacterCodes.a <= firstChar && firstChar <= CharacterCodes.z) {
+                                symbolName = symbolName[0].toUpperCase() + symbolName.substring(1);
+                            }
+                            else {
+                                return;
+                            }
+                        }
+
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                         if (isCompletionDetailsMatch || !detailsEntryId && charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             const defaultExportInfo = find(info, isImportableExportInfo);
@@ -2463,6 +2477,7 @@ namespace ts.Completions {
                             const { exportInfo = defaultExportInfo, moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
                             const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                             const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
+
                             pushAutoImportSymbol(symbol, {
                                 kind: moduleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                                 moduleSpecifier,
