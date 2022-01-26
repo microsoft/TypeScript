@@ -1071,6 +1071,15 @@ namespace ts {
         };
     }
 
+    export function createDiagnosticMessageChainFromDiagnostic(diagnostic: DiagnosticRelatedInformation): DiagnosticMessageChain {
+        return typeof diagnostic.messageText === "string" ? {
+            code: diagnostic.code,
+            category: diagnostic.category,
+            messageText: diagnostic.messageText,
+            next: (diagnostic as DiagnosticMessageChain).next,
+        } : diagnostic.messageText;
+    }
+
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
         return {
             file: sourceFile,
