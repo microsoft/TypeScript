@@ -39437,27 +39437,10 @@ namespace ts {
                 return false;
             }
 
-            if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                const expr = node as PropertyAccessExpression;
-
-                if (expr.expression.kind === SyntaxKind.Identifier) {
-                    return true;
-                }
-
-                return isConstantMemberAccess(expr.expression);
-            }
-
-            if (node.kind === SyntaxKind.ElementAccessExpression) {
-                const expr = node as ElementAccessExpression;
-
-                if (expr.expression.kind === SyntaxKind.Identifier && isStringLiteralLike(expr.argumentExpression)) {
-                    return true;
-                }
-
-                return isConstantMemberAccess(expr.expression);
-            }
-
-            return false;
+            return node.kind === SyntaxKind.Identifier ||
+                node.kind === SyntaxKind.PropertyAccessExpression && isConstantMemberAccess((node as PropertyAccessExpression).expression) ||
+                node.kind === SyntaxKind.ElementAccessExpression && isConstantMemberAccess((node as ElementAccessExpression).expression) &&
+                    isStringLiteralLike((node as ElementAccessExpression).argumentExpression);
         }
 
         function checkEnumDeclaration(node: EnumDeclaration) {
