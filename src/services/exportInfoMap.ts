@@ -47,7 +47,7 @@ namespace ts {
         clear(): void;
         add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], getSymbolName: (preferUppercase?: boolean) => string, isFromAmbientModule: boolean, key: string) => void): void;
+        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], getSymbolName: (preferCapitalized?: boolean) => string, isFromAmbientModule: boolean, key: string) => void): void;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -123,9 +123,9 @@ namespace ts {
                     const rehydrated = info.map(rehydrateCachedInfo);
                     action(
                         rehydrated,
-                        preferUppercase => {
-                            return preferUppercase
-                                ? getNameForExportedSymbol(rehydrated[0].symbol, /*scriptTarget*/ undefined, /*preferUppercase*/ true)
+                        preferCapitalized => {
+                            return preferCapitalized
+                                ? getNameForExportedSymbol(rehydrated[0].symbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
                                 : symbolName;
                         },
                         !!ambientModuleName,

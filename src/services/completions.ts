@@ -2447,7 +2447,7 @@ namespace ts.Completions {
                 !!importCompletionNode,
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, getSymbolName, isFromAmbientModule, exportMapKey) => {
-                        const symbolName = getSymbolName(/*preferUppercase*/ isRightOfOpenTag);
+                        const symbolName = getSymbolName(/*preferCapitalized*/ isRightOfOpenTag);
                         if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
