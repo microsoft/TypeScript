@@ -39433,7 +39433,7 @@ namespace ts {
 
         function isConstantMemberAccess(node: Expression): node is AccessExpression {
             const type = getTypeOfExpression(node);
-            if(!type.symbol) {
+            if(type === errorType) {
                 return false;
             }
 
