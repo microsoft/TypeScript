@@ -13,6 +13,6 @@ tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'MyElement'.
             return <div />;
                     ~~~
 !!! error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
-!!! related TS2728 /.ts/lib.dom.d.ts:4844:13: 'Element' is declared here.
+!!! related TS2728 /.ts/lib.dom.d.ts:4877:13: 'Element' is declared here.
         }
     }
