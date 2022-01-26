@@ -45,9 +45,9 @@ namespace ts {
     export interface ExportInfoMap {
         isUsableByFile(importingFile: Path): boolean;
         clear(): void;
-        add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, scriptTarget: ScriptTarget, checker: TypeChecker): void;
+        add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], name: string, isSynthesizedFromFileName: boolean, isFromAmbientModule: boolean, key: string) => void): void;
+        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], getSymbolName: (preferUppercase?: boolean) => string, isFromAmbientModule: boolean, key: string) => void): void;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -59,7 +59,7 @@ namespace ts {
         getPackageJsonAutoImportProvider(): Program | undefined;
     }
 
-    export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
+    export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost, scriptTarget: ScriptTarget): ExportInfoMap {
         let exportInfoId = 1;
         const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
@@ -72,7 +72,7 @@ namespace ts {
                 symbols.clear();
                 usableByFileName = undefined;
             },
-            add: (importingFile, symbol, symbolTableKey, moduleSymbol, moduleFile, exportKind, isFromPackageJson, scriptTarget, checker) => {
+            add: (importingFile, symbol, symbolTableKey, moduleSymbol, moduleFile, exportKind, isFromPackageJson, checker) => {
                 if (importingFile !== usableByFileName) {
                     cache.clear();
                     usableByFileName = importingFile;
@@ -86,13 +86,9 @@ namespace ts {
                 // 3. Otherwise, we have a default/namespace import that can be imported by any name, and
                 //    `symbolTableKey` will be something undesirable like `export=` or `default`, so we try to
                 //    get a better name.
-                let importedName, isSynthesizedFromFileName = false;
-                if (exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)) {
-                    importedName = unescapeLeadingUnderscores(symbolTableKey);
-                }
-                else {
-                    ({ name: importedName, isSynthesizedFromFileName } = getNameForExportedSymbol(namedSymbol, scriptTarget));
-                }
+                const importedName = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
+                    ? unescapeLeadingUnderscores(symbolTableKey)
+                    : getNameForExportedSymbol(namedSymbol, scriptTarget);
 
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
@@ -101,14 +97,7 @@ namespace ts {
                 const storedModuleSymbol = moduleSymbol.flags & SymbolFlags.Transient ? undefined : moduleSymbol;
                 if (!storedSymbol || !storedModuleSymbol) symbols.set(id, [symbol, moduleSymbol]);
 
-                const cacheKey = key(
-                    importedName,
-                    isSynthesizedFromFileName,
-                    symbol,
-                    isExternalModuleNameRelative(moduleName) ? undefined : moduleName,
-                    checker);
-
-                exportInfo.add(cacheKey, {
+                exportInfo.add(key(importedName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
                     id,
                     symbolTableKey,
                     symbolName: importedName,
@@ -130,8 +119,17 @@ namespace ts {
             forEach: (importingFile, action) => {
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
-                    const { symbolName, isSynthesizedFromFileName, ambientModuleName } = parseKey(key);
-                    action(info.map(rehydrateCachedInfo), symbolName, isSynthesizedFromFileName, !!ambientModuleName, key);
+                    const { symbolName, ambientModuleName } = parseKey(key);
+                    const rehydrated = info.map(rehydrateCachedInfo);
+                    action(
+                        rehydrated,
+                        preferUppercase => {
+                            return preferUppercase
+                                ? getNameForExportedSymbol(rehydrated[0].symbol, scriptTarget, /*preferUppercase*/ true)
+                                : symbolName;
+                        },
+                        !!ambientModuleName,
+                        key);
                 });
             },
             releaseSymbols: () => {
@@ -200,17 +198,16 @@ namespace ts {
             };
         }
 
-        function key(importedName: string, isSynthesizedFromFileName: boolean, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker): string {
+        function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker): string {
             const moduleKey = ambientModuleName || "";
-            return `${importedName}|${+isSynthesizedFromFileName}|${getSymbolId(skipAlias(symbol, checker))}|${moduleKey}`;
+            return `${importedName}|${getSymbolId(skipAlias(symbol, checker))}|${moduleKey}`;
         }
 
         function parseKey(key: string) {
             const symbolName = key.substring(0, key.indexOf("|"));
-            const isSynthesizedFromFileName = key.charCodeAt(key.indexOf("|", 1) + 1) === CharacterCodes._1;
             const moduleKey = key.substring(key.lastIndexOf("|") + 1);
             const ambientModuleName = moduleKey === "" ? undefined : moduleKey;
-            return { symbolName, isSynthesizedFromFileName, ambientModuleName };
+            return { symbolName, ambientModuleName };
         }
 
         function fileIsGlobalOnly(file: SourceFile) {
@@ -325,7 +322,7 @@ namespace ts {
         const cache = host.getCachedExportInfoMap?.() || createCacheableExportInfoMap({
             getCurrentProgram: () => program,
             getPackageJsonAutoImportProvider: () => host.getPackageJsonAutoImportProvider?.(),
-        });
+        }, getEmitScriptTarget(program.getCompilerOptions()));
 
         if (cache.isUsableByFile(importingFile.path)) {
             host.log?.("getExportInfoMap: cache hit");
@@ -334,7 +331,6 @@ namespace ts {
 
         host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
-        const scriptTarget = getEmitScriptTarget(compilerOptions);
         let moduleCount = 0;
         forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
@@ -352,7 +348,6 @@ namespace ts {
                     moduleFile,
                     defaultInfo.exportKind,
                     isFromPackageJson,
-                    scriptTarget,
                     checker);
             }
             checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
@@ -365,7 +360,6 @@ namespace ts {
                         moduleFile,
                         ExportKind.Named,
                         isFromPackageJson,
-                        scriptTarget,
                         checker);
                 }
             });
@@ -394,12 +388,12 @@ namespace ts {
         if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
     }
 
-    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string, readonly isSynthesizedFromFileName: boolean } | undefined {
+    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-        if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name, isSynthesizedFromFileName: false };
+        if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
 
         const name = getNameForExportDefault(defaultExport);
-        if (name !== undefined) return { symbolForMeaning: defaultExport, name, isSynthesizedFromFileName: false };
+        if (name !== undefined) return { symbolForMeaning: defaultExport, name };
 
         if (defaultExport.flags & SymbolFlags.Alias) {
             const aliased = checker.getImmediateAliasedSymbol(defaultExport);
@@ -414,9 +408,9 @@ namespace ts {
 
         if (defaultExport.escapedName !== InternalSymbolName.Default &&
             defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
-            return { symbolForMeaning: defaultExport, name: defaultExport.getName(), isSynthesizedFromFileName: false };
+            return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
         }
-        return { symbolForMeaning: defaultExport, ...getNameForExportedSymbol(defaultExport, compilerOptions.target) };
+        return { symbolForMeaning: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
     }
 
     function getNameForExportDefault(symbol: Symbol): string | undefined {

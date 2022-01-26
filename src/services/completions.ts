@@ -1544,7 +1544,7 @@ namespace ts.Completions {
             targetSymbol,
             moduleSymbol,
             sourceFile,
-            getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions), isJsxOpeningTagName).name,
+            getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions), isJsxOpeningTagName),
             isJsxOpeningTagName,
             host,
             program,
@@ -2446,24 +2446,16 @@ namespace ts.Completions {
                 preferences,
                 !!importCompletionNode,
                 context => {
-                    exportInfo.forEach(sourceFile.path, (info, symbolName, isSynthesizedFromFileName, isFromAmbientModule, exportMapKey) => {
+                    exportInfo.forEach(sourceFile.path, (info, getSymbolName, isFromAmbientModule, exportMapKey) => {
+                        const symbolName = getSymbolName(/*preferUppercase*/ isRightOfOpenTag);
                         if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
                         if (!isTypeOnlyLocation && !importCompletionNode && !(info[0].targetFlags & SymbolFlags.Value)) return;
                         if (isTypeOnlyLocation && !(info[0].targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return;
-
+                        // Do not try to auto-import something with a lowercase first letter for a JSX tag
                         const firstChar = symbolName.charCodeAt(0);
-                        if (isRightOfOpenTag && (firstChar < CharacterCodes.A || firstChar > CharacterCodes.Z)) {
-                            // This is not going to be a valid identifier for a JSX tag name - we can convert it to one
-                            // if the symbol name was generated from a file name (as with unnamed default exports).
-                            if (isSynthesizedFromFileName && CharacterCodes.a <= firstChar && firstChar <= CharacterCodes.z) {
-                                symbolName = symbolName[0].toUpperCase() + symbolName.substring(1);
-                            }
-                            else {
-                                return;
-                            }
-                        }
+                        if (isRightOfOpenTag && (firstChar < CharacterCodes.A || firstChar > CharacterCodes.Z)) return;
 
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                         if (isCompletionDetailsMatch || !detailsEntryId && charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {

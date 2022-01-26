@@ -70,7 +70,7 @@ namespace ts.codefix {
 
         function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) {
             const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
-            const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions)).name;
+            const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
             const checker = program.getTypeChecker();
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
             const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, /*isJsxTagName*/ false, host, program, preferences, useAutoImportProvider);
