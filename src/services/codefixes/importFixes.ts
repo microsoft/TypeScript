@@ -668,19 +668,22 @@ namespace ts.codefix {
     interface FixesInfo { readonly fixes: readonly ImportFix[]; readonly symbolName: string; }
     function getFixesInfo(context: CodeFixContextBase, errorCode: number, pos: number, useAutoImportProvider: boolean): FixesInfo | undefined {
         const symbolToken = getTokenAtPosition(context.sourceFile, pos);
+        let info;
         if (errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
-            return getFixesInfoForUMDImport(context, symbolToken);
+            info = getFixesInfoForUMDImport(context, symbolToken);
         }
-        if (!isIdentifier(symbolToken)) {
+        else if (!isIdentifier(symbolToken)) {
             return undefined;
         }
-        if (errorCode === Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.code) {
+        else if (errorCode === Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.code) {
             const symbolName = getSymbolName(context.sourceFile, context.program.getTypeChecker(), symbolToken, context.program.getCompilerOptions());
             const fix = getTypeOnlyPromotionFix(context.sourceFile, symbolToken, symbolName, context.program);
             return fix && { fixes: [fix], symbolName };
         }
+        else {
+            info = getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider);
+        }
 
-        const info = getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider);
         const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
         return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, packageJsonImportFilter) };
     }
@@ -723,7 +726,7 @@ namespace ts.codefix {
         return Comparison.EqualTo;
     }
 
-    function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: CodeFixContextBase, token: Node): FixesInfo | undefined {
+    function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: CodeFixContextBase, token: Node): FixesInfo & { fixes: readonly ImportFixWithModuleSpecifier[] } | undefined {
         const checker = program.getTypeChecker();
         const umdSymbol = getUmdSymbol(token, checker);
         if (!umdSymbol) return undefined;
