@@ -16544,7 +16544,7 @@ namespace ts {
 
         function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
             const declaration = type.objectFlags & ObjectFlags.Reference ? (type as TypeReference).node! :
-                type.objectFlags & ObjectFlags.InstantiationExpressionType ? (type as InstantiationExpressionType).node! :
+                type.objectFlags & ObjectFlags.InstantiationExpressionType ? (type as InstantiationExpressionType).node :
                 type.symbol.declarations![0];
             const links = getNodeLinks(declaration);
             const target = type.objectFlags & ObjectFlags.Reference ? links.resolvedType! as DeferredTypeReference :
