@@ -450,7 +450,6 @@ namespace ts.Completions {
             isInSnippetScope,
             isNewIdentifierLocation,
             location,
-            previousToken,
             propertyAccessToConvert,
             keywordFilters,
             literals,
@@ -548,7 +547,7 @@ namespace ts.Completions {
         }
 
         const entryNames = new Set(entries.map(e => e.name));
-        for (const keywordEntry of getContextualKeywords(location, previousToken, contextToken, position)) {
+        for (const keywordEntry of getContextualKeywords(contextToken, position)) {
             if (!entryNames.has(keywordEntry.name)) {
                 insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
             }
@@ -3588,8 +3587,6 @@ namespace ts.Completions {
     }
 
     function getContextualKeywords(
-        _location: Node,
-        _previousToken: Node | undefined,
         contextToken: Node | undefined,
         position: number,
     ): readonly CompletionEntry[] {
