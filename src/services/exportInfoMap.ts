@@ -23,7 +23,6 @@ namespace ts {
         targetFlags: SymbolFlags;
         /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
         isFromPackageJson: boolean;
-        packageName: string | undefined;
     }
 
     interface CachedSymbolExportInfo {
@@ -158,7 +157,7 @@ namespace ts {
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
                     const rehydrated = info.map(rehydrateCachedInfo);
-                    const filtered = rehydrated.filter(isNotShadowedByDeeperNodeModulesPackage);
+                    const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
                     if (filtered.length) {
                         action(
                             filtered,
@@ -207,7 +206,7 @@ namespace ts {
 
         function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
             if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
-            const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName, packageName } = info;
+            const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
             const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
             if (cachedSymbol && cachedModuleSymbol) {
                 return {
@@ -217,7 +216,6 @@ namespace ts {
                     exportKind,
                     targetFlags,
                     isFromPackageJson,
-                    packageName,
                 };
             }
             const checker = (isFromPackageJson
@@ -238,7 +236,6 @@ namespace ts {
                 exportKind,
                 targetFlags,
                 isFromPackageJson,
-                packageName,
             };
         }
 
@@ -275,9 +272,9 @@ namespace ts {
             return true;
         }
 
-        function isNotShadowedByDeeperNodeModulesPackage(info: SymbolExportInfo) {
-            if (!info.packageName || !info.moduleFileName) return true;
-            const packageDeepestNodeModulesPath = packages.get(info.packageName);
+        function isNotShadowedByDeeperNodeModulesPackage(info: SymbolExportInfo, packageName: string | undefined) {
+            if (!packageName || !info.moduleFileName) return true;
+            const packageDeepestNodeModulesPath = packages.get(packageName);
             return !packageDeepestNodeModulesPath || startsWith(info.moduleFileName, packageDeepestNodeModulesPath);
         }
     }
