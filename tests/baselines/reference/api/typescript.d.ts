@@ -2656,6 +2656,7 @@ declare namespace ts {
         ClassOrInterface = 3,
         ContainsSpread = 4194304,
         ObjectRestType = 8388608,
+        InstantiationExpressionType = 16777216,
     }
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
