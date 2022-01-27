@@ -81,11 +81,7 @@ namespace ts.codefix {
             const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
             const checker = program.getTypeChecker();
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
-<<<<<<< HEAD
-            const exportInfo = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, host, program, preferences, useAutoImportProvider);
-=======
-            const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, /*isJsxTagName*/ false, host, program, preferences, useAutoImportProvider);
->>>>>>> main
+            const exportInfo = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, /*isJsxTagName*/ false, host, program, preferences, useAutoImportProvider);
             const useRequire = shouldUseRequire(sourceFile, program);
             const fix = getImportFixForSymbol(sourceFile, exportInfo, moduleSymbol, symbolName, program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
             if (fix) {
