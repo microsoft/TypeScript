@@ -3993,8 +3993,9 @@ namespace ts {
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
-                writeComment(`/// <reference types="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, data: directive.fileName });
+                // Should we elide `resolution-mode` if it matches the mode the currentSourceFile defaults to?
+                writeComment(`/// <reference types="${directive.fileName}" ${directive.resolutionMode ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"` : ""}/>`);
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: !directive.resolutionMode ? BundleFileSectionKind.Type : directive.resolutionMode === ModuleKind.ESNext ? BundleFileSectionKind.TypeResolutionModeImport : BundleFileSectionKind.TypeResolutionModeRequire, data: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {

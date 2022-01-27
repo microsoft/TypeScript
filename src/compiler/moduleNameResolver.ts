@@ -297,7 +297,7 @@ namespace ts {
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
      * is assumed to be the same as root directory of the project.
      */
-    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache, resolutionMode?: SourceFile["impliedNodeFormat"]): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
         if (redirectedReference) {
             options = redirectedReference.commandLine.options;
@@ -305,7 +305,7 @@ namespace ts {
 
         const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
         const perFolderCache = containingDirectory ? cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference) : undefined;
-        let result = perFolderCache && perFolderCache.get(typeReferenceDirectiveName, /*mode*/ undefined);
+        let result = perFolderCache && perFolderCache.get(typeReferenceDirectiveName, /*mode*/ resolutionMode);
         if (result) {
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1, typeReferenceDirectiveName, containingFile);
@@ -340,8 +340,19 @@ namespace ts {
         }
 
         const failedLookupLocations: string[] = [];
-        const features = getDefaultNodeResolutionFeatures(options);
-        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions: ["node", "require", "types"] };
+        let features = getDefaultNodeResolutionFeatures(options);
+        // Unlike `import` statements, whose mode-calculating APIs are all guaranteed to return `undefined` if we're in an un-mode-ed module resolution
+        // setting, type references will return their target mode regardless of options because of how the parser works, so we guard against the mode being
+        // set in a non-modal module resolution setting here. Do note that our behavior is not particularly well defined when these mode-overriding imports
+        // are present in a non-modal project; while in theory we'd like to either ignore the mode or provide faithful modern resolution, depending on what we feel is best,
+        // in practice, not every cache has the options available to intelligently make the choice to ignore the mode request, and it's unclear how modern "faithful modern
+        // resolution" should be (`node12`? `nodenext`?). As such, witnessing a mode-overriding triple-slash reference in a non-modal module resolution
+        // context should _probably_ be an error - and that should likely be handled by the `Program`.
+        if (resolutionMode === ModuleKind.ESNext && (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext)) {
+            features |= NodeResolutionFeatures.EsmMode;
+        }
+        const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions };
         let resolved = primaryLookup();
         let primary = true;
         if (!resolved) {
@@ -362,7 +373,7 @@ namespace ts {
             };
         }
         result = { resolvedTypeReferenceDirective, failedLookupLocations };
-        perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ undefined, result);
+        perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
         if (traceEnabled) traceResult(result);
         return result;
 
@@ -733,11 +744,15 @@ namespace ts {
     }
 
     /* @internal */
-    export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly string[], values: readonly V[]): ModeAwareCache<V> {
+    export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly string[] | readonly FileReference[], values: readonly V[]): ModeAwareCache<V> {
         Debug.assert(keys.length === values.length);
         const map = createModeAwareCache<V>();
         for (let i = 0; i < keys.length; ++i) {
-            map.set(keys[i], getModeForResolutionAtIndex(file, i), values[i]);
+            const entry = keys[i];
+            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+            const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
+            const mode = !isString(entry) ? entry.resolutionMode || file.impliedNodeFormat : getModeForResolutionAtIndex(file, i);
+            map.set(name, mode, values[i]);
         }
         return map;
     }
