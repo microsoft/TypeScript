@@ -131,6 +131,43 @@ function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
     let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 }
 
+function makeBox<T>(value: T) {
+    return { value };
+}
+
+type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
+type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
+
+type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
+type StringBox = Box<string>;  // { value: string }
+
+type A<U> = InstanceType<typeof Array<U>>;  // U[]
+
+declare const g1: {
+    <T>(a: T): { a: T };
+    new <U>(b: U): { b: U };
+}
+
+type T30<V> = typeof g1<V>;  // { (a: V) => { a: V }; new (b: V) => { b: V }; }
+type T31<A> = ReturnType<T30<A>>;  // { a: A }
+type T32<B> = InstanceType<T30<B>>;  // { b: B }
+
+declare const g2: {
+    <T extends string>(a: T): T;
+    new <T extends number>(b: T): T;
+}
+
+type T40<U extends string> = typeof g2<U>;  // Error
+type T41<U extends number> = typeof g2<U>;  // Error
+
+declare const g3: {
+    <T extends string>(a: T): T;
+    new <T extends number, Q>(b: T): T;
+}
+
+type T50<U extends string> = typeof g3<U>;  // (a: U) => U
+type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
+
 
 //// [instantiationExpressions.js]
 "use strict";
@@ -221,6 +258,9 @@ function f36(f) {
 function f37(f) {
     var fs = (f); // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 }
+function makeBox(value) {
+    return { value: value };
+}
 
 
 //// [instantiationExpressions.d.ts]
@@ -301,3 +341,34 @@ declare function f34(f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])
 declare function f35(f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])): void;
 declare function f36(f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])): void;
 declare function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])): void;
+declare function makeBox<T>(value: T): {
+    value: T;
+};
+declare type BoxFunc<T> = typeof makeBox<T>;
+declare type StringBoxFunc = BoxFunc<string>;
+declare type Box<T> = ReturnType<typeof makeBox<T>>;
+declare type StringBox = Box<string>;
+declare type A<U> = InstanceType<typeof Array<U>>;
+declare const g1: {
+    <T>(a: T): {
+        a: T;
+    };
+    new <U>(b: U): {
+        b: U;
+    };
+};
+declare type T30<V> = typeof g1<V>;
+declare type T31<A> = ReturnType<T30<A>>;
+declare type T32<B> = InstanceType<T30<B>>;
+declare const g2: {
+    <T extends string>(a: T): T;
+    new <T extends number>(b: T): T;
+};
+declare type T40<U extends string> = typeof g2<U>;
+declare type T41<U extends number> = typeof g2<U>;
+declare const g3: {
+    <T extends string>(a: T): T;
+    new <T extends number, Q>(b: T): T;
+};
+declare type T50<U extends string> = typeof g3<U>;
+declare type T51<U extends number> = typeof g3<U, any>;
