@@ -13,8 +13,8 @@ Issues that ask questions answered in the FAQ will be closed without elaboration
 Some search tips:
  * *Don't* restrict your search to only open issues. An issue with a title similar to yours may have been closed as a duplicate of one with a less-findable title.
  * Check for synonyms. For example, if your bug involves an interface, it likely also occurs with type aliases or classes.
- * Search for the title of the issue you're about to log. This sounds obvious but 80% of the time this is sufficient to find a duplicate when one exists.
- * Read more than the first page of results. Many bugs here use the same words so relevancy sorting is not particularly strong.
+ * Search for the title of the issue you're about to log. This sounds obvious, but 80% of the time, this is sufficient to find a duplicate when one exists.
+ * Read more than the first page of the results. Many bugs here use the same words, so relevancy sorting is not particularly strong.
  * If you have a crash, search for the first few topmost function names shown in the call stack.
 
 ## 3. Do you have a question?
@@ -41,20 +41,20 @@ In general, things we find useful when reviewing suggestions are:
 * A description of the problem you're trying to solve
 * An overview of the suggested solution
 * Examples of how the suggestion would work in various places
-  * Code examples showing e.g. "this would be an error, this wouldn't"
+  * Code examples showing e.g., "this would be an error, this wouldn't"
   * Code examples showing the generated JavaScript (if applicable)
-* If relevant, precedent in other languages can be useful for establishing context and expected behavior
+* If relevant, precedent in other languages can be useful for establishing the context and expected behavior
 
 # Instructions for Contributing Code
 
 ## What You'll Need
 
-0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
-1. [A GitHub account](https://github.com/join).
-2. A copy of the TypeScript code. See the next steps for instructions.
-3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
-4. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
-5. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
+1. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
+2. [A GitHub account](https://github.com/join).
+3. A copy of the TypeScript code. See the next steps for instructions.
+4. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
+5. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
+6. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
 
 ## Get Started
 
@@ -107,7 +107,7 @@ Your pull request should:
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
-* Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
+* Follow the code conventions described in the [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Contributing `lib.d.ts` fixes
@@ -115,7 +115,7 @@ Your pull request should:
 There are three relevant locations to be aware of when it comes to TypeScript's library declaration files:
 
 * `src/lib`: the location of the sources themselves.
-* `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
+* `lib`: the location of the last-known-good (LKG) versions of the files, which are updated periodically.
 * `built/local`: the build output location, including where `src/lib` files will be copied to.
 
 Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/main/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
@@ -130,7 +130,7 @@ The files in `lib/` are used to bootstrap compilation and usually **should not**
 
 ### Modifying generated library files
 
-The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
+The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator.
 
 ## Running the Tests
 
@@ -146,7 +146,7 @@ This will run all tests; to run only a specific subset of tests, use:
 gulp runtests --tests=<regex>
 ```
 
-e.g. to run all compiler baseline tests:
+e.g., to run all compiler baseline tests:
 
 ```Shell
 gulp runtests --tests=compiler
