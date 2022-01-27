@@ -52,7 +52,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("1", {
   name: "MyClass",
   source: "../packages/mylib",
-  description: `Import 'MyClass' from module "../packages/mylib"`,
+  description: `Add import from "../packages/mylib"`,
   data: {
     exportName: "MyClass",
     fileName: "/packages/mylib/index.ts",
