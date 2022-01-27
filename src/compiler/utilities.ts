@@ -7501,4 +7501,68 @@ namespace ts {
     export function isThisTypeParameter(type: Type): boolean {
         return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
     }
+
+    export interface NodeModulePathParts {
+        readonly topLevelNodeModulesIndex: number;
+        readonly topLevelPackageNameIndex: number;
+        readonly packageRootIndex: number;
+        readonly fileNameIndex: number;
+    }
+    export function getNodeModulePathParts(fullPath: string): NodeModulePathParts | undefined {
+        // If fullPath can't be valid module file within node_modules, returns undefined.
+        // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+        // Returns indices:                       ^            ^                                                      ^             ^
+
+        let topLevelNodeModulesIndex = 0;
+        let topLevelPackageNameIndex = 0;
+        let packageRootIndex = 0;
+        let fileNameIndex = 0;
+
+        const enum States {
+            BeforeNodeModules,
+            NodeModules,
+            Scope,
+            PackageContent
+        }
+
+        let partStart = 0;
+        let partEnd = 0;
+        let state = States.BeforeNodeModules;
+
+        while (partEnd >= 0) {
+            partStart = partEnd;
+            partEnd = fullPath.indexOf("/", partStart + 1);
+            switch (state) {
+                case States.BeforeNodeModules:
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
+                        topLevelNodeModulesIndex = partStart;
+                        topLevelPackageNameIndex = partEnd;
+                        state = States.NodeModules;
+                    }
+                    break;
+                case States.NodeModules:
+                case States.Scope:
+                    if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                        state = States.Scope;
+                    }
+                    else {
+                        packageRootIndex = partEnd;
+                        state = States.PackageContent;
+                    }
+                    break;
+                case States.PackageContent:
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
+                        state = States.NodeModules;
+                    }
+                    else {
+                        state = States.PackageContent;
+                    }
+                    break;
+            }
+        }
+
+        fileNameIndex = partStart;
+
+        return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
+    }
 }

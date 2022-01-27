@@ -32,6 +32,7 @@ namespace ts {
         symbolTableKey: __String;
         moduleName: string;
         moduleFile: SourceFile | undefined;
+        packageName: string | undefined;
 
         // SymbolExportInfo, but optional symbols
         readonly symbol: Symbol | undefined;
@@ -63,6 +64,17 @@ namespace ts {
         let exportInfoId = 1;
         const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
+        /**
+         * Key: node_modules package name (no @types).
+         * Value: path to deepest node_modules folder seen that is
+         * both visible to `usableByFileName` and contains the package.
+         *
+         * Later, we can see if a given SymbolExportInfo is shadowed by
+         * a another installation of the same package in a deeper
+         * node_modules folder by seeing if its path starts with the
+         * value stored here.
+         */
+        const packages = new Map<string, string>();
         let usableByFileName: Path | undefined;
         const cache: ExportInfoMap = {
             isUsableByFile: importingFile => importingFile === usableByFileName,
@@ -77,6 +89,29 @@ namespace ts {
                     cache.clear();
                     usableByFileName = importingFile;
                 }
+
+                let packageName;
+                if (moduleFile) {
+                    const nodeModulesPathParts = getNodeModulePathParts(moduleFile.fileName);
+                    if (nodeModulesPathParts) {
+                        const { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex } = nodeModulesPathParts;
+                        packageName = unmangleScopedPackageName(getPackageNameFromTypesPackageName(moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex)));
+                        if (startsWith(importingFile, moduleFile.path.substring(0, topLevelNodeModulesIndex))) {
+                            const prevDeepestNodeModulesPath = packages.get(packageName);
+                            const nodeModulesPath = moduleFile.fileName.substring(0, topLevelPackageNameIndex);
+                            if (prevDeepestNodeModulesPath) {
+                                const prevDeepestNodeModulesIndex = prevDeepestNodeModulesPath.indexOf(nodeModulesPathPart);
+                                if (topLevelNodeModulesIndex > prevDeepestNodeModulesIndex) {
+                                    packages.set(packageName, nodeModulesPath);
+                                }
+                            }
+                            else {
+                                packages.set(packageName, nodeModulesPath);
+                            }
+                        }
+                    }
+                }
+
                 const isDefault = exportKind === ExportKind.Default;
                 const namedSymbol = isDefault && getLocalSymbolForExportDefault(symbol) || symbol;
                 // 1. A named export must be imported by its key in `moduleSymbol.exports` or `moduleSymbol.members`.
@@ -104,6 +139,7 @@ namespace ts {
                     moduleName,
                     moduleFile,
                     moduleFileName: moduleFile?.fileName,
+                    packageName,
                     exportKind,
                     targetFlags: target.flags,
                     isFromPackageJson,
@@ -121,17 +157,20 @@ namespace ts {
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
                     const rehydrated = info.map(rehydrateCachedInfo);
-                    action(
-                        rehydrated,
-                        preferCapitalized => {
-                            const { symbol, exportKind } = rehydrated[0];
-                            const namedSymbol = exportKind === ExportKind.Default && getLocalSymbolForExportDefault(symbol) || symbol;
-                            return preferCapitalized
-                                ? getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
-                                : symbolName;
-                        },
-                        !!ambientModuleName,
-                        key);
+                    const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
+                    if (filtered.length) {
+                        action(
+                            filtered,
+                            preferCapitalized => {
+                                const { symbol, exportKind } = rehydrated[0];
+                                const namedSymbol = exportKind === ExportKind.Default && getLocalSymbolForExportDefault(symbol) || symbol;
+                                return preferCapitalized
+                                    ? getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
+                                    : symbolName;
+                            },
+                            !!ambientModuleName,
+                            key);
+                    }
                 });
             },
             releaseSymbols: () => {
@@ -231,6 +270,12 @@ namespace ts {
                 }
             }
             return true;
+        }
+
+        function isNotShadowedByDeeperNodeModulesPackage(info: SymbolExportInfo, packageName: string | undefined) {
+            if (!packageName || !info.moduleFileName) return true;
+            const packageDeepestNodeModulesPath = packages.get(packageName);
+            return !packageDeepestNodeModulesPath || startsWith(info.moduleFileName, packageDeepestNodeModulesPath);
         }
     }
 
