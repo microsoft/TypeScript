@@ -203,6 +203,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always" | "exceptZero" | undefined;
         unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
+        currencyDisplay?: string | undefined;
+        currencySign?: string | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -211,6 +213,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always" | "exceptZero";
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface DateTimeFormatOptions {

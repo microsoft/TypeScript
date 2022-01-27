@@ -1090,7 +1090,7 @@ namespace ts {
                 Debug.type<AssertEntry>(node);
                 return factory.updateAssertEntry(node,
                     nodeVisitor(node.name, visitor, isAssertionKey),
-                    nodeVisitor(node.value, visitor, isStringLiteral));
+                    nodeVisitor(node.value, visitor, isExpressionNode));
 
             case SyntaxKind.ImportClause:
                 Debug.type<ImportClause>(node);

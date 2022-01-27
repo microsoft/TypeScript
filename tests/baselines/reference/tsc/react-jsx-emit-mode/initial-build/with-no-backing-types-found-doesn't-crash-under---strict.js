@@ -47,7 +47,7 @@ Output::
 [7m [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error in /src/project/src/index.tsx:1
+Found 1 error in src/project/src/index.tsx[90m:1[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
