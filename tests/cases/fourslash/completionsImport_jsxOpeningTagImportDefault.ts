@@ -29,7 +29,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "Component",
   source: "/component",
-  description: `Import default 'Component' from module "./component"`,
+  description: `Add import from "./component"`,
   newFileContent:
 `import Component from "./component";
 
