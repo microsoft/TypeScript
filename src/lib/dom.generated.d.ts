@@ -1903,7 +1903,7 @@ interface AbortSignal extends EventTarget {
 declare var AbortSignal: {
     prototype: AbortSignal;
     new(): AbortSignal;
-    abort(reason?: any): AbortSignal;
+    // abort(): AbortSignal; - To be re-added in the future
 };
 
 interface AbstractRange {
