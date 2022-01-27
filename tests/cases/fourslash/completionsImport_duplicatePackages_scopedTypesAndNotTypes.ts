@@ -3,27 +3,27 @@
 // @module: commonjs
 // @esModuleInterop: true
 
-// @Filename: /node_modules/@types/react-dom/package.json
+// @Filename: /node_modules/@types/scope__react-dom/package.json
 //// { "name": "react-dom", "version": "1.0.0", "types": "./index.d.ts" }
 
-// @Filename: /node_modules/@types/react-dom/index.d.ts
+// @Filename: /node_modules/@types/scope__react-dom/index.d.ts
 //// import * as React from "react";
 //// export function render(): void;
 
-// @Filename: /node_modules/@types/react/package.json
+// @Filename: /node_modules/@types/scope__react/package.json
 //// { "name": "react", "version": "1.0.0", "types": "./index.d.ts" }
 
-// @Filename: /node_modules/@types/react/index.d.ts
+// @Filename: /node_modules/@types/scope__react/index.d.ts
 //// import "./other";
 //// export declare function useState(): void;
 
-// @Filename: /node_modules/@types/react/other.d.ts
+// @Filename: /node_modules/@types/scope__react/other.d.ts
 //// export declare function useRef(): void;
 
-// @Filename: /packages/a/node_modules/@types/react/package.json
+// @Filename: /packages/a/node_modules/@scope/react/package.json
 //// { "name": "react", "version": "1.0.1", "types": "./index.d.ts" }
 
-// @Filename: /packages/a/node_modules/@types/react/index.d.ts
+// @Filename: /packages/a/node_modules/@scope/react/index.d.ts
 //// export declare function useState(): void;
 
 // @Filename: /packages/a/index.ts
@@ -31,15 +31,21 @@
 //// import "react";
 
 // @Filename: /packages/a/foo.ts
-//// useState/**/
+//// /**/
 
 goTo.marker("");
 verify.completions({
   marker: "",
   exact: completion.globalsPlus([{
+    name: "render",
+    source: "@scope/react-dom",
+    sourceDisplay: "@scope/react-dom",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions,
+  }, {
     name: "useState",
-    source: "react",
-    sourceDisplay: "react",
+    source: "@scope/react",
+    sourceDisplay: "@scope/react",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions,
   }]),

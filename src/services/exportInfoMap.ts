@@ -92,17 +92,16 @@ namespace ts {
 
                 let packageName;
                 if (moduleFile) {
-                    const nodeModulesIndex = moduleFile.fileName.indexOf(nodeModulesPathPart);
-                    if (nodeModulesIndex !== -1) {
-                        const isTypes = moduleFile.fileName.substring(nodeModulesIndex + nodeModulesPathPart.length).indexOf("@types/") === 0;
-                        const nextSlash = moduleFile.fileName.indexOf(directorySeparator, nodeModulesIndex + nodeModulesPathPart.length + (isTypes ? "@types/".length : 0) + 1);
-                        packageName = moduleFile.fileName.substring(nodeModulesIndex + nodeModulesPathPart.length + (isTypes ? "@types/".length : 0), nextSlash);
-                        if (startsWith(importingFile, moduleFile.path.substring(0, nodeModulesIndex))) {
+                    const nodeModulesPathParts = getNodeModulePathParts(moduleFile.fileName);
+                    if (nodeModulesPathParts) {
+                        const { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex } = nodeModulesPathParts;
+                        packageName = unmangleScopedPackageName(getPackageNameFromTypesPackageName(moduleFile.fileName.substring(topLevelPackageNameIndex + 1, packageRootIndex)));
+                        if (startsWith(importingFile, moduleFile.path.substring(0, topLevelNodeModulesIndex))) {
                             const prevDeepestNodeModulesPath = packages.get(packageName);
-                            const nodeModulesPath = moduleFile.fileName.substring(0, nodeModulesIndex + nodeModulesPathPart.length);
+                            const nodeModulesPath = moduleFile.fileName.substring(0, topLevelPackageNameIndex);
                             if (prevDeepestNodeModulesPath) {
                                 const prevDeepestNodeModulesIndex = prevDeepestNodeModulesPath.indexOf(nodeModulesPathPart);
-                                if (nodeModulesIndex > prevDeepestNodeModulesIndex) {
+                                if (topLevelNodeModulesIndex > prevDeepestNodeModulesIndex) {
                                     packages.set(packageName, nodeModulesPath);
                                 }
                             }
