@@ -1,0 +1,70 @@
+=== tests/cases/compiler/enumBasics2.ts ===
+enum Foo {
+>Foo : Foo
+
+  a = 2,
+>a : Foo
+>2 : 2
+
+  b = 3,
+>b : Foo
+>3 : 3
+
+  x = a.b,       // should error
+>x : Foo
+>a.b : any
+>a : Foo
+>b : any
+
+  y = b.a,       // should error
+>y : Foo
+>b.a : any
+>b : Foo
+>a : any
+
+  z = y.x * a.x, // should error
+>z : Foo
+>y.x * a.x : number
+>y.x : any
+>y : Foo
+>x : any
+>a.x : any
+>a : Foo
+>x : any
+}
+
+enum Bar {
+>Bar : Bar
+
+  a = (1).valueOf(),   // ok
+>a : Bar
+>(1).valueOf() : number
+>(1).valueOf : () => number
+>(1) : 1
+>1 : 1
+>valueOf : () => number
+
+  b = Foo.a,           // ok
+>b : Bar
+>Foo.a : Foo
+>Foo : typeof Foo
+>a : Foo
+
+  c = Foo.a.valueOf(), // ok
+>c : Bar
+>Foo.a.valueOf() : number
+>Foo.a.valueOf : () => number
+>Foo.a : Foo
+>Foo : typeof Foo
+>a : Foo
+>valueOf : () => number
+
+  d = Foo.a.a,         // should error
+>d : Bar
+>Foo.a.a : any
+>Foo.a : Foo
+>Foo : typeof Foo
+>a : Foo
+>a : any
+}
+
