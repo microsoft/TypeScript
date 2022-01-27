@@ -14,7 +14,7 @@
 
 goTo.marker("$")
 verify.codeFixAvailable([
-    { description: "Import 'bbb' from module \"./library.js\"" },
+    { description: "Add import from \"./library.js\"" },
     { description: "Ignore this error message" },
     { description: "Disable checking for this file" },
     { description: "Convert to ES module" },
