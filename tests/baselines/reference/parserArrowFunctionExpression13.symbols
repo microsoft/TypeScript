@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression13.ts ===
+a ? () => a() : (): any => null;
+>any : Symbol(any, Decl(parserArrowFunctionExpression13.ts, 0, 19))
+

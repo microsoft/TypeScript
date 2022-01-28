@@ -4538,7 +4538,6 @@ namespace ts {
             // false side, we may still be within the true side of a parent conditional
             // expression, so don't allow it to be a return type either.
             if (parsingConditionalExpression && token() === SyntaxKind.ColonToken) {
-                Debug.assert(!allowAmbiguity);
                 return undefined;
             }
 
