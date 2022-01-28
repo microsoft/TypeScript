@@ -1,23 +1,14 @@
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts(1,1): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts(1,30): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts(1,37): error TS1109: Expression expected.
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts(1,40): error TS2304: Cannot find name 'd'.
-tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts(1,44): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts(1,46): error TS2304: Cannot find name 'e'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts (6 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression14.ts (3 errors) ====
     a() ? (b: number, c?: string): void => d() : e;
     ~
 !!! error TS2304: Cannot find name 'a'.
-                                 ~
-!!! error TS1109: Expression expected.
-                                        ~~
-!!! error TS1109: Expression expected.
                                            ~
 !!! error TS2304: Cannot find name 'd'.
-                                               ~
-!!! error TS1005: ';' expected.
                                                  ~
 !!! error TS2304: Cannot find name 'e'.
     

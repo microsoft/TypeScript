@@ -4304,7 +4304,7 @@ namespace ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             return triState === Tristate.True ?
-                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, parsingConditionalExpression) :
+                parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ true, /*parsingConditionalExpression*/ false) :
                 tryParse(() => parsePossibleParenthesizedArrowFunctionExpression(parsingConditionalExpression));
         }
 
