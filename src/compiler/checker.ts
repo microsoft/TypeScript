@@ -24993,6 +24993,10 @@ namespace ts {
         }
 
         function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
+            if (isThisInTypeQuery(node)) {
+                return checkThisExpression(node);
+            }
+
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
                 return errorType;
@@ -34018,7 +34022,7 @@ namespace ts {
             }
             switch (kind) {
                 case SyntaxKind.Identifier:
-                    return isThisInTypeQuery(node) ? checkThisExpression(node) : checkIdentifier(node as Identifier, checkMode);
+                    return checkIdentifier(node as Identifier, checkMode);
                 case SyntaxKind.PrivateIdentifier:
                     return checkPrivateIdentifierExpression(node as PrivateIdentifier);
                 case SyntaxKind.ThisKeyword:
