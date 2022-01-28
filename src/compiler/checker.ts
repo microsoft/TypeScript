@@ -2235,27 +2235,21 @@ namespace ts {
                         error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(errorLocation as Identifier));
                     }
                 }
-                if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias) {
-                    checkSymbolUsageInExpressionContext(result, name, errorLocation);
+                if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
+                    const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
+                    if (typeOnlyDeclaration) {
+                        const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                            ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
+                            : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
+                        const unescapedName = unescapeLeadingUnderscores(name);
+                        addTypeOnlyDeclarationRelatedInfo(
+                            error(errorLocation, message, unescapedName),
+                            typeOnlyDeclaration,
+                            unescapedName);
+                    }
                 }
             }
             return result;
-        }
-
-        function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node) {
-            if (!isValidTypeOnlyAliasUseSite(useSite)) {
-                const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
-                if (typeOnlyDeclaration) {
-                    const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
-                        ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
-                        : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
-                    const unescapedName = unescapeLeadingUnderscores(name);
-                    addTypeOnlyDeclarationRelatedInfo(
-                        error(useSite, message, unescapedName),
-                        typeOnlyDeclaration,
-                        unescapedName);
-                }
-            }
         }
 
         function addTypeOnlyDeclarationRelatedInfo(diagnostic: Diagnostic, typeOnlyDeclaration: TypeOnlyCompatibleAliasDeclaration | undefined, unescapedName: string) {

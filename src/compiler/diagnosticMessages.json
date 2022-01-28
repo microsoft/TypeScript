@@ -6354,17 +6354,13 @@
         "category": "Message",
         "code": 90012
     },
-    "Import '{0}' from module \"{1}\"": {
+    "Import '{0}' from \"{1}\"": {
         "category": "Message",
         "code": 90013
     },
     "Change '{0}' to '{1}'": {
         "category": "Message",
         "code": 90014
-    },
-    "Add '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90015
     },
     "Declare property '{0}'": {
         "category": "Message",
@@ -6430,14 +6426,6 @@
         "category": "Message",
         "code": 90031
     },
-    "Import default '{0}' from module \"{1}\"": {
-        "category": "Message",
-        "code": 90032
-    },
-    "Add default import '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90033
-    },
     "Add parameter name": {
         "category": "Message",
         "code": 90034
@@ -6473,6 +6461,22 @@
     "Includes imports of types referenced by '{0}'": {
         "category": "Message",
         "code": 90054
+    },
+    "Remove 'type' from import declaration from \"{0}\"": {
+        "category": "Message",
+        "code": 90055
+    },
+    "Remove 'type' from import of '{0}' from \"{1}\"": {
+        "category": "Message",
+        "code": 90056
+    },
+    "Add import from \"{0}\"": {
+        "category": "Message",
+        "code": 90057
+    },
+    "Update import from \"{0}\"": {
+        "category": "Message",
+        "code": 90058
     },
 
     "Convert function to an ES2015 class": {

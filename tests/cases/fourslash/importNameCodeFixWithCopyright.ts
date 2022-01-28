@@ -38,7 +38,7 @@
 
 goTo.file("/b.ts");
 verify.codeFix({
-    description: ignoreInterpolations(ts.Diagnostics.Import_0_from_module_1),
+    description: ignoreInterpolations(ts.Diagnostics.Add_import_from_0),
     newFileContent:
         `/*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -52,7 +52,7 @@ export class B extends A { }`,
 
 goTo.file("/c.ts");
 verify.codeFix({
-    description: ignoreInterpolations(ts.Diagnostics.Import_0_from_module_1),
+    description: ignoreInterpolations(ts.Diagnostics.Add_import_from_0),
     newFileContent:
         `/*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -70,7 +70,7 @@ export class C extends A { }`,
 
 goTo.file("/d.ts");
 verify.codeFix({
-    description: ignoreInterpolations(ts.Diagnostics.Import_0_from_module_1),
+    description: ignoreInterpolations(ts.Diagnostics.Add_import_from_0),
     newFileContent:
         `/*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
