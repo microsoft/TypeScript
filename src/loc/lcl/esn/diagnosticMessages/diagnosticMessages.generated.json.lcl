@@ -867,12 +867,18 @@
       <Item ItemId=";A_super_call_must_be_a_root_level_statement_within_a_constructor_of_a_derived_class_that_contains_in_2401" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una llamada "super" debe ser una instrucción de nivel raíz dentro de un constructor de una clase derivada que contiene propiedades inicializadas, propiedades de parámetros o identificadores privados.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";A_super_call_must_be_the_first_statement_in_the_constructor_to_refer_to_super_or_this_when_a_derived_2376" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una llamada "super" debe ser la primera instrucción del constructor para hacer referencia a "super" o "this" cuando una clase derivada contiene propiedades inicializadas, propiedades de parámetro o identificadores privados.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2136,6 +2142,9 @@
       <Item ItemId=";An_object_literal_cannot_have_multiple_properties_with_the_same_name_1117" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An object literal cannot have multiple properties with the same name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un literal de objeto no puede tener varias propiedades con el mismo nombre.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2928,6 +2937,9 @@
       <Item ItemId=";Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function_2311" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Did you mean to write this in an async function?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[No se puede encontrar el nombre "{0}". ¿Ha querido escribir esto en una función asincrónica?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3627,6 +3639,9 @@
       <Item ItemId=";Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_w_4124" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La opción del compilador "{0}" del valor "{1}" es inestable. Use TypeScript nocturno para silenciar este error. Intente actualizar con "npm install -D typescript@next".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5265,6 +5280,9 @@
       <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las importaciones dinámicas solo admiten un segundo argumento cuando la opción "--module" está establecida en "esnext" o "nodenext".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5787,6 +5805,9 @@
       <Item ItemId=";Errors_Files_6041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Errors  Files]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Archivos de errores]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6570,12 +6591,18 @@
       <Item ItemId=";Found_0_errors_in_1_files_6261" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found {0} errors in {1} files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Se han encontrado {0} errores en {1} archivos.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Found_0_errors_in_the_same_file_starting_at_Colon_1_6260" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found {0} errors in the same file, starting at: {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Se han encontrado {0} errores en el mismo archivo, empezando por: {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6600,6 +6627,9 @@
       <Item ItemId=";Found_1_error_in_1_6259" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found 1 error in {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Se ha encontrado 1 error en {1}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7113,18 +7143,27 @@
       <Item ItemId=";Import_assertion_values_must_be_string_literal_expressions_2837" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import assertion values must be string literal expressions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Los valores de aserción de importación deben ser expresiones literales de cadena.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls_2836" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import assertions are not allowed on statements that transpile to commonjs 'require' calls.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las aserciones de importación no están permitidas en instrucciones que se transpilan a llamadas "requeridas" de commonjs.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext_2821" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las aserciones de importación solo se admiten cuando la opción "--module" está establecida en "esnext" o "nodenext".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7362,6 +7401,9 @@
       <Item ItemId=";Includes_imports_of_types_referenced_by_0_90054" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Includes imports of types referenced by '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Incluye importaciones de tipos a los que hace referencia "{0}"]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10617,12 +10659,18 @@
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2834" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones EcmaScript cuando "--moduleResolution" es "node12" o "nodenext". Considere la posibilidad de agregar una extensión a la ruta de acceso de importación.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2835" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las rutas de acceso de importación relativas necesitan extensiones de archivo explícitas en las importaciones EcmaScript cuando "--moduleResolution" es "node12" o "nodenext". ¿Quería decir "{0}"?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15771,6 +15819,9 @@
       <Item ItemId=";catch_or_finally_expected_1472" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['catch' or 'finally' expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[se esperaba "catch" o "finally".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
