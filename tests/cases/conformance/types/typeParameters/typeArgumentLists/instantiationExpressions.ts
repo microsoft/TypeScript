@@ -133,6 +133,10 @@ function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
     let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 }
 
+function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
+    let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+}
+
 function makeBox<T>(value: T) {
     return { value };
 }

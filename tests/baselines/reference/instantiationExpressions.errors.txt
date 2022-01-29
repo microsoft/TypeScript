@@ -12,9 +12,9 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(114,16): error TS2635: Type '{ x: string; } | { y: string; }' has no signatures for which the type argument list is applicable.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(126,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(130,16): error TS2635: Type 'new (a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(159,40): error TS2344: Type 'U' does not satisfy the constraint 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(163,40): error TS2344: Type 'U' does not satisfy the constraint 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(160,40): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(164,40): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
 
 
@@ -177,6 +177,10 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
         let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
                    ~~~~~~
 !!! error TS2635: Type 'new (a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
+        let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
     }
     
     function makeBox<T>(value: T) {

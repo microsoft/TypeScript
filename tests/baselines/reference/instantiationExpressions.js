@@ -131,6 +131,10 @@ function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
     let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 }
 
+function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
+    let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+}
+
 function makeBox<T>(value: T) {
     return { value };
 }
@@ -258,6 +262,9 @@ function f36(f) {
 function f37(f) {
     var fs = (f); // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
 }
+function f38(f) {
+    var fs = (f); // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+}
 function makeBox(value) {
     return { value: value };
 }
@@ -341,6 +348,7 @@ declare function f34(f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])
 declare function f35(f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])): void;
 declare function f36(f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])): void;
 declare function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])): void;
+declare function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])): void;
 declare function makeBox<T>(value: T): {
     value: T;
 };
