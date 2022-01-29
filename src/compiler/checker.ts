@@ -31410,53 +31410,59 @@ namespace ts {
                 isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) :
                 checkExpression(node.exprName);
             const typeArguments = node.typeArguments;
-            if (!some(typeArguments)) {
+            if (exprType === silentNeverType || isErrorType(exprType) || !some(typeArguments)) {
                 return exprType;
-            }
-            const funcType = getApparentType(exprType);
-            if (funcType === silentNeverType || isErrorType(funcType)) {
-                return funcType;
             }
             let hasSomeApplicableSignature = false;
             let nonApplicableType: Type | undefined;
-            let hasSignatures: boolean;
-            let hasApplicableSignature: boolean;
-            const result = mapType(funcType, getInstantiatedType);
-            const errorType = hasSomeApplicableSignature ? nonApplicableType : funcType;
+            const result = getInstantiatedType(exprType);
+            const errorType = hasSomeApplicableSignature ? nonApplicableType : exprType;
             if (errorType) {
                 diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable, typeToString(errorType)));
             }
             return result;
 
             function getInstantiatedType(type: Type): Type {
-                hasSignatures = false;
-                hasApplicableSignature = false;
-                const result = getInstantiatedTypeWorker(type);
+                let hasSignatures = false;
+                let hasApplicableSignature = false;
+                const result = getInstantiatedTypePart(type);
                 hasSomeApplicableSignature ||= hasApplicableSignature;
                 if (hasSignatures && !hasApplicableSignature) {
                     nonApplicableType ??= type;
                 }
                 return result;
-            }
 
-            function getInstantiatedTypeWorker(type: Type): Type {
-                if (type.flags & TypeFlags.Object) {
-                    const resolved = resolveStructuredTypeMembers(type as ObjectType);
-                    const callSignatures = getInstantiatedSignatures(resolved.callSignatures);
-                    const constructSignatures = getInstantiatedSignatures(resolved.constructSignatures);
-                    hasSignatures ||= resolved.callSignatures.length !== 0 || resolved.constructSignatures.length !== 0;
-                    hasApplicableSignature ||= callSignatures.length !== 0 || constructSignatures.length !== 0;
-                    if (callSignatures !== resolved.callSignatures || constructSignatures !== resolved.constructSignatures) {
-                        const result = createAnonymousType(undefined, resolved.members, callSignatures, constructSignatures, resolved.indexInfos) as ResolvedType & InstantiationExpressionType;
-                        result.objectFlags |= ObjectFlags.InstantiationExpressionType;
-                        result.node = node;
-                        return result;
+                function getInstantiatedTypePart(type: Type): Type {
+                    if (type.flags & TypeFlags.Object) {
+                        const resolved = resolveStructuredTypeMembers(type as ObjectType);
+                        const callSignatures = getInstantiatedSignatures(resolved.callSignatures);
+                        const constructSignatures = getInstantiatedSignatures(resolved.constructSignatures);
+                        hasSignatures ||= resolved.callSignatures.length !== 0 || resolved.constructSignatures.length !== 0;
+                        hasApplicableSignature ||= callSignatures.length !== 0 || constructSignatures.length !== 0;
+                        if (callSignatures !== resolved.callSignatures || constructSignatures !== resolved.constructSignatures) {
+                            const result = createAnonymousType(undefined, resolved.members, callSignatures, constructSignatures, resolved.indexInfos) as ResolvedType & InstantiationExpressionType;
+                            result.objectFlags |= ObjectFlags.InstantiationExpressionType;
+                            result.node = node;
+                            return result;
+                        }
                     }
+                    else if (type.flags & TypeFlags.InstantiableNonPrimitive) {
+                        const constraint = getBaseConstraintOfType(type);
+                        if (constraint) {
+                            const instantiated = getInstantiatedTypePart(constraint);
+                            if (instantiated !== constraint) {
+                                return instantiated;
+                            }
+                        }
+                    }
+                    else if (type.flags & TypeFlags.Union) {
+                        return mapType(type, getInstantiatedType);
+                    }
+                    else if (type.flags & TypeFlags.Intersection) {
+                        return getIntersectionType(sameMap((type as IntersectionType).types, getInstantiatedTypePart));
+                    }
+                    return type;
                 }
-                else if (type.flags & TypeFlags.Intersection) {
-                    return getIntersectionType(sameMap((type as IntersectionType).types, getInstantiatedTypeWorker));
-                }
-                return type;
             }
 
             function getInstantiatedSignatures(signatures: readonly Signature[]) {
