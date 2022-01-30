@@ -1,4 +1,4 @@
-tests/cases/compiler/genericCallWithoutArgs.ts(4,17): error TS1005: ';' expected.
+tests/cases/compiler/genericCallWithoutArgs.ts(4,18): error TS1003: Identifier expected.
 
 
 ==== tests/cases/compiler/genericCallWithoutArgs.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/compiler/genericCallWithoutArgs.ts(4,17): error TS1005: ';' expected
     }
     
     f<number,string>.
-                    ~
-!!! error TS1005: ';' expected.
+                     
+!!! error TS1003: Identifier expected.
