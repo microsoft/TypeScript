@@ -1053,18 +1053,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar "{0}" a una declaración de importación existente desde "{1}"]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
@@ -1236,15 +1224,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_default_import_0_to_existing_import_declaration_from_1_90033" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add default import '{0}' to existing import declaration from "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar la importación "{0}" predeterminada a la declaración de importación existente de "{1}"]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Add_definite_assignment_assertion_to_property_0_95020" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add definite assignment assertion to property '{0}']]></Val>
@@ -1268,6 +1247,15 @@
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Agregar "export {}" para transformar este archivo en un módulo]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_import_from_0_90057" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add import from "{0}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Agregar importación desde “{0}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7128,15 +7116,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
+          <Val><![CDATA[Import '{0}' from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importar "{0}" desde el módulo "{1}"]]></Val>
+            <Val><![CDATA[Importar “{0}” desde “{1}”]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7211,15 +7196,6 @@
           <Val><![CDATA[Import declarations in a namespace cannot reference a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Las declaraciones de importación de un espacio de nombres no pueden hacer referencia a un módulo.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Import_default_0_from_module_1_90032" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importar el valor predeterminado "{0}" del módulo "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14738,6 +14714,15 @@
           <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Directiva "@ts-expect-error" no usada.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Update_import_from_0_90058" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Update import from "{0}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Actualizar importación desde “{0}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
