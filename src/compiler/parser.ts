@@ -5431,12 +5431,6 @@ namespace ts {
                     continue;
                 }
 
-                if (!questionDotToken && token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
-                    nextToken();
-                    expression = finishNode(factory.createNonNullExpression(expression), pos);
-                    continue;
-                }
-
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName
                 if ((questionDotToken || !inDecoratorContext()) && parseOptional(SyntaxKind.OpenBracketToken)) {
                     expression = parseElementAccessExpressionRest(pos, expression, questionDotToken);
@@ -5444,8 +5438,24 @@ namespace ts {
                 }
 
                 if (isTemplateStartOfTaggedTemplate()) {
-                    expression = parseTaggedTemplateRest(pos, expression, questionDotToken, /*typeArguments*/ undefined);
+                    // Absorb type arguments into TemplateExpression when preceding expression is ExpressionWithTypeArguments
+                    expression = !questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments ?
+                        parseTaggedTemplateRest(pos, (expression as ExpressionWithTypeArguments).expression, questionDotToken, (expression as ExpressionWithTypeArguments).typeArguments) :
+                        parseTaggedTemplateRest(pos, expression, questionDotToken, /*typeArguments*/ undefined);
                     continue;
+                }
+
+                if (!questionDotToken) {
+                    if (token() === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                        nextToken();
+                        expression = finishNode(factory.createNonNullExpression(expression), pos);
+                        continue;
+                    }
+                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    if (typeArguments) {
+                        expression = finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
+                        continue;
+                    }
                 }
 
                 return expression as MemberExpression;
@@ -5474,42 +5484,30 @@ namespace ts {
         function parseCallExpressionRest(pos: number, expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(pos, expression, /*allowOptionalChain*/ true);
+                let typeArguments: NodeArray<TypeNode> | undefined;
                 const questionDotToken = parseOptionalToken(SyntaxKind.QuestionDotToken);
-                // handle 'foo<<T>()'
-                // parse template arguments only in TypeScript files (not in JavaScript files).
-                if ((contextFlags & NodeFlags.JavaScriptFile) === 0 && (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken)) {
-                    // See if this is the start of a generic invocation.  If so, consume it and
-                    // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
-                    // part of an arithmetic expression.  Break out so we consume it higher in the
-                    // stack.
-                    const typeArguments = tryParse(parseTypeArgumentsInExpression);
-                    if (typeArguments) {
-                        if (isTemplateStartOfTaggedTemplate()) {
-                            expression = parseTaggedTemplateRest(pos, expression, questionDotToken, typeArguments);
-                            continue;
-                        }
-                        if (questionDotToken || token() === SyntaxKind.OpenParenToken) {
-                            const argumentList = parseArgumentList();
-                            const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
-                                factory.createCallChain(expression, questionDotToken, typeArguments, argumentList) :
-                                factory.createCallExpression(expression, typeArguments, argumentList);
-                            expression = finishNode(callExpr, pos);
-                            continue;
-                        }
-                        expression = finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
-                        break;
+                if (questionDotToken) {
+                    typeArguments = tryParse(parseTypeArgumentsInExpression);
+                    if (isTemplateStartOfTaggedTemplate()) {
+                        expression = parseTaggedTemplateRest(pos, expression, questionDotToken, typeArguments);
+                        continue;
                     }
                 }
-                else if (token() === SyntaxKind.OpenParenToken) {
+                if (typeArguments || token() === SyntaxKind.OpenParenToken) {
+                    // Absorb type arguments into CallExpression when preceding expression is ExpressionWithTypeArguments
+                    if (!questionDotToken && expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                        typeArguments = (expression as ExpressionWithTypeArguments).typeArguments;
+                        expression = (expression as ExpressionWithTypeArguments).expression;
+                    }
                     const argumentList = parseArgumentList();
                     const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
-                        factory.createCallChain(expression, questionDotToken, /*typeArguments*/ undefined, argumentList) :
-                        factory.createCallExpression(expression, /*typeArguments*/ undefined, argumentList);
+                        factory.createCallChain(expression, questionDotToken, typeArguments, argumentList) :
+                        factory.createCallExpression(expression, typeArguments, argumentList);
                     expression = finishNode(callExpr, pos);
                     continue;
                 }
                 if (questionDotToken) {
-                    // We failed to parse anything, so report a missing identifier here.
+                    // We parsed `?.` but then failed to parse anything, so report a missing identifier here.
                     const name = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, Diagnostics.Identifier_expected);
                     expression = finishNode(factory.createPropertyAccessChain(expression, questionDotToken, name), pos);
                 }
@@ -5561,6 +5559,7 @@ namespace ts {
                 // falls through
                 case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.DotToken:                       // foo<x>.
+                case SyntaxKind.QuestionDotToken:               // foo<x>?.
                 case SyntaxKind.CloseParenToken:                // foo<x>)
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
                 case SyntaxKind.ColonToken:                     // foo<x>:
@@ -5788,25 +5787,16 @@ namespace ts {
                 const name = parseIdentifierName();
                 return finishNode(factory.createMetaProperty(SyntaxKind.NewKeyword, name), pos);
             }
-
             const expressionPos = getNodePos();
-            let expression = parseMemberExpressionRest(expressionPos, parsePrimaryExpression(), /*allowOptionalChain*/ false);
-            let typeArguments = tryParse(parseTypeArgumentsInExpression);
-            if (isTemplateStartOfTaggedTemplate()) {
-                Debug.assert(!!typeArguments,
-                    "Expected a type argument list; all plain tagged template starts should be consumed in 'parseMemberExpressionRest'");
-                expression = parseTaggedTemplateRest(expressionPos, expression, /*optionalChain*/ undefined, typeArguments);
-                typeArguments = undefined;
+            let expression: LeftHandSideExpression = parseMemberExpressionRest(expressionPos, parsePrimaryExpression(), /*allowOptionalChain*/ false);
+            let typeArguments: NodeArray<TypeNode> | undefined;
+            // Absorb type arguments into NewExpression when preceding expression is ExpressionWithTypeArguments
+            if (expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                typeArguments = (expression as ExpressionWithTypeArguments).typeArguments;
+                expression = (expression as ExpressionWithTypeArguments).expression;
             }
-
-            let argumentsArray: NodeArray<Expression> | undefined;
-            if (token() === SyntaxKind.OpenParenToken) {
-                argumentsArray = parseArgumentList();
-            }
-            else if (typeArguments) {
-                parseErrorAt(pos, scanner.getStartPos(), Diagnostics.A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list);
-            }
-            return finishNode(factory.createNewExpression(expression, typeArguments, argumentsArray), pos);
+            const argumentList = token() === SyntaxKind.OpenParenToken ? parseArgumentList() : undefined;
+            return finishNode(factory.createNewExpression(expression, typeArguments, argumentList), pos);
         }
 
         // STATEMENTS

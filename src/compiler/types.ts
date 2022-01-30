@@ -2444,7 +2444,7 @@ namespace ts {
         readonly expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends LeftHandSideExpression, NodeWithTypeArguments {
+    export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
         readonly expression: LeftHandSideExpression;
     }
