@@ -203,6 +203,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always" | "exceptZero" | undefined;
         unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
+        currencyDisplay?: string | undefined;
+        currencySign?: string | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -211,6 +213,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always" | "exceptZero";
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface DateTimeFormatOptions {
@@ -277,6 +281,7 @@ declare namespace Intl {
     };
 
      interface DisplayNamesOptions {
+        locale: UnicodeBCP47LocaleIdentifier;
         localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
         type: "language" | "region" | "script" | "currency";
@@ -299,7 +304,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/of).
          */
-        of(code: string): string;
+        of(code: string): string | undefined;
         /**
          * Returns a new object with properties reflecting the locale and style formatting options computed during the construction of the current
          * [`Intl/DisplayNames`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames) object.

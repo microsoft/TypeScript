@@ -18,7 +18,7 @@ namespace ts.refactor {
             namespaceToNamedAction.kind,
             namedToNamespaceAction.kind
         ],
-        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
+        getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(context): readonly ApplicableRefactorInfo[] {
             const info = getImportToConvert(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
@@ -39,7 +39,7 @@ namespace ts.refactor {
 
             return emptyArray;
         },
-        getEditsForAction(context, actionName): RefactorEditInfo {
+        getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === namespaceToNamedAction.name || actionName === namedToNamespaceAction.name, "Unexpected action name");
             const info = getImportToConvert(context);
             Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");

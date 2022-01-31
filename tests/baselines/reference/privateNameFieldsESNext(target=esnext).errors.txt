@@ -1,0 +1,29 @@
+tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(8,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(11,17): error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts (2 errors) ====
+    class C {
+        a = 123;
+        #a = 10;
+        c = "hello";
+        #b;
+        method() {
+            console.log(this.#a);
+            this.#a = "hello";
+            ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            console.log(this.#b);
+        }
+        static #m = "test";
+                    ~~~~~~
+!!! error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+        static #x;
+        static test() {
+            console.log(this.#m);
+            console.log(this.#x = "test");
+        }
+        #something = () => 1234;
+    }
+    
+    

@@ -192,9 +192,12 @@ namespace ts {
         return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
     }
 
-    export function packageIdToString({ name, subModuleName, version }: PackageId): string {
-        const fullName = subModuleName ? `${name}/${subModuleName}` : name;
-        return `${fullName}@${version}`;
+    export function packageIdToPackageName({ name, subModuleName }: PackageId): string {
+        return subModuleName ? `${name}/${subModuleName}` : name;
+    }
+
+    export function packageIdToString(packageId: PackageId): string {
+        return `${packageIdToPackageName(packageId)}@${packageId.version}`;
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
@@ -627,7 +630,8 @@ namespace ts {
                 Float64Array: ["at"],
                 BigInt64Array: ["at"],
                 BigUint64Array: ["at"],
-                ObjectConstructor: ["hasOwn"]
+                ObjectConstructor: ["hasOwn"],
+                Error: ["cause"]
             }
         };
     }
@@ -1067,6 +1071,15 @@ namespace ts {
         };
     }
 
+    export function createDiagnosticMessageChainFromDiagnostic(diagnostic: DiagnosticRelatedInformation): DiagnosticMessageChain {
+        return typeof diagnostic.messageText === "string" ? {
+            code: diagnostic.code,
+            category: diagnostic.category,
+            messageText: diagnostic.messageText,
+            next: (diagnostic as DiagnosticMessageChain).next,
+        } : diagnostic.messageText;
+    }
+
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
         return {
             file: sourceFile,
@@ -1243,7 +1256,8 @@ namespace ts {
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction ||
             node.kind === SyntaxKind.ParenthesizedExpression ||
-            node.kind === SyntaxKind.VariableDeclaration) ?
+            node.kind === SyntaxKind.VariableDeclaration ||
+            node.kind === SyntaxKind.ExportSpecifier) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
@@ -1668,6 +1682,34 @@ namespace ts {
         }
     }
 
+    /**
+     * @returns Whether the node creates a new 'this' scope for its children.
+     */
+    export function isThisContainerOrFunctionBlock(node: Node): boolean {
+        switch (node.kind) {
+            // Arrow functions use the same scope, but may do so in a "delayed" manner
+            // For example, `const getThis = () => this` may be before a super() call in a derived constructor
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.PropertyDeclaration:
+                return true;
+            case SyntaxKind.Block:
+                switch (node.parent.kind) {
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        // Object properties can have computed names; only method-like bodies start a new scope
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return false;
+        }
+    }
+
     export function isInTopLevelContext(node: Node) {
         // The name of a class or function declaration is a BindingIdentifier in its surrounding scope.
         if (isIdentifier(node) && (isClassDeclaration(node.parent) || isFunctionDeclaration(node.parent)) && node.parent.name === node) {
@@ -2045,7 +2087,7 @@ namespace ts {
     }
 
     export function getExternalModuleRequireArgument(node: Node) {
-        return isRequireVariableDeclaration(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+        return isVariableDeclarationInitializedToBareOrAccessedRequire(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -2112,17 +2154,30 @@ namespace ts {
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireVariableDeclaration(node: Node): node is RequireVariableDeclaration {
+    export function isVariableDeclarationInitializedToRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall> {
+        return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ false);
+    }
+
+    /**
+     * Like {@link isVariableDeclarationInitializedToRequire} but allows things like `require("...").foo.bar` or `require("...")["baz"]`.
+     */
+    export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: Node): node is VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression> {
+        return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
+    }
+
+    function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
         if (node.kind === SyntaxKind.BindingElement) {
             node = node.parent.parent;
         }
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), /*requireStringLiteralLikeArgument*/ true);
+        return isVariableDeclaration(node) &&
+            !!node.initializer &&
+            isRequireCall(allowAccessedRequire ? getLeftmostAccessExpression(node.initializer) : node.initializer, /*requireStringLiteralLikeArgument*/ true);
     }
 
     export function isRequireVariableStatement(node: Node): node is RequireVariableStatement {
         return isVariableStatement(node)
             && node.declarationList.declarations.length > 0
-            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl));
+            && every(node.declarationList.declarations, decl => isVariableDeclarationInitializedToRequire(decl));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -2218,7 +2273,7 @@ namespace ts {
         const e = isBinaryExpression(initializer)
             && (initializer.operatorToken.kind === SyntaxKind.BarBarToken || initializer.operatorToken.kind === SyntaxKind.QuestionQuestionToken)
             && getExpandoInitializer(initializer.right, isPrototypeAssignment);
-        if (e && isSameEntityName(name, (initializer as BinaryExpression).left)) {
+        if (e && isSameEntityName(name, initializer.left)) {
             return e;
         }
     }
@@ -5857,7 +5912,7 @@ namespace ts {
     }
 
     // eslint-disable-next-line prefer-const
-    export let objectAllocator: ObjectAllocator = {
+    export const objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => Node as any,
         getTokenConstructor: () => Token as any,
         getIdentifierConstructor: () => Identifier as any,
@@ -5870,18 +5925,27 @@ namespace ts {
     };
 
     export function setObjectAllocator(alloc: ObjectAllocator) {
-        objectAllocator = alloc;
+        Object.assign(objectAllocator, alloc);
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.checkDefined(args[+index + baseIndex]));
     }
 
-    export let localizedDiagnosticMessages: MapLike<string> | undefined;
+    let localizedDiagnosticMessages: MapLike<string> | undefined;
 
     /* @internal */
     export function setLocalizedDiagnosticMessages(messages: typeof localizedDiagnosticMessages) {
         localizedDiagnosticMessages = messages;
+    }
+
+    /* @internal */
+    // If the localized messages json is unset, and if given function use it to set the json
+
+    export function maybeSetLocalizedDiagnosticMessages(getMessages: undefined | (() => typeof localizedDiagnosticMessages)) {
+        if (!localizedDiagnosticMessages && getMessages) {
+            localizedDiagnosticMessages = getMessages();
+        }
     }
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
@@ -6239,7 +6303,7 @@ namespace ts {
     }
 
     export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
-        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 : compilerOptions.useDefineForClassFields;
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
@@ -6306,8 +6370,6 @@ namespace ts {
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
         setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
         setSymlinkedFile(symlinkPath: Path, real: string): void;
-        /*@internal*/
-        setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
         /**
          * @internal
          * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
@@ -6343,16 +6405,6 @@ namespace ts {
                         (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
-                }
-            },
-            setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
-                this.setSymlinkedFile(toPath(symlink, cwd, getCanonicalFileName), real);
-                const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
-                if (commonResolved && commonOriginal) {
-                    this.setSymlinkedDirectory(commonOriginal, {
-                        real: commonResolved,
-                        realPath: toPath(commonResolved, cwd, getCanonicalFileName),
-                    });
                 }
             },
             setSymlinksFromResolutions(files, typeReferenceDirectives) {
@@ -7412,6 +7464,105 @@ namespace ts {
     }
 
     export function escapeSnippetText(text: string): string {
-        return text.replace(/\$/gm, "\\$");
+        return text.replace(/\$/gm, () => "\\$");
+    }
+
+    export function isNumericLiteralName(name: string | __String) {
+        // The intent of numeric names is that
+        //     - they are names with text in a numeric form, and that
+        //     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
+        //         acquired by applying the abstract 'ToNumber' operation on the name's text.
+        //
+        // The subtlety is in the latter portion, as we cannot reliably say that anything that looks like a numeric literal is a numeric name.
+        // In fact, it is the case that the text of the name must be equal to 'ToString(numLit)' for this to hold.
+        //
+        // Consider the property name '"0xF00D"'. When one indexes with '0xF00D', they are actually indexing with the value of 'ToString(0xF00D)'
+        // according to the ECMAScript specification, so it is actually as if the user indexed with the string '"61453"'.
+        // Thus, the text of all numeric literals equivalent to '61543' such as '0xF00D', '0xf00D', '0170015', etc. are not valid numeric names
+        // because their 'ToString' representation is not equal to their original text.
+        // This is motivated by ECMA-262 sections 9.3.1, 9.8.1, 11.1.5, and 11.2.1.
+        //
+        // Here, we test whether 'ToString(ToNumber(name))' is exactly equal to 'name'.
+        // The '+' prefix operator is equivalent here to applying the abstract ToNumber operation.
+        // Applying the 'toString()' method on a number gives us the abstract ToString operation on a number.
+        //
+        // Note that this accepts the values 'Infinity', '-Infinity', and 'NaN', and that this is intentional.
+        // This is desired behavior, because when indexing with them as numeric entities, you are indexing
+        // with the strings '"Infinity"', '"-Infinity"', and '"NaN"' respectively.
+        return (+name).toString() === name;
+    }
+
+    export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote?: boolean, stringNamed?: boolean) {
+        return isIdentifierText(name, target) ? factory.createIdentifier(name) :
+            !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+            factory.createStringLiteral(name, !!singleQuote);
+    }
+
+    export function isThisTypeParameter(type: Type): boolean {
+        return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
+    }
+
+    export interface NodeModulePathParts {
+        readonly topLevelNodeModulesIndex: number;
+        readonly topLevelPackageNameIndex: number;
+        readonly packageRootIndex: number;
+        readonly fileNameIndex: number;
+    }
+    export function getNodeModulePathParts(fullPath: string): NodeModulePathParts | undefined {
+        // If fullPath can't be valid module file within node_modules, returns undefined.
+        // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+        // Returns indices:                       ^            ^                                                      ^             ^
+
+        let topLevelNodeModulesIndex = 0;
+        let topLevelPackageNameIndex = 0;
+        let packageRootIndex = 0;
+        let fileNameIndex = 0;
+
+        const enum States {
+            BeforeNodeModules,
+            NodeModules,
+            Scope,
+            PackageContent
+        }
+
+        let partStart = 0;
+        let partEnd = 0;
+        let state = States.BeforeNodeModules;
+
+        while (partEnd >= 0) {
+            partStart = partEnd;
+            partEnd = fullPath.indexOf("/", partStart + 1);
+            switch (state) {
+                case States.BeforeNodeModules:
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
+                        topLevelNodeModulesIndex = partStart;
+                        topLevelPackageNameIndex = partEnd;
+                        state = States.NodeModules;
+                    }
+                    break;
+                case States.NodeModules:
+                case States.Scope:
+                    if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                        state = States.Scope;
+                    }
+                    else {
+                        packageRootIndex = partEnd;
+                        state = States.PackageContent;
+                    }
+                    break;
+                case States.PackageContent:
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
+                        state = States.NodeModules;
+                    }
+                    else {
+                        state = States.PackageContent;
+                    }
+                    break;
+            }
+        }
+
+        fileNameIndex = partStart;
+
+        return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
     }
 }

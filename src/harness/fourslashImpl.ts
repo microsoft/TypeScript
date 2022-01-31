@@ -914,9 +914,26 @@ namespace FourSlash {
             }
 
             if (ts.hasProperty(options, "exact")) {
-                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes"));
+                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes") && !ts.hasProperty(options, "unsorted"));
                 if (options.exact === undefined) throw this.raiseError("Expected no completions");
-                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact), options.marker);
+                this.verifyCompletionsAreExactly(actualCompletions.entries, options.exact, options.marker);
+            }
+            else if (options.unsorted) {
+                ts.Debug.assert(!ts.hasProperty(options, "includes") && !ts.hasProperty(options, "excludes"));
+                for (const expectedEntry of options.unsorted) {
+                    const name = typeof expectedEntry === "string" ? expectedEntry : expectedEntry.name;
+                    const found = nameToEntries.get(name);
+                    if (!found) throw this.raiseError(`Unsorted: completion '${name}' not found.`);
+                    if (!found.length) throw this.raiseError(`Unsorted: no completions with name '${name}' remain unmatched.`);
+                    this.verifyCompletionEntry(found.shift()!, expectedEntry);
+                }
+                if (actualCompletions.entries.length !== options.unsorted.length) {
+                    const unmatched: string[] = [];
+                    nameToEntries.forEach(entries => {
+                        unmatched.push(...entries.map(e => e.name));
+                    });
+                    this.raiseError(`Additional completions found not included in 'unsorted': ${unmatched.join("\n")}`);
+                }
             }
             else {
                 if (options.includes) {
@@ -993,7 +1010,11 @@ namespace FourSlash {
             }
         }
 
-        private verifyCompletionsAreExactly(actual: readonly ts.CompletionEntry[], expected: readonly FourSlashInterface.ExpectedCompletionEntry[], marker?: ArrayOrSingle<string | Marker>) {
+        private verifyCompletionsAreExactly(actual: readonly ts.CompletionEntry[], expected: ArrayOrSingle<FourSlashInterface.ExpectedCompletionEntry> | FourSlashInterface.ExpectedExactCompletionsPlus, marker?: ArrayOrSingle<string | Marker>) {
+            if (!ts.isArray(expected)) {
+                expected = [expected];
+            }
+
             // First pass: test that names are right. Then we'll test details.
             assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name), marker ? "At marker " + JSON.stringify(marker) : undefined);
 
@@ -1004,6 +1025,16 @@ namespace FourSlash {
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
+
+            // All completions were correct in the sort order given. If that order was produced by a function
+            // like `completion.globalsPlus`, ensure the "plus" array was sorted in the same way.
+            const { plusArgument, plusFunctionName } = expected as FourSlashInterface.ExpectedExactCompletionsPlus;
+            if (plusArgument) {
+                assert.deepEqual(
+                    plusArgument,
+                    expected.filter(entry => plusArgument.includes(entry)),
+                    `At marker ${JSON.stringify(marker)}: Argument to '${plusFunctionName}' was incorrectly sorted.`);
+            }
         }
 
         /** Use `getProgram` instead of accessing this directly. */
@@ -1317,7 +1348,11 @@ namespace FourSlash {
             if (options) {
                 this.configure(options);
             }
-            return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
+            return this.languageService.getCompletionsAtPosition(
+                this.activeFile.fileName,
+                this.currentCaretPosition,
+                options,
+                this.formatCodeSettings);
         }
 
         private getCompletionEntryDetails(entryName: string, source: string | undefined, data: ts.CompletionEntryData | undefined, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
@@ -1362,11 +1397,11 @@ namespace FourSlash {
             }));
         }
 
-        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string) {
+        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string, expectedTags?: {name: string; text: string;}[]) {
             if (typeof markerName === "string") this.goToMarker(markerName);
             else this.goToRangeStart(markerName);
 
-            this.verifyQuickInfoString(expectedText, expectedDocumentation);
+            this.verifyQuickInfoString(expectedText, expectedDocumentation, expectedTags);
         }
 
         public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
@@ -1385,16 +1420,29 @@ namespace FourSlash {
             }
         }
 
-        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string) {
+        public verifyQuickInfoString(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
             if (expectedDocumentation === "") {
-                throw new Error("Use 'undefined' instead");
+                throw new Error("Use 'undefined' instead of empty string for `expectedDocumentation`");
             }
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
-            const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";
+            const actualQuickInfoText = ts.displayPartsToString(actualQuickInfo?.displayParts);
+            const actualQuickInfoDocumentation = ts.displayPartsToString(actualQuickInfo?.documentation);
+            const actualQuickInfoTags = actualQuickInfo?.tags?.map(tag => ({ name: tag.name, text: ts.displayPartsToString(tag.text) }));
 
             assert.equal(actualQuickInfoText, expectedText, this.messageAtLastKnownMarker("quick info text"));
             assert.equal(actualQuickInfoDocumentation, expectedDocumentation || "", this.assertionMessageAtLastKnownMarker("quick info doc"));
+            if (!expectedTags) {
+                // Skip if `expectedTags` is not given
+            }
+            else if (!actualQuickInfoTags) {
+                assert.equal(actualQuickInfoTags, expectedTags, this.messageAtLastKnownMarker("QuickInfo tags"));
+            }
+            else {
+                ts.zipWith(expectedTags, actualQuickInfoTags, (expectedTag, actualTag) => {
+                    assert.equal(expectedTag.name, actualTag.name);
+                    assert.equal(expectedTag.text, actualTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
+                });
+            }
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: TextSpan,

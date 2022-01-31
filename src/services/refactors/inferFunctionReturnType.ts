@@ -10,11 +10,11 @@ namespace ts.refactor.inferFunctionReturnType {
     };
     registerRefactor(refactorName, {
         kinds: [inferReturnTypeAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToInferReturnType,
+        getAvailableActions: getRefactorActionsToInferReturnType
     });
 
-    function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
+    function getRefactorEditsToInferReturnType(context: RefactorContext): RefactorEditInfo | undefined {
         const info = getInfo(context);
         if (info && !isRefactorErrorInfo(info)) {
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, t, info.declaration, info.returnTypeNode));
@@ -23,7 +23,7 @@ namespace ts.refactor.inferFunctionReturnType {
         return undefined;
     }
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToInferReturnType(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context);
         if (!info) return emptyArray;
         if (!isRefactorErrorInfo(info)) {

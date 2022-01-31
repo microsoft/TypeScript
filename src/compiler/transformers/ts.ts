@@ -1189,7 +1189,7 @@ namespace ts {
             //
 
             const prefix = getClassMemberPrefix(node, member);
-            const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ true);
+            const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient));
             const descriptor = languageVersion > ScriptTarget.ES3
                 ? member.kind === SyntaxKind.PropertyDeclaration
                     // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
@@ -1511,6 +1511,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                     return factory.createIdentifier("Boolean");
 
+                case SyntaxKind.TemplateLiteralType:
                 case SyntaxKind.StringKeyword:
                     return factory.createIdentifier("String");
 
@@ -1932,13 +1933,21 @@ namespace ts {
             }
 
             let statements: Statement[] = [];
-            let indexOfFirstStatement = 0;
 
             resumeLexicalEnvironment();
 
-            indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(factory, constructor, statements, visitor);
+            const indexAfterLastPrologueStatement = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            const superStatementIndex = findSuperStatementIndex(body.statements, indexAfterLastPrologueStatement);
 
-            // Add parameters with property assignments. Transforms this:
+            // If there was a super call, visit existing statements up to and including it
+            if (superStatementIndex >= 0) {
+                addRange(
+                    statements,
+                    visitNodes(body.statements, visitor, isStatement, indexAfterLastPrologueStatement, superStatementIndex + 1 - indexAfterLastPrologueStatement),
+                );
+            }
+
+            // Transform parameters into property assignments. Transforms this:
             //
             //  constructor (public x, public y) {
             //  }
@@ -1950,10 +1959,19 @@ namespace ts {
             //      this.y = y;
             //  }
             //
-            addRange(statements, map(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment));
+            const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
 
-            // Add the existing statements, skipping the initial super call.
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, indexOfFirstStatement));
+            // If there is a super() call, the parameter properties go immediately after it
+            if (superStatementIndex >= 0) {
+                addRange(statements, parameterPropertyAssignments);
+            }
+            // Since there was no super() call, parameter properties are the first statements in the constructor
+            else {
+                statements = addRange(parameterPropertyAssignments, statements);
+            }
+
+            // Add remaining statements from the body, skipping the super() call if it was found
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1));
 
             // End the lexical environment.
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -2237,11 +2255,10 @@ namespace ts {
                 // we can safely elide the parentheses here, as a new synthetic
                 // ParenthesizedExpression will be inserted if we remove parentheses too
                 // aggressively.
-                // HOWEVER - if there are leading comments on the expression itself, to handle ASI
-                // correctly for return and throw, we must keep the parenthesis
-                if (length(getLeadingCommentRangesOfNode(expression, currentSourceFile))) {
-                    return factory.updateParenthesizedExpression(node, expression);
-                }
+                //
+                // If there are leading comments on the expression itself, the emitter will handle ASI
+                // for return, throw, and yield by re-introducing parenthesis during emit on an as-need
+                // basis.
                 return factory.createPartiallyEmittedExpression(expression, node);
             }
 

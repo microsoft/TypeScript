@@ -4433,7 +4433,7 @@ namespace ts {
                                     return true;
                             }
                         }
-                        else if (third === SyntaxKind.CommaToken) {
+                        else if (third === SyntaxKind.CommaToken || third === SyntaxKind.EqualsToken) {
                             return true;
                         }
                         return false;
@@ -4539,9 +4539,16 @@ namespace ts {
             //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
             //  - "a ? (b): function() {}" will too, since function() is a valid JSDoc function type.
+            //  - "a ? (b): (function() {})" as well, but inside of a parenthesized type with an arbitrary amount of nesting.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            const hasJSDocFunctionType = type && isJSDocFunctionType(type);
+
+            let unwrappedType = type;
+            while (unwrappedType?.kind === SyntaxKind.ParenthesizedType) {
+                unwrappedType = (unwrappedType as ParenthesizedTypeNode).type;  // Skip parens if need be
+            }
+
+            const hasJSDocFunctionType = unwrappedType && isJSDocFunctionType(unwrappedType);
             if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                     return undefined;
@@ -6073,7 +6080,7 @@ namespace ts {
             // one out no matter what.
             let finallyBlock: Block | undefined;
             if (!catchClause || token() === SyntaxKind.FinallyKeyword) {
-                parseExpected(SyntaxKind.FinallyKeyword);
+                parseExpected(SyntaxKind.FinallyKeyword, Diagnostics.catch_or_finally_expected);
                 finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
@@ -7274,7 +7281,7 @@ namespace ts {
             const pos = getNodePos();
             const name = tokenIsIdentifierOrKeyword(token()) ? parseIdentifierName() : parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
             parseExpected(SyntaxKind.ColonToken);
-            const value = parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
+            const value = parseAssignmentExpressionOrHigher();
             return finishNode(factory.createAssertEntry(name, value), pos);
         }
 
@@ -7399,7 +7406,8 @@ namespace ts {
         }
 
         function parseExportSpecifier() {
-            return parseImportOrExportSpecifier(SyntaxKind.ExportSpecifier) as ExportSpecifier;
+            const hasJSDoc = hasPrecedingJSDocComment();
+            return withJSDoc(parseImportOrExportSpecifier(SyntaxKind.ExportSpecifier) as ExportSpecifier, hasJSDoc);
         }
 
         function parseImportSpecifier() {

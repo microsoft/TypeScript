@@ -940,6 +940,10 @@ namespace ts.server {
                 }
                 return;
             }
+            this.writeMessage(msg);
+        }
+
+        protected writeMessage(msg: protocol.Message) {
             const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
             perfLogger.logEvent(`Response message size: ${msgText.length}`);
             this.host.write(msgText);
@@ -1842,26 +1846,31 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
-                ...convertUserPreferences(this.getPreferences(file)),
-                triggerCharacter: args.triggerCharacter,
-                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
-                includeExternalModuleExports: args.includeExternalModuleExports,
-                includeInsertTextCompletions: args.includeInsertTextCompletions
-            });
+            const completions = project.getLanguageService().getCompletionsAtPosition(
+                file,
+                position,
+                {
+                    ...convertUserPreferences(this.getPreferences(file)),
+                    triggerCharacter: args.triggerCharacter,
+                    triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
+                    includeExternalModuleExports: args.includeExternalModuleExports,
+                    includeInsertTextCompletions: args.includeInsertTextCompletions,
+                },
+                project.projectService.getFormatCodeOptions(file),
+            );
             if (completions === undefined) return undefined;
 
             if (kind === protocol.CommandTypes.CompletionsFull) return completions;
 
             const prefix = args.prefix || "";
-            const entries = stableSort(mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
+            const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
                     const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
                 }
-            }), (a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
+            });
 
             if (kind === protocol.CommandTypes.Completions) {
                 if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;

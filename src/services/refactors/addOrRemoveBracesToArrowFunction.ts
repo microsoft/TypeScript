@@ -15,8 +15,9 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     };
     registerRefactor(refactorName, {
         kinds: [removeBracesAction.kind],
-        getEditsForAction,
-        getAvailableActions });
+        getEditsForAction: getRefactorEditsToRemoveFunctionBraces,
+        getAvailableActions: getRefactorActionsToRemoveFunctionBraces
+    });
 
     interface FunctionBracesInfo {
         func: ArrowFunction;
@@ -25,7 +26,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         addBraces: boolean;
     }
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToRemoveFunctionBraces(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
         if (!info) return emptyArray;
@@ -54,7 +55,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return emptyArray;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");

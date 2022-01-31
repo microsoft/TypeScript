@@ -174,14 +174,12 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
-        tracing?.pop();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -253,7 +251,9 @@ namespace ts {
             Debug.attachFlowNodeDebugInfo(reportedUnreachableFlow);
 
             if (!file.locals) {
+                tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
                 bind(file);
+                tracing?.pop();
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
                 delayedBindJSDocTypedefTag();
@@ -1365,7 +1365,7 @@ namespace ts {
         }
 
         function maybeBindExpressionFlowIfCall(node: Expression) {
-            // A top level or LHS of comma expression call expression with a dotted function name and at least one argument
+            // A top level or comma expression call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
             if (node.kind === SyntaxKind.CallExpression) {
                 const call = node as CallExpression;
@@ -1550,24 +1550,29 @@ namespace ts {
                 return state;
             }
 
-            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onLeft(left: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(left);
+                    const maybeBound = maybeBind(left);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(left);
+                    }
+                    return maybeBound;
                 }
             }
 
-            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, _node: BinaryExpression) {
                 if (!state.skip) {
-                    if (operatorToken.kind === SyntaxKind.CommaToken) {
-                        maybeBindExpressionFlowIfCall(node.left);
-                    }
                     bind(operatorToken);
                 }
             }
 
-            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+            function onRight(right: Expression, state: WorkArea, node: BinaryExpression) {
                 if (!state.skip) {
-                    return maybeBind(right);
+                    const maybeBound = maybeBind(right);
+                    if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(right);
+                    }
+                    return maybeBound;
                 }
             }
 
@@ -2066,12 +2071,6 @@ namespace ts {
                         seen.set(identifier.escapedText, currentKind);
                         continue;
                     }
-
-                    if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
-                        const span = getErrorSpanForNode(file, identifier);
-                        file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
-                            Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
-                    }
                 }
             }
 
@@ -2341,7 +2340,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
+            if (languageVersion < ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -2409,6 +2408,7 @@ namespace ts {
                 return;
             }
             setParent(node, parent);
+            if (tracing) (node as TracingNode).tracingPath = file.path;
             const saveInStrictMode = inStrictMode;
 
             // Even though in the AST the jsdoc @typedef node belongs to the current node,
@@ -3288,7 +3288,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isRequireVariableDeclaration(node) && !getJSDocTypeTag(node)) {
+                if (isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node) && !getJSDocTypeTag(node)) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {

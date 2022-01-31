@@ -85,7 +85,7 @@ namespace ts.projectSystem {
                 {
                     codeActions: [
                         {
-                            description: `Import 'foo' from module "./a"`,
+                            description: `Add import from "./a"`,
                             changes: [
                                 {
                                     fileName: "/b.ts",
@@ -118,7 +118,7 @@ namespace ts.projectSystem {
                 {
                     codeActions: [
                         {
-                            description: `Import 'foo' from module "./a"`,
+                            description: `Add import from "./a"`,
                             changes: [
                                 {
                                     fileName: "/b.ts",

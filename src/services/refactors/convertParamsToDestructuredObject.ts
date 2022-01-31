@@ -11,11 +11,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     };
     registerRefactor(refactorName, {
         kinds: [toDestructuredAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertParametersToDestructuredObject,
+        getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const isJSFile = isSourceFileJS(file);
         if (isJSFile) return emptyArray; // TODO: GH#30113
@@ -29,7 +29,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertParametersToDestructuredObject(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorName, "Unexpected action name");
         const { file, startPosition, program, cancellationToken, host } = context;
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
