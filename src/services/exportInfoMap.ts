@@ -345,6 +345,20 @@ namespace ts {
             forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
+
+        if (host.getProgramForReferencedProject) {
+            const projectReferences = program.getResolvedProjectReferences();
+            if (projectReferences) {
+                for (const ref of projectReferences) {
+                    if (ref) {
+                        const referencedProgram = host.getProgramForReferencedProject(ref.sourceFile.fileName);
+                        if (referencedProgram) {
+                            forEachExternalModule(referencedProgram.getTypeChecker(), referencedProgram.getSourceFiles(), (module, file) => cb(module, file, referencedProgram, /*isFromPackageJson*/ false));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {

@@ -318,6 +318,7 @@ namespace ts {
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
         /* @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
+        /* @internal */ getProgramForReferencedProject?(configFileName: string): Program | undefined;
     }
 
     /* @internal */

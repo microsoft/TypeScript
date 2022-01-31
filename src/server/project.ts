@@ -1768,6 +1768,11 @@ namespace ts.server {
         getIncompleteCompletionsCache() {
             return this.projectService.getIncompleteCompletionsCache();
         }
+
+        /*@internal*/
+        getProgramForReferencedProject(configFileName: string) {
+            return this.projectService.findConfiguredProjectByProjectName(toNormalizedPath(configFileName))?.getCurrentProgram();
+        }
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {
