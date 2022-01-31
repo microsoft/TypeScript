@@ -1,0 +1,65 @@
+=== tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts ===
+declare class StateMachine<T> {
+>StateMachine : StateMachine<T>
+
+  onDone: (a: T) => void;
+>onDone : (a: T) => void
+>a : T
+}
+
+declare function createMachine<T>(implementations: {
+>createMachine : <T>(implementations: {    services: Record<string, () => Promise<T> | StateMachine<T>>;}) => void
+>implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
+
+  services: Record<string, () => Promise<T> | StateMachine<T>>;
+>services : Record<string, () => Promise<T> | StateMachine<T>>
+
+}): void;
+
+createMachine<{ count: number }>({
+>createMachine<{ count: number }>({  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },}) : void
+>createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
+>count : number
+>{  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },} : { services: { test: () => Promise<{ count: number; } | StateMachine<{ count: number; }>>; test2(): Promise<{ count: number; } | StateMachine<{ count: number; }>>; }; }
+
+  services: {
+>services : { test: () => Promise<{ count: number; } | StateMachine<{ count: number; }>>; test2(): Promise<{ count: number; } | StateMachine<{ count: number; }>>; }
+>{    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  } : { test: () => Promise<{ count: number; } | StateMachine<{ count: number; }>>; test2(): Promise<{ count: number; } | StateMachine<{ count: number; }>>; }
+
+    test: async () => Promise.reject("some err"),
+>test : () => Promise<{ count: number; } | StateMachine<{ count: number; }>>
+>async () => Promise.reject("some err") : () => Promise<{ count: number; } | StateMachine<{ count: number; }>>
+>Promise.reject("some err") : Promise<{ count: number; } | StateMachine<{ count: number; }>>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>"some err" : "some err"
+
+    async test2() {
+>test2 : () => Promise<{ count: number; } | StateMachine<{ count: number; }>>
+
+      return Promise.reject("some err");
+>Promise.reject("some err") : Promise<{ count: number; } | StateMachine<{ count: number; }>>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>"some err" : "some err"
+
+    },
+  },
+});
+
+function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number }> {
+>fn1 : () => () => Promise<{    count: number;}> | StateMachine<{    count: number;}>
+>count : number
+>count : number
+
+  return async () => Promise.reject('some err')
+>async () => Promise.reject('some err') : () => Promise<{ count: number; } | StateMachine<{ count: number; }>>
+>Promise.reject('some err') : Promise<{ count: number; } | StateMachine<{ count: number; }>>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>'some err' : "some err"
+}
+
