@@ -26691,12 +26691,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             return undefined;
                         }
                         contextualReturnType = iterationTypes.returnType;
-                        // falls through to unwrap Promise for AsyncGenerators
                     }
 
                     if (functionFlags & FunctionFlags.Async) { // Async function or AsyncGenerator function
-                        // Get the awaited type without the `Awaited<T>` alias
-                        const contextualAwaitedType = mapType(contextualReturnType, getAwaitedTypeNoAlias);
+                        const contextualAwaitedType = mapType(contextualReturnType, functionFlags & FunctionFlags.Generator ? getAwaitedTypeNoAlias : getAwaitedTypeOfPromise);
                         return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                     }
 
