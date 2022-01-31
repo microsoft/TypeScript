@@ -26681,7 +26681,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function getContextualTypeForReturnExpression(node: Expression): Type | undefined {
             const func = getContainingFunction(node);
             if (func) {
-                let contextualReturnType = getContextualReturnType(func);
+                const contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
                     const functionFlags = getFunctionFlags(func);
                     if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
@@ -26690,12 +26690,17 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         if (!iterationTypes) {
                             return undefined;
                         }
-                        contextualReturnType = iterationTypes.returnType;
+                        if (functionFlags & FunctionFlags.Async) {
+                            // unwrap Promise to get the awaited type without the `Awaited<T>` alias
+                            const contextualAwaitedType = mapType(iterationTypes.returnType, getAwaitedTypeNoAlias);
+                            return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                        }
+                        return iterationTypes.returnType;
                     }
 
-                    if (functionFlags & FunctionFlags.Async) { // Async function or AsyncGenerator function
-                        const contextualAwaitedType = mapType(contextualReturnType, functionFlags & FunctionFlags.Generator ? getAwaitedTypeNoAlias : getAwaitedTypeOfPromise);
-                        return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                    if (functionFlags & FunctionFlags.Async) {
+                        const contextualTypeOfPromise = mapType(contextualReturnType, getAwaitedTypeOfPromise);
+                        return contextualTypeOfPromise && getUnionType([contextualTypeOfPromise, createPromiseLikeType(contextualTypeOfPromise)]);
                     }
 
                     return contextualReturnType; // Regular function or Generator function
