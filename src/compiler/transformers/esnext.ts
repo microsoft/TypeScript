@@ -32,6 +32,7 @@ namespace ts {
         function visitClassLike(node: ClassDeclaration | ClassExpression) {
             const oldClassHasInstanceTracker = currentClassHasInstanceTracker;
             currentClassHasInstanceTracker = undefined;
+            // visit children first so currentClassHasInstanceTracker will be set on demand.
             const updated = visitEachChild(node, visitor, context);
             if (!currentClassHasInstanceTracker) {
                 currentClassHasInstanceTracker = oldClassHasInstanceTracker;
@@ -53,63 +54,13 @@ namespace ts {
                 )
             );
 
-            // tracker.add(this);
-            const track = factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                        currentClassHasInstanceTracker,
-                        "add"
-                    ),
-                    /** generics */ undefined,
-                    [factory.createThis()]
-                )
-            );
-
             const originalConstructor = getFirstConstructorWithBody(node);
-            let updatedConstructor: ConstructorDeclaration =
-                originalConstructor ||
-                createDefaultConstructor(isClassExtended(node), [track]);
-            if (originalConstructor) {
-                const body = updatedConstructor.body!;
-                const updatedBody = isClassExtended(node)
-                    ? // extended class, add track after super()
-                      visitEachChild(
-                          body,
-                          function visitor(node): VisitResult<Node> {
-                              if (
-                                  node.kind === SyntaxKind.ClassDeclaration ||
-                                  node.kind === SyntaxKind.ClassExpression ||
-                                  node.kind ===
-                                      SyntaxKind.FunctionDeclaration ||
-                                  node.kind === SyntaxKind.FunctionExpression
-                              ) {
-                                  return node;
-                              }
-                              if (
-                                  isCallExpression(node) &&
-                                  node.expression.kind ===
-                                      SyntaxKind.SuperKeyword
-                              ) {
-                                  return factory.createCommaListExpression([
-                                      node,
-                                      track.expression,
-                                      factory.createThis(),
-                                  ]);
-                              }
-                              return visitEachChild(node, visitor, context);
-                          },
-                          context
-                      )
-                    : // plain class, add track at the top
-                      factory.updateBlock(body, [track, ...body.statements]);
-                updatedConstructor = factory.updateConstructorDeclaration(
-                    updatedConstructor,
-                    updatedConstructor.modifiers,
-                    updatedConstructor.parameters,
-                    updatedBody
+            const updatedConstructor =
+                getConstructorWithClassHasInstanceTracker(
+                    originalConstructor,
+                    isClassExtended(node),
+                    currentClassHasInstanceTracker
                 );
-            }
-
             const updatedMembers = originalConstructor
                 ? updated.members.map((element) =>
                       element === originalConstructor
@@ -156,9 +107,8 @@ namespace ts {
                 );
             }
             // tracker.has()
-            const trackerDotHas = factory.createPropertyAccessChain(
+            const trackerDotHas = factory.createPropertyAccessExpression(
                 currentClassHasInstanceTracker,
-                /** ?. */ undefined,
                 "has"
             );
             const arg0 = visitEachChild(
@@ -179,35 +129,88 @@ namespace ts {
             (node) => node.token === SyntaxKind.ExtendsKeyword
         );
     }
-    function createDefaultConstructor(
+    type ClassConstructor = ConstructorDeclaration & { body: Block };
+
+    function getConstructorWithClassHasInstanceTracker(
+        oldConstructor: ClassConstructor | undefined,
         isExtended: boolean,
-        additionalStatements: Statement[]
+        tracker: Identifier
     ) {
-        const params: ParameterDeclaration[] = [];
-        const statements: Statement[] = [];
-        if (isExtended) {
-            const rest = factory.createTempVariable(noop);
-            const param = factory.createParameterDeclaration(
-                /** mod */ undefined,
-                factory.createToken(SyntaxKind.DotDotDotToken),
-                rest
-            );
-            params.push(param);
-            statements.push(
-                factory.createExpressionStatement(
-                    factory.createCallExpression(
-                        factory.createSuper(),
-                        /** generics */ undefined,
-                        [factory.createSpreadElement(rest)]
+        let oldBody = oldConstructor?.body;
+        if (!oldBody) {
+            const defaultBody: Statement[] = [];
+            if (isExtended) {
+                defaultBody.push(
+                    factory.createExpressionStatement(
+                        factory.createCallExpression(
+                            factory.createSuper(),
+                            /** generics */ undefined,
+                            [
+                                factory.createSpreadElement(
+                                    factory.createIdentifier("arguments")
+                                ),
+                            ]
+                        )
                     )
-                )
-            );
+                );
+            }
+            oldBody = factory.createBlock(defaultBody);
         }
-        statements.push(...additionalStatements);
+        const hasErrorWhenConstructingTracker =
+            factory.createTempVariable(noop);
+        const catchErrVariable = factory.createTempVariable(noop);
+        const newBody = factory.createBlock([
+            // var _a
+            factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList([
+                    factory.createVariableDeclaration(
+                        hasErrorWhenConstructingTracker
+                    ),
+                ])
+            ),
+            // try { original_statements } catch(_err) { _a = true; throw err; } finally { if (!_a) tracker.add(this); }
+            factory.createTryStatement(
+                // original_statements
+                oldBody,
+                // catch(_err) { _a = true; throw err; }
+                factory.createCatchClause(
+                    catchErrVariable,
+                    factory.createBlock([
+                        factory.createExpressionStatement(
+                            factory.createAssignment(
+                                hasErrorWhenConstructingTracker,
+                                factory.createTrue()
+                            )
+                        ),
+                        factory.createThrowStatement(catchErrVariable),
+                    ])
+                ),
+                // finally { if (!_a) tracker.add(this); }
+                factory.createBlock([
+                    factory.createIfStatement(
+                        factory.createPrefixUnaryExpression(
+                            SyntaxKind.ExclamationToken,
+                            hasErrorWhenConstructingTracker
+                        ),
+                        factory.createExpressionStatement(
+                            factory.createCallExpression(
+                                factory.createPropertyAccessExpression(
+                                    tracker,
+                                    "add"
+                                ),
+                                /** generics */ undefined,
+                                [factory.createThis()]
+                            )
+                        )
+                    ),
+                ])
+            ),
+        ]);
         return factory.createConstructorDeclaration(
-            /** modifiers */ undefined,
-            params,
-            factory.createBlock(statements)
+            oldConstructor?.modifiers,
+            oldConstructor?.parameters || [],
+            newBody
         );
     }
 }
