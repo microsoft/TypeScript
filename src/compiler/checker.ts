@@ -31508,6 +31508,9 @@ namespace ts {
         }
 
         function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [parameterName: __String, isRestParameter: boolean] | undefined {
+            if (signature.declaration?.kind === SyntaxKind.JSDocFunctionType) {
+                return undefined;
+            }
             const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
             if (pos < paramCount) {
                 const param = signature.parameters[pos];
