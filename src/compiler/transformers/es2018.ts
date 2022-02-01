@@ -721,6 +721,7 @@ namespace ts {
                 ),
                 EmitFlags.NoTokenTrailingSourceMaps
             );
+            setOriginalNode(forStatement, node);
 
             return factory.createTryStatement(
                 factory.createBlock([
