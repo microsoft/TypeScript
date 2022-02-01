@@ -33074,7 +33074,7 @@ namespace ts {
 
         // cache this type on the class symbol?
         function createClassMetaPropertyExpressionType(targetClass: Type): Type {
-            // Create a synthetic type `ClassMetaProperty { hasInstance(value: unknown): unknown is TargetClass }`
+            // Create a synthetic type `ClassMetaProperty { hasInstance(value: unknown): value is TargetClass }`
             const symbol = createSymbol(SymbolFlags.None, "ClassMetaProperty" as __String);
 
             // class.hasInstance
@@ -33084,7 +33084,8 @@ namespace ts {
 
                 const arg0 = createSymbol(SymbolFlags.None, "value" as __String);
                 arg0.type = unknownType;
-                const classConstructor = getSingleSignature(targetClass, SignatureKind.Construct, /** allow members */ true);
+                // TODO: is it possible that cannot get construct signature from a class?
+                const classConstructor = getErasedSignature(getSingleSignature(targetClass, SignatureKind.Construct, /** allow members */ true)!);
                 const classInstance = classConstructor ? getReturnTypeOfSignature(classConstructor) : errorType;
                 const hasInstanceReturnType = createTypePredicate(TypePredicateKind.Identifier, "value", 0, classInstance);
                 const signature = createSignature(
