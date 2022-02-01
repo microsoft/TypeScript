@@ -220,6 +220,24 @@ namespace ts {
         Auto,
     }
 
+    /* @internal */
+    export const enum ProjectReferenceAutoImportPreference {
+        Off,
+        On,
+    }
+
+    /* @internal */
+    export function getAutoImportPreferences(preferences: UserPreferences) {
+        const includePackageJson =
+            preferences.includePackageJsonAutoImports === "off" ? PackageJsonAutoImportPreference.Off :
+            preferences.includePackageJsonAutoImports === "on" ? PackageJsonAutoImportPreference.On :
+            PackageJsonAutoImportPreference.Auto;
+        const includeProjectReferences =
+            preferences.includeProjectReferenceAutoImports === "on" ? ProjectReferenceAutoImportPreference.On :
+            ProjectReferenceAutoImportPreference.Off;
+        return { includePackageJson, includeProjectReferences };
+    }
+
     export interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
@@ -320,6 +338,13 @@ namespace ts {
         /* @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
         /* @internal */ getProgramForReferencedProject?(configFileName: string): Program | undefined;
     }
+
+    export const enum AutoImportSourceKind {
+        Program = 1,
+        PackageJson,
+    }
+
+    export type AutoImportSource = AutoImportSourceKind | string;
 
     /* @internal */
     export const emptyOptions = {};
@@ -1201,13 +1226,12 @@ namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        source: AutoImportSource;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
         /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
         ambientModuleName?: string;
-        /** True if the export was found in the package.json AutoImportProvider */
-        isPackageJsonImport?: true;
     }
 
     export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {

@@ -21,8 +21,7 @@ namespace ts {
         moduleFileName: string | undefined;
         exportKind: ExportKind;
         targetFlags: SymbolFlags;
-        /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
-        isFromPackageJson: boolean;
+        source: AutoImportSource;
     }
 
     interface CachedSymbolExportInfo {
@@ -40,13 +39,13 @@ namespace ts {
         moduleFileName: string | undefined;
         exportKind: ExportKind;
         targetFlags: SymbolFlags;
-        isFromPackageJson: boolean;
+        source: AutoImportSource;
     }
 
     export interface ExportInfoMap {
         isUsableByFile(importingFile: Path): boolean;
         clear(): void;
-        add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
+        add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, source: AutoImportSource, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
         forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], getSymbolName: (preferCapitalized?: boolean) => string, isFromAmbientModule: boolean, key: string) => void): void;
         releaseSymbols(): void;
@@ -58,6 +57,7 @@ namespace ts {
     export interface CacheableExportInfoMapHost {
         getCurrentProgram(): Program | undefined;
         getPackageJsonAutoImportProvider(): Program | undefined;
+        getProgramForReferencedProject(configFileName: string): Program | undefined;
     }
 
     export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
@@ -84,7 +84,7 @@ namespace ts {
                 symbols.clear();
                 usableByFileName = undefined;
             },
-            add: (importingFile, symbol, symbolTableKey, moduleSymbol, moduleFile, exportKind, isFromPackageJson, checker) => {
+            add: (importingFile, symbol, symbolTableKey, moduleSymbol, moduleFile, exportKind, source, checker) => {
                 if (importingFile !== usableByFileName) {
                     cache.clear();
                     usableByFileName = importingFile;
@@ -142,7 +142,7 @@ namespace ts {
                     packageName,
                     exportKind,
                     targetFlags: target.flags,
-                    isFromPackageJson,
+                    source,
                     symbol: storedSymbol,
                     moduleSymbol: storedModuleSymbol,
                 });
@@ -206,7 +206,7 @@ namespace ts {
 
         function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
             if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
-            const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
+            const { id, exportKind, targetFlags, source, moduleFileName } = info;
             const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
             if (cachedSymbol && cachedModuleSymbol) {
                 return {
@@ -215,12 +215,10 @@ namespace ts {
                     moduleFileName,
                     exportKind,
                     targetFlags,
-                    isFromPackageJson,
+                    source,
                 };
             }
-            const checker = (isFromPackageJson
-                ? host.getPackageJsonAutoImportProvider()!
-                : host.getCurrentProgram()!).getTypeChecker();
+            const checker = getProgramForAutoImport(source, host.getCurrentProgram()!, host).getTypeChecker();
             const moduleSymbol = info.moduleSymbol || cachedModuleSymbol || Debug.checkDefined(info.moduleFile
                 ? checker.getMergedSymbol(info.moduleFile.symbol)
                 : checker.tryFindAmbientModule(info.moduleName));
@@ -235,7 +233,7 @@ namespace ts {
                 moduleFileName,
                 exportKind,
                 targetFlags,
-                isFromPackageJson,
+                source,
             };
         }
 
@@ -335,25 +333,25 @@ namespace ts {
     export function forEachExternalModuleToImportFrom(
         program: Program,
         host: LanguageServiceHost,
-        useAutoImportProvider: boolean,
-        cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
+        preferences: UserPreferences,
+        cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, source: AutoImportSource) => void,
     ) {
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
-        const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, AutoImportSourceKind.Program));
+        const autoImportProvider = preferences.includePackageJsonAutoImports && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
+            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, AutoImportSourceKind.PackageJson));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
 
-        if (host.getProgramForReferencedProject) {
+        if (preferences.includeProjectReferenceAutoImports && host.getProgramForReferencedProject) {
             const projectReferences = program.getResolvedProjectReferences();
             if (projectReferences) {
                 for (const ref of projectReferences) {
                     if (ref) {
                         const referencedProgram = host.getProgramForReferencedProject(ref.sourceFile.fileName);
                         if (referencedProgram) {
-                            forEachExternalModule(referencedProgram.getTypeChecker(), referencedProgram.getSourceFiles(), (module, file) => cb(module, file, referencedProgram, /*isFromPackageJson*/ false));
+                            forEachExternalModule(referencedProgram.getTypeChecker(), referencedProgram.getSourceFiles(), (module, file) => cb(module, file, referencedProgram, ref.sourceFile.fileName));
                         }
                     }
                 }
@@ -374,7 +372,7 @@ namespace ts {
         }
     }
 
-    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, cancellationToken: CancellationToken | undefined, preferences: UserPreferences): ExportInfoMap {
         const start = timestamp();
         // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
         // which will invalidate the export map cache if things change, so pull it before
@@ -383,6 +381,7 @@ namespace ts {
         const cache = host.getCachedExportInfoMap?.() || createCacheableExportInfoMap({
             getCurrentProgram: () => program,
             getPackageJsonAutoImportProvider: () => host.getPackageJsonAutoImportProvider?.(),
+            getProgramForReferencedProject: configFileName => host.getProgramForReferencedProject?.(configFileName),
         });
 
         if (cache.isUsableByFile(importingFile.path)) {
@@ -393,8 +392,8 @@ namespace ts {
         host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
         let moduleCount = 0;
-        forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
-            if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
+        forEachExternalModuleToImportFrom(program, host, preferences, (moduleSymbol, moduleFile, program, source) => {
+        if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
             const seenExports = new Map<__String, true>();
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
@@ -408,7 +407,7 @@ namespace ts {
                     moduleSymbol,
                     moduleFile,
                     defaultInfo.exportKind,
-                    isFromPackageJson,
+                    source,
                     checker);
             }
             checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
@@ -420,7 +419,7 @@ namespace ts {
                         moduleSymbol,
                         moduleFile,
                         ExportKind.Named,
-                        isFromPackageJson,
+                        source,
                         checker);
                 }
             });

@@ -80,12 +80,12 @@ namespace ts.Completions {
     interface SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
         isDefaultExport?: boolean;
-        isFromPackageJson?: boolean;
         fileName?: string;
     }
 
     interface SymbolOriginInfoExport extends SymbolOriginInfo {
         symbolName: string;
+        source: AutoImportSource;
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
         exportName: string;
@@ -94,6 +94,7 @@ namespace ts.Completions {
 
     interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
         symbolName: string;
+        source: AutoImportSource;
         moduleSymbol: Symbol;
         exportName: string;
         moduleSpecifier: string;
@@ -124,7 +125,7 @@ namespace ts.Completions {
     }
 
     function originIsPackageJsonImport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
-        return (originIsExport(origin) || originIsResolvedExport(origin)) && !!origin.isFromPackageJson;
+        return (originIsExport(origin) || originIsResolvedExport(origin)) && origin.source === AutoImportSourceKind.PackageJson;
     }
 
     function originIsPromise(origin: SymbolOriginInfo): boolean {
@@ -351,7 +352,7 @@ namespace ts.Completions {
         if (!previousResponse) return undefined;
 
         const lowerCaseTokenText = location.text.toLowerCase();
-        const exportMap = getExportInfoMap(file, host, program, cancellationToken);
+        const exportMap = getExportInfoMap(file, host, program, cancellationToken, preferences);
         const newEntries = resolvingModuleSpecifiers(
             "continuePreviousIncompleteResponse",
             host,
@@ -1095,14 +1096,13 @@ namespace ts.Completions {
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport): CompletionEntryData | undefined {
         const ambientModuleName = origin.fileName ? undefined : stripQuotes(origin.moduleSymbol.name);
-        const isPackageJsonImport = origin.isFromPackageJson ? true : undefined;
         if (originIsResolvedExport(origin)) {
             const resolvedData: CompletionEntryDataResolved = {
                 exportName: origin.exportName,
                 moduleSpecifier: origin.moduleSpecifier,
                 ambientModuleName,
                 fileName: origin.fileName,
-                isPackageJsonImport,
+                source: origin.source,
             };
             return resolvedData;
         }
@@ -1111,14 +1111,13 @@ namespace ts.Completions {
             exportMapKey: origin.exportMapKey,
             fileName: origin.fileName,
             ambientModuleName: origin.fileName ? undefined : stripQuotes(origin.moduleSymbol.name),
-            isPackageJsonImport: origin.isFromPackageJson ? true : undefined,
+            source: origin.source,
         };
         return unresolvedData;
     }
 
     function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, completionName: string, moduleSymbol: Symbol): SymbolOriginInfoExport | SymbolOriginInfoResolvedExport {
         const isDefaultExport = data.exportName === InternalSymbolName.Default;
-        const isFromPackageJson = !!data.isPackageJsonImport;
         if (completionEntryDataIsResolved(data)) {
             const resolvedOrigin: SymbolOriginInfoResolvedExport = {
                 kind: SymbolOriginInfoKind.ResolvedExport,
@@ -1126,9 +1125,9 @@ namespace ts.Completions {
                 moduleSpecifier: data.moduleSpecifier,
                 symbolName: completionName,
                 fileName: data.fileName,
+                source: data.source,
                 moduleSymbol,
                 isDefaultExport,
-                isFromPackageJson,
             };
             return resolvedOrigin;
         }
@@ -1138,9 +1137,9 @@ namespace ts.Completions {
             exportMapKey: data.exportMapKey,
             symbolName: completionName,
             fileName: data.fileName,
+            source: data.source,
             moduleSymbol,
             isDefaultExport,
-            isFromPackageJson,
         };
         return unresolvedOrigin;
     }
@@ -1576,7 +1575,7 @@ namespace ts.Completions {
             return { codeActions: undefined, sourceDisplay: undefined };
         }
 
-        const checker = origin.isFromPackageJson ? host.getPackageJsonAutoImportProvider!()!.getTypeChecker() : program.getTypeChecker();
+        const checker = getProgramForAutoImport(origin.source, program, host).getTypeChecker();
         const { moduleSymbol } = origin;
         const targetSymbol = checker.getMergedSymbol(skipAlias(symbol.exportSymbol || symbol, checker));
         const isJsxOpeningTagName = contextToken?.kind === SyntaxKind.LessThanToken && isJsxOpeningLikeElement(contextToken.parent);
@@ -1979,8 +1978,8 @@ namespace ts.Completions {
         const symbolToSortTextIdMap: SymbolSortTextIdMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
         const isTypeOnlyLocation = isTypeOnlyCompletion();
-        const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
-            return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
+        const getModuleSpecifierResolutionHost = memoizeOne((source: AutoImportSource) => {
+            return createModuleSpecifierResolutionHost(getProgramForAutoImport(source, program, host), host);
         });
 
         if (isRightOfDot || isRightOfQuestionDot) {
@@ -2209,7 +2208,7 @@ namespace ts.Completions {
                         const { moduleSpecifier } = codefix.getModuleSpecifierForBestExportInfo([{
                             exportKind: ExportKind.Named,
                             moduleFileName: fileName,
-                            isFromPackageJson: false,
+                            source: AutoImportSourceKind.Program,
                             moduleSymbol,
                             symbol: firstAccessibleSymbol,
                             targetFlags: skipAlias(firstAccessibleSymbol, typeChecker).flags,
@@ -2222,6 +2221,7 @@ namespace ts.Completions {
                                 isDefaultExport: false,
                                 symbolName: firstAccessibleSymbol.name,
                                 exportName: firstAccessibleSymbol.name,
+                                source: AutoImportSourceKind.Program,
                                 fileName,
                                 moduleSpecifier,
                             };
@@ -2484,8 +2484,8 @@ namespace ts.Completions {
                 "";
 
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-            const exportInfo = getExportInfoMap(sourceFile, host, program, cancellationToken);
-            const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
+            const exportInfo = getExportInfoMap(sourceFile, host, program, cancellationToken, preferences);
+            const getProgramForAutoImport = createMemoizedGetProgramForAutoImport(program, host);
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             resolvingModuleSpecifiers(
                 "collectAutoImports",
@@ -2528,7 +2528,7 @@ namespace ts.Completions {
                                 fileName: exportInfo.moduleFileName,
                                 isDefaultExport,
                                 moduleSymbol: exportInfo.moduleSymbol,
-                                isFromPackageJson: exportInfo.isFromPackageJson,
+                                source: exportInfo.source,
                             });
                         }
                     });
@@ -2545,16 +2545,16 @@ namespace ts.Completions {
                         return false;
                     }
                     return packageJsonFilter
-                        ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
+                        ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.source))
                         : true;
                 }
                 return isImportableFile(
-                    info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
+                    getProgramForAutoImport(info.source),
                     sourceFile,
                     moduleFile,
                     preferences,
                     packageJsonFilter,
-                    getModuleSpecifierResolutionHost(info.isFromPackageJson),
+                    getModuleSpecifierResolutionHost(info.source),
                     moduleSpecifierCache);
             }
         }
@@ -3454,7 +3454,7 @@ namespace ts.Completions {
     }
 
     function getAutoImportSymbolFromCompletionEntryData(name: string, data: CompletionEntryData, program: Program, host: LanguageServiceHost): { symbol: Symbol, origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport } | undefined {
-        const containingProgram = data.isPackageJsonImport ? host.getPackageJsonAutoImportProvider!()! : program;
+        const containingProgram = getProgramForAutoImport(data.source, program, host);
         const checker = containingProgram.getTypeChecker();
         const moduleSymbol =
             data.ambientModuleName ? checker.tryFindAmbientModule(data.ambientModuleName) :

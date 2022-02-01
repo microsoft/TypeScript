@@ -8683,6 +8683,7 @@ namespace ts {
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly includeProjectReferenceAutoImports?: "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
     }

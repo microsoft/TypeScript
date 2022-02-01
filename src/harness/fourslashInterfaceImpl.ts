@@ -478,8 +478,8 @@ namespace FourSlashInterface {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
-        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]) {
-            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers);
+        public importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], options?: ts.UserPreferences) {
+            this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, options);
         }
 
         public navigationBar(json: any, options?: { checkSpans?: boolean }) {

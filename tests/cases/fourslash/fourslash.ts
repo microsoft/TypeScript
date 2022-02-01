@@ -104,10 +104,17 @@ declare module ts {
         character: number;
     }
 
+    const enum AutoImportSourceKind {
+        Program = 1,
+        PackageJson,
+    }
+
+    type AutoImportSource = AutoImportSourceKind | string;
+
     interface CompletionEntryData {
         fileName?: string;
         ambientModuleName?: string;
-        isPackageJsonImport?: true;
+        source: AutoImportSource;
         exportName: string;
     }
 
@@ -364,7 +371,7 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
-        importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]): void;
+        importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], options?: UserPreferences): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -654,6 +661,7 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly includeProjectReferenceAutoImports?: "on" | "off";
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

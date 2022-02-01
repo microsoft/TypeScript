@@ -3314,5 +3314,20 @@ namespace ts {
         };
     }
 
+    export function getProgramForAutoImport(source: AutoImportSource, program: Program, host: CacheableExportInfoMapHost | LanguageServiceHost): Program {
+        switch (source) {
+            case AutoImportSourceKind.Program:
+                return program;
+            case AutoImportSourceKind.PackageJson:
+                return Debug.checkDefined(host.getPackageJsonAutoImportProvider?.(), "Could not retrieve package.json AutoImportProvider");
+            default:
+                return Debug.checkDefined(host.getProgramForReferencedProject?.(source), "Could not retrieve program for auto-importing from referenced project");
+        }
+    }
+
+    export function createMemoizedGetProgramForAutoImport(program: Program, host: CacheableExportInfoMapHost | LanguageServiceHost) {
+        return memoizeOne((source: AutoImportSource) => getProgramForAutoImport(source, program, host));
+    }
+
     // #endregion
 }

@@ -3146,9 +3146,13 @@ namespace FourSlash {
             });
         }
 
-        public verifyImportFixModuleSpecifiers(markerName: string, moduleSpecifiers: string[]) {
+        public verifyImportFixModuleSpecifiers(markerName: string, moduleSpecifiers: string[], options?: ts.UserPreferences) {
+            if (options) {
+                this.configure(options);
+            }
             const marker = this.getMarkerByName(markerName);
             const codeFixes = this.getCodeFixes(marker.fileName, ts.Diagnostics.Cannot_find_name_0.code, {
+                ...options,
                 includeCompletionsForModuleExports: true,
                 includeCompletionsWithInsertText: true
             }, marker.position).filter(f => f.fixName === ts.codefix.importFixName);
