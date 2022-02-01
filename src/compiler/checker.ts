@@ -135,7 +135,7 @@ namespace ts {
         AllTypeofNE = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined,
         EmptyObjectFacts = All,
         // Masks
-        OrFactsMask = TypeofEQFunction | TypeofEQObject | TypeofNEObject,
+        OrFactsMask = TypeofEQFunction | TypeofNEObject,
         AndFactsMask = All & ~OrFactsMask,
     }
 
@@ -22961,7 +22961,10 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.Object && !ignoreObjects) {
+            if (flags & TypeFlags.Object) {
+                if (ignoreObjects) {
+                    return TypeFacts.AndFactsMask; // This is the identity element for computing type facts of intersection.
+                }
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                     isFunctionObjectType(type as ObjectType) ?
