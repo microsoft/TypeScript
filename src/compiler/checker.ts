@@ -135,7 +135,7 @@ namespace ts {
         AllTypeofNE = TypeofNEString | TypeofNENumber | TypeofNEBigInt | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined,
         EmptyObjectFacts = All,
         // Masks
-        OrFactsMask = TypeofEQFunction | TypeofEQObject | TypeofNEObject,
+        OrFactsMask = TypeofEQFunction | TypeofNEObject,
         AndFactsMask = All & ~OrFactsMask,
     }
 
@@ -22961,7 +22961,10 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.Object && !ignoreObjects) {
+            if (flags & TypeFlags.Object) {
+                if (ignoreObjects) {
+                    return TypeFacts.AndFactsMask; // This is the identity element for computing type facts of intersection.
+                }
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                     isFunctionObjectType(type as ObjectType) ?
@@ -27086,7 +27089,8 @@ namespace ts {
             const links = getNodeLinks(node.expression);
             if (!links.resolvedType) {
                 if ((isTypeLiteralNode(node.parent.parent) || isClassLike(node.parent.parent) || isInterfaceDeclaration(node.parent.parent))
-                    && isBinaryExpression(node.expression) && node.expression.operatorToken.kind === SyntaxKind.InKeyword) {
+                    && isBinaryExpression(node.expression) && node.expression.operatorToken.kind === SyntaxKind.InKeyword
+                    && node.parent.kind !== SyntaxKind.GetAccessor && node.parent.kind !== SyntaxKind.SetAccessor) {
                     return links.resolvedType = errorType;
                 }
                 links.resolvedType = checkExpression(node.expression);
@@ -31508,6 +31512,9 @@ namespace ts {
         }
 
         function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [parameterName: __String, isRestParameter: boolean] | undefined {
+            if (signature.declaration?.kind === SyntaxKind.JSDocFunctionType) {
+                return undefined;
+            }
             const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
             if (pos < paramCount) {
                 const param = signature.parameters[pos];

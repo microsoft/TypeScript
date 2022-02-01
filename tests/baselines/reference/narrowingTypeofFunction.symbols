@@ -43,3 +43,16 @@ function f2<T>(x: (T & F) | T & string) {
 >x : Symbol(x, Decl(narrowingTypeofFunction.ts, 12, 15))
     }
 }
+
+function f3(x: { _foo: number } & number) {
+>f3 : Symbol(f3, Decl(narrowingTypeofFunction.ts, 19, 1))
+>x : Symbol(x, Decl(narrowingTypeofFunction.ts, 21, 12))
+>_foo : Symbol(_foo, Decl(narrowingTypeofFunction.ts, 21, 16))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(narrowingTypeofFunction.ts, 21, 12))
+
+        x;
+>x : Symbol(x, Decl(narrowingTypeofFunction.ts, 21, 12))
+    }
+}

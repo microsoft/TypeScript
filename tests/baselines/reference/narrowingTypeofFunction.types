@@ -42,3 +42,19 @@ function f2<T>(x: (T & F) | T & string) {
 >x : T & string
     }
 }
+
+function f3(x: { _foo: number } & number) {
+>f3 : (x: {    _foo: number;} & number) => void
+>x : { _foo: number; } & number
+>_foo : number
+
+    if (typeof x === "function") {
+>typeof x === "function" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : { _foo: number; } & number
+>"function" : "function"
+
+        x;
+>x : never
+    }
+}
