@@ -121,7 +121,7 @@ namespace ts.codefix {
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
                         const parameter = getSetAccessorValueParameter(accessor);
-                        const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
+                        const parameterName = parameter?.name && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
                         addClassElement(factory.createSetAccessorDeclaration(
                             /*decorators*/ undefined,
                             modifiers,

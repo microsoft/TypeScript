@@ -201,12 +201,13 @@ namespace ts {
         // so let's just ignore it.
         return parameter.dotDotDotToken ? parameter :
             isBindingPattern(parameter.name) ? addDefaultValueAssignmentForBindingPattern(parameter, context) :
-            parameter.initializer ? addDefaultValueAssignmentForInitializer(parameter, parameter.name, parameter.initializer, context) :
+            parameter.initializer && parameter.name ? addDefaultValueAssignmentForInitializer(parameter, parameter.name, parameter.initializer, context) :
             parameter;
     }
 
     function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclaration, context: TransformationContext) {
         const { factory } = context;
+        Debug.type<BindingPattern>(parameter.name);
         context.addInitializationStatement(
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
@@ -391,6 +392,7 @@ namespace ts {
 
             case SyntaxKind.Parameter:
                 Debug.type<ParameterDeclaration>(node);
+                Debug.type<BindingName>(node.name);
                 return factory.updateParameterDeclaration(node,
                     nodesVisitor(node.decorators, visitor, isDecorator),
                     nodesVisitor(node.modifiers, visitor, isModifier),

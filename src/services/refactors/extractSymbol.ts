@@ -1291,7 +1291,7 @@ namespace ts.refactor.extractSymbol {
                     const firstParameter = firstOrUndefined(parameters);
                     // If the function signature has a this parameter and if the first defined parameter is not the this parameter, we must add it
                     // Note: If this parameter was already there, it would have been previously updated with the type if not type was present
-                    if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
+                    if (!firstParameter || !firstParameter.name || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this")) {
                         const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
                         parameters.splice(0, 0, factory.createParameterDeclaration(
                             /* decorators */ undefined,

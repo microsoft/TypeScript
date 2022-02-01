@@ -142,7 +142,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }
 
         function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {
-            Debug.assert(isIdentifier(p.name)); // This is checked during refactoring applicability checking
+            Debug.assert(p.name && isIdentifier(p.name)); // This is checked during refactoring applicability checking
             const result = setTextRange(factory.createNamedTupleMember(
                 p.dotDotDotToken,
                 p.name,
@@ -209,7 +209,7 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
             return;
         }
         const signatureDecls = decls as (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[];
-        if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.decorators || !!p.modifiers || !isIdentifier(p.name)))) {
+        if (some(signatureDecls, d => !!d.typeParameters || some(d.parameters, p => !!p.decorators || !!p.modifiers || !p.name || !isIdentifier(p.name)))) {
             return;
         }
         const signatures = mapDefined(signatureDecls, d => checker.getSignatureFromDeclaration(d));

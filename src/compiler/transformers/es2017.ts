@@ -373,6 +373,7 @@ namespace ts {
         }
 
         function recordDeclarationName({ name }: ParameterDeclaration | VariableDeclaration | BindingElement, names: Set<__String>) {
+            Debug.type<BindingName>(name);
             if (isIdentifier(name)) {
                 names.add(name.escapedText);
             }

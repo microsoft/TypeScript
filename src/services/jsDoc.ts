@@ -266,6 +266,7 @@ namespace ts.JsDoc {
         if (!isFunctionLike(fn)) return [];
 
         return mapDefined(fn.parameters, param => {
+            Debug.type<BindingName>(param.name);
             if (!isIdentifier(param.name)) return undefined;
 
             const name = param.name.text;
@@ -372,6 +373,7 @@ namespace ts.JsDoc {
 
     function parameterDocComments(parameters: readonly ParameterDeclaration[], isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
         return parameters.map(({ name, dotDotDotToken }, i) => {
+            Debug.type<BindingName>(name);
             const paramName = name.kind === SyntaxKind.Identifier ? name.text : "param" + i;
             const type = isJavaScriptFile ? (dotDotDotToken ? "{...any} " : "{any} ") : "";
             return `${indentationStr} * @param ${type}${paramName}${newLine}`;

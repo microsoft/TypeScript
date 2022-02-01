@@ -255,7 +255,7 @@ namespace ts.codefix {
         isFixAll = false): void {
         if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
             if (parameter.modifiers && parameter.modifiers.length > 0 &&
-                (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
+                (!parameter.name || !isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
                 parameter.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
             }
             else if (!parameter.initializer && isNotProvidedArguments(parameter, checker, sourceFiles)) {
@@ -331,7 +331,7 @@ namespace ts.codefix {
         const index = parameters.indexOf(parameter);
         Debug.assert(index !== -1, "The parameter should already be in the list");
         return isFixAll ?
-            parameters.slice(index + 1).every(p => isIdentifier(p.name) && !p.symbol.isReferenced) :
+            parameters.slice(index + 1).every(p => p.name && isIdentifier(p.name) && !p.symbol.isReferenced) :
             index === parameters.length - 1;
     }
 

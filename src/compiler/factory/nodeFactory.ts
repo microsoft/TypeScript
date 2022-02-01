@@ -1151,7 +1151,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             dotDotDotToken: DotDotDotToken | undefined,
-            name: string | BindingName,
+            name: string | BindingName | undefined,
             questionToken?: QuestionToken,
             type?: TypeNode,
             initializer?: Expression
@@ -1186,7 +1186,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             dotDotDotToken: DotDotDotToken | undefined,
-            name: string | BindingName,
+            name: string | BindingName | undefined,
             questionToken: QuestionToken | undefined,
             type: TypeNode | undefined,
             initializer: Expression | undefined

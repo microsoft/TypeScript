@@ -746,6 +746,7 @@ namespace ts.codefix {
         if (isFunctionLikeDeclaration(funcNode)) {
             if (funcNode.parameters.length > 0) {
                 const param = funcNode.parameters[0].name;
+                Debug.type<BindingName>(param);
                 name = getMappedBindingNameOrDefault(param);
             }
         }

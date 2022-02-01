@@ -229,6 +229,7 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
     ): void {
+        Debug.type<BindingName>(parameterDeclaration.name);
         if (!isIdentifier(parameterDeclaration.name)) {
             return;
         }
@@ -287,7 +288,7 @@ namespace ts.codefix {
 
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
-        if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
+        if (param && isIdentifier(setAccessorDeclaration.name) && param.name && isIdentifier(param.name)) {
             let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken);
             if (type === program.getTypeChecker().getAnyType()) {
                 type = inferTypeForVariableFromUsage(param.name, program, cancellationToken);
@@ -344,7 +345,7 @@ namespace ts.codefix {
         const inferences = mapDefined(parameterInferences, inference => {
             const param = inference.declaration;
             // only infer parameters that have (1) no type and (2) an accessible inferred type
-            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) {
+            if (param.initializer || getJSDocType(param) || !param.name || !isIdentifier(param.name)) {
                 return;
             }
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
@@ -398,7 +399,7 @@ namespace ts.codefix {
         return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
             func.parameters.map<ParameterInference>(p => ({
                 declaration: p,
-                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
+                type: p.name && isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
             }));
     }
 
@@ -557,7 +558,7 @@ namespace ts.codefix {
                         types.push(checker.getBaseTypeOfLiteralType(call.argumentTypes[parameterIndex]));
                     }
                 }
-                if (isIdentifier(parameter.name)) {
+                if (parameter.name && isIdentifier(parameter.name)) {
                     const inferred = inferTypesFromReferencesSingle(getReferences(parameter.name, program, cancellationToken));
                     types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }

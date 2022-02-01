@@ -404,7 +404,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const type = checker.getTypeAtLocation(parameterDeclaration);
             if (!checker.isArrayType(type) && !checker.isTupleType(type)) return false;
         }
-        return !parameterDeclaration.modifiers && !parameterDeclaration.decorators && isIdentifier(parameterDeclaration.name);
+        return !parameterDeclaration.modifiers && !parameterDeclaration.decorators && !!parameterDeclaration.name && isIdentifier(parameterDeclaration.name);
     }
 
     function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
@@ -412,7 +412,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     function hasThisParameter(parameters: NodeArray<ParameterDeclaration>): boolean {
-        return parameters.length > 0 && isThis(parameters[0].name);
+        return parameters.length > 0 && !!parameters[0].name && isThis(parameters[0].name);
     }
 
     function getRefactorableParametersLength(parameters: NodeArray<ParameterDeclaration>): number {
@@ -492,8 +492,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 /*questionToken*/ undefined,
                 thisParameter.type);
 
-            suppressLeadingAndTrailingTrivia(newThisParameter.name);
-            copyComments(thisParameter.name, newThisParameter.name);
+            suppressLeadingAndTrailingTrivia(newThisParameter.name!);
+            copyComments(thisParameter.name, newThisParameter.name!);
             if (thisParameter.type) {
                 suppressLeadingAndTrailingTrivia(newThisParameter.type!);
                 copyComments(thisParameter.type, newThisParameter.type!);

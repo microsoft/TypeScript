@@ -167,7 +167,7 @@ namespace ts.codefix {
             if (!(signature && signature.declaration && signature.parameters[argIndex])) return undefined;
 
             const param = signature.parameters[argIndex].valueDeclaration;
-            if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
+            if (!(param && isParameter(param) && param.name && isIdentifier(param.name))) return undefined;
 
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;

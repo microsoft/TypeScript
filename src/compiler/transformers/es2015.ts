@@ -1310,6 +1310,7 @@ namespace ts {
                     added = insertDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer) || added;
                 }
                 else if (initializer) {
+                    Debug.type<BindingName>(name);
                     insertDefaultValueAssignmentForInitializer(statements, parameter, name, initializer);
                     added = true;
                 }
@@ -1439,6 +1440,7 @@ namespace ts {
 
             // `declarationName` is the name of the local declaration for the parameter.
             // TODO(rbuckton): Does this need to be parented?
+            Debug.type<BindingName>(parameter.name);
             const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 

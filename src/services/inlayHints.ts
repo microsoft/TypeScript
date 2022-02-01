@@ -270,7 +270,7 @@ namespace ts.InlayHints {
                 const param = node.parameters[i];
                 const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
 
-                if (effectiveTypeAnnotation) {
+                if (effectiveTypeAnnotation || !param.name) {
                     continue;
                 }
 

@@ -3031,7 +3031,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
                     // TODO(rbuckton): JSDoc parameters don't have names (except `this`/`new`), should we manufacture an empty identifier?
-                    name!,
+                    name,
                     /*questionToken*/ undefined,
                     parseJSDocType(),
                     /*initializer*/ undefined

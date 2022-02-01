@@ -540,6 +540,8 @@ namespace ts.textChanges {
                 }
             }
             else {
+                Debug.assert(node.parent.kind !== SyntaxKind.JSDocFunctionType);
+                Debug.type<BindingName | PropertyName>(node.name);
                 endNode = (node.kind === SyntaxKind.VariableDeclaration ? node.exclamationToken : node.questionToken) ?? node.name;
             }
 

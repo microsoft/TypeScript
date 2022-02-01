@@ -4264,7 +4264,7 @@ namespace ts {
                 && !parameter.questionToken         // parameter may not be optional
                 && !parameter.type                  // parameter may not have a type annotation
                 && !parameter.initializer           // parameter may not have an initializer
-                && isIdentifier(parameter.name);    // parameter name must be identifier
+                && isIdentifier(parameter.name!);    // parameter name must be identifier
         }
 
         function emitParametersForArrow(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {

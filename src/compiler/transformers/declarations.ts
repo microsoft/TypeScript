@@ -447,8 +447,8 @@ namespace ts {
             return ret;
         }
 
-        function filterBindingPatternInitializers(name: BindingName) {
-            if (name.kind === SyntaxKind.Identifier) {
+        function filterBindingPatternInitializers(name: BindingName | undefined) {
+            if (!name || name.kind === SyntaxKind.Identifier) {
                 return name;
             }
             else {
@@ -465,7 +465,7 @@ namespace ts {
                 if (elem.kind === SyntaxKind.OmittedExpression) {
                     return elem;
                 }
-                return factory.updateBindingElement(elem, elem.dotDotDotToken, elem.propertyName, filterBindingPatternInitializers(elem.name), shouldPrintWithInitializer(elem) ? elem.initializer : undefined);
+                return factory.updateBindingElement(elem, elem.dotDotDotToken, elem.propertyName, filterBindingPatternInitializers(elem.name)!, shouldPrintWithInitializer(elem) ? elem.initializer : undefined);
             }
         }
 
@@ -1371,6 +1371,7 @@ namespace ts {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, (param) => {
                             if (!hasSyntacticModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
+                            Debug.type<BindingName>(param.name);
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(factory.createPropertyDeclaration(

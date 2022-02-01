@@ -891,6 +891,7 @@ namespace ts {
 
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
+                    Debug.type<BindingName>(parameter.name);
                     if (isIdentifier(parameter.name)) {
                         members.push(setOriginalNode(factory.createPropertyDeclaration(
                             /*decorators*/ undefined,
@@ -1414,11 +1415,9 @@ namespace ts {
          */
         function serializeParameterTypesOfNode(node: Node, container: ClassLikeDeclaration): ArrayLiteralExpression {
             const valueDeclaration =
-                isClassLike(node)
-                    ? getFirstConstructorWithBody(node)
-                    : isFunctionLike(node) && nodeIsPresent((node as FunctionLikeDeclaration).body)
-                        ? node
-                        : undefined;
+                isClassLike(node) ? getFirstConstructorWithBody(node)
+                : isFunctionLike(node) && nodeIsPresent((node as FunctionLikeDeclaration).body) ? node
+                : undefined;
 
             const expressions: SerializedTypeNode[] = [];
             if (valueDeclaration) {
@@ -1426,6 +1425,7 @@ namespace ts {
                 const numParameters = parameters.length;
                 for (let i = 0; i < numParameters; i++) {
                     const parameter = parameters[i];
+                    Debug.type<BindingName>(parameter.name);
                     if (i === 0 && isIdentifier(parameter.name) && parameter.name.escapedText === "this") {
                         continue;
                     }
@@ -2176,7 +2176,9 @@ namespace ts {
                 setCommentRange(updated, node);
                 setTextRange(updated, moveRangePastModifiers(node));
                 setSourceMapRange(updated, moveRangePastModifiers(node));
-                setEmitFlags(updated.name, EmitFlags.NoTrailingSourceMap);
+                if (updated.name) {
+                    setEmitFlags(updated.name, EmitFlags.NoTrailingSourceMap);
+                }
             }
             return updated;
         }

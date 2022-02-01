@@ -2206,7 +2206,7 @@ namespace ts {
     /** Get the declaration initializer when it is container-like (See getExpandoInitializer). */
     export function getDeclaredExpandoInitializer(node: HasExpressionInitializer) {
         const init = getEffectiveInitializer(node);
-        return init && getExpandoInitializer(init, isPrototypeAccess(node.name));
+        return init && node.name && getExpandoInitializer(init, isPrototypeAccess(node.name));
     }
 
     function hasExpandoValueProperty(node: ObjectLiteralExpression, isPrototypeAssignment: boolean) {
@@ -2780,7 +2780,7 @@ namespace ts {
         if (!decl) {
             return undefined;
         }
-        const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
+        const parameter = find(decl.parameters, p => !!p.name && p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
         return parameter && parameter.symbol;
     }
 

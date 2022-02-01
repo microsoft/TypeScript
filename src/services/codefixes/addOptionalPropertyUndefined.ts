@@ -64,7 +64,7 @@ namespace ts.codefix {
             const i = errorNode.parent.arguments.indexOf(errorNode);
             if (i === -1) return undefined;
             const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name;
-            if (isIdentifier(name)) return { source: errorNode, target: name };
+            if (name && isIdentifier(name)) return { source: errorNode, target: name };
         }
         else if (isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
             isShorthandPropertyAssignment(errorNode.parent)) {

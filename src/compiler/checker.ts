@@ -1739,7 +1739,7 @@ namespace ts {
             return false;
 
             function requiresScopeChange(node: ParameterDeclaration): boolean {
-                return requiresScopeChangeWorker(node.name)
+                return !!node.name && requiresScopeChangeWorker(node.name)
                     || !!node.initializer && requiresScopeChangeWorker(node.initializer);
             }
 
@@ -21293,7 +21293,7 @@ namespace ts {
                     break;
                 case SyntaxKind.Parameter:
                     const param = declaration as ParameterDeclaration;
-                    if (isIdentifier(param.name) &&
+                    if (param.name && isIdentifier(param.name) &&
                         (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
                         param.parent.parameters.indexOf(param) > -1 &&
                         (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
@@ -25990,7 +25990,7 @@ namespace ts {
             const parentType = getContextualTypeForVariableLikeDeclaration(parent) ||
                 parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent);
             if (!parentType || isBindingPattern(name) || isComputedNonLiteralName(name)) return undefined;
-            if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
+            if (parent.name?.kind === SyntaxKind.ArrayBindingPattern) {
                 const index = indexOfNode(declaration.parent.elements, declaration);
                 if (index < 0) return undefined;
                 return getContextualTypeForElementExpression(parentType, index);
@@ -31488,7 +31488,7 @@ namespace ts {
         }
 
         function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember) {
-            Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
+            Debug.assert(d.name && isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
             return d.name.escapedText;
         }
 
@@ -31541,10 +31541,10 @@ namespace ts {
         }
 
         function isParameterDeclarationWithIdentifierName(symbol: Symbol) {
-            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name);
+            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && symbol.valueDeclaration.name && isIdentifier(symbol.valueDeclaration.name);
         }
         function isValidDeclarationForTupleLabel(d: Declaration): d is NamedTupleMember | (ParameterDeclaration & { name: Identifier }) {
-            return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && d.name && isIdentifier(d.name));
+            return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && !!d.name && isIdentifier(d.name));
         }
 
         function getNameableDeclarationAtPosition(signature: Signature, pos: number) {
@@ -31771,7 +31771,7 @@ namespace ts {
             if (!links.type) {
                 const declaration = parameter.valueDeclaration as ParameterDeclaration;
                 links.type = type || getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
-                if (declaration.name.kind !== SyntaxKind.Identifier) {
+                if (declaration.name && declaration.name.kind !== SyntaxKind.Identifier) {
                     // if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
                     if (links.type === unknownType) {
                         links.type = getTypeFromBindingPattern(declaration.name);
@@ -33717,7 +33717,7 @@ namespace ts {
             const initializer = getEffectiveInitializer(declaration)!;
             const type = getQuickTypeOfExpression(initializer) ||
                 (contextualType ? checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, CheckMode.Normal) : checkExpressionCached(initializer));
-            return isParameter(declaration) && declaration.name.kind === SyntaxKind.ArrayBindingPattern &&
+            return isParameter(declaration) && declaration.name?.kind === SyntaxKind.ArrayBindingPattern &&
                 isTupleType(type) && !type.target.hasRestElement && getTypeReferenceArity(type) < declaration.name.elements.length ?
                 padTupleType(type, declaration.name) : type;
         }
@@ -34254,7 +34254,7 @@ namespace ts {
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
-                if (func.kind === SyntaxKind.Constructor && isIdentifier(node.name) && node.name.escapedText === "constructor") {
+                if (func.kind === SyntaxKind.Constructor && node.name && isIdentifier(node.name) && node.name.escapedText === "constructor") {
                     error(node.name, Diagnostics.constructor_cannot_be_used_as_a_parameter_property_name);
                 }
             }
@@ -36436,7 +36436,7 @@ namespace ts {
                     case SyntaxKind.Constructor:
                         for (const parameter of (member as ConstructorDeclaration).parameters) {
                             if (!parameter.symbol.isReferenced && hasSyntacticModifier(parameter, ModifierFlags.Private)) {
-                                addDiagnostic(parameter, UnusedKind.Local, createDiagnosticForNode(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol)));
+                                addDiagnostic(parameter, UnusedKind.Local, createDiagnosticForNode(parameter.name!, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol)));
                             }
                         }
                         break;
@@ -42937,17 +42937,17 @@ namespace ts {
                     }
 
                     if (parameter.initializer) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
+                        return grammarErrorOnNode(parameter.name || parameter, Diagnostics.A_rest_parameter_cannot_have_an_initializer);
                     }
                 }
                 else if (isOptionalParameter(parameter)) {
                     seenOptionalParameter = true;
                     if (parameter.questionToken && parameter.initializer) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
+                        return grammarErrorOnNode(parameter.name || parameter, Diagnostics.Parameter_cannot_have_question_mark_and_initializer);
                     }
                 }
                 else if (seenOptionalParameter && !parameter.initializer) {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
+                    return grammarErrorOnNode(parameter.name || parameter, Diagnostics.A_required_parameter_cannot_follow_an_optional_parameter);
                 }
             }
         }
@@ -43017,7 +43017,7 @@ namespace ts {
             const parameter = node.parameters[0];
             if (node.parameters.length !== 1) {
                 if (parameter) {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
+                    return grammarErrorOnNode(parameter.name || parameter, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
                 }
                 else {
                     return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_exactly_one_parameter);
@@ -43028,23 +43028,23 @@ namespace ts {
                 return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.An_index_signature_cannot_have_a_rest_parameter);
             }
             if (hasEffectiveModifiers(parameter)) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier);
+                return grammarErrorOnNode(parameter.name || parameter, Diagnostics.An_index_signature_parameter_cannot_have_an_accessibility_modifier);
             }
             if (parameter.questionToken) {
                 return grammarErrorOnNode(parameter.questionToken, Diagnostics.An_index_signature_parameter_cannot_have_a_question_mark);
             }
             if (parameter.initializer) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_cannot_have_an_initializer);
+                return grammarErrorOnNode(parameter.name || parameter, Diagnostics.An_index_signature_parameter_cannot_have_an_initializer);
             }
             if (!parameter.type) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
+                return grammarErrorOnNode(parameter.name || parameter, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
             if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericType(type)) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
+                return grammarErrorOnNode(parameter.name || parameter, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
             if (!everyType(type, isValidIndexKeyType)) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type);
+                return grammarErrorOnNode(parameter.name || parameter, Diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type);
             }
             if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
