@@ -157,11 +157,12 @@ namespace ts {
                 const result = exportInfo.get(key);
                 return result?.map(rehydrateCachedInfo);
             },
-            search: (importingFile, preferCaptialized, matches, action) => {
+            search: (importingFile, preferCapitalized, matches, action) => {
+
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
-                    const name = preferCaptialized && info[0].capitalizedSymbolName || symbolName;
+                    const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
                     if (matches(name, info[0].targetFlags)) {
                         const rehydrated = info.map(rehydrateCachedInfo);
                         const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
