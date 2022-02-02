@@ -912,8 +912,8 @@ namespace ts {
         const kind = link.kind === SyntaxKind.JSDocLink ? "link"
             : link.kind === SyntaxKind.JSDocLinkCode ? "linkcode"
             : "linkplain";
-        const name = link.name ? entityNameToString(link.name) : ""
-        const space = link.name && link.text.startsWith("://") ? "" : " "
+        const name = link.name ? entityNameToString(link.name) : "";
+        const space = link.name && link.text.startsWith("://") ? "" : " ";
         return `{@${kind} ${name}${space}${link.text}}`;
     }
 
