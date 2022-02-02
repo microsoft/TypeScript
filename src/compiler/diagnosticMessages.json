@@ -731,7 +731,7 @@
         "category": "Error",
         "code": 1232
     },
-    "An export declaration can only be used at the top level of a module.": {
+    "An export declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1233
     },
@@ -1412,6 +1412,10 @@
     "An import declaration can only be used at the top level of a module.": {
         "category": "Error",
         "code": 1472
+    },
+    "An export declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1473
     },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -4164,7 +4168,6 @@
         "category": "Message",
         "code": 6041
     },
-
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
