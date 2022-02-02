@@ -17815,6 +17815,8 @@ namespace ts {
             const t = target.flags;
             if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
             if (t & TypeFlags.Never) return false;
+            // Intersection types that would be reduced to never may be passed as `target`, thus returning early.
+            if (t & TypeFlags.Intersection) return false;
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
