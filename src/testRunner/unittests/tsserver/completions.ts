@@ -42,7 +42,7 @@ namespace ts.projectSystem {
                 source: "/a",
                 sourceDisplay: undefined,
                 isSnippet: undefined,
-                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined }
+                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, source: AutoImportSourceKind.Program }
             };
 
             // `data.exportMapKey` contains a SymbolId so should not be mocked up with an expected value here.
@@ -61,7 +61,7 @@ namespace ts.projectSystem {
 
             const detailsRequestArgs: protocol.CompletionDetailsRequestArgs = {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{ name: "foo", source: "/a", data: { source: AutoImportSourceKind.Program, exportName: "foo", fileName: "/a.ts", exportMapKey } }],
             };
 
             const detailsResponse = executeSessionRequest<protocol.CompletionDetailsRequest, protocol.CompletionDetailsResponse>(session, protocol.CommandTypes.CompletionDetails, detailsRequestArgs);

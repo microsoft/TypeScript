@@ -4055,6 +4055,7 @@ declare namespace ts {
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly includeProjectReferenceAutoImports?: "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
     }
@@ -5683,6 +5684,11 @@ declare namespace ts {
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     }
+    enum AutoImportSourceKind {
+        Program = 1,
+        PackageJson = 2
+    }
+    type AutoImportSource = AutoImportSourceKind | string;
     type WithMetadata<T> = T & {
         metadata?: unknown;
     };
@@ -6388,13 +6394,12 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        source: AutoImportSource;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
         /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
         ambientModuleName?: string;
-        /** True if the export was found in the package.json AutoImportProvider */
-        isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
         /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */

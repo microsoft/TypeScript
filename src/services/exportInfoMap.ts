@@ -337,14 +337,15 @@ namespace ts {
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, source: AutoImportSource) => void,
     ) {
         forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, AutoImportSourceKind.Program));
-        const autoImportProvider = preferences.includePackageJsonAutoImports && host.getPackageJsonAutoImportProvider?.();
+        const { includePackageJson, includeProjectReferences } = getAutoImportPreferences(preferences);
+        const autoImportProvider = includePackageJson && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
             forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, AutoImportSourceKind.PackageJson));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
 
-        if (preferences.includeProjectReferenceAutoImports && host.getProgramForReferencedProject) {
+        if (includeProjectReferences && host.getProgramForReferencedProject) {
             const projectReferences = program.getResolvedProjectReferences();
             if (projectReferences) {
                 for (const ref of projectReferences) {

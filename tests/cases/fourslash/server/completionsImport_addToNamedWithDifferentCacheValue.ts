@@ -54,6 +54,7 @@ verify.applyCodeActionFromCompletion("1", {
   source: "../packages/mylib",
   description: `Add import from "../packages/mylib"`,
   data: {
+    source: ts.AutoImportSourceKind.Program,
     exportName: "MyClass",
     fileName: "/packages/mylib/index.ts",
   },

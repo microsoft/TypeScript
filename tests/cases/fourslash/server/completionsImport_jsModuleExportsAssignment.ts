@@ -48,6 +48,7 @@ verify.applyCodeActionFromCompletion("", {
   source: "/third_party/marked/src/defaults",
   description: `Add import from "./third_party/marked/src/defaults"`,
   data: {
+    source: ts.AutoImportSourceKind.Program,
     exportName: "defaults",
     fileName: "/third_party/marked/src/defaults.js",
   },

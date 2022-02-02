@@ -82,6 +82,7 @@ verify.applyCodeActionFromCompletion("", {
   source: "vue",
   description: `Update import from "vue"`,
   data: {
+    source: ts.AutoImportSourceKind.Program,
     exportName: "ref",
     fileName: "/node_modules/vue/dist/vue.d.ts",
   },

@@ -24,6 +24,7 @@ verify.applyCodeActionFromCompletion("2", {
     name: "abc",
     source: "/a",
     data: {
+        source: ts.AutoImportSourceKind.Program,
         exportName: "abc",
         fileName: "/a.ts",
     },

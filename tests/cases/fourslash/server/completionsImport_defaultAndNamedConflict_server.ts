@@ -44,7 +44,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "someModule",
   source: "/someModule",
-  data: { exportName: "default", fileName: "/someModule.ts" },
+  data: { source: ts.AutoImportSourceKind.Program, exportName: "default", fileName: "/someModule.ts" },
   description: `Add import from "./someModule"`,
   newFileContent: `import someModule from "./someModule";\r\n\r\nsomeMo`
 });
