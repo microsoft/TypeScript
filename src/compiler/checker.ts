@@ -25107,6 +25107,10 @@ namespace ts {
         }
 
         function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
+            if (isThisInTypeQuery(node)) {
+                return checkThisExpression(node);
+            }
+
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
                 return errorType;
@@ -41245,7 +41249,10 @@ namespace ts {
                 case SyntaxKind.PrivateIdentifier:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
-                    return getSymbolOfNameOrPropertyAccessExpression(node as EntityName | PrivateIdentifier | PropertyAccessExpression);
+                    if (!isThisInTypeQuery(node)) {
+                        return getSymbolOfNameOrPropertyAccessExpression(node as EntityName | PrivateIdentifier | PropertyAccessExpression);
+                    }
+                    // falls through
 
                 case SyntaxKind.ThisKeyword:
                     const container = getThisContainer(node, /*includeArrowFunctions*/ false);

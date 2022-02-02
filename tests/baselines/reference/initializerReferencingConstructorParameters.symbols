@@ -39,6 +39,7 @@ class E {
     b: typeof this.x; // ok
 >b : Symbol(E.b, Decl(initializerReferencingConstructorParameters.ts, 15, 15))
 >this.x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
+>this : Symbol(E, Decl(initializerReferencingConstructorParameters.ts, 12, 1))
 >x : Symbol(E.x, Decl(initializerReferencingConstructorParameters.ts, 17, 16))
 
     constructor(public x) { }

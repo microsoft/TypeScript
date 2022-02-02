@@ -2320,7 +2320,7 @@ namespace ts {
                 if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
+                parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
