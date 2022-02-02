@@ -158,7 +158,6 @@ namespace ts {
                 return result?.map(rehydrateCachedInfo);
             },
             search: (importingFile, preferCapitalized, matches, action) => {
-
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
@@ -167,7 +166,7 @@ namespace ts {
                         const rehydrated = info.map(rehydrateCachedInfo);
                         const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
                         if (filtered.length) {
-                            action(filtered, symbolName, !!ambientModuleName, key);
+                            action(filtered, name, !!ambientModuleName, key);
                         }
                     }
                 });
