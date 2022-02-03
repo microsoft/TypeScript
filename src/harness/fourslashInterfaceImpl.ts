@@ -1694,6 +1694,7 @@ namespace FourSlashInterface {
         readonly sourceDisplay?: string;
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly sortText?: ts.Completions.SortText;
+        readonly data?: ts.CompletionEntryData;
     }
 
     export type ExpectedExactCompletionsPlus = readonly ExpectedCompletionEntry[] & {

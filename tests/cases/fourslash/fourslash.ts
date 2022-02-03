@@ -116,6 +116,7 @@ declare module ts {
         ambientModuleName?: string;
         source: AutoImportSource;
         exportName: string;
+        moduleSpecifier?: string;
     }
 
     interface CompilerOptions {
@@ -700,6 +701,7 @@ declare namespace FourSlashInterface {
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
         readonly isSnippet?: boolean;
+        readonly data?: ts.CompletionEntryData;
 
         // details
         readonly text?: string;

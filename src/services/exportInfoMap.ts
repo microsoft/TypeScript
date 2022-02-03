@@ -336,8 +336,14 @@ namespace ts {
         preferences: UserPreferences,
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, source: AutoImportSource) => void,
     ) {
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, AutoImportSourceKind.Program));
         const { includePackageJson, includeProjectReferences } = getAutoImportPreferences(preferences);
+        const seenModules = includeProjectReferences ? new Set<string>() : undefined;
+
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => {
+            seenModules?.add(file?.path || module.name);
+            cb(module, file, program, AutoImportSourceKind.Program);
+        });
+
         const autoImportProvider = includePackageJson && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
@@ -352,7 +358,17 @@ namespace ts {
                     if (ref) {
                         const referencedProgram = host.getProgramForReferencedProject(ref.sourceFile.fileName);
                         if (referencedProgram) {
-                            forEachExternalModule(referencedProgram.getTypeChecker(), referencedProgram.getSourceFiles(), (module, file) => cb(module, file, referencedProgram, ref.sourceFile.fileName));
+                            forEachExternalModule(
+                                referencedProgram.getTypeChecker(),
+                                mapDefined(referencedProgram.getRootFileNames(), fileName => {
+                                    const file = referencedProgram.getSourceFile(fileName);
+                                    return file && !seenModules!.has(file.path) ? file : undefined;
+                                }),
+                                (module, file) => {
+                                    cb(module, file, referencedProgram, ref.sourceFile.fileName);
+                                    seenModules!.add(file?.path || module.name);
+                                },
+                            );
                         }
                     }
                 }

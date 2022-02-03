@@ -982,6 +982,9 @@ namespace FourSlash {
             if (expected.isPackageJsonImport !== undefined) {
                 assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, "Expected 'isPackageJsonImport' properties to match");
             }
+            if (expected.data !== undefined) {
+                assert.deepEqual(actual.data, expected.data);
+            }
 
             assert.equal(actual.hasAction, expected.hasAction, `Expected 'hasAction' properties to match`);
             assert.equal(actual.isRecommended, expected.isRecommended, `Expected 'isRecommended' properties to match'`);
