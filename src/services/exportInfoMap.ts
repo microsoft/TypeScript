@@ -337,7 +337,10 @@ namespace ts {
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, source: AutoImportSource) => void,
     ) {
         const { includePackageJson, includeProjectReferences } = getAutoImportPreferences(preferences);
-        const seenModules = includeProjectReferences ? new Set<string>() : undefined;
+        const resolvedReferencedProjects = includeProjectReferences && host.getProgramForReferencedProject
+            ? compact(program.getResolvedProjectReferences() || emptyArray)
+            : undefined;
+        const seenModules = some(resolvedReferencedProjects) ? new Set<string>() : undefined;
 
         forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => {
             seenModules?.add(file?.path || module.name);
@@ -347,30 +350,32 @@ namespace ts {
         const autoImportProvider = includePackageJson && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, AutoImportSourceKind.PackageJson));
+            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => {
+                // The only reason we have to add files from package.json auto imports to the dedupe
+                // set for project references is that a referenced project symlinked through node_modules
+                // can show up here. We could add files only if their path does not contain '/node_modules/';
+                // I'm not sure whether that would be faster or slower, but probably doesn't make a big difference.
+                seenModules?.add(file?.path || module.name);
+                cb(module, file, autoImportProvider, AutoImportSourceKind.PackageJson);
+            });
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
 
-        if (includeProjectReferences && host.getProgramForReferencedProject) {
-            const projectReferences = program.getResolvedProjectReferences();
-            if (projectReferences) {
-                for (const ref of projectReferences) {
-                    if (ref) {
-                        const referencedProgram = host.getProgramForReferencedProject(ref.sourceFile.fileName);
-                        if (referencedProgram) {
-                            forEachExternalModule(
-                                referencedProgram.getTypeChecker(),
-                                mapDefined(referencedProgram.getRootFileNames(), fileName => {
-                                    const file = referencedProgram.getSourceFile(fileName);
-                                    return file && !seenModules!.has(file.path) ? file : undefined;
-                                }),
-                                (module, file) => {
-                                    cb(module, file, referencedProgram, ref.sourceFile.fileName);
-                                    seenModules!.add(file?.path || module.name);
-                                },
-                            );
-                        }
-                    }
+        if (resolvedReferencedProjects) {
+            for (const ref of resolvedReferencedProjects) {
+                const referencedProgram = host.getProgramForReferencedProject!(ref.sourceFile.fileName);
+                if (referencedProgram) {
+                    forEachExternalModule(
+                        referencedProgram.getTypeChecker(),
+                        mapDefined(referencedProgram.getRootFileNames(), fileName => {
+                            const file = referencedProgram.getSourceFile(fileName);
+                            return file && !seenModules!.has(file.path) ? file : undefined;
+                        }),
+                        (module, file) => {
+                            cb(module, file, referencedProgram, ref.sourceFile.fileName);
+                            seenModules!.add(file?.path || module.name);
+                        },
+                    );
                 }
             }
         }
