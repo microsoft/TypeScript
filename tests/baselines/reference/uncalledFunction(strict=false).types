@@ -1,0 +1,77 @@
+=== tests/cases/compiler/uncalledFunction.ts ===
+function a() {}
+>a : () => void
+
+a;
+>a : () => void
+
+const b = () => {}
+>b : () => void
+>() => {} : () => void
+
+b;
+>b : () => void
+
+const c = {
+>c : { d: () => void; e: { f: () => void; }; }
+>{    d: () => {},    e: {        f: () => {}    }} : { d: () => void; e: { f: () => void; }; }
+
+    d: () => {},
+>d : () => void
+>() => {} : () => void
+
+    e: {
+>e : { f: () => void; }
+>{        f: () => {}    } : { f: () => void; }
+
+        f: () => {}
+>f : () => void
+>() => {} : () => void
+    }
+}
+
+c.d;
+>c.d : () => void
+>c : { d: () => void; e: { f: () => void; }; }
+>d : () => void
+
+c['d'];
+>c['d'] : () => void
+>c : { d: () => void; e: { f: () => void; }; }
+>'d' : "d"
+
+c.e.f;
+>c.e.f : () => void
+>c.e : { f: () => void; }
+>c : { d: () => void; e: { f: () => void; }; }
+>e : { f: () => void; }
+>f : () => void
+
+c.e['f'];
+>c.e['f'] : () => void
+>c.e : { f: () => void; }
+>c : { d: () => void; e: { f: () => void; }; }
+>e : { f: () => void; }
+>'f' : "f"
+
+class C {
+>C : C
+
+    m1() {}
+>m1 : () => void
+
+    m2() {
+>m2 : () => void
+
+        this.m1;
+>this.m1 : () => void
+>this : this
+>m1 : () => void
+
+        this['m1'];
+>this['m1'] : () => void
+>this : this
+>'m1' : "m1"
+    }
+}
+

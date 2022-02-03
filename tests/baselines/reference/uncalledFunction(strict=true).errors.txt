@@ -1,0 +1,54 @@
+tests/cases/compiler/uncalledFunction.ts(2,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(5,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(14,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(15,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(17,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(18,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(23,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunction.ts(24,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/uncalledFunction.ts (8 errors) ====
+    function a() {}
+    a;
+    ~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    
+    const b = () => {}
+    b;
+    ~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    
+    const c = {
+        d: () => {},
+        e: {
+            f: () => {}
+        }
+    }
+    
+    c.d;
+    ~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    c['d'];
+    ~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    
+    c.e.f;
+    ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    c.e['f'];
+    ~~~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    
+    class C {
+        m1() {}
+        m2() {
+            this.m1;
+            ~~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+            this['m1'];
+            ~~~~~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+        }
+    }
+    

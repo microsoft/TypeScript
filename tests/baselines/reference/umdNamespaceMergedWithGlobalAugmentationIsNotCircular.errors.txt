@@ -1,0 +1,30 @@
+tests/cases/compiler/emits.ts(2,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/compiler/some_module.ts(2,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/global.d.ts (0 errors) ====
+    declare global {
+        const React: typeof import("./module");
+    }
+    
+    export { };
+    
+==== tests/cases/compiler/module.d.ts (0 errors) ====
+    export = React;
+    export as namespace React;
+    
+    declare namespace React {
+        function createRef(): any;
+    }
+    
+==== tests/cases/compiler/some_module.ts (1 errors) ====
+    export { };
+    React.createRef;
+    ~~~~~~~~~~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
+    
+==== tests/cases/compiler/emits.ts (1 errors) ====
+    console.log("hello");
+    React.createRef;
+    ~~~~~~~~~~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?

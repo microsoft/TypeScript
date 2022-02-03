@@ -3353,6 +3353,10 @@
         "category": "Error",
         "code": 2822
     },
+    "This expression refers to function. Did you mean to call it instead?": {
+        "category": "Error",
+        "code": 2823
+    },
     "Cannot find namespace '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2833

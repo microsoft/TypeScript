@@ -27,6 +27,11 @@
 ////    if (x.foo.bar) {}
 ////    x.foo.bar && console.log('test');
 ////}
+////function f() {}
+////f;
+////
+////const a = { b: () => {} };
+////a.b;
 
 verify.codeFixAll({
     fixAllDescription: ts.Diagnostics.Add_all_missing_call_parentheses.message,
@@ -57,5 +62,10 @@ function foo() {
     x.foo.bar() ? console.log('test') : undefined;
     if (x.foo.bar()) {}
     x.foo.bar() && console.log('test');
-}`,
+}
+function f() {}
+f();
+
+const a = { b: () => {} };
+a.b();`,
 });

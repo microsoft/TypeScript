@@ -2,10 +2,15 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(10,1): error TS2
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(14,1): error TS2454: Variable 'b' is used before being assigned.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(22,1): error TS2454: Variable 'd' is used before being assigned.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(29,5): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(35,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(44,5): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(45,5): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(52,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(52,5): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(57,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(57,1): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(68,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(72,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(83,5): error TS2532: Object is possibly 'undefined'.
@@ -16,20 +21,36 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(105,5): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(111,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(125,5): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(172,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(181,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(193,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(202,9): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(208,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(211,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(214,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(214,9): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(217,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(220,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(223,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(223,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(235,9): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(238,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(241,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(244,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(244,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(256,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(265,9): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(271,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(274,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(286,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(298,9): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(307,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(310,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(319,9): error TS2532: Object is possibly 'undefined'.
@@ -46,6 +67,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(358,9): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(367,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(370,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(379,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(391,9): error TS2823: This expression refers to function. Did you mean to call it instead?
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(406,9): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(418,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(421,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(430,9): error TS2532: Object is possibly 'undefined'.
@@ -61,7 +84,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(518,13): error T
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (61 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (84 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -99,6 +122,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
     if (f?.(x)) {
         x; // number
         f; // (x: any) => x is number
+        ~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         f(x);
     }
     else {
@@ -118,7 +143,11 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
     if (o2?.f(x)) {
         x; // number
         o2.f; // (x: any) => x is number
+        ~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         o2?.f;
+        ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         o2?.f(x);
     }
     else {
@@ -128,6 +157,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         o2.f;
         ~~
 !!! error TS2532: Object is possibly 'undefined'.
+        ~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
     }
     x;
     o2;
@@ -135,6 +166,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
     o2.f;
     ~~
 !!! error TS2532: Object is possibly 'undefined'.
+    ~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
     
     declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
     if (o3?.x === 1) {
@@ -223,6 +256,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
     if (o6?.f()) {
         o6; // Derived
         o6.f;
+        ~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
     }
     else {
         o6;
@@ -230,12 +265,16 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         o6.f;
         ~~
 !!! error TS2532: Object is possibly 'undefined'.
+        ~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
     }
     o6;
     o6?.f;
     o6.f;
     ~~
 !!! error TS2532: Object is possibly 'undefined'.
+    ~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
     
     // asserts
     declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
@@ -274,6 +313,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() === value) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.foo == value) {
             o.foo;
@@ -283,6 +324,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() == value) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -295,6 +338,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() === value) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.foo == value) {
             o.foo;
@@ -304,6 +349,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() == value) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -322,6 +369,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
             o.bar;  // Error
             ~
 !!! error TS2532: Object is possibly 'undefined'.
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.foo == value) {
             o.foo;  // Error
@@ -337,6 +386,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
             o.bar;  // Error
             ~
 !!! error TS2532: Object is possibly 'undefined'.
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -349,6 +400,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() === value) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.foo == value) {
             o.foo;  // Error
@@ -364,6 +417,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
             o.bar;  // Error
             ~
 !!! error TS2532: Object is possibly 'undefined'.
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -376,6 +431,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() !== undefined) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.foo != undefined) {
             o.foo;
@@ -385,6 +442,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() != undefined) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -403,6 +462,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
             o.bar;  // Error
             ~
 !!! error TS2532: Object is possibly 'undefined'.
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.foo != null) {
             o.foo;
@@ -412,6 +473,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() != null) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -424,6 +487,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (o?.bar() !== undefined) {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
     }
     
@@ -549,6 +614,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (typeof o?.bar() === "number") {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.baz instanceof Error) {
             o.baz;
@@ -564,6 +631,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (typeof o?.bar() === "number") {
             o.bar;
+            ~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
         }
         if (o?.baz instanceof Error) {
             o.baz;

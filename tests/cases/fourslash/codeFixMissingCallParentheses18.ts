@@ -1,0 +1,15 @@
+/// <reference path='fourslash.ts'/>
+
+// @strictNullChecks: true
+////function foo() {}
+////[|foo;|]
+
+verify.codeFixAvailable([
+    { description: ts.Diagnostics.Add_missing_call_parentheses.message }
+]);
+
+verify.codeFix({
+    description: ts.Diagnostics.Add_missing_call_parentheses.message,
+    index: 0,
+    newRangeContent: `foo();`,
+});

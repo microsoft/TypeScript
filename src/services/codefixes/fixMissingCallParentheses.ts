@@ -3,6 +3,7 @@ namespace ts.codefix {
     const fixId = "fixMissingCallParentheses";
     const errorCodes = [
         Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead.code,
+        Diagnostics.This_expression_refers_to_function_Did_you_mean_to_call_it_instead.code,
     ];
 
     registerCodeFix({

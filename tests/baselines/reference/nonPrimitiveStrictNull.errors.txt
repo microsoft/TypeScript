@@ -1,4 +1,5 @@
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(6,1): error TS2454: Variable 'a' is used before being assigned.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(6,1): error TS2823: This expression refers to function. Did you mean to call it instead?
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(7,1): error TS2322: Type 'undefined' is not assignable to type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(8,1): error TS2322: Type 'null' is not assignable to type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(9,1): error TS2322: Type 'object | null' is not assignable to type 'object'.
@@ -22,7 +23,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(52,14): err
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(53,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (18 errors) ====
+==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (19 errors) ====
     var a: object
     declare var b: object | null
     declare var c: object | undefined
@@ -31,6 +32,8 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(53,14): err
     a.toString; // error
     ~
 !!! error TS2454: Variable 'a' is used before being assigned.
+    ~~~~~~~~~~
+!!! error TS2823: This expression refers to function. Did you mean to call it instead?
     a = undefined; // error
     ~
 !!! error TS2322: Type 'undefined' is not assignable to type 'object'.

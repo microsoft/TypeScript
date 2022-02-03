@@ -37156,7 +37156,7 @@ namespace ts {
         function checkExpressionStatement(node: ExpressionStatement) {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
-
+            checkUncalledFunction(node);
             checkExpression(node.expression);
         }
 
@@ -39942,6 +39942,21 @@ namespace ts {
                 }
             }
             return targetSymbol;
+        }
+
+        function checkUncalledFunction(node: ExpressionStatement) {
+            if (!strictNullChecks) return;
+
+            const expression = node.expression;
+            switch (expression.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression: {
+                    if (isFunctionType(getTypeOfNode(expression))) {
+                        error(expression, Diagnostics.This_expression_refers_to_function_Did_you_mean_to_call_it_instead);
+                    }
+                }
+            }
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
