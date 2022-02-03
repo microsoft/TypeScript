@@ -14036,7 +14036,7 @@ namespace ts {
                 }
             }
             const fixedLength = properties.length;
-            const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
+            const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String, readonly ? CheckFlags.Readonly : 0);
             if (combinedFlags & ElementFlags.Variable) {
                 lengthSymbol.type = numberType;
             }
