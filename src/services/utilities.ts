@@ -3329,5 +3329,18 @@ namespace ts {
         return memoizeOne((source: AutoImportSource) => getProgramForAutoImport(source, program, host));
     }
 
+    export function getAutoImportPreferences(preferences: UserPreferences) {
+        const includePackageJson =
+            preferences.includePackageJsonAutoImports === "off" ? PackageJsonAutoImportPreference.Off :
+            preferences.includePackageJsonAutoImports === "on" ? PackageJsonAutoImportPreference.On :
+            PackageJsonAutoImportPreference.Auto;
+        // TODO: flip default back to "off" if shipping as an opt-in experiment.
+        //       Needs to default to "on" until VS Code is able to set it.
+        const includeProjectReferences =
+            preferences.includeProjectReferenceAutoImports === "off" ? ProjectReferenceAutoImportPreference.Off :
+            ProjectReferenceAutoImportPreference.On;
+        return { includePackageJson, includeProjectReferences };
+    }
+
     // #endregion
 }

@@ -226,18 +226,6 @@ namespace ts {
         On,
     }
 
-    /* @internal */
-    export function getAutoImportPreferences(preferences: UserPreferences) {
-        const includePackageJson =
-            preferences.includePackageJsonAutoImports === "off" ? PackageJsonAutoImportPreference.Off :
-            preferences.includePackageJsonAutoImports === "on" ? PackageJsonAutoImportPreference.On :
-            PackageJsonAutoImportPreference.Auto;
-        const includeProjectReferences =
-            preferences.includeProjectReferenceAutoImports === "on" ? ProjectReferenceAutoImportPreference.On :
-            ProjectReferenceAutoImportPreference.Off;
-        return { includePackageJson, includeProjectReferences };
-    }
-
     export interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
