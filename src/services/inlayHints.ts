@@ -7,11 +7,11 @@ namespace ts.InlayHints {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
     };
 
-    function shouldShowParameterNameHints(preferences: InlayHintsOptions) {
+    function shouldShowParameterNameHints(preferences: UserPreferences) {
         return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
     }
 
-    function shouldShowLiteralParameterNameHintsOnly(preferences: InlayHintsOptions) {
+    function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
         return preferences.includeInlayParameterNameHints === "literals";
     }
 
