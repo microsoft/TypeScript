@@ -12146,7 +12146,6 @@ namespace ts {
             let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
             let syntheticFlag = CheckFlags.SyntheticMethod;
             let checkFlags = isUnion ? 0 : CheckFlags.Readonly;
-            let containsSetAccessor = false;
             let mergedInstantiations = false;
             for (const current of containingType.types) {
                 const type = getApparentType(current);
@@ -12184,9 +12183,6 @@ namespace ts {
                                     propSet.set(id, prop);
                                 }
                             }
-                        }
-                        if (prop.flags & SymbolFlags.SetAccessor) {
-                            containsSetAccessor = true;
                         }
                         if (isUnion && isReadonlySymbol(prop)) {
                             checkFlags |= CheckFlags.Readonly;
@@ -12259,8 +12255,9 @@ namespace ts {
                     firstType = type;
                     nameType = getSymbolLinks(prop).nameType;
                 }
-                if (containsSetAccessor) {
-                    writeTypes = append(writeTypes, getSetAccessorTypeOfSymbol(prop));
+                const writeType = getWriteTypeOfSymbol(prop);
+                if (writeTypes || writeType !== type) {
+                    writeTypes = append(!writeTypes ? propTypes.slice() : writeTypes, writeType);
                 }
                 else if (type !== firstType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
