@@ -39795,7 +39795,7 @@ namespace ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
-            if (checkGrammarModuleElementContext(node,isInJSFile(node) ? Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module : Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module)) {
+            if (checkGrammarModuleElementContext(node, isInJSFile(node) ? Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module : Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module)) {
                 // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
