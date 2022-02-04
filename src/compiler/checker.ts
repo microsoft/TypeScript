@@ -18375,7 +18375,9 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
-                    result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags);
+                    if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)) {
+                        resetErrorInfo(saveErrorInfo);
+                    }
                 }
                 if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
