@@ -2829,14 +2829,14 @@ namespace ts {
                     redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     addFileToFilesByName(dupFile, path, redirectedPath);
                     addFileIncludeReason(dupFile, reason);
-                    sourceFileToPackageName.set(path, packageId.name);
+                    sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                     processingOtherFiles!.push(dupFile);
                     return dupFile;
                 }
                 else if (file) {
                     // This is the first source file to have this packageId.
                     packageIdToSourceFile.set(packageIdKey, file);
-                    sourceFileToPackageName.set(path, packageId.name);
+                    sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                 }
             }
             addFileToFilesByName(file, path, redirectedPath);

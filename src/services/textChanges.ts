@@ -339,6 +339,7 @@ namespace ts.textChanges {
             this.deletedNodes.push({ sourceFile, node });
         }
 
+        /** Stop! Consider using `delete` instead, which has logic for deleting nodes from delimited lists. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
@@ -784,6 +785,20 @@ namespace ts.textChanges {
 
         public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
             this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+        }
+
+        public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+            const prevSpecifier = namedImports.elements[index - 1];
+            if (prevSpecifier) {
+                this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
+            }
+            else {
+                this.insertNodeBefore(
+                    sourceFile,
+                    namedImports.elements[0],
+                    importSpecifier,
+                    !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile));
+            }
         }
 
         /**

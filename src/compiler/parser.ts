@@ -7424,7 +7424,8 @@ namespace ts {
         }
 
         function parseExportSpecifier() {
-            return parseImportOrExportSpecifier(SyntaxKind.ExportSpecifier) as ExportSpecifier;
+            const hasJSDoc = hasPrecedingJSDocComment();
+            return withJSDoc(parseImportOrExportSpecifier(SyntaxKind.ExportSpecifier) as ExportSpecifier, hasJSDoc);
         }
 
         function parseImportSpecifier() {
