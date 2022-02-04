@@ -1331,8 +1331,12 @@ namespace ts {
             else {
                 const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
                 const resolved = nodeLoadModuleByRelativeName(extensions, candidate, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/ true);
+                if (!resolved) return undefined;
+
+                const path = realPath(resolved.path, host, traceEnabled);
+                const originalPath = arePathsEqual(path, resolved.path, host) ? undefined : resolved.path;
                 // Treat explicit "node_modules" import as an external library import.
-                return resolved && toSearchResult({ resolved, isExternalLibraryImport: contains(parts, "node_modules") });
+                return toSearchResult({ resolved: { ...resolved, path, originalPath }, isExternalLibraryImport: contains(parts, "node_modules") });
             }
         }
     }
