@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: false
 
 class K {
     p = 12;

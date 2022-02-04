@@ -47,7 +47,7 @@ namespace ts {
                 placeOpenBraceOnNewLineForControlBlocks: false,
             };
             verifyOperationCancelledAfter(file, 1, service => // The LS doesn't do any top-level checks on the token for completion entry details, so the first check is within the checker
-                service.getCompletionEntryDetails("file.ts", file.lastIndexOf("f"), "foo", options, /*content*/ undefined, {})!, r => assert.exists(r.displayParts)
+                service.getCompletionEntryDetails("file.ts", file.lastIndexOf("f"), "foo", options, /*source*/ undefined, {}, /*data*/ undefined)!, r => assert.exists(r.displayParts)
             );
         });
 

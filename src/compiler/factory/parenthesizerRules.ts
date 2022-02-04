@@ -5,7 +5,12 @@ namespace ts {
             cachedLiteralKind: SyntaxKind;
         }
 
+        let binaryLeftOperandParenthesizerCache: ESMap<BinaryOperator, (node: Expression) => Expression> | undefined;
+        let binaryRightOperandParenthesizerCache: ESMap<BinaryOperator, (node: Expression) => Expression> | undefined;
+
         return {
+            getParenthesizeLeftSideOfBinaryForOperator,
+            getParenthesizeRightSideOfBinaryForOperator,
             parenthesizeLeftSideOfBinary,
             parenthesizeRightSideOfBinary,
             parenthesizeExpressionOfComputedPropertyName,
@@ -26,6 +31,26 @@ namespace ts {
             parenthesizeConstituentTypesOfUnionOrIntersectionType,
             parenthesizeTypeArguments,
         };
+
+        function getParenthesizeLeftSideOfBinaryForOperator(operatorKind: BinaryOperator) {
+            binaryLeftOperandParenthesizerCache ||= new Map();
+            let parenthesizerRule = binaryLeftOperandParenthesizerCache.get(operatorKind);
+            if (!parenthesizerRule) {
+                parenthesizerRule = node => parenthesizeLeftSideOfBinary(operatorKind, node);
+                binaryLeftOperandParenthesizerCache.set(operatorKind, parenthesizerRule);
+            }
+            return parenthesizerRule;
+        }
+
+        function getParenthesizeRightSideOfBinaryForOperator(operatorKind: BinaryOperator) {
+            binaryRightOperandParenthesizerCache ||= new Map();
+            let parenthesizerRule = binaryRightOperandParenthesizerCache.get(operatorKind);
+            if (!parenthesizerRule) {
+                parenthesizerRule = node => parenthesizeRightSideOfBinary(operatorKind, /*leftSide*/ undefined, node);
+                binaryRightOperandParenthesizerCache.set(operatorKind, parenthesizerRule);
+            }
+            return parenthesizerRule;
+        }
 
         /**
          * Determines whether the operand to a BinaryExpression needs to be parenthesized.
@@ -165,18 +190,18 @@ namespace ts {
                 return node.kind;
             }
 
-            if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
-                if ((<BinaryPlusExpression>node).cachedLiteralKind !== undefined) {
-                    return (<BinaryPlusExpression>node).cachedLiteralKind;
+            if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
+                if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
+                    return (node as BinaryPlusExpression).cachedLiteralKind;
                 }
 
-                const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
+                const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);
                 const literalKind = isLiteralKind(leftKind)
-                    && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
+                    && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
                         ? leftKind
                         : SyntaxKind.Unknown;
 
-                (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
+                (node as BinaryPlusExpression).cachedLiteralKind = literalKind;
                 return literalKind;
             }
 
@@ -210,7 +235,7 @@ namespace ts {
             return parenthesizeBinaryOperand(binaryOperator, leftSide, /*isLeftSideOfBinary*/ true);
         }
 
-        function parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression, rightSide: Expression): Expression {
+        function parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression | undefined, rightSide: Expression): Expression {
             return parenthesizeBinaryOperand(binaryOperator, rightSide, /*isLeftSideOfBinary*/ false, leftSide);
         }
 
@@ -294,7 +319,7 @@ namespace ts {
             //
             const emittedExpression = skipPartiallyEmittedExpressions(expression);
             if (isLeftHandSideExpression(emittedExpression)
-                && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
+                && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)) {
                 // TODO(rbuckton): Verify whether this assertion holds.
                 return expression as LeftHandSideExpression;
             }
@@ -352,6 +377,8 @@ namespace ts {
             return expression;
         }
 
+        function parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
+        function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
         function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
             if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
@@ -403,6 +430,8 @@ namespace ts {
     }
 
     export const nullParenthesizerRules: ParenthesizerRules = {
+        getParenthesizeLeftSideOfBinaryForOperator: _ => identity,
+        getParenthesizeRightSideOfBinaryForOperator: _ => identity,
         parenthesizeLeftSideOfBinary: (_binaryOperator, leftSide) => leftSide,
         parenthesizeRightSideOfBinary: (_binaryOperator, _leftSide, rightSide) => rightSide,
         parenthesizeExpressionOfComputedPropertyName: identity,

@@ -1,0 +1,140 @@
+=== tests/cases/compiler/deepComparisons.ts ===
+function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
+>f1 : Symbol(f1, Decl(deepComparisons.ts, 0, 0))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K2 : Symbol(K2, Decl(deepComparisons.ts, 0, 34))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
+
+    let v1: Extract<T, string> = 0 as any as T;  // Error
+>v1 : Symbol(v1, Decl(deepComparisons.ts, 1, 7))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+
+    let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error
+>v2 : Symbol(v2, Decl(deepComparisons.ts, 2, 7))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
+
+    let v3: Extract<T[K1][K2], string> = 0 as any as T[K1][K2];  // No error
+>v3 : Symbol(v3, Decl(deepComparisons.ts, 3, 7))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
+>K2 : Symbol(K2, Decl(deepComparisons.ts, 0, 34))
+>T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
+>K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
+>K2 : Symbol(K2, Decl(deepComparisons.ts, 0, 34))
+}
+
+type Foo<T> = { x: Foo<T> };
+>Foo : Symbol(Foo, Decl(deepComparisons.ts, 4, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 6, 9))
+>x : Symbol(x, Decl(deepComparisons.ts, 6, 15))
+>Foo : Symbol(Foo, Decl(deepComparisons.ts, 4, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 6, 9))
+
+type Bar<T> = { x: Bar<T[]> };
+>Bar : Symbol(Bar, Decl(deepComparisons.ts, 6, 28))
+>T : Symbol(T, Decl(deepComparisons.ts, 7, 9))
+>x : Symbol(x, Decl(deepComparisons.ts, 7, 15))
+>Bar : Symbol(Bar, Decl(deepComparisons.ts, 6, 28))
+>T : Symbol(T, Decl(deepComparisons.ts, 7, 9))
+
+function f2<U>() {
+>f2 : Symbol(f2, Decl(deepComparisons.ts, 7, 30))
+>U : Symbol(U, Decl(deepComparisons.ts, 9, 12))
+
+    let x: Foo<U> = 0 as any as Bar<U>;  // Error, excessive stack depth
+>x : Symbol(x, Decl(deepComparisons.ts, 10, 7))
+>Foo : Symbol(Foo, Decl(deepComparisons.ts, 4, 1))
+>U : Symbol(U, Decl(deepComparisons.ts, 9, 12))
+>Bar : Symbol(Bar, Decl(deepComparisons.ts, 6, 28))
+>U : Symbol(U, Decl(deepComparisons.ts, 9, 12))
+}
+
+type Foo1<T> = { x: Foo2<T> };
+>Foo1 : Symbol(Foo1, Decl(deepComparisons.ts, 11, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 13, 10))
+>x : Symbol(x, Decl(deepComparisons.ts, 13, 16))
+>Foo2 : Symbol(Foo2, Decl(deepComparisons.ts, 13, 30))
+>T : Symbol(T, Decl(deepComparisons.ts, 13, 10))
+
+type Foo2<T> = { x: Foo1<T> };
+>Foo2 : Symbol(Foo2, Decl(deepComparisons.ts, 13, 30))
+>T : Symbol(T, Decl(deepComparisons.ts, 14, 10))
+>x : Symbol(x, Decl(deepComparisons.ts, 14, 16))
+>Foo1 : Symbol(Foo1, Decl(deepComparisons.ts, 11, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 14, 10))
+
+function f3<U>() {
+>f3 : Symbol(f3, Decl(deepComparisons.ts, 14, 30))
+>U : Symbol(U, Decl(deepComparisons.ts, 16, 12))
+
+    let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
+>x : Symbol(x, Decl(deepComparisons.ts, 17, 7))
+>Foo1 : Symbol(Foo1, Decl(deepComparisons.ts, 11, 1))
+>U : Symbol(U, Decl(deepComparisons.ts, 16, 12))
+>Bar : Symbol(Bar, Decl(deepComparisons.ts, 6, 28))
+>U : Symbol(U, Decl(deepComparisons.ts, 16, 12))
+}
+
+// Repro from #46500
+
+type F<T> = {} & (
+>F : Symbol(F, Decl(deepComparisons.ts, 18, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+
+    T extends [any, ...any[]]
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+
+        ? { [K in keyof T]?: F<T[K]> }
+>K : Symbol(K, Decl(deepComparisons.ts, 24, 13))
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+>F : Symbol(F, Decl(deepComparisons.ts, 18, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+>K : Symbol(K, Decl(deepComparisons.ts, 24, 13))
+
+        : T extends any[]
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+
+            ? F<T[number]>[]
+>F : Symbol(F, Decl(deepComparisons.ts, 18, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+
+            : T extends { [K: string]: any }
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+>K : Symbol(K, Decl(deepComparisons.ts, 27, 27))
+
+                ? { [K in keyof T]?: F<T[K]> }
+>K : Symbol(K, Decl(deepComparisons.ts, 28, 21))
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+>F : Symbol(F, Decl(deepComparisons.ts, 18, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 22, 7))
+>K : Symbol(K, Decl(deepComparisons.ts, 28, 21))
+
+                : { x: string }
+>x : Symbol(x, Decl(deepComparisons.ts, 29, 19))
+
+);
+
+declare function f<T = any>(): F<T>;
+>f : Symbol(f, Decl(deepComparisons.ts, 30, 2))
+>T : Symbol(T, Decl(deepComparisons.ts, 32, 19))
+>F : Symbol(F, Decl(deepComparisons.ts, 18, 1))
+>T : Symbol(T, Decl(deepComparisons.ts, 32, 19))
+
+function g() {
+>g : Symbol(g, Decl(deepComparisons.ts, 32, 36))
+
+    return f() as F<any>;
+>f : Symbol(f, Decl(deepComparisons.ts, 30, 2))
+>F : Symbol(F, Decl(deepComparisons.ts, 18, 1))
+}
+

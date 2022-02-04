@@ -93,7 +93,7 @@ node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' 
 node_modules/lodash/_cloneArrayBuffer.js(11,20): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: Buffer, isDeep?: boolean | undefined) => Buffer'.
-node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer\"": (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
 node_modules/lodash/_cloneBuffer.js(29,56): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/lodash/_createAggregator.js(19,60): error TS2554: Expected 0-1 arguments, but got 2.
@@ -172,7 +172,7 @@ node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is 
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
-node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_nodeUtil\"": any; }'.
+node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: any; }'.
 node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'false | (Global & typeof globalThis)'.
   Property 'process' does not exist on type 'false'.
 node_modules/lodash/_overRest.js(15,32): error TS1016: A required parameter cannot follow an optional parameter.
@@ -361,7 +361,7 @@ node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ attempt:
 node_modules/lodash/inRange.js(43,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/includes.js(40,49): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/intersectionBy.js(41,55): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/isBuffer\"": any; }'.
+node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: any; }'.
 node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
 node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.
 node_modules/lodash/iteratee.js(50,74): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
@@ -416,15 +416,15 @@ node_modules/lodash/take.js(29,25): error TS1016: A required parameter cannot fo
 node_modules/lodash/takeRight.js(29,30): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/takeRightWhile.js(41,48): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/takeWhile.js(41,48): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/template.js(140,36): error TS1016: A required parameter cannot follow an optional parameter.
-node_modules/lodash/template.js(152,34): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(159,21): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(164,6): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(167,6): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(176,9): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(184,15): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(209,62): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/template.js(238,21): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
+node_modules/lodash/template.js(155,36): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/template.js(167,34): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(174,21): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(179,6): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(182,6): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(191,9): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(199,15): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(224,62): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/template.js(259,21): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
 node_modules/lodash/templateSettings.js(63,12): error TS2322: Type '{ escape: (string?: string | undefined) => string; }' is not assignable to type 'Function'.
   Object literal may only specify known properties, and ''escape'' does not exist in type 'Function'.
 node_modules/lodash/throttle.js(59,28): error TS2532: Object is possibly 'undefined'.
@@ -433,8 +433,8 @@ node_modules/lodash/toLower.js(11,21): error TS8024: JSDoc '@param' tag has name
 node_modules/lodash/toUpper.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
 node_modules/lodash/transform.js(46,37): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/transform.js(60,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-node_modules/lodash/trim.js(33,30): error TS1016: A required parameter cannot follow an optional parameter.
-node_modules/lodash/trimEnd.js(29,33): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/trim.js(31,30): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/trimEnd.js(27,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/trimStart.js(29,35): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/truncate.js(60,36): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/truncate.js(61,26): error TS2532: Object is possibly 'undefined'.

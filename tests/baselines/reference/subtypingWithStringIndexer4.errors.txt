@@ -1,13 +1,13 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
-  Index signatures are incompatible.
+  'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(20,11): error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
-  Index signatures are incompatible.
+  'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(20,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
-  Index signatures are incompatible.
+  'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
@@ -26,7 +26,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     class B extends A {
           ~
 !!! error TS2415: Class 'B' incorrectly extends base class 'A'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'string' index signatures are incompatible.
 !!! error TS2415:     Type 'string' is not assignable to type 'Derived'.
         [x: string]: string; // error
     }
@@ -39,7 +39,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B extends A<Base> {
               ~
 !!! error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'string' index signatures are incompatible.
 !!! error TS2415:     Type 'string' is not assignable to type 'Base'.
                           ~~~~
 !!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
@@ -51,7 +51,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B3<T extends Derived> extends A<T> {
               ~~
 !!! error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'string' index signatures are incompatible.
 !!! error TS2415:     Type 'string' is not assignable to type 'T'.
 !!! error TS2415:       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
             [x: string]: string; // error

@@ -33,7 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var scalar_1 = require("../lib/operators/scalar");
 exports.default = {
     get xs() {
-        return scalar_1.scalar("14px");
+        return (0, scalar_1.scalar)("14px");
     }
 };
 

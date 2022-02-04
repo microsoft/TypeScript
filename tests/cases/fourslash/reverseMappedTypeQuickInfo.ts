@@ -30,7 +30,7 @@
 
 verify.quickInfoAt("1", `type FinalType = {
     test: {
-        test_inner: ...;
+        test_inner: string;
     };
 }`);
 verify.quickInfoAt("2", `(property) test_inner: string`);

@@ -1,4 +1,4 @@
-tests/cases/compiler/arraySigChecking.ts(11,17): error TS1023: An index signature parameter type must be either 'string' or 'number'.
+tests/cases/compiler/arraySigChecking.ts(11,17): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 tests/cases/compiler/arraySigChecking.ts(18,27): error TS2322: Type 'void' is not assignable to type 'string'.
 tests/cases/compiler/arraySigChecking.ts(22,13): error TS2322: Type 'number' is not assignable to type 'number[]'.
 tests/cases/compiler/arraySigChecking.ts(22,16): error TS2322: Type 'number' is not assignable to type 'number[]'.
@@ -17,7 +17,7 @@ tests/cases/compiler/arraySigChecking.ts(22,16): error TS2322: Type 'number' is 
     
         var foo: { [index: any]; }; // expect an error here
                     ~~~~~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
     }
     
     interface myInt {

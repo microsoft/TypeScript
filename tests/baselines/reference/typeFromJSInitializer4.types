@@ -1,0 +1,78 @@
+=== tests/cases/conformance/salsa/a.js ===
+/** @type {number | undefined} */
+var n;
+>n : number
+
+// should get any on parameter initialisers
+function f(a = null, b = n, l = []) {
+>f : (a?: any, b?: number, l?: any[]) => void
+>a : any
+>null : null
+>b : number
+>n : number
+>l : any[]
+>[] : undefined[]
+
+    // a should be any
+    a = undefined
+>a = undefined : undefined
+>a : any
+>undefined : undefined
+
+    a = null
+>a = null : null
+>a : any
+>null : null
+
+    a = 1
+>a = 1 : 1
+>a : any
+>1 : 1
+
+    a = true
+>a = true : true
+>a : any
+>true : true
+
+    a = {}
+>a = {} : {}
+>a : any
+>{} : {}
+
+    a = 'ok'
+>a = 'ok' : "ok"
+>a : any
+>'ok' : "ok"
+
+    // b should be number | undefined, not any
+    b = 1
+>b = 1 : 1
+>b : number
+>1 : 1
+
+    b = undefined
+>b = undefined : undefined
+>b : number
+>undefined : undefined
+
+    b = 'error'
+>b = 'error' : "error"
+>b : number
+>'error' : "error"
+
+    // l should be any[]
+    l.push(1)
+>l.push(1) : number
+>l.push : (...items: any[]) => number
+>l : any[]
+>push : (...items: any[]) => number
+>1 : 1
+
+    l.push('ok')
+>l.push('ok') : number
+>l.push : (...items: any[]) => number
+>l : any[]
+>push : (...items: any[]) => number
+>'ok' : "ok"
+}
+

@@ -32,22 +32,22 @@ namespace ts.projectSystem {
             const session = createSession(host, { cancellationToken });
 
             expectedRequestId = session.getNextSeq();
-            session.executeCommandSeq(<server.protocol.OpenRequest>{
+            session.executeCommandSeq({
                 command: "open",
                 arguments: { file: f1.path }
-            });
+            } as server.protocol.OpenRequest);
 
             expectedRequestId = session.getNextSeq();
-            session.executeCommandSeq(<server.protocol.GeterrRequest>{
+            session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: [f1.path] }
-            });
+            } as server.protocol.GeterrRequest);
 
             expectedRequestId = session.getNextSeq();
-            session.executeCommandSeq(<server.protocol.OccurrencesRequest>{
+            session.executeCommandSeq({
                 command: "occurrences",
                 arguments: { file: f1.path, line: 1, offset: 6 }
-            });
+            } as server.protocol.OccurrencesRequest);
 
             expectedRequestId = 2;
             host.runQueuedImmediateCallbacks();
@@ -75,15 +75,15 @@ namespace ts.projectSystem {
                 cancellationToken
             });
             {
-                session.executeCommandSeq(<protocol.OpenRequest>{
+                session.executeCommandSeq({
                     command: "open",
                     arguments: { file: f1.path }
-                });
+                } as protocol.OpenRequest);
                 // send geterr for missing file
-                session.executeCommandSeq(<protocol.GeterrRequest>{
+                session.executeCommandSeq({
                     command: "geterr",
                     arguments: { files: ["/a/missing"] }
-                });
+                } as protocol.GeterrRequest);
                 // Queued files
                 assert.equal(host.getOutput().length, 0, "expected 0 message");
                 host.checkTimeoutQueueLengthAndRun(1);
@@ -94,18 +94,18 @@ namespace ts.projectSystem {
             {
                 const getErrId = session.getNextSeq();
                 // send geterr for a valid file
-                session.executeCommandSeq(<protocol.GeterrRequest>{
+                session.executeCommandSeq({
                     command: "geterr",
                     arguments: { files: [f1.path] }
-                });
+                } as protocol.GeterrRequest);
 
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
                 // run new request
-                session.executeCommandSeq(<protocol.ProjectInfoRequest>{
+                session.executeCommandSeq({
                     command: "projectInfo",
                     arguments: { file: f1.path }
-                });
+                } as protocol.ProjectInfoRequest);
                 session.clearMessages();
 
                 // cancel previously issued Geterr
@@ -119,16 +119,16 @@ namespace ts.projectSystem {
             }
             {
                 const getErrId = session.getNextSeq();
-                session.executeCommandSeq(<protocol.GeterrRequest>{
+                session.executeCommandSeq({
                     command: "geterr",
                     arguments: { files: [f1.path] }
-                });
+                } as protocol.GeterrRequest);
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
                 // run first step
                 host.runQueuedTimeoutCallbacks();
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
-                const e1 = <protocol.Event>getMessage(0);
+                const e1 = getMessage(0) as protocol.Event;
                 assert.equal(e1.event, "syntaxDiag");
                 session.clearMessages();
 
@@ -141,29 +141,29 @@ namespace ts.projectSystem {
             }
             {
                 const getErrId = session.getNextSeq();
-                session.executeCommandSeq(<protocol.GeterrRequest>{
+                session.executeCommandSeq({
                     command: "geterr",
                     arguments: { files: [f1.path] }
-                });
+                } as protocol.GeterrRequest);
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
                 // run first step
                 host.runQueuedTimeoutCallbacks();
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
-                const e1 = <protocol.Event>getMessage(0);
+                const e1 = getMessage(0) as protocol.Event;
                 assert.equal(e1.event, "syntaxDiag");
                 session.clearMessages();
 
                 // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
                 assert.equal(host.getOutput().length, 1);
-                const e2 = <protocol.Event>getMessage(0);
+                const e2 = getMessage(0) as protocol.Event;
                 assert.equal(e2.event, "semanticDiag");
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks(1);
                 assert.equal(host.getOutput().length, 2);
-                const e3 = <protocol.Event>getMessage(0);
+                const e3 = getMessage(0) as protocol.Event;
                 assert.equal(e3.event, "suggestionDiag");
                 verifyRequestCompleted(getErrId, 1);
 
@@ -171,28 +171,28 @@ namespace ts.projectSystem {
             }
             {
                 const getErr1 = session.getNextSeq();
-                session.executeCommandSeq(<protocol.GeterrRequest>{
+                session.executeCommandSeq({
                     command: "geterr",
                     arguments: { files: [f1.path] }
-                });
+                } as protocol.GeterrRequest);
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
                 // run first step
                 host.runQueuedTimeoutCallbacks();
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
-                const e1 = <protocol.Event>getMessage(0);
+                const e1 = getMessage(0) as protocol.Event;
                 assert.equal(e1.event, "syntaxDiag");
                 session.clearMessages();
 
-                session.executeCommandSeq(<protocol.GeterrRequest>{
+                session.executeCommandSeq({
                     command: "geterr",
                     arguments: { files: [f1.path] }
-                });
+                } as protocol.GeterrRequest);
                 // make sure that getErr1 is completed
                 verifyRequestCompleted(getErr1, 0);
             }
 
             function verifyRequestCompleted(expectedSeq: number, n: number) {
-                const event = <protocol.RequestCompletedEvent>getMessage(n);
+                const event = getMessage(n) as protocol.RequestCompletedEvent;
                 assert.equal(event.event, "requestCompleted");
                 assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
                 session.clearMessages();
@@ -223,34 +223,34 @@ namespace ts.projectSystem {
                 throttleWaitMilliseconds: 0
             });
             {
-                session.executeCommandSeq(<protocol.OpenRequest>{
+                session.executeCommandSeq({
                     command: "open",
                     arguments: { file: f1.path }
-                });
+                } as protocol.OpenRequest);
 
                 // send navbar request (normal priority)
-                session.executeCommandSeq(<protocol.NavBarRequest>{
+                session.executeCommandSeq({
                     command: "navbar",
                     arguments: { file: f1.path }
-                });
+                } as protocol.NavBarRequest);
 
                 // ensure the nav bar request can be canceled
-                verifyExecuteCommandSeqIsCancellable(<protocol.NavBarRequest>{
+                verifyExecuteCommandSeqIsCancellable({
                     command: "navbar",
                     arguments: { file: f1.path }
-                });
+                } as protocol.NavBarRequest);
 
                 // send outlining spans request (normal priority)
-                session.executeCommandSeq(<protocol.OutliningSpansRequestFull>{
+                session.executeCommandSeq({
                     command: "outliningSpans",
                     arguments: { file: f1.path }
-                });
+                } as protocol.OutliningSpansRequestFull);
 
                 // ensure the outlining spans request can be canceled
-                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequestFull>{
+                verifyExecuteCommandSeqIsCancellable({
                     command: "outliningSpans",
                     arguments: { file: f1.path }
-                });
+                } as protocol.OutliningSpansRequestFull);
             }
 
             function verifyExecuteCommandSeqIsCancellable<T extends server.protocol.Request>(request: Partial<T>) {

@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js ===
+/** @template {T} */
+class Baz {
+>Baz : Baz
+
+    m() {
+>m : () => void
+
+        class Bar {
+>Bar : Bar
+
+            static bar() { this.prototype.foo(); }
+>bar : () => void
+>this.prototype.foo() : any
+>this.prototype.foo : any
+>this.prototype : Bar
+>this : typeof Bar
+>prototype : Bar
+>foo : any
+        }
+    }
+}
+

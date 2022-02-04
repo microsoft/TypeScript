@@ -10,11 +10,11 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     };
     registerRefactor(refactorName, {
         kinds: [functionOverloadAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertOverloadsToOneSignature,
+        getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
         const info = getConvertableOverloadListAtPosition(file, startPosition, program);
         if (!info) return emptyArray;
@@ -26,7 +26,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         }];
     }
 
-    function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorContext): RefactorEditInfo | undefined {
         const { file, startPosition, program } = context;
         const signatureDecls = getConvertableOverloadListAtPosition(file, startPosition, program);
         if (!signatureDecls) return undefined;
@@ -201,10 +201,10 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
         if (!every(decls, d => getSourceFileOfNode(d) === file)) {
             return;
         }
-        if (!isConvertableSignatureDeclaration(decls[0])) {
+        if (!isConvertableSignatureDeclaration(decls![0])) {
             return;
         }
-        const kindOne = decls[0].kind;
+        const kindOne = decls![0].kind;
         if (!every(decls, d => d.kind === kindOne)) {
             return;
         }

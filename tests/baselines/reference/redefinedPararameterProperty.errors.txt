@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterProperty.ts(6,14): error TS2729: Property 'a' is used before its initialization.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterProperty.ts (1 errors) ====
+    class Base {
+        a = 1;
+      }
+      
+      class Derived extends Base {
+        b = this.a /*undefined*/;
+                 ~
+!!! error TS2729: Property 'a' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterProperty.ts:8:17: 'a' is declared here.
+      
+        constructor(public a: number) {
+            super();
+        }
+      }
+      

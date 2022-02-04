@@ -147,9 +147,9 @@ foo();
 bar();`
             };
             const host = createServerHost([file, libFile]);
-            const session = createSession(host, { canUseEvents: true, });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file], session);
-            verifyGetErrRequestNoErrors({ session, host, files: [file] });
+            verifyGetErrRequest({ session, host, files: [file] });
 
             // Remove first ts-ignore and check only first error is reported
             const tsIgnoreComment = `// @ts-ignore`;
@@ -166,22 +166,7 @@ bar();`
                     }]
                 }
             });
-            const locationOfY = protocolTextSpanFromSubstring(file.content, "y");
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [
-                    {
-                        file,
-                        syntax: [],
-                        semantic: [
-                            createDiagnostic(locationOfY.start, locationOfY.end, Diagnostics.Type_0_is_not_assignable_to_type_1, ["number", "string"]),
-                        ],
-                        suggestion: []
-                    },
-                ]
-            });
-
+            verifyGetErrRequest({ session, host, files: [file] });
             // Revert the change and no errors should be reported
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,
@@ -195,7 +180,8 @@ bar();`
                     }]
                 }
             });
-            verifyGetErrRequestNoErrors({ session, host, files: [file] });
+            verifyGetErrRequest({ session, host, files: [file] });
+            baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
         });
     });
 }

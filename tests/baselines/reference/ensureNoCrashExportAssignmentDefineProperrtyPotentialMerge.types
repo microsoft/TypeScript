@@ -13,10 +13,10 @@ module.exports = 12;
 >12 : 12
 
 Object.defineProperty(module, "exports", { value: "oh no" });
->Object.defineProperty(module, "exports", { value: "oh no" }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module, "exports", { value: "oh no" }) : typeof module
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module : typeof module
 >"exports" : "exports"
 >{ value: "oh no" } : { value: string; }
@@ -58,10 +58,10 @@ B.NS = require("./namespacey");
 >"./namespacey" : "./namespacey"
 
 Object.defineProperty(B, "NS", { value: "why though", writable: true });
->Object.defineProperty(B, "NS", { value: "why though", writable: true }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(B, "NS", { value: "why though", writable: true }) : typeof B
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >B : typeof B
 >"NS" : "NS"
 >{ value: "why though", writable: true } : { value: string; writable: true; }

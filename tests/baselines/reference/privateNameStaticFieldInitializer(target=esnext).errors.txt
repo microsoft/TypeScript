@@ -1,0 +1,11 @@
+tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldInitializer.ts(2,21): error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldInitializer.ts (1 errors) ====
+    class A {
+        static #field = 10;
+                        ~~
+!!! error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+        static #uninitialized;
+    }
+    

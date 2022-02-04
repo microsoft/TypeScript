@@ -1,0 +1,61 @@
+=== tests/cases/compiler/missingDomElements.ts ===
+interface Element {}
+interface EventTarget {}
+interface HTMLElement {}
+interface HTMLInputElement {}
+
+({} as any as Element).textContent;
+>({} as any as Element).textContent : any
+>({} as any as Element) : Element
+>{} as any as Element : Element
+>{} as any : any
+>{} : {}
+>textContent : any
+
+({} as any as HTMLElement).textContent;
+>({} as any as HTMLElement).textContent : any
+>({} as any as HTMLElement) : HTMLElement
+>{} as any as HTMLElement : HTMLElement
+>{} as any : any
+>{} : {}
+>textContent : any
+
+({} as any as HTMLInputElement).textContent;
+>({} as any as HTMLInputElement).textContent : any
+>({} as any as HTMLInputElement) : HTMLInputElement
+>{} as any as HTMLInputElement : HTMLInputElement
+>{} as any : any
+>{} : {}
+>textContent : any
+
+({} as any as EventTarget & HTMLInputElement).textContent
+>({} as any as EventTarget & HTMLInputElement).textContent : any
+>({} as any as EventTarget & HTMLInputElement) : EventTarget & HTMLInputElement
+>{} as any as EventTarget & HTMLInputElement : EventTarget & HTMLInputElement
+>{} as any : any
+>{} : {}
+>textContent : any
+
+interface HTMLElementFake {}
+interface Node {
+    actuallyNotTheSame: number;    
+>actuallyNotTheSame : number
+
+};
+
+({} as any as HTMLElementFake).textContent;
+>({} as any as HTMLElementFake).textContent : any
+>({} as any as HTMLElementFake) : HTMLElementFake
+>{} as any as HTMLElementFake : HTMLElementFake
+>{} as any : any
+>{} : {}
+>textContent : any
+
+({} as any as Node).textContent;
+>({} as any as Node).textContent : any
+>({} as any as Node) : Node
+>{} as any as Node : Node
+>{} as any : any
+>{} : {}
+>textContent : any
+

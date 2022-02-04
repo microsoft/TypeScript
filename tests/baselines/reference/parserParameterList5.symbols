@@ -2,4 +2,5 @@
 function A(): (public B) => C {
 >A : Symbol(A, Decl(parserParameterList5.ts, 0, 0))
 >B : Symbol(B, Decl(parserParameterList5.ts, 0, 15))
+>C : Symbol(C)
 }

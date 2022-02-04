@@ -100,13 +100,13 @@ function test3(items: string[] | number[]) {
 >items.forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
 >items : string[] | number[]
 >forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
->item => console.log(item) : (item: any) => void
->item : any
+>item => console.log(item) : (item: string | number) => void
+>item : string | number
 >console.log(item) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->item : any
+>item : string | number
 }
 
 function test4(

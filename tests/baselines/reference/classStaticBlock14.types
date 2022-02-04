@@ -1,0 +1,24 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts ===
+class C {
+>C : C
+
+  static #_1 = 1;
+>#_1 : number
+>1 : 1
+
+  static #_3 = 1;
+>#_3 : number
+>1 : 1
+
+  static #_5 = 1;
+>#_5 : number
+>1 : 1
+
+  static {}
+  static {}
+  static {}
+  static {}
+  static {}
+  static {}
+}
+

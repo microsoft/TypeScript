@@ -77,7 +77,7 @@
         "3": {
             "kind": "JSDocTag",
             "pos": 62,
-            "end": 75,
+            "end": 89,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -92,7 +92,7 @@
         },
         "length": 4,
         "pos": 7,
-        "end": 75,
+        "end": 89,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

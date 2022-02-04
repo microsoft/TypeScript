@@ -40,6 +40,15 @@ class G {
     }
     constructor(public p1: number) {}
 }
+class H {
+    constructor(public p1: C) {}
+
+    public p2 = () => {
+        return this.p1.foo;
+    }
+
+    public p3 = () => this.p1.foo;
+}
 
 
 //// [assignParameterPropertyToPropertyDeclarationESNext.js]
@@ -89,4 +98,14 @@ class G {
     constructor(p1) {
         this.p1 = p1;
     }
+}
+class H {
+    p1;
+    constructor(p1) {
+        this.p1 = p1;
+    }
+    p2 = () => {
+        return this.p1.foo;
+    };
+    p3 = () => this.p1.foo;
 }

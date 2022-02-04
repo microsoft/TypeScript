@@ -10,4 +10,3 @@ var [debugger, if] = [1, 2];
 enum void {}
 function f(default: number) {}
 class C { m(null: string) {} }
-

@@ -1,0 +1,89 @@
+// === /tests/cases/fourslash/bar.js ===
+// const { /*FIND ALL REFS*/[|foo|]: bar } = require('./foo');
+
+// === /tests/cases/fourslash/foo.js ===
+// module.exports = {
+//     [|foo|]: '1'
+// };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/foo.js",
+      "kind": "property",
+      "name": "(property) foo: string",
+      "textSpan": {
+        "start": 23,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 23,
+        "length": 8
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 23,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/foo.js",
+        "contextSpan": {
+          "start": 23,
+          "length": 8
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 8,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/bar.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 38
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

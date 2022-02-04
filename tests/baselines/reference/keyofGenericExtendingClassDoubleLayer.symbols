@@ -1,0 +1,40 @@
+=== tests/cases/compiler/keyofGenericExtendingClassDoubleLayer.ts ===
+class Model<Attributes = any> {
+>Model : Symbol(Model, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 0))
+>Attributes : Symbol(Attributes, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 12))
+
+    public createdAt: Date;
+>createdAt : Symbol(Model.createdAt, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 31))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+type ModelAttributes<T> = Omit<T, keyof Model>;
+>ModelAttributes : Symbol(ModelAttributes, Decl(keyofGenericExtendingClassDoubleLayer.ts, 2, 1))
+>T : Symbol(T, Decl(keyofGenericExtendingClassDoubleLayer.ts, 4, 21))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofGenericExtendingClassDoubleLayer.ts, 4, 21))
+>Model : Symbol(Model, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 0))
+
+class AutoModel<T> extends Model<ModelAttributes<T>> {}
+>AutoModel : Symbol(AutoModel, Decl(keyofGenericExtendingClassDoubleLayer.ts, 4, 47))
+>T : Symbol(T, Decl(keyofGenericExtendingClassDoubleLayer.ts, 6, 16))
+>Model : Symbol(Model, Decl(keyofGenericExtendingClassDoubleLayer.ts, 0, 0))
+>ModelAttributes : Symbol(ModelAttributes, Decl(keyofGenericExtendingClassDoubleLayer.ts, 2, 1))
+>T : Symbol(T, Decl(keyofGenericExtendingClassDoubleLayer.ts, 6, 16))
+
+class PersonModel extends AutoModel<PersonModel> {
+>PersonModel : Symbol(PersonModel, Decl(keyofGenericExtendingClassDoubleLayer.ts, 6, 55))
+>AutoModel : Symbol(AutoModel, Decl(keyofGenericExtendingClassDoubleLayer.ts, 4, 47))
+>PersonModel : Symbol(PersonModel, Decl(keyofGenericExtendingClassDoubleLayer.ts, 6, 55))
+
+    public age: number;
+>age : Symbol(PersonModel.age, Decl(keyofGenericExtendingClassDoubleLayer.ts, 8, 50))
+
+    toJson() {
+>toJson : Symbol(PersonModel.toJson, Decl(keyofGenericExtendingClassDoubleLayer.ts, 9, 23))
+
+        let x: keyof this = 'createdAt';
+>x : Symbol(x, Decl(keyofGenericExtendingClassDoubleLayer.ts, 12, 11))
+    }
+}
+

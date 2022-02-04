@@ -117,7 +117,7 @@ type U14 = InstanceType<Function>;  // Error
 >U14 : any
 
 type U15 = InstanceType<typeof Abstract>;  // Abstract
->U15 : any
+>U15 : Abstract
 >Abstract : typeof Abstract
 
 type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
@@ -126,7 +126,7 @@ type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  /
 >args : T
 
 type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]
->U17 : any
+>U17 : T[]
 >x : string
 >args : T
 

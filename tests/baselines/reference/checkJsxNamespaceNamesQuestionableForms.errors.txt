@@ -1,0 +1,25 @@
+tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,2): error TS2304: Cannot find name 'b:c'.
+tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,2): error TS2633: JSX property access expressions cannot include JSX namespace names
+tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx(12,10): error TS2304: Cannot find name 'b:c'.
+
+
+==== tests/cases/conformance/jsx/checkJsxNamespaceNamesQuestionableForms.tsx (3 errors) ====
+    declare namespace JSX {
+        interface IntrinsicElements {
+            'this:b': any;
+            'b:c': {
+                x: any
+            };
+            'a:b': any;
+        }
+    }
+    
+    <a:b></a:b>;
+    <b:c.x></b:c.x>;
+     ~~~
+!!! error TS2304: Cannot find name 'b:c'.
+     ~~~
+!!! error TS2633: JSX property access expressions cannot include JSX namespace names
+             ~~~
+!!! error TS2304: Cannot find name 'b:c'.
+    <this:b></this:b>;

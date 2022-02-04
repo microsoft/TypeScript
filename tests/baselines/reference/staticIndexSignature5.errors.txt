@@ -1,0 +1,32 @@
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature5.ts(7,5): error TS1071: 'static' modifier cannot appear on an index signature.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature5.ts(8,5): error TS1071: 'static' modifier cannot appear on an index signature.
+
+
+==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature5.ts (2 errors) ====
+    class B {
+        static readonly [s: string]: number;
+        static readonly [s: number]: 42 | 233
+    }
+    
+    interface I {
+        static readonly [s: string]: number;
+        ~~~~~~
+!!! error TS1071: 'static' modifier cannot appear on an index signature.
+        static readonly [s: number]: 42 | 233
+        ~~~~~~
+!!! error TS1071: 'static' modifier cannot appear on an index signature.
+    }
+    
+    type TA = (typeof B)["foo"]
+    type TB = (typeof B)[42]
+    
+    type TC = (typeof B)[string]
+    type TD = (typeof B)[number]
+    
+    type TE = keyof typeof B;
+    
+    type TF = Pick<typeof B, number>
+    type TFI = Pick<I, number>
+    type TG = Omit<typeof B, number>
+    type TGI = Omit<I, number>
+    

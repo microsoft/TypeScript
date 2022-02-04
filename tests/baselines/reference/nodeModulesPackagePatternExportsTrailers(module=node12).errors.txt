@@ -1,0 +1,120 @@
+tests/cases/conformance/node/index.cts(2,23): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+tests/cases/conformance/node/index.cts(3,23): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+tests/cases/conformance/node/index.cts(4,24): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+tests/cases/conformance/node/index.mts(2,23): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+tests/cases/conformance/node/index.mts(3,23): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+tests/cases/conformance/node/index.mts(4,24): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+tests/cases/conformance/node/index.ts(2,23): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+tests/cases/conformance/node/index.ts(3,23): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+tests/cases/conformance/node/index.ts(4,24): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.cts(2,22): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.cts(4,23): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.mts(2,22): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.mts(3,22): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.mts(4,23): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(2,22): error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/node/index.ts (3 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index.cjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+    import * as typei from "inner/js/index.js";
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/index.mts (3 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index.cjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+    import * as typei from "inner/js/index.js";
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/index.cts (3 errors) ====
+    // cjs format file
+    import * as cjsi from "inner/cjs/index.cjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+    import * as typei from "inner/js/index.js";
+                           ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/node_modules/inner/index.d.ts (3 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index.cjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+    import * as type from "inner/js/index.js";
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (3 errors) ====
+    // esm format file
+    import * as cjs from "inner/cjs/index.cjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+    import * as type from "inner/js/index.js";
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/node_modules/inner/index.d.cts (3 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index.cjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/index.cjs' or its corresponding type declarations.
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/index.mjs' or its corresponding type declarations.
+    import * as type from "inner/js/index.js";
+                          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/index.js' or its corresponding type declarations.
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+    }
+==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs/*.cjs": "./*.cjs",
+            "./mjs/*.mjs": "./*.mjs",
+            "./js/*.js": "./*.js"
+        }
+    }

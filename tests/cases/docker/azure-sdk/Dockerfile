@@ -1,8 +1,7 @@
 FROM node:current
 RUN npm install -g @microsoft/rush
-RUN git clone https://github.com/Azure/azure-sdk-for-js.git /azure-sdk
+RUN git clone --depth 1 https://github.com/Azure/azure-sdk-for-js.git /azure-sdk
 WORKDIR /azure-sdk
-RUN git pull
 RUN rush update
 WORKDIR /azure-sdk/sdk/core/core-http
 # Sync up all TS versions used internally so they're all linked from a known location

@@ -35,9 +35,9 @@ node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot f
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(53,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2769: No overload matches this call.
-  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: BinaryToTextEncoding): string', gave the following error.
+  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: Encoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'undefined'.
-  Overload 2 of 4, '(data: string, input_encoding: Encoding | undefined, output_encoding: BinaryToTextEncoding): string', gave the following error.
+  Overload 2 of 4, '(data: string, input_encoding: Encoding | undefined, output_encoding: Encoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Encoding | undefined'.
 node_modules/adonis-framework/src/Encryption/index.js(77,27): error TS2322: Type 'string' is not assignable to type 'Buffer'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
@@ -46,7 +46,7 @@ node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cann
 node_modules/adonis-framework/src/Encryption/index.js(101,21): error TS2769: No overload matches this call.
   Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: Encoding): string', gave the following error.
     Argument of type '"base64"' is not assignable to parameter of type 'undefined'.
-  Overload 2 of 4, '(data: string, input_encoding: BinaryToTextEncoding | undefined, output_encoding: Encoding): string', gave the following error.
+  Overload 2 of 4, '(data: string, input_encoding: Encoding | undefined, output_encoding: Encoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Encoding'.
 node_modules/adonis-framework/src/Encryption/index.js(102,5): error TS2322: Type 'string' is not assignable to type 'Buffer & string'.
   Type 'string' is not assignable to type 'Buffer'.
@@ -136,7 +136,6 @@ node_modules/adonis-framework/src/Response/index.js(56,7): error TS1056: Accesso
 node_modules/adonis-framework/src/Response/index.js(68,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Response/index.js(76,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(95,16): error TS2304: Cannot find name 'Html'.
-node_modules/adonis-framework/src/Response/index.js(144,12): error TS1003: Identifier expected.
 node_modules/adonis-framework/src/Response/index.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(299,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(323,15): error TS2304: Cannot find name 'Mixed'.

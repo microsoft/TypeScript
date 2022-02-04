@@ -20,7 +20,9 @@ namespace ts {
 
             node.emitNode = {} as EmitNode;
         }
-
+        else {
+            Debug.assert(!(node.emitNode.flags & EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+        }
         return node.emitNode;
     }
 
@@ -252,6 +254,24 @@ namespace ts {
         if (helpersRemoved > 0) {
             sourceEmitHelpers.length -= helpersRemoved;
         }
+    }
+
+    /**
+     * Gets the SnippetElement of a node.
+     */
+    /* @internal */
+    export function getSnippetElement(node: Node): SnippetElement | undefined {
+        return node.emitNode?.snippetElement;
+    }
+
+    /**
+     * Sets the SnippetElement of a node.
+     */
+    /* @internal */
+    export function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.snippetElement = snippet;
+        return node;
     }
 
     /* @internal */

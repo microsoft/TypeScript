@@ -31,10 +31,10 @@ const _str = "my-fake-sym";
 >"my-fake-sym" : "my-fake-sym"
 
 Object.defineProperty(module.exports, _sym, { value: "ok" });
->Object.defineProperty(module.exports, _sym, { value: "ok" }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
@@ -44,10 +44,10 @@ Object.defineProperty(module.exports, _sym, { value: "ok" });
 >"ok" : "ok"
 
 Object.defineProperty(module.exports, _str, { value: "ok" });
->Object.defineProperty(module.exports, _str, { value: "ok" }) : any
->Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof module.exports
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports

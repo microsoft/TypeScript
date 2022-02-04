@@ -434,8 +434,8 @@ declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 
 // Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
 var g1 = applySpec({
->g1 : (...args: any[]) => { sum: number; nested: { mul: any; }; }
->applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: any; }; }
+>g1 : (...args: any[]) => { sum: number; nested: { mul: string; }; }
+>applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: string; }; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
 
@@ -459,8 +459,8 @@ var g1 = applySpec({
 
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
->g2 : (...args: any[]) => { foo: { bar: any; }; }
->applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: any; }; }
+>g2 : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
+>applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
 >foo : { bar: { baz: (x: any) => boolean; }; }

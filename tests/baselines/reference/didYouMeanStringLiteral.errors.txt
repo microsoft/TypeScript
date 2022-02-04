@@ -1,0 +1,20 @@
+tests/cases/compiler/didYouMeanStringLiteral.ts(5,7): error TS2820: Type '"strong"' is not assignable to type 'T1'. Did you mean '"string"'?
+tests/cases/compiler/didYouMeanStringLiteral.ts(6,7): error TS2322: Type '"strong"' is not assignable to type '"number" | "boolean"'.
+tests/cases/compiler/didYouMeanStringLiteral.ts(7,7): error TS2820: Type '"strong"' is not assignable to type '"string" | "boolean"'. Did you mean '"string"'?
+
+
+==== tests/cases/compiler/didYouMeanStringLiteral.ts (3 errors) ====
+    type T1 = "string" | "number" | "boolean";
+    type T2 = T1 & ("number" | "boolean"); // "number" | "boolean"
+    type T3 = T1 & ("string" | "boolean"); // "string" | "boolean"
+    
+    const t1: T1 = "strong";
+          ~~
+!!! error TS2820: Type '"strong"' is not assignable to type 'T1'. Did you mean '"string"'?
+    const t2: T2 = "strong";
+          ~~
+!!! error TS2322: Type '"strong"' is not assignable to type '"number" | "boolean"'.
+    const t3: T3 = "strong";
+          ~~
+!!! error TS2820: Type '"strong"' is not assignable to type '"string" | "boolean"'. Did you mean '"string"'?
+    

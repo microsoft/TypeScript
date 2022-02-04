@@ -1,0 +1,16 @@
+tests/cases/compiler/a.js(6,16): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment4.js (0 errors) ====
+    
+==== tests/cases/compiler/a.js (1 errors) ====
+    /**
+     * @typedef {number} Foo
+     */
+    
+    /** @type {Foo} */
+    export default "";
+                   ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
+    

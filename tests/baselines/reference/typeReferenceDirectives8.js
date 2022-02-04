@@ -21,7 +21,7 @@ exports.foo = foo;
 exports.__esModule = true;
 exports.bar = void 0;
 var mod1_1 = require("./mod1");
-exports.bar = mod1_1.foo();
+exports.bar = (0, mod1_1.foo)();
 
 
 //// [mod1.d.ts]

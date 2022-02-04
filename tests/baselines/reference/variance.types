@@ -35,8 +35,9 @@ const z: Foo<number> = x;
 class Bar<T extends string> {
 >Bar : Bar<T>
 
-  private static instance: Bar<string>[];
+  private static instance: Bar<string>[] = [];
 >instance : Bar<string>[]
+>[] : never[]
 
   cast(_name: ([T] extends [string] ? string : string)) { }
 >cast : (_name: ([T] extends [string] ? string : string)) => void

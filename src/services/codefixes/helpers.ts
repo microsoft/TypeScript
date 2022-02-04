@@ -7,18 +7,25 @@ namespace ts.codefix {
      * @param importAdder If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], sourceFile: SourceFile, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(
+        classDeclaration: ClassLikeDeclaration,
+        possiblyMissingSymbols: readonly Symbol[],
+        sourceFile: SourceFile,
+        context: TypeConstructionContext,
+        preferences: UserPreferences,
+        importAdder: ImportAdder | undefined,
+        addClassElement: (node: AddNode) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined);
             }
         }
     }
 
     export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): SymbolTracker {
         return {
-            trackSymbol: noop,
+            trackSymbol: () => false,
             moduleResolverHost: getModuleSpecifierResolverHost(context.program, context.host),
         };
     }
@@ -28,10 +35,30 @@ namespace ts.codefix {
         host: LanguageServiceHost;
     }
 
+    type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
+
+    export const enum PreserveOptionalFlags {
+        Method  = 1 << 0,
+        Property = 1 << 1,
+        All     = Method | Property
+    }
+
     /**
-     * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
+     * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
+     * @param body If defined, this will be the body of the member node passed to `addClassElement`. Otherwise, the body will default to a stub.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: Node) => void): void {
+    export function addNewNodeForMemberSymbol(
+        symbol: Symbol,
+        enclosingDeclaration: ClassLikeDeclaration,
+        sourceFile: SourceFile,
+        context: TypeConstructionContext,
+        preferences: UserPreferences,
+        importAdder: ImportAdder | undefined,
+        addClassElement: (node: AddNode) => void,
+        body: Block | undefined,
+        preserveOptional = PreserveOptionalFlags.All,
+        isAmbient = false,
+    ): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
@@ -44,7 +71,7 @@ namespace ts.codefix {
         const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
-        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient);
+        const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
         const quotePreference = getQuotePreference(sourceFile, preferences);
 
         switch (declaration.kind) {
@@ -63,7 +90,7 @@ namespace ts.codefix {
                     /*decorators*/ undefined,
                     modifiers,
                     name,
-                    optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                    optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
                 break;
@@ -89,7 +116,7 @@ namespace ts.codefix {
                             name,
                             emptyArray,
                             typeNode,
-                            ambient ? undefined : createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
@@ -100,7 +127,7 @@ namespace ts.codefix {
                             modifiers,
                             name,
                             createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
-                            ambient ? undefined : createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }
                 }
                 break;
@@ -122,50 +149,51 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
-                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : createStubbedMethodBody(quotePreference));
+                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : body || createStubbedMethodBody(quotePreference));
                     break;
                 }
 
                 for (const signature of signatures) {
-                    // Need to ensure nodes are fresh each time so they can have different positions.
+                    // Ensure nodes are fresh so they can have different positions when going through formatting.
                     outputMethod(quotePreference, signature, getSynthesizedDeepClones(modifiers, /*includeTrivia*/ false), getSynthesizedDeepClone(name, /*includeTrivia*/ false));
                 }
 
                 if (!ambient) {
                     if (declarations.length > signatures.length) {
                         const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                        outputMethod(quotePreference, signature, modifiers, name, createStubbedMethodBody(quotePreference));
+                        outputMethod(quotePreference, signature, modifiers, name, body || createStubbedMethodBody(quotePreference));
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        addClassElement(createMethodImplementingSignatures(signatures, name, optional, modifiers, quotePreference));
+                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body));
                     }
                 }
                 break;
         }
 
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = signatureToMethodDeclaration(context, quotePreference, signature, enclosingDeclaration, modifiers, name, optional, body, importAdder);
+            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder);
             if (method) addClassElement(method);
         }
     }
 
-    function signatureToMethodDeclaration(
+    export function createSignatureDeclarationFromSignature(
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction,
         context: TypeConstructionContext,
         quotePreference: QuotePreference,
         signature: Signature,
-        enclosingDeclaration: ClassLikeDeclaration,
-        modifiers: NodeArray<Modifier> | undefined,
-        name: PropertyName,
-        optional: boolean,
         body: Block | undefined,
-        importAdder: ImportAdder | undefined,
-    ): MethodDeclaration | undefined {
+        name: PropertyName | undefined,
+        modifiers: NodeArray<Modifier> | undefined,
+        optional: boolean | undefined,
+        enclosingDeclaration: Node | undefined,
+        importAdder: ImportAdder | undefined
+     ) {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.NoUndefinedOptionalParameterType | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
-        const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
+        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration;
         if (!signatureDeclaration) {
             return undefined;
         }
@@ -233,18 +261,18 @@ namespace ts.codefix {
             }
         }
 
-        return factory.updateMethodDeclaration(
-            signatureDeclaration,
-            /*decorators*/ undefined,
-            modifiers,
-            signatureDeclaration.asteriskToken,
-            name,
-            optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            typeParameters,
-            parameters,
-            type,
-            body
-        );
+        const questionToken = optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
+        const asteriskToken = signatureDeclaration.asteriskToken;
+        if (isFunctionExpression(signatureDeclaration)) {
+            return factory.updateFunctionExpression(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
+        }
+        if (isArrowFunction(signatureDeclaration)) {
+            return factory.updateArrowFunction(signatureDeclaration, modifiers, typeParameters, parameters, type, signatureDeclaration.equalsGreaterThanToken, body ?? signatureDeclaration.body);
+        }
+        if (isMethodDeclaration(signatureDeclaration)) {
+            return factory.updateMethodDeclaration(signatureDeclaration, /* decorators */ undefined, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+        }
+        return undefined;
     }
 
     export function createSignatureDeclarationFromCallExpression(
@@ -252,7 +280,7 @@ namespace ts.codefix {
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
-        name: Identifier,
+        name: Identifier | string,
         modifierFlags: ModifierFlags,
         contextNode: Node
     ) {
@@ -310,15 +338,16 @@ namespace ts.codefix {
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-        const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
+        let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
             if (importableReference) {
                 importSymbols(importAdder, importableReference.symbols);
-                return importableReference.typeNode;
+                typeNode = importableReference.typeNode;
             }
         }
-        return typeNode;
+        // Ensure nodes are fresh so they can have different positions when going through formatting.
+        return getSynthesizedDeepClone(typeNode);
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
@@ -338,11 +367,15 @@ namespace ts.codefix {
     }
 
     function createMethodImplementingSignatures(
+        checker: TypeChecker,
+        context: TypeConstructionContext,
+        enclosingDeclaration: ClassLikeDeclaration,
         signatures: readonly Signature[],
         name: PropertyName,
         optional: boolean,
         modifiers: readonly Modifier[] | undefined,
         quotePreference: QuotePreference,
+        body: Block | undefined,
     ): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
@@ -362,7 +395,6 @@ namespace ts.codefix {
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
-
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
@@ -384,8 +416,16 @@ namespace ts.codefix {
             optional,
             /*typeParameters*/ undefined,
             parameters,
-            /*returnType*/ undefined,
-            quotePreference);
+            getReturnTypeFromSignatures(signatures, checker, context, enclosingDeclaration),
+            quotePreference,
+            body);
+    }
+
+    function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
+        if (length(signatures)) {
+            const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
+            return checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+        }
     }
 
     function createStubbedMethod(
@@ -395,7 +435,8 @@ namespace ts.codefix {
         typeParameters: readonly TypeParameterDeclaration[] | undefined,
         parameters: readonly ParameterDeclaration[],
         returnType: TypeNode | undefined,
-        quotePreference: QuotePreference
+        quotePreference: QuotePreference,
+        body: Block | undefined
     ): MethodDeclaration {
         return factory.createMethodDeclaration(
             /*decorators*/ undefined,
@@ -406,7 +447,7 @@ namespace ts.codefix {
             typeParameters,
             parameters,
             returnType,
-            createStubbedMethodBody(quotePreference));
+            body || createStubbedMethodBody(quotePreference));
     }
 
     function createStubbedMethodBody(quotePreference: QuotePreference) {
@@ -521,6 +562,6 @@ namespace ts.codefix {
     }
 
     export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
-        symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
+        symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
     }
 }

@@ -1,0 +1,26 @@
+=== tests/cases/compiler/inferTypeParameterConstraints.ts ===
+// Repro from #42636
+
+type SubGuard<A, X extends [A]> = X;
+>SubGuard : X
+
+type IsSub<M extends any[], S extends any[]> = M extends [...SubGuard<M[number], infer B>, ...S, ...any[]] ? B : never;
+>IsSub : IsSub<M, S>
+
+type E0 = IsSub<[1, 2, 3, 4], [2, 3, 4]>;  // [1 | 2 | 3 | 4]
+>E0 : [1 | 4 | 2 | 3]
+
+type E1 = [1, 2, 3, 4] extends [...infer B, 2, 3, 4, ...any[]] ? B : never;  // unknown[]
+>E1 : unknown[]
+
+// Repro from #42636
+
+type Constrain<T extends C, C> = unknown;
+>Constrain : unknown
+
+type Foo<A> = A extends Constrain<infer X, A> ? X : never;
+>Foo : Foo<A>
+
+type T0 = Foo<string>;  // string
+>T0 : string
+

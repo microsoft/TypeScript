@@ -1,0 +1,17 @@
+=== tests/cases/conformance/override/a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    doSomething() {}
+>doSomething : Symbol(A.doSomething, Decl(a.js, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(a.js, 2, 1))
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @override  */
+    doSomethang() {}
+>doSomethang : Symbol(B.doSomethang, Decl(a.js, 4, 19))
+}
+
