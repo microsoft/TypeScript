@@ -930,6 +930,7 @@ namespace ts {
         | ExportDeclaration
         | NamedTupleMember
         | ExportSpecifier
+        | CaseClause
         | EndOfFileToken
         ;
 
@@ -2801,7 +2802,7 @@ namespace ts {
         readonly clauses: NodeArray<CaseOrDefaultClause>;
     }
 
-    export interface CaseClause extends Node {
+    export interface CaseClause extends Node, JSDocContainer {
         readonly kind: SyntaxKind.CaseClause;
         readonly parent: CaseBlock;
         readonly expression: Expression;

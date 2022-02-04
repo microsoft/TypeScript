@@ -6005,11 +6005,12 @@ namespace ts {
 
         function parseCaseClause(): CaseClause {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.CaseKeyword);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.ColonToken);
             const statements = parseList(ParsingContext.SwitchClauseStatements, parseStatement);
-            return finishNode(factory.createCaseClause(expression, statements), pos);
+            return withJSDoc(finishNode(factory.createCaseClause(expression, statements), pos), hasJSDoc);
         }
 
         function parseDefaultClause(): DefaultClause {
