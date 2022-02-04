@@ -4534,9 +4534,13 @@ namespace ts {
             // This is a valid arrow function with "z" as the return type.
             //
             // But, if we're in the true side of a conditional expression, this colon
-            // terminates the true side, so cannot be the return type. If we are in the
-            // false side, we may still be within the true side of a parent conditional
-            // expression, so don't allow it to be a return type either.
+            // terminates the expression, so we cannot allow a return type if we aren't
+            // certain whether or not the preceding text was parsed as a parameter list.
+            //
+            // For example,
+            //     a() ? (b: number, c?: string): void => d() : e
+            // is determined by isParenthesizedArrowFunctionExpression to unambiguously
+            // be an arrow expression, so we allow a return type.
             if (disallowReturnTypeInArrowFunction && token() === SyntaxKind.ColonToken) {
                 return undefined;
             }
