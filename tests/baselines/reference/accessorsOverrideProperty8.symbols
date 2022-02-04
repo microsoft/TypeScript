@@ -54,6 +54,7 @@ const Base = classWithProperties({
 
     get x() { return 'boolean' as const },
 >x : Symbol(x, Decl(accessorsOverrideProperty8.ts, 13, 34))
+>const : Symbol(const)
 
     y: 'string',
 >y : Symbol(y, Decl(accessorsOverrideProperty8.ts, 14, 42))
