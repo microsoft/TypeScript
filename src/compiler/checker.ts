@@ -11823,11 +11823,6 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
-        function hasStructuredOrInstantiableConstraint(type: Type) {
-            const constraint = type.flags & TypeFlags.Instantiable ? getConstraintOfType(type) : undefined;
-            return constraint && !!(constraint.flags & TypeFlags.StructuredOrInstantiable);
-        }
-
         function isUnionContainingMultipleObjectLikeTypes(type: Type) {
             return !!(type.flags & TypeFlags.Union) &&
                 countWhere((type as UnionType).types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Substitution))) >= 2;
@@ -18365,10 +18360,10 @@ namespace ts {
                     // (1) Source is an intersection of object types { a } & { b } and target is an object type { a, b }.
                     // (2) Source is an object type { a, b: boolean } and target is a union { a, b: true } | { a, b: false }.
                     // (3) Source is an intersection { a } & { b: boolean } and target is a union { a, b: true } | { a, b: false }.
-                    // (4) Source is an instantiable type with a union constraint and target is a union.
+                    // (4) Source is an instantiable type with a union or intersection constraint and target is a union or intersection.
                     if (!result && (source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Object ||
-                        (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && isUnionContainingMultipleObjectLikeTypes(target)) ||
-                        (target.flags & TypeFlags.Union && hasStructuredOrInstantiableConstraint(source)))) {
+                        source.flags & (TypeFlags.Object | TypeFlags.Intersection) && isUnionContainingMultipleObjectLikeTypes(target) ||
+                        source.flags & TypeFlags.Instantiable && target.flags & TypeFlags.UnionOrIntersection)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)) {
                             resetErrorInfo(saveErrorInfo);
                         }
