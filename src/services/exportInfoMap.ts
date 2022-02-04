@@ -29,6 +29,7 @@ namespace ts {
         // Used to rehydrate `symbol` and `moduleSymbol` when transient
         id: number;
         symbolName: string;
+        capitalizedSymbolName: string | undefined;
         symbolTableKey: __String;
         moduleName: string;
         moduleFile: SourceFile | undefined;
@@ -48,7 +49,7 @@ namespace ts {
         clear(): void;
         add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], getSymbolName: (preferCapitalized?: boolean) => string, isFromAmbientModule: boolean, key: string) => void): void;
+        search(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => void): void;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -121,9 +122,12 @@ namespace ts {
                 // 3. Otherwise, we have a default/namespace import that can be imported by any name, and
                 //    `symbolTableKey` will be something undesirable like `export=` or `default`, so we try to
                 //    get a better name.
-                const importedName = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
+                const names = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                     ? unescapeLeadingUnderscores(symbolTableKey)
-                    : getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+                    : getNamesForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+
+                const symbolName = typeof names === "string" ? names : names[0];
+                const capitalizedSymbolName = typeof names === "string" ? undefined : names[1];
 
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
@@ -132,10 +136,11 @@ namespace ts {
                 const storedModuleSymbol = moduleSymbol.flags & SymbolFlags.Transient ? undefined : moduleSymbol;
                 if (!storedSymbol || !storedModuleSymbol) symbols.set(id, [symbol, moduleSymbol]);
 
-                exportInfo.add(key(importedName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
+                exportInfo.add(key(symbolName, symbol, isExternalModuleNameRelative(moduleName) ? undefined : moduleName, checker), {
                     id,
                     symbolTableKey,
-                    symbolName: importedName,
+                    symbolName,
+                    capitalizedSymbolName,
                     moduleName,
                     moduleFile,
                     moduleFileName: moduleFile?.fileName,
@@ -152,24 +157,17 @@ namespace ts {
                 const result = exportInfo.get(key);
                 return result?.map(rehydrateCachedInfo);
             },
-            forEach: (importingFile, action) => {
+            search: (importingFile, preferCapitalized, matches, action) => {
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
-                    const rehydrated = info.map(rehydrateCachedInfo);
-                    const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
-                    if (filtered.length) {
-                        action(
-                            filtered,
-                            preferCapitalized => {
-                                const { symbol, exportKind } = rehydrated[0];
-                                const namedSymbol = exportKind === ExportKind.Default && getLocalSymbolForExportDefault(symbol) || symbol;
-                                return preferCapitalized
-                                    ? getNameForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined, /*preferCapitalized*/ true)
-                                    : symbolName;
-                            },
-                            !!ambientModuleName,
-                            key);
+                    const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
+                    if (matches(name, info[0].targetFlags)) {
+                        const rehydrated = info.map(rehydrateCachedInfo);
+                        const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
+                        if (filtered.length) {
+                            action(filtered, name, !!ambientModuleName, key);
+                        }
                     }
                 });
             },
