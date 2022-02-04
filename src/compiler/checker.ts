@@ -11823,6 +11823,16 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
+        function hasStructuredOrInstantiableConstraint(type: Type) {
+            const constraint = type.flags & TypeFlags.Instantiable ? getConstraintOfType(type) : undefined;
+            return constraint && !!(constraint.flags & TypeFlags.StructuredOrInstantiable);
+        }
+
+        function isUnionContainingMultipleObjectLikeTypes(type: Type) {
+            return !!(type.flags & TypeFlags.Union) &&
+                countWhere((type as UnionType).types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Substitution))) >= 2;
+        }
+
         function getEffectiveConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean) {
             let constraints: Type[] | undefined;
             let hasDisjointDomainType = false;
@@ -18346,17 +18356,26 @@ namespace ts {
                 let result = Ternary.False;
                 const saveErrorInfo = captureErrorCalculationState();
 
-                if ((source.flags & TypeFlags.Union || target.flags & TypeFlags.Union) && getConstituentCount(source) * getConstituentCount(target) < 4) {
+                if (source.flags & TypeFlags.UnionOrIntersection || target.flags & TypeFlags.UnionOrIntersection) {
                     // We skip caching when source or target is a union with no more than three constituents.
-                    result = structuredTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck);
-                }
-                else if (source.flags & TypeFlags.UnionOrIntersection || target.flags & TypeFlags.UnionOrIntersection) {
-                    result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck, recursionFlags);
-                }
-                if (!result && !(source.flags & TypeFlags.Union) && (source.flags & (TypeFlags.StructuredOrInstantiable) || target.flags & TypeFlags.StructuredOrInstantiable)) {
-                    if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)) {
-                        resetErrorInfo(saveErrorInfo);
+                    result = (source.flags & TypeFlags.Union || target.flags & TypeFlags.Union) && getConstituentCount(source) * getConstituentCount(target) < 4 ?
+                        structuredTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck) :
+                        recursiveTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck, recursionFlags);
+                    // The ordered decomposition above doesn't handle all cases. Specifically, we also need to handle:
+                    // (1) Source is an intersection of object types { a } & { b } and target is an object type { a, b }.
+                    // (2) Source is an object type { a, b: boolean } and target is a union { a, b: true } | { a, b: false }.
+                    // (3) Source is an intersection { a } & { b: boolean } and target is a union { a, b: true } | { a, b: false }.
+                    // (4) Source is an instantiable type with a union constraint and target is a union.
+                    if (!result && (source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Object ||
+                        (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && isUnionContainingMultipleObjectLikeTypes(target)) ||
+                        (target.flags & TypeFlags.Union && hasStructuredOrInstantiableConstraint(source)))) {
+                        if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)) {
+                            resetErrorInfo(saveErrorInfo);
+                        }
                     }
+                }
+                else if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
+                    result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags);
                 }
                 if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
@@ -18628,8 +18647,11 @@ namespace ts {
                     }
                 }
                 if (reportErrors) {
+                    // Elaborate only if we can find a best matching type in the target union
                     const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
-                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], RecursionFlags.Target, /*reportErrors*/ true);
+                    if (bestMatchingType) {
+                        isRelatedTo(source, bestMatchingType, RecursionFlags.Target, /*reportErrors*/ true);
+                    }
                 }
                 return Ternary.False;
             }
@@ -35937,34 +35959,26 @@ namespace ts {
                 return;
             }
 
+            let headMessage: DiagnosticMessage;
             let expectedReturnType: Type;
-            const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
-            let errorInfo: DiagnosticMessageChain | undefined;
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
+                    headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
                     const classSymbol = getSymbolOfNode(node.parent);
                     const classConstructorType = getTypeOfSymbol(classSymbol);
                     expectedReturnType = getUnionType([classConstructorType, voidType]);
                     break;
 
-                case SyntaxKind.Parameter:
-                    expectedReturnType = voidType;
-                    errorInfo = chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
-
-                    break;
-
                 case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.Parameter:
+                    headMessage = Diagnostics.Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any;
                     expectedReturnType = voidType;
-                    errorInfo = chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.The_return_type_of_a_property_decorator_function_must_be_either_void_or_any);
                     break;
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                    headMessage = Diagnostics.Decorator_function_return_type_0_is_not_assignable_to_type_1;
                     const methodType = getTypeOfNode(node.parent);
                     const descriptorType = createTypedPropertyDescriptorType(methodType);
                     expectedReturnType = getUnionType([descriptorType, voidType]);
@@ -35978,8 +35992,7 @@ namespace ts {
                 returnType,
                 expectedReturnType,
                 node,
-                headMessage,
-                () => errorInfo);
+                headMessage);
         }
 
         /**
@@ -44217,27 +44230,26 @@ namespace ts {
 
         function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
             let bestMatch: Type | undefined;
-            let matchingCount = 0;
-            for (const target of unionTarget.types) {
-                const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
-                if (overlap.flags & TypeFlags.Index) {
-                    // perfect overlap of keys
-                    bestMatch = target;
-                    matchingCount = Infinity;
-                }
-                else if (overlap.flags & TypeFlags.Union) {
-                    // We only want to account for literal types otherwise.
-                    // If we have a union of index types, it seems likely that we
-                    // needed to elaborate between two generic mapped types anyway.
-                    const len = length(filter((overlap as UnionType).types, isUnitType));
-                    if (len >= matchingCount) {
-                        bestMatch = target;
-                        matchingCount = len;
+            if (!(source.flags & (TypeFlags.Primitive | TypeFlags.InstantiablePrimitive))) {
+                let matchingCount = 0;
+                for (const target of unionTarget.types) {
+                    if (!(target.flags & (TypeFlags.Primitive | TypeFlags.InstantiablePrimitive))) {
+                        const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
+                        if (overlap.flags & TypeFlags.Index) {
+                            // perfect overlap of keys
+                            return target;
+                        }
+                        else if (isUnitType(overlap) || overlap.flags & TypeFlags.Union) {
+                            // We only want to account for literal types otherwise.
+                            // If we have a union of index types, it seems likely that we
+                            // needed to elaborate between two generic mapped types anyway.
+                            const len = overlap.flags & TypeFlags.Union ? countWhere((overlap as UnionType).types, isUnitType) : 1;
+                            if (len >= matchingCount) {
+                                bestMatch = target;
+                                matchingCount = len;
+                            }
+                        }
                     }
-                }
-                else if (isUnitType(overlap) && 1 >= matchingCount) {
-                    bestMatch = target;
-                    matchingCount = 1;
                 }
             }
             return bestMatch;
