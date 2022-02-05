@@ -1,0 +1,57 @@
+=== tests/cases/compiler/intersectionReductionInFunctionReturnType.ts ===
+// repro from #46032
+
+interface A {
+>A : Symbol(A, Decl(intersectionReductionInFunctionReturnType.ts, 0, 0))
+
+  p: "a";
+>p : Symbol(A.p, Decl(intersectionReductionInFunctionReturnType.ts, 2, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(intersectionReductionInFunctionReturnType.ts, 4, 1))
+
+  p: "b";
+>p : Symbol(B.p, Decl(intersectionReductionInFunctionReturnType.ts, 6, 13))
+}
+
+type C = A & B;
+>C : Symbol(C, Decl(intersectionReductionInFunctionReturnType.ts, 8, 1))
+>A : Symbol(A, Decl(intersectionReductionInFunctionReturnType.ts, 0, 0))
+>B : Symbol(B, Decl(intersectionReductionInFunctionReturnType.ts, 4, 1))
+
+function func(): { value: C[] } {
+>func : Symbol(func, Decl(intersectionReductionInFunctionReturnType.ts, 10, 15))
+>value : Symbol(value, Decl(intersectionReductionInFunctionReturnType.ts, 12, 18))
+>C : Symbol(C, Decl(intersectionReductionInFunctionReturnType.ts, 8, 1))
+
+  return {
+    value: [],
+>value : Symbol(value, Decl(intersectionReductionInFunctionReturnType.ts, 13, 10))
+
+  };
+}
+
+// other tests
+// Using `C` in place of `never` shouldn't change the errors other than elaboration
+
+function f1(): never {
+>f1 : Symbol(f1, Decl(intersectionReductionInFunctionReturnType.ts, 16, 1))
+
+  return;
+}
+
+function f2(): C {
+>f2 : Symbol(f2, Decl(intersectionReductionInFunctionReturnType.ts, 23, 1))
+>C : Symbol(C, Decl(intersectionReductionInFunctionReturnType.ts, 8, 1))
+
+  return;
+}
+
+function g1(): never {}
+>g1 : Symbol(g1, Decl(intersectionReductionInFunctionReturnType.ts, 27, 1))
+
+function g2(): C {}
+>g2 : Symbol(g2, Decl(intersectionReductionInFunctionReturnType.ts, 29, 23))
+>C : Symbol(C, Decl(intersectionReductionInFunctionReturnType.ts, 8, 1))
+

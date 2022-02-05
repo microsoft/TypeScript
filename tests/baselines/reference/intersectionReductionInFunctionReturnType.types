@@ -1,0 +1,51 @@
+=== tests/cases/compiler/intersectionReductionInFunctionReturnType.ts ===
+// repro from #46032
+
+interface A {
+  p: "a";
+>p : "a"
+}
+
+interface B {
+  p: "b";
+>p : "b"
+}
+
+type C = A & B;
+>C : never
+
+function func(): { value: C[] } {
+>func : () => {    value: C[];}
+>value : never[]
+
+  return {
+>{    value: [],  } : { value: undefined[]; }
+
+    value: [],
+>value : undefined[]
+>[] : undefined[]
+
+  };
+}
+
+// other tests
+// Using `C` in place of `never` shouldn't change the errors other than elaboration
+
+function f1(): never {
+>f1 : () => never
+
+  return;
+}
+
+function f2(): C {
+>f2 : () => C
+
+  return;
+}
+
+function g1(): never {}
+>g1 : () => never
+
+function g2(): C {}
+>g2 : () => C
+

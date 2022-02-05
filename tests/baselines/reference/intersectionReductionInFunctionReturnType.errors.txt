@@ -1,0 +1,60 @@
+tests/cases/compiler/intersectionReductionInFunctionReturnType.ts(15,5): error TS2322: Type 'undefined[]' is not assignable to type 'never[]'.
+  Type 'undefined' is not assignable to type 'never'.
+    The intersection 'C' was reduced to 'never' because property 'p' has conflicting types in some constituents.
+tests/cases/compiler/intersectionReductionInFunctionReturnType.ts(23,3): error TS2322: Type 'undefined' is not assignable to type 'never'.
+tests/cases/compiler/intersectionReductionInFunctionReturnType.ts(27,3): error TS2322: Type 'undefined' is not assignable to type 'never'.
+  The intersection 'C' was reduced to 'never' because property 'p' has conflicting types in some constituents.
+tests/cases/compiler/intersectionReductionInFunctionReturnType.ts(30,16): error TS2534: A function returning 'never' cannot have a reachable end point.
+tests/cases/compiler/intersectionReductionInFunctionReturnType.ts(32,16): error TS2534: A function returning 'never' cannot have a reachable end point.
+  The intersection 'C' was reduced to 'never' because property 'p' has conflicting types in some constituents.
+
+
+==== tests/cases/compiler/intersectionReductionInFunctionReturnType.ts (5 errors) ====
+    // repro from #46032
+    
+    interface A {
+      p: "a";
+    }
+    
+    interface B {
+      p: "b";
+    }
+    
+    type C = A & B;
+    
+    function func(): { value: C[] } {
+      return {
+        value: [],
+        ~~~~~
+!!! error TS2322: Type 'undefined[]' is not assignable to type 'never[]'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'never'.
+!!! error TS2322:     The intersection 'C' was reduced to 'never' because property 'p' has conflicting types in some constituents.
+!!! related TS6500 tests/cases/compiler/intersectionReductionInFunctionReturnType.ts:13:20: The expected type comes from property 'value' which is declared here on type '{ value: never[]; }'
+      };
+    }
+    
+    // other tests
+    // Using `C` in place of `never` shouldn't change the errors other than elaboration
+    
+    function f1(): never {
+      return;
+      ~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'never'.
+    }
+    
+    function f2(): C {
+      return;
+      ~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'never'.
+!!! error TS2322:   The intersection 'C' was reduced to 'never' because property 'p' has conflicting types in some constituents.
+    }
+    
+    function g1(): never {}
+                   ~~~~~
+!!! error TS2534: A function returning 'never' cannot have a reachable end point.
+    
+    function g2(): C {}
+                   ~
+!!! error TS2534: A function returning 'never' cannot have a reachable end point.
+!!! error TS2534:   The intersection 'C' was reduced to 'never' because property 'p' has conflicting types in some constituents.
+    
