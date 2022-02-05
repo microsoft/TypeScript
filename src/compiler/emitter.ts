@@ -2108,6 +2108,7 @@ namespace ts {
             writeKeyword(node.kind === SyntaxKind.GetAccessor ? "get" : "set");
             writeSpace();
             emit(node.name);
+            emit(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 

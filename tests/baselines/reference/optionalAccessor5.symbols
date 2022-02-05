@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor5.ts ===
+class C {
+>C : Symbol(C, Decl(optionalAccessor5.ts, 0, 0))
+
+    get x?(): string;
+>x : Symbol(C.x, Decl(optionalAccessor5.ts, 0, 9))
+}
+

@@ -2628,6 +2628,8 @@ namespace ts {
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     return (node as ParameterDeclaration | MethodDeclaration | PropertyDeclaration).questionToken !== undefined;
             }
         }

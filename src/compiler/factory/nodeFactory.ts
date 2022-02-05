@@ -1502,9 +1502,10 @@ namespace ts {
             name: string | PropertyName,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined,
+            questionToken: QuestionToken | undefined,
             body: Block | undefined
         ) {
-            return createBaseFunctionLikeDeclaration<GetAccessorDeclaration>(
+            const node = createBaseFunctionLikeDeclaration<GetAccessorDeclaration>(
                 SyntaxKind.GetAccessor,
                 decorators,
                 modifiers,
@@ -1514,6 +1515,8 @@ namespace ts {
                 type,
                 body
             );
+            node.questionToken = questionToken;
+            return node;
         }
 
         // @api
@@ -1524,15 +1527,17 @@ namespace ts {
             name: PropertyName,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined,
+            questionToken: QuestionToken | undefined,
             body: Block | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.name !== name
                 || node.parameters !== parameters
+                || node.questionToken !== questionToken
                 || node.type !== type
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body), node)
+                ? updateBaseFunctionLikeDeclaration(createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, questionToken, body), node)
                 : node;
         }
 
@@ -1542,9 +1547,10 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             name: string | PropertyName,
             parameters: readonly ParameterDeclaration[],
+            questionToken: QuestionToken | undefined,
             body: Block | undefined
         ) {
-            return createBaseFunctionLikeDeclaration<SetAccessorDeclaration>(
+            const node = createBaseFunctionLikeDeclaration<SetAccessorDeclaration>(
                 SyntaxKind.SetAccessor,
                 decorators,
                 modifiers,
@@ -1554,6 +1560,8 @@ namespace ts {
                 /*type*/ undefined,
                 body
             );
+            node.questionToken = questionToken;
+            return node;
         }
 
         // @api
@@ -1563,14 +1571,16 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             name: PropertyName,
             parameters: readonly ParameterDeclaration[],
+            questionToken: QuestionToken | undefined,
             body: Block | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.name !== name
                 || node.parameters !== parameters
+                || node.questionToken !== questionToken
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createSetAccessorDeclaration(decorators, modifiers, name, parameters, body), node)
+                ? updateBaseFunctionLikeDeclaration(createSetAccessorDeclaration(decorators, modifiers, name, parameters, questionToken, body), node)
                 : node;
         }
 
@@ -5755,6 +5765,7 @@ namespace ts {
                                 /*type*/ undefined,
                                 /*initializer*/ undefined
                             )],
+                            /*questionToken*/ undefined,
                             createBlock([
                                 createExpressionStatement(expression)
                             ])
@@ -6094,8 +6105,8 @@ namespace ts {
                 isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
                 isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
                 isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifierArray, node.parameters, node.body) :
-                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.type, node.body) :
-                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.body) :
+                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.type, node.questionToken, node.body) :
+                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.questionToken, node.body) :
                 isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifierArray, node.parameters, node.type) :
                 isFunctionExpression(node) ? updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
                 isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :

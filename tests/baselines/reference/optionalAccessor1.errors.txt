@@ -1,0 +1,14 @@
+tests/cases/conformance/types/namedTypes/optionalAccessor1.ts(2,10): error TS1162: An object member cannot be declared optional.
+tests/cases/conformance/types/namedTypes/optionalAccessor1.ts(3,10): error TS1162: An object member cannot be declared optional.
+
+
+==== tests/cases/conformance/types/namedTypes/optionalAccessor1.ts (2 errors) ====
+    const Foo = {
+        get x?() { return '' },
+             ~
+!!! error TS1162: An object member cannot be declared optional.
+        set x?(value: string) {}
+             ~
+!!! error TS1162: An object member cannot be declared optional.
+    }
+    

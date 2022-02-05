@@ -1,0 +1,23 @@
+tests/cases/conformance/types/namedTypes/optionalAccessor8.ts(10,5): error TS2375: Type '{ foo: number | undefined; }' is not assignable to type 'C' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'foo' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/types/namedTypes/optionalAccessor8.ts (1 errors) ====
+    export class C {
+        get foo?(): number { return 1; }
+        set foo?(value: number) {}
+    }
+    
+    declare let x: {
+        foo: number | undefined;
+    }
+    
+    let y: C = x;
+        ~
+!!! error TS2375: Type '{ foo: number | undefined; }' is not assignable to type 'C' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+!!! error TS2375:   Types of property 'foo' are incompatible.
+!!! error TS2375:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2375:       Type 'undefined' is not assignable to type 'number'.
+    

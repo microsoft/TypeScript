@@ -2070,6 +2070,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
+                /*questionToken*/ undefined,
                 visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
             );
             if (updated !== node) {
@@ -2091,6 +2092,7 @@ namespace ts {
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
+                /*questionToken*/ undefined,
                 visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
             );
             if (updated !== node) {

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor3.ts ===
+interface I {
+>I : Symbol(I, Decl(optionalAccessor3.ts, 0, 0))
+
+    get x?(): string;
+>x : Symbol(I.x, Decl(optionalAccessor3.ts, 0, 13), Decl(optionalAccessor3.ts, 1, 21))
+
+    set x?(value: string);
+>x : Symbol(I.x, Decl(optionalAccessor3.ts, 0, 13), Decl(optionalAccessor3.ts, 1, 21))
+>value : Symbol(value, Decl(optionalAccessor3.ts, 2, 11))
+}
+
+class C implements I {}
+>C : Symbol(C, Decl(optionalAccessor3.ts, 3, 1))
+>I : Symbol(I, Decl(optionalAccessor3.ts, 0, 0))
+

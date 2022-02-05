@@ -464,6 +464,7 @@ namespace ts {
                     nodeVisitor(node.name, visitor, isPropertyName),
                     visitParameterList(node.parameters, visitor, context, nodesVisitor),
                     nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                     visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
             case SyntaxKind.SetAccessor:
@@ -473,6 +474,7 @@ namespace ts {
                     nodesVisitor(node.modifiers, visitor, isModifier),
                     nodeVisitor(node.name, visitor, isPropertyName),
                     visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                     visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
             case SyntaxKind.ClassStaticBlockDeclaration:

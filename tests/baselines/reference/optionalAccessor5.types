@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor5.ts ===
+class C {
+>C : C
+
+    get x?(): string;
+>x : string
+}
+

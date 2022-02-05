@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor7.ts ===
+class A {
+>A : A
+
+    get x?() { return '' }
+>x : string
+>'' : ""
+
+    set x?(value: string) {}
+>x : string
+>value : string
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    get x() { return '' }
+>x : string
+>'' : ""
+
+    set x(value: string) { }
+>x : string
+>value : string
+}
+

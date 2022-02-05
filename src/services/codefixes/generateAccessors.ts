@@ -150,6 +150,7 @@ namespace ts.codefix {
             accessorName,
             /*parameters*/ undefined!, // TODO: GH#18217
             type,
+            /*questionToken*/ undefined,
             factory.createBlock([
                 factory.createReturnStatement(
                     createAccessorAccessExpression(fieldName, isStatic, container)
@@ -171,6 +172,7 @@ namespace ts.codefix {
                 /*questionToken*/ undefined,
                 type
             )],
+            /*questionToken*/ undefined,
             factory.createBlock([
                 factory.createExpressionStatement(
                     factory.createAssignment(

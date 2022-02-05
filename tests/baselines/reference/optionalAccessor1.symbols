@@ -1,0 +1,12 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor1.ts ===
+const Foo = {
+>Foo : Symbol(Foo, Decl(optionalAccessor1.ts, 0, 5))
+
+    get x?() { return '' },
+>x : Symbol(x, Decl(optionalAccessor1.ts, 0, 13), Decl(optionalAccessor1.ts, 1, 27))
+
+    set x?(value: string) {}
+>x : Symbol(x, Decl(optionalAccessor1.ts, 0, 13), Decl(optionalAccessor1.ts, 1, 27))
+>value : Symbol(value, Decl(optionalAccessor1.ts, 2, 11))
+}
+

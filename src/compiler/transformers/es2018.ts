@@ -864,6 +864,7 @@ namespace ts {
                 visitNode(node.name, visitor, isPropertyName),
                 visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,
+                visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
                 transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
@@ -882,6 +883,7 @@ namespace ts {
                 node.modifiers,
                 visitNode(node.name, visitor, isPropertyName),
                 visitParameterList(node.parameters, parameterVisitor, context),
+                visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
                 transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;

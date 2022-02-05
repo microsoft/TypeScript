@@ -950,6 +950,7 @@ namespace ts {
                             input.name,
                             updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
                             ensureType(input, accessorType),
+                            input.questionToken,
                             /*body*/ undefined));
                     }
                     case SyntaxKind.SetAccessor: {
@@ -962,6 +963,7 @@ namespace ts {
                             ensureModifiers(input),
                             input.name,
                             updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
+                            input.questionToken,
                             /*body*/ undefined));
                     }
                     case SyntaxKind.PropertyDeclaration:

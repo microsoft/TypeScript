@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor6.ts ===
+class C {
+>C : C
+
+    get x?() { return '' }
+>x : string
+>'' : ""
+
+    set x?(value: string) {}
+>x : string
+>value : string
+}
+

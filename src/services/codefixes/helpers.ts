@@ -116,6 +116,7 @@ namespace ts.codefix {
                             name,
                             emptyArray,
                             typeNode,
+                            /*questionToken*/ undefined,
                             ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }
                     else {
@@ -127,6 +128,7 @@ namespace ts.codefix {
                             modifiers,
                             name,
                             createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
+                            /*questionToken*/ undefined,
                             ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }
                 }

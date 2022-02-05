@@ -1,0 +1,24 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor8.ts ===
+export class C {
+>C : Symbol(C, Decl(optionalAccessor8.ts, 0, 0))
+
+    get foo?(): number { return 1; }
+>foo : Symbol(C.foo, Decl(optionalAccessor8.ts, 0, 16), Decl(optionalAccessor8.ts, 1, 36))
+
+    set foo?(value: number) {}
+>foo : Symbol(C.foo, Decl(optionalAccessor8.ts, 0, 16), Decl(optionalAccessor8.ts, 1, 36))
+>value : Symbol(value, Decl(optionalAccessor8.ts, 2, 13))
+}
+
+declare let x: {
+>x : Symbol(x, Decl(optionalAccessor8.ts, 5, 11))
+
+    foo: number | undefined;
+>foo : Symbol(foo, Decl(optionalAccessor8.ts, 5, 16))
+}
+
+let y: C = x;
+>y : Symbol(y, Decl(optionalAccessor8.ts, 9, 3))
+>C : Symbol(C, Decl(optionalAccessor8.ts, 0, 0))
+>x : Symbol(x, Decl(optionalAccessor8.ts, 5, 11))
+

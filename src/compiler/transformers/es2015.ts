@@ -3649,10 +3649,10 @@ namespace ts {
             const parameters = visitParameterList(node.parameters, visitor, context);
             const body = transformFunctionBody(node);
             if (node.kind === SyntaxKind.GetAccessor) {
-                updated = factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
+                updated = factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, node.type, node.questionToken, body);
             }
             else {
-                updated = factory.updateSetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, body);
+                updated = factory.updateSetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, node.questionToken, body);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;

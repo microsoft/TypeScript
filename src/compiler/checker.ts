@@ -5709,8 +5709,8 @@ namespace ts {
                     kind === SyntaxKind.MethodSignature ? factory.createMethodSignature(modifiers, options?.name ?? factory.createIdentifier(""), options?.questionToken, typeParameters, parameters, returnTypeNode) :
                     kind === SyntaxKind.MethodDeclaration ? factory.createMethodDeclaration(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, options?.name ?? factory.createIdentifier(""), /*questionToken*/ undefined, typeParameters, parameters, returnTypeNode, /*body*/ undefined) :
                     kind === SyntaxKind.Constructor ? factory.createConstructorDeclaration(/*decorators*/ undefined, modifiers, parameters, /*body*/ undefined) :
-                    kind === SyntaxKind.GetAccessor ? factory.createGetAccessorDeclaration(/*decorators*/ undefined, modifiers, options?.name ?? factory.createIdentifier(""), parameters, returnTypeNode, /*body*/ undefined) :
-                    kind === SyntaxKind.SetAccessor ? factory.createSetAccessorDeclaration(/*decorators*/ undefined, modifiers, options?.name ?? factory.createIdentifier(""), parameters, /*body*/ undefined) :
+                    kind === SyntaxKind.GetAccessor ? factory.createGetAccessorDeclaration(/*decorators*/ undefined, modifiers, options?.name ?? factory.createIdentifier(""), parameters, returnTypeNode, /*questionToken*/ undefined, /*body*/ undefined) :
+                    kind === SyntaxKind.SetAccessor ? factory.createSetAccessorDeclaration(/*decorators*/ undefined, modifiers, options?.name ?? factory.createIdentifier(""), parameters, /*questionToken*/ undefined, /*body*/ undefined) :
                     kind === SyntaxKind.IndexSignature ? factory.createIndexSignature(/*decorators*/ undefined, modifiers, parameters, returnTypeNode) :
                     kind === SyntaxKind.JSDocFunctionType ? factory.createJSDocFunctionType(parameters, returnTypeNode) :
                     kind === SyntaxKind.FunctionType ? factory.createFunctionTypeNode(typeParameters, parameters, returnTypeNode ?? factory.createTypeReferenceNode(factory.createIdentifier(""))) :
@@ -7787,6 +7787,7 @@ namespace ts {
                                         /*questionToken*/ undefined,
                                         isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled)
                                     )],
+                                    /*questionToken*/ undefined,
                                     /*body*/ undefined
                                 ), p.declarations?.find(isSetAccessor) || firstPropertyLikeDecl));
                             }
@@ -7798,6 +7799,7 @@ namespace ts {
                                     name,
                                     [],
                                     isPrivate ? undefined : serializeTypeForDeclaration(context, getTypeOfSymbol(p), p, enclosingDeclaration, includePrivateSymbol, bundled),
+                                    /*questionToken*/ undefined,
                                     /*body*/ undefined
                                 ), p.declarations?.find(isGetAccessor) || firstPropertyLikeDecl));
                             }
@@ -9496,7 +9498,6 @@ namespace ts {
             }
 
             let type = resolveTypeOfAccessors(symbol, writing);
-
             if (!popTypeResolution()) {
                 type = anyType;
                 if (noImplicitAny) {
@@ -9504,7 +9505,7 @@ namespace ts {
                     error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                 }
             }
-            return type;
+            return type ? addOptionality(type, /*isProperty*/ true, !!(symbol.flags & SymbolFlags.Optional)) : undefined;
         }
 
         function resolveTypeOfAccessors(symbol: Symbol, writing = false) {
@@ -43241,9 +43242,11 @@ namespace ts {
                         currentKind = DeclarationMeaning.Method;
                         break;
                     case SyntaxKind.GetAccessor:
+                        checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                         currentKind = DeclarationMeaning.GetAccessor;
                         break;
                     case SyntaxKind.SetAccessor:
+                        checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                         currentKind = DeclarationMeaning.SetAccessor;
                         break;
                     default:
@@ -43430,7 +43433,7 @@ namespace ts {
                 if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(accessor.name)) {
                     return grammarErrorOnNode(accessor.name, Diagnostics.Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher);
                 }
-                if (accessor.body === undefined && !hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
+                if (accessor.body === undefined && !hasQuestionToken(accessor) && !hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
                     return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }

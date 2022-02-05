@@ -2637,9 +2637,9 @@ namespace ts {
                 case SyntaxKind.Constructor:
                     return declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
                 case SyntaxKind.GetAccessor:
-                    return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
+                    return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.GetAccessor | ((node as GetAccessorDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.GetAccessorExcludes);
                 case SyntaxKind.SetAccessor:
-                    return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
+                    return bindPropertyOrMethodOrAccessor(node as Declaration, SymbolFlags.SetAccessor | ((node as SetAccessorDeclaration).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocSignature:

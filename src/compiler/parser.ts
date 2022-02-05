@@ -6747,13 +6747,14 @@ namespace ts {
 
         function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"]): AccessorDeclaration {
             const name = parsePropertyName();
+            const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             const typeParameters = parseTypeParameters();
             const parameters = parseParameters(SignatureFlags.None);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlockOrSemicolon(SignatureFlags.None);
             const node = kind === SyntaxKind.GetAccessor
-                ? factory.createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body)
-                : factory.createSetAccessorDeclaration(decorators, modifiers, name, parameters, body);
+                ? factory.createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, questionToken, body)
+                : factory.createSetAccessorDeclaration(decorators, modifiers, name, parameters, questionToken, body);
             // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
             node.typeParameters = typeParameters;
             if (type && node.kind === SyntaxKind.SetAccessor) (node as Mutable<SetAccessorDeclaration>).type = type;

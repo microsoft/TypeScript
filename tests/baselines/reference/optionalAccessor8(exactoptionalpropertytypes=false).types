@@ -1,0 +1,24 @@
+=== tests/cases/conformance/types/namedTypes/optionalAccessor8.ts ===
+export class C {
+>C : C
+
+    get foo?(): number { return 1; }
+>foo : number | undefined
+>1 : 1
+
+    set foo?(value: number) {}
+>foo : number | undefined
+>value : number
+}
+
+declare let x: {
+>x : { foo: number | undefined; }
+
+    foo: number | undefined;
+>foo : number | undefined
+}
+
+let y: C = x;
+>y : C
+>x : { foo: number | undefined; }
+
