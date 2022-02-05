@@ -11823,11 +11823,6 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
-        function isUnionContainingMultipleObjectLikeTypes(type: Type) {
-            return !!(type.flags & TypeFlags.Union) &&
-                countWhere((type as UnionType).types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Substitution))) >= 2;
-        }
-
         function getEffectiveConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean) {
             let constraints: Type[] | undefined;
             let hasDisjointDomainType = false;
@@ -18357,13 +18352,14 @@ namespace ts {
                         structuredTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck) :
                         recursiveTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck, recursionFlags);
                     // The ordered decomposition above doesn't handle all cases. Specifically, we also need to handle:
-                    // (1) Source is an intersection of object types { a } & { b } and target is an object type { a, b }.
-                    // (2) Source is an object type { a, b: boolean } and target is a union { a, b: true } | { a, b: false }.
-                    // (3) Source is an intersection { a } & { b: boolean } and target is a union { a, b: true } | { a, b: false }.
-                    // (4) Source is an instantiable type with a union or intersection constraint and target is a union or intersection.
-                    if (!result && (source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Object ||
-                        source.flags & (TypeFlags.Object | TypeFlags.Intersection) && isUnionContainingMultipleObjectLikeTypes(target) ||
-                        source.flags & TypeFlags.Instantiable && target.flags & TypeFlags.UnionOrIntersection)) {
+                    // Source is instantiable (e.g. source has union or intersection constraint).
+                    // Source is an object, target is a union (e.g. { a, b: boolean } <=> { a, b: true } | { a, b: false }).
+                    // Source is an intersection, target is an object (e.g. { a } & { b } <=> { a, b }).
+                    // Source is an intersection, target is a union (e.g. { a } & { b: boolean } <=> { a, b: true } | { a, b: false }).
+                    // Source is an intersection, target instantiable (e.g. string & { tag } <=> T["a"] constrained to string & { tag }).
+                    if (!result && (source.flags & TypeFlags.Instantiable ||
+                        source.flags & TypeFlags.Object && target.flags & TypeFlags.Union ||
+                        source.flags & TypeFlags.Intersection && target.flags & (TypeFlags.Object | TypeFlags.Union | TypeFlags.Instantiable))) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags)) {
                             resetErrorInfo(saveErrorInfo);
                         }
