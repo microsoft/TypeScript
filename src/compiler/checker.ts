@@ -28425,29 +28425,6 @@ namespace ts {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
 
-                if (lexicallyScopedSymbol?.valueDeclaration && (getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && !useDefineForClassFields)) {
-                    const lexicalClass = getContainingClass(lexicallyScopedSymbol.valueDeclaration);
-                    const parentStaticFieldInitializer = findAncestor(node, (n) => {
-                        if (n === lexicalClass) return "quit";
-                        if (isPropertyDeclaration(n.parent) && hasStaticModifier(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (parentStaticFieldInitializer) {
-                        const parentStaticFieldInitializerSymbol = getSymbolOfNode(parentStaticFieldInitializer.parent);
-                        Debug.assert(parentStaticFieldInitializerSymbol, "Initializer without declaration symbol");
-                        const diagnostic = error(node,
-                            Diagnostics.Property_0_may_not_be_used_in_a_static_property_s_initializer_in_the_same_class_when_target_is_esnext_and_useDefineForClassFields_is_false,
-                            symbolName(lexicallyScopedSymbol));
-                        addRelatedInfo(diagnostic,
-                            createDiagnosticForNode(parentStaticFieldInitializer.parent,
-                                Diagnostics.Initializer_for_property_0,
-                                symbolName(parentStaticFieldInitializerSymbol))
-                        );
-                    }
-                }
-
                 if (isAnyLike) {
                     if (lexicallyScopedSymbol) {
                         return isErrorType(apparentType) ? errorType : apparentType;
@@ -34656,9 +34633,7 @@ namespace ts {
             checkVariableLikeDeclaration(node);
 
             setNodeLinksForPrivateIdentifierScope(node);
-            if (isPrivateIdentifier(node.name) && hasStaticModifier(node) && node.initializer && languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) {
-                error(node.initializer, Diagnostics.Static_fields_with_private_names_can_t_have_initializers_when_the_useDefineForClassFields_flag_is_not_specified_with_a_target_of_esnext_Consider_adding_the_useDefineForClassFields_flag);
-            }
+
             // property signatures already report "initializer not allowed in ambient context" elsewhere
             if (hasSyntacticModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.PropertyDeclaration && node.initializer) {
                 error(node, Diagnostics.Property_0_cannot_have_an_initializer_because_it_is_marked_abstract, declarationNameToString(node.name));

@@ -87,8 +87,8 @@ namespace ts.projectSystem {
             // transient symbols are recreated with every new checker.
             const programBefore = project.getCurrentProgram()!;
             let sigintPropBefore: readonly SymbolExportInfo[] | undefined;
-            exportMapCache.forEach(bTs.path as Path, (info, getSymbolName) => {
-                if (getSymbolName() === "SIGINT") sigintPropBefore = info;
+            exportMapCache.search(bTs.path as Path, /*preferCapitalized*/ false, returnTrue, (info, symbolName) => {
+                if (symbolName === "SIGINT") sigintPropBefore = info;
             });
             assert.ok(sigintPropBefore);
             assert.ok(sigintPropBefore![0].symbol.flags & SymbolFlags.Transient);
@@ -113,8 +113,8 @@ namespace ts.projectSystem {
 
             // Get same info from cache again
             let sigintPropAfter: readonly SymbolExportInfo[] | undefined;
-            exportMapCache.forEach(bTs.path as Path, (info, getSymbolName) => {
-                if (getSymbolName() === "SIGINT") sigintPropAfter = info;
+            exportMapCache.search(bTs.path as Path, /*preferCapitalized*/ false, returnTrue, (info, symbolName) => {
+                if (symbolName === "SIGINT") sigintPropAfter = info;
             });
             assert.ok(sigintPropAfter);
             assert.notEqual(symbolIdBefore, getSymbolId(sigintPropAfter![0].symbol));

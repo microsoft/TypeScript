@@ -287,10 +287,10 @@ class C {
         this.readonlyCall = Symbol();
         this.readwriteCall = Symbol();
     }
+    static { this.readonlyStaticCall = Symbol(); }
+    static { this.readonlyStaticTypeAndCall = Symbol(); }
+    static { this.readwriteStaticCall = Symbol(); }
 }
-C.readonlyStaticCall = Symbol();
-C.readonlyStaticTypeAndCall = Symbol();
-C.readwriteStaticCall = Symbol();
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
@@ -347,18 +347,18 @@ class C0 {
         this.e = N.s;
         this.f = N["s"];
     }
+    static { this.a = s; }
+    static { this.b = N.s; }
+    static { this.c = N["s"]; }
+    static { this.d = s; }
+    static { this.e = N.s; }
+    static { this.f = N["s"]; }
     method1() { return s; }
     async method2() { return s; }
     async *method3() { yield s; }
     *method4() { yield s; }
     method5(p = s) { return p; }
 }
-C0.a = s;
-C0.b = N.s;
-C0.c = N["s"];
-C0.d = s;
-C0.e = N.s;
-C0.f = N["s"];
 // non-widening positions
 // element access
 o[s];
@@ -385,8 +385,8 @@ Math.random() * 2 ? N["s"] : "a";
     [N.s]: "b",
 });
 class C1 {
+    static { N.s, N.s; }
 }
-N.s, N.s;
 const o4 = {
     method1() {
         return s; // return type should not widen due to contextual type

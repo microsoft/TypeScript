@@ -1,112 +1,110 @@
-//// [privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts]
-class TestWithErrors {
-    #prop = 0 
-    static dd = new TestWithErrors().#prop; // Err
+//// [privateNameWhenNotUseDefineForClassFieldsInEsNext.ts]
+class TestWithStatics {
+    #prop = 0
+    static dd = new TestWithStatics().#prop; // OK
     static ["X_ z_ zz"] = class Inner {
-        #foo  = 10   
+        #foo  = 10
         m() {
-            new TestWithErrors().#prop // Err
+            new TestWithStatics().#prop // OK
         }
         static C = class InnerInner {
             m() {
-                new TestWithErrors().#prop // Err
-                new Inner().#foo; // Err
+                new TestWithStatics().#prop // OK
+                new Inner().#foo; // OK
             }
         }
 
         static M(){
             return class {
                 m() {
-                    new TestWithErrors().#prop // Err
+                    new TestWithStatics().#prop // OK
                     new Inner().#foo; // OK
                 }
             }
-        } 
+        }
     }
 }
 
-class TestNoErrors {
-    #prop = 0 
-    dd = new TestNoErrors().#prop; // OK
+class TestNonStatics {
+    #prop = 0
+    dd = new TestNonStatics().#prop; // OK
     ["X_ z_ zz"] = class Inner {
-        #foo  = 10   
+        #foo  = 10
         m() {
-            new TestNoErrors().#prop // Ok
+            new TestNonStatics().#prop // Ok
         }
         C = class InnerInner {
             m() {
-                new TestNoErrors().#prop // Ok
+                new TestNonStatics().#prop // Ok
                 new Inner().#foo; // Ok
             }
         }
-  
+
         static M(){
             return class {
                 m() {
-                    new TestNoErrors().#prop // OK
+                    new TestNonStatics().#prop // OK
                     new Inner().#foo; // OK
                 }
             }
-        } 
+        }
     }
-  }
+}
 
-//// [privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.js]
+//// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
 "use strict";
-var _a;
-class TestWithErrors {
+class TestWithStatics {
     constructor() {
         this.#prop = 0;
     }
     #prop;
-}
-TestWithErrors.dd = new TestWithErrors().#prop; // Err
-TestWithErrors["X_ z_ zz"] = (_a = class Inner {
+    static { this.dd = new TestWithStatics().#prop; } // OK
+    static { this["X_ z_ zz"] = class Inner {
         constructor() {
             this.#foo = 10;
         }
         #foo;
         m() {
-            new TestWithErrors().#prop; // Err
+            new TestWithStatics().#prop; // OK
         }
+        static { this.C = class InnerInner {
+            m() {
+                new TestWithStatics().#prop; // OK
+                new Inner().#foo; // OK
+            }
+        }; }
         static M() {
             return class {
                 m() {
-                    new TestWithErrors().#prop; // Err
+                    new TestWithStatics().#prop; // OK
                     new Inner().#foo; // OK
                 }
             };
         }
-    },
-    _a.C = class InnerInner {
-        m() {
-            new TestWithErrors().#prop; // Err
-            new _a().#foo; // Err
-        }
-    },
-    _a);
-class TestNoErrors {
+    }; }
+}
+class TestNonStatics {
     constructor() {
         this.#prop = 0;
-        this.dd = new TestNoErrors().#prop; // OK
+        this.dd = new TestNonStatics().#prop; // OK
         this["X_ z_ zz"] = class Inner {
             constructor() {
                 this.#foo = 10;
                 this.C = class InnerInner {
                     m() {
-                        new TestNoErrors().#prop; // Ok
+                        new TestNonStatics().#prop; // Ok
                         new Inner().#foo; // Ok
                     }
                 };
             }
             #foo;
             m() {
-                new TestNoErrors().#prop; // Ok
+                new TestNonStatics().#prop; // Ok
             }
             static M() {
                 return class {
                     m() {
-                        new TestNoErrors().#prop; // OK
+                        new TestNonStatics().#prop; // OK
                         new Inner().#foo; // OK
                     }
                 };

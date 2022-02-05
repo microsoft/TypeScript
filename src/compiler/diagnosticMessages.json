@@ -3281,10 +3281,6 @@
         "category": "Error",
         "code": 2804
     },
-    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
-        "category": "Error",
-        "code": 2805
-    },
     "Private accessor was defined without a getter.": {
         "category": "Error",
         "code": 2806
@@ -3300,10 +3296,6 @@
     "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
-    },
-    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
-        "category": "Error",
-        "code": 2810
     },
     "Initializer for property '{0}'": {
         "category": "Error",
@@ -7130,6 +7122,10 @@
     "Add 'undefined' to optional property type": {
         "category": "Message",
         "code": 95169
+    },
+    "Convert named imports to default import": {
+        "category": "Message",
+        "code": 95170
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
