@@ -32140,7 +32140,8 @@ namespace ts {
             }
 
             const functionFlags = getFunctionFlags(func);
-            const type = returnType && unwrapReturnType(returnType, functionFlags);
+            const unwrappedType = returnType && unwrapReturnType(returnType, functionFlags);
+            const type = unwrappedType && getReducedType(unwrappedType);
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
             if (type && maybeTypeOfKind(type, TypeFlags.Any | TypeFlags.Void)) {
@@ -32157,7 +32158,9 @@ namespace ts {
             const errorNode = getEffectiveReturnTypeNode(func) || func;
 
             if (type && type.flags & TypeFlags.Never) {
-                error(errorNode, Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
+                const elaboration = elaborateNeverIntersection(/*errorInfo*/ undefined, unwrappedType);
+                const diagnostic = chainDiagnosticMessages(elaboration, Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, diagnostic));
             }
             else if (type && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
@@ -38219,7 +38222,7 @@ namespace ts {
             const signature = getSignatureFromDeclaration(container);
             const returnType = getReturnTypeOfSignature(signature);
             const functionFlags = getFunctionFlags(container);
-            if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
+            if (strictNullChecks || node.expression || returnType.flags & (TypeFlags.Never | TypeFlags.Intersection)) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
                 if (container.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
