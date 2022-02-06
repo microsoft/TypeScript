@@ -196,8 +196,7 @@ namespace ts {
         Source = 1 << 0,
         Target = 1 << 1,
         PropertyCheck = 1 << 2,
-        UnionIntersectionCheck = 1 << 3,
-        InPropertyCheck = 1 << 4,
+        InPropertyCheck = 1 << 3,
     }
 
     const enum RecursionFlags {
@@ -18262,7 +18261,9 @@ namespace ts {
                     if (isSimpleTypeRelatedTo(originalSource, originalTarget, relation, reportErrors ? reportError : undefined)) {
                         return Ternary.True;
                     }
-                    reportErrorResults(originalSource, originalTarget, Ternary.False, !!(getObjectFlags(originalSource) & ObjectFlags.JsxAttributes));
+                    if (reportErrors) {
+                        reportErrorResults(originalSource, originalTarget, originalSource, originalTarget, headMessage);
+                    }
                     return Ternary.False;
                 }
 
@@ -18276,7 +18277,10 @@ namespace ts {
                 if (source === target) return Ternary.True;
 
                 if (relation === identityRelation) {
-                    return isIdenticalTo(source, target, recursionFlags);
+                    if (source.flags !== target.flags) return Ternary.False;
+                    if (source.flags & TypeFlags.Singleton) return Ternary.True;
+                    traceUnionsOrIntersectionsTooLarge(source, target);
+                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, IntersectionState.None, recursionFlags);
                 }
 
                 // We fastpath comparing a type parameter to exactly its constraint, as this is _super_ common,
@@ -18309,7 +18313,6 @@ namespace ts {
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                 const isPerformingExcessPropertyChecks = !(intersectionState & IntersectionState.Target) && (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral);
                 if (isPerformingExcessPropertyChecks) {
                     if (hasExcessProperties(source as FreshObjectLiteralType, target, reportErrors)) {
@@ -18324,6 +18327,7 @@ namespace ts {
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
+                const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                 if (isPerformingCommonPropertyChecks && !hasCommonProperties(source, target, isComparingJsxAttributes)) {
                     if (reportErrors) {
                         const sourceString = typeToString(originalSource.aliasSymbol ? originalSource : source);
@@ -18405,53 +18409,53 @@ namespace ts {
                     inPropertyCheck = false;
                 }
 
-                reportErrorResults(source, target, result, isComparingJsxAttributes);
+                if (!result && reportErrors) {
+                    reportErrorResults(originalSource, originalTarget, source, target, headMessage);
+                }
                 return result;
+            }
 
-                function reportErrorResults(source: Type, target: Type, result: Ternary, isComparingJsxAttributes: boolean) {
-                    if (!result && reportErrors) {
-                        const sourceHasBase = !!getSingleBaseForNonAugmentingSubtype(originalSource);
-                        const targetHasBase = !!getSingleBaseForNonAugmentingSubtype(originalTarget);
-                        source = (originalSource.aliasSymbol || sourceHasBase) ? originalSource : source;
-                        target = (originalTarget.aliasSymbol || targetHasBase) ? originalTarget : target;
-                        let maybeSuppress = overrideNextErrorInfo > 0;
-                        if (maybeSuppress) {
-                            overrideNextErrorInfo--;
-                        }
-                        if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
-                            const currentError = errorInfo;
-                            tryElaborateArrayLikeErrors(source, target, reportErrors);
-                            if (errorInfo !== currentError) {
-                                maybeSuppress = !!errorInfo;
-                            }
-                        }
-                        if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
-                            tryElaborateErrorsForPrimitivesAndObjects(source, target);
-                        }
-                        else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
-                            reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
-                        }
-                        else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
-                            const targetTypes = (target as IntersectionType).types;
-                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
-                            const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
-                            if (!isErrorType(intrinsicAttributes) && !isErrorType(intrinsicClassAttributes) &&
-                                (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
-                                // do not report top error
-                                return result;
-                            }
-                        }
-                        else {
-                            errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
-                        }
-                        if (!headMessage && maybeSuppress) {
-                            lastSkippedInfo = [source, target];
-                            // Used by, eg, missing property checking to replace the top-level message with a more informative one
-                            return result;
-                        }
-                        reportRelationError(headMessage, source, target);
+            function reportErrorResults(originalSource: Type, originalTarget: Type, source: Type, target: Type, headMessage: DiagnosticMessage | undefined) {
+                const sourceHasBase = !!getSingleBaseForNonAugmentingSubtype(originalSource);
+                const targetHasBase = !!getSingleBaseForNonAugmentingSubtype(originalTarget);
+                source = (originalSource.aliasSymbol || sourceHasBase) ? originalSource : source;
+                target = (originalTarget.aliasSymbol || targetHasBase) ? originalTarget : target;
+                let maybeSuppress = overrideNextErrorInfo > 0;
+                if (maybeSuppress) {
+                    overrideNextErrorInfo--;
+                }
+                if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
+                    const currentError = errorInfo;
+                    tryElaborateArrayLikeErrors(source, target, /*reportErrors*/ true);
+                    if (errorInfo !== currentError) {
+                        maybeSuppress = !!errorInfo;
                     }
                 }
+                if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
+                    tryElaborateErrorsForPrimitivesAndObjects(source, target);
+                }
+                else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
+                    reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
+                }
+                else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
+                    const targetTypes = (target as IntersectionType).types;
+                    const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
+                    const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
+                    if (!isErrorType(intrinsicAttributes) && !isErrorType(intrinsicClassAttributes) &&
+                        (contains(targetTypes, intrinsicAttributes) || contains(targetTypes, intrinsicClassAttributes))) {
+                        // do not report top error
+                        return;
+                    }
+                }
+                else {
+                    errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
+                }
+                if (!headMessage && maybeSuppress) {
+                    lastSkippedInfo = [source, target];
+                    // Used by, eg, missing property checking to replace the top-level message with a more informative one
+                    return;
+                }
+                reportRelationError(headMessage, source, target);
             }
 
             function traceUnionsOrIntersectionsTooLarge(source: Type, target: Type): void {
@@ -18481,20 +18485,6 @@ namespace ts {
                         });
                     }
                 }
-            }
-
-            function isIdenticalTo(source: Type, target: Type, recursionFlags: RecursionFlags): Ternary {
-                if (source.flags !== target.flags) return Ternary.False;
-                if (source.flags & TypeFlags.Singleton) return Ternary.True;
-                traceUnionsOrIntersectionsTooLarge(source, target);
-                if (source.flags & TypeFlags.UnionOrIntersection) {
-                    let result = eachTypeRelatedToSomeType(source as UnionOrIntersectionType, target as UnionOrIntersectionType);
-                    if (result) {
-                        result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source as UnionOrIntersectionType);
-                    }
-                    return result;
-                }
-                return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, IntersectionState.None, recursionFlags);
             }
 
             function getTypeOfPropertyInTypes(types: Type[], name: __String) {
@@ -18599,8 +18589,8 @@ namespace ts {
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
                     return relation === comparableRelation ?
-                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & ~IntersectionState.UnionIntersectionCheck) :
-                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & ~IntersectionState.UnionIntersectionCheck);
+                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
+                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
                 }
                 if (target.flags & TypeFlags.Union) {
                     return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target as UnionType, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
@@ -18881,6 +18871,7 @@ namespace ts {
                     };
                 }
 
+                let result: Ternary;
                 if (expandingFlags === ExpandingFlags.Both) {
                     tracing?.instant(tracing.Phase.CheckTypes, "recursiveTypeRelatedTo_DepthLimit", {
                         sourceId: source.id,
@@ -18890,9 +18881,14 @@ namespace ts {
                         depth: sourceDepth,
                         targetDepth
                     });
+                    result = Ternary.Maybe;
+                }
+                else {
+                    tracing?.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
+                    result = structuredTypeRelatedTo(source, target, reportErrors, intersectionState);
+                    tracing?.pop();
                 }
 
-                const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, intersectionState) : Ternary.Maybe;
                 if (outofbandVarianceMarkerHandler) {
                     outofbandVarianceMarkerHandler = originalHandler;
                 }
@@ -18925,13 +18921,6 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                tracing?.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
-                const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                tracing?.pop();
-                return result;
-            }
-
-            function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
@@ -18939,34 +18928,28 @@ namespace ts {
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 let varianceCheckFailed = false;
                 const saveErrorInfo = captureErrorCalculationState();
-                if (source.flags & TypeFlags.UnionOrIntersection || target.flags & TypeFlags.UnionOrIntersection) {
-                    result = unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState);
-                    // The ordered decomposition above doesn't handle all cases. Specifically, we also need to handle:
-                    // Source is instantiable (e.g. source has union or intersection constraint).
-                    // Source is an object, target is a union (e.g. { a, b: boolean } <=> { a, b: true } | { a, b: false }).
-                    // Source is an intersection, target is an object (e.g. { a } & { b } <=> { a, b }).
-                    // Source is an intersection, target is a union (e.g. { a } & { b: boolean } <=> { a, b: true } | { a, b: false }).
-                    // Source is an intersection, target instantiable (e.g. string & { tag } <=> T["a"] constrained to string & { tag }).
-                    if (result || !(source.flags & TypeFlags.Instantiable ||
-                        source.flags & TypeFlags.Object && target.flags & TypeFlags.Union ||
-                        source.flags & TypeFlags.Intersection && target.flags & (TypeFlags.Object | TypeFlags.Union | TypeFlags.Instantiable))) {
+                let sourceFlags = source.flags;
+                const targetFlags = target.flags;
+                if (relation === identityRelation) {
+                    // We've already checked that source.flags and target.flags are identical
+                    if (sourceFlags & TypeFlags.UnionOrIntersection) {
+                        let result = eachTypeRelatedToSomeType(source as UnionOrIntersectionType, target as UnionOrIntersectionType);
+                        if (result) {
+                            result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source as UnionOrIntersectionType);
+                        }
                         return result;
                     }
-                }
-                const flags = source.flags & target.flags;
-                if (relation === identityRelation && !(flags & TypeFlags.Object)) {
-                    if (flags & TypeFlags.Index) {
+                    if (sourceFlags & TypeFlags.Index) {
                         return isRelatedTo((source as IndexType).type, (target as IndexType).type, RecursionFlags.Both, /*reportErrors*/ false);
                     }
-                    let result = Ternary.False;
-                    if (flags & TypeFlags.IndexedAccess) {
+                    if (sourceFlags & TypeFlags.IndexedAccess) {
                         if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, /*reportErrors*/ false)) {
                             if (result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, /*reportErrors*/ false)) {
                                 return result;
                             }
                         }
                     }
-                    if (flags & TypeFlags.Conditional) {
+                    if (sourceFlags & TypeFlags.Conditional) {
                         if ((source as ConditionalType).root.isDistributive === (target as ConditionalType).root.isDistributive) {
                             if (result = isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, RecursionFlags.Both, /*reportErrors*/ false)) {
                                 if (result &= isRelatedTo((source as ConditionalType).extendsType, (target as ConditionalType).extendsType, RecursionFlags.Both, /*reportErrors*/ false)) {
@@ -18979,16 +18962,32 @@ namespace ts {
                             }
                         }
                     }
-                    if (flags & TypeFlags.Substitution) {
+                    if (sourceFlags & TypeFlags.Substitution) {
                         return isRelatedTo((source as SubstitutionType).substitute, (target as SubstitutionType).substitute, RecursionFlags.Both, /*reportErrors*/ false);
                     }
-                    return Ternary.False;
+                    if (!(sourceFlags & TypeFlags.Object)) {
+                        return Ternary.False;
+                    }
+                }
+                else if (sourceFlags & TypeFlags.UnionOrIntersection || targetFlags & TypeFlags.UnionOrIntersection) {
+                    result = unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState);
+                    // The ordered decomposition above doesn't handle all cases. Specifically, we also need to handle:
+                    // Source is instantiable (e.g. source has union or intersection constraint).
+                    // Source is an object, target is a union (e.g. { a, b: boolean } <=> { a, b: true } | { a, b: false }).
+                    // Source is an intersection, target is an object (e.g. { a } & { b } <=> { a, b }).
+                    // Source is an intersection, target is a union (e.g. { a } & { b: boolean } <=> { a, b: true } | { a, b: false }).
+                    // Source is an intersection, target instantiable (e.g. string & { tag } <=> T["a"] constrained to string & { tag }).
+                    if (result || !(sourceFlags & TypeFlags.Instantiable ||
+                        sourceFlags & TypeFlags.Object && targetFlags & TypeFlags.Union ||
+                        sourceFlags & TypeFlags.Intersection && targetFlags & (TypeFlags.Object | TypeFlags.Union | TypeFlags.Instantiable))) {
+                        return result;
+                    }
                 }
 
                 // We limit alias variance probing to only object and conditional types since their alias behavior
                 // is more predictable than other, interned types, which may or may not have an alias depending on
                 // the order in which things were checked.
-                if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
+                if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
@@ -19008,7 +19007,7 @@ namespace ts {
                     return result;
                 }
 
-                if (target.flags & TypeFlags.TypeParameter) {
+                if (targetFlags & TypeFlags.TypeParameter) {
                     // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && !(source as MappedType).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(source as MappedType), RecursionFlags.Both)) {
 
@@ -19021,10 +19020,10 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Index) {
+                else if (targetFlags & TypeFlags.Index) {
                     const targetType = (target as IndexType).type;
                     // A keyof S is related to a keyof T if T is related to S.
-                    if (source.flags & TypeFlags.Index) {
+                    if (sourceFlags & TypeFlags.Index) {
                         if (result = isRelatedTo(targetType, (source as IndexType).type, RecursionFlags.Both, /*reportErrors*/ false)) {
                             return result;
                         }
@@ -19080,8 +19079,8 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.IndexedAccess) {
-                    if (source.flags & TypeFlags.IndexedAccess) {
+                else if (targetFlags & TypeFlags.IndexedAccess) {
+                    if (sourceFlags & TypeFlags.IndexedAccess) {
                         // Relate components directly before falling back to constraint relationships
                         // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                         if (result = isRelatedTo((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType, RecursionFlags.Both, reportErrors)) {
@@ -19189,7 +19188,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Conditional) {
+                else if (targetFlags & TypeFlags.Conditional) {
                     // If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
                     // conditional type and bail out with a Ternary.Maybe result.
                     if (isDeeplyNestedType(target, targetStack, targetDepth, 10)) {
@@ -19214,8 +19213,8 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.TemplateLiteral) {
-                    if (source.flags & TypeFlags.TemplateLiteral) {
+                else if (targetFlags & TypeFlags.TemplateLiteral) {
+                    if (sourceFlags & TypeFlags.TemplateLiteral) {
                         if (relation === comparableRelation) {
                             return templateLiteralTypesDefinitelyUnrelated(source as TemplateLiteralType, target as TemplateLiteralType) ? Ternary.False : Ternary.True;
                         }
@@ -19228,11 +19227,11 @@ namespace ts {
                     }
                 }
 
-                if (source.flags & TypeFlags.TypeVariable) {
-                    // IndexedAccess comparisons are handled above in the `target.flags & TypeFlage.IndexedAccess` branch
-                    if (!(source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess)) {
+                if (sourceFlags & TypeFlags.TypeVariable) {
+                    // IndexedAccess comparisons are handled above in the `targetFlags & TypeFlage.IndexedAccess` branch
+                    if (!(sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess)) {
                         const constraint = getConstraintOfType(source as TypeVariable);
-                        if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
+                        if (!constraint || (sourceFlags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                             // A type variable with no constraint is not related to the non-primitive object type.
                             if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive), RecursionFlags.Both)) {
                                 resetErrorInfo(saveErrorInfo);
@@ -19245,7 +19244,7 @@ namespace ts {
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(target.flags & source.flags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -19262,14 +19261,14 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.Index) {
+                else if (sourceFlags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Source, reportErrors)) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.TemplateLiteral && !(target.flags & TypeFlags.Object)) {
-                    if (!(target.flags & TypeFlags.TemplateLiteral)) {
+                else if (sourceFlags & TypeFlags.TemplateLiteral && !(targetFlags & TypeFlags.Object)) {
+                    if (!(targetFlags & TypeFlags.TemplateLiteral)) {
                         const constraint = getBaseConstraintOfType(source);
                         if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
                             resetErrorInfo(saveErrorInfo);
@@ -19277,8 +19276,8 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.StringMapping) {
-                    if (target.flags & TypeFlags.StringMapping && (source as StringMappingType).symbol === (target as StringMappingType).symbol) {
+                else if (sourceFlags & TypeFlags.StringMapping) {
+                    if (targetFlags & TypeFlags.StringMapping && (source as StringMappingType).symbol === (target as StringMappingType).symbol) {
                         if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, reportErrors)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
@@ -19292,14 +19291,14 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.Conditional) {
+                else if (sourceFlags & TypeFlags.Conditional) {
                     // If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
                     // conditional type and bail out with a Ternary.Maybe result.
                     if (isDeeplyNestedType(source, sourceStack, sourceDepth, 10)) {
                         resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
-                    if (target.flags & TypeFlags.Conditional) {
+                    if (targetFlags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
@@ -19360,9 +19359,10 @@ namespace ts {
                         }
                         return Ternary.False;
                     }
-                    const sourceIsPrimitive = !!(source.flags & TypeFlags.Primitive);
+                    const sourceIsPrimitive = !!(sourceFlags & TypeFlags.Primitive);
                     if (relation !== identityRelation) {
                         source = getApparentType(source);
+                        sourceFlags = source.flags;
                     }
                     else if (isGenericMappedType(source)) {
                         return Ternary.False;
@@ -19404,7 +19404,7 @@ namespace ts {
                     // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
-                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                    if (sourceFlags & (TypeFlags.Object | TypeFlags.Intersection) && targetFlags & TypeFlags.Object) {
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo.errorInfo && !sourceIsPrimitive;
                         result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, intersectionState);
@@ -19428,7 +19428,7 @@ namespace ts {
                     // there exists a constituent of T for every combination of the discriminants of S
                     // with respect to T. We do not report errors here, as we will use the existing
                     // error result from checking each constituent of the union.
-                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Union) {
+                    if (sourceFlags & (TypeFlags.Object | TypeFlags.Intersection) && targetFlags & TypeFlags.Union) {
                         const objectOnlyTarget = extractTypesOfKind(target, TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Substitution);
                         if (objectOnlyTarget.flags & TypeFlags.Union) {
                             const result = typeRelatedToDiscriminatedType(source, objectOnlyTarget as UnionType);
