@@ -18292,22 +18292,17 @@ namespace ts {
                     return Ternary.True;
                 }
 
-                // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
-                // If so, reporting the `null` and `undefined` in the type is hardly useful.
-                // First, see if we're even relating an object type to a union.
-                // Then see if the target is stripped down to a single non-union type.
-                // Note
-                //  * We actually want to remove null and undefined naively here (rather than using getNonNullableType),
-                //    since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
-                //    when dealing with generics.
-                //  * We also don't deal with primitive source types, since we already halt elaboration below.
-                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object &&
-                    (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
-                    const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
-                    if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
-                        target = getNormalizedType(nullStrippedTarget, /*writing*/ true);
+                // See if we're relating a definitely non-nullable type to a union that includes null and/or undefined
+                // plus a single non-nullable type. If so, remove null and/or undefined from the target type.
+                if (source.flags & TypeFlags.DefinitelyNonNullable && target.flags & TypeFlags.Union) {
+                    const types = (target as UnionType).types;
+                    const candidate = types.length === 2 && types[0].flags & TypeFlags.Nullable ? types[1] :
+                        types.length === 3 && types[0].flags & TypeFlags.Nullable && types[1].flags & TypeFlags.Nullable ? types[2] :
+                        undefined;
+                    if (candidate && !(candidate.flags & TypeFlags.Nullable)) {
+                        target = getNormalizedType(candidate, /*writing*/ true);
+                        if (source === target) return Ternary.True;
                     }
-                    if (source === nullStrippedTarget) return Ternary.True;
                 }
 
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
@@ -18949,8 +18944,6 @@ namespace ts {
                         return result;
                     }
                     if (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union) {
-                        // (T extends 1 | 2) & 1 <=> 1
-                        // (T extends 1 | 2) <=> T & 1 | T & 2
                         // The combined constraint of an intersection type is the intersection of the constraints of
                         // the constituents. When an intersection type contains instantiable types with union type
                         // constraints, there are situations where we need to examine the combined constraint. One is
