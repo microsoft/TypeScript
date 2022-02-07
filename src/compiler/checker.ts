@@ -18361,31 +18361,6 @@ namespace ts {
                     }
                 }
 
-                if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
-                    // The combined constraint of an intersection type is the intersection of the constraints of
-                    // the constituents. When an intersection type contains instantiable types with union type
-                    // constraints, there are situations where we need to examine the combined constraint. One is
-                    // when the target is a union type. Another is when the intersection contains types belonging
-                    // to one of the disjoint domains. For example, given type variables T and U, each with the
-                    // constraint 'string | number', the combined constraint of 'T & U' is 'string | number' and
-                    // we need to check this constraint against a union on the target side. Also, given a type
-                    // variable V constrained to 'string | number', 'V & number' has a combined constraint of
-                    // 'string & number | number & number' which reduces to just 'number'.
-                    // This also handles type parameters, as a type parameter with a union constraint compared against a union
-                    // needs to have its constraint hoisted into an intersection with said type parameter, this way
-                    // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
-                    // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                    if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
-                        if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
-                            // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                                resetErrorInfo(saveErrorInfo);
-                            }
-                        }
-                    }
-                }
-
                 // For certain combinations involving intersections and optional, excess, or mismatched properties we need
                 // an extra property check where the intersection is viewed as a single object. The following are motivating
                 // examples that all should be errors, but aren't without this extra property check:
@@ -18970,17 +18945,44 @@ namespace ts {
                     }
                 }
                 else if (sourceFlags & TypeFlags.UnionOrIntersection || targetFlags & TypeFlags.UnionOrIntersection) {
-                    result = unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState);
+                    if (result = unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState)) {
+                        return result;
+                    }
+                    if (source.flags & TypeFlags.Intersection || source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.Union) {
+                        // (T extends 1 | 2) & 1 <=> 1
+                        // (T extends 1 | 2) <=> T & 1 | T & 2
+                        // The combined constraint of an intersection type is the intersection of the constraints of
+                        // the constituents. When an intersection type contains instantiable types with union type
+                        // constraints, there are situations where we need to examine the combined constraint. One is
+                        // when the target is a union type. Another is when the intersection contains types belonging
+                        // to one of the disjoint domains. For example, given type variables T and U, each with the
+                        // constraint 'string | number', the combined constraint of 'T & U' is 'string | number' and
+                        // we need to check this constraint against a union on the target side. Also, given a type
+                        // variable V constrained to 'string | number', 'V & number' has a combined constraint of
+                        // 'string & number | number & number' which reduces to just 'number'.
+                        // This also handles type parameters, as a type parameter with a union constraint compared against a union
+                        // needs to have its constraint hoisted into an intersection with said type parameter, this way
+                        // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
+                        // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
+                        const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
+                        if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
+                            // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
+                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
+                        }
+                    }
                     // The ordered decomposition above doesn't handle all cases. Specifically, we also need to handle:
                     // Source is instantiable (e.g. source has union or intersection constraint).
                     // Source is an object, target is a union (e.g. { a, b: boolean } <=> { a, b: true } | { a, b: false }).
                     // Source is an intersection, target is an object (e.g. { a } & { b } <=> { a, b }).
                     // Source is an intersection, target is a union (e.g. { a } & { b: boolean } <=> { a, b: true } | { a, b: false }).
                     // Source is an intersection, target instantiable (e.g. string & { tag } <=> T["a"] constrained to string & { tag }).
-                    if (result || !(sourceFlags & TypeFlags.Instantiable ||
+                    if (!(sourceFlags & TypeFlags.Instantiable ||
                         sourceFlags & TypeFlags.Object && targetFlags & TypeFlags.Union ||
                         sourceFlags & TypeFlags.Intersection && targetFlags & (TypeFlags.Object | TypeFlags.Union | TypeFlags.Instantiable))) {
-                        return result;
+                        return Ternary.False;
                     }
                 }
 
