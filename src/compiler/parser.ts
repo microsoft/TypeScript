@@ -5155,7 +5155,7 @@ namespace ts {
                             // This looks like a closing element; stick it in as a child with a faked opening element.
                             const pos = getNodePos();
                             const missingTagName = createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false);
-                            const missingAttributes = finishNode(factory.createJsxAttributes([]), pos);
+                            const missingAttributes = finishNode(factory.createJsxAttributes(createNodeArray([], pos)), pos);
                             const missingOpen = finishNode(factory.createJsxOpeningElement(missingTagName, /*typeArguments*/ undefined, missingAttributes), pos);
                             const missingChildren = createNodeArray([], pos);
                             const closing = parseJsxClosingElement(missingOpen, /*inExpressionContext*/ false);
