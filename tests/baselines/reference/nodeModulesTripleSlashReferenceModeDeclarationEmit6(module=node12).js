@@ -44,10 +44,10 @@ exports.default = uses_js_1.default;
 
 
 //// [uses.d.ts]
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;

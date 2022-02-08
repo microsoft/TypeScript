@@ -64,15 +64,15 @@ export default [obj1, obj2.default];
 
 
 //// [uses.d.ts]
-/// <reference types="pkg" resolution-mode="import"/>
+/// <reference types="pkg" />
 declare const _default: ImportInterface;
 export default _default;
 //// [uses.d.ts]
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" />
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
-/// <reference types="pkg" resolution-mode="import"/>
+/// <reference types="pkg" />
 /// <reference types="pkg" resolution-mode="require"/>
 declare const _default: readonly [ImportInterface, RequireInterface];
 export default _default;

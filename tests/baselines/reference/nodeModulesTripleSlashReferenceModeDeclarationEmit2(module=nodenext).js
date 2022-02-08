@@ -34,6 +34,6 @@ export {};
 
 
 //// [index.d.ts]
-/// <reference types="pkg" resolution-mode="import"/>
+/// <reference types="pkg" />
 export interface LocalInterface extends ImportInterface {
 }
