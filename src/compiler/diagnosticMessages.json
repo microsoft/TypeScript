@@ -6240,10 +6240,6 @@
         "category": "Error",
         "code": 17014
     },
-    "Expected corresponding closing tag for JSX fragment.": {
-        "category": "Error",
-        "code": 17015
-    },
     "The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.": {
         "category": "Error",
         "code": 17016
