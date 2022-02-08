@@ -8460,8 +8460,8 @@ namespace ts {
 
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
-        function getTypeForBindingElementParent(node: BindingElementGrandparent, checkMode: CheckMode | undefined) {
-            if (checkMode && checkMode !== CheckMode.Normal) {
+        function getTypeForBindingElementParent(node: BindingElementGrandparent, checkMode: CheckMode) {
+            if (checkMode !== CheckMode.Normal) {
                 return getTypeForVariableLikeDeclaration(node, /*includeOptionality*/ false, checkMode);
             }
             const symbol = getSymbolOfNode(node);
@@ -8670,9 +8670,9 @@ namespace ts {
             if (getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration))) {
                 // In strict null checking mode, if a default value of a non-undefined type is specified, remove
                 // undefined from the final type.
-                return strictNullChecks && !(getFalsyFlags(checkDeclarationInitializer(declaration, /* checkMode */ undefined)) & TypeFlags.Undefined) ? getNonUndefinedType(type) : type;
+                return strictNullChecks && !(getFalsyFlags(checkDeclarationInitializer(declaration, CheckMode.Normal)) & TypeFlags.Undefined) ? getNonUndefinedType(type) : type;
             }
-            return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, /* checkMode */ undefined)], UnionReduction.Subtype));
+            return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, CheckMode.Normal)], UnionReduction.Subtype));
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -8701,7 +8701,7 @@ namespace ts {
         function getTypeForVariableLikeDeclaration(
             declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | JSDocPropertyLikeTag,
             includeOptionality: boolean, // >> TODO: change this to use a flag in check mode; figure out how this interacts with caching
-            checkMode: CheckMode | undefined,
+            checkMode: CheckMode,
         ): Type | undefined {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
@@ -9184,7 +9184,7 @@ namespace ts {
                 // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
                 // pattern.
                 const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, /*checkMode*/ undefined, contextualType)));
+                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -9276,7 +9276,7 @@ namespace ts {
         // binding pattern [x, s = ""]. Because the contextual type is a tuple type, the resulting type of [1, "one"] is the
         // tuple type [number, string]. Thus, the type inferred for 'x' is number and the type inferred for 's' is string.
         function getWidenedTypeForVariableLikeDeclaration(declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | JSDocPropertyLikeTag, reportErrors?: boolean): Type {
-            return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, /*checkMode*/ undefined), declaration, reportErrors);
+            return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, CheckMode.Normal), declaration, reportErrors);
         }
 
         function isGlobalSymbolConstructor(node: Node) {
@@ -25072,7 +25072,7 @@ namespace ts {
                         const links = getNodeLinks(location);
                         if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                             links.flags |= NodeCheckFlags.InCheckIdentifier;
-                            const parentType = getTypeForBindingElementParent(parent, /*checkMode*/ undefined);
+                            const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
                             links.flags &= ~NodeCheckFlags.InCheckIdentifier;
                             if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                                 const pattern = declaration.parent;
@@ -33729,7 +33729,7 @@ namespace ts {
 
         function checkDeclarationInitializer(
             declaration: HasExpressionInitializer,
-            checkMode: CheckMode | undefined,
+            checkMode: CheckMode,
             contextualType?: Type | undefined
         ) {
             const initializer = getEffectiveInitializer(declaration)!;
@@ -38395,7 +38395,7 @@ namespace ts {
                     const declaration = catchClause.variableDeclaration;
                     const typeNode = getEffectiveTypeAnnotationNode(getRootDeclaration(declaration));
                     if (typeNode) {
-                        const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false, /*checkMode*/ undefined);
+                        const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false, CheckMode.Normal);
                         if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
                             grammarErrorOnFirstToken(typeNode, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
                         }
@@ -41384,7 +41384,7 @@ namespace ts {
             }
 
             if (isBindingPattern(node)) {
-                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true, /*checkMode*/ undefined) || errorType;
+                return getTypeForVariableLikeDeclaration(node.parent, /*includeOptionality*/ true, CheckMode.Normal) || errorType;
             }
 
             if (isInRightSideOfImportOrExportAssignment(node as Identifier)) {
