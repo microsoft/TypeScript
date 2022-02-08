@@ -3,4 +3,4 @@
 //@Filename: file.tsx
 //// let x = <></Fo/*$*/o>;
 
-verify.quickInfoAt("$", "let Foo: any")
+verify.quickInfoAt("$", "any");
