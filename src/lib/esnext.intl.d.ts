@@ -1,7 +1,7 @@
 declare namespace Intl {
 
     interface NumberFormat {
-        formatRange(startDate: number | bigint, endDate: number | bigint): string;
-        formatRangeToParts(startDate: number | bigint, endDate: number | bigint): NumberFormatPart[];
+        formatRange(start: number | bigint, end: number | bigint): string;
+        formatRangeToParts(start: number | bigint, end: number | bigint): NumberFormatPart[];
     }
 }
