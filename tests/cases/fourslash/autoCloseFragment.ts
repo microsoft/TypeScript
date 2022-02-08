@@ -50,7 +50,7 @@ verify.jsxClosingTag({
     1: undefined,
     2: undefined,
     3: undefined,
-    4: { newText: "</>" },
+    4: undefined,
     5: { newText: "</>" },
     6: { newText: "</>" },
     7: { newText: "</>" },
