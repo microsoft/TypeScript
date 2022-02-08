@@ -5360,6 +5360,12 @@ namespace ts {
         IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
         /* @internal */
         IsNeverIntersection = 1 << 26, // Intersection reduces to never
+
+        // Flags that require TypeFlags.Object or TypeFlags.Intersection
+        /* @internal */
+        IsWeakTypeComputed = 1 << 27,
+        /* @internal */
+        IsWeakType = 1 << 28,
     }
 
     /* @internal */
