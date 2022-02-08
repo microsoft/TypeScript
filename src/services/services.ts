@@ -299,6 +299,9 @@ namespace ts {
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
 
+        contextualGetAccessorTags?: JSDocTagInfo[];
+        contextualSetAccessorTags?: JSDocTagInfo[];
+
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
             this.escapedName = name;
@@ -343,13 +346,11 @@ namespace ts {
             switch (context?.kind) {
                 case SyntaxKind.GetAccessor:
                     if (!this.contextualGetAccessorDocumentationComment) {
-                        this.contextualGetAccessorDocumentationComment = emptyArray;
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
                     return this.contextualGetAccessorDocumentationComment;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorDocumentationComment) {
-                        this.contextualSetAccessorDocumentationComment = emptyArray;
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
                     return this.contextualSetAccessorDocumentationComment;
@@ -360,10 +361,27 @@ namespace ts {
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations, checker);
+                this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
             }
 
             return this.tags;
+        }
+
+        getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+            switch (context?.kind) {
+                case SyntaxKind.GetAccessor:
+                    if (!this.contextualGetAccessorTags) {
+                        this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
+                    }
+                    return this.contextualGetAccessorTags;
+                case SyntaxKind.SetAccessor:
+                    if (!this.contextualSetAccessorTags) {
+                        this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
+                    }
+                    return this.contextualSetAccessorTags;
+                default:
+                    return this.getJsDocTags(checker);
+            }
         }
     }
 
@@ -564,10 +582,7 @@ namespace ts {
         }
 
         getJsDocTags(): JSDocTagInfo[] {
-            if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? getJsDocTagsOfSignature(this.declaration, this.checker) : [];
-            }
-            return this.jsDocTags;
+            return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
         }
     }
 
@@ -580,12 +595,25 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
-    function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
-        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
-        if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
-            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
-            if (inheritedTags) {
-                tags = [...inheritedTags, ...tags];
+    function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+        if (!declarations) return emptyArray;
+
+        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
+        if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+            const seenSymbols = new Set<Symbol>();
+            for (const declaration of declarations) {
+                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol);
+                        if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                            return symbol.getContextualJsDocTags(declaration, checker);
+                        }
+                        return symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined;
+                    }
+                });
+                if (inheritedTags) {
+                    tags = [...inheritedTags, ...tags];
+                }
             }
         }
         return tags;
@@ -601,6 +629,9 @@ namespace ts {
                 const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
                     if (!seenSymbols.has(symbol)) {
                         seenSymbols.add(symbol);
+                        if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                            return symbol.getContextualDocumentationComment(declaration, checker);
+                        }
                         return symbol.getDocumentationComment(checker);
                     }
                 });

@@ -82,6 +82,7 @@ Open files:
 		Projects: /user/username/projects/solution/api/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/solution/api/src/server.ts","line":2,"offset":12},"seq":1,"type":"request"}
+Finding references to /user/username/projects/solution/api/src/server.ts position 56 in project /user/username/projects/solution/api/tsconfig.json
 Search path: /user/username/projects/solution/shared/src
 For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
 Creating configuration project /user/username/projects/solution/shared/tsconfig.json
@@ -175,6 +176,8 @@ Project '/user/username/projects/solution/app/tsconfig.json' (Configured)
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
 -----------------------------------------------
+Finding references to /user/username/projects/solution/shared/src/index.ts position 21 in project /user/username/projects/solution/app/tsconfig.json
 Search path: /user/username/projects/solution/shared/src
 For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Finding references to /user/username/projects/solution/shared/src/index.ts position 21 in project /user/username/projects/solution/shared/tsconfig.json
 response:{"response":{"refs":[{"file":"/user/username/projects/solution/shared/src/index.ts","start":{"line":1,"offset":22},"end":{"line":1,"offset":25},"contextStart":{"line":1,"offset":22},"contextEnd":{"line":1,"offset":36},"lineText":"export const foo = { bar: () => { } };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/solution/api/src/server.ts","start":{"line":2,"offset":12},"end":{"line":2,"offset":15},"lineText":"shared.foo.bar();","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/solution/app/src/app.ts","start":{"line":2,"offset":12},"end":{"line":2,"offset":15},"lineText":"shared.foo.bar();","isWriteAccess":false,"isDefinition":false}],"symbolName":"bar","symbolStartOffset":12,"symbolDisplayString":"(property) bar: () => void"},"responseRequired":true}

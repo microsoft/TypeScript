@@ -7,7 +7,6 @@ class A {
 
 //// [privateNameStaticFieldInitializer.js]
 class A {
-    static #field;
+    static #field = 10;
     static #uninitialized;
 }
-A.#field = 10;

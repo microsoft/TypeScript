@@ -526,7 +526,7 @@ namespace ts.FindAllReferences {
     function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
         let start = node.getStart(sourceFile);
         let end = (endNode || node).getEnd();
-        if (isStringLiteralLike(node)) {
+        if (isStringLiteralLike(node) && (end - start) > 2) {
             Debug.assert(endNode === undefined);
             start += 1;
             end -= 1;
@@ -1276,7 +1276,7 @@ namespace ts.FindAllReferences {
             - But if the parent has `export as namespace`, the symbol is globally visible through that namespace.
             */
             const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
-            if (exposedByParent && !(isExternalModuleSymbol(parent!) && !parent!.globalExports)) {
+            if (exposedByParent && !(isExternalModuleSymbol(parent) && !parent.globalExports)) {
                 return undefined;
             }
 

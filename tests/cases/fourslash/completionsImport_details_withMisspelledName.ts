@@ -13,7 +13,7 @@ goTo.marker("1");
 verify.applyCodeActionFromCompletion("1", {
     name: "abc",
     source: "/a",
-    description: `Import 'abc' from module "./a"`,
+    description: `Add import from "./a"`,
     newFileContent: `import { abc } from "./a";
 
 acb;`,
@@ -27,7 +27,7 @@ verify.applyCodeActionFromCompletion("2", {
         exportName: "abc",
         fileName: "/a.ts",
     },
-    description: `Import 'abc' from module "./a"`,
+    description: `Add import from "./a"`,
     newFileContent: `import { abc } from "./a";
 
 acb;`,

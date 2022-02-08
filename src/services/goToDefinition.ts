@@ -171,7 +171,7 @@ namespace ts.GoToDefinition {
         }
 
         if (sourceFile.resolvedModules?.size()) {
-            const node = getTokenAtPosition(sourceFile, position);
+            const node = getTouchingToken(sourceFile, position);
             if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
                 const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedFileName;
                 const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
