@@ -486,8 +486,8 @@ namespace ts.refactor.extractSymbol {
                         // but a super *method call* simply implies a 'this' reference
                         if (node.parent.kind === SyntaxKind.CallExpression) {
                             // Super constructor call
-                            const containingClass = getContainingClass(node)!; // TODO:GH#18217
-                            if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
+                            const containingClass = getContainingClass(node);
+                            if (containingClass === undefined || containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
                                 (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                                 return true;
                             }
