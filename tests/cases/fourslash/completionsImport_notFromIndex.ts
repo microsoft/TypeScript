@@ -33,7 +33,7 @@ for (const [marker, sourceDisplay] of [["0", "./src"], ["1", "./a"], ["2", "../a
     verify.applyCodeActionFromCompletion(marker, {
         name: "x",
         source: "/src/a",
-        description: `Import 'x' from module "${sourceDisplay}"`,
+        description: `Add import from "${sourceDisplay}"`,
         newFileContent: `import { x } from "${sourceDisplay}";\n\nx`,
     });
 }

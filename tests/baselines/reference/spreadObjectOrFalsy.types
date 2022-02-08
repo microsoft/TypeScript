@@ -73,3 +73,42 @@ function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
     };
 }
 
+// Repro from #47028
+
+interface DatafulFoo<T> {
+    data: T;
+>data : T
+}
+
+class Foo<T extends string> {
+>Foo : Foo<T>
+
+    data: T | undefined;
+>data : T | undefined
+
+    bar() {
+>bar : () => void
+
+        if (this.hasData()) {
+>this.hasData() : boolean
+>this.hasData : () => this is DatafulFoo<T>
+>this : this
+>hasData : () => this is DatafulFoo<T>
+
+            this.data.toLocaleLowerCase();
+>this.data.toLocaleLowerCase() : string
+>this.data.toLocaleLowerCase : (locales?: string | string[] | undefined) => string
+>this.data : (T | undefined) & T
+>this : this & DatafulFoo<T>
+>data : (T | undefined) & T
+>toLocaleLowerCase : (locales?: string | string[] | undefined) => string
+        }
+    }
+    hasData(): this is DatafulFoo<T> {
+>hasData : () => this is DatafulFoo<T>
+
+        return true;
+>true : true
+    }
+}
+

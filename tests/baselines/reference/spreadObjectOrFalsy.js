@@ -32,6 +32,24 @@ function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
     };
 }
 
+// Repro from #47028
+
+interface DatafulFoo<T> {
+    data: T;
+}
+
+class Foo<T extends string> {
+    data: T | undefined;
+    bar() {
+        if (this.hasData()) {
+            this.data.toLocaleLowerCase();
+        }
+    }
+    hasData(): this is DatafulFoo<T> {
+        return true;
+    }
+}
+
 
 //// [spreadObjectOrFalsy.js]
 "use strict";
@@ -69,6 +87,19 @@ function g1(a) {
     var z = a.z;
     return __assign({}, z);
 }
+var Foo = /** @class */ (function () {
+    function Foo() {
+    }
+    Foo.prototype.bar = function () {
+        if (this.hasData()) {
+            this.data.toLocaleLowerCase();
+        }
+    };
+    Foo.prototype.hasData = function () {
+        return true;
+    };
+    return Foo;
+}());
 
 
 //// [spreadObjectOrFalsy.d.ts]
@@ -81,3 +112,11 @@ declare function f6<T extends object | undefined>(a: T): T;
 declare function g1<T extends {}, A extends {
     z: (T | undefined) & T;
 }>(a: A): (T | undefined) & T;
+interface DatafulFoo<T> {
+    data: T;
+}
+declare class Foo<T extends string> {
+    data: T | undefined;
+    bar(): void;
+    hasData(): this is DatafulFoo<T>;
+}

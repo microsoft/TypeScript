@@ -85,3 +85,46 @@ function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
     };
 }
 
+// Repro from #47028
+
+interface DatafulFoo<T> {
+>DatafulFoo : Symbol(DatafulFoo, Decl(spreadObjectOrFalsy.ts, 31, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 35, 21))
+
+    data: T;
+>data : Symbol(DatafulFoo.data, Decl(spreadObjectOrFalsy.ts, 35, 25))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 35, 21))
+}
+
+class Foo<T extends string> {
+>Foo : Symbol(Foo, Decl(spreadObjectOrFalsy.ts, 37, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 39, 10))
+
+    data: T | undefined;
+>data : Symbol(Foo.data, Decl(spreadObjectOrFalsy.ts, 39, 29))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 39, 10))
+
+    bar() {
+>bar : Symbol(Foo.bar, Decl(spreadObjectOrFalsy.ts, 40, 24))
+
+        if (this.hasData()) {
+>this.hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
+>this : Symbol(Foo, Decl(spreadObjectOrFalsy.ts, 37, 1))
+>hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
+
+            this.data.toLocaleLowerCase();
+>this.data.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29), Decl(spreadObjectOrFalsy.ts, 35, 25))
+>data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29), Decl(spreadObjectOrFalsy.ts, 35, 25))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+    hasData(): this is DatafulFoo<T> {
+>hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
+>DatafulFoo : Symbol(DatafulFoo, Decl(spreadObjectOrFalsy.ts, 31, 1))
+>T : Symbol(T, Decl(spreadObjectOrFalsy.ts, 39, 10))
+
+        return true;
+    }
+}
+

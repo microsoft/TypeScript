@@ -26,3 +26,10 @@ function computeCommonSourceDirectoryOfFilenames(integer) {
 >1 : 1
 }
 
+/** {@link https://hvad} */
+var see3 = true
+>see3 : boolean
+>true : true
+
+/** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
+

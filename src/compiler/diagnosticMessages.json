@@ -1409,6 +1409,10 @@
         "category": "Error",
         "code": 1471
     },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1747,7 +1751,7 @@
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
+    "A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -1838,6 +1842,10 @@
     "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
         "category": "Error",
         "code": 2400
+    },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
+        "category": "Error",
+        "code": 2401
     },
     "Expression resolves to '_super' that compiler uses to capture base class reference.": {
         "category": "Error",
@@ -3273,10 +3281,6 @@
         "category": "Error",
         "code": 2804
     },
-    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
-        "category": "Error",
-        "code": 2805
-    },
     "Private accessor was defined without a getter.": {
         "category": "Error",
         "code": 2806
@@ -3292,10 +3296,6 @@
     "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
-    },
-    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
-        "category": "Error",
-        "code": 2810
     },
     "Initializer for property '{0}'": {
         "category": "Error",
@@ -3360,6 +3360,10 @@
     "Import assertions are not allowed on statements that transpile to commonjs 'require' calls.": {
         "category": "Error",
         "code": 2836
+    },
+    "Import assertion values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2837
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4161,7 +4165,6 @@
         "category": "Message",
         "code": 6041
     },
-    
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043
@@ -4945,7 +4948,7 @@
         "category": "Message",
         "code": 6259
     },
-    "Found {0} errors in 1 file.": {
+    "Found {0} errors in the same file, starting at: {1}": {
         "category": "Message",
         "code": 6260
     },
@@ -6343,17 +6346,13 @@
         "category": "Message",
         "code": 90012
     },
-    "Import '{0}' from module \"{1}\"": {
+    "Import '{0}' from \"{1}\"": {
         "category": "Message",
         "code": 90013
     },
     "Change '{0}' to '{1}'": {
         "category": "Message",
         "code": 90014
-    },
-    "Add '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90015
     },
     "Declare property '{0}'": {
         "category": "Message",
@@ -6419,14 +6418,6 @@
         "category": "Message",
         "code": 90031
     },
-    "Import default '{0}' from module \"{1}\"": {
-        "category": "Message",
-        "code": 90032
-    },
-    "Add default import '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90033
-    },
     "Add parameter name": {
         "category": "Message",
         "code": 90034
@@ -6462,6 +6453,22 @@
     "Includes imports of types referenced by '{0}'": {
         "category": "Message",
         "code": 90054
+    },
+    "Remove 'type' from import declaration from \"{0}\"": {
+        "category": "Message",
+        "code": 90055
+    },
+    "Remove 'type' from import of '{0}' from \"{1}\"": {
+        "category": "Message",
+        "code": 90056
+    },
+    "Add import from \"{0}\"": {
+        "category": "Message",
+        "code": 90057
+    },
+    "Update import from \"{0}\"": {
+        "category": "Message",
+        "code": 90058
     },
 
     "Convert function to an ES2015 class": {
@@ -7115,6 +7122,10 @@
     "Add 'undefined' to optional property type": {
         "category": "Message",
         "code": 95169
+    },
+    "Convert named imports to default import": {
+        "category": "Message",
+        "code": 95170
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

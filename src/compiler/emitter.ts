@@ -1051,7 +1051,7 @@ namespace ts {
                 writeLine();
                 const pos = writer.getTextPos();
                 const savedSections = bundleFileInfo && bundleFileInfo.sections;
-                if (savedSections) bundleFileInfo!.sections = [];
+                if (savedSections) bundleFileInfo.sections = [];
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
                 if (bundleFileInfo) {
                     const newSections = bundleFileInfo.sections;
@@ -1940,7 +1940,7 @@ namespace ts {
                     emitPlaceholder(hint, node, snippet);
                     break;
                 case SnippetKind.TabStop:
-                    emitTabStop(snippet);
+                    emitTabStop(hint, node, snippet);
                     break;
             }
         }
@@ -1952,7 +1952,12 @@ namespace ts {
             // `${2:...}`
         }
 
-        function emitTabStop(snippet: TabStop) {
+        function emitTabStop(hint: EmitHint, node: Node, snippet: TabStop) {
+            // A tab stop should only be attached to an empty node, i.e. a node that doesn't emit any text.
+            Debug.assert(node.kind === SyntaxKind.EmptyStatement,
+                `A tab stop cannot be attached to a node of kind ${Debug.formatSyntaxKind(node.kind)}.`);
+            Debug.assert(hint !== EmitHint.EmbeddedStatement,
+                `A tab stop cannot be attached to an embedded statement.`);
             nonEscapingWrite(`\$${snippet.order}`);
         }
 

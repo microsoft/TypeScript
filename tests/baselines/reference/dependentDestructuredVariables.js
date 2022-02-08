@@ -168,6 +168,64 @@ if (!done) {
     value;  // number
 }
 
+// Repro from #46658
+
+declare function f50(cb: (...args: Args) => void): void
+
+f50((kind, data) => {
+    if (kind === 'A') {
+        data.toFixed();
+    }
+    if (kind === 'B') {
+        data.toUpperCase();
+    }
+});
+
+const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+};
+
+const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    else {
+        payload;  // undefined
+    }
+};
+
+declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
+
+readFile('hello', (err, data) => {
+    if (err === null) {
+        data.length;
+    }
+    else {
+        err.message;
+    }
+});
+
+type ReducerArgs = ["add", { a: number, b: number }] | ["concat", { firstArr: any[], secondArr: any[] }];
+
+const reducer: (...args: ReducerArgs) => void = (op, args) => {
+    switch (op) {
+        case "add":
+            console.log(args.a + args.b);
+            break;
+        case "concat":
+            console.log(args.firstArr.concat(args.secondArr));
+            break;
+    }
+}
+
+reducer("add", { a: 1, b: 3 });
+reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -292,6 +350,50 @@ const { value, done } = it.next();
 if (!done) {
     value; // number
 }
+f50((kind, data) => {
+    if (kind === 'A') {
+        data.toFixed();
+    }
+    if (kind === 'B') {
+        data.toUpperCase();
+    }
+});
+const f51 = (kind, payload) => {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+};
+const f52 = (kind, payload) => {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    else {
+        payload; // undefined
+    }
+};
+readFile('hello', (err, data) => {
+    if (err === null) {
+        data.length;
+    }
+    else {
+        err.message;
+    }
+});
+const reducer = (op, args) => {
+    switch (op) {
+        case "add":
+            console.log(args.a + args.b);
+            break;
+        case "concat":
+            console.log(args.firstArr.concat(args.secondArr));
+            break;
+    }
+};
+reducer("add", { a: 1, b: 3 });
+reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -355,3 +457,15 @@ declare type Action3 = {
 declare const reducerBroken: (state: number, { type, payload }: Action3) => number;
 declare var it: Iterator<number>;
 declare const value: any, done: boolean | undefined;
+declare function f50(cb: (...args: Args) => void): void;
+declare const f51: (...args: ['A', number] | ['B', string]) => void;
+declare const f52: (...args: ['A', number] | ['B']) => void;
+declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
+declare type ReducerArgs = ["add", {
+    a: number;
+    b: number;
+}] | ["concat", {
+    firstArr: any[];
+    secondArr: any[];
+}];
+declare const reducer: (...args: ReducerArgs) => void;

@@ -59,6 +59,7 @@ namespace ts {
         let exportedVariableStatement = false;
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
+        let parametersWithPrecedingObjectRestOrSpread: Set<ParameterDeclaration> | undefined;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
         let hierarchyFacts: HierarchyFacts = 0;
 
@@ -721,6 +722,7 @@ namespace ts {
                 ),
                 EmitFlags.NoTokenTrailingSourceMaps
             );
+            setOriginalNode(forStatement, node);
 
             return factory.createTryStatement(
                 factory.createBlock([
@@ -785,7 +787,24 @@ namespace ts {
             );
         }
 
+        function parameterVisitor(node: Node) {
+            Debug.assertNode(node, isParameter);
+            return visitParameter(node);
+        }
+
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
+            if (parametersWithPrecedingObjectRestOrSpread?.has(node)) {
+                return factory.updateParameterDeclaration(
+                    node,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    node.dotDotDotToken,
+                    isBindingPattern(node.name) ? factory.getGeneratedNameForNode(node) : node.name,
+                    /*questionToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined
+                );
+            }
             if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
@@ -803,54 +822,78 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function collectParametersWithPrecedingObjectRestOrSpread(node: SignatureDeclaration) {
+            let parameters: Set<ParameterDeclaration> | undefined;
+            for (const parameter of node.parameters) {
+                if (parameters) {
+                    parameters.add(parameter);
+                }
+                else if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                    parameters = new Set();
+                }
+            }
+            return parameters;
+        }
+
         function visitConstructorDeclaration(node: ConstructorDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
-            enclosingFunctionFlags = FunctionFlags.Normal;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
+            enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateConstructorDeclaration(
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
         function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
-            enclosingFunctionFlags = FunctionFlags.Normal;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
+            enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateGetAccessorDeclaration(
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
                 visitNode(node.name, visitor, isPropertyName),
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,
                 transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
         function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
-            enclosingFunctionFlags = FunctionFlags.Normal;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
+            enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateSetAccessorDeclaration(
                 node,
                 /*decorators*/ undefined,
                 node.modifiers,
                 visitNode(node.name, visitor, isPropertyName),
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
         function visitMethodDeclaration(node: MethodDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
             enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateMethodDeclaration(
                 node,
                 /*decorators*/ undefined,
@@ -863,19 +906,22 @@ namespace ts {
                 visitNode(node.name, visitor, isPropertyName),
                 visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
                 /*typeParameters*/ undefined,
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,
                 enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
                     ? transformAsyncGeneratorFunctionBody(node)
                     : transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
             enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateFunctionDeclaration(
                 node,
                 /*decorators*/ undefined,
@@ -887,35 +933,41 @@ namespace ts {
                     : node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,
                 enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
                     ? transformAsyncGeneratorFunctionBody(node)
                     : transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
         function visitArrowFunction(node: ArrowFunction) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
             enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateArrowFunction(
                 node,
                 node.modifiers,
                 /*typeParameters*/ undefined,
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,
                 node.equalsGreaterThanToken,
                 transformFunctionBody(node),
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
         function visitFunctionExpression(node: FunctionExpression) {
             const savedEnclosingFunctionFlags = enclosingFunctionFlags;
+            const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
             enclosingFunctionFlags = getFunctionFlags(node);
+            parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
             const updated = factory.updateFunctionExpression(
                 node,
                 enclosingFunctionFlags & FunctionFlags.Generator
@@ -926,13 +978,14 @@ namespace ts {
                     : node.asteriskToken,
                 node.name,
                 /*typeParameters*/ undefined,
-                visitParameterList(node.parameters, visitor, context),
+                visitParameterList(node.parameters, parameterVisitor, context),
                 /*type*/ undefined,
                 enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
                     ? transformAsyncGeneratorFunctionBody(node)
                     : transformFunctionBody(node)
             );
             enclosingFunctionFlags = savedEnclosingFunctionFlags;
+            parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
             return updated;
         }
 
@@ -1007,6 +1060,7 @@ namespace ts {
                 statementOffset = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
             }
             addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
+
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = factory.converters.convertToFunctionBlock(body, /*multiLine*/ true);
@@ -1018,25 +1072,86 @@ namespace ts {
         }
 
         function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
+            let containsPrecedingObjectRestOrSpread = false;
             for (const parameter of node.parameters) {
-                if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                    const temp = factory.getGeneratedNameForNode(parameter);
+                if (containsPrecedingObjectRestOrSpread) {
+                    if (isBindingPattern(parameter.name)) {
+                        // In cases where a binding pattern is simply '[]' or '{}',
+                        // we usually don't want to emit a var declaration; however, in the presence
+                        // of an initializer, we must emit that expression to preserve side effects.
+                        //
+                        // NOTE: see `insertDefaultValueAssignmentForBindingPattern` in es2015.ts
+                        if (parameter.name.elements.length > 0) {
+                            const declarations = flattenDestructuringBinding(
+                                parameter,
+                                visitor,
+                                context,
+                                FlattenLevel.All,
+                                factory.getGeneratedNameForNode(parameter));
+                            if (some(declarations)) {
+                                const declarationList = factory.createVariableDeclarationList(declarations);
+                                const statement = factory.createVariableStatement(/*modifiers*/ undefined, declarationList);
+                                setEmitFlags(statement, EmitFlags.CustomPrologue);
+                                statements = append(statements, statement);
+                            }
+                        }
+                        else if (parameter.initializer) {
+                            const name = factory.getGeneratedNameForNode(parameter);
+                            const initializer = visitNode(parameter.initializer, visitor, isExpression);
+                            const assignment = factory.createAssignment(name, initializer);
+                            const statement = factory.createExpressionStatement(assignment);
+                            setEmitFlags(statement, EmitFlags.CustomPrologue);
+                            statements = append(statements, statement);
+                        }
+                    }
+                    else if (parameter.initializer) {
+                        // Converts a parameter initializer into a function body statement, i.e.:
+                        //
+                        //  function f(x = 1) { }
+                        //
+                        // becomes
+                        //
+                        //  function f(x) {
+                        //    if (typeof x === "undefined") { x = 1; }
+                        //  }
+
+                        const name = factory.cloneNode(parameter.name);
+                        setTextRange(name, parameter.name);
+                        setEmitFlags(name, EmitFlags.NoSourceMap);
+
+                        const initializer = visitNode(parameter.initializer, visitor, isExpression);
+                        addEmitFlags(initializer, EmitFlags.NoSourceMap | EmitFlags.NoComments);
+
+                        const assignment = factory.createAssignment(name, initializer);
+                        setTextRange(assignment, parameter);
+                        setEmitFlags(assignment, EmitFlags.NoComments);
+
+                        const block = factory.createBlock([factory.createExpressionStatement(assignment)]);
+                        setTextRange(block, parameter);
+                        setEmitFlags(block, EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
+
+                        const typeCheck = factory.createTypeCheck(factory.cloneNode(parameter.name), "undefined");
+                        const statement = factory.createIfStatement(typeCheck, block);
+                        startOnNewLine(statement);
+                        setTextRange(statement, parameter);
+                        setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
+                        statements = append(statements, statement);
+                    }
+                }
+                else if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                    containsPrecedingObjectRestOrSpread = true;
                     const declarations = flattenDestructuringBinding(
                         parameter,
                         visitor,
                         context,
                         FlattenLevel.ObjectRest,
-                        temp,
+                        factory.getGeneratedNameForNode(parameter),
                         /*doNotRecordTempVariablesInLine*/ false,
                         /*skipInitializer*/ true,
                     );
                     if (some(declarations)) {
-                        const statement = factory.createVariableStatement(
-                            /*modifiers*/ undefined,
-                            factory.createVariableDeclarationList(
-                                declarations
-                            )
-                        );
+                        const declarationList = factory.createVariableDeclarationList(declarations);
+                        const statement = factory.createVariableStatement(/*modifiers*/ undefined, declarationList);
                         setEmitFlags(statement, EmitFlags.CustomPrologue);
                         statements = append(statements, statement);
                     }
