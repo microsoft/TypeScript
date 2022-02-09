@@ -9511,11 +9511,12 @@ namespace ts {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
-            const setterType = getAnnotatedAccessorType(setter);
-
             // For write operations, prioritize type annotations on the setter
-            if (writing && setterType) {
-                return instantiateTypeIfNeeded(setterType, symbol);
+            if (writing) {
+                const setterType = getAnnotatedAccessorType(setter);
+                if (setterType) {
+                    return instantiateTypeIfNeeded(setterType, symbol);
+                }
             }
             // Else defer to the getter type
 
@@ -9533,6 +9534,7 @@ namespace ts {
             }
 
             // If the user didn't specify a return type, try to use the set-accessor's parameter type.
+            const setterType = getAnnotatedAccessorType(setter);
             if (setterType) {
                 return setterType;
             }
