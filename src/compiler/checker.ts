@@ -184,7 +184,6 @@ namespace ts {
         RestBindingElement = 1 << 5,       // Checking a type that is going to be used to determine the type of a rest binding element
                                            //   e.g. in `const { a, ...rest } = foo`, when checking the type of `foo` to determine the type of `rest`,
                                            //   we need to preserve generic types instead of substituting them for constraints
-        IncludeOptionality = 1 << 6,       // >> TODO: description, replace bool param with flag
     }
 
     const enum SignatureCheckMode {
@@ -8700,7 +8699,7 @@ namespace ts {
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(
             declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement | JSDocPropertyLikeTag,
-            includeOptionality: boolean, // >> TODO: change this to use a flag in check mode; figure out how this interacts with caching
+            includeOptionality: boolean,
             checkMode: CheckMode,
         ): Type | undefined {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
