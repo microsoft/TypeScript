@@ -19,3 +19,10 @@ let a2 = { a: 123, ...(t ? a : {}) };  // string | number
 let b2 = { a: 123, ...(t ? b : {}) };  // string | number
 let c2 = { a: 123, ...(t ? c : {}) };  // string | number
 let d2 = { a: 123, ...(t ? d : {}) };  // string | number
+
+// from #46463
+declare const conditional: boolean;
+const example = {
+    color: "red",  // OK
+    ...(conditional ? { color: "green" } : { size: "large" })
+}

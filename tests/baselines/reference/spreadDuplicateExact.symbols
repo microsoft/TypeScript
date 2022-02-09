@@ -64,3 +64,19 @@ let d2 = { a: 123, ...(t ? d : {}) };  // string | number | undefined
 >t : Symbol(t, Decl(spreadDuplicateExact.ts, 7, 11))
 >d : Symbol(d, Decl(spreadDuplicateExact.ts, 5, 11))
 
+// from #46463
+declare const conditional: boolean;
+>conditional : Symbol(conditional, Decl(spreadDuplicateExact.ts, 20, 13))
+
+const example = {
+>example : Symbol(example, Decl(spreadDuplicateExact.ts, 21, 5))
+
+    color: "red",  // error
+>color : Symbol(color, Decl(spreadDuplicateExact.ts, 21, 17))
+
+    ...(conditional ? { color: "green" } : { size: "large" })
+>conditional : Symbol(conditional, Decl(spreadDuplicateExact.ts, 20, 13))
+>color : Symbol(color, Decl(spreadDuplicateExact.ts, 23, 23))
+>size : Symbol(size, Decl(spreadDuplicateExact.ts, 23, 44))
+}
+

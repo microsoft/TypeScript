@@ -92,3 +92,27 @@ let d2 = { a: 123, ...(t ? d : {}) };  // string | number | undefined
 >d : { a?: string | undefined; }
 >{} : {}
 
+// from #46463
+declare const conditional: boolean;
+>conditional : boolean
+
+const example = {
+>example : { color: string; } | { size: string; color: string; }
+>{    color: "red",  // error    ...(conditional ? { color: "green" } : { size: "large" })} : { color: string; } | { size: string; color: string; }
+
+    color: "red",  // error
+>color : string
+>"red" : "red"
+
+    ...(conditional ? { color: "green" } : { size: "large" })
+>(conditional ? { color: "green" } : { size: "large" }) : { color: string; } | { size: string; }
+>conditional ? { color: "green" } : { size: "large" } : { color: string; } | { size: string; }
+>conditional : boolean
+>{ color: "green" } : { color: string; }
+>color : string
+>"green" : "green"
+>{ size: "large" } : { size: string; }
+>size : string
+>"large" : "large"
+}
+

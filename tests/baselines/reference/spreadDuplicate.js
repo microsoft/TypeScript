@@ -18,6 +18,13 @@ let b2 = { a: 123, ...(t ? b : {}) };  // string | number
 let c2 = { a: 123, ...(t ? c : {}) };  // string | number
 let d2 = { a: 123, ...(t ? d : {}) };  // string | number
 
+// from #46463
+declare const conditional: boolean;
+const example = {
+    color: "red",  // OK
+    ...(conditional ? { color: "green" } : { size: "large" })
+}
+
 
 //// [spreadDuplicate.js]
 "use strict";
@@ -41,6 +48,7 @@ var a2 = __assign({ a: 123 }, (t ? a : {})); // string | number
 var b2 = __assign({ a: 123 }, (t ? b : {})); // string | number
 var c2 = __assign({ a: 123 }, (t ? c : {})); // string | number
 var d2 = __assign({ a: 123 }, (t ? d : {})); // string | number
+var example = __assign({ color: "red" }, (conditional ? { color: "green" } : { size: "large" }));
 
 
 //// [spreadDuplicate.d.ts]
@@ -80,4 +88,11 @@ declare let c2: {
 };
 declare let d2: {
     a: string | number;
+};
+declare const conditional: boolean;
+declare const example: {
+    color: string;
+} | {
+    size: string;
+    color: string;
 };

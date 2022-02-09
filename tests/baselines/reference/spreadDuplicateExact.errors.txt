@@ -1,8 +1,9 @@
 tests/cases/conformance/types/spread/spreadDuplicateExact.ts(10,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/spreadDuplicateExact.ts(12,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/spreadDuplicateExact.ts(23,5): error TS2783: 'color' is specified more than once, so this usage will be overwritten.
 
 
-==== tests/cases/conformance/types/spread/spreadDuplicateExact.ts (2 errors) ====
+==== tests/cases/conformance/types/spread/spreadDuplicateExact.ts (3 errors) ====
     // Repro from #44438
     
     declare let a: { a: string };
@@ -27,4 +28,14 @@ tests/cases/conformance/types/spread/spreadDuplicateExact.ts(12,12): error TS278
     let b2 = { a: 123, ...(t ? b : {}) };  // string | number
     let c2 = { a: 123, ...(t ? c : {}) };  // string | number | undefined
     let d2 = { a: 123, ...(t ? d : {}) };  // string | number | undefined
+    
+    // from #46463
+    declare const conditional: boolean;
+    const example = {
+        color: "red",  // error
+        ~~~~~~~~~~~~
+!!! error TS2783: 'color' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/spreadDuplicateExact.ts:24:5: This spread always overwrites this property.
+        ...(conditional ? { color: "green" } : { size: "large" })
+    }
     

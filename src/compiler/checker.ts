@@ -27593,12 +27593,11 @@ namespace ts {
 
         function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
             for (const right of getPropertiesOfType(type)) {
-                if (!(right.flags & SymbolFlags.Optional)) {
-                    const left = props.get(right.escapedName);
-                    if (left) {
-                        const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
-                        addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
-                    }
+                const rightType = getTypeOfSymbol(right);
+                const left = props.get(right.escapedName);
+                if (left && (exactOptionalPropertyTypes || !maybeTypeOfKind(rightType, TypeFlags.Nullable)) && !(right.flags & SymbolFlags.Optional)) {
+                    const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
                 }
             }
         }
