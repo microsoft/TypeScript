@@ -36,8 +36,8 @@ verify.completions(
         exact: [
           "goTo",
           "onClick",
-          { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
-          { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+          { name: "children", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+          { name: "className", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
         ]
     },
     {
@@ -45,14 +45,14 @@ verify.completions(
       exact: [
         "goTo",
         "onClick",
-        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        { name: "className", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
       ]
     },
     {
       marker: ["3", "4", "5"],
       exact: [
-        { name: "children", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
-        { name: "className", kind: "JSX attribute", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        { name: "children", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
+        { name: "className", kind: "property", kindModifiers: "optional", sortText: completion.SortText.OptionalMember },
       ]
     },
 );

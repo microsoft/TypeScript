@@ -202,7 +202,27 @@ namespace ts {
             scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
+
+            const oldBucketCount = buckets.size;
             const bucket = getOrUpdate(buckets, key, () => new Map());
+            if (tracing) {
+                if (buckets.size > oldBucketCount) {
+                    // It is interesting, but not definitively problematic if a build requires multiple document registry buckets -
+                    // perhaps they are for two projects that don't have any overlap.
+                    // Bonus: these events can help us interpret the more interesting event below.
+                    tracing.instant(tracing.Phase.Session, "createdDocumentRegistryBucket", { configFilePath: compilationSettings.configFilePath, key });
+                }
+
+                // It is fairly suspicious to have one path in two buckets - you'd expect dependencies to have similar configurations.
+                // If this occurs unexpectedly, the fix is likely to synchronize the project settings.
+                // Skip .d.ts files to reduce noise (should also cover most of node_modules).
+                const otherBucketKey = !fileExtensionIs(path, Extension.Dts) &&
+                    forEachEntry(buckets, (bucket, bucketKey) => bucketKey !== key && bucket.has(path) && bucketKey);
+                if (otherBucketKey) {
+                    tracing.instant(tracing.Phase.Session, "documentRegistryBucketOverlap", { path, key1: otherBucketKey, key2: key });
+                }
+            }
+
             const bucketEntry = bucket.get(path);
             let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
             if (!entry && externalCache) {

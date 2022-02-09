@@ -339,6 +339,7 @@ namespace ts.textChanges {
             this.deletedNodes.push({ sourceFile, node });
         }
 
+        /** Stop! Consider using `delete` instead, which has logic for deleting nodes from delimited lists. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
@@ -502,7 +503,11 @@ namespace ts.textChanges {
                 if (merged) oldTags[i] = merged;
                 return !!merged;
             }));
-            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...oldTags, ...unmergedNewTags]));
+            const tags = [...oldTags, ...unmergedNewTags];
+            const jsDoc = singleOrUndefined(parent.jsDoc);
+            const comment = jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && !length(comments) ? undefined :
+                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+            const tag = factory.createJSDocComment(comment, factory.createNodeArray(tags));
             const host = updateJSDocHost(parent);
             this.insertJsdocCommentBefore(sourceFile, host, tag);
         }
@@ -782,6 +787,20 @@ namespace ts.textChanges {
             this.insertText(sourceFile, node.getStart(sourceFile), "export ");
         }
 
+        public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+            const prevSpecifier = namedImports.elements[index - 1];
+            if (prevSpecifier) {
+                this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
+            }
+            else {
+                this.insertNodeBefore(
+                    sourceFile,
+                    namedImports.elements[0],
+                    importSpecifier,
+                    !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile));
+            }
+        }
+
         /**
          * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
@@ -967,6 +986,8 @@ namespace ts.textChanges {
             }
             case SyntaxKind.JSDocReturnTag:
                 return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+            case SyntaxKind.JSDocTypeTag:
+                return factory.createJSDocTypeTag(/*tagName*/ undefined, (newTag as JSDocTypeTag).typeExpression, oldTag.comment);
         }
     }
 
@@ -1052,15 +1073,6 @@ namespace ts.textChanges {
                     ? "" : options.suffix);
         }
 
-        function getFormatCodeSettingsForWriting({ options }: formatting.FormatContext, sourceFile: SourceFile): FormatCodeSettings {
-            const shouldAutoDetectSemicolonPreference = !options.semicolons || options.semicolons === SemicolonPreference.Ignore;
-            const shouldRemoveSemicolons = options.semicolons === SemicolonPreference.Remove || shouldAutoDetectSemicolonPreference && !probablyUsesSemicolons(sourceFile);
-            return {
-                ...options,
-                semicolons: shouldRemoveSemicolons ? SemicolonPreference.Remove : SemicolonPreference.Ignore,
-            };
-        }
-
         /** Note: this may mutate `nodeIn`. */
         function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
@@ -1110,7 +1122,7 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
-    function assignPositionsToNode(node: Node): Node {
+    export function assignPositionsToNode(node: Node): Node {
         const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
@@ -1131,7 +1143,7 @@ namespace ts.textChanges {
 
     interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
-    function createWriter(newLine: string): TextChangesWriter {
+    export function createWriter(newLine: string): TextChangesWriter {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine);

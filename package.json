@@ -28,6 +28,7 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "packageManager": "npm@6.14.15",
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/browserify": "latest",
@@ -92,7 +93,7 @@
         "q": "latest",
         "source-map-support": "latest",
         "through2": "latest",
-        "typescript": "^4.2.3",
+        "typescript": "^4.5.5",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"

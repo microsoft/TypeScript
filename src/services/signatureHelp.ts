@@ -169,12 +169,12 @@ namespace ts.SignatureHelp {
             : { invocation: info.invocation.node, argumentCount: info.argumentCount, argumentIndex: info.argumentIndex };
     }
 
-    function getArgumentOrParameterListInfo(node: Node, sourceFile: SourceFile): { readonly list: Node, readonly argumentIndex: number, readonly argumentCount: number, readonly argumentsSpan: TextSpan } | undefined {
+    function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile: SourceFile): { readonly list: Node, readonly argumentIndex: number, readonly argumentCount: number, readonly argumentsSpan: TextSpan } | undefined {
         const info = getArgumentOrParameterListAndIndex(node, sourceFile);
         if (!info) return undefined;
         const { list, argumentIndex } = info;
 
-        const argumentCount = getArgumentCount(list);
+        const argumentCount = getArgumentCount(list, /*ignoreTrailingComma*/ isInString(sourceFile, position, node));
         if (argumentIndex !== 0) {
             Debug.assertLessThan(argumentIndex, argumentCount);
         }
@@ -222,7 +222,7 @@ namespace ts.SignatureHelp {
             //    Case 3:
             //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give signature help
             // Find out if 'node' is an argument, a type argument, or neither
-            const info = getArgumentOrParameterListInfo(node, sourceFile);
+            const info = getArgumentOrParameterListInfo(node, position, sourceFile);
             if (!info) return undefined;
             const { list, argumentIndex, argumentCount, argumentsSpan } = info;
             const isTypeParameterList = !!parent.typeArguments && parent.typeArguments.pos === list.pos;
@@ -299,8 +299,8 @@ namespace ts.SignatureHelp {
         return isBinaryExpression(b.left) ? countBinaryExpressionParameters(b.left) + 1 : 2;
     }
 
-    function tryGetParameterInfo(startingToken: Node, _position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-        const info = getContextualSignatureLocationInfo(startingToken, sourceFile, checker);
+    function tryGetParameterInfo(startingToken: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
+        const info = getContextualSignatureLocationInfo(startingToken, sourceFile, position, checker);
         if (!info) return undefined;
         const { contextualType, argumentIndex, argumentCount, argumentsSpan } = info;
 
@@ -315,7 +315,7 @@ namespace ts.SignatureHelp {
     }
 
     interface ContextualSignatureLocationInfo { readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
-    function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: SourceFile, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
+    function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: SourceFile, position: number, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
         if (startingToken.kind !== SyntaxKind.OpenParenToken && startingToken.kind !== SyntaxKind.CommaToken) return undefined;
         const { parent } = startingToken;
         switch (parent.kind) {
@@ -323,7 +323,7 @@ namespace ts.SignatureHelp {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                const info = getArgumentOrParameterListInfo(startingToken, sourceFile);
+                const info = getArgumentOrParameterListInfo(startingToken, position, sourceFile);
                 if (!info) return undefined;
                 const { argumentIndex, argumentCount, argumentsSpan } = info;
                 const contextualType = isMethodDeclaration(parent) ? checker.getContextualTypeForObjectLiteralElement(parent) : checker.getContextualType(parent as ParenthesizedExpression | FunctionExpression | ArrowFunction);
@@ -372,7 +372,7 @@ namespace ts.SignatureHelp {
         return argumentIndex;
     }
 
-    function getArgumentCount(argumentsList: Node) {
+    function getArgumentCount(argumentsList: Node, ignoreTrailingComma: boolean) {
         // The argument count for a list is normally the number of non-comma children it has.
         // For example, if you have "Foo(a,b)" then there will be three children of the arg
         // list 'a' '<comma>' 'b'.  So, in this case the arg count will be 2.  However, there
@@ -387,10 +387,9 @@ namespace ts.SignatureHelp {
         const listChildren = argumentsList.getChildren();
 
         let argumentCount = countWhere(listChildren, arg => arg.kind !== SyntaxKind.CommaToken);
-        if (listChildren.length > 0 && last(listChildren).kind === SyntaxKind.CommaToken) {
+        if (!ignoreTrailingComma && listChildren.length > 0 && last(listChildren).kind === SyntaxKind.CommaToken) {
             argumentCount++;
         }
-
         return argumentCount;
     }
 

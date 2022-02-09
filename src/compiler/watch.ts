@@ -64,7 +64,7 @@ namespace ts {
     }
 
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?
@@ -130,34 +130,49 @@ namespace ts {
             Diagnostics.Found_0_errors_Watching_for_file_changes;
     }
 
+    function prettyPathForFileError(error: ReportFileInError, cwd: string) {
+        const line = formatColorAndReset(":" + error.line, ForegroundColorEscapeSequences.Grey);
+        if (pathIsAbsolute(error.fileName) && pathIsAbsolute(cwd)) {
+            return getRelativePathFromDirectory(cwd, error.fileName, /* ignoreCase */ false) + line;
+        }
+
+        return error.fileName + line;
+    }
+
     export function getErrorSummaryText(
         errorCount: number,
         filesInError: readonly (ReportFileInError | undefined)[],
-        newLine: string
+        newLine: string,
+        host: HasCurrentDirectory
     ) {
         if (errorCount === 0) return "";
         const nonNilFiles = filesInError.filter(fileInError => fileInError !== undefined);
         const distinctFileNamesWithLines = nonNilFiles.map(fileInError => `${fileInError!.fileName}:${fileInError!.line}`)
             .filter((value, index, self) => self.indexOf(value) === index);
+
+        const firstFileReference = nonNilFiles[0] && prettyPathForFileError(nonNilFiles[0], host.getCurrentDirectory());
+
         const d = errorCount === 1 ?
             createCompilerDiagnostic(
                 filesInError[0] !== undefined ?
                     Diagnostics.Found_1_error_in_1 :
                     Diagnostics.Found_1_error,
                 errorCount,
-                distinctFileNamesWithLines[0]) :
+                firstFileReference) :
             createCompilerDiagnostic(
                 distinctFileNamesWithLines.length === 0 ?
                     Diagnostics.Found_0_errors :
                     distinctFileNamesWithLines.length === 1 ?
-                        Diagnostics.Found_0_errors_in_1_file :
+                        Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1 :
                         Diagnostics.Found_0_errors_in_1_files,
                 errorCount,
-                distinctFileNamesWithLines.length);
-        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles) : ""}`;
+                distinctFileNamesWithLines.length === 1 ? firstFileReference : distinctFileNamesWithLines.length);
+
+        const suffix = distinctFileNamesWithLines.length > 1 ? createTabularErrorsDisplay(nonNilFiles, host) : "";
+        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${suffix}`;
     }
 
-    function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[]) {
+    function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[], host: HasCurrentDirectory) {
         const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
         if (distinctFiles.length === 0) return "";
 
@@ -178,7 +193,9 @@ namespace ts {
             const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
                 " ".repeat(leftPaddingGoal - errorCountDigitsLength)
                 : "";
-            tabularData += `${leftPadding}${errorCount}  ${file!.fileName}:${file!.line}\n`;
+
+            const fileRef = prettyPathForFileError(file!, host.getCurrentDirectory());
+            tabularData += `${leftPadding}${errorCount}  ${fileRef}\n`;
         });
 
         return tabularData;
@@ -727,7 +744,7 @@ namespace ts {
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
-            input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine)) : undefined
+            input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined
         );
         if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
         return exitStatus;

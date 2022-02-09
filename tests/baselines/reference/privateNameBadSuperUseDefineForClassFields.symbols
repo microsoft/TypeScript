@@ -10,7 +10,7 @@ class A extends B {
 >#x : Symbol(A.#x, Decl(privateNameBadSuperUseDefineForClassFields.ts, 1, 19))
 
     constructor() {
-        void 0; // Error: 'super' call must  come first
+        void 0;
         super();
 >super : Symbol(B, Decl(privateNameBadSuperUseDefineForClassFields.ts, 0, 0))
     }

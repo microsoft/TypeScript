@@ -370,7 +370,8 @@ namespace ts.server {
     function combineProjectOutputForReferences(
         projects: Projects,
         defaultProject: Project,
-        initialLocation: DocumentPosition
+        initialLocation: DocumentPosition,
+        logger: Logger,
     ): readonly ReferencedSymbol[] {
         const outputs: ReferencedSymbol[] = [];
 
@@ -379,6 +380,7 @@ namespace ts.server {
             defaultProject,
             initialLocation,
             (project, location, getMappedLocation) => {
+                logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
                     const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
                     const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
@@ -940,6 +942,10 @@ namespace ts.server {
                 }
                 return;
             }
+            this.writeMessage(msg);
+        }
+
+        protected writeMessage(msg: protocol.Message) {
             const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
             perfLogger.logEvent(`Response message size: ${msgText.length}`);
             this.host.write(msgText);
@@ -1584,6 +1590,7 @@ namespace ts.server {
                 projects,
                 this.getDefaultProject(args),
                 { fileName: args.file, pos: position },
+                this.logger,
             );
 
             if (!simplifiedResult) return references;
@@ -1842,13 +1849,18 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
 
-            const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
-                ...convertUserPreferences(this.getPreferences(file)),
-                triggerCharacter: args.triggerCharacter,
-                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
-                includeExternalModuleExports: args.includeExternalModuleExports,
-                includeInsertTextCompletions: args.includeInsertTextCompletions
-            });
+            const completions = project.getLanguageService().getCompletionsAtPosition(
+                file,
+                position,
+                {
+                    ...convertUserPreferences(this.getPreferences(file)),
+                    triggerCharacter: args.triggerCharacter,
+                    triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
+                    includeExternalModuleExports: args.includeExternalModuleExports,
+                    includeInsertTextCompletions: args.includeInsertTextCompletions,
+                },
+                project.projectService.getFormatCodeOptions(file),
+            );
             if (completions === undefined) return undefined;
 
             if (kind === protocol.CommandTypes.CompletionsFull) return completions;

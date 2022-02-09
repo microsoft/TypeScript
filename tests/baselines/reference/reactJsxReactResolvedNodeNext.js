@@ -24,4 +24,4 @@ import './';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
-exports.a = (0, jsx_runtime_1.jsx)("div", {}, void 0);
+exports.a = (0, jsx_runtime_1.jsx)("div", {});
