@@ -39882,7 +39882,7 @@ namespace ts {
                     && !(node.flags & NodeFlags.Ambient)) {
                     const typeOnlyAlias = getTypeOnlyAliasDeclaration(symbol);
                     const isType = !(target.flags & SymbolFlags.Value);
-                    if (isType || typeOnlyAlias) {
+                    if (isType || typeOnlyAlias || target.valueDeclaration?.flags! & NodeFlags.Ambient && isConstEnumOrConstEnumOnlyModule(target)) {
                         switch (node.kind) {
                             case SyntaxKind.ImportClause:
                             case SyntaxKind.ImportSpecifier:
