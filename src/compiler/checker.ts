@@ -20258,22 +20258,15 @@ namespace ts {
          * and no required properties, call/construct signatures or index signatures
          */
         function isWeakType(type: Type): boolean {
-            if (!(type.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
-                return false;
+            if (type.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(type as ObjectType);
+                return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 && resolved.indexInfos.length === 0 &&
+                    resolved.properties.length > 0 && every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
             }
-            if (!((type as ObjectType | IntersectionType).objectFlags & ObjectFlags.IsWeakTypeComputed)) {
-                let isWeak;
-                if (type.flags & TypeFlags.Object) {
-                    const resolved = resolveStructuredTypeMembers(type as ObjectType);
-                    isWeak = resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 && resolved.indexInfos.length === 0 &&
-                        resolved.properties.length > 0 && every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
-                }
-                else {
-                    isWeak = every((type as IntersectionType).types, isWeakType);
-                }
-                (type as ObjectType | IntersectionType).objectFlags |= ObjectFlags.IsWeakTypeComputed | (isWeak ? ObjectFlags.IsWeakType : 0);
+            if (type.flags & TypeFlags.Intersection) {
+                return every((type as IntersectionType).types, isWeakType);
             }
-            return !!((type as ObjectType | IntersectionType).objectFlags & ObjectFlags.IsWeakType);
+            return false;
         }
 
         function hasCommonProperties(source: Type, target: Type, isComparingJsxAttributes: boolean) {
