@@ -17833,8 +17833,8 @@ namespace ts {
                     (source as LiteralType).value === (target as LiteralType).value &&
                     isEnumTypeRelatedTo(getParentOfSymbol(source.symbol)!, getParentOfSymbol(target.symbol)!, errorReporter)) return true;
             }
-            if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
-            if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
+            if (s & TypeFlags.Undefined && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
+            if (s & TypeFlags.Null && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
@@ -19353,6 +19353,11 @@ namespace ts {
                     }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target &&
                         !isTupleType(source) && !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
+                        // When strictNullChecks is disabled, the element type of the empty array literal is undefinedWideningType,
+                        // and an empty array literal wouldn't be assignable to a `never[]` without this check.
+                        if (isEmptyArrayLiteralType(source)) {
+                            return Ternary.True;
+                        }
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
