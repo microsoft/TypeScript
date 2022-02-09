@@ -370,7 +370,8 @@ namespace ts.server {
     function combineProjectOutputForReferences(
         projects: Projects,
         defaultProject: Project,
-        initialLocation: DocumentPosition
+        initialLocation: DocumentPosition,
+        logger: Logger,
     ): readonly ReferencedSymbol[] {
         const outputs: ReferencedSymbol[] = [];
 
@@ -379,6 +380,7 @@ namespace ts.server {
             defaultProject,
             initialLocation,
             (project, location, getMappedLocation) => {
+                logger.info(`Finding references to ${location.fileName} position ${location.pos} in project ${project.getProjectName()}`);
                 for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
                     const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
                     const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
@@ -1588,6 +1590,7 @@ namespace ts.server {
                 projects,
                 this.getDefaultProject(args),
                 { fileName: args.file, pos: position },
+                this.logger,
             );
 
             if (!simplifiedResult) return references;
