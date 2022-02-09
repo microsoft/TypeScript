@@ -17997,16 +17997,16 @@ namespace ts {
                 return {
                     errorInfo,
                     lastSkippedInfo,
-                    incompatibleStack: incompatibleStack ? incompatibleStack.slice() : undefined,
+                    incompatibleStack: incompatibleStack?.slice(),
                     overrideNextErrorInfo,
-                    relatedInfo: relatedInfo ? relatedInfo.slice() as [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] : undefined,
+                    relatedInfo: relatedInfo?.slice() as [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined,
                 };
             }
 
             function reportIncompatibleError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
                 overrideNextErrorInfo++; // Suppress the next relation error
                 lastSkippedInfo = undefined; // Reset skipped info cache
-                (incompatibleStack || (incompatibleStack = [])).push([message, arg0, arg1, arg2, arg3]);
+                (incompatibleStack ||= []).push([message, arg0, arg1, arg2, arg3]);
             }
 
             function reportIncompatibleStack() {
@@ -18579,18 +18579,9 @@ namespace ts {
                     }
                 }
                 // Check to see if any constituents of the intersection are immediately related to the target.
-                //
-                // Don't report errors though. Checking whether a constituent is related to the source is not actually
-                // useful and leads to some confusing error messages. Instead it is better to let the below checks
-                // take care of this, or to not elaborate at all. For instance,
-                //
-                //    - For an object type (such as 'C = A & B'), users are usually more interested in structural errors.
-                //
-                //    - For a union type (such as '(A | B) = (C & D)'), it's better to hold onto the whole intersection
-                //          than to report that 'D' is not assignable to 'A' or 'B'.
-                //
-                //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
-                //          breaking the intersection apart.
+                // Don't report errors though. Elaborating on whether a source constituent is related to the target is
+                // not actually useful and leads to some confusing error messages. Instead, we rely on the caller
+                // checking whether the full intersection viewed as an object is related to the target.
                 return someTypeRelatedToType(source as IntersectionType, target, /*reportErrors*/ false, IntersectionState.Source);
             }
 
