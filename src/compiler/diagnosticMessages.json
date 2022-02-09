@@ -727,11 +727,11 @@
         "category": "Error",
         "code": 1231
     },
-    "An import declaration can only be used in a namespace or module.": {
+    "An import declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1232
     },
-    "An export declaration can only be used in a module.": {
+    "An export declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1233
     },
@@ -739,7 +739,7 @@
         "category": "Error",
         "code": 1234
     },
-    "A namespace declaration is only allowed in a namespace or module.": {
+    "A namespace declaration is only allowed at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1235
     },
@@ -1413,7 +1413,15 @@
         "category": "Error",
         "code": 1472
     },
-
+    "An import declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1473
+    },
+    "An export declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1474
+    },
+    
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
