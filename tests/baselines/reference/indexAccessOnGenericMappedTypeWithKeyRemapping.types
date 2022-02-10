@@ -1,0 +1,16 @@
+=== tests/cases/compiler/indexAccessOnGenericMappedTypeWithKeyRemapping.ts ===
+type Foo<T extends string> = {
+>Foo : Foo<T>
+
+    [RemappedT in T as `get${RemappedT}`]: RemappedT;
+};
+const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];
+>get : <T extends string>(t: T, foo: Foo<T>) => T
+><T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`] : <T extends string>(t: T, foo: Foo<T>) => T
+>t : T
+>foo : Foo<T>
+>foo[`get${t}`] : Foo<T>[`get${T}`]
+>foo : Foo<T>
+>`get${t}` : `get${T}`
+>t : T
+

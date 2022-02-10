@@ -1,0 +1,24 @@
+=== tests/cases/compiler/indexAccessOnGenericMappedTypeWithKeyRemapping.ts ===
+type Foo<T extends string> = {
+>Foo : Symbol(Foo, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 0, 0))
+>T : Symbol(T, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 0, 9))
+
+    [RemappedT in T as `get${RemappedT}`]: RemappedT;
+>RemappedT : Symbol(RemappedT, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 1, 5))
+>T : Symbol(T, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 0, 9))
+>RemappedT : Symbol(RemappedT, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 1, 5))
+>RemappedT : Symbol(RemappedT, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 1, 5))
+
+};
+const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];
+>get : Symbol(get, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 5))
+>T : Symbol(T, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 13))
+>t : Symbol(t, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 31))
+>T : Symbol(T, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 13))
+>foo : Symbol(foo, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 36))
+>Foo : Symbol(Foo, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 0, 0))
+>T : Symbol(T, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 13))
+>T : Symbol(T, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 13))
+>foo : Symbol(foo, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 36))
+>t : Symbol(t, Decl(indexAccessOnGenericMappedTypeWithKeyRemapping.ts, 3, 31))
+

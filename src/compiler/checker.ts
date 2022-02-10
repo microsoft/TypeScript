@@ -15567,8 +15567,10 @@ namespace ts {
         }
 
         function substituteIndexedMappedType(objectType: MappedType, index: Type) {
-            const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
-            const templateMapper = combineTypeMappers(objectType.mapper, mapper);
+            let templateMapper = objectType.mapper;
+            if (!objectType.declaration.nameType) {
+                templateMapper = combineTypeMappers(templateMapper, createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]));
+            }
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
