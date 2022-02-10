@@ -2102,7 +2102,7 @@ namespace ts {
 
                 const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
                 const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
-                const isPlainJs = isJs && !sourceFile.checkJsDirective && options.checkJs === undefined;
+                const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
                 // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
