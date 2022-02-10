@@ -374,6 +374,11 @@ namespace ts.Completions.StringCompletions {
             getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
     }
 
+    function isEmitModuleResolutionRespectingExportMaps(compilerOptions: CompilerOptions) {
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 ||
+        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
+    }
+
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
         return isEmitResolutionKindUsingNodeModules(compilerOptions) ?
@@ -568,12 +573,55 @@ namespace ts.Completions.StringCompletions {
                 }
             }
             if (!foundGlobal) {
-                forEachAncestorDirectory(scriptPath, ancestor => {
+                let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                     const nodeModules = combinePaths(ancestor, "node_modules");
                     if (tryDirectoryExists(host, nodeModules)) {
                         getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*exclude*/ undefined, result);
                     }
-                });
+                };
+                if (fragmentDirectory && isEmitModuleResolutionRespectingExportMaps(compilerOptions)) {
+                    const nodeModulesDirectoryLookup = ancestorLookup;
+                    ancestorLookup = ancestor => {
+                        const components = getPathComponents(fragmentDirectory);
+                        let packagePath = components.pop();
+                        if (!packagePath) {
+                            return nodeModulesDirectoryLookup(ancestor);
+                        }
+                        if (startsWith(packagePath, "@")) {
+                            const subName = components.pop();
+                            if (!subName) {
+                                return nodeModulesDirectoryLookup(ancestor);
+                            }
+                            packagePath = combinePaths(packagePath, subName);
+                        }
+                        const packageFile = combinePaths(ancestor, "node_modules", packagePath, "package.json");
+                        if (tryFileExists(host, packageFile)) {
+                            const packageJson = readJson(packageFile, host as { readFile: (filename: string) => string | undefined });
+                            const exports = (packageJson as any).exports;
+                            if (exports) {
+                                if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                                    return; // null exports or entrypoint only, no sub-modules available
+                                }
+                                const keys = getOwnKeys(exports);
+                                const fragmentSubpath = components.join("/");
+                                const processedKeys = mapDefined(keys, k => {
+                                    if (k === ".") return undefined;
+                                    if (!startsWith(k, "./")) return undefined;
+                                    const subpath = k.substring(2);
+                                    if (!startsWith(subpath, fragmentSubpath)) return undefined;
+                                    // subpath is a valid export (barring conditions, which we don't currently check here)
+                                    return subpath;
+                                });
+                                forEach(processedKeys, k => {
+                                    result.push(nameAndKind(k, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                });
+                                return;
+                            }
+                        }
+                        return nodeModulesDirectoryLookup(ancestor);
+                    };
+                }
+                forEachAncestorDirectory(scriptPath, ancestorLookup);
             }
         }
 

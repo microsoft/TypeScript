@@ -1,3 +1,5 @@
+/// <reference path="../fourslash.ts" />
+
 // @Filename: /node_modules/dependency/package.json
 //// {
 ////     "type": "module",
@@ -34,3 +36,7 @@
 //// import { fooFromIndex } from "/**/";
 
 verify.baselineCompletions();
+edit.insert("dependency/");
+verify.completions({ exact: ["lol"], isNewIdentifierLocation: true });
+edit.insert("l");
+verify.completions({ exact: ["lol"], isNewIdentifierLocation: true });
