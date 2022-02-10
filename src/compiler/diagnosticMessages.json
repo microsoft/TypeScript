@@ -867,6 +867,10 @@
         "category": "Error",
         "code": 1268
     },
+    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1269
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1421,7 +1425,7 @@
         "category": "Error",
         "code": 1474
     },
-    
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
