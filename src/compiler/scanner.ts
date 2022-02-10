@@ -1246,7 +1246,7 @@ namespace ts {
          * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
          * a literal component of a TemplateExpression.
          */
-        function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean, jsxAttributeString: boolean): SyntaxKind {
+        function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean): SyntaxKind {
             const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
             pos++;
@@ -1282,7 +1282,7 @@ namespace ts {
                 }
 
                 // Escape character
-                if (currChar === CharacterCodes.backslash && !jsxAttributeString) {
+                if (currChar === CharacterCodes.backslash) {
                     contents += text.substring(start, pos);
                     contents += scanEscapeSequence(isTaggedTemplate);
                     start = pos;
@@ -1692,7 +1692,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false, /* isJsxAttributeValue */ false);
+                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -2232,12 +2232,12 @@ namespace ts {
         function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(isTaggedTemplate, /*isJsxAttributeValue*/ false);
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
         }
 
         function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true, /*isJsxAttributeValue*/ false);
+            return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
         function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
@@ -2388,7 +2388,7 @@ namespace ts {
                     tokenValue = scanString(/*jsxAttributeString*/ true);
                     return token = SyntaxKind.StringLiteral;
                 case CharacterCodes.backtick:
-                    return token = scanTemplateAndSetTokenValue(/*isTaggedTemplate*/ false, /*isJsxAttributeValue*/ true);
+                    return token = scanTemplateAndSetTokenValue(/*isTaggedTemplate*/ false);
                 default:
                     // If this scans anything other than `{`, it's a parse error.
                     return scan();
