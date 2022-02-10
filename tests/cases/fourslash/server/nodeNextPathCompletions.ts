@@ -11,7 +11,8 @@
 ////         },
 ////         "./lol": {
 ////             "types": "./lib/lol.d.ts"
-////         }
+////         },
+////        "./dir/*": "./lib/*"
 ////     }
 //// }
 
@@ -37,6 +38,6 @@
 
 verify.baselineCompletions();
 edit.insert("dependency/");
-verify.completions({ exact: ["lol"], isNewIdentifierLocation: true });
+verify.completions({ exact: ["lol", "dir/"], isNewIdentifierLocation: true });
 edit.insert("l");
 verify.completions({ exact: ["lol"], isNewIdentifierLocation: true });

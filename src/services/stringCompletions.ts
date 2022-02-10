@@ -582,13 +582,14 @@ namespace ts.Completions.StringCompletions {
                 if (fragmentDirectory && isEmitModuleResolutionRespectingExportMaps(compilerOptions)) {
                     const nodeModulesDirectoryLookup = ancestorLookup;
                     ancestorLookup = ancestor => {
-                        const components = getPathComponents(fragmentDirectory);
-                        let packagePath = components.pop();
+                        const components = getPathComponents(fragment);
+                        components.shift(); // shift off empty root
+                        let packagePath = components.shift();
                         if (!packagePath) {
                             return nodeModulesDirectoryLookup(ancestor);
                         }
                         if (startsWith(packagePath, "@")) {
-                            const subName = components.pop();
+                            const subName = components.shift();
                             if (!subName) {
                                 return nodeModulesDirectoryLookup(ancestor);
                             }
@@ -610,10 +611,19 @@ namespace ts.Completions.StringCompletions {
                                     const subpath = k.substring(2);
                                     if (!startsWith(subpath, fragmentSubpath)) return undefined;
                                     // subpath is a valid export (barring conditions, which we don't currently check here)
-                                    return subpath;
+                                    if (!stringContains(subpath, "*")) {
+                                        return subpath;
+                                    }
+                                    // pattern export - only return everything up to the `*`, so the user can autocomplete, then
+                                    // keep filling in the pattern (we could speculatively return a list of options by hitting disk,
+                                    // but conditions will make that somewhat awkward, as each condition may have a different set of possible
+                                    // options for the `*`.
+                                    return subpath.slice(0, subpath.indexOf("*"));
                                 });
                                 forEach(processedKeys, k => {
-                                    result.push(nameAndKind(k, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                    if (k) {
+                                        result.push(nameAndKind(k, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                    }
                                 });
                                 return;
                             }
