@@ -368,9 +368,15 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
+    function isEmitResolutionKindUsingNodeModules(compilerOptions: CompilerOptions): boolean {
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
+    }
+
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
-        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+        return isEmitResolutionKindUsingNodeModules(compilerOptions) ?
             getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
@@ -549,7 +555,7 @@ namespace ts.Completions.StringCompletions {
 
         getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
 
-        if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
+        if (isEmitResolutionKindUsingNodeModules(compilerOptions)) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
             // (But do if we didn't find anything, e.g. 'package.json' missing.)
             let foundGlobal = false;
