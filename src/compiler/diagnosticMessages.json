@@ -7135,6 +7135,18 @@
         "category": "Message",
         "code": 95170
     },
+    "Delete unused '@param' tag '{0}'": {
+        "category": "Message",
+        "code": 95171
+    },
+    "Delete all unused '@param' tags": {
+        "category": "Message",
+        "code": 95172
+    },
+    "Rename '@param' tag name '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95173
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

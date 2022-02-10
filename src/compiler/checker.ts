@@ -34472,6 +34472,7 @@ namespace ts {
             }
 
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
+            checkUnmatchedJSDocParameters(node);
 
             forEach(node.parameters, checkParameter);
 
@@ -36235,40 +36236,7 @@ namespace ts {
 
         function checkJSDocParameterTag(node: JSDocParameterTag) {
             checkSourceElement(node.typeExpression);
-            if (!getParameterSymbolFromJSDoc(node)) {
-                const decl = getHostSignatureFromJSDoc(node);
-                // don't issue an error for invalid hosts -- just functions --
-                // and give a better error message when the host function mentions `arguments`
-                // but the tag doesn't have an array type
-                if (decl) {
-                    const i = getJSDocTags(decl).filter(isJSDocParameterTag).indexOf(node);
-                    if (i > -1 && i < decl.parameters.length && isBindingPattern(decl.parameters[i].name)) {
-                        return;
-                    }
-                    if (!containsArgumentsReference(decl)) {
-                        if (isQualifiedName(node.name)) {
-                            error(node.name,
-                                Diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1,
-                                entityNameToString(node.name),
-                                entityNameToString(node.name.left));
-                        }
-                        else {
-                            error(node.name,
-                                Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                                idText(node.name));
-                        }
-                    }
-                    else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
-                        node.typeExpression && node.typeExpression.type &&
-                        !isArrayType(getTypeFromTypeNode(node.typeExpression.type))) {
-                        error(node.name,
-                            Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type,
-                            idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
-                    }
-                }
-            }
         }
-
         function checkJSDocPropertyTag(node: JSDocPropertyTag) {
             checkSourceElement(node.typeExpression);
         }
@@ -38561,6 +38529,45 @@ namespace ts {
             if (languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
                 && (moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(name).impliedNodeFormat === ModuleKind.CommonJS)) {
                 error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
+            }
+        }
+
+        function checkUnmatchedJSDocParameters(node: SignatureDeclaration) {
+            const jsdocParameters = filter(getJSDocTags(node), isJSDocParameterTag);
+            if (!length(jsdocParameters)) return;
+
+            const isJs = isInJSFile(node);
+            const parameters = new Set<__String>();
+            const excludedParameters = new Set<number>();
+            forEach(node.parameters, ({ name }, index) => {
+                if (isIdentifier(name)) {
+                    parameters.add(name.escapedText);
+                }
+                if (isBindingPattern(name)) {
+                    excludedParameters.add(index);
+                }
+            });
+
+            const containsArguments = containsArgumentsReference(node);
+            if (containsArguments) {
+                const lastJSDocParam = lastOrUndefined(jsdocParameters);
+                if (lastJSDocParam && isIdentifier(lastJSDocParam.name) && lastJSDocParam.typeExpression &&
+                    lastJSDocParam.typeExpression.type && !parameters.has(lastJSDocParam.name.escapedText) && !isArrayType(getTypeFromTypeNode(lastJSDocParam.typeExpression.type))) {
+                    errorOrSuggestion(isJs, lastJSDocParam.name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type, idText(lastJSDocParam.name));
+                }
+            }
+            else {
+                forEach(jsdocParameters, ({ name }, index) => {
+                    if (excludedParameters.has(index) || isIdentifier(name) && parameters.has(name.escapedText)) {
+                        return;
+                    }
+                    if (isQualifiedName(name)) {
+                        errorOrSuggestion(isJs, name, Diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1, entityNameToString(name), entityNameToString(name.left));
+                    }
+                    else {
+                        errorOrSuggestion(isJs, name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name, idText(name));
+                    }
+                });
             }
         }
 
