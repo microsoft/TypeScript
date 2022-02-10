@@ -595,7 +595,7 @@ namespace ts {
                 return factory.createJsxAttribute(
                     visitNode(node.name, visitor, isIdentifier),
                     factory.createJsxExpression(
-                        undefined,
+                        /* dotDotDotToken */ undefined,
                         visitNode(node.initializer, visitor, isExpression)
                     )
                 );
