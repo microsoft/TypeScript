@@ -8773,12 +8773,8 @@ namespace ts {
                     }
                 }
                 if (isInJSFile(declaration)) {
-                    const typeTag = getJSDocType(func);
-                    if (typeTag && isFunctionTypeNode(typeTag)) {
-                        const signature = getSignatureFromDeclaration(typeTag);
-                        const pos = func.parameters.indexOf(declaration);
-                        return declaration.dotDotDotToken ? getRestTypeAtPosition(signature, pos) : getTypeAtPosition(signature, pos);
-                    }
+                    const type = getParameterTypeOfTypeTag(func, declaration);
+                    if (type) return type;
                 }
                 // Use contextual parameter type if one is available
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
@@ -12774,6 +12770,13 @@ namespace ts {
             if (!(isInJSFile(node) && isFunctionLikeDeclaration(node))) return undefined;
             const typeTag = getJSDocTypeTag(node);
             return typeTag?.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
+        }
+
+        function getParameterTypeOfTypeTag(func: FunctionLikeDeclaration, parameter: ParameterDeclaration) {
+            const signature = getSignatureOfTypeTag(func);
+            if (!signature) return undefined;
+            const pos = func.parameters.indexOf(parameter);
+            return parameter.dotDotDotToken ? getRestTypeAtPosition(signature, pos) : getTypeAtPosition(signature, pos);
         }
 
         function getReturnTypeOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
