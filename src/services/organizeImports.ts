@@ -94,6 +94,9 @@ namespace ts.OrganizeImports {
             return oldImports;
         }
 
+        const jsDocLinks = getJSDocLinks(sourceFile);
+        jsDocLinks.has("test");
+
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
@@ -161,9 +164,40 @@ namespace ts.OrganizeImports {
         return usedImports;
 
         function isDeclarationUsed(identifier: Identifier) {
+            // TODO: Check for more use cases, before submitting the PR to review
+            if (jsDocLinks.has(identifier.getText())) {
+                return true;
+            }
+
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
             return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
                 FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+        }
+
+        // TODO: Improve this, before submitting the PR to review, because it is very ugly.
+        function getJSDocLinks(sourceFile: SourceFile) {
+            const fileJSDocs = sourceFile.statements.filter((node) => !isImportDeclaration(node)).map((node) => getJSDocCommentsAndTags(node));
+            const jsDocLinkSet = new Set<string>();
+
+            for (const jsDocArray of fileJSDocs) {
+                for (const jsDoc of jsDocArray) {
+                    if (!jsDoc.comment) {
+                        continue;
+                    }
+                    else if (jsDoc.comment instanceof String || typeof jsDoc.comment === "string") {
+                        continue;
+                    }
+
+                    const links = jsDoc.comment.filter((comment) => comment.kind === SyntaxKind.JSDocLink) as JSDocLink[];
+                    for (const link of links) {
+                        if (link.name) {
+                            jsDocLinkSet.add(link.name?.getText());
+                        }
+                    }
+                }
+            }
+
+            return jsDocLinkSet;
         }
     }
 
