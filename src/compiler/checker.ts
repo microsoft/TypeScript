@@ -1327,7 +1327,7 @@ namespace ts {
                 const targetSymbolFile = target.declarations && getSourceFileOfNode(target.declarations[0]);
 
                 const isSourcePlainJs = isPlainJsFile(sourceSymbolFile, compilerOptions.checkJs);
-                const isTargetPlainJs = isPlainJsFile(targetSymbolFile, compilerOptions.checkJs)
+                const isTargetPlainJs = isPlainJsFile(targetSymbolFile, compilerOptions.checkJs);
                 const symbolName = symbolToString(source);
 
                 // Collect top-level duplicate identifier errors into one mapping, so we can then merge their diagnostics if there are a bunch
