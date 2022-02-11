@@ -94,13 +94,11 @@ namespace ts.OrganizeImports {
             return oldImports;
         }
 
-        const jsDocLinks = getJSDocLinks(sourceFile);
-        jsDocLinks.has("test");
-
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
+        const jsDocReferencesSet = getJSDocReferencedTypesFromSourceFile(sourceFile);
 
         const usedImports: ImportDeclaration[] = [];
 
@@ -164,40 +162,44 @@ namespace ts.OrganizeImports {
         return usedImports;
 
         function isDeclarationUsed(identifier: Identifier) {
-            // TODO: Check for more use cases, before submitting the PR to review
-            if (jsDocLinks.has(identifier.getText())) {
-                return true;
-            }
-
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
             return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
-                FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+                FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile) ||
+                jsDocReferencesSet.has(identifier.getText());
         }
 
-        // TODO: Improve this, before submitting the PR to review, because it is very ugly.
-        function getJSDocLinks(sourceFile: SourceFile) {
-            const fileJSDocs = sourceFile.statements.filter((node) => !isImportDeclaration(node)).map((node) => getJSDocCommentsAndTags(node));
-            const jsDocLinkSet = new Set<string>();
+        /**
+         * Retrieve all the type names from the JSDoc "@link" tags in the source file as a Set.
+         * @returns a Set with the types referenced inside the JSDoc tags.
+         */
+        function getJSDocReferencedTypesFromSourceFile(sourceFile: SourceFile) {
+            let jsDocLinkNames: string[] = [];
 
-            for (const jsDocArray of fileJSDocs) {
-                for (const jsDoc of jsDocArray) {
-                    if (!jsDoc.comment) {
-                        continue;
-                    }
-                    else if (jsDoc.comment instanceof String || typeof jsDoc.comment === "string") {
-                        continue;
-                    }
-
-                    const links = jsDoc.comment.filter((comment) => comment.kind === SyntaxKind.JSDocLink) as JSDocLink[];
-                    for (const link of links) {
-                        if (link.name) {
-                            jsDocLinkSet.add(link.name?.getText());
-                        }
-                    }
-                }
+            for (const statement of sourceFile.statements) {
+                const jsDocs = getJSDocCommentsAndTags(statement);
+                const names = getJSDocLinksNamesFromJSDocs(jsDocs);
+                jsDocLinkNames = jsDocLinkNames.concat(names);
             }
 
-            return jsDocLinkSet;
+            return new Set<string>(jsDocLinkNames);
+        }
+
+        function getJSDocLinksNamesFromJSDocs(jsDocs: readonly (JSDoc | JSDocTag)[]) {
+            let jsDocLinks: JSDocLink[] = [];
+            for (const doc of jsDocs) {
+                const links = getJSDocLinksFromJSDocComments(doc.comment);
+                jsDocLinks = jsDocLinks.concat(links);
+            }
+
+            return getNamesFromJSDocLinks(jsDocLinks);
+        }
+
+        function getJSDocLinksFromJSDocComments(comment?: string | NodeArray<JSDocComment>): JSDocLink[] {
+            return isArray(comment) ? comment.filter((commentNode) => commentNode.kind === SyntaxKind.JSDocLink) as JSDocLink[] : [];
+        }
+
+        function getNamesFromJSDocLinks(jsDocLinks: JSDocLink[]): string[] {
+            return jsDocLinks.filter((link) => link.name?.getText()).map((link) => link.name!.getText());
         }
     }
 
