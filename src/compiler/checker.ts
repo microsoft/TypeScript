@@ -19732,6 +19732,18 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
+
+                // Ensure {readonly a: whatever} is not a subtype of {a: whatever},
+                // while {a: whatever} is a subtype of {readonly a: whatever}.
+                // This ensures the subtype relationship is ordered, and preventing declaration order
+                // from deciding which type "wins" in union subtype reduction.
+                // They're still assignable to one another, since `readonly` doesn't affect assignability.
+                if (
+                    (relation === subtypeRelation || relation === strictSubtypeRelation) &&
+                    !!(sourcePropFlags & ModifierFlags.Readonly) && !(targetPropFlags & ModifierFlags.Readonly)
+                ) {
+                    return Ternary.False;
+                }
                 // If the target comes from a partial union prop, allow `undefined` in the target type
                 const related = isPropertySymbolTypeRelated(sourceProp, targetProp, getTypeOfSourceProperty, reportErrors, intersectionState);
                 if (!related) {
