@@ -271,6 +271,10 @@ namespace ts {
         return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
     }
 
+    export function isPlainJsFile(file: SourceFile | undefined, checkJs: boolean | undefined): boolean {
+        return !!file && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX) && !file.checkJsDirective && checkJs === undefined;
+    }
+
     export function isStatementWithLocals(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Block:
@@ -2510,7 +2514,7 @@ namespace ts {
         return expr.right;
     }
 
-    export function isPrototypePropertyAssignment(node: Node): boolean {
+    export function isPrototypePropertyAssignment(node: Node): node is BinaryExpression {
         return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 

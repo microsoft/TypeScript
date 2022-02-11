@@ -727,11 +727,11 @@
         "category": "Error",
         "code": 1231
     },
-    "An import declaration can only be used in a namespace or module.": {
+    "An import declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1232
     },
-    "An export declaration can only be used in a module.": {
+    "An export declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1233
     },
@@ -739,7 +739,7 @@
         "category": "Error",
         "code": 1234
     },
-    "A namespace declaration is only allowed in a namespace or module.": {
+    "A namespace declaration is only allowed at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1235
     },
@@ -866,6 +866,10 @@
     "An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.": {
         "category": "Error",
         "code": 1268
+    },
+    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1269
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1412,6 +1416,14 @@
     "'catch' or 'finally' expected.": {
         "category": "Error",
         "code": 1472
+    },
+    "An import declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1473
+    },
+    "An export declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1474
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -7126,6 +7138,18 @@
     "Convert named imports to default import": {
         "category": "Message",
         "code": 95170
+    },
+    "Delete unused '@param' tag '{0}'": {
+        "category": "Message",
+        "code": 95171
+    },
+    "Delete all unused '@param' tags": {
+        "category": "Message",
+        "code": 95172
+    },
+    "Rename '@param' tag name '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95173
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
