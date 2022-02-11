@@ -78,12 +78,12 @@ namespace ts {
 
     function getImportMetaIfNecessary(sourceFile: SourceFile) {
         return sourceFile.flags & NodeFlags.PossiblyContainsImportMeta ?
-            walkTreeForExternalModuleIndicators(sourceFile) :
+            walkTreeForImportMeta(sourceFile) :
             undefined;
     }
 
-    function walkTreeForExternalModuleIndicators(node: Node): Node | undefined {
-        return isImportMeta(node) ? node : forEachChild(node, walkTreeForExternalModuleIndicators);
+    function walkTreeForImportMeta(node: Node): Node | undefined {
+        return isImportMeta(node) ? node : forEachChild(node, walkTreeForImportMeta);
     }
 
     /** Do not use hasModifier inside the parser; it relies on parent pointers. Use this instead. */
