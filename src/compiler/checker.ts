@@ -39940,6 +39940,9 @@ namespace ts {
                                         name
                                     );
                                 }
+                                if (isType && node.kind === SyntaxKind.ImportEqualsDeclaration && hasEffectiveModifier(node, ModifierFlags.Export)) {
+                                    error(node, Diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_the_isolatedModules_flag_is_provided);
+                                }
                                 break;
                             }
                             case SyntaxKind.ExportSpecifier: {
