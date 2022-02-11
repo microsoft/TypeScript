@@ -3981,8 +3981,15 @@ namespace ts {
                 return res;
             }
             const candidates = mapDefined(symbol.declarations, d => {
-                if (!isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
-                    return getSymbolOfNode(d.parent);
+                if (!isAmbientModule(d) && d.parent){
+                    // direct children of a module
+                    if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
+                        return getSymbolOfNode(d.parent);
+                    }
+                    // export ='d member of an ambient module
+                    if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfNode(d.parent.parent)) === symbol) {
+                        return getSymbolOfNode(d.parent.parent);
+                    }
                 }
                 if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
                     if (isModuleExportsAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
