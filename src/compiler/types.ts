@@ -929,6 +929,7 @@ namespace ts {
         | JSDocFunctionType
         | ExportDeclaration
         | NamedTupleMember
+        | ExportSpecifier
         | EndOfFileToken
         ;
 
@@ -3117,7 +3118,7 @@ namespace ts {
         readonly isTypeOnly: boolean;
     }
 
-    export interface ExportSpecifier extends NamedDeclaration {
+    export interface ExportSpecifier extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.ExportSpecifier;
         readonly parent: NamedExports;
         readonly isTypeOnly: boolean;
@@ -3141,8 +3142,8 @@ namespace ts {
         | ImportClause & { readonly isTypeOnly: true, readonly name: Identifier }
         | ImportEqualsDeclaration & { readonly isTypeOnly: true }
         | NamespaceImport & { readonly parent: ImportClause & { readonly isTypeOnly: true } }
-        | ImportSpecifier & { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } }
-        | ExportSpecifier & { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } }
+        | ImportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } })
+        | ExportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } })
         ;
 
     /**
@@ -4951,6 +4952,7 @@ namespace ts {
         extendedContainersByFile?: ESMap<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
         variances?: VarianceFlags[];                // Alias symbol type argument variance cache
         deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
+        deferralWriteConstituents?: Type[];         // Constituents of a deferred `writeType`
         deferralParent?: Type;                      // Source union/intersection of a deferred type
         cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs

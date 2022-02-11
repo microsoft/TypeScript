@@ -236,10 +236,9 @@ namespace ts.OrganizeImports {
                 }
             }
 
-            newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause!.namedBindings as NamedImports).elements)); // TODO: GH#18217
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
             const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
-
             const importDecl = defaultImports.length > 0
                 ? defaultImports[0]
                 : namedImports[0];
@@ -491,5 +490,21 @@ namespace ts.OrganizeImports {
             case SyntaxKind.VariableStatement:
                 return 6;
         }
+    }
+
+    function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
+        return flatMap(namedImports, namedImport =>
+            map(tryGetNamedBindingElements(namedImport), importSpecifier =>
+                importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                    ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                    : importSpecifier
+            )
+        );
+    }
+
+    function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
+        return namedImport.importClause?.namedBindings && isNamedImports(namedImport.importClause.namedBindings)
+            ? namedImport.importClause.namedBindings.elements
+            : undefined;
     }
 }

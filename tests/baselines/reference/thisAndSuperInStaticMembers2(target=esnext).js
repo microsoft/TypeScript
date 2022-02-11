@@ -40,8 +40,7 @@ class C extends B {
 
 
 //// [thisAndSuperInStaticMembers2.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-class C extends (_b = B) {
+class C extends B {
     constructor() {
         super(...arguments);
         // these should be unaffected
@@ -49,29 +48,28 @@ class C extends (_b = B) {
         this.y = this.x;
         this.z = super.f();
     }
+    static { this.x = undefined; }
+    static { this.y1 = this.x; }
+    static { this.y2 = this.x(); }
+    static { this.y3 = this?.x(); }
+    static { this.y4 = this[("x")](); }
+    static { this.y5 = this?.[("x")](); }
+    static { this.z1 = super.a; }
+    static { this.z2 = super["a"]; }
+    static { this.z3 = super.f(); }
+    static { this.z4 = super["f"](); }
+    static { this.z5 = super.a = 0; }
+    static { this.z6 = super.a += 1; }
+    static { this.z7 = (() => { super.a = 0; })(); }
+    static { this.z8 = [super.a] = [0]; }
+    static { this.z9 = [super.a = 0] = [0]; }
+    static { this.z10 = [...super.a] = [0]; }
+    static { this.z11 = { x: super.a } = { x: 0 }; }
+    static { this.z12 = { x: super.a = 0 } = { x: 0 }; }
+    static { this.z13 = { ...super.a } = { x: 0 }; }
+    static { this.z14 = ++super.a; }
+    static { this.z15 = --super.a; }
+    static { this.z16 = ++super[("a")]; }
+    static { this.z17 = super.a++; }
+    static { this.z18 = super.a ``; }
 }
-_a = C;
-C.x = undefined;
-C.y1 = _a.x;
-C.y2 = _a.x();
-C.y3 = _a?.x();
-C.y4 = _a[("x")]();
-C.y5 = _a?.[("x")]();
-C.z1 = Reflect.get(_b, "a", _a);
-C.z2 = Reflect.get(_b, "a", _a);
-C.z3 = Reflect.get(_b, "f", _a).call(_a);
-C.z4 = Reflect.get(_b, "f", _a).call(_a);
-C.z5 = (Reflect.set(_b, "a", _c = 0, _a), _c);
-C.z6 = (Reflect.set(_b, "a", _d = Reflect.get(_b, "a", _a) + 1, _a), _d);
-C.z7 = (() => { Reflect.set(_b, "a", 0, _a); })();
-C.z8 = [({ set value(_c) { Reflect.set(_b, "a", _c, _a); } }).value] = [0];
-C.z9 = [({ set value(_c) { Reflect.set(_b, "a", _c, _a); } }).value = 0] = [0];
-C.z10 = [...({ set value(_c) { Reflect.set(_b, "a", _c, _a); } }).value] = [0];
-C.z11 = { x: ({ set value(_c) { Reflect.set(_b, "a", _c, _a); } }).value } = { x: 0 };
-C.z12 = { x: ({ set value(_c) { Reflect.set(_b, "a", _c, _a); } }).value = 0 } = { x: 0 };
-C.z13 = { ...({ set value(_c) { Reflect.set(_b, "a", _c, _a); } }).value } = { x: 0 };
-C.z14 = (Reflect.set(_b, "a", (_f = Reflect.get(_b, "a", _a), _e = ++_f), _a), _e);
-C.z15 = (Reflect.set(_b, "a", (_h = Reflect.get(_b, "a", _a), _g = --_h), _a), _g);
-C.z16 = (Reflect.set(_b, _j = ("a"), (_l = Reflect.get(_b, _j, _a), _k = ++_l), _a), _k);
-C.z17 = (Reflect.set(_b, "a", (_o = Reflect.get(_b, "a", _a), _m = _o++, _o), _a), _m);
-C.z18 = Reflect.get(_b, "a", _a).bind(_a) ``;

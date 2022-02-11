@@ -20,6 +20,10 @@ namespace ts {
         return undefined;
     }
 
+    export function getDeclarationsOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T[] {
+        return filter(symbol.declarations || emptyArray, d => d.kind === kind) as T[];
+    }
+
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
         const result = new Map<__String, Symbol>();
         if (symbols) {
@@ -192,9 +196,12 @@ namespace ts {
         return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version;
     }
 
-    export function packageIdToString({ name, subModuleName, version }: PackageId): string {
-        const fullName = subModuleName ? `${name}/${subModuleName}` : name;
-        return `${fullName}@${version}`;
+    export function packageIdToPackageName({ name, subModuleName }: PackageId): string {
+        return subModuleName ? `${name}/${subModuleName}` : name;
+    }
+
+    export function packageIdToString(packageId: PackageId): string {
+        return `${packageIdToPackageName(packageId)}@${packageId.version}`;
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
@@ -262,6 +269,10 @@ namespace ts {
 
     export function getSourceFileOfModule(module: Symbol) {
         return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
+    }
+
+    export function isPlainJsFile(file: SourceFile | undefined, checkJs: boolean | undefined): boolean {
+        return !!file && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX) && !file.checkJsDirective && checkJs === undefined;
     }
 
     export function isStatementWithLocals(node: Node) {
@@ -1068,6 +1079,15 @@ namespace ts {
         };
     }
 
+    export function createDiagnosticMessageChainFromDiagnostic(diagnostic: DiagnosticRelatedInformation): DiagnosticMessageChain {
+        return typeof diagnostic.messageText === "string" ? {
+            code: diagnostic.code,
+            category: diagnostic.category,
+            messageText: diagnostic.messageText,
+            next: (diagnostic as DiagnosticMessageChain).next,
+        } : diagnostic.messageText;
+    }
+
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
         return {
             file: sourceFile,
@@ -1244,7 +1264,8 @@ namespace ts {
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction ||
             node.kind === SyntaxKind.ParenthesizedExpression ||
-            node.kind === SyntaxKind.VariableDeclaration) ?
+            node.kind === SyntaxKind.VariableDeclaration ||
+            node.kind === SyntaxKind.ExportSpecifier) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
@@ -2493,7 +2514,7 @@ namespace ts {
         return expr.right;
     }
 
-    export function isPrototypePropertyAssignment(node: Node): boolean {
+    export function isPrototypePropertyAssignment(node: Node): node is BinaryExpression {
         return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 
@@ -7487,5 +7508,69 @@ namespace ts {
 
     export function isThisTypeParameter(type: Type): boolean {
         return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
+    }
+
+    export interface NodeModulePathParts {
+        readonly topLevelNodeModulesIndex: number;
+        readonly topLevelPackageNameIndex: number;
+        readonly packageRootIndex: number;
+        readonly fileNameIndex: number;
+    }
+    export function getNodeModulePathParts(fullPath: string): NodeModulePathParts | undefined {
+        // If fullPath can't be valid module file within node_modules, returns undefined.
+        // Example of expected pattern: /base/path/node_modules/[@scope/otherpackage/@otherscope/node_modules/]package/[subdirectory/]file.js
+        // Returns indices:                       ^            ^                                                      ^             ^
+
+        let topLevelNodeModulesIndex = 0;
+        let topLevelPackageNameIndex = 0;
+        let packageRootIndex = 0;
+        let fileNameIndex = 0;
+
+        const enum States {
+            BeforeNodeModules,
+            NodeModules,
+            Scope,
+            PackageContent
+        }
+
+        let partStart = 0;
+        let partEnd = 0;
+        let state = States.BeforeNodeModules;
+
+        while (partEnd >= 0) {
+            partStart = partEnd;
+            partEnd = fullPath.indexOf("/", partStart + 1);
+            switch (state) {
+                case States.BeforeNodeModules:
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
+                        topLevelNodeModulesIndex = partStart;
+                        topLevelPackageNameIndex = partEnd;
+                        state = States.NodeModules;
+                    }
+                    break;
+                case States.NodeModules:
+                case States.Scope:
+                    if (state === States.NodeModules && fullPath.charAt(partStart + 1) === "@") {
+                        state = States.Scope;
+                    }
+                    else {
+                        packageRootIndex = partEnd;
+                        state = States.PackageContent;
+                    }
+                    break;
+                case States.PackageContent:
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
+                        state = States.NodeModules;
+                    }
+                    else {
+                        state = States.PackageContent;
+                    }
+                    break;
+            }
+        }
+
+        fileNameIndex = partStart;
+
+        return state > States.NodeModules ? { topLevelNodeModulesIndex, topLevelPackageNameIndex, packageRootIndex, fileNameIndex } : undefined;
     }
 }

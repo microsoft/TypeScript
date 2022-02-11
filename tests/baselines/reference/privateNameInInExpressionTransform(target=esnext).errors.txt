@@ -1,17 +1,14 @@
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(4,26): error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(20,24): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(24,14): error TS2360: The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts (5 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts (4 errors) ====
     class Foo {
         #field = 1;
         #method() {}
         static #staticField= 2;
-                             ~
-!!! error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
         static #staticMethod() {}
     
         check(v: any) {
