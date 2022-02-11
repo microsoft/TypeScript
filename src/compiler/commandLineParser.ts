@@ -2753,7 +2753,7 @@ namespace ts {
         function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
             if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
                 if (isArray(raw[prop])) {
-                    const result = raw[prop];
+                    const result = raw[prop] as T[];
                     if (!sourceFile && !every(result, validateElement)) {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                     }

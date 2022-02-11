@@ -22773,9 +22773,10 @@ namespace ts {
                     return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    return isAccessExpression(target) &&
-                        getAccessedPropertyName(source as AccessExpression) === getAccessedPropertyName(target) &&
-                        isMatchingReference((source as AccessExpression).expression, target.expression);
+                    const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
+                    const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
+                    return sourcePropertyName !== undefined && targetPropertyName !== undefined && targetPropertyName === sourcePropertyName &&
+                        isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
                 case SyntaxKind.QualifiedName:
                     return isAccessExpression(target) &&
                         (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
@@ -22787,12 +22788,52 @@ namespace ts {
         }
 
         function getAccessedPropertyName(access: AccessExpression | BindingElement | ParameterDeclaration): __String | undefined {
-            let propertyName;
-            return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
-                access.kind === SyntaxKind.ElementAccessExpression && isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
-                access.kind === SyntaxKind.BindingElement && (propertyName = getDestructuringPropertyName(access)) ? escapeLeadingUnderscores(propertyName) :
-                access.kind === SyntaxKind.Parameter ? ("" + access.parent.parameters.indexOf(access)) as __String :
-                undefined;
+            if (isPropertyAccessExpression(access)) {
+                return access.name.escapedText;
+            }
+            if (isElementAccessExpression(access)) {
+                return tryGetElementAccessExpressionName(access);
+            }
+            if (isBindingElement(access)) {
+                const name = getDestructuringPropertyName(access);
+                return name ? escapeLeadingUnderscores(name) : undefined;
+            }
+            if (isParameter(access)) {
+                return ("" + access.parent.parameters.indexOf(access)) as __String;
+            }
+            return undefined;
+        }
+
+        function tryGetNameFromType(type: Type) {
+            return type.flags & TypeFlags.UniqueESSymbol ? (type as UniqueESSymbolType).escapedName :
+                type.flags & TypeFlags.StringOrNumberLiteral ? escapeLeadingUnderscores("" + (type as StringLiteralType | NumberLiteralType).value) : undefined;
+        }
+
+        function tryGetElementAccessExpressionName(node: ElementAccessExpression) {
+            if (isStringOrNumericLiteralLike(node.argumentExpression)) {
+                return escapeLeadingUnderscores(node.argumentExpression.text);
+            }
+            if (isEntityNameExpression(node.argumentExpression)) {
+                const symbol = resolveEntityName(node.argumentExpression, SymbolFlags.Value, /*ignoreErrors*/ true);
+                if (!symbol || !isConstVariable(symbol)) return undefined;
+
+                const declaration = symbol.valueDeclaration;
+                if (declaration === undefined) return undefined;
+
+                const type = tryGetTypeFromEffectiveTypeNode(declaration);
+                if (type) {
+                    const name = tryGetNameFromType(type);
+                    if (name !== undefined) {
+                        return name;
+                    }
+                }
+
+                if (hasOnlyExpressionInitializer(declaration)) {
+                    const initializer = getEffectiveInitializer(declaration);
+                    return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
+                }
+            }
+            return undefined;
         }
 
         function containsMatchingReference(source: Node, target: Node) {
@@ -39310,7 +39351,7 @@ namespace ts {
                 }
                 if (!isStatic(member) && isPropertyWithoutInitializer(member)) {
                     const propName = (member as PropertyDeclaration).name;
-                    if (isIdentifier(propName) || isPrivateIdentifier(propName)) {
+                    if (isIdentifier(propName) || isPrivateIdentifier(propName) || isComputedPropertyName(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
                         if (!(type.flags & TypeFlags.AnyOrUnknown || getFalsyFlags(type) & TypeFlags.Undefined)) {
                             if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
@@ -39346,8 +39387,10 @@ namespace ts {
             return false;
         }
 
-        function isPropertyInitializedInConstructor(propName: Identifier | PrivateIdentifier, propType: Type, constructor: ConstructorDeclaration) {
-            const reference = factory.createPropertyAccessExpression(factory.createThis(), propName);
+        function isPropertyInitializedInConstructor(propName: Identifier | PrivateIdentifier | ComputedPropertyName, propType: Type, constructor: ConstructorDeclaration) {
+            const reference = isComputedPropertyName(propName)
+                ? factory.createElementAccessExpression(factory.createThis(), propName.expression)
+                : factory.createPropertyAccessExpression(factory.createThis(), propName);
             setParent(reference.expression, reference);
             setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;
