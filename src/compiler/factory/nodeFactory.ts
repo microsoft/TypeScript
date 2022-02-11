@@ -4024,7 +4024,7 @@ namespace ts {
         }
 
         // @api
-        function createAssertEntry(name: AssertionKey, value: StringLiteral): AssertEntry {
+        function createAssertEntry(name: AssertionKey, value: Expression): AssertEntry {
             const node = createBaseNode<AssertEntry>(SyntaxKind.AssertEntry);
             node.name = name;
             node.value = value;
@@ -4033,7 +4033,7 @@ namespace ts {
         }
 
         // @api
-        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: StringLiteral): AssertEntry {
+        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry {
             return node.name !== name
                 || node.value !== value
                 ? update(createAssertEntry(name, value), node)

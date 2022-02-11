@@ -45,7 +45,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "Bar",
   source: "path2longer",
-  description: `Import 'Bar' from module "path2longer"`,
+  description: `Add import from "path2longer"`,
   newFileContent: `import { Bar } from "path2longer";\n\nBa`,
   preferences: {
     includeCompletionsForModuleExports: true

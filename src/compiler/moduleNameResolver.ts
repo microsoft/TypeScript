@@ -417,7 +417,7 @@ namespace ts {
                     result = searchResult && searchResult.value;
                 }
                 else {
-                    const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
+                    const { path: candidate } = normalizePathForCJSResolution(initialLocationForSecondaryLookup, typeReferenceDirectiveName);
                     result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
                 }
                 return resolvedTypeScriptOnly(result);
@@ -977,7 +977,7 @@ namespace ts {
                 perFolderCache.set(moduleName, resolutionMode, result);
                 if (!isExternalModuleNameRelative(moduleName)) {
                     // put result in per-module name cache
-                    cache!.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
+                    cache.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
                 }
             }
         }
@@ -1329,12 +1329,26 @@ namespace ts {
                 return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
             }
             else {
-                const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
+                const { path: candidate, parts } = normalizePathForCJSResolution(containingDirectory, moduleName);
                 const resolved = nodeLoadModuleByRelativeName(extensions, candidate, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/ true);
                 // Treat explicit "node_modules" import as an external library import.
                 return resolved && toSearchResult({ resolved, isExternalLibraryImport: contains(parts, "node_modules") });
             }
         }
+
+    }
+
+    // If you import from "." inside a containing directory "/foo", the result of `normalizePath`
+    // would be "/foo", but this loses the information that `foo` is a directory and we intended
+    // to look inside of it. The Node CommonJS resolution algorithm doesn't call this out
+    // (https://nodejs.org/api/modules.html#all-together), but it seems that module paths ending
+    // in `.` are actually normalized to `./` before proceeding with the resolution algorithm.
+    function normalizePathForCJSResolution(containingDirectory: string, moduleName: string) {
+        const combined = combinePaths(containingDirectory, moduleName);
+        const parts = getPathComponents(combined);
+        const lastPart = lastOrUndefined(parts);
+        const path = lastPart === "." || lastPart === ".." ? ensureTrailingDirectorySeparator(normalizePath(combined)) : normalizePath(combined);
+        return { path, parts };
     }
 
     function realPath(path: string, host: ModuleResolutionHost, traceEnabled: boolean): string {

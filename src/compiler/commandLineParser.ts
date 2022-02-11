@@ -3168,7 +3168,7 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(opt as CommandLineOptionOfListType, value, basePath, errors);
+                return convertJsonOptionOfListType(opt , value, basePath, errors);
             }
             else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);

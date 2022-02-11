@@ -133,7 +133,7 @@ Output::
 [7m [0m [91m                  ~~~~~[0m
 
 
-Found 1 error in /users/username/projects/project/index.tsx:1
+Found 1 error in index.tsx[90m:1[0m
 
 
 

@@ -140,5 +140,5 @@
 Found 21 errors in 2 files.
 
 Errors  Files
-    18  tests/cases/compiler/a.ts:1
-     3  tests/cases/compiler/b.ts:1
+    18  tests/cases/compiler/a.ts[90m:1[0m
+     3  tests/cases/compiler/b.ts[90m:1[0m

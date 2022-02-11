@@ -78,7 +78,7 @@ pkg3/src/keys.ts
 pkg3/src/index.ts
   Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
 
-Found 1 error in /user/username/projects/myproject/pkg3/src/keys.ts:2
+Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
 

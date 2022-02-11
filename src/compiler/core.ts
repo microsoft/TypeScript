@@ -1252,11 +1252,11 @@ namespace ts {
         return result;
     }
 
-    export function getOwnValues<T>(sparseArray: T[]): T[] {
+    export function getOwnValues<T>(collection: MapLike<T> | T[]): T[] {
         const values: T[] = [];
-        for (const key in sparseArray) {
-            if (hasOwnProperty.call(sparseArray, key)) {
-                values.push(sparseArray[key]);
+        for (const key in collection) {
+            if (hasOwnProperty.call(collection, key)) {
+                values.push((collection as MapLike<T>)[key]);
             }
         }
 
