@@ -869,10 +869,6 @@ namespace ts.codefix {
         return { kind: ImportFixKind.PromoteTypeOnly, typeOnlyAliasDeclaration };
     }
 
-    function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
-        return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
-    }
-
     function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string {
         const parent = symbolToken.parent;
         if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
