@@ -1394,7 +1394,13 @@ namespace ts {
                 onlyRecordFailures = true;
             }
         }
-        return loadNodeModuleFromDirectory(extensions, candidate, onlyRecordFailures, state, considerPackageJson);
+        // esm mode relative imports shouldn't do any directory lookups (either inside `package.json`
+        // files or implicit `index.js`es). This is a notable depature from cjs norms, where `./foo/pkg`
+        // could have been redirected by `./foo/pkg/package.json` to an arbitrary location!
+        if (!(state.features & NodeResolutionFeatures.EsmMode)) {
+            return loadNodeModuleFromDirectory(extensions, candidate, onlyRecordFailures, state, considerPackageJson);
+        }
+        return undefined;
     }
 
     /*@internal*/
@@ -2178,7 +2184,7 @@ namespace ts {
             if (packageInfo && packageInfo.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
                 return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
             }
-            const pathAndExtension =
+            let pathAndExtension =
                 loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
                 loadNodeModuleFromDirectoryWorker(
                     extensions,
@@ -2188,6 +2194,16 @@ namespace ts {
                     packageInfo && packageInfo.packageJsonContent,
                     packageInfo && packageInfo.versionPaths
                 );
+            if (
+                !pathAndExtension && packageInfo
+                && packageInfo.packageJsonContent.exports === undefined
+                && packageInfo.packageJsonContent.main === undefined
+                && state.features & NodeResolutionFeatures.EsmMode
+            ) {
+                // EsmMode disables index lookup in `loadNodeModuleFromDirectoryWorker` generally, however non-relative package resolutions still assume
+                // a default `index.js` entrypoint if no `main` or `exports` are present
+                pathAndExtension = loadModuleFromFile(extensions, combinePaths(candidate, "index.js"), onlyRecordFailures, state);
+            }
             return withPackageId(packageInfo, pathAndExtension);
         };
 
