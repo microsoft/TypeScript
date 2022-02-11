@@ -1954,11 +1954,7 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    const enum InlayHintKind {
-        Type = "Type",
-        Parameter = "Parameter",
-        Enum = "Enum"
-    }
+    type InlayHintKind = "Type" | "Parameter" | "Enum";
     interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -1976,7 +1972,7 @@ declare namespace ts.server.protocol {
     interface InlayHintItem {
         text: string;
         position: Location;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -2641,6 +2637,13 @@ declare namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
+        /**
+         * If enabled, completions for class members (e.g. methods and properties) will include
+         * a whole declaration for the member.
+         * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
+         * `class A { foo }`.
+         */
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -2651,6 +2654,7 @@ declare namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
     }
@@ -2761,6 +2765,7 @@ declare namespace ts.server.protocol {
         ES2019 = "ES2019",
         ES2020 = "ES2020",
         ES2021 = "ES2021",
+        ES2022 = "ES2022",
         ESNext = "ESNext"
     }
     const enum ClassificationType {
@@ -2895,6 +2900,7 @@ declare namespace ts.server.protocol {
         externalModuleName = "external module name",
         /**
          * <JsxTagName attribute1 attribute2={0} />
+         * @deprecated
          */
         jsxAttribute = "JSX attribute",
         /** String literal */
