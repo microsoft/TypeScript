@@ -285,18 +285,8 @@ namespace ts.projectSystem {
         it("navigateTo", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
+            // Results are scoped to the project containing `userTs.path`
             assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
-                {
-                    ...protocolFileSpanFromSubstring({
-                        file: bDts,
-                        text: "export declare function fnB(): void;"
-                    }),
-                    name: "fnB",
-                    matchKind: "prefix",
-                    isCaseSensitive: true,
-                    kind: ScriptElementKind.functionElement,
-                    kindModifiers: "export,declare",
-                },
                 {
                     ...protocolFileSpanFromSubstring({
                         file: userTs,
@@ -308,20 +298,9 @@ namespace ts.projectSystem {
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 },
-                {
-                    ...protocolFileSpanFromSubstring({
-                        file: aTs,
-                        text: "export function fnA() {}"
-                    }),
-                    name: "fnA",
-                    matchKind: "prefix",
-                    isCaseSensitive: true,
-                    kind: ScriptElementKind.functionElement,
-                    kindModifiers: "export",
-                },
             ]);
 
-            verifyATsConfigOriginalProject(session);
+            verifySingleInferredProject(session);
         });
 
         it("navigateToAll -- when neither file nor project is specified", () => {

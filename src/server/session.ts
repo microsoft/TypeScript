@@ -2087,38 +2087,45 @@ namespace ts.server {
             }
 
             const outputs: ProjectNavigateToItems[] = [];
+
+            // This is effectively a hashset with `name` as the custom hash and `navigateToItemIsEqualTo` as the custom equals.
+            // `name` is a very cheap hash function, but we could incorporate other properties to reduce collisions.
             const seenItems = new Map<string, NavigateToItem[]>(); // name to items with that name
 
             if (!args.file && !projectFileName) {
+                // VS Code's `Go to symbol in workspaces` sends request like this
+
+                // TODO (https://github.com/microsoft/TypeScript/issues/47839)
+                // This appears to have been intended to search all projects but, in practice, it seems to only search
+                // those that are downstream from already-loaded projects.
+                // Filtering by !isSourceOfProjectReferenceRedirect is new, but seems appropriate and consistent with
+                // the case below.
                 this.projectService.loadAncestorProjectTree();
-                this.projectService.forEachEnabledProject(project => {
-                    const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject());
-                    const unseenItems = filter(projectItems, item => tryAddSeenItem(item));
-                    if (unseenItems.length) {
-                        outputs.push({ project, navigateToItems: unseenItems });
-                    }
-                });
+                this.projectService.forEachEnabledProject(project => addItemsForProject(project));
             }
             else {
-                const fileArgs = args as protocol.FileRequestArgs;
+                // VS's `Go to symbol` sends requests with just a project and doesn't want cascading since it will
+                // send a separate request for each project of interest
 
-                combineProjectOutputWorker(
-                    this.getProjects(fileArgs),
-                    this.getDefaultProject(fileArgs),
-                    /*initialLocation*/ undefined,
-                    (project, _, tryAddToTodo) => {
-                        const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*fileName*/ undefined, /*excludeDts*/ project.isNonTsProject());
-                        const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !tryAddToTodo(project, documentSpanLocation(item)));
-                        if (unseenItems.length) {
-                            outputs.push({ project, navigateToItems: unseenItems });
-                        }
-                    }
-                );
+                // TODO (https://github.com/microsoft/TypeScript/issues/47839)
+                // This doesn't really make sense unless it's a single project matching `projectFileName`
+                const projects = this.getProjects(args as protocol.FileRequestArgs);
+                forEachProjectInProjects(projects, /*path*/ undefined, project => addItemsForProject(project));
             }
 
             return outputs;
 
+            // Mutates `outputs`
+            function addItemsForProject(project: Project) {
+                const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject());
+                const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !project.getSourceMapper().tryGetSourcePosition(documentSpanLocation(item)));
+                if (unseenItems.length) {
+                    outputs.push({ project, navigateToItems: unseenItems });
+                }
+            }
+
             // Returns true if the item had not been seen before
+            // Mutates `seenItems`
             function tryAddSeenItem(item: NavigateToItem) {
                 const name = item.name;
                 if (!seenItems.has(name)) {
@@ -2251,8 +2258,12 @@ namespace ts.server {
             const formatOptions = this.getHostFormatOptions();
             const preferences = this.getHostPreferences();
 
+
             const seenFiles = new Set<string>();
             const textChanges: FileTextChanges[] = [];
+            // TODO (https://github.com/microsoft/TypeScript/issues/47839)
+            // This appears to have been intended to search all projects but, in practice, it seems to only search
+            // those that are downstream from already-loaded projects.
             this.projectService.loadAncestorProjectTree();
             this.projectService.forEachEnabledProject(project => {
                 const projectTextChanges = project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences);
