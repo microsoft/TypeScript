@@ -287,6 +287,18 @@ namespace ts.projectSystem {
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
             // Results are scoped to the project containing `userTs.path`
             assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                // We keep this output file from a different project because the corresponding input file has been deleted
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: bDts,
+                        text: "export declare function fnB(): void;"
+                    }),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export,declare",
+                },
                 {
                     ...protocolFileSpanFromSubstring({
                         file: userTs,
