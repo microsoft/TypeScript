@@ -231,11 +231,13 @@ var _loop_11 = function (y) {
     else
         inc_1 = true;
     if (!(use(function () { return y; }), y < 1))
-        return "break";
+        return out_y_2 = y, "break";
+    out_y_2 = y;
 };
-var inc_1 = false;
+var out_y_2, inc_1 = false;
 for (var y = 0;;) {
     var state_1 = _loop_11(y);
+    y = out_y_2;
     if (state_1 === "break")
         break;
 }
@@ -244,14 +246,16 @@ var _loop_12 = function (y) {
         use(function () { return y; }), ++y;
     else
         inc_2 = true;
+    out_y_3 = y;
 };
-var inc_2 = false;
+var out_y_3, inc_2 = false;
 for (var y = 0; y < 1;) {
     _loop_12(y);
+    y = out_y_3;
 }
 var _loop_init_2 = function () {
     var y = (use(function () { return y; }), 0);
-    out_y_2 = y;
+    out_y_4 = y;
 };
 var _loop_13 = function (y) {
     if (inc_3)
@@ -259,13 +263,15 @@ var _loop_13 = function (y) {
     else
         inc_3 = true;
     if (!(use(function () { return y; }), y < 1))
-        return out_y_2 = y, "break";
+        return out_y_4 = y, "break";
     use(function () { return y; });
+    out_y_4 = y;
 };
-var out_y_2, inc_3 = false;
+var out_y_4, inc_3 = false;
 _loop_init_2();
-for (var y = out_y_2;;) {
+for (var y = out_y_4;;) {
     var state_2 = _loop_13(y);
+    y = out_y_4;
     if (state_2 === "break")
         break;
 }

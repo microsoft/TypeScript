@@ -24,8 +24,8 @@ class Foo {
         _Foo_field.set(this, true);
     }
     f() {
-        (0, tslib_1.__classPrivateFieldSet)(this, _Foo_field, (0, tslib_1.__classPrivateFieldGet)(this, _Foo_field, "f"), "f");
-        (0, tslib_1.__classPrivateFieldIn)(_Foo_field, this);
+        tslib_1.__classPrivateFieldSet(this, _Foo_field, tslib_1.__classPrivateFieldGet(this, _Foo_field, "f"), "f");
+        tslib_1.__classPrivateFieldIn(_Foo_field, this);
     }
 }
 exports.Foo = Foo;

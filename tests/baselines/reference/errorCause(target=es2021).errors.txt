@@ -1,8 +1,41 @@
-tests/cases/compiler/errorCause.ts(1,18): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(1,28): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(2,5): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/errorCause.ts(4,22): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(5,23): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(6,27): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(7,24): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(8,22): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(9,21): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(10,31): error TS2554: Expected 1-2 arguments, but got 3.
 
 
-==== tests/cases/compiler/errorCause.ts (1 errors) ====
-    new Error("foo", { cause: new Error("bar") });
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==== tests/cases/compiler/errorCause.ts (9 errors) ====
+    let err = new Error("foo", { cause: new Error("bar") });
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 0-1 arguments, but got 2.
+    err.cause;
+        ~~~~~
+!!! error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    
+    new EvalError("foo", { cause: new Error("bar") });
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new RangeError("foo", { cause: new Error("bar") });
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new ReferenceError("foo", { cause: new Error("bar") });
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new SyntaxError("foo", { cause: new Error("bar") });
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new TypeError("foo", { cause: new Error("bar") });
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new URIError("foo", { cause: new Error("bar") });
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new AggregateError([], "foo", { cause: new Error("bar") });
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 1-2 arguments, but got 3.
     

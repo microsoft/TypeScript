@@ -340,10 +340,7 @@ namespace ts {
         }
 
         const failedLookupLocations: string[] = [];
-        const features =
-            getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 ? NodeResolutionFeatures.Node12Default :
-            getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
-            NodeResolutionFeatures.None;
+        const features = getDefaultNodeResolutionFeatures(options);
         const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions: ["node", "require", "types"] };
         let resolved = primaryLookup();
         let primary = true;
@@ -420,7 +417,7 @@ namespace ts {
                     result = searchResult && searchResult.value;
                 }
                 else {
-                    const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
+                    const { path: candidate } = normalizePathForCJSResolution(initialLocationForSecondaryLookup, typeReferenceDirectiveName);
                     result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
                 }
                 return resolvedTypeScriptOnly(result);
@@ -431,6 +428,42 @@ namespace ts {
                 }
             }
         }
+    }
+
+    function getDefaultNodeResolutionFeatures(options: CompilerOptions) {
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 ? NodeResolutionFeatures.Node12Default :
+            getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext ? NodeResolutionFeatures.NodeNextDefault :
+                NodeResolutionFeatures.None;
+    }
+
+    /**
+     * @internal
+     * Does not try `@types/${packageName}` - use a second pass if needed.
+     */
+    export function resolvePackageNameToPackageJson(
+        packageName: string,
+        containingDirectory: string,
+        options: CompilerOptions,
+        host: ModuleResolutionHost,
+        cache: ModuleResolutionCache | undefined,
+    ): PackageJsonInfo | undefined {
+        const moduleResolutionState: ModuleResolutionState = {
+            compilerOptions: options,
+            host,
+            traceEnabled: isTraceEnabled(options, host),
+            failedLookupLocations: [],
+            packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
+            conditions: emptyArray,
+            features: NodeResolutionFeatures.None,
+        };
+
+        return forEachAncestorDirectory(containingDirectory, ancestorDirectory => {
+            if (getBaseFileName(ancestorDirectory) !== "node_modules") {
+                const nodeModulesFolder = combinePaths(ancestorDirectory, "node_modules");
+                const candidate = combinePaths(nodeModulesFolder, packageName);
+                return getPackageJsonInfo(candidate, /*onlyRecordFailures*/ false, moduleResolutionState);
+            }
+        });
     }
 
     /**
@@ -944,7 +977,7 @@ namespace ts {
                 perFolderCache.set(moduleName, resolutionMode, result);
                 if (!isExternalModuleNameRelative(moduleName)) {
                     // put result in per-module name cache
-                    cache!.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
+                    cache.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
                 }
             }
         }
@@ -1172,11 +1205,6 @@ namespace ts {
     }
 
     /* @internal */
-    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost) {
-        return tryResolveJSModuleWorker(moduleName, initialDir, host).resolvedModule;
-    }
-
-    /* @internal */
     enum NodeResolutionFeatures {
         None = 0,
         // resolving `#local` names in your own package.json
@@ -1301,12 +1329,26 @@ namespace ts {
                 return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
             }
             else {
-                const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
+                const { path: candidate, parts } = normalizePathForCJSResolution(containingDirectory, moduleName);
                 const resolved = nodeLoadModuleByRelativeName(extensions, candidate, /*onlyRecordFailures*/ false, state, /*considerPackageJson*/ true);
                 // Treat explicit "node_modules" import as an external library import.
                 return resolved && toSearchResult({ resolved, isExternalLibraryImport: contains(parts, "node_modules") });
             }
         }
+
+    }
+
+    // If you import from "." inside a containing directory "/foo", the result of `normalizePath`
+    // would be "/foo", but this loses the information that `foo` is a directory and we intended
+    // to look inside of it. The Node CommonJS resolution algorithm doesn't call this out
+    // (https://nodejs.org/api/modules.html#all-together), but it seems that module paths ending
+    // in `.` are actually normalized to `./` before proceeding with the resolution algorithm.
+    function normalizePathForCJSResolution(containingDirectory: string, moduleName: string) {
+        const combined = combinePaths(containingDirectory, moduleName);
+        const parts = getPathComponents(combined);
+        const lastPart = lastOrUndefined(parts);
+        const path = lastPart === "." || lastPart === ".." ? ensureTrailingDirectorySeparator(normalizePath(combined)) : normalizePath(combined);
+        return { path, parts };
     }
 
     function realPath(path: string, host: ModuleResolutionHost, traceEnabled: boolean): string {
@@ -1536,11 +1578,124 @@ namespace ts {
         return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
     }
 
+    /* @internal */
+    export function getEntrypointsFromPackageJsonInfo(
+        packageJsonInfo: PackageJsonInfo,
+        options: CompilerOptions,
+        host: ModuleResolutionHost,
+        cache: ModuleResolutionCache | undefined,
+        resolveJs?: boolean,
+    ): string[] | false {
+        if (!resolveJs && packageJsonInfo.resolvedEntrypoints !== undefined) {
+            // Cached value excludes resolutions to JS files - those could be
+            // cached separately, but they're used rarely.
+            return packageJsonInfo.resolvedEntrypoints;
+        }
+
+        let entrypoints: string[] | undefined;
+        const extensions = resolveJs ? Extensions.JavaScript : Extensions.TypeScript;
+        const features = getDefaultNodeResolutionFeatures(options);
+        const requireState: ModuleResolutionState = {
+            compilerOptions: options,
+            host,
+            traceEnabled: isTraceEnabled(options, host),
+            failedLookupLocations: [],
+            packageJsonInfoCache: cache?.getPackageJsonInfoCache(),
+            conditions: ["node", "require", "types"],
+            features,
+        };
+        const requireResolution = loadNodeModuleFromDirectoryWorker(
+            extensions,
+            packageJsonInfo.packageDirectory,
+            /*onlyRecordFailures*/ false,
+            requireState,
+            packageJsonInfo.packageJsonContent,
+            packageJsonInfo.versionPaths);
+        entrypoints = append(entrypoints, requireResolution?.path);
+
+        if (features & NodeResolutionFeatures.Exports && packageJsonInfo.packageJsonContent.exports) {
+            for (const conditions of [["node", "import", "types"], ["node", "require", "types"]]) {
+                const exportState = { ...requireState, failedLookupLocations: [], conditions };
+                const exportResolutions = loadEntrypointsFromExportMap(
+                    packageJsonInfo,
+                    packageJsonInfo.packageJsonContent.exports,
+                    exportState,
+                    extensions);
+                if (exportResolutions) {
+                    for (const resolution of exportResolutions) {
+                        entrypoints = appendIfUnique(entrypoints, resolution.path);
+                    }
+                }
+            }
+        }
+
+        return packageJsonInfo.resolvedEntrypoints = entrypoints || false;
+    }
+
+    function loadEntrypointsFromExportMap(
+        scope: PackageJsonInfo,
+        exports: object,
+        state: ModuleResolutionState,
+        extensions: Extensions,
+    ): PathAndExtension[] | undefined {
+        let entrypoints: PathAndExtension[] | undefined;
+        if (isArray(exports)) {
+            for (const target of exports) {
+                loadEntrypointsFromTargetExports(target);
+            }
+        }
+        // eslint-disable-next-line no-null/no-null
+        else if (typeof exports === "object" && exports !== null && allKeysStartWithDot(exports as MapLike<unknown>)) {
+            for (const key in exports) {
+                loadEntrypointsFromTargetExports((exports as MapLike<unknown>)[key]);
+            }
+        }
+        else {
+            loadEntrypointsFromTargetExports(exports);
+        }
+        return entrypoints;
+
+        function loadEntrypointsFromTargetExports(target: unknown): boolean | undefined {
+            if (typeof target === "string" && startsWith(target, "./") && target.indexOf("*") === -1) {
+                const partsAfterFirst = getPathComponents(target).slice(2);
+                if (partsAfterFirst.indexOf("..") >= 0 || partsAfterFirst.indexOf(".") >= 0 || partsAfterFirst.indexOf("node_modules") >= 0) {
+                    return false;
+                }
+                const resolvedTarget = combinePaths(scope.packageDirectory, target);
+                const finalPath = getNormalizedAbsolutePath(resolvedTarget, state.host.getCurrentDirectory?.());
+                const result = loadJSOrExactTSFileName(extensions, finalPath, /*recordOnlyFailures*/ false, state);
+                if (result) {
+                    entrypoints = appendIfUnique(entrypoints, result, (a, b) => a.path === b.path);
+                    return true;
+                }
+            }
+            else if (Array.isArray(target)) {
+                for (const t of target) {
+                    const success = loadEntrypointsFromTargetExports(t);
+                    if (success) {
+                        return true;
+                    }
+                }
+            }
+            // eslint-disable-next-line no-null/no-null
+            else if (typeof target === "object" && target !== null) {
+                return forEach(getOwnKeys(target as MapLike<unknown>), key => {
+                    if (key === "default" || contains(state.conditions, key) || isApplicableVersionedTypesKey(state.conditions, key)) {
+                        loadEntrypointsFromTargetExports((target as MapLike<unknown>)[key]);
+                        return true;
+                    }
+                });
+            }
+        }
+    }
+
     /*@internal*/
     interface PackageJsonInfo {
         packageDirectory: string;
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
+        /** false: resolved to nothing. undefined: not yet resolved */
+        resolvedEntrypoints: string[] | false | undefined;
     }
 
     /**
@@ -1606,7 +1761,7 @@ namespace ts {
                 trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
             const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
-            const result = { packageDirectory, packageJsonContent, versionPaths };
+            const result = { packageDirectory, packageJsonContent, versionPaths, resolvedEntrypoints: undefined };
             state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
             return result;
         }
