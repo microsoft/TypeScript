@@ -3987,7 +3987,7 @@ namespace ts {
                         return getSymbolOfNode(d.parent);
                     }
                     // export ='d member of an ambient module
-                    if (isModuleBlock(d.parent) && d.parent.parent && resolveSymbol(getSymbolOfNode(d.parent.parent).exports?.get(InternalSymbolName.ExportEquals)) === symbol) {
+                    if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfNode(d.parent.parent)) === symbol) {
                         return getSymbolOfNode(d.parent.parent);
                     }
                 }
