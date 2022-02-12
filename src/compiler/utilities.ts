@@ -2698,15 +2698,16 @@ namespace ts {
     export function getAllNodesWithJSDocs(rootNode: Node) {
         const traverseNodes = (node: Node) => {
             let nodesWithJSDocs: Node[] = [];
-            if (hasJSDocNodes(node)) {
-                nodesWithJSDocs.push(node);
-            }
 
             forEachChild(node,
                 (childNode) => {
                     nodesWithJSDocs = nodesWithJSDocs.concat(traverseNodes(childNode));
                 },
             );
+
+            if (hasJSDocNodes(node)) {
+                nodesWithJSDocs.push(node);
+            }
 
             return nodesWithJSDocs;
         };
