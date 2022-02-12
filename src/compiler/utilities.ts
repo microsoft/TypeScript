@@ -2695,6 +2695,9 @@ namespace ts {
             : undefined;
     }
 
+    /**
+     * Retrieves all nodes belonging to the same root node that contain JSDocs.
+     */
     export function getAllNodesWithJSDocs(rootNode: Node) {
         const traverseNodes = (node: Node) => {
             let nodesWithJSDocs: Node[] = [];
@@ -2712,9 +2715,7 @@ namespace ts {
             return nodesWithJSDocs;
         };
 
-        const result = traverseNodes(rootNode);
-
-        return result;
+        return traverseNodes(rootNode);
     }
 
     export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {

@@ -173,7 +173,8 @@ namespace ts.OrganizeImports {
          * @returns a Set with the types referenced inside the JSDoc tags.
          */
         function getJSDocReferencedTypesFromSourceFile(sourceFile: SourceFile) {
-            const jsDocs = flatMap(sourceFile.statements, statement => getJSDocCommentsAndTags(statement));
+            const nodesWithJSDocs = flatMap(sourceFile.statements, (statement) => getAllNodesWithJSDocs(statement));
+            const jsDocs = flatMap(nodesWithJSDocs, statement => getJSDocCommentsAndTags(statement));
             const jdDocsLinks = flatMap(jsDocs, (doc) => getJSDocLinksFromJSDocComments(doc.comment));
             const jsDocLinkNames = getNamesFromJSDocLinks(jdDocsLinks);
 
