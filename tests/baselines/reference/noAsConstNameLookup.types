@@ -14,7 +14,7 @@ export class FeatureRunner<W extends Store> {
 
     private readonly cleaners: Cleaner[] = []
 >cleaners : Cleaner[]
->[] : never[]
+>[] : Cleaner[]
 
     async runFeature(): Promise<any> {
 >runFeature : () => Promise<any>

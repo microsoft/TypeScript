@@ -16933,7 +16933,10 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                     return some((node as ObjectLiteralExpression).properties, isContextSensitive);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                    if ((node as ArrayLiteralExpression).elements.length > 0) {
+                        return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                    }
+                    return true;
                 case SyntaxKind.ConditionalExpression:
                     return isContextSensitive((node as ConditionalExpression).whenTrue) ||
                         isContextSensitive((node as ConditionalExpression).whenFalse);
@@ -26996,6 +26999,12 @@ namespace ts {
             const elementTypes: Type[] = [];
             const elementFlags: ElementFlags[] = [];
             const contextualType = getApparentTypeOfContextualType(node);
+            if (elementCount === 0 && contextualType && !checkMode) {
+                const elementType = getElementTypeOfArrayType(contextualType);
+                if (elementType) {
+                    return createArrayType(elementType);
+                }
+            }
             const inDestructuringPattern = isAssignmentTarget(node);
             const inConstContext = isConstContext(node);
             let hasOmittedExpression = false;

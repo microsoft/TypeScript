@@ -409,7 +409,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >parse : (node: Tree, index?: number[]) => HTMLUListElement
 >node : Tree
 >index : number[]
->[] : never[]
+>[] : number[]
 
   return html('ul', node.map(([el, children], i) => {
 >html('ul', node.map(([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  })) : any
@@ -544,8 +544,8 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >h : HTMLHeadingElement
 
     }, [[]])
->[[]] : never[][]
->[] : never[]
+>[[]] : HTMLHeadingElement[][]
+>[] : HTMLHeadingElement[]
 
     .reduce<Tree>((node, hs) =>
 >reduce : { (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[]): HTMLHeadingElement[]; (callbackfn: (previousValue: HTMLHeadingElement[], currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => HTMLHeadingElement[], initialValue: HTMLHeadingElement[]): HTMLHeadingElement[]; <U>(callbackfn: (previousValue: U, currentValue: HTMLHeadingElement[], currentIndex: number, array: HTMLHeadingElement[][]) => U, initialValue: U): U; }
@@ -580,7 +580,7 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >hs : HTMLHeadingElement[]
 
     , []);
->[] : never[]
+>[] : [HTMLHeadingElement, Tree][]
 }
 
 function level(h: HTMLHeadingElement): number {

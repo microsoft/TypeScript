@@ -513,7 +513,7 @@ var arr = new someGenerics9([], null, undefined);
 >arr : any[]
 >new someGenerics9([], null, undefined) : any[]
 >someGenerics9 : someGenerics9
->[] : undefined[]
+>[] : any[]
 >null : null
 >undefined : undefined
 

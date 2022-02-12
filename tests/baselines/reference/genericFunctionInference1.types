@@ -640,7 +640,7 @@ export interface Data {
 
 var data: Data[] = [];
 >data : Data[]
->[] : never[]
+>[] : Data[]
 
 declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
 >toKeys : <a>(values: a[], toKey: (value: a) => string) => string[]

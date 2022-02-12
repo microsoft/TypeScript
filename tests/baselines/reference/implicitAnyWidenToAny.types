@@ -59,7 +59,7 @@ var array1 = ["Bob",2];
 
 var array2: any[] = [];
 >array2 : any[]
->[] : undefined[]
+>[] : any[]
 
 var array3: any[] = [null, undefined];
 >array3 : any[]

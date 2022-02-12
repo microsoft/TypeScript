@@ -13,7 +13,7 @@ class Foo<T> {
 
     static c: T[] = [];
 >c : T[]
->[] : undefined[]
+>[] : T[]
 
     static d = false || ((x: T) => x || undefined)(null)
 >d : any

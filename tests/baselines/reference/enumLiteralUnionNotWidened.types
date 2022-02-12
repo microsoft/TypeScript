@@ -26,7 +26,7 @@ class List<T>
 {
 	private readonly items: T[] = [];
 >items : T[]
->[] : undefined[]
+>[] : T[]
 }
 
 function asList<T>(arg: T): List<T> { return new List(); }

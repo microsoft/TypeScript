@@ -84,7 +84,7 @@ var n = [[]] || [];
 >[[]] || [] : undefined[][]
 >[[]] : undefined[][]
 >[] : undefined[]
->[] : undefined[]
+>[] : undefined[][]
 
 for (n[idx++] in m);
 >n[idx++] : any[]

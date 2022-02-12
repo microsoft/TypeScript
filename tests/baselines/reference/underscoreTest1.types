@@ -128,7 +128,7 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >b : number[]
->[] : undefined[]
+>[] : number[]
 
 var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >even : number

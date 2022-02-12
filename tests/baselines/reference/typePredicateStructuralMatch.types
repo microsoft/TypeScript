@@ -9,9 +9,9 @@ getResults1([]);
 getResults1({data: []});
 >getResults1({data: []}) : Results
 >getResults1 : (value: Results | { data: Results; }) => Results
->{data: []} : { data: undefined[]; }
->data : undefined[]
->[] : undefined[]
+>{data: []} : { data: Result[]; }
+>data : Result[]
+>[] : Result[]
 
 getResults2([]);
 >getResults2([]) : Results
@@ -21,9 +21,9 @@ getResults2([]);
 getResults2({data: []});
 >getResults2({data: []}) : Results
 >getResults2 : (value: Results | { data: Results; }) => Results
->{data: []} : { data: undefined[]; }
->data : undefined[]
->[] : undefined[]
+>{data: []} : { data: Result[]; }
+>data : Result[]
+>[] : Result[]
 
 type Result = { value: string };
 >Result : Result

@@ -86,7 +86,7 @@
 
     const ns: number[][] = [];
 >ns : number[][]
->[] : undefined[]
+>[] : number[][]
 
     for (var {} of ns) {
 >ns : number[][]

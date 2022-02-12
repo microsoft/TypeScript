@@ -71,7 +71,7 @@ module TypeScript {
         public asts: TypeScript.AST[] = [];
 >asts : TypeScript.AST[]
 >TypeScript : any
->[] : undefined[]
+>[] : TypeScript.AST[]
 
         public top: number = -1;
 >top : number

@@ -236,7 +236,7 @@ module Harness {
 
         export var bugIds: string[] = [];
 >bugIds : string[]
->[] : undefined[]
+>[] : string[]
 
         export var throwAssertError = (error: Error) => {
 >throwAssertError : (error: Error) => never
@@ -967,7 +967,7 @@ module Harness {
     // Logger-related functions
     var loggers: ILogger[] = [];
 >loggers : ILogger[]
->[] : undefined[]
+>[] : ILogger[]
 
     export function registerLogger(logger: ILogger) {
 >registerLogger : (logger: ILogger) => void
@@ -1038,7 +1038,7 @@ module Harness {
         // The current stack of Runnable objects
         static currentStack: Runnable[] = [];
 >currentStack : Runnable[]
->[] : undefined[]
+>[] : Runnable[]
 
         // The error, if any, that occurred when running 'block'
         public error: Error = null;
@@ -1053,12 +1053,12 @@ module Harness {
         // A list of bugs impacting this object
         public bugs: string[] = [];
 >bugs : string[]
->[] : undefined[]
+>[] : string[]
 
         // A list of all our child Runnables
         public children: Runnable[] = [];
 >children : Runnable[]
->[] : undefined[]
+>[] : Runnable[]
 
         public addChild(child: Runnable): void {
 >addChild : (child: Runnable) => void
@@ -1205,7 +1205,7 @@ module Harness {
         static errorHandlerStack: { (e: Error): void; }[] = [];
 >errorHandlerStack : ((e: Error) => void)[]
 >e : Error
->[] : undefined[]
+>[] : ((e: Error) => void)[]
 
         static pushGlobalErrorHandler(done: IDone) {
 >pushGlobalErrorHandler : (done: IDone) => void
@@ -1973,7 +1973,7 @@ module Harness {
 
             public data: number[] = [];
 >data : number[]
->[] : undefined[]
+>[] : number[]
 
             public add(value: number) {
 >add : (value: number) => void
@@ -2255,7 +2255,7 @@ module Harness {
 
         export var benchmarks: { new (): Benchmark; }[] = [];
 >benchmarks : (new () => Benchmark)[]
->[] : undefined[]
+>[] : (new () => Benchmark)[]
 
         var timeFunction: (
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: {    (): void;}) => void) => void
@@ -2550,7 +2550,7 @@ module Harness {
 
             public lines: string[] = [];
 >lines : string[]
->[] : undefined[]
+>[] : string[]
 
             public currentLine = "";
 >currentLine : string
@@ -2626,11 +2626,11 @@ module Harness {
 >reset : () => void
 
                 this.lines = [];
->this.lines = [] : undefined[]
+>this.lines = [] : string[]
 >this.lines : string[]
 >this : this
 >lines : string[]
->[] : undefined[]
+>[] : string[]
 
                 this.currentLine = "";
 >this.currentLine = "" : ""
@@ -2733,7 +2733,7 @@ module Harness {
 >result : { filename: string; file: WriterAggregator; }[]
 >filename : string
 >file : WriterAggregator
->[] : undefined[]
+>[] : { filename: string; file: WriterAggregator; }[]
 
                 for (var p in this.fileCollection) {
 >p : string
@@ -3751,7 +3751,7 @@ module Harness {
 
                 var matchingIdentifiers: Type[] = [];
 >matchingIdentifiers : Type[]
->[] : undefined[]
+>[] : Type[]
 
                 if (!usePull) {
 >!usePull : boolean
@@ -4796,11 +4796,11 @@ module Harness {
 >"\n" : "\n"
 
                 this.errors = [];
->this.errors = [] : undefined[]
+>this.errors = [] : CompilerError[]
 >this.errors : CompilerError[]
 >this : this
 >errors : CompilerError[]
->[] : undefined[]
+>[] : CompilerError[]
 
                 for (var i = 0; i < errorLines.length; i++) {
 >i : number
@@ -5544,7 +5544,7 @@ module Harness {
             var scripts: TypeScript.Script[] = [];
 >scripts : TypeScript.Script[]
 >TypeScript : any
->[] : undefined[]
+>[] : TypeScript.Script[]
 
             reset();
 >reset() : void
@@ -5892,7 +5892,7 @@ module Harness {
             // List of all the subfiles we've parsed out
             var files: TestUnitData[] = [];
 >files : TestUnitData[]
->[] : undefined[]
+>[] : TestUnitData[]
 
             var lines = splitContentByNewlines(code);
 >lines : string[]
@@ -5916,7 +5916,7 @@ module Harness {
             var refs: TypeScript.IFileReference[] = [];
 >refs : TypeScript.IFileReference[]
 >TypeScript : any
->[] : undefined[]
+>[] : TypeScript.IFileReference[]
 
             for (var i = 0; i < lines.length; i++) {
 >i : number
@@ -6129,9 +6129,9 @@ module Harness {
 >2 : 2
 
                         refs = [];
->refs = [] : undefined[]
+>refs = [] : TypeScript.IFileReference[]
 >refs : TypeScript.IFileReference[]
->[] : undefined[]
+>[] : TypeScript.IFileReference[]
 
                     } else {
                         // First metadata marker in the file
@@ -6241,7 +6241,7 @@ module Harness {
 >length : number
 >editRange : TypeScript.ScriptEditRange
 >TypeScript : any
->[] : undefined[]
+>[] : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 
         constructor(public name: string, public content: string, public isResident: boolean, public maxScriptVersions: number) {
 >name : string
@@ -6263,11 +6263,11 @@ module Harness {
 >isResident : boolean
 
             this.editRanges = [];
->this.editRanges = [] : undefined[]
+>this.editRanges = [] : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >this : this
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->[] : undefined[]
+>[] : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 
             this.content = content;
 >this.content = content : string
@@ -6580,7 +6580,7 @@ module Harness {
 
         public scripts: ScriptInfo[] = [];
 >scripts : ScriptInfo[]
->[] : undefined[]
+>[] : ScriptInfo[]
 
         public maxScriptVersions = 100;
 >maxScriptVersions : number
@@ -7339,7 +7339,7 @@ module Harness {
             var result: Services.TextEdit[] = [];
 >result : Services.TextEdit[]
 >Services : any
->[] : undefined[]
+>[] : Services.TextEdit[]
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
 >mapEdits : (edits: Services.TextEdit[]) => {    edit: Services.TextEdit;    index: number;}[]

@@ -41,7 +41,7 @@ class arrTest {
 >this.test : { (arg1: number[]): any; (arg1: string[]): any; }
 >this : this
 >test : { (arg1: number[]): any; (arg1: string[]): any; }
->[] : undefined[]
+>[] : number[]
 
         this.test([1, 2, "hi", 5]); // Error
 >this.test([1, 2, "hi", 5]) : any

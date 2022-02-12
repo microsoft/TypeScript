@@ -18,7 +18,7 @@ function getMaxId(items: NodeWithId[]) {
 const nodes = [] as ITreeItem[];
 >nodes : ITreeItem[]
 >[] as ITreeItem[] : ITreeItem[]
->[] : never[]
+>[] : ITreeItem[]
 
 getMaxId(nodes);
 >getMaxId(nodes) : void

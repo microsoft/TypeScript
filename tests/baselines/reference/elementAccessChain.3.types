@@ -169,16 +169,16 @@ for (obj?.a["b"] of []);
 >1 : 1
 
 [...obj?.["a"]] = [];
->[...obj?.["a"]] = [] : never[]
+>[...obj?.["a"]] = [] : any[]
 >[...obj?.["a"]] : any[]
 >...obj?.["a"] : any
 >obj?.["a"] : any
 >obj : any
 >"a" : "a"
->[] : never[]
+>[] : any[]
 
 [...obj?.a["b"]] = [];
->[...obj?.a["b"]] = [] : never[]
+>[...obj?.a["b"]] = [] : any[]
 >[...obj?.a["b"]] : any[]
 >...obj?.a["b"] : any
 >obj?.a["b"] : any
@@ -186,5 +186,5 @@ for (obj?.a["b"] of []);
 >obj : any
 >a : any
 >"b" : "b"
->[] : never[]
+>[] : any[]
 

@@ -18,7 +18,7 @@ class C extends Base({ x: p<C[]>(() => []) }) { }
 >p<C[]>(() => []) : C[]
 >p : <T>(fn: () => T) => T
 >() => [] : () => never[]
->[] : never[]
+>[] : C[]
 
 // Repro from #44359
 

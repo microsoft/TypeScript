@@ -120,11 +120,11 @@ for (var a = ['a', 'b']; ;) { }
 for (var a = <string[]>[]; ;) { }
 >a : string[]
 ><string[]>[] : string[]
->[] : undefined[]
+>[] : string[]
 
 for (var a: string[] = []; ;) { }
 >a : string[]
->[] : undefined[]
+>[] : string[]
 
 for (var a = new Array<string>(); ;) { }
 >a : string[]

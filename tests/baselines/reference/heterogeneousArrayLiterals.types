@@ -250,7 +250,7 @@ module WithContextualType {
 
     var c: Derived[] = [];
 >c : Derived[]
->[] : undefined[]
+>[] : Derived[]
 
     var d: { (): Base }[] = [() => derived, () => derived2];
 >d : (() => Base)[]

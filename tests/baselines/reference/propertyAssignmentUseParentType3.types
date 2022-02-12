@@ -18,7 +18,7 @@ function foo2(): any[] {
 >foo2 : typeof foo2
 
     return [];
->[] : undefined[]
+>[] : any[]
 }
 foo2.join = "";
 >foo2.join = "" : ""

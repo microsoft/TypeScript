@@ -54,7 +54,7 @@ const list: LinkedList<number> = mkList([], compareNumbers);
 >list : LinkedList<number>
 >mkList([], compareNumbers) : LinkedList<number>
 >mkList : <T>(items: T[], comparator: Comparator<T>) => LinkedList<T>
->[] : never[]
+>[] : number[]
 >compareNumbers : (x: number, y: number) => number
 
 // Repro from #19858
@@ -76,7 +76,7 @@ f2(Array.from([0]), [], (a1, a2) => a1 - a2);
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >[0] : number[]
 >0 : 0
->[] : never[]
+>[] : number[]
 >(a1, a2) => a1 - a2 : (a1: number, a2: number) => number
 >a1 : number
 >a2 : number
