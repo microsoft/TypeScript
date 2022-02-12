@@ -2695,6 +2695,27 @@ namespace ts {
             : undefined;
     }
 
+    export function getAllNodesWithJSDocs(rootNode: Node) {
+        const traverseNodes = (node: Node) => {
+            let nodesWithJSDocs: Node[] = [];
+            if (hasJSDocNodes(node)) {
+                nodesWithJSDocs.push(node);
+            }
+
+            forEachChild(node,
+                (childNode) => {
+                    nodesWithJSDocs = nodesWithJSDocs.concat(traverseNodes(childNode));
+                },
+            );
+
+            return nodesWithJSDocs;
+        };
+
+        const result = traverseNodes(rootNode);
+
+        return result;
+    }
+
     export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
