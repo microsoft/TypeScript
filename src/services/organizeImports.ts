@@ -173,32 +173,18 @@ namespace ts.OrganizeImports {
          * @returns a Set with the types referenced inside the JSDoc tags.
          */
         function getJSDocReferencedTypesFromSourceFile(sourceFile: SourceFile) {
-            let jsDocLinkNames: string[] = [];
-
-            for (const statement of sourceFile.statements) {
-                const jsDocs = getJSDocCommentsAndTags(statement);
-                const names = getJSDocLinksNamesFromJSDocs(jsDocs);
-                jsDocLinkNames = jsDocLinkNames.concat(names);
-            }
+            const jsDocs = flatMap(sourceFile.statements, statement => getJSDocCommentsAndTags(statement));
+            const jdDocsLinks = flatMap(jsDocs, (doc) => getJSDocLinksFromJSDocComments(doc.comment));
+            const jsDocLinkNames = getNamesFromJSDocLinks(jdDocsLinks);
 
             return new Set<string>(jsDocLinkNames);
-        }
-
-        function getJSDocLinksNamesFromJSDocs(jsDocs: readonly (JSDoc | JSDocTag)[]) {
-            let jsDocLinks: JSDocLink[] = [];
-            for (const doc of jsDocs) {
-                const links = getJSDocLinksFromJSDocComments(doc.comment);
-                jsDocLinks = jsDocLinks.concat(links);
-            }
-
-            return getNamesFromJSDocLinks(jsDocLinks);
         }
 
         function getJSDocLinksFromJSDocComments(comment?: string | NodeArray<JSDocComment>): JSDocLink[] {
             return isArray(comment) ? comment.filter((commentNode) => commentNode.kind === SyntaxKind.JSDocLink) as JSDocLink[] : [];
         }
 
-        function getNamesFromJSDocLinks(jsDocLinks: JSDocLink[]): string[] {
+        function getNamesFromJSDocLinks(jsDocLinks: readonly JSDocLink[]): string[] {
             return jsDocLinks.filter((link) => link.name?.getText()).map((link) => link.name!.getText());
         }
     }
