@@ -1,0 +1,66 @@
+=== tests/cases/compiler/typing.d.ts ===
+declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
+>define : Symbol(define, Decl(typing.d.ts, 0, 0))
+>T : Symbol(T, Decl(typing.d.ts, 0, 24))
+>name : Symbol(name, Decl(typing.d.ts, 0, 35))
+>modules : Symbol(modules, Decl(typing.d.ts, 0, 48))
+>ready : Symbol(ready, Decl(typing.d.ts, 0, 67))
+>modules : Symbol(modules, Decl(typing.d.ts, 0, 76))
+>T : Symbol(T, Decl(typing.d.ts, 0, 24))
+
+=== tests/cases/compiler/deps/BaseClass.d.ts ===
+declare module "deps/BaseClass" {
+>"deps/BaseClass" : Symbol("deps/BaseClass", Decl(BaseClass.d.ts, 0, 0))
+
+    class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(BaseClass.d.ts, 0, 33))
+
+        static extends<A>(a: A): new () => A & BaseClass;
+>extends : Symbol(BaseClass.extends, Decl(BaseClass.d.ts, 1, 21))
+>A : Symbol(A, Decl(BaseClass.d.ts, 2, 23))
+>a : Symbol(a, Decl(BaseClass.d.ts, 2, 26))
+>A : Symbol(A, Decl(BaseClass.d.ts, 2, 23))
+>A : Symbol(A, Decl(BaseClass.d.ts, 2, 23))
+>BaseClass : Symbol(BaseClass, Decl(BaseClass.d.ts, 0, 33))
+    }
+    export = BaseClass;
+>BaseClass : Symbol(BaseClass, Decl(BaseClass.d.ts, 0, 33))
+}
+=== tests/cases/compiler/ExtendedClass.js ===
+define("lib/ExtendedClass", ["deps/BaseClass"], 
+>define : Symbol(define, Decl(typing.d.ts, 0, 0))
+
+/**
+ * {typeof import("deps/BaseClass")}
+ * @param  {typeof import("deps/BaseClass")} BaseClass 
+ * @returns 
+ */
+(BaseClass) => {    
+>BaseClass : Symbol(BaseClass, Decl(ExtendedClass.js, 6, 1))
+    
+    const ExtendedClass = BaseClass.extends({
+>ExtendedClass : Symbol(ExtendedClass, Decl(ExtendedClass.js, 8, 9))
+>BaseClass.extends : Symbol(BaseClass.extends, Decl(BaseClass.d.ts, 1, 21))
+>BaseClass : Symbol(BaseClass, Decl(ExtendedClass.js, 6, 1))
+>extends : Symbol(BaseClass.extends, Decl(BaseClass.d.ts, 1, 21))
+
+        f: function() {
+>f : Symbol(f, Decl(ExtendedClass.js, 8, 45))
+
+            return "something";
+        }
+    });
+
+    // Exports the module in a way tsc recognize class export 
+    const module = {};
+>module : Symbol(module, Decl(ExtendedClass.js, 15, 9))
+
+    module.exports = ExtendedClass
+>module : Symbol(export=, Decl(ExtendedClass.js, 15, 22))
+>exports : Symbol(export=, Decl(ExtendedClass.js, 15, 22))
+>ExtendedClass : Symbol(ExtendedClass, Decl(ExtendedClass.js, 8, 9))
+
+    return module.exports;
+>module : Symbol(module, Decl(ExtendedClass.js, 15, 9))
+
+});

@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.6";
+    const versionMajorMinor = "4.7";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**

@@ -537,11 +537,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_namespace_declaration_is_only_allowed_in_a_namespace_or_module_1235" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_namespace_declaration_is_only_allowed_at_the_top_level_of_a_namespace_or_module_1235" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A namespace declaration is only allowed in a namespace or module.]]></Val>
+          <Val><![CDATA[A namespace declaration is only allowed at the top level of a namespace or module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Una dichiarazione di spazio dei nomi è consentita solo in uno spazio dei nomi o in un modulo.]]></Val>
+            <Val><![CDATA[Una dichiarazione di spazio dei nomi è consentita solo al livello superiore di uno spazio dei nomi o di un modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1860,11 +1860,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_export_declaration_can_only_be_used_in_a_module_1233" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_export_declaration_can_only_be_used_at_the_top_level_of_a_module_1474" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An export declaration can only be used in a module.]]></Val>
+          <Val><![CDATA[An export declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[È possibile usare una dichiarazione di esportazione solo in un modulo.]]></Val>
+            <Val><![CDATA[Una dichiarazione di esportazione può essere usata solo al livello superiore di un modulo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_export_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module_1233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An export declaration can only be used at the top level of a namespace or module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una dichiarazione di esportazione può essere usata solo al livello superiore di uno spazio dei nomi o di un modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1944,11 +1953,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_import_declaration_can_only_be_used_in_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_import_declaration_can_only_be_used_at_the_top_level_of_a_module_1473" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An import declaration can only be used in a namespace or module.]]></Val>
+          <Val><![CDATA[An import declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[È possibile usare una dichiarazione di importazione solo in uno spazio dei nomi o in un modulo.]]></Val>
+            <Val><![CDATA[Una dichiarazione di importazione può essere usata solo al livello superiore di un modulo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_import_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An import declaration can only be used at the top level of a namespace or module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Una dichiarazione di importazione può essere usata solo al livello superiore di uno spazio dei nomi o di un modulo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4623,11 +4641,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Delete_all_unused_param_tags_95172" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused '@param' tags]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eliminare tutti i tag '@param' inutilizzati]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Eliminare gli output di tutti i progetti]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Delete_unused_param_tag_0_95171" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete unused '@param' tag '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eliminare il tag '@param' '{0}' inutilizzato]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10850,6 +10886,15 @@
           <Val><![CDATA[Remove variable statement]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Rimuovere l'istruzione di variabile]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Rename_param_tag_name_0_to_1_95173" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rename '@param' tag name '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Cambiane il nome '{0}' del tag '@param' in '{1}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

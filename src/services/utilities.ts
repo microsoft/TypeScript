@@ -3335,5 +3335,9 @@ namespace ts {
         };
     }
 
+    export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
+    }
+
     // #endregion
 }

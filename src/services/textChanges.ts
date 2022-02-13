@@ -303,7 +303,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {

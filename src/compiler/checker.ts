@@ -3981,8 +3981,15 @@ namespace ts {
                 return res;
             }
             const candidates = mapDefined(symbol.declarations, d => {
-                if (!isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
-                    return getSymbolOfNode(d.parent);
+                if (!isAmbientModule(d) && d.parent){
+                    // direct children of a module
+                    if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
+                        return getSymbolOfNode(d.parent);
+                    }
+                    // export ='d member of an ambient module
+                    if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfNode(d.parent.parent)) === symbol) {
+                        return getSymbolOfNode(d.parent.parent);
+                    }
                 }
                 if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
                     if (isModuleExportsAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
@@ -17900,8 +17907,10 @@ namespace ts {
                     (source as LiteralType).value === (target as LiteralType).value &&
                     isEnumTypeRelatedTo(getParentOfSymbol(source.symbol)!, getParentOfSymbol(target.symbol)!, errorReporter)) return true;
             }
-            if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
-            if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
+            // In non-strictNullChecks mode, `undefined` and `null` are assignable to anything except `never`.
+            // Since unions and intersections may reduce to `never`, we exclude them here.
+            if (s & TypeFlags.Undefined && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
+            if (s & TypeFlags.Null && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
@@ -19420,6 +19429,11 @@ namespace ts {
                     }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target &&
                         !isTupleType(source) && !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
+                        // When strictNullChecks is disabled, the element type of the empty array literal is undefinedWideningType,
+                        // and an empty array literal wouldn't be assignable to a `never[]` without this check.
+                        if (isEmptyArrayLiteralType(source)) {
+                            return Ternary.True;
+                        }
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
@@ -19723,6 +19737,18 @@ namespace ts {
                         reportError(Diagnostics.Property_0_is_protected_in_type_1_but_public_in_type_2,
                             symbolToString(targetProp), typeToString(source), typeToString(target));
                     }
+                    return Ternary.False;
+                }
+
+                // Ensure {readonly a: whatever} is not a subtype of {a: whatever},
+                // while {a: whatever} is a subtype of {readonly a: whatever}.
+                // This ensures the subtype relationship is ordered, and preventing declaration order
+                // from deciding which type "wins" in union subtype reduction.
+                // They're still assignable to one another, since `readonly` doesn't affect assignability.
+                if (
+                    (relation === subtypeRelation || relation === strictSubtypeRelation) &&
+                    !!(sourcePropFlags & ModifierFlags.Readonly) && !(targetPropFlags & ModifierFlags.Readonly)
+                ) {
                     return Ternary.False;
                 }
                 // If the target comes from a partial union prop, allow `undefined` in the target type
