@@ -345,7 +345,7 @@ namespace ts.server {
         hostPreferences: UserPreferences
     ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
-        combineProjectOutputWorker(
+        combineProjectOutputRenameWorker(
             projects,
             defaultProject,
             initialLocation,
@@ -491,6 +491,49 @@ namespace ts.server {
                 });
             }
         }
+
+        while (toDo && toDo.length) {
+            const next = toDo.pop();
+            Debug.assertIsDefined(next);
+            toDo = callbackProjectAndLocation(next.project, next.location, projectService, toDo, seenProjects, cb);
+        }
+    }
+
+    function combineProjectOutputRenameWorker<TLocation extends DocumentPosition | undefined>(
+        projects: Projects,
+        defaultProject: Project,
+        initialLocation: TLocation,
+        cb: CombineProjectOutputCallback<TLocation>
+    ): void {
+        const projectService = defaultProject.projectService;
+        let toDo: ProjectAndLocation<TLocation>[] | undefined;
+        const seenProjects = new Set<string>();
+        forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
+            // TLocation should be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
+            const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
+            toDo = callbackProjectAndLocation(project, location, projectService, toDo, seenProjects, cb);
+        });
+
+        // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
+        // if (initialLocation) {
+        //     const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
+        //     if (defaultDefinition) {
+        //         const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+        //             defaultDefinition :
+        //             defaultProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(defaultDefinition));
+        //         const getSourceDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
+        //             defaultDefinition :
+        //             defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition));
+        //         projectService.loadAncestorProjectTree(seenProjects);
+        //         projectService.forEachEnabledProject(project => {
+        //             if (!addToSeen(seenProjects, project)) return;
+        //             const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
+        //             if (definition) {
+        //                 toDo = callbackProjectAndLocation<TLocation>(project, definition as TLocation, projectService, toDo, seenProjects, cb);
+        //             }
+        //         });
+        //     }
+        // }
 
         while (toDo && toDo.length) {
             const next = toDo.pop();
