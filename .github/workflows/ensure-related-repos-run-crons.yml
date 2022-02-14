@@ -32,7 +32,7 @@ jobs:
         git commit --allow-empty -m "Monthly Bump"
         git push https://github.com/microsoft/TypeScript-Website.git
       env:
-        GITHUB_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - uses: actions/checkout@v2
       with: 
@@ -45,4 +45,4 @@ jobs:
         git commit --allow-empty -m "Monthly Bump"
         git push https://github.com/microsoft/TypeScript-Make-Monaco-Builds.git
       env:
-        GITHUB_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
