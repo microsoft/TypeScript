@@ -1,8 +1,8 @@
 tests/cases/compiler/throwType_function_parameter.ts(4,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
-tests/cases/compiler/throwType_function_parameter.ts(4,24): error TS2820: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_function_parameter.ts(4,24): error TS2838: Type instantiated results in a throw type saying: 
     No zero
 tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
-tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2820: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2838: Type instantiated results in a throw type saying: 
     "found ""str""
 
 
@@ -14,8 +14,8 @@ tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2820: Type i
                            ~~~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
                            ~~~~
-!!! error TS2820: Type instantiated results in a throw type saying: 
-!!! error TS2820:     No zero
+!!! error TS2838: Type instantiated results in a throw type saying: 
+!!! error TS2838:     No zero
     checkParameterPosition(12345678)
     
     type MustNumber<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
@@ -28,6 +28,6 @@ tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2820: Type i
        ~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
        ~~~~~
-!!! error TS2820: Type instantiated results in a throw type saying: 
-!!! error TS2820:     "found ""str""
+!!! error TS2838: Type instantiated results in a throw type saying: 
+!!! error TS2838:     "found ""str""
     

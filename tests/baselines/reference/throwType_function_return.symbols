@@ -30,6 +30,7 @@ const theAnswerToEverything = <T>(x: T): T extends 42 ? T : throw "Wrong" => x
 
 theAnswerToEverything(42 as const)
 >theAnswerToEverything : Symbol(theAnswerToEverything, Decl(throwType_function_return.ts, 7, 5))
+>const : Symbol(const)
 
 theAnswerToEverything('')
 >theAnswerToEverything : Symbol(theAnswerToEverything, Decl(throwType_function_return.ts, 7, 5))

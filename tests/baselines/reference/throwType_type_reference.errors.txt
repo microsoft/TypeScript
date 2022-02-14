@@ -1,4 +1,4 @@
-tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2820: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2838: Type instantiated results in a throw type saying: 
     Expected number, but found ""Window & typeof globalThis""
 
 
@@ -7,6 +7,6 @@ tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2820: Type insta
     type A = MustNumber<1>
     type B = MustNumber<TypeToString<typeof window>>
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2820: Type instantiated results in a throw type saying: 
-!!! error TS2820:     Expected number, but found ""Window & typeof globalThis""
+!!! error TS2838: Type instantiated results in a throw type saying: 
+!!! error TS2838:     Expected number, but found ""Window & typeof globalThis""
     

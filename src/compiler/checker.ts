@@ -18446,10 +18446,6 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
-                // throw types are considered related with any type, they'll be reported as type error in the use site.
-                if ((originalSource.flags | originalTarget.flags) & TypeFlags.ThrowType) {
-                    return Ternary.True;
-                }
                 // Before normalization: if `source` is type an object type, and `target` is primitive,
                 // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
                 if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
@@ -19493,8 +19489,12 @@ namespace ts {
                         }
                         if (isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
                             (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, RecursionFlags.Both) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType, RecursionFlags.Both))) {
-                            if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, reportErrors)) {
-                                result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, reportErrors);
+                            const lTrueType = dropThrowTypeInConditionalType(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper));
+                            const rTrueType = dropThrowTypeInConditionalType(getTrueTypeFromConditionalType(target as ConditionalType));
+                            if (result = (lTrueType.flags | rTrueType.flags) & TypeFlags.ThrowType ? Ternary.True : isRelatedTo(lTrueType, rTrueType, RecursionFlags.Both, reportErrors)) {
+                                const lFalseType = dropThrowTypeInConditionalType(getFalseTypeFromConditionalType(source as ConditionalType));
+                                const rFalseType = dropThrowTypeInConditionalType(getFalseTypeFromConditionalType(target as ConditionalType));
+                                result &= (lFalseType.flags | rFalseType.flags) & TypeFlags.ThrowType ? Ternary.True : isRelatedTo(lFalseType, rFalseType, RecursionFlags.Both, reportErrors);
                             }
                             if (result) {
                                 resetErrorInfo(saveErrorInfo);
@@ -29836,7 +29836,6 @@ namespace ts {
             reportErrors: boolean,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         ): readonly Diagnostic[] | undefined {
-
             const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
             if (isJsxOpeningLikeElement(node)) {
                 if (!checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
