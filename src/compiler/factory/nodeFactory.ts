@@ -5708,7 +5708,7 @@ namespace ts {
         }
 
         function createImportCall(argumentsList: readonly Expression[]) {
-            return <ImportCall>createCallExpression(<ImportExpression>createToken(SyntaxKind.ImportKeyword), /*type*/ undefined, argumentsList);
+            return createCallExpression(createToken(SyntaxKind.ImportKeyword) as ImportExpression, /*type*/ undefined, argumentsList) as ImportCall;
         }
 
         //

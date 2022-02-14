@@ -4296,7 +4296,7 @@ namespace ts.Completions {
             if (isImportKeyword(contextToken) && isSourceFile(parent)) {
                 // A lone import keyword with nothing following it does not parse as a statement at all
                 keywordCompletion = SyntaxKind.TypeKeyword;
-                return contextToken as ImportExpression;
+                return contextToken;
             }
             if (isImportKeyword(contextToken) && isImportDeclaration(parent)) {
                 // `import s| from`
