@@ -155,7 +155,7 @@ namespace ts {
     }
 
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
         return diagnostic => {
