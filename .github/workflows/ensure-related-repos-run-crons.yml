@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Configure git and update package-lock.json
+    - name: Configure git
       run: |
         git config --global user.email "typescriptbot@microsoft.com"
         git config --global user.name "TypeScript Bot"
@@ -30,6 +30,7 @@ jobs:
       run:  |
         cd ts-site
         git commit --allow-empty -m "Monthly Bump"
+        git config --unset-all http.https://github.com/.extraheader
         git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
 
     - uses: actions/checkout@v2
@@ -41,4 +42,5 @@ jobs:
       run:  |
         cd monaco-builds
         git commit --allow-empty -m "Monthly Bump"
+        git config --unset-all http.https://github.com/.extraheader
         git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Make-Monaco-Builds.git
