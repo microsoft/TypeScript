@@ -30,7 +30,9 @@ jobs:
       run:  |
         cd ts-site
         git commit --allow-empty -m "Monthly Bump"
-        git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
+        git push https://github.com/microsoft/TypeScript-Website.git
+      env:
+        GITHUB_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
 
     - uses: actions/checkout@v2
       with: 
@@ -41,4 +43,6 @@ jobs:
       run:  |
         cd monaco-builds
         git commit --allow-empty -m "Monthly Bump"
-        git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Make-Monaco-Builds.git
+        git push https://github.com/microsoft/TypeScript-Make-Monaco-Builds.git
+      env:
+        GITHUB_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
