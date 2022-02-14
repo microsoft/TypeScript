@@ -11881,7 +11881,7 @@ namespace ts {
             return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
-        function getEffectiveConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean) {
+        function getEffectiveConstraintOfIntersection(types: readonly Type[], targetIsUnion: boolean, ongoingExpansions?: Map<number>) {
             let constraints: Type[] | undefined;
             let hasDisjointDomainType = false;
             for (const t of types) {
@@ -11893,6 +11893,8 @@ namespace ts {
                         constraint = getConstraintOfType(constraint);
                     }
                     if (constraint) {
+                        const id = "" + getTypeId(t);
+                        ongoingExpansions?.set(id, (ongoingExpansions.get(id) || 0) + 1);
                         constraints = append(constraints, constraint);
                         if (targetIsUnion) {
                             constraints = append(constraints, t);
@@ -18002,6 +18004,7 @@ namespace ts {
             let maybeCount = 0;
             let sourceDepth = 0;
             let targetDepth = 0;
+            let intersectionConstraintExpansions = new Map<string, number>();
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
@@ -18434,7 +18437,7 @@ namespace ts {
                         resetErrorInfo(saveErrorInfo);
                     }
                 }
-                if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
+                if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter) && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
                     // the constituents. When an intersection type contains instantiable types with union type
                     // constraints, there are situations where we need to examine the combined constraint. One is
@@ -18448,15 +18451,24 @@ namespace ts {
                     // needs to have its constraint hoisted into an intersection with said type parameter, this way
                     // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                    if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
-                        if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
-                            // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                                resetErrorInfo(saveErrorInfo);
-                            }
+                    // checkpoint the set of intersection constraint expansions so we can restore it after we're done comparing this layer of intersection types
+                    const oldExpansions = new Map(arrayFrom(intersectionConstraintExpansions.entries()));
+                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union), intersectionConstraintExpansions);
+                    if (constraint && everyType(constraint, c => c !== source)) {
+                        if (some(arrayFrom(intersectionConstraintExpansions.values()), v => v >= 3)) {
+                            intersectionConstraintExpansions = oldExpansions;
+                            // We've expanded some intersection member 3 times - call it a `Maybe` and move on
+                            // (We must allow at least one expansion to handle assigning type variables to intersections containing those variables
+                            // beyond that - it's questionable how useful it is to explore the expansion more. There's certainly
+                            // diminishing returns on how likely the pattern is to actually match anything.)
+                            return Ternary.Maybe;
+                        }
+                        // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
+                        if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                            resetErrorInfo(saveErrorInfo);
                         }
                     }
+                    intersectionConstraintExpansions = oldExpansions;
                 }
 
                 // For certain combinations involving intersections and optional, excess, or mismatched properties we need
@@ -19359,6 +19371,7 @@ namespace ts {
                         resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
+                    let doDistributiveCheck = false;
                     if (target.flags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
@@ -19387,13 +19400,7 @@ namespace ts {
                     else {
                         // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
                         // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
-                        const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
-                        if (distributiveConstraint) {
-                            if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
-                            }
-                        }
+                        doDistributiveCheck = true;
                     }
 
                     // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
@@ -19403,6 +19410,19 @@ namespace ts {
                         if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
+                        }
+                    }
+
+                    // We check the distributive constraint _after_ the default constraint since the distributive constraint is way more
+                    // likely to be generative and trigger instantiation depth warnings, even for types whose default constraint could
+                    // trivially answer the question of assignability.
+                    if (doDistributiveCheck) {
+                        const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
+                        if (distributiveConstraint) {
+                            if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
                         }
                     }
                 }
