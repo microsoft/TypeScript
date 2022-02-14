@@ -3221,6 +3221,9 @@
       <Item ItemId=";Cannot_use_export_import_on_a_type_or_type_only_namespace_when_the_isolatedModules_flag_is_provided_1269" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nie można użyć polecenia „export import” w przestrzeni nazw typu lub tylko typu, jeśli podano flagę „--isolatedModules”.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
