@@ -455,10 +455,10 @@ namespace ts {
         return node.kind === SyntaxKind.MetaProperty;
     }
 
-    export function isImportMeta(n: Node): n is ImportMetaProperty {
-        return isMetaProperty(n)
-            && n.keywordToken === SyntaxKind.ImportKeyword
-            && n.name.escapedText === "meta";
+    export function isImportMeta(node: Node): node is ImportMetaProperty {
+        return isMetaProperty(node)
+            && node.keywordToken === SyntaxKind.ImportKeyword
+            && node.name.escapedText === "meta";
     }
 
     export function isSyntheticExpression(node: Node): node is SyntheticExpression {
@@ -483,8 +483,8 @@ namespace ts {
         return node.kind === SyntaxKind.SemicolonClassElement;
     }
 
-    export function isImportCall(n: Node): n is ImportCall {
-        return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
+    export function isImportCall(node: Node): node is ImportCall {
+        return node.kind === SyntaxKind.CallExpression && (node as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
     }
 
     // Elements

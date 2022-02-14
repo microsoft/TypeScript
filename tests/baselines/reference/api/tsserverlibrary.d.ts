@@ -4748,13 +4748,13 @@ declare namespace ts {
     function isSatisfiesExpression(node: Node): node is SatisfiesExpression;
     function isNonNullExpression(node: Node): node is NonNullExpression;
     function isMetaProperty(node: Node): node is MetaProperty;
-    function isImportMeta(n: Node): n is ImportMetaProperty;
+    function isImportMeta(node: Node): node is ImportMetaProperty;
     function isSyntheticExpression(node: Node): node is SyntheticExpression;
     function isPartiallyEmittedExpression(node: Node): node is PartiallyEmittedExpression;
     function isCommaListExpression(node: Node): node is CommaListExpression;
     function isTemplateSpan(node: Node): node is TemplateSpan;
     function isSemicolonClassElement(node: Node): node is SemicolonClassElement;
-    function isImportCall(n: Node): n is ImportCall;
+    function isImportCall(node: Node): node is ImportCall;
     function isBlock(node: Node): node is Block;
     function isVariableStatement(node: Node): node is VariableStatement;
     function isEmptyStatement(node: Node): node is EmptyStatement;
