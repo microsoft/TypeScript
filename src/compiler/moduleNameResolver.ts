@@ -1819,7 +1819,17 @@ namespace ts {
             // Even if extensions is DtsOnly, we can still look up a .ts file as a result of package.json "types"
             const nextExtensions = extensions === Extensions.DtsOnly ? Extensions.TypeScript : extensions;
             // Don't do package.json lookup recursively, because Node.js' package lookup doesn't.
-            return nodeLoadModuleByRelativeName(nextExtensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ false);
+
+            // Disable `EsmMode` for the resolution of the package path for cjs-mode packages (so the `main` field can omit extensions)
+            // (technically it only emits a deprecation warning in esm packages right now, but that's probably
+            // enough to mean we don't need to support it)
+            const features = state.features;
+            if (jsonContent?.type !== "module") {
+                state.features &= ~NodeResolutionFeatures.EsmMode;
+            }
+            const result = nodeLoadModuleByRelativeName(nextExtensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ false);
+            state.features = features;
+            return result;
         };
 
         const onlyRecordFailuresForPackageFile = packageFile ? !directoryProbablyExists(getDirectoryPath(packageFile), state.host) : undefined;
