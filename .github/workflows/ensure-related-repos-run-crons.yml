@@ -20,6 +20,7 @@ jobs:
       run: |
         git config --global user.email "typescriptbot@microsoft.com"
         git config --global user.name "TypeScript Bot"
+        git config --unset-all http.https://github.com/.extraheader
 
     - uses: actions/checkout@v2
       with: 
@@ -30,9 +31,7 @@ jobs:
       run:  |
         cd ts-site
         git commit --allow-empty -m "Monthly Bump"
-        git push https://github.com/microsoft/TypeScript-Website.git
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
 
     - uses: actions/checkout@v2
       with: 
@@ -43,6 +42,4 @@ jobs:
       run:  |
         cd monaco-builds
         git commit --allow-empty -m "Monthly Bump"
-        git push https://github.com/microsoft/TypeScript-Make-Monaco-Builds.git
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Make-Monaco-Builds.git
