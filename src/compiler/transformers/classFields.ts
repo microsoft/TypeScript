@@ -135,10 +135,13 @@ namespace ts {
 
         const shouldTransformPrivateElementsOrClassStaticBlocks = languageVersion < ScriptTarget.ES2022;
 
+        // We need to transform `this` in a static initializer into a reference to the class
+        // when targeting < ES2022 since the assignment will be moved outside of the class body.
+        const shouldTransformThisInStaticInitializers = languageVersion < ScriptTarget.ES2022;
+
         // We don't need to transform `super` property access when targeting ES5, ES3 because
         // the es2015 transformation handles those.
-        const shouldTransformSuperInStaticInitializers = (languageVersion <= ScriptTarget.ES2021 || !useDefineForClassFields) && languageVersion >= ScriptTarget.ES2015;
-        const shouldTransformThisInStaticInitializers = languageVersion <= ScriptTarget.ES2021 || !useDefineForClassFields;
+        const shouldTransformSuperInStaticInitializers = shouldTransformThisInStaticInitializers && languageVersion >= ScriptTarget.ES2015;
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -422,6 +425,11 @@ namespace ts {
 
             if (isPrivateIdentifier(node.name)) {
                 if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
+                    if (isStatic(node)) {
+                        // static fields are left as is
+                        return visitEachChild(node, visitor, context);
+                    }
+
                     // Initializer is elided as the field is initialized in transformConstructor.
                     return factory.updatePropertyDeclaration(
                         node,
@@ -448,6 +456,28 @@ namespace ts {
             if (expr && !isSimpleInlineableExpression(expr)) {
                 getPendingExpressions().push(expr);
             }
+
+            if (isStatic(node) && !shouldTransformPrivateElementsOrClassStaticBlocks && !useDefineForClassFields) {
+                const initializerStatement = transformPropertyOrClassStaticBlock(node, factory.createThis());
+                if (initializerStatement) {
+                    const staticBlock = factory.createClassStaticBlockDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        factory.createBlock([initializerStatement])
+                    );
+
+                    setOriginalNode(staticBlock, node);
+                    setCommentRange(staticBlock, node);
+
+                    // Set the comment range for the statement to an empty synthetic range
+                    // and drop synthetic comments from the statement to avoid printing them twice.
+                    setCommentRange(initializerStatement, { pos: -1, end: -1 });
+                    setSyntheticLeadingComments(initializerStatement, undefined);
+                    setSyntheticTrailingComments(initializerStatement, undefined);
+                    return staticBlock;
+                }
+            }
+
             return undefined;
         }
 
@@ -1006,8 +1036,6 @@ namespace ts {
                 enableSubstitutionForClassStaticThisOrSuperReference();
             }
 
-            const staticProperties = getStaticPropertiesAndClassStaticBlock(node);
-
             // If a class has private static fields, or a static field has a `this` or `super` reference,
             // then we need to allocate a temp variable to hold on to that reference.
             let pendingClassReferenceAssignment: BinaryExpression | undefined;
@@ -1047,6 +1075,7 @@ namespace ts {
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
 
+            const staticProperties = getStaticPropertiesAndClassStaticBlock(node);
             if (some(staticProperties)) {
                 addPropertyOrClassStaticBlockStatements(statements, staticProperties, factory.getInternalName(node));
             }
@@ -1102,7 +1131,7 @@ namespace ts {
                 transformClassMembers(node, isDerivedClass)
             );
 
-            const hasTransformableStatics = some(staticPropertiesOrClassStaticBlocks, p => isClassStaticBlockDeclaration(p) || !!p.initializer || (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifier(p.name)));
+            const hasTransformableStatics = shouldTransformPrivateElementsOrClassStaticBlocks && some(staticPropertiesOrClassStaticBlocks, p => isClassStaticBlockDeclaration(p) || !!p.initializer || isPrivateIdentifier(p.name));
             if (hasTransformableStatics || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
@@ -1156,6 +1185,7 @@ namespace ts {
         }
 
         function transformClassMembers(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
+            const members: ClassElement[] = [];
             if (shouldTransformPrivateElementsOrClassStaticBlocks) {
                 // Declare private names.
                 for (const member of node.members) {
@@ -1169,12 +1199,26 @@ namespace ts {
                 }
             }
 
-            const members: ClassElement[] = [];
             const constructor = transformConstructor(node, isDerivedClass);
+            const visitedMembers = visitNodes(node.members, classElementVisitor, isClassElement);
+
             if (constructor) {
                 members.push(constructor);
             }
-            addRange(members, visitNodes(node.members, classElementVisitor, isClassElement));
+
+            if (!shouldTransformPrivateElementsOrClassStaticBlocks && some(pendingExpressions)) {
+                members.push(factory.createClassStaticBlockDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    factory.createBlock([
+                        factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))
+                    ])
+                ));
+                pendingExpressions = undefined;
+            }
+
+            addRange(members, visitedMembers);
+
             return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
         }
 
@@ -1374,25 +1418,39 @@ namespace ts {
          */
         function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const expression = isClassStaticBlockDeclaration(property) ?
-                    transformClassStaticBlockDeclaration(property) :
-                    transformProperty(property, receiver);
-                if (!expression) {
+                if (isStatic(property) && !shouldTransformPrivateElementsOrClassStaticBlocks && !useDefineForClassFields) {
                     continue;
                 }
-                const statement = factory.createExpressionStatement(expression);
-                setSourceMapRange(statement, moveRangePastModifiers(property));
-                setCommentRange(statement, property);
-                setOriginalNode(statement, property);
 
-                // `setOriginalNode` *copies* the `emitNode` from `property`, so now both
-                // `statement` and `expression` have a copy of the synthesized comments.
-                // Drop the comments from expression to avoid printing them twice.
-                setSyntheticLeadingComments(expression, undefined);
-                setSyntheticTrailingComments(expression, undefined);
+                const statement = transformPropertyOrClassStaticBlock(property, receiver);
+                if (!statement) {
+                    continue;
+                }
 
                 statements.push(statement);
             }
+        }
+
+        function transformPropertyOrClassStaticBlock(property: PropertyDeclaration | ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
+            const expression = isClassStaticBlockDeclaration(property) ?
+                transformClassStaticBlockDeclaration(property) :
+                transformProperty(property, receiver);
+            if (!expression) {
+                return undefined;
+            }
+
+            const statement = factory.createExpressionStatement(expression);
+            setSourceMapRange(statement, moveRangePastModifiers(property));
+            setCommentRange(statement, property);
+            setOriginalNode(statement, property);
+
+            // `setOriginalNode` *copies* the `emitNode` from `property`, so now both
+            // `statement` and `expression` have a copy of the synthesized comments.
+            // Drop the comments from expression to avoid printing them twice.
+            setSyntheticLeadingComments(expression, undefined);
+            setSyntheticTrailingComments(expression, undefined);
+
+            return statement;
         }
 
         /**

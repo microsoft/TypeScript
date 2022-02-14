@@ -584,6 +584,19 @@ namespace ts.SymbolDisplay {
             }
         }
 
+        if (documentation.length === 0 && isIdentifier(location) && symbol.valueDeclaration && isBindingElement(symbol.valueDeclaration)) {
+            const declaration = symbol.valueDeclaration;
+            const parent = declaration.parent;
+            if (isIdentifier(declaration.name) && isObjectBindingPattern(parent)) {
+                const name = getTextOfIdentifierOrLiteral(declaration.name);
+                const objectType = typeChecker.getTypeAtLocation(parent);
+                documentation = firstDefined(objectType.isUnion() ? objectType.types : [objectType], t => {
+                    const prop = t.getProperty(name);
+                    return prop ? prop.getDocumentationComment(typeChecker) : undefined;
+                }) || emptyArray;
+            }
+        }
+
         if (tags.length === 0 && !hasMultipleSignatures) {
             tags = symbol.getContextualJsDocTags(enclosingDeclaration, typeChecker);
         }

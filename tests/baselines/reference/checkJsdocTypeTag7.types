@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/test.js ===
+/**
+ * @typedef {(a: string, b: number) => void} Foo
+ */
+
+class C {
+>C : C
+
+    /** @type {Foo} */
+    foo(a, b) {}
+>foo : (a: string, b: number) => void
+>a : string
+>b : number
+}
+
