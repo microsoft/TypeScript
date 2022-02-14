@@ -232,8 +232,8 @@ namespace ts {
             else if (canCopySemanticDiagnostics) {
                 const sourceFile = newProgram.getSourceFileByPath(sourceFilePath)!;
 
-                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
-                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
+                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) return;
+                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) return;
 
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
@@ -257,6 +257,14 @@ namespace ts {
             newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
             state.seenAffectedFiles = state.seenAffectedFiles || new Set();
+        }
+        if (useOldState) {
+            // Any time the interpretation of a source file changes, mark it as changed
+            forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => {
+                if (state.fileInfos.has(sourceFilePath) && state.fileInfos.get(sourceFilePath)!.impliedFormat !== info.impliedFormat) {
+                    state.changedFilesSet.add(sourceFilePath);
+                }
+            });
         }
 
         state.buildInfoEmitPending = !!state.changedFilesSet.size;
@@ -744,13 +752,13 @@ namespace ts {
             const actualSignature = signature ?? value.signature;
             return value.version === actualSignature ?
                 value.affectsGlobalScope ?
-                    { version: value.version, signature: undefined, affectsGlobalScope: true } :
+                    { version: value.version, signature: undefined, affectsGlobalScope: true, impliedFormat: value.impliedFormat } :
                     value.version :
                 actualSignature !== undefined ?
                     signature === undefined ?
                         value :
-                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope } :
-                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope };
+                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat } :
+                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope, impliedFormat: value.impliedFormat };
         });
 
         let referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -1243,10 +1251,10 @@ namespace ts {
 
     export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): BuilderState.FileInfo {
         return isString(fileInfo) ?
-            { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined } :
+            { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined, impliedFormat: undefined } :
             isString(fileInfo.signature) ?
                 fileInfo as BuilderState.FileInfo :
-                { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope };
+                { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {

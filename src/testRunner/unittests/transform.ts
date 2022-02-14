@@ -275,9 +275,9 @@ namespace ts {
                         if (node.kind === SyntaxKind.ExportDeclaration) {
                             const ed = node as Node as ExportDeclaration;
                             const exports = [{ name: "x" }];
-                            const exportSpecifiers = exports.map(e => factory.createExportSpecifier(e.name, e.name));
+                            const exportSpecifiers = exports.map(e => factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
                             const exportClause = factory.createNamedExports(exportSpecifiers);
-                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier);
+                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
 
                             return newEd as Node as T;
                         }
@@ -314,7 +314,8 @@ namespace ts {
                             /*name*/ undefined,
                             factory.createNamespaceImport(factory.createIdentifier("i0"))
                         ),
-                        /*moduleSpecifier*/ factory.createStringLiteral("./comp1"));
+                        /*moduleSpecifier*/ factory.createStringLiteral("./comp1"),
+                        /*assertClause*/ undefined);
                     return factory.updateSourceFile(sf, [importStar]);
                 }
             }
@@ -598,6 +599,63 @@ module MyModule {
         }, exports => {
             assert.equal(exports.stringLength, 5);
         });
+
+        function addStaticFieldWithComment(context: TransformationContext) {
+            return (sourceFile: SourceFile): SourceFile => {
+                return visitNode(sourceFile, rootTransform, isSourceFile);
+            };
+            function rootTransform<T extends Node>(node: T): Node {
+                if (isClassLike(node)) {
+                    const newMembers = [factory.createPropertyDeclaration(/* decorators */ undefined, [factory.createModifier(SyntaxKind.StaticKeyword)], "newField", /* questionOrExclamationToken */ undefined, /* type */ undefined, factory.createStringLiteral("x"))];
+                    setSyntheticLeadingComments(newMembers[0], [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    return isClassDeclaration(node) ?
+                        factory.updateClassDeclaration(
+                            node, node.decorators,
+                            /* modifierFlags */ undefined, node.name,
+                            node.typeParameters, node.heritageClauses,
+                            newMembers) :
+                        factory.updateClassExpression(
+                            node, node.decorators,
+                            /* modifierFlags */ undefined, node.name,
+                            node.typeParameters, node.heritageClauses,
+                            newMembers);
+                }
+                return visitEachChild(node, rootTransform, context);
+            }
+        }
+
+        testBaseline("transformSyntheticCommentOnStaticFieldInClassDeclaration", () => {
+            return transpileModule(`
+declare const Decorator: any;
+@Decorator
+class MyClass {
+}
+`, {
+                transformers: {
+                    before: [addStaticFieldWithComment],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+        });
+
+        testBaseline("transformSyntheticCommentOnStaticFieldInClassExpression", () => {
+            return transpileModule(`
+const MyClass = class {
+};
+`, {
+                transformers: {
+                    before: [addStaticFieldWithComment],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+        });
+
     });
 }
 

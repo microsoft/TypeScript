@@ -15,7 +15,9 @@ type PromisedTuple<L extends any[], U = (...args: L) => void> =
 >args : Symbol(args, Decl(recursiveResolveTypeMembers.ts, 3, 26))
 >R : Symbol(R, Decl(recursiveResolveTypeMembers.ts, 3, 41))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>H : Symbol(H)
 >PromisedTuple : Symbol(PromisedTuple, Decl(recursiveResolveTypeMembers.ts, 0, 0))
+>R : Symbol(R)
 
 type Promised = PromisedTuple<[1, 2, 3]> 
 >Promised : Symbol(Promised, Decl(recursiveResolveTypeMembers.ts, 3, 91))

@@ -8,7 +8,9 @@ function* g2(): Iterator<Iterable<(x: string) => number>> {
     yield function* () {
         yield x => x.length;
 >x : Symbol(x, Decl(generatorTypeCheck30.ts, 2, 13))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck30.ts, 2, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     } ()
 }

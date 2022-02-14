@@ -1,0 +1,235 @@
+=== tests/cases/compiler/destructuringUnspreadableIntoRest.ts ===
+class A {
+>A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+    constructor(
+        public publicProp: string,
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+
+        private privateProp: string,
+>privateProp : Symbol(A.privateProp, Decl(destructuringUnspreadableIntoRest.ts, 2, 34))
+
+        protected protectedProp: string,
+>protectedProp : Symbol(A.protectedProp, Decl(destructuringUnspreadableIntoRest.ts, 3, 36))
+
+    ) {}
+
+    get getter(): number {
+>getter : Symbol(A.getter, Decl(destructuringUnspreadableIntoRest.ts, 5, 8))
+
+        return 1;
+    }
+
+    set setter(_v: number) {}
+>setter : Symbol(A.setter, Decl(destructuringUnspreadableIntoRest.ts, 9, 5))
+>_v : Symbol(_v, Decl(destructuringUnspreadableIntoRest.ts, 11, 15))
+
+    method() {
+>method : Symbol(A.method, Decl(destructuringUnspreadableIntoRest.ts, 11, 29))
+
+        const {                 ...rest1 } = this;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+>this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+        const {                 ...rest2 } = this as A;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+>this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+>A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+        const { publicProp: _1, ...rest3 } = this;
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_1 : Symbol(_1, Decl(destructuringUnspreadableIntoRest.ts, 16, 15))
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+>this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+        const { publicProp: _2, ...rest4 } = this as A;
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_2 : Symbol(_2, Decl(destructuringUnspreadableIntoRest.ts, 17, 15))
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+>this : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+>A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+        rest1.publicProp;
+>rest1.publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+>publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+
+        rest2.publicProp;
+>rest2.publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+
+        rest3.publicProp;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+
+        rest4.publicProp;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+
+        rest1.privateProp;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+
+        rest2.privateProp;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+
+        rest3.privateProp;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+
+        rest4.privateProp;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+
+        rest1.protectedProp;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+
+        rest2.protectedProp;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+
+        rest3.protectedProp;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+
+        rest4.protectedProp;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+
+        rest1.getter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+
+        rest2.getter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+
+        rest3.getter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+
+        rest4.getter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+
+        rest1.setter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+
+        rest2.setter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+
+        rest3.setter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+
+        rest4.setter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+
+        rest1.method;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 14, 15))
+
+        rest2.method;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 15, 15))
+
+        rest3.method;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 16, 31))
+
+        rest4.method;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 17, 31))
+    }
+}
+
+function destructure<T extends A>(x: T) {
+>destructure : Symbol(destructure, Decl(destructuringUnspreadableIntoRest.ts, 49, 1))
+>T : Symbol(T, Decl(destructuringUnspreadableIntoRest.ts, 51, 21))
+>A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 51, 34))
+>T : Symbol(T, Decl(destructuringUnspreadableIntoRest.ts, 51, 21))
+
+    const {                 ...rest1 } = x;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 51, 34))
+
+    const {                 ...rest2 } = x as A;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 51, 34))
+>A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+    const { publicProp: _1, ...rest3 } = x;
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_1 : Symbol(_1, Decl(destructuringUnspreadableIntoRest.ts, 54, 11))
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 51, 34))
+
+    const { publicProp: _2, ...rest4 } = x as A;
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>_2 : Symbol(_2, Decl(destructuringUnspreadableIntoRest.ts, 55, 11))
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+>x : Symbol(x, Decl(destructuringUnspreadableIntoRest.ts, 51, 34))
+>A : Symbol(A, Decl(destructuringUnspreadableIntoRest.ts, 0, 0))
+
+    rest1.publicProp;
+>rest1.publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+>publicProp : Symbol(publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+
+    rest2.publicProp;
+>rest2.publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+>publicProp : Symbol(A.publicProp, Decl(destructuringUnspreadableIntoRest.ts, 1, 16))
+
+    rest3.publicProp;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+
+    rest4.publicProp;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+
+    rest1.privateProp;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+
+    rest2.privateProp;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+
+    rest3.privateProp;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+
+    rest4.privateProp;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+
+    rest1.protectedProp;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+
+    rest2.protectedProp;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+
+    rest3.protectedProp;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+
+    rest4.protectedProp;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+
+    rest1.getter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+
+    rest2.getter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+
+    rest3.getter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+
+    rest4.getter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+
+    rest1.setter;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+
+    rest2.setter;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+
+    rest3.setter;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+
+    rest4.setter;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+
+    rest1.method;
+>rest1 : Symbol(rest1, Decl(destructuringUnspreadableIntoRest.ts, 52, 11))
+
+    rest2.method;
+>rest2 : Symbol(rest2, Decl(destructuringUnspreadableIntoRest.ts, 53, 11))
+
+    rest3.method;
+>rest3 : Symbol(rest3, Decl(destructuringUnspreadableIntoRest.ts, 54, 27))
+
+    rest4.method;
+>rest4 : Symbol(rest4, Decl(destructuringUnspreadableIntoRest.ts, 55, 27))
+}
+

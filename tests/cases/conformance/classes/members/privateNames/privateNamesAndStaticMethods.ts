@@ -1,6 +1,6 @@
 // @strict: true
-// @target: esnext
-// @lib: esnext
+// @target: esnext, es2022
+// @lib: esnext, es2022
 // @useDefineForClassFields: false
 
 class A {
@@ -14,7 +14,7 @@ class A {
         return this.#_quux;
     }
     static set #quux (val: number) {
-        this.#_quux = val; 
+        this.#_quux = val;
     }
     constructor () {
         A.#foo(30);

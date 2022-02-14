@@ -163,16 +163,19 @@ namespace ts.tscWatch {
                         version: system.createHash(libFile.content),
                         signature: system.createHash(libFile.content),
                         affectsGlobalScope: true,
+                        impliedFormat: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
                         signature: system.createHash(file1.content),
                         affectsGlobalScope: undefined,
+                        impliedFormat: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
                         signature: system.createHash(fileModified.content),
                         affectsGlobalScope: undefined,
+                        impliedFormat: undefined,
                     });
 
                     assert.deepEqual(state.compilerOptions, {

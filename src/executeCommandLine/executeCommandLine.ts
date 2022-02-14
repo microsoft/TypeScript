@@ -43,10 +43,10 @@ namespace ts {
         }
 
         const path = file.path;
-        if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+        if (fileExtensionIsOneOf(path, supportedTSExtensionsFlat)) {
             return "TypeScript";
         }
-        else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
+        else if (fileExtensionIsOneOf(path, supportedJSExtensionsFlat)) {
             return "JavaScript";
         }
         else if (fileExtensionIs(path, Extension.Json)) {
@@ -68,7 +68,7 @@ namespace ts {
     }
 
     function defaultIsPretty(sys: System) {
-        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
     }
 
     function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
@@ -96,26 +96,47 @@ namespace ts {
                 bold: (str: string) => str,
                 blue: (str: string) => str,
                 blueBackground: (str: string) => str,
-                white: (str: string) => str
+                brightWhite: (str: string) => str
             };
         }
 
         function bold(str: string) {
             return `\x1b[1m${str}\x1b[22m`;
         }
+
+        const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+        const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
+        const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
+
         function blue(str: string) {
-            return `\x1b[34m${str}\x1b[39m`;
+            // Effectively Powershell and Command prompt users use cyan instead
+            // of blue because the default theme doesn't show blue with enough contrast.
+            if (isWindows && !isWindowsTerminal && !isVSCode) {
+                return brightWhite(str);
+            }
+
+            return `\x1b[94m${str}\x1b[39m`;
         }
+
+        // There are ~3 types of terminal color support: 16 colors, 256 and 16m colors
+        // If there is richer color support, e.g. 256+ we can use extended ANSI codes which are not just generic 'blue'
+        // but a 'lighter blue' which is closer to the blue in the TS logo.
+        const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color";
         function blueBackground(str: string) {
-            return `\x1b[44m${str}\x1b[49m`;
+            if (supportsRicherColors) {
+                return `\x1B[48;5;68m${str}\x1B[39;49m`;
+            }
+            else {
+                return `\x1b[44m${str}\x1B[39;49m`;
+            }
         }
-        function white(str: string) {
-            return `\x1b[37m${str}\x1b[39m`;
+        function brightWhite(str: string) {
+            return `\x1b[97m${str}\x1b[39m`;
         }
         return {
             bold,
             blue,
-            white,
+            brightWhite,
             blueBackground
         };
     }
@@ -139,11 +160,17 @@ namespace ts {
 
         // value type and possible value
         const valueCandidates = getValueCandidate(option);
-        const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
+        const defaultValueDescription =
+            typeof option.defaultValueDescription === "object"
+                ? getDiagnosticText(option.defaultValueDescription)
+                : formatDefaultValue(
+                      option.defaultValueDescription,
+                      option.type === "list" ? option.element.type : option.type
+                  );
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
         // Note: child_process might return `terminalWidth` as undefined.
-        if (terminalWidth >= 60) {
+        if (terminalWidth >= 80) {
             let description = "";
             if (option.description) {
                 description = getDiagnosticText(option.description);
@@ -181,6 +208,19 @@ namespace ts {
             text.push(sys.newLine);
         }
         return text;
+
+        function formatDefaultValue(
+            defaultValue: CommandLineOption["defaultValueDescription"],
+            type: CommandLineOption["type"]
+        ) {
+            return defaultValue !== undefined && typeof type === "object"
+                // e.g. ScriptTarget.ES2015 -> "es6/es2015"
+                ? arrayFrom(type.entries())
+                      .filter(([, value]) => value === defaultValue)
+                      .map(([name]) => name)
+                      .join("/")
+                : String(defaultValue);
+        }
 
         function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, option: CommandLineOption): boolean {
             const ignoreValues = ["string"];
@@ -265,8 +305,14 @@ namespace ts {
                         break;
                     default:
                         // ESMap<string, number | string>
-                        const keys = arrayFrom(option.type.keys());
-                        possibleValues = keys.join(", ");
+                        // Group synonyms: es6/es2015
+                        const inverted: { [value: string]: string[] } = {};
+                        option.type.forEach((value, name) => {
+                            (inverted[value] ||= []).push(name);
+                        });
+                        return getEntries(inverted)
+                            .map(([, synonyms]) => synonyms.join("/"))
+                            .join(", ");
                 }
                 return possibleValues;
             }
@@ -333,14 +379,14 @@ namespace ts {
 
     function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
         const colors = createColors(sys);
-        let output: string[] = [...getHelpHeader(sys)];
+        let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
         output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
 
         example("tsc", Diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory);
         example("tsc app.ts util.ts", Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
         example("tsc -b", Diagnostics.Build_a_composite_project_in_the_working_directory);
         example("tsc --init", Diagnostics.Creates_a_tsconfig_json_with_the_recommended_settings_in_the_working_directory);
-        example("tsc -p .path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
+        example("tsc -p ./path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
         example("tsc --help --all", Diagnostics.An_expanded_version_of_this_information_showing_all_possible_compiler_options);
         example(["tsc --noEmit", "tsc --target esnext"], Diagnostics.Compiles_the_current_project_with_additional_settings);
 
@@ -367,7 +413,7 @@ namespace ts {
     }
 
     function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
-        let output: string[] = [...getHelpHeader(sys)];
+        let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
         output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
         output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
         output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
@@ -377,32 +423,31 @@ namespace ts {
     }
 
     function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
-        let output: string[] = [...getHelpHeader(sys)];
+        let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
         output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
         for (const line of output) {
             sys.write(line);
         }
     }
 
-    function getHelpHeader(sys: System) {
+    function getHeader(sys: System, message: string) {
         const colors = createColors(sys);
         const header: string[] = [];
-        const tscExplanation = `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`;
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;;
         const tsIconLength = 5;
 
         const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = colors.blueBackground(colors.white(padLeft("TS ", tsIconLength)));
+        const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
-        if (terminalWidth >= tscExplanation.length + tsIconLength) {
+        if (terminalWidth >= message.length + tsIconLength) {
             // right align of the icon is 120 at most.
             const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
             const leftAlign = rightAlign - tsIconLength;
-            header.push(padRight(tscExplanation, leftAlign) + tsIconFirstLine + sys.newLine);
+            header.push(padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
             header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
         }
         else {
-            header.push(tscExplanation + sys.newLine);
+            header.push(message + sys.newLine);
             header.push(sys.newLine);
         }
         return header;
@@ -728,7 +773,7 @@ namespace ts {
 
     function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
         return shouldBePretty(sys, options) ?
-            errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
+            (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
             undefined;
     }
 
@@ -1014,7 +1059,12 @@ namespace ts {
         }
         else {
             sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+            const output: string[] = [sys.newLine, ...getHeader(sys,"Created a new tsconfig.json with:")];
+            output.push(getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
+            output.push(`You can learn more at https://aka.ms/tsconfig.json` + sys.newLine);
+            for (const line of output) {
+                sys.write(line);
+            }
         }
 
         return;

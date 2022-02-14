@@ -4,6 +4,7 @@ module A { }
 
 var a: A; // error
 >a : Symbol(a, Decl(moduleWithNoValuesAsType.ts, 1, 3))
+>A : Symbol(A)
 
 module B {
 >B : Symbol(B, Decl(moduleWithNoValuesAsType.ts, 1, 9))
@@ -13,6 +14,7 @@ module B {
 }
 var b: B; // error
 >b : Symbol(b, Decl(moduleWithNoValuesAsType.ts, 6, 3))
+>B : Symbol(B)
 
 module C {
 >C : Symbol(C, Decl(moduleWithNoValuesAsType.ts, 6, 9))
@@ -27,4 +29,5 @@ module C {
 
 var c: C; // error
 >c : Symbol(c, Decl(moduleWithNoValuesAsType.ts, 14, 3))
+>C : Symbol(C)
 

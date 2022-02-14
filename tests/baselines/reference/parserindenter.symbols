@@ -25,31 +25,40 @@ module Formatting {
 
         private indentationBag: IndentationBag;
 >indentationBag : Symbol(Indenter.indentationBag, Decl(parserindenter.ts, 19, 63))
+>IndentationBag : Symbol(IndentationBag)
 
         private scriptBlockBeginLineNumber: number;
 >scriptBlockBeginLineNumber : Symbol(Indenter.scriptBlockBeginLineNumber, Decl(parserindenter.ts, 21, 47))
 
         private offsetIndentationDeltas: Dictionary_int_int;
 >offsetIndentationDeltas : Symbol(Indenter.offsetIndentationDeltas, Decl(parserindenter.ts, 22, 51))
+>Dictionary_int_int : Symbol(Dictionary_int_int)
 
         constructor(
             public logger: TypeScript.ILogger,
 >logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
+>TypeScript : Symbol(TypeScript)
+>ILogger : Symbol(TypeScript.ILogger)
 
             public tree: ParseTree,
 >tree : Symbol(Indenter.tree, Decl(parserindenter.ts, 26, 46))
+>ParseTree : Symbol(ParseTree)
 
             public snapshot: ITextSnapshot,
 >snapshot : Symbol(Indenter.snapshot, Decl(parserindenter.ts, 27, 35))
+>ITextSnapshot : Symbol(ITextSnapshot)
 
             public languageHostIndentation: string,
 >languageHostIndentation : Symbol(Indenter.languageHostIndentation, Decl(parserindenter.ts, 28, 43))
 
             public editorOptions: Services.EditorOptions,
 >editorOptions : Symbol(Indenter.editorOptions, Decl(parserindenter.ts, 29, 51))
+>Services : Symbol(Services)
+>EditorOptions : Symbol(Services.EditorOptions)
 
             public firstToken: TokenSpan,
 >firstToken : Symbol(Indenter.firstToken, Decl(parserindenter.ts, 30, 57))
+>TokenSpan : Symbol(TokenSpan)
 
             public smartIndent: boolean) {
 >smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
@@ -102,9 +111,13 @@ module Formatting {
         public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEdits : Symbol(Indenter.GetIndentationEdits, Decl(parserindenter.ts, 44, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 46, 35))
+>TokenSpan : Symbol(TokenSpan)
 >nextToken : Symbol(nextToken, Decl(parserindenter.ts, 46, 52))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 46, 74))
+>ParseNode : Symbol(ParseNode)
 >sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 46, 91))
+>List_TextEditInfo : Symbol(List_TextEditInfo)
 
             if (this.logger.information()) {
 >this.logger : Symbol(Indenter.logger, Decl(parserindenter.ts, 25, 20))
@@ -172,15 +185,20 @@ module Formatting {
         public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEditsWorker : Symbol(Indenter.GetIndentationEditsWorker, Decl(parserindenter.ts, 64, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 66, 41))
+>TokenSpan : Symbol(TokenSpan)
 >nextToken : Symbol(nextToken, Decl(parserindenter.ts, 66, 58))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 66, 80))
+>ParseNode : Symbol(ParseNode)
 >sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 66, 97))
+>List_TextEditInfo : Symbol(List_TextEditInfo)
 
             var result = new List_TextEditInfo();
 >result : Symbol(result, Decl(parserindenter.ts, 67, 15))
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 68, 15))
+>IndentationInfo : Symbol(IndentationInfo)
 
             // This handles the case:
             //      return (
@@ -354,6 +372,8 @@ module Formatting {
         private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
 >GetCommentIndentationEdits : Symbol(Indenter.GetCommentIndentationEdits, Decl(parserindenter.ts, 149, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 151, 43))
+>TokenSpan : Symbol(TokenSpan)
+>List_TextEditInfo : Symbol(List_TextEditInfo)
 
             var result = new List_TextEditInfo();
 >result : Symbol(result, Decl(parserindenter.ts, 152, 15))
@@ -455,6 +475,8 @@ module Formatting {
 >GetIndentSizeFromIndentText : Symbol(Indenter.GetIndentSizeFromIndentText, Decl(parserindenter.ts, 179, 9))
 >indentText : Symbol(indentText, Decl(parserindenter.ts, 181, 43))
 >editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 181, 62))
+>Services : Symbol(Services)
+>EditorOptions : Symbol(Services.EditorOptions)
 
             return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
 >indentText : Symbol(indentText, Decl(parserindenter.ts, 181, 43))
@@ -465,6 +487,8 @@ module Formatting {
 >GetIndentSizeFromText : Symbol(Indenter.GetIndentSizeFromText, Decl(parserindenter.ts, 183, 9))
 >text : Symbol(text, Decl(parserindenter.ts, 185, 37))
 >editorOptions : Symbol(editorOptions, Decl(parserindenter.ts, 185, 50))
+>Services : Symbol(Services)
+>EditorOptions : Symbol(Services.EditorOptions)
 >includeNonIndentChars : Symbol(includeNonIndentChars, Decl(parserindenter.ts, 185, 89))
 
             var indentSize = 0;
@@ -520,10 +544,14 @@ module Formatting {
         private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentation : Symbol(Indenter.GetSpecialCaseIndentation, Decl(parserindenter.ts, 204, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 206, 42))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 206, 59))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 207, 15))
+>IndentationInfo : Symbol(IndentationInfo)
 
             switch (token.Token) {
 >token : Symbol(token, Decl(parserindenter.ts, 206, 42))
@@ -607,9 +635,12 @@ module Formatting {
         private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForLCurly : Symbol(Indenter.GetSpecialCaseIndentationForLCurly, Decl(parserindenter.ts, 243, 9))
 >node : Symbol(node, Decl(parserindenter.ts, 245, 51))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 246, 15))
+>IndentationInfo : Symbol(IndentationInfo)
 
             if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
 >node : Symbol(node, Decl(parserindenter.ts, 245, 51))
@@ -648,10 +679,14 @@ module Formatting {
         private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForSemicolon : Symbol(Indenter.GetSpecialCaseIndentationForSemicolon, Decl(parserindenter.ts, 262, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 264, 54))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 264, 71))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 265, 15))
+>IndentationInfo : Symbol(IndentationInfo)
 
             if (this.smartIndent) {
 >this.smartIndent : Symbol(Indenter.smartIndent, Decl(parserindenter.ts, 31, 41))
@@ -700,10 +735,14 @@ module Formatting {
         private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForComment : Symbol(Indenter.GetSpecialCaseIndentationForComment, Decl(parserindenter.ts, 285, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 287, 52))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 287, 69))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 288, 15))
+>IndentationInfo : Symbol(IndentationInfo)
 
             // Only indent line comment and the first line of block comment
             var twoCharSpan = token.Span.Intersection(new Span(token.Span.startPosition(), 2));
@@ -754,7 +793,9 @@ module Formatting {
         private CanIndentComment(token: TokenSpan, node: ParseNode): boolean {
 >CanIndentComment : Symbol(Indenter.CanIndentComment, Decl(parserindenter.ts, 305, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 307, 33))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 307, 50))
+>ParseNode : Symbol(ParseNode)
 
             switch (node.AuthorNode.Details.Kind) {
 >node : Symbol(node, Decl(parserindenter.ts, 307, 50))
@@ -810,6 +851,7 @@ module Formatting {
 >ApplyScriptBlockIndentation : Symbol(Indenter.ApplyScriptBlockIndentation, Decl(parserindenter.ts, 340, 9))
 >languageHostIndentation : Symbol(languageHostIndentation, Decl(parserindenter.ts, 342, 44))
 >tree : Symbol(tree, Decl(parserindenter.ts, 342, 76))
+>ParseTree : Symbol(ParseTree)
         {
             if (languageHostIndentation == null || tree.StartNodeSelf == null)
 >languageHostIndentation : Symbol(languageHostIndentation, Decl(parserindenter.ts, 342, 44))
@@ -875,8 +917,10 @@ module Formatting {
         private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
 >GetIndentEdit : Symbol(Indenter.GetIndentEdit, Decl(parserindenter.ts, 393, 9))
 >indentInfo : Symbol(indentInfo, Decl(parserindenter.ts, 395, 30))
+>IndentationInfo : Symbol(IndentationInfo)
 >tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 395, 58))
 >sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 395, 86))
+>TextEditInfo : Symbol(TextEditInfo)
 
             var indentText = this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level);
 >indentText : Symbol(indentText, Decl(parserindenter.ts, 396, 15))
@@ -1101,10 +1145,14 @@ module Formatting {
         private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
 >ApplyIndentationDeltaFromParent : Symbol(Indenter.ApplyIndentationDeltaFromParent, Decl(parserindenter.ts, 474, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 476, 49))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 476, 66))
+>ParseNode : Symbol(ParseNode)
+>IndentationInfo : Symbol(IndentationInfo)
 
             var indentationInfo: IndentationInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 477, 15))
+>IndentationInfo : Symbol(IndentationInfo)
 
             var indentableParent = node;
 >indentableParent : Symbol(indentableParent, Decl(parserindenter.ts, 479, 15))
@@ -1152,6 +1200,7 @@ module Formatting {
 >ApplyIndentationDelta1 : Symbol(Indenter.ApplyIndentationDelta1, Decl(parserindenter.ts, 491, 9))
 >tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 493, 39))
 >delta : Symbol(delta, Decl(parserindenter.ts, 493, 66))
+>IndentationInfo : Symbol(IndentationInfo)
 
             // Get current indentation
             var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
@@ -1187,6 +1236,7 @@ module Formatting {
 >ApplyIndentationDelta2 : Symbol(Indenter.ApplyIndentationDelta2, Decl(parserindenter.ts, 501, 9))
 >currentIndent : Symbol(currentIndent, Decl(parserindenter.ts, 503, 39))
 >delta : Symbol(delta, Decl(parserindenter.ts, 503, 61))
+>IndentationInfo : Symbol(IndentationInfo)
 
             if (delta == 0)
 >delta : Symbol(delta, Decl(parserindenter.ts, 503, 61))
@@ -1380,12 +1430,14 @@ module Formatting {
         private FillInheritedIndentation(tree: ParseTree): void
 >FillInheritedIndentation : Symbol(Indenter.FillInheritedIndentation, Decl(parserindenter.ts, 568, 9))
 >tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
+>ParseTree : Symbol(ParseTree)
         {
             var offset = -1;
 >offset : Symbol(offset, Decl(parserindenter.ts, 572, 15))
 
             var indentNode: ParseNode = null;
 >indentNode : Symbol(indentNode, Decl(parserindenter.ts, 573, 15))
+>ParseNode : Symbol(ParseNode)
 
             if (tree.StartNodeSelf != null) {
 >tree : Symbol(tree, Decl(parserindenter.ts, 570, 41))
@@ -1448,6 +1500,7 @@ module Formatting {
                 else {
                     var parent: ParseNode;
 >parent : Symbol(parent, Decl(parserindenter.ts, 595, 23))
+>ParseNode : Symbol(ParseNode)
 
                     // Otherwise base on parent indentation.
                     if (this.smartIndent) {
@@ -1629,6 +1682,7 @@ module Formatting {
 
             var indentationEdit: IndentationEditInfo;
 >indentationEdit : Symbol(indentationEdit, Decl(parserindenter.ts, 664, 15))
+>IndentationEditInfo : Symbol(IndentationEditInfo)
 
             // First check if we already have indentation info in our indentation bag
             indentationEdit = this.indentationBag.FindIndent(offset);
@@ -1681,10 +1735,12 @@ module Formatting {
         private RegisterIndentation(indent: TextEditInfo, sameLineIndent: boolean): void
 >RegisterIndentation : Symbol(Indenter.RegisterIndentation, Decl(parserindenter.ts, 683, 9))
 >indent : Symbol(indent, Decl(parserindenter.ts, 685, 36))
+>TextEditInfo : Symbol(TextEditInfo)
 >sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 685, 57))
         {
             var indentationInfo: IndentationEditInfo = null;
 >indentationInfo : Symbol(indentationInfo, Decl(parserindenter.ts, 687, 15))
+>IndentationEditInfo : Symbol(IndentationEditInfo)
 
             if (sameLineIndent) {
 >sameLineIndent : Symbol(sameLineIndent, Decl(parserindenter.ts, 685, 57))
@@ -1738,7 +1794,9 @@ module Formatting {
         private AdjustStartOffsetIfNeeded(token: TokenSpan, node: ParseNode): void
 >AdjustStartOffsetIfNeeded : Symbol(Indenter.AdjustStartOffsetIfNeeded, Decl(parserindenter.ts, 706, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 708, 42))
+>TokenSpan : Symbol(TokenSpan)
 >node : Symbol(node, Decl(parserindenter.ts, 708, 59))
+>ParseNode : Symbol(ParseNode)
         {
             if (token == null)
 >token : Symbol(token, Decl(parserindenter.ts, 708, 42))
@@ -1786,6 +1844,7 @@ module Formatting {
         private IsMultiLineString(token: TokenSpan): boolean {
 >IsMultiLineString : Symbol(Indenter.IsMultiLineString, Decl(parserindenter.ts, 732, 9))
 >token : Symbol(token, Decl(parserindenter.ts, 734, 34))
+>TokenSpan : Symbol(TokenSpan)
 
             return token.tokenID === TypeScript.TokenID.StringLiteral &&
 >token : Symbol(token, Decl(parserindenter.ts, 734, 34))

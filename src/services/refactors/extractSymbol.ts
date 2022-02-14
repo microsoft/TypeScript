@@ -17,15 +17,15 @@ namespace ts.refactor.extractSymbol {
             extractConstantAction.kind,
             extractFunctionAction.kind
         ],
-        getAvailableActions,
-        getEditsForAction
+        getEditsForAction: getRefactorEditsToExtractSymbol,
+        getAvailableActions: getRefactorActionsToExtractSymbol,
     });
 
     /**
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    export function getRefactorActionsToExtractSymbol(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const requestedRefactor = context.kind;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
         const targetRange = rangeToExtract.targetRange;
@@ -168,7 +168,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     /* Exported for tests */
-    export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    export function getRefactorEditsToExtractSymbol(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
         const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
 
@@ -314,8 +314,7 @@ namespace ts.refactor.extractSymbol {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
             const statements: Statement[] = [];
-            const start2 = start; // TODO: GH#18217 Need to alias `start` to get this to compile. See https://github.com/Microsoft/TypeScript/issues/19955#issuecomment-344118248
-            for (const statement of (start2.parent as BlockLike).statements) {
+            for (const statement of start.parent.statements) {
                 if (statement === start || statements.length) {
                     const errors = checkNode(statement);
                     if (errors) {
@@ -364,10 +363,11 @@ namespace ts.refactor.extractSymbol {
                     return node.expression;
                 }
             }
-            else if (isVariableStatement(node)) {
+            else if (isVariableStatement(node) || isVariableDeclarationList(node)) {
+                const declarations = isVariableStatement(node) ? node.declarationList.declarations : node.declarations;
                 let numInitializers = 0;
                 let lastInitializer: Expression | undefined;
-                for (const declaration of node.declarationList.declarations) {
+                for (const declaration of declarations) {
                     if (declaration.initializer) {
                         numInitializers++;
                         lastInitializer = declaration.initializer;
@@ -383,7 +383,6 @@ namespace ts.refactor.extractSymbol {
                     return node.initializer;
                 }
             }
-
             return node;
         }
 
@@ -487,8 +486,8 @@ namespace ts.refactor.extractSymbol {
                         // but a super *method call* simply implies a 'this' reference
                         if (node.parent.kind === SyntaxKind.CallExpression) {
                             // Super constructor call
-                            const containingClass = getContainingClass(node)!; // TODO:GH#18217
-                            if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
+                            const containingClass = getContainingClass(node);
+                            if (containingClass === undefined || containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
                                 (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                                 return true;
                             }
@@ -1141,7 +1140,7 @@ namespace ts.refactor.extractSymbol {
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-        let initializer = transformConstantInitializer(node, substitutions);
+        let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
         ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
 
@@ -1375,7 +1374,7 @@ namespace ts.refactor.extractSymbol {
         }
         let returnValueProperty: string | undefined;
         let ignoreReturns = false;
-        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(body as Expression)]);
+        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (hasWritesOrVariableDeclarations || substitutions.size) {
             const rewrittenStatements = visitNodes(statements, visitor).slice();

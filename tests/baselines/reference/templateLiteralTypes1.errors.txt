@@ -6,9 +6,10 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2590: Expression produces a union type that is too complex to represent.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (6 errors) ====
+==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (7 errors) ====
     // Template types example from #12754
     
     const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
@@ -259,4 +260,23 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
     } as const;
     
     let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+    
+    // Repro from #46480
+    
+    export type Spacing =
+        | `0`
+        | `${number}px`
+        | `${number}rem`
+        | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+    
+    const spacing: Spacing = "s12"
+    
+    export type SpacingShorthand =
+        | `${Spacing} ${Spacing}`
+        | `${Spacing} ${Spacing} ${Spacing}`
+        | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2590: Expression produces a union type that is too complex to represent.
+    
+    const test1: SpacingShorthand = "0 0 0";
     

@@ -58,7 +58,7 @@ const locals = [
 ];
 verify.completions(
     // Non-contextual, any, unknown, object, Record<string, ..>, [key: string]: .., Type parameter, etc..
-    { marker: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], exact: completion.globalsPlus(locals), isNewIdentifierLocation: true },
+    { marker: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], unsorted: completion.globalsPlus(locals), isNewIdentifierLocation: true },
     // Has named property
     { marker: ["12", "13"], exact: "typed", isNewIdentifierLocation: false },
     // Has both StringIndexType and named property
@@ -66,5 +66,5 @@ verify.completions(
     // NumberIndexType
     { marker: ["15", "16"], exact: [], isNewIdentifierLocation: true },
     // After comma
-    { marker: ["17"], exact: completion.globalsPlus(locals), isNewIdentifierLocation: true },
+    { marker: ["17"], unsorted: completion.globalsPlus(locals), isNewIdentifierLocation: true },
 );

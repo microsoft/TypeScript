@@ -31,7 +31,7 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            if (!ambientModule.body) { continue; }
+            if (!ambientModule.body) continue;
 
             const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
@@ -95,6 +95,7 @@ namespace ts.OrganizeImports {
         }
 
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
@@ -146,7 +147,8 @@ namespace ts.OrganizeImports {
                         importDecl.decorators,
                         importDecl.modifiers,
                         /*importClause*/ undefined,
-                        moduleSpecifier));
+                        moduleSpecifier,
+                        /*assertClause*/ undefined));
                 }
                 // If we’re not in a declaration file, we can’t remove the import clause even though
                 // the imported symbols are unused, because removing them makes it look like the import
@@ -161,7 +163,7 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
+            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
                 FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
@@ -231,14 +233,13 @@ namespace ts.OrganizeImports {
             else {
                 for (const defaultImport of defaultImports) {
                     newImportSpecifiers.push(
-                        factory.createImportSpecifier(factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
                 }
             }
 
-            newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause!.namedBindings as NamedImports).elements)); // TODO: GH#18217
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
             const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
-
             const importDecl = defaultImports.length > 0
                 ? defaultImports[0]
                 : namedImports[0];
@@ -358,7 +359,8 @@ namespace ts.OrganizeImports {
                             factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
                             factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                     ),
-                    exportDecl.moduleSpecifier));
+                    exportDecl.moduleSpecifier,
+                    exportDecl.assertClause));
         }
 
         return coalescedExports;
@@ -405,7 +407,8 @@ namespace ts.OrganizeImports {
             importDeclaration.decorators,
             importDeclaration.modifiers,
             factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
-            importDeclaration.moduleSpecifier);
+            importDeclaration.moduleSpecifier,
+            importDeclaration.assertClause);
     }
 
     function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[]) {
@@ -413,7 +416,8 @@ namespace ts.OrganizeImports {
     }
 
     export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
-        return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
+        return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
+            || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
             || compareIdentifiers(s1.name, s2.name);
     }
 
@@ -487,5 +491,21 @@ namespace ts.OrganizeImports {
             case SyntaxKind.VariableStatement:
                 return 6;
         }
+    }
+
+    function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
+        return flatMap(namedImports, namedImport =>
+            map(tryGetNamedBindingElements(namedImport), importSpecifier =>
+                importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                    ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                    : importSpecifier
+            )
+        );
+    }
+
+    function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
+        return namedImport.importClause?.namedBindings && isNamedImports(namedImport.importClause.namedBindings)
+            ? namedImport.importClause.namedBindings.elements
+            : undefined;
     }
 }

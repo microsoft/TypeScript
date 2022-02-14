@@ -27,6 +27,10 @@ namespace ts.projectSystem {
         path: "/src/ambient.d.ts",
         content: "declare module 'ambient' {}"
     };
+    const mobxPackageJson: File = {
+        path: "/node_modules/mobx/package.json",
+        content: `{ "name": "mobx", "version": "1.0.0" }`
+    };
     const mobxDts: File = {
         path: "/node_modules/mobx/index.d.ts",
         content: "export declare function observable(): unknown;"
@@ -120,7 +124,7 @@ namespace ts.projectSystem {
     });
 
     function setup() {
-        const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxDts]);
+        const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
         const session = createSession(host);
         openFilesForSession([aTs, bTs, cTs], session);
         const projectService = session.getProjectService();
