@@ -3993,8 +3993,10 @@ namespace ts {
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
-                // Should we elide `resolution-mode` if it matches the mode the currentSourceFile defaults to?
-                writeComment(`/// <reference types="${directive.fileName}" ${directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"` : ""}/>`);
+                const resolutionMode = directive.resolutionMode && directive.resolutionMode !== currentSourceFile?.impliedNodeFormat
+                    ? `resolution-mode="${directive.resolutionMode === ModuleKind.ESNext ? "import" : "require"}"`
+                    : "";
+                writeComment(`/// <reference types="${directive.fileName}" ${resolutionMode}/>`);
                 if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: !directive.resolutionMode ? BundleFileSectionKind.Type : directive.resolutionMode === ModuleKind.ESNext ? BundleFileSectionKind.TypeResolutionModeImport : BundleFileSectionKind.TypeResolutionModeRequire, data: directive.fileName });
                 writeLine();
             }

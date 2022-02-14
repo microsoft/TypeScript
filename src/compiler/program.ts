@@ -518,7 +518,7 @@ namespace ts {
         const cache = new Map<string, T>();
         for (const name of names) {
             let result: T;
-            const mode = (!isString(name) ? name.resolutionMode : undefined) || containingFileMode;
+            const mode = getModeForFileReference(name, containingFileMode);
             // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
             const strName = isString(name) ? name : name.fileName.toLowerCase();
             const cacheKey = mode !== undefined ? `${mode}|${strName}` : strName;
@@ -539,6 +539,11 @@ namespace ts {
         moduleAugmentations: SourceFile["moduleAugmentations"];
         impliedNodeFormat?: SourceFile["impliedNodeFormat"];
     };
+
+    /* @internal */
+    export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]) {
+        return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
+    }
 
     /* @internal */
     export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number) {

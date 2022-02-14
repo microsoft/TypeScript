@@ -400,7 +400,7 @@ namespace ts {
                 // import's syntax may override the file's default mode.
                 // Type references instead supply a `containingSourceFileMode` and a non-string entry which contains
                 // a default file mode override if applicable.
-                const mode = !isString(entry) ? entry.resolutionMode || containingSourceFileMode :
+                const mode = !isString(entry) ? getModeForFileReference(entry, containingSourceFileMode) :
                     containingSourceFile ? getModeForResolutionAtIndex(containingSourceFile, i) : undefined;
                 i++;
                 let resolution = resolutionsInFile.get(name, mode);

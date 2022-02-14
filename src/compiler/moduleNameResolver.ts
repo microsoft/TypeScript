@@ -347,7 +347,7 @@ namespace ts {
         // are present in a non-modal project; while in theory we'd like to either ignore the mode or provide faithful modern resolution, depending on what we feel is best,
         // in practice, not every cache has the options available to intelligently make the choice to ignore the mode request, and it's unclear how modern "faithful modern
         // resolution" should be (`node12`? `nodenext`?). As such, witnessing a mode-overriding triple-slash reference in a non-modal module resolution
-        // context should _probably_ be an error - and that should likely be handled by the `Program`.
+        // context should _probably_ be an error - and that should likely be handled by the `Program` (which is what we do).
         if (resolutionMode === ModuleKind.ESNext && (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext)) {
             features |= NodeResolutionFeatures.EsmMode;
         }

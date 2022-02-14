@@ -219,7 +219,7 @@ namespace ts {
             const entry = names[i];
             // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
             const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
-            const mode = !isString(entry) ? entry.resolutionMode || oldSourceFile?.impliedNodeFormat : oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, i);
+            const mode = !isString(entry) ? getModeForFileReference(entry, oldSourceFile?.impliedNodeFormat) : oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, i);
             const oldResolution = oldResolutions && oldResolutions.get(name, mode);
             const changed =
                 oldResolution
