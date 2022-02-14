@@ -1232,16 +1232,6 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isImportCall(n: Node): n is ImportCall {
-        return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.ImportKeyword;
-    }
-
-    export function isImportMeta(n: Node): n is ImportMetaProperty {
-        return isMetaProperty(n)
-            && n.keywordToken === SyntaxKind.ImportKeyword
-            && n.name.escapedText === "meta";
-    }
-
     export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
         return isImportTypeNode(n) && isLiteralTypeNode(n.argument) && isStringLiteral(n.argument.literal);
     }
