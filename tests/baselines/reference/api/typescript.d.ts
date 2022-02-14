@@ -3869,7 +3869,6 @@ declare namespace ts {
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
         createImportCall(argumentsList: readonly Expression[]): ImportCall;
-        updateImportCall(node: ImportCall, argumentsList: readonly Expression[]): ImportCall;
         restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
     }
     export interface CoreTransformationContext {
