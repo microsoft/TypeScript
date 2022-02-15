@@ -43,6 +43,11 @@ const locales1 = ['ban', 'id-u-co-pinyin', 'de-ID'];
 const options1 = { localeMatcher: 'lookup' } as const;
 console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
 
+const language = (new Intl.Locale('en-US')).language;
+
+new Intl.Locale(); // should error
+
+
 //// [es2020IntlAPIs.js]
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
 const count = 26254.39;
@@ -73,3 +78,5 @@ console.log(regionNamesInTraditionalChinese.of('US'));
 const locales1 = ['ban', 'id-u-co-pinyin', 'de-ID'];
 const options1 = { localeMatcher: 'lookup' };
 console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
+const language = (new Intl.Locale('en-US')).language;
+new Intl.Locale(); // should error

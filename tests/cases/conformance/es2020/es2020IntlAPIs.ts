@@ -43,3 +43,7 @@ console.log(regionNamesInTraditionalChinese.of('US'));
 const locales1 = ['ban', 'id-u-co-pinyin', 'de-ID'];
 const options1 = { localeMatcher: 'lookup' } as const;
 console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
+
+const language = (new Intl.Locale('en-US')).language;
+
+new Intl.Locale(); // should error
