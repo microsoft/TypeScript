@@ -26064,9 +26064,6 @@ namespace ts {
 
             const contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
-                // const inferenceContext = getInferenceContext(func); // >> Changed here
-                // const signature = inferenceContext ?
-                //                 instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
                 const signature = contextualSignature;
                 const index = func.parameters.indexOf(parameter) - (getThisParameter(func) ? 1 : 0);
                 return parameter.dotDotDotToken && lastOrUndefined(func.parameters) === parameter ?
@@ -31873,9 +31870,8 @@ namespace ts {
         function assignBindingElementTypes(pattern: BindingPattern, parentType: Type) {
             for (const element of pattern.elements) {
                 if (!isOmittedExpression(element)) {
-                    const type = getBindingElementTypeFromParentType(element, parentType); // >> Changed here
+                    const type = getBindingElementTypeFromParentType(element, parentType);
                     if (element.name.kind === SyntaxKind.Identifier) {
-                        // getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
                         getSymbolLinks(getSymbolOfNode(element)).type = type;
                     }
                     else {
