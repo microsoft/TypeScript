@@ -288,7 +288,7 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
      */
     const Locale: {
-        new (tag?: BCP47LanguageTag, options?: LocaleOptions): Locale;
+        new (tag: BCP47LanguageTag | Locale, options?: LocaleOptions): Locale;
     };
 
      interface DisplayNamesOptions {
