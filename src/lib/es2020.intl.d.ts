@@ -254,6 +254,8 @@ declare namespace Intl {
     }
 
     interface Locale extends LocaleOptions {
+        /** The primary language subtag associated with the locale. */
+        language: string;
         /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
         maximize(): Locale;
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
@@ -277,7 +279,7 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
      */
     const Locale: {
-        new (tag?: BCP47LanguageTag, options?: LocaleOptions): Locale;
+        new (tag: BCP47LanguageTag, options?: LocaleOptions): Locale;
     };
 
      interface DisplayNamesOptions {
