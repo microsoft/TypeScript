@@ -44,8 +44,8 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(65,1): error TS1042: 'asyn
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(66,1): error TS1042: 'async' modifier cannot be used here.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(67,1): error TS1191: An import declaration cannot have modifiers.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(68,1): error TS1193: An export declaration cannot have modifiers.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(70,5): error TS1233: An export declaration can only be used in a module.
-tests/cases/conformance/salsa/plainJSGrammarErrors.js(71,5): error TS1232: An import declaration can only be used in a namespace or module.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(70,5): error TS1474: An export declaration can only be used at the top level of a module.
+tests/cases/conformance/salsa/plainJSGrammarErrors.js(71,5): error TS1473: An import declaration can only be used at the top level of a module.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(72,5): error TS1258: A default export must be at the top level of a file or module declaration.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(75,5): error TS1184: Modifiers cannot appear here.
 tests/cases/conformance/salsa/plainJSGrammarErrors.js(78,5): error TS1042: 'static' modifier cannot be used here.
@@ -267,10 +267,10 @@ tests/cases/conformance/salsa/plainJSGrammarErrors.js(207,1): error TS1108: A 'r
     function nestedExports() {
         export { staticParam }
         ~~~~~~
-!!! error TS1233: An export declaration can only be used in a module.
+!!! error TS1474: An export declaration can only be used at the top level of a module.
         import 'fs'
         ~~~~~~
-!!! error TS1232: An import declaration can only be used in a namespace or module.
+!!! error TS1473: An import declaration can only be used at the top level of a module.
         export default 12
         ~~~~~~
 !!! error TS1258: A default export must be at the top level of a file or module declaration.

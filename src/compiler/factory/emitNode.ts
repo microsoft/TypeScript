@@ -127,7 +127,7 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting comments.
      */
-    export function getCommentRange(node: Node) {
+    export function getCommentRange(node: Node): TextRange {
         return node.emitNode?.commentRange ?? node;
     }
 

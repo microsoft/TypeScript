@@ -25,7 +25,7 @@ const getType = <P extends Params>(params: P) => {
 >rest : Omit<P, "foo">
 
     } = params;
->params : P
+>params : Params
 
     return rest;
 >rest : Omit<P, "foo">

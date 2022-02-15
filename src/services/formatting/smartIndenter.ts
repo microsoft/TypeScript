@@ -432,6 +432,8 @@ namespace ts.formatting {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
+                case SyntaxKind.GetAccessor:
+                    return getList((node as GetAccessorDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:

@@ -37,7 +37,7 @@ class A {
         [A.#field = 2] = [];
         [this.otherClass.#field = 2] = [];
     }
-    static #field;
+    static #field = 1;
     testObject() {
         return { x: 10, y: 6 };
     }
@@ -48,4 +48,3 @@ class A {
         [_a.#field] = [2];
     }
 }
-A.#field = 1;

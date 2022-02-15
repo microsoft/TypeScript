@@ -727,11 +727,11 @@
         "category": "Error",
         "code": 1231
     },
-    "An import declaration can only be used in a namespace or module.": {
+    "An import declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1232
     },
-    "An export declaration can only be used in a module.": {
+    "An export declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1233
     },
@@ -739,7 +739,7 @@
         "category": "Error",
         "code": 1234
     },
-    "A namespace declaration is only allowed in a namespace or module.": {
+    "A namespace declaration is only allowed at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1235
     },
@@ -867,13 +867,17 @@
         "category": "Error",
         "code": 1268
     },
-    "Decorator function return type '{0}' is not assignable to type '{1}'.": {
+    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1269
     },
-    "Decorator function return type is '{0}' but is expected to be 'void' or 'any'.": {
+    "Decorator function return type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 1270
+    },
+    "Decorator function return type is '{0}' but is expected to be 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1271
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1420,6 +1424,14 @@
     "'catch' or 'finally' expected.": {
         "category": "Error",
         "code": 1472
+    },
+    "An import declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1473
+    },
+    "An export declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1474
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3289,10 +3301,6 @@
         "category": "Error",
         "code": 2804
     },
-    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
-        "category": "Error",
-        "code": 2805
-    },
     "Private accessor was defined without a getter.": {
         "category": "Error",
         "code": 2806
@@ -3308,10 +3316,6 @@
     "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
-    },
-    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
-        "category": "Error",
-        "code": 2810
     },
     "Initializer for property '{0}'": {
         "category": "Error",
@@ -7138,6 +7142,22 @@
     "Add 'undefined' to optional property type": {
         "category": "Message",
         "code": 95169
+    },
+    "Convert named imports to default import": {
+        "category": "Message",
+        "code": 95170
+    },
+    "Delete unused '@param' tag '{0}'": {
+        "category": "Message",
+        "code": 95171
+    },
+    "Delete all unused '@param' tags": {
+        "category": "Message",
+        "code": 95172
+    },
+    "Rename '@param' tag name '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95173
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

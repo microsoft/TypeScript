@@ -861,9 +861,9 @@ namespace ts {
         Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block.code,
         Diagnostics.A_set_accessor_cannot_have_rest_parameter.code,
         Diagnostics.A_set_accessor_must_have_exactly_one_parameter.code,
-        Diagnostics.An_export_declaration_can_only_be_used_in_a_module.code,
+        Diagnostics.An_export_declaration_can_only_be_used_at_the_top_level_of_a_module.code,
         Diagnostics.An_export_declaration_cannot_have_modifiers.code,
-        Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module.code,
+        Diagnostics.An_import_declaration_can_only_be_used_at_the_top_level_of_a_module.code,
         Diagnostics.An_import_declaration_cannot_have_modifiers.code,
         Diagnostics.An_object_member_cannot_be_declared_optional.code,
         Diagnostics.Argument_of_dynamic_import_cannot_be_spread_element.code,
@@ -2102,7 +2102,7 @@ namespace ts {
 
                 const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
                 const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
-                const isPlainJs = isJs && !sourceFile.checkJsDirective && options.checkJs === undefined;
+                const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
 
                 // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
