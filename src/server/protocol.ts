@@ -3420,6 +3420,14 @@ namespace ts.server.protocol {
 
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
+
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export interface CompilerOptions {
