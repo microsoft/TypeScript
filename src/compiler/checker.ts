@@ -31851,21 +31851,22 @@ namespace ts {
                     if (links.type === unknownType) {
                         links.type = getTypeFromBindingPattern(declaration.name);
                     }
-                    assignBindingElementTypes(declaration.name);
+                    assignBindingElementTypes(declaration.name, links.type);
                 }
             }
         }
 
         // When contextual typing assigns a type to a parameter that contains a binding pattern, we also need to push
         // the destructured type into the contained binding elements.
-        function assignBindingElementTypes(pattern: BindingPattern) {
+        function assignBindingElementTypes(pattern: BindingPattern, parentType: Type) {
             for (const element of pattern.elements) {
                 if (!isOmittedExpression(element)) {
+                    const type = getBindingElementTypeFromParentType(element, parentType);
                     if (element.name.kind === SyntaxKind.Identifier) {
-                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        getSymbolLinks(getSymbolOfNode(element)).type = type;
                     }
                     else {
-                        assignBindingElementTypes(element.name);
+                        assignBindingElementTypes(element.name, type);
                     }
                 }
             }
