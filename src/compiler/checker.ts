@@ -26061,12 +26061,17 @@ namespace ts {
                 links.resolvedSignature = cached;
                 return type;
             }
+
             const contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
+                // const inferenceContext = getInferenceContext(func); // >> Changed here
+                // const signature = inferenceContext ?
+                //                 instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
+                const signature = contextualSignature;
                 const index = func.parameters.indexOf(parameter) - (getThisParameter(func) ? 1 : 0);
                 return parameter.dotDotDotToken && lastOrUndefined(func.parameters) === parameter ?
-                    getRestTypeAtPosition(contextualSignature, index) :
-                    tryGetTypeAtPosition(contextualSignature, index);
+                    getRestTypeAtPosition(signature, index) :
+                    tryGetTypeAtPosition(signature, index);
             }
         }
 
@@ -31858,21 +31863,23 @@ namespace ts {
                     if (links.type === unknownType) {
                         links.type = getTypeFromBindingPattern(declaration.name);
                     }
-                    assignBindingElementTypes(declaration.name);
+                    assignBindingElementTypes(declaration.name, links.type);
                 }
             }
         }
 
         // When contextual typing assigns a type to a parameter that contains a binding pattern, we also need to push
         // the destructured type into the contained binding elements.
-        function assignBindingElementTypes(pattern: BindingPattern) {
+        function assignBindingElementTypes(pattern: BindingPattern, parentType: Type) {
             for (const element of pattern.elements) {
                 if (!isOmittedExpression(element)) {
+                    const type = getBindingElementTypeFromParentType(element, parentType); // >> Changed here
                     if (element.name.kind === SyntaxKind.Identifier) {
-                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        // getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        getSymbolLinks(getSymbolOfNode(element)).type = type;
                     }
                     else {
-                        assignBindingElementTypes(element.name);
+                        assignBindingElementTypes(element.name, type);
                     }
                 }
             }
