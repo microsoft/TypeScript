@@ -11,7 +11,6 @@ function call<T extends object>(obj: T, cb: (val: T) => void) {
 declare let obj: Slugs;
 call(obj, ({foo, ...rest}) => {
   console.log(rest.bar);
-  //               ~~~ Property 'bar' does not exist on type 'Omit<T, "foo">'. ts(2339)
 });
 
 //// [narrowingRestGenericCall.js]
@@ -32,5 +31,4 @@ function call(obj, cb) {
 call(obj, function (_a) {
     var foo = _a.foo, rest = __rest(_a, ["foo"]);
     console.log(rest.bar);
-    //               ~~~ Property 'bar' does not exist on type 'Omit<T, "foo">'. ts(2339)
 });

@@ -41,5 +41,4 @@ call(obj, ({foo, ...rest}) => {
 >rest : Symbol(rest, Decl(narrowingRestGenericCall.ts, 10, 16))
 >bar : Symbol(Slugs.bar, Decl(narrowingRestGenericCall.ts, 1, 14))
 
-  //               ~~~ Property 'bar' does not exist on type 'Omit<T, "foo">'. ts(2339)
 });
