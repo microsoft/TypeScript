@@ -28,5 +28,5 @@ declare global {
 // @filename: /index.ts
 /// <reference types="pkg" resolution-mode="require" />
 foo;
-bar; // bar should resolve while foo should not, since even though index.js is esm, the refernce is cjs
+bar; // bar should resolve while foo should not, since even though index.js is esm, the reference is cjs
 export {};

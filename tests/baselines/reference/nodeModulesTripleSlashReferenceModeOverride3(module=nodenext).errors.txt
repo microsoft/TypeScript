@@ -6,7 +6,7 @@
     foo;
     ~~~
 !!! error TS2304: Cannot find name 'foo'.
-    bar; // bar should resolve while foo should not, since even though index.js is esm, the refernce is cjs
+    bar; // bar should resolve while foo should not, since even though index.js is esm, the reference is cjs
     export {};
 ==== /node_modules/pkg/package.json (0 errors) ====
     {
