@@ -26061,14 +26061,12 @@ namespace ts {
                 links.resolvedSignature = cached;
                 return type;
             }
-
             const contextualSignature = getContextualSignature(func);
             if (contextualSignature) {
-                const signature = contextualSignature;
                 const index = func.parameters.indexOf(parameter) - (getThisParameter(func) ? 1 : 0);
                 return parameter.dotDotDotToken && lastOrUndefined(func.parameters) === parameter ?
-                    getRestTypeAtPosition(signature, index) :
-                    tryGetTypeAtPosition(signature, index);
+                    getRestTypeAtPosition(contextualSignature, index) :
+                    tryGetTypeAtPosition(contextualSignature, index);
             }
         }
 
