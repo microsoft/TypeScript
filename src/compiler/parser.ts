@@ -875,7 +875,7 @@ namespace ts {
             initializeState("", content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
             // Prime the scanner.
             nextToken();
-            const entityName = parseEntityName(/*allowReservedWords*/ true);
+            const entityName = parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ false);
             const isInvalid = token() === SyntaxKind.EndOfFileToken && !parseDiagnostics.length;
             clearState();
             return isInvalid ? entityName : undefined;
@@ -2719,7 +2719,7 @@ namespace ts {
             return createMissingList<T>();
         }
 
-        function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
+        function parseEntityName(allowReservedWords: boolean, allowPrivateIdentifiers: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             const pos = getNodePos();
             let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
             let dotPos = getNodePos();
@@ -2733,7 +2733,7 @@ namespace ts {
                 entity = finishNode(
                     factory.createQualifiedName(
                         entity,
-                        parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
+                        parseRightSideOfDot(allowReservedWords, allowPrivateIdentifiers) as Identifier
                     ),
                     pos
                 );
@@ -2918,7 +2918,7 @@ namespace ts {
         // TYPES
 
         function parseEntityNameOfTypeReference() {
-            return parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
+            return parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ false, Diagnostics.Type_expected);
         }
 
         function parseTypeArgumentsOfTypeReference() {
@@ -3078,7 +3078,7 @@ namespace ts {
         function parseTypeQuery(): TypeQueryNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.TypeOfKeyword);
-            return finishNode(factory.createTypeQueryNode(parseEntityName(/*allowReservedWords*/ true)), pos);
+            return finishNode(factory.createTypeQueryNode(parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ true)), pos);
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
@@ -7351,7 +7351,7 @@ namespace ts {
         function parseModuleReference() {
             return isExternalModuleReference()
                 ? parseExternalModuleReference()
-                : parseEntityName(/*allowReservedWords*/ false);
+                : parseEntityName(/*allowReservedWords*/ false, /*allowPrivateIdentifiers*/ false);
         }
 
         function parseExternalModuleReference() {
@@ -7659,7 +7659,7 @@ namespace ts {
                 const pos = getNodePos();
                 const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const p2 = getNodePos();
-                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
+                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false, /*allowPrivateIdentifiers*/ false);
                 while (token() === SyntaxKind.PrivateIdentifier) {
                     reScanHashToken(); // rescan #id as # id
                     nextTokenJSDoc(); // then skip the #
@@ -8122,7 +8122,7 @@ namespace ts {
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
                     const p2 = getNodePos();
                     let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
-                        ? parseEntityName(/*allowReservedWords*/ true)
+                        ? parseEntityName(/*allowReservedWords*/ true, /*allowPrivateIdentifiers*/ false)
                         : undefined;
                     if (name) {
                         while (token() === SyntaxKind.PrivateIdentifier) {
