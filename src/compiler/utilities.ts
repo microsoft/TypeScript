@@ -211,7 +211,7 @@ namespace ts {
     }
 
     export function hasChangesInResolutions<T>(
-        names: readonly string[],
+        names: readonly string[] | readonly FileReference[],
         newResolutions: readonly T[],
         oldResolutions: ModeAwareCache<T> | undefined,
         oldSourceFile: SourceFile | undefined,
@@ -220,7 +220,11 @@ namespace ts {
 
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
-            const oldResolution = oldResolutions && oldResolutions.get(names[i], oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, i));
+            const entry = names[i];
+            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+            const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
+            const mode = !isString(entry) ? getModeForFileReference(entry, oldSourceFile?.impliedNodeFormat) : oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, i);
+            const oldResolution = oldResolutions && oldResolutions.get(name, mode);
             const changed =
                 oldResolution
                     ? !newResolution || !comparer(oldResolution, newResolution)
@@ -6384,7 +6388,7 @@ namespace ts {
          * don't include automatic type reference directives. Must be called only when
          * `hasProcessedResolutions` returns false (once per cache instance).
          */
-        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void;
+        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirective | undefined> | undefined): void;
         /**
          * @internal
          * Whether `setSymlinksFromResolutions` has already been called.

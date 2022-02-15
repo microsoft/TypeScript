@@ -23,9 +23,13 @@ tests/cases/compiler/tupleTypes.ts(50,1): error TS2322: Type '[number, number]' 
 tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is not assignable to type '[number, string]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type '{}' is not assignable to type 'string'.
+tests/cases/compiler/tupleTypes.ts(57,1): error TS2322: Type '0' is not assignable to type '1'.
+tests/cases/compiler/tupleTypes.ts(59,4): error TS2540: Cannot assign to 'length' because it is a read-only property.
+tests/cases/compiler/tupleTypes.ts(61,4): error TS2540: Cannot assign to 'length' because it is a read-only property.
+tests/cases/compiler/tupleTypes.ts(63,4): error TS2540: Cannot assign to 'length' because it is a read-only property.
 
 
-==== tests/cases/compiler/tupleTypes.ts (14 errors) ====
+==== tests/cases/compiler/tupleTypes.ts (18 errors) ====
     var v1: [];  // Error
     var v2: [number];
     var v3: [number, string];
@@ -120,4 +124,24 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
 !!! error TS2322:     Type '{}' is not assignable to type 'string'.
     a3 = a1;
     a3 = a2;
+    
+    type B = Pick<[number], 'length'>;
+    declare const b: B;
+    b.length = 0; // Error
+    ~~~~~~~~
+!!! error TS2322: Type '0' is not assignable to type '1'.
+    declare const b1: readonly [number?];
+    b1.length = 0; // Error
+       ~~~~~~
+!!! error TS2540: Cannot assign to 'length' because it is a read-only property.
+    declare const b2: readonly [number, ...number[]];
+    b2.length = 0; // Error
+       ~~~~~~
+!!! error TS2540: Cannot assign to 'length' because it is a read-only property.
+    declare const b3: readonly number[];
+    b3.length = 0; // Error
+       ~~~~~~
+!!! error TS2540: Cannot assign to 'length' because it is a read-only property.
+    declare const b4: [number?];
+    b4.length = 0;
     

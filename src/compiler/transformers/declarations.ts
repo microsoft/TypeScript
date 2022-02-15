@@ -58,7 +58,7 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeReferences: Set<string> | undefined;
+        let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
@@ -92,7 +92,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly string[] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -296,7 +296,7 @@ namespace ts {
                         const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
-                        recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
+                        recordTypeReferenceDirectivesIfNecessary(map(sourceFile.typeReferenceDirectives, ref => [ref.fileName, ref.resolutionMode]));
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }
@@ -354,10 +354,10 @@ namespace ts {
             }
 
             function getFileReferencesForUsedTypeReferences() {
-                return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForTypeName) : [];
+                return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
             }
 
-            function getFileReferenceForTypeName(typeName: string): FileReference | undefined {
+            function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]): FileReference | undefined {
                 // Elide type references for which we have imports
                 if (emittedImports) {
                     for (const importStatement of emittedImports) {
@@ -372,7 +372,7 @@ namespace ts {
                         }
                     }
                 }
-                return { fileName: typeName, pos: -1, end: -1 };
+                return { fileName: typeName, pos: -1, end: -1, ...(mode ? { resolutionMode: mode } : undefined) };
             }
 
             function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
@@ -399,7 +399,7 @@ namespace ts {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
                             // via a non-relative name, emit a type reference directive to that non-relative name, rather than
                             // a relative path to the declaration file
-                            recordTypeReferenceDirectivesIfNecessary([specifier]);
+                            recordTypeReferenceDirectivesIfNecessary([[specifier, /*mode*/ undefined]]);
                             return;
                         }
 

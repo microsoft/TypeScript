@@ -871,6 +871,14 @@
         "category": "Error",
         "code": 1269
     },
+    "Decorator function return type '{0}' is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 1270
+    },
+    "Decorator function return type is '{0}' but is expected to be 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1271
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1403,6 +1411,14 @@
     "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
         "category": "Error",
         "code": 1451
+    },
+    "Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.": {
+        "category": "Error",
+        "code": 1452
+    },
+    "`resolution-mode` should be either `require` or `import`.": {
+        "category": "Error",
+        "code": 1453
     },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {

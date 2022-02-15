@@ -255,7 +255,7 @@ namespace FourSlashInterface {
             }
         }
 
-        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
             this.state.verifyInlayHints(expected, span, preference);
         }
 
