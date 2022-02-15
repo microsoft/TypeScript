@@ -1412,6 +1412,14 @@
         "category": "Error",
         "code": 1451
     },
+    "Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.": {
+        "category": "Error",
+        "code": 1452
+    },
+    "`resolution-mode` should be either `require` or `import`.": {
+        "category": "Error",
+        "code": 1453
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",

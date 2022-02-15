@@ -42202,11 +42202,11 @@ namespace ts {
             // this variable and functions that use it are deliberately moved here from the outer scope
             // to avoid scope pollution
             const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
-            let fileToDirective: ESMap<string, string>;
+            let fileToDirective: ESMap<string, [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]>;
             if (resolvedTypeReferenceDirectives) {
                 // populate reverse mapping: file path -> type reference directive that was resolved to this file
-                fileToDirective = new Map<string, string>();
-                resolvedTypeReferenceDirectives.forEach((resolvedDirective, key) => {
+                fileToDirective = new Map<string, [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]>();
+                resolvedTypeReferenceDirectives.forEach((resolvedDirective, key, mode) => {
                     if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
                         return;
                     }
@@ -42214,7 +42214,7 @@ namespace ts {
                     if (file) {
                         // Add the transitive closure of path references loaded by this file (as long as they are not)
                         // part of an existing type reference.
-                        addReferencedFilesToTypeDirective(file, key);
+                        addReferencedFilesToTypeDirective(file, key, mode);
                     }
                 });
             }
@@ -42337,7 +42337,7 @@ namespace ts {
             }
 
             // defined here to avoid outer scope pollution
-            function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): string[] | undefined {
+            function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined {
                 // program does not have any files with type reference directives - bail out
                 if (!fileToDirective) {
                     return undefined;
@@ -42355,13 +42355,13 @@ namespace ts {
             }
 
             // defined here to avoid outer scope pollution
-            function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined {
+            function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined {
                 // program does not have any files with type reference directives - bail out
                 if (!fileToDirective || !isSymbolFromTypeDeclarationFile(symbol)) {
                     return undefined;
                 }
                 // check what declarations in the symbol can contribute to the target meaning
-                let typeReferenceDirectives: string[] | undefined;
+                let typeReferenceDirectives: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined;
                 for (const decl of symbol.declarations!) {
                     // check meaning of the local symbol to see if declaration needs to be analyzed further
                     if (decl.symbol && decl.symbol.flags & meaning!) {
@@ -42412,14 +42412,14 @@ namespace ts {
                 return false;
             }
 
-            function addReferencedFilesToTypeDirective(file: SourceFile, key: string) {
+            function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: SourceFile["impliedNodeFormat"] | undefined) {
                 if (fileToDirective.has(file.path)) return;
-                fileToDirective.set(file.path, key);
-                for (const { fileName } of file.referencedFiles) {
+                fileToDirective.set(file.path, [key, mode]);
+                for (const { fileName, resolutionMode } of file.referencedFiles) {
                     const resolvedFile = resolveTripleslashReference(fileName, file.fileName);
                     const referencedFile = host.getSourceFile(resolvedFile);
                     if (referencedFile) {
-                        addReferencedFilesToTypeDirective(referencedFile, key);
+                        addReferencedFilesToTypeDirective(referencedFile, key, resolutionMode || file.impliedNodeFormat);
                     }
                 }
             }
