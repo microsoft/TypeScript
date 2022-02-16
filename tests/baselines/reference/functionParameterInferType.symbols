@@ -1,0 +1,57 @@
+=== tests/cases/compiler/functionParameterInferType.ts ===
+function t<
+>t : Symbol(t, Decl(functionParameterInferType.ts, 0, 0))
+
+  O extends { [key: string]: (...args: any[]) => (arg: number) => void }
+>O : Symbol(O, Decl(functionParameterInferType.ts, 0, 11))
+>key : Symbol(key, Decl(functionParameterInferType.ts, 1, 15))
+>args : Symbol(args, Decl(functionParameterInferType.ts, 1, 30))
+>arg : Symbol(arg, Decl(functionParameterInferType.ts, 1, 50))
+
+>(input: O) {}
+>input : Symbol(input, Decl(functionParameterInferType.ts, 2, 2))
+>O : Symbol(O, Decl(functionParameterInferType.ts, 0, 11))
+
+t({
+>t : Symbol(t, Decl(functionParameterInferType.ts, 0, 0))
+
+  fn1: (input: string) => (data) => {},
+>fn1 : Symbol(fn1, Decl(functionParameterInferType.ts, 4, 3))
+>input : Symbol(input, Decl(functionParameterInferType.ts, 5, 8))
+>data : Symbol(data, Decl(functionParameterInferType.ts, 5, 27))
+
+  fn2: (input: string) => {
+>fn2 : Symbol(fn2, Decl(functionParameterInferType.ts, 5, 39))
+>input : Symbol(input, Decl(functionParameterInferType.ts, 6, 8))
+
+    return (data) => {};
+>data : Symbol(data, Decl(functionParameterInferType.ts, 7, 12))
+
+  },
+  fn3(input: string) {
+>fn3 : Symbol(fn3, Decl(functionParameterInferType.ts, 8, 4))
+>input : Symbol(input, Decl(functionParameterInferType.ts, 9, 6))
+
+    return (data) => {};
+>data : Symbol(data, Decl(functionParameterInferType.ts, 10, 12))
+
+  },
+  fn4: (input: string) => {
+>fn4 : Symbol(fn4, Decl(functionParameterInferType.ts, 11, 4))
+>input : Symbol(input, Decl(functionParameterInferType.ts, 12, 8))
+
+    if (input) {
+>input : Symbol(input, Decl(functionParameterInferType.ts, 12, 8))
+
+      return (data: number) => {};
+>data : Symbol(data, Decl(functionParameterInferType.ts, 14, 14))
+
+    } else {
+      for (;;) {
+        return (data) => {};
+>data : Symbol(data, Decl(functionParameterInferType.ts, 17, 16))
+      }
+    }
+  },
+});
+
