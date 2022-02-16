@@ -28587,6 +28587,9 @@ namespace ts {
                 if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
                     error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
                 }
+                if (indexInfo.declaration && getCombinedNodeFlags(indexInfo.declaration) & NodeFlags.Deprecated) {
+                    addDeprecatedSuggestion(right, [indexInfo.declaration], right.escapedText as string);
+                }
             }
             else {
                 if (isDeprecatedSymbol(prop) && isUncalledFunctionReference(node, prop) && prop.declarations) {
