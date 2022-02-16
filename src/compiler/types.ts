@@ -8223,6 +8223,7 @@ namespace ts {
         /*@internal*/ sourceMap?: boolean;
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ inlineSources?: boolean;
+        /*@internal*/ omitBraceSourceMapPositions?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;

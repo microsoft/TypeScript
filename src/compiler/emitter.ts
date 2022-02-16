@@ -455,6 +455,7 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
+                omitBraceSourceMapPositions: true,
                 writeBundleFileInfo: !!bundleBuildInfo,
                 recordInternalSection: !!bundleBuildInfo,
                 relativeToBuildInfo
@@ -864,6 +865,7 @@ namespace ts {
         } = handlers;
 
         const extendedDiagnostics = !!printerOptions.extendedDiagnostics;
+        const omitBraceSourcePositions = !!printerOptions.omitBraceSourceMapPositions;
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = new Map<string, boolean>();
@@ -2987,7 +2989,18 @@ namespace ts {
                     decreaseIndent();
                 }
             }
-            pos = writeTokenText(token, writer, pos);
+
+            // We don't emit source positions for most tokens as it tends to be quite noisy, however
+            // we need to emit source positions for open and close braces so that tools like istanbul
+            // can map branches for code coverage. However, we still omit brace source positions when
+            // the output is a declaration file.
+            if (!omitBraceSourcePositions && (token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken)) {
+                pos = writeToken(token, pos, writer, contextNode);
+            }
+            else {
+                pos = writeTokenText(token, writer, pos);
+            }
+
             if (isSimilarNode && contextNode.end !== pos) {
                 const isJsxExprContext = contextNode.kind === SyntaxKind.JsxExpression;
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContext, /*forceNoNewline*/ isJsxExprContext);
