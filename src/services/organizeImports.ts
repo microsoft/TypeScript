@@ -95,6 +95,7 @@ namespace ts.OrganizeImports {
         }
 
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
@@ -162,7 +163,7 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
+            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
                 FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
@@ -236,10 +237,9 @@ namespace ts.OrganizeImports {
                 }
             }
 
-            newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause!.namedBindings as NamedImports).elements)); // TODO: GH#18217
+            newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
             const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
-
             const importDecl = defaultImports.length > 0
                 ? defaultImports[0]
                 : namedImports[0];
@@ -491,5 +491,21 @@ namespace ts.OrganizeImports {
             case SyntaxKind.VariableStatement:
                 return 6;
         }
+    }
+
+    function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
+        return flatMap(namedImports, namedImport =>
+            map(tryGetNamedBindingElements(namedImport), importSpecifier =>
+                importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+                    ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
+                    : importSpecifier
+            )
+        );
+    }
+
+    function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
+        return namedImport.importClause?.namedBindings && isNamedImports(namedImport.importClause.namedBindings)
+            ? namedImport.importClause.namedBindings.elements
+            : undefined;
     }
 }

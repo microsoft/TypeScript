@@ -303,7 +303,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -339,6 +339,7 @@ namespace ts.textChanges {
             this.deletedNodes.push({ sourceFile, node });
         }
 
+        /** Stop! Consider using `delete` instead, which has logic for deleting nodes from delimited lists. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
@@ -494,29 +495,30 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 
+        private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
+            const comments = flatMap(node.jsDoc, jsDoc =>
+                isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
+            const jsDoc = singleOrUndefined(node.jsDoc);
+            return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
+                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+        }
+
+        public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]) {
+            this.insertJsdocCommentBefore(sourceFile, updateJSDocHost(node), factory.createJSDocComment(this.createJSDocText(sourceFile, node), factory.createNodeArray(tags)));
+        }
+
         public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
             const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
             const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
                 const merged = tryMergeJsdocTags(tag, newTag);
                 if (merged) oldTags[i] = merged;
                 return !!merged;
             }));
-            const tags = [...oldTags, ...unmergedNewTags];
-            const jsDoc = singleOrUndefined(parent.jsDoc);
-            const comment = jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && !length(comments) ? undefined :
-                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
-            const tag = factory.createJSDocComment(comment, factory.createNodeArray(tags));
-            const host = updateJSDocHost(parent);
-            this.insertJsdocCommentBefore(sourceFile, host, tag);
+            this.replaceJSDocComment(sourceFile, parent, [...oldTags, ...unmergedNewTags]);
         }
 
         public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
-            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
-            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
-            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(filter(oldTags, predicate) || emptyArray)]));
-            const host = updateJSDocHost(parent);
-            this.insertJsdocCommentBefore(sourceFile, host, tag);
+            this.replaceJSDocComment(sourceFile, parent, filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate));
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
@@ -784,6 +786,20 @@ namespace ts.textChanges {
 
         public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
             this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+        }
+
+        public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+            const prevSpecifier = namedImports.elements[index - 1];
+            if (prevSpecifier) {
+                this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
+            }
+            else {
+                this.insertNodeBefore(
+                    sourceFile,
+                    namedImports.elements[0],
+                    importSpecifier,
+                    !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile));
+            }
         }
 
         /**

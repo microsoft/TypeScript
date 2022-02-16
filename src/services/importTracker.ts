@@ -367,7 +367,7 @@ namespace ts.FindAllReferences {
                     }
                 }
                 for (const ref of referencingFile.typeReferenceDirectives) {
-                    const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName);
+                    const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat);
                     if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                         refs.push({ kind: "reference", referencingFile, ref });
                     }
@@ -621,7 +621,7 @@ namespace ts.FindAllReferences {
                 Debug.assert((parent as ImportClause | NamespaceImport).name === node);
                 return true;
             case SyntaxKind.BindingElement:
-                return isInJSFile(node) && isRequireVariableDeclaration(parent);
+                return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent);
             default:
                 return false;
         }

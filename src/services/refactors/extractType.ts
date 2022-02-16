@@ -144,11 +144,20 @@ namespace ts.refactor {
         function visitor(node: Node): true | undefined {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
-                    const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    const declaration = tryCast(symbol?.declarations?.[0], isTypeParameterDeclaration);
-                    if (declaration) {
-                        if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
-                            pushIfUnique(result, declaration);
+                    const typeName = node.typeName;
+                    const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
+                    for (const decl of symbol?.declarations || emptyArray) {
+                        if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
+                            // skip extraction if the type node is in the range of the type parameter declaration.
+                            // function foo<T extends { a?: /**/T }>(): void;
+                            if (decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selection, file)) {
+                                return true;
+                            }
+
+                            if (rangeContainsSkipTrivia(statement, decl, file) && !rangeContainsSkipTrivia(selection, decl, file)) {
+                                pushIfUnique(result, decl);
+                                break;
+                            }
                         }
                     }
                 }

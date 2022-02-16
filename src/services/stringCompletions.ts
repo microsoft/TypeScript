@@ -368,9 +368,20 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
+    function isEmitResolutionKindUsingNodeModules(compilerOptions: CompilerOptions): boolean {
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
+    }
+
+    function isEmitModuleResolutionRespectingExportMaps(compilerOptions: CompilerOptions) {
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 ||
+        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
+    }
+
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
-        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+        return isEmitResolutionKindUsingNodeModules(compilerOptions) ?
             getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
@@ -549,7 +560,7 @@ namespace ts.Completions.StringCompletions {
 
         getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
 
-        if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
+        if (isEmitResolutionKindUsingNodeModules(compilerOptions)) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
             // (But do if we didn't find anything, e.g. 'package.json' missing.)
             let foundGlobal = false;
@@ -562,12 +573,65 @@ namespace ts.Completions.StringCompletions {
                 }
             }
             if (!foundGlobal) {
-                forEachAncestorDirectory(scriptPath, ancestor => {
+                let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                     const nodeModules = combinePaths(ancestor, "node_modules");
                     if (tryDirectoryExists(host, nodeModules)) {
                         getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*exclude*/ undefined, result);
                     }
-                });
+                };
+                if (fragmentDirectory && isEmitModuleResolutionRespectingExportMaps(compilerOptions)) {
+                    const nodeModulesDirectoryLookup = ancestorLookup;
+                    ancestorLookup = ancestor => {
+                        const components = getPathComponents(fragment);
+                        components.shift(); // shift off empty root
+                        let packagePath = components.shift();
+                        if (!packagePath) {
+                            return nodeModulesDirectoryLookup(ancestor);
+                        }
+                        if (startsWith(packagePath, "@")) {
+                            const subName = components.shift();
+                            if (!subName) {
+                                return nodeModulesDirectoryLookup(ancestor);
+                            }
+                            packagePath = combinePaths(packagePath, subName);
+                        }
+                        const packageFile = combinePaths(ancestor, "node_modules", packagePath, "package.json");
+                        if (tryFileExists(host, packageFile)) {
+                            const packageJson = readJson(packageFile, host as { readFile: (filename: string) => string | undefined });
+                            const exports = (packageJson as any).exports;
+                            if (exports) {
+                                if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                                    return; // null exports or entrypoint only, no sub-modules available
+                                }
+                                const keys = getOwnKeys(exports);
+                                const fragmentSubpath = components.join("/");
+                                const processedKeys = mapDefined(keys, k => {
+                                    if (k === ".") return undefined;
+                                    if (!startsWith(k, "./")) return undefined;
+                                    const subpath = k.substring(2);
+                                    if (!startsWith(subpath, fragmentSubpath)) return undefined;
+                                    // subpath is a valid export (barring conditions, which we don't currently check here)
+                                    if (!stringContains(subpath, "*")) {
+                                        return subpath;
+                                    }
+                                    // pattern export - only return everything up to the `*`, so the user can autocomplete, then
+                                    // keep filling in the pattern (we could speculatively return a list of options by hitting disk,
+                                    // but conditions will make that somewhat awkward, as each condition may have a different set of possible
+                                    // options for the `*`.
+                                    return subpath.slice(0, subpath.indexOf("*"));
+                                });
+                                forEach(processedKeys, k => {
+                                    if (k) {
+                                        result.push(nameAndKind(k, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                    }
+                                });
+                                return;
+                            }
+                        }
+                        return nodeModulesDirectoryLookup(ancestor);
+                    };
+                }
+                forEachAncestorDirectory(scriptPath, ancestorLookup);
             }
         }
 

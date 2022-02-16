@@ -72,6 +72,7 @@ Open files:
 		Projects: /user/username/projects/myproject/a/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/a/index.ts","line":3,"offset":10},"seq":1,"type":"request"}
+Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/lib/index.d.ts.map 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
 Search path: /user/username/projects/myproject/b

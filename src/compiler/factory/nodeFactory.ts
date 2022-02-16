@@ -4026,7 +4026,7 @@ namespace ts {
         }
 
         // @api
-        function createAssertEntry(name: AssertionKey, value: StringLiteral): AssertEntry {
+        function createAssertEntry(name: AssertionKey, value: Expression): AssertEntry {
             const node = createBaseNode<AssertEntry>(SyntaxKind.AssertEntry);
             node.name = name;
             node.value = value;
@@ -4035,7 +4035,7 @@ namespace ts {
         }
 
         // @api
-        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: StringLiteral): AssertEntry {
+        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry {
             return node.name !== name
                 || node.value !== value
                 ? update(createAssertEntry(name, value), node)
@@ -6416,7 +6416,7 @@ namespace ts {
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelper[] | undefined;
         let referencedFiles: FileReference[] | undefined;
-        let typeReferenceDirectives: string[] | undefined;
+        let typeReferenceDirectives: FileReference[] | undefined;
         let libReferenceDirectives: FileReference[] | undefined;
         let prependChildren: UnparsedTextLike[] | undefined;
         let texts: UnparsedSourceText[] | undefined;
@@ -6437,7 +6437,13 @@ namespace ts {
                     referencedFiles = append(referencedFiles, { pos: -1, end: -1, fileName: section.data });
                     break;
                 case BundleFileSectionKind.Type:
-                    typeReferenceDirectives = append(typeReferenceDirectives, section.data);
+                    typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.TypeResolutionModeImport:
+                    typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data, resolutionMode: ModuleKind.ESNext });
+                    break;
+                case BundleFileSectionKind.TypeResolutionModeRequire:
+                    typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data, resolutionMode: ModuleKind.CommonJS });
                     break;
                 case BundleFileSectionKind.Lib:
                     libReferenceDirectives = append(libReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
@@ -6498,6 +6504,8 @@ namespace ts {
                 case BundleFileSectionKind.NoDefaultLib:
                 case BundleFileSectionKind.Reference:
                 case BundleFileSectionKind.Type:
+                case BundleFileSectionKind.TypeResolutionModeImport:
+                case BundleFileSectionKind.TypeResolutionModeRequire:
                 case BundleFileSectionKind.Lib:
                     syntheticReferences = append(syntheticReferences, setTextRange(factory.createUnparsedSyntheticReference(section), section));
                     break;

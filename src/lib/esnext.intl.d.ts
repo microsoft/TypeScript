@@ -1,3 +1,6 @@
 declare namespace Intl {
-   // Empty for now
+
+   interface DateTimeFormat {
+      formatRange(startName: Date, endNumber: Date): string;
+   }
 }
