@@ -17042,9 +17042,9 @@ namespace ts {
 
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
             // If one of the returned expressions is context sensitive, the body block is context sensitive
-            if (!node.typeParameters && !getEffectiveReturnTypeNode(node) && !!node.body) {
-                return node.body.kind !== SyntaxKind.Block ? isContextSensitive(node.body) :
-                    !!forEachReturnStatement(node.body as Block, returnStatment => returnStatment.expression && isContextSensitive(returnStatment.expression));
+            if (!node.typeParameters && !getEffectiveReturnTypeNode(node) && node.body) {
+                return node.body.kind === SyntaxKind.Block ? !!forEachReturnStatement(node.body as Block, returnStatment => returnStatment.expression && isContextSensitive(returnStatment.expression)) :
+                    isContextSensitive(node.body);
             }
 
             return false;
