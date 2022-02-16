@@ -1577,7 +1577,7 @@ namespace ts.server {
             }
         }
 
-        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
+        protected async enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
             if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
                 this.projectService.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
@@ -1589,8 +1589,27 @@ namespace ts.server {
             const logError = (message: string) => {
                 (errorLogs || (errorLogs = [])).push(message);
             };
-            const resolvedModule = firstDefined(searchPaths, searchPath =>
+
+            let resolvedModule: any | undefined;
+            if (this.projectService.host.importServicePlugin) {
+                for (const searchPath of searchPaths) {
+                    try {
+                        resolvedModule = await this.projectService.host.importServicePlugin(searchPath, pluginConfigEntry.name);
+                    }
+                    catch (e) {
+                        // TODO: log this?
+                        continue;
+                    }
+                    if (resolvedModule) {
+                        break;
+                    }
+                }
+            }
+            else {
+                resolvedModule = firstDefined(searchPaths, searchPath =>
                 Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+            }
+
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {

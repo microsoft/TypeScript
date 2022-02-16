@@ -1,4 +1,6 @@
 /*@internal*/
+/// <reference lib="dom" />
+
 namespace ts.server {
     export interface HostWithWriteMessage {
         writeMessage(s: any): void;
@@ -137,6 +139,22 @@ namespace ts.server {
             /* eslint-enable no-restricted-globals */
 
             require: () => ({ module: undefined, error: new Error("Not implemented") }),
+            importServicePlugin: async (root: string, moduleName: string) => {
+                const packageRoot = combinePaths(root, "node_modules", moduleName);
+
+                const packageJsonResponse = await fetch(combinePaths(packageRoot, "package.json"));
+                const packageJson = await packageJsonResponse.json();
+                const browser = packageJson.browser;
+                if (!browser) {
+                    throw new Error("Could not load plugin. No 'browser' field found in package.json.");
+                }
+
+                const scriptPath = combinePaths(packageRoot, browser);
+
+                // TODO: TS rewrites `import(...)` to `require`. Use eval to bypass this
+                // eslint-disable-next-line no-eval
+                return eval(`import(${JSON.stringify(scriptPath)})`);
+            },
             exit: notImplemented,
 
             // Debugging related

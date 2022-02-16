@@ -16,5 +16,6 @@ declare namespace ts.server {
         gc?(): void;
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
+        importServicePlugin?(root: string, moduleName: string): Promise<any>;
     }
 }
