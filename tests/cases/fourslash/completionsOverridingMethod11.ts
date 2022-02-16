@@ -62,7 +62,7 @@ verify.completions({
             insertText:
 `c(a: string): string
 c(a: number): number
-c(a: any): string | number {
+c(a: unknown): string | number {
 }`,
         },
     ],
