@@ -8148,10 +8148,12 @@ namespace ts {
                         && nextTokenJSDoc() === SyntaxKind.AtToken
                         && tokenIsIdentifierOrKeyword(nextTokenJSDoc())) {
                         const kind = scanner.getTokenValue();
-                        if(kind === "link" || kind === "linkcode" || kind === "linkplain") {
-                            return kind;
-                        }
+                        if (isJSDocLinkTag(kind)) return kind;
                     }
+                }
+
+                function isJSDocLinkTag(kind: string) {
+                    return kind === "link" || kind === "linkcode" || kind === "linkplain";
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {
@@ -8276,7 +8278,7 @@ namespace ts {
 
                 function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
                     const isMarkdownOrJSDocLink = token() === SyntaxKind.OpenBracketToken
-                        || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link");
+                        || lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && isJSDocLinkTag(scanner.getTokenValue()));
                     const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
