@@ -20,7 +20,7 @@ and limitations under the License.
 
 /// <reference lib="es2018.asynciterable" />
 
-interface AsyncGenerator<T = unknown, TReturn = any, TNext = unknown> extends AsyncIterator<T, TReturn, TNext> {
+interface AsyncGenerator<T = unknown, TReturn = any, TNext = unknown> extends AsyncIterator<T, TReturn>, AsyncIterableIterator<T> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
     next(...args: [] | [TNext]): Promise<IteratorResult<T, TReturn>>;
     return(value: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>;

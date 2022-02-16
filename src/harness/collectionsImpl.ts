@@ -239,9 +239,9 @@ namespace collections {
         return result.done ? undefined : result;
     }
 
-    export function closeIterator<T>(iterator: Iterator<T>) {
-        const fn = iterator.return;
-        if (typeof fn === "function") fn.call(iterator);
+    export function closeIterator<T>(_: Iterator<T>) {
+        // const fn = iterator.return;
+        // if (typeof fn === "function") fn.call(iterator);
     }
 
     /**
