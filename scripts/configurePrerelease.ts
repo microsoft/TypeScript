@@ -1,5 +1,6 @@
 /// <reference types="node"/>
 import { normalize, relative } from "path";
+import { spawnSync } from "child_process";
 import assert = require("assert");
 import { readFileSync, writeFileSync } from "fs";
 
@@ -45,9 +46,11 @@ function main(): void {
         throw new Error(err + "\n");
     }
 
+    const currentCommit = spawnSync("git", ["rev-parse", "HEAD"]).stdout.toString().trim();
+
     // Finally write the changes to disk.
     // Modify the package.json structure
-    packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
+    packageJsonValue.version = `${majorMinor}.${prereleasePatch}+${currentCommit}`;
     writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4));
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
