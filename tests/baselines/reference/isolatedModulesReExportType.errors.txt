@@ -1,14 +1,17 @@
 /user.ts(2,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
+/user.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.
 /user.ts(17,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
 /user.ts(25,10): error TS1448: 'CC' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
 
 
-==== /user.ts (3 errors) ====
+==== /user.ts (4 errors) ====
     // Error, can't re-export something that's only a type.
     export { T } from "./exportT";
              ~
 !!! error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
     export import T2 = require("./exportEqualsT");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1269: Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.
     
     // OK, has a value side
     export { C } from "./exportValue";
