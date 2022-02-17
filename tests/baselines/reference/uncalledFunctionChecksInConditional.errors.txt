@@ -1,12 +1,12 @@
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(5,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(9,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(9,14): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(13,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(32,10): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(36,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(40,22): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(44,16): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
-tests/cases/compiler/uncalledFunctionChecksInConditional.ts(48,22): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(5,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(9,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(9,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(13,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(32,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(36,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(40,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(44,16): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional.ts(48,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
 ==== tests/cases/compiler/uncalledFunctionChecksInConditional.ts (9 errors) ====
@@ -16,21 +16,21 @@ tests/cases/compiler/uncalledFunctionChecksInConditional.ts(48,22): error TS2774
     
     if (isFoo) {
         ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo
     }
     
     if (isFoo || isBar) {
         ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
                  ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo, isBar
     }
     
     if (isFoo || isFoo()) {
         ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo
     }
     
@@ -51,31 +51,31 @@ tests/cases/compiler/uncalledFunctionChecksInConditional.ts(48,22): error TS2774
     
     if (x || isFoo) {
              ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo
     }
     
     if (isFoo || x) {
         ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo
     }
     
     if (x || y || z() || isFoo) {
                          ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo
     }
     
     if (x || uy || z || isUndefinedFoo) {
                    ~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on z
     }
     
     if (ux || y || uz || isFoo) {
                          ~~~~~
-!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
         // error on isFoo
     }
     

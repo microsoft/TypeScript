@@ -37304,7 +37304,8 @@ namespace ts {
                     ? condExpr.right
                     : condExpr;
                 const type = checkTruthinessExpression(location);
-                if (getFalsyFlags(type)) return; // TODO: Missing now?
+                const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
+                if (getFalsyFlags(type) || isPropertyExpressionCast) return;
 
                 // While it technically should be invalid for any known-truthy value
                 // to be tested, we de-scope to functions and Promises unreferenced in
@@ -37321,13 +37322,7 @@ namespace ts {
                     : isPropertyAccessExpression(location) ? location.name
                     : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
                     : undefined;
-                const isPropertyExpressionCast = isPropertyAccessExpression(location)
-                    && isTypeAssertion(location.expression);
-                if (!testedNode || isPropertyExpressionCast) {
-                    return;
-                }
-
-                const testedSymbol = getSymbolAtLocation(testedNode);
+                const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
                 if (!testedSymbol && !isPromise) {
                     return;
                 }
