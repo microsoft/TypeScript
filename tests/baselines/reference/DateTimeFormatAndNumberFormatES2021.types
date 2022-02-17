@@ -9,13 +9,13 @@ Intl.NumberFormat.prototype.formatRange
 >formatRange : any
 
 Intl.DateTimeFormat.prototype.formatRange
->Intl.DateTimeFormat.prototype.formatRange : (startDate: number | bigint, endDate: number | bigint) => string
+>Intl.DateTimeFormat.prototype.formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
 >Intl.DateTimeFormat.prototype : Intl.DateTimeFormat
 >Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >Intl : typeof Intl
 >DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >prototype : Intl.DateTimeFormat
->formatRange : (startDate: number | bigint, endDate: number | bigint) => string
+>formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
 
 new Intl.NumberFormat().formatRange 
 >new Intl.NumberFormat().formatRange : any
@@ -34,18 +34,18 @@ new Intl.NumberFormat().formatRangeToParts
 >formatRangeToParts : any
 
 new Intl.DateTimeFormat().formatRange
->new Intl.DateTimeFormat().formatRange : (startDate: number | bigint, endDate: number | bigint) => string
+>new Intl.DateTimeFormat().formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >Intl : typeof Intl
 >DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
->formatRange : (startDate: number | bigint, endDate: number | bigint) => string
+>formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
 
 new Intl.DateTimeFormat().formatRangeToParts
->new Intl.DateTimeFormat().formatRangeToParts : (startDate: number | bigint, endDate: number | bigint) => Intl.DateTimeFormatPart[]
+>new Intl.DateTimeFormat().formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeFormatPart[]
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >Intl : typeof Intl
 >DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
->formatRangeToParts : (startDate: number | bigint, endDate: number | bigint) => Intl.DateTimeFormatPart[]
+>formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeFormatPart[]
 
