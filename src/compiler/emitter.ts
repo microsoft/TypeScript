@@ -3102,7 +3102,8 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.emitNode?.typeNode ? node.name.emitNode.typeNode.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
