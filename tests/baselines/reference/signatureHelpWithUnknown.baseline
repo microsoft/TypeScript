@@ -90,7 +90,7 @@
               "text": [
                 {
                   "text": "x",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

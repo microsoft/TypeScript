@@ -34,12 +34,20 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n) || isVariableStatement(n) || n.kind === SyntaxKind.EndOfFileToken) {
+            if (isDeclaration(n) || isVariableStatement(n) || isReturnStatement(n) || isCallOrNewExpression(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
             if (isFunctionLike(n) && isBinaryExpression(n.parent) && isPropertyAccessExpression(n.parent.left)) {
                 addOutliningForLeadingCommentsForNode(n.parent.left, sourceFile, cancellationToken, out);
+            }
+
+            if (isBlock(n) || isModuleBlock(n)) {
+                addOutliningForLeadingCommentsForPos(n.statements.end, sourceFile, cancellationToken, out);
+            }
+
+            if (isClassLike(n) || isInterfaceDeclaration(n)) {
+                addOutliningForLeadingCommentsForPos(n.members.end, sourceFile, cancellationToken, out);
             }
 
             const span = getOutliningSpanForNode(n, sourceFile);
@@ -94,14 +102,22 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
-    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+    const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?(?:\r)?$/;
     function isRegionDelimiter(lineText: string) {
+        // We trim the leading whitespace and // without the regex since the
+        // multiple potential whitespace matches can make for some gnarly backtracking behavior
+        lineText = trimStringStart(lineText);
+        if (!startsWith(lineText, "\/\/")) {
+            return null; // eslint-disable-line no-null/no-null
+        }
+        lineText = trimString(lineText.slice(2));
         return regionDelimiterRegExp.exec(lineText);
     }
 
-    function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
-        const comments = getLeadingCommentRangesOfNode(n, sourceFile);
+    function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+        const comments = getLeadingCommentRanges(sourceFile.text, pos);
         if (!comments) return;
+
         let firstSingleLineCommentStart = -1;
         let lastSingleLineCommentEnd = -1;
         let singleLineCommentCount = 0;
@@ -145,6 +161,11 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
+    function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+        if (isJsxText(n)) return;
+        addOutliningForLeadingCommentsForPos(n.pos, sourceFile, cancellationToken, out);
+    }
+
     function createOutliningSpanFromBounds(pos: number, end: number, kind: OutliningSpanKind): OutliningSpan {
         return createOutliningSpan(createTextSpanFromBounds(pos, end), kind);
     }
@@ -170,7 +191,7 @@ namespace ts.OutliningElementsCollector {
                         return spanForNode(n.parent);
                     case SyntaxKind.TryStatement:
                         // Could be the try-block, or the finally-block.
-                        const tryStatement = <TryStatement>n.parent;
+                        const tryStatement = n.parent as TryStatement;
                         if (tryStatement.tryBlock === n) {
                             return spanForNode(n.parent);
                         }
@@ -204,21 +225,21 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
             case SyntaxKind.JsxElement:
-                return spanForJSXElement(<JsxElement>n);
+                return spanForJSXElement(n as JsxElement);
             case SyntaxKind.JsxFragment:
-                return spanForJSXFragment(<JsxFragment>n);
+                return spanForJSXFragment(n as JsxFragment);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
-                return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+                return spanForJSXAttributes((n as JsxOpeningLikeElement).attributes);
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
+                return spanForTemplateLiteral(n as TemplateExpression | NoSubstitutionTemplateLiteral);
             case SyntaxKind.ArrayBindingPattern:
                 return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
             case SyntaxKind.ArrowFunction:
-                return spanForArrowFunction(<ArrowFunction>n);
+                return spanForArrowFunction(n as ArrowFunction);
             case SyntaxKind.CallExpression:
-                return spanForCallExpression(<CallExpression>n);
+                return spanForCallExpression(n as CallExpression);
         }
 
         function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {

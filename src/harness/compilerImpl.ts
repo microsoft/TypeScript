@@ -118,11 +118,11 @@ namespace compiler {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
                             if (!vpath.isDeclaration(sourceFile.fileName)) {
-                                const extname = ts.getOutputExtension(sourceFile, this.options);
+                                const extname = ts.getOutputExtension(sourceFile.fileName, this.options);
                                 const outputs: CompilationOutput = {
                                     inputs: [input],
                                     js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
-                                    dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts")),
+                                    dts: dts.get(this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName))),
                                     map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
                                 };
 
@@ -205,7 +205,7 @@ namespace compiler {
             }
             else {
                 path = vpath.resolve(this.vfs.cwd(), path);
-                const outDir = ext === ".d.ts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+                const outDir = ext === ".d.ts" || ext === ".json.d.ts" || ext === ".d.mts" || ext === ".d.cts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
                 if (outDir) {
                     const common = this.commonSourceDirectory;
                     if (common) {
@@ -249,18 +249,24 @@ namespace compiler {
         }
 
         // establish defaults (aligns with old harness)
-        if (compilerOptions.target === undefined) compilerOptions.target = ts.ScriptTarget.ES3;
+        if (compilerOptions.target === undefined && compilerOptions.module !== ts.ModuleKind.Node12 && compilerOptions.module !== ts.ModuleKind.NodeNext) compilerOptions.target = ts.ScriptTarget.ES3;
         if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const preProgram = ts.length(rootFiles) < 100 ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
+        // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
+        // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
+        const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
+
+        const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
         const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
         const program = ts.createProgram(rootFiles || [], compilerOptions, host);
         const emitResult = program.emit();
         const postErrors = ts.getPreEmitDiagnostics(program);
-        const errors = preErrors && (preErrors.length !== postErrors.length) ? [...postErrors,
+        const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
+        const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
+        const errors = preErrors && (preErrors.length !== postErrors.length) ? [...shorterErrors!,
             ts.addRelatedInfo(
                 ts.createCompilerDiagnostic({
                     category: ts.DiagnosticCategory.Error,
@@ -274,7 +280,7 @@ namespace compiler {
                     key: "-1",
                     message: `The excess diagnostics are:`
                 }),
-                ...ts.filter(postErrors, p => !ts.some(preErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
+                ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
             )
         ] : postErrors;
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);

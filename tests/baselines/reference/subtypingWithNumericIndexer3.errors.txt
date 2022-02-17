@@ -1,17 +1,17 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(24,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(36,11): error TS2415: Class 'B4<T>' incorrectly extends base class 'A<T>'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts(40,11): error TS2415: Class 'B5<T>' incorrectly extends base class 'A<T>'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
 
@@ -30,7 +30,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     class B extends A {
           ~
 !!! error TS2415: Class 'B' incorrectly extends base class 'A'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'number' index signatures are incompatible.
 !!! error TS2415:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer3.ts:4:34: 'bar' is declared here.
         [x: number]: Base; // error
@@ -58,7 +58,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B3<T extends Derived> extends A<T> {
               ~~
 !!! error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'number' index signatures are incompatible.
 !!! error TS2415:     Type 'Base' is not assignable to type 'T'.
 !!! error TS2415:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
             [x: number]: Base; // error
@@ -67,7 +67,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B4<T extends Derived> extends A<T> {
               ~~
 !!! error TS2415: Class 'B4<T>' incorrectly extends base class 'A<T>'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'number' index signatures are incompatible.
 !!! error TS2415:     Type 'Derived' is not assignable to type 'T'.
 !!! error TS2415:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
             [x: number]: Derived; // error
@@ -76,7 +76,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         class B5<T extends Derived2> extends A<T> {
               ~~
 !!! error TS2415: Class 'B5<T>' incorrectly extends base class 'A<T>'.
-!!! error TS2415:   Index signatures are incompatible.
+!!! error TS2415:   'number' index signatures are incompatible.
 !!! error TS2415:     Type 'Derived2' is not assignable to type 'T'.
 !!! error TS2415:       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
             [x: number]: Derived2; // error

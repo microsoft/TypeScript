@@ -86,7 +86,7 @@ namespace Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.IScriptSnapshot): ts.TextChangeRange {
-            const oldShim = <ScriptSnapshot>oldScript;
+            const oldShim = oldScript as ScriptSnapshot;
             return this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
         }
     }
@@ -325,7 +325,8 @@ namespace Harness.LanguageService {
                     readFile: fileName => {
                         const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
-                    }
+                    },
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames()
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName)!;
@@ -471,8 +472,8 @@ namespace Harness.LanguageService {
             const responseFormat = format || ts.SemanticClassificationFormat.Original;
             return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length, responseFormat));
         }
-        getCompletionsAtPosition(fileName: string, position: number, preferences: ts.UserPreferences | undefined): ts.CompletionInfo {
-            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, preferences));
+        getCompletionsAtPosition(fileName: string, position: number, preferences: ts.UserPreferences | undefined, formattingSettings: ts.FormatCodeSettings | undefined): ts.CompletionInfo {
+            return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, preferences, formattingSettings));
         }
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: ts.FormatCodeOptions | undefined, source: string | undefined, preferences: ts.UserPreferences | undefined, data: ts.CompletionEntryData | undefined): ts.CompletionEntryDetails {
             return unwrapJSONCallResult(this.shim.getCompletionEntryDetails(fileName, position, entryName, JSON.stringify(formatOptions), source, preferences, data));
@@ -584,7 +585,7 @@ namespace Harness.LanguageService {
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
-        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
+        organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
         getEditsForFileRename(): readonly ts.FileTextChanges[] {
@@ -598,6 +599,9 @@ namespace Harness.LanguageService {
         }
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
+        }
+        provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.UserPreferences) {
+            return unwrapJSONCallResult(this.shim.provideInlayHints(fileName, span, preference));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
@@ -826,7 +830,7 @@ namespace Harness.LanguageService {
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
             // eslint-disable-next-line no-restricted-globals
-            return setTimeout(callback, ms, args);
+            return setTimeout(callback, ms, ...args);
         }
 
         clearTimeout(timeoutId: any): void {

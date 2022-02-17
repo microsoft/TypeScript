@@ -60,16 +60,16 @@ namespace ts.server {
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
     export function toNormalizedPath(fileName: string): NormalizedPath {
-        return <NormalizedPath>normalizePath(fileName);
+        return normalizePath(fileName) as NormalizedPath;
     }
 
     export function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path {
         const f = isRootedDiskPath(normalizedPath) ? normalizedPath : getNormalizedAbsolutePath(normalizedPath, currentDirectory);
-        return <Path>getCanonicalFileName(f);
+        return getCanonicalFileName(f) as Path;
     }
 
     export function asNormalizedPath(fileName: string): NormalizedPath {
-        return <NormalizedPath>fileName;
+        return fileName as NormalizedPath;
     }
 
     export interface NormalizedPathMap<T> {

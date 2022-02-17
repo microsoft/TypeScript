@@ -9,12 +9,11 @@ abstract class Base {
 >bar : () => void
 }
 
-// No errors:
 abstract class Sub extends Base {
 >Sub : Sub
 >Base : Base
 
-    override abstract foo(): number;
+    abstract override foo(): number;
 >foo : () => number
 
     bar() { }

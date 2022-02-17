@@ -18,7 +18,7 @@
 
 goTo.marker('str');
 edit.insert('.');
-verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });
+verify.completions({ includes: { name: "substring", kind: "method", kindModifiers: "declare" } });
 
 goTo.marker('num');
 edit.insert('.');

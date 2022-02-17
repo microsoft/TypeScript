@@ -8,16 +8,16 @@ const userName = process.env.GH_USERNAME || "typescript-bot";
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
 const masterBranchname = `user-baseline-updates`;
-const targetBranch = process.env.TARGET_BRANCH || "master";
-const branchName = process.env.TARGET_FORK?.toLowerCase() === "microsoft" && (targetBranch === "master" || targetBranch === "refs/heads/master")
+const targetBranch = process.env.TARGET_BRANCH || "main";
+const branchName = process.env.TARGET_FORK?.toLowerCase() === "microsoft" && (targetBranch === "main" || targetBranch === "refs/heads/main")
     ? masterBranchname
     : `user-update-${process.env.TARGET_FORK}-${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
-const baseRef = branchName === masterBranchname ? "master" : masterBranchname;
+const baseRef = branchName === masterBranchname ? "main" : masterBranchname;
 runSequence([
     ["git", ["remote", "add", "fork", remoteUrl]], // Add the remote fork
     ["git", ["checkout", "."]], // reset any changes
-    ["git", ["fetch", baseRef === "master" ? "origin" : "fork", baseRef]], // fetch target ref in case it's not present locally
+    ["git", ["fetch", baseRef === "main" ? "origin" : "fork", baseRef]], // fetch target ref in case it's not present locally
     ["git", ["checkout", baseRef]], // move head to target
     ["node", ["./node_modules/gulp/bin/gulp.js", "baseline-accept"]], // accept baselines
     ["git", ["checkout", "-b", branchName]], // create a branch
@@ -36,7 +36,7 @@ gh.pulls.create({
     maintainer_can_modify: true,
     title: `🤖 User test baselines have changed` + (process.env.TARGET_BRANCH ? ` for ${process.env.TARGET_BRANCH}` : ""),
     head: `${userName}:${branchName}`,
-    base: branchName === masterBranchname ? "master" : masterBranchname,
+    base: branchName === masterBranchname ? "main" : masterBranchname,
     body:
 `${process.env.SOURCE_ISSUE ? `This test run was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE} `+"\n" : ""}Please review the diff and merge if no changes are unexpected.
 You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).

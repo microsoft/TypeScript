@@ -183,7 +183,7 @@
               "text": [
                 {
                   "text": "radix",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

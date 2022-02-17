@@ -184,3 +184,48 @@ a3 = a2;
 >a3 : Symbol(a3, Decl(tupleTypes.ts, 45, 3))
 >a2 : Symbol(a2, Decl(tupleTypes.ts, 44, 3))
 
+type B = Pick<[number], 'length'>;
+>B : Symbol(B, Decl(tupleTypes.ts, 52, 8))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+
+declare const b: B;
+>b : Symbol(b, Decl(tupleTypes.ts, 55, 13))
+>B : Symbol(B, Decl(tupleTypes.ts, 52, 8))
+
+b.length = 0; // Error
+>b.length : Symbol(length)
+>b : Symbol(b, Decl(tupleTypes.ts, 55, 13))
+>length : Symbol(length)
+
+declare const b1: readonly [number?];
+>b1 : Symbol(b1, Decl(tupleTypes.ts, 57, 13))
+
+b1.length = 0; // Error
+>b1.length : Symbol(length)
+>b1 : Symbol(b1, Decl(tupleTypes.ts, 57, 13))
+>length : Symbol(length)
+
+declare const b2: readonly [number, ...number[]];
+>b2 : Symbol(b2, Decl(tupleTypes.ts, 59, 13))
+
+b2.length = 0; // Error
+>b2.length : Symbol(length)
+>b2 : Symbol(b2, Decl(tupleTypes.ts, 59, 13))
+>length : Symbol(length)
+
+declare const b3: readonly number[];
+>b3 : Symbol(b3, Decl(tupleTypes.ts, 61, 13))
+
+b3.length = 0; // Error
+>b3.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>b3 : Symbol(b3, Decl(tupleTypes.ts, 61, 13))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+declare const b4: [number?];
+>b4 : Symbol(b4, Decl(tupleTypes.ts, 63, 13))
+
+b4.length = 0;
+>b4.length : Symbol(length)
+>b4 : Symbol(b4, Decl(tupleTypes.ts, 63, 13))
+>length : Symbol(length)
+

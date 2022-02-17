@@ -1,0 +1,17 @@
+=== tests/cases/conformance/node/allowJs/foo.cjs ===
+exports.foo = "foo"
+>exports.foo = "foo" : "foo"
+>exports.foo : string
+>exports : typeof import("tests/cases/conformance/node/allowJs/foo")
+>foo : string
+>"foo" : "foo"
+
+=== tests/cases/conformance/node/allowJs/bar.ts ===
+import foo from "./foo.cjs"
+>foo : typeof foo
+
+foo.foo;
+>foo.foo : string
+>foo : typeof foo
+>foo : string
+

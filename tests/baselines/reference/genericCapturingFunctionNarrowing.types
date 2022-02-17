@@ -1,0 +1,44 @@
+=== tests/cases/compiler/genericCapturingFunctionNarrowing.ts ===
+function needsToNarrowTheType<First extends { foo: string }, Second extends { bar: string }, SubFirst extends First, SubFirstMore extends First & {other: string}>(thing: First | SubFirst | SubFirstMore | Second) {
+>needsToNarrowTheType : <First extends { foo: string; }, Second extends { bar: string; }, SubFirst extends First, SubFirstMore extends First & { other: string; }>(thing: First | SubFirst | SubFirstMore | Second) => void
+>foo : string
+>bar : string
+>other : string
+>thing : First | Second | SubFirst | SubFirstMore
+
+    if (hasAFoo(thing)) {
+>hasAFoo(thing) : boolean
+>hasAFoo : (value: First | Second) => value is First
+>thing : First | Second | SubFirst | SubFirstMore
+
+        console.log(thing.foo);
+>console.log(thing.foo) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>thing.foo : string
+>thing : First | SubFirst | SubFirstMore
+>foo : string
+    }
+    else {
+        // I would expect this to work because the type should be narrowed in this branch to `Second`
+        console.log(thing.bar); // Error: Property 'bar' does not exist on type 'First | Second'.
+>console.log(thing.bar) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>thing.bar : string
+>thing : Second
+>bar : string
+    }
+
+    function hasAFoo(value: First | Second): value is First {
+>hasAFoo : (value: First | Second) => value is First
+>value : First | Second
+
+        return "foo" in value;
+>"foo" in value : boolean
+>"foo" : "foo"
+>value : First | Second
+    }
+}

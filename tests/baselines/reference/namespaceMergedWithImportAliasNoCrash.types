@@ -30,7 +30,7 @@ Lib.foo; // should work
 >foo : string
 
 var x: Lib.Bar; // should be an error
->x : any
+>x : Lib.Bar
 >Lib : any
 
 export { Lib }

@@ -27,7 +27,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 22, end: 33 }, { fileName: "refFile2.ts", pos: 59, end: 70 },
                         { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
-                    importedFiles: <ts.FileReference[]>[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -40,8 +40,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -54,8 +54,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -68,8 +68,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -82,7 +82,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
@@ -97,10 +97,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ false,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
-                    importedFiles: <ts.FileReference[]>[],
+                    importedFiles: [] as ts.FileReference[],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -111,7 +111,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
@@ -214,7 +214,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             /*readImportFile*/ true,
             /*detectJavaScriptImports*/ false,
             {
-                referencedFiles: <ts.FileReference[]>[],
+                referencedFiles: [] as ts.FileReference[],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
@@ -244,7 +244,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
             /*readImportFile*/ true,
             /*detectJavaScriptImports*/ false,
             {
-                referencedFiles: <ts.FileReference[]>[],
+                referencedFiles: [] as ts.FileReference[],
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [

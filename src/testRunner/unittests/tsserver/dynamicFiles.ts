@@ -121,6 +121,28 @@ var x = 10;`
             service.openClientFile(file.path);
             checkNumberOfProjects(service, { configuredProjects: 1 });
         });
+
+        it("when changing scriptKind of the untitled files", () => {
+            const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
+            const service = createProjectService(host, { useInferredProjectPerProjectRoot: true });
+            service.openClientFile(untitledFile, "const x = 10;", ScriptKind.TS, tscWatch.projectRoot);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
+            const program = service.inferredProjects[0].getCurrentProgram()!;
+            const sourceFile = program.getSourceFile(untitledFile)!;
+
+            // Close untitled file
+            service.closeClientFile(untitledFile);
+
+            // Open untitled file with different mode
+            service.openClientFile(untitledFile, "const x = 10;", ScriptKind.TSX, tscWatch.projectRoot);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);
+            const newProgram = service.inferredProjects[0].getCurrentProgram()!;
+            const newSourceFile = newProgram.getSourceFile(untitledFile)!;
+            assert.notStrictEqual(newProgram, program);
+            assert.notStrictEqual(newSourceFile, sourceFile);
+        });
     });
 
     describe("unittests:: tsserver:: dynamicFiles:: ", () => {

@@ -31,7 +31,7 @@ class D extends B{
     override readonly p4: number;
 >p4 : Symbol(D.p4, Decl(override7.ts, 12, 33))
 
-    override static sp: number;
+    static override sp: number;
 >sp : Symbol(D.sp, Decl(override7.ts, 14, 33))
 
     override override oop: number;

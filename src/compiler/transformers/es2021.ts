@@ -21,7 +21,7 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
-                    const binaryExpression = <BinaryExpression>node;
+                    const binaryExpression = node as BinaryExpression;
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
                         return transformLogicalAssignment(binaryExpression);
                     }

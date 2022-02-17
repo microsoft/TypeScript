@@ -106,3 +106,88 @@ const templated1: Templated = `${value1} abc` as const;
 
 const value2 = "abc";
 const templated2: Templated = `${value2} abc` as const;
+
+// Repro from #43620
+
+type Prefixes = "foo" | "bar";
+
+type AllPrefixData = "foo:baz" | "bar:baz";
+
+type PrefixData<P extends Prefixes> = `${P}:baz`;
+
+interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
+    blah: string;
+}
+
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+
+chain("a");
+
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+    if (x === y) {
+        x;  // `foo-${string}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+    if (x === y) {
+        x;  // `foo-${T}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+    if (x === y) {
+        x;  // `foo-${string}` | 'bar'
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+    if (x === 'foo-test') {
+        x;  // 'foo-test'
+    }
+    if (y === 'foo-test') {
+        y;  // 'foo-test'
+    }
+}
+
+// Repro from #46045
+
+type Action =
+    | { type: `${string}_REQUEST` }
+    | { type: `${string}_SUCCESS`, response: string };
+
+function reducer(action: Action) {
+    if (action.type === 'FOO_SUCCESS') {
+        action.type;
+        action.response;
+    }
+}
+
+// Repro from #46768
+
+type DotString = `${string}.${string}.${string}`;
+
+declare function noSpread<P extends DotString>(args: P[]): P;
+declare function spread<P extends DotString>(...args: P[]): P;
+
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
+
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
+spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
+
+function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
+    spread(`1.${t}.3`, `1.${t}.4`);
+    spread(`1.${u}.3`, `1.${u}.4`);
+    spread(u1, u2);
+}

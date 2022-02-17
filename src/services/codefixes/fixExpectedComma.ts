@@ -9,7 +9,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile } = context;
             const info = getInfo(sourceFile, context.span.start, context.errorCode);
-            if (!info) { return undefined; }
+            if (!info) return undefined;
 
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
 

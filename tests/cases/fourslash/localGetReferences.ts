@@ -185,17 +185,8 @@
 ////	}
 ////}
 
-// References to comment.
-goTo.marker("1");
-verify.noReferences();
-
-// References to unresolved symbol.
-goTo.marker("3");
-verify.noReferences();
-
-// References to no context.
-goTo.marker("4");
-verify.noReferences();
+// References to comment / unresolved symbol / no context
+verify.baselineFindAllReferences('1', '3', '4')
 
 test.rangesByText().forEach((ranges, text) => {
     switch (text) {

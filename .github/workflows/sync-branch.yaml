@@ -28,8 +28,8 @@ jobs:
     - run: |
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
-        git fetch origin master
-        git merge origin/master --no-ff
+        git fetch origin main
+        git merge origin/main --no-ff
         npm ci
         npm test
         git push

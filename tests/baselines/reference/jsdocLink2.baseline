@@ -107,7 +107,7 @@
               "kind": "link"
             },
             {
-              "text": "C",
+              "text": "C()",
               "kind": "linkName",
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink2.ts",
@@ -116,10 +116,6 @@
                   "length": 11
                 }
               }
-            },
-            {
-              "text": "()",
-              "kind": "linkText"
             },
             {
               "text": "}",
@@ -161,7 +157,7 @@
               "kind": "link"
             },
             {
-              "text": "unformattedpostfix text",
+              "text": "unformatted postfix text",
               "kind": "linkText"
             },
             {

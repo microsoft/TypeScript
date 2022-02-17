@@ -471,7 +471,7 @@
           "text": [
             {
               "text": "foo",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",

@@ -196,7 +196,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -213,7 +213,7 @@
               "text": [
                 {
                   "text": "W",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 }
               ]
             },
@@ -221,8 +221,20 @@
               "name": "template",
               "text": [
                 {
-                  "text": "U, V",
-                  "kind": "text"
+                  "text": "U",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": ",",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -239,7 +251,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -256,7 +268,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -477,7 +489,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -494,7 +506,7 @@
               "text": [
                 {
                   "text": "W",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 }
               ]
             },
@@ -502,8 +514,20 @@
               "name": "template",
               "text": [
                 {
-                  "text": "U, V",
-                  "kind": "text"
+                  "text": "U",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": ",",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -520,7 +544,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -537,7 +561,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -758,7 +782,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -775,7 +799,7 @@
               "text": [
                 {
                   "text": "W",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 }
               ]
             },
@@ -783,8 +807,20 @@
               "name": "template",
               "text": [
                 {
-                  "text": "U, V",
-                  "kind": "text"
+                  "text": "U",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": ",",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -801,7 +837,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -818,7 +854,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1039,7 +1075,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -1056,7 +1092,7 @@
               "text": [
                 {
                   "text": "W",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 }
               ]
             },
@@ -1064,8 +1100,20 @@
               "name": "template",
               "text": [
                 {
-                  "text": "U, V",
-                  "kind": "text"
+                  "text": "U",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": ",",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -1082,7 +1130,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1099,7 +1147,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

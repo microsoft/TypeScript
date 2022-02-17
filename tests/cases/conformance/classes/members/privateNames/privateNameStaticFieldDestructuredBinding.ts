@@ -1,4 +1,5 @@
-// @target: esnext, es2015
+// @target: esnext, es2022, es2015
+// @useDefineForClassFields: false
 
 class A {
     static #field = 1;

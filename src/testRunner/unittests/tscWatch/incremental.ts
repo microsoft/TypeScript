@@ -163,16 +163,19 @@ namespace ts.tscWatch {
                         version: system.createHash(libFile.content),
                         signature: system.createHash(libFile.content),
                         affectsGlobalScope: true,
+                        impliedFormat: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
                         signature: system.createHash(file1.content),
-                        affectsGlobalScope: false,
+                        affectsGlobalScope: undefined,
+                        impliedFormat: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
                         signature: system.createHash(fileModified.content),
-                        affectsGlobalScope: false,
+                        affectsGlobalScope: undefined,
+                        impliedFormat: undefined,
                     });
 
                     assert.deepEqual(state.compilerOptions, {
@@ -181,8 +184,8 @@ namespace ts.tscWatch {
                         configFilePath: config.path
                     });
 
-                    assert.equal(state.referencedMap!.size, 0);
-                    assert.equal(state.exportedModulesMap!.size, 0);
+                    assert.equal(arrayFrom(state.referencedMap!.keys()).length, 0);
+                    assert.equal(arrayFrom(state.exportedModulesMap!.keys()).length, 0);
 
                     assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
                     assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as Path), emptyArray);
@@ -353,6 +356,23 @@ export const Fragment: unique symbol;
                     host.deleteFile(`${project}/node_modules/tslib/index.d.ts`);
                     host.deleteFile(`${project}/node_modules/tslib/package.json`);
                 }
+            });
+        });
+
+        describe("editing module augmentation", () => {
+            verifyIncrementalWatchEmit({
+                subScenario: "editing module augmentation",
+                files: () => [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
+                    { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
+                    { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
+                    { path: configFile.path, content: JSON.stringify({ compilerOptions: { module: "commonjs", incremental: true } }) },
+                ],
+                modifyFs: host => {
+                    // delete 'foo'
+                    host.writeFile(`${project}/src/types/classnames.d.ts`, `export {}; declare module "classnames" { interface Result {} }`);
+                },
             });
         });
     });

@@ -1,5 +1,5 @@
 // @target: esnext
-// @module: esnext
+// @module: es2022,esnext
 
 // @filename: index.ts
 // await disallowed in alias of named import

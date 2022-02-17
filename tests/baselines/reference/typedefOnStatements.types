@@ -1,0 +1,181 @@
+=== tests/cases/conformance/jsdoc/typedefOnStatements.js ===
+/** @typedef {{a: string}} A */
+;
+/** @typedef {{ b: string }} B */
+debugger;
+/** @typedef {{ c: string }} C */
+{
+}
+/** @typedef {{ d: string }} D */
+1 + 1;
+>1 + 1 : number
+>1 : 1
+>1 : 1
+
+/** @typedef {{ e: string }} E */
+if (false) {
+>false : false
+}
+/** @typedef {{ f: string }} F */
+do {
+} while (false);
+>false : false
+
+/** @typedef {{ g: string }} G */
+while (false) {
+>false : false
+}
+/** @typedef {{ h: string }} H */
+for (;; false) {
+>false : false
+}
+/** @typedef {{ i: string }} I */
+for (let i in []) {
+>i : string
+>[] : never[]
+}
+/** @typedef {{ j: string }} J */
+break;
+/** @typedef {{ k: string }} K */
+for (let k of []) {
+>k : never
+>[] : never[]
+}
+/** @typedef {{ l: string }} L */
+continue;
+/** @typedef {{ m: string }} M */
+with (name) {
+>name : void
+}
+/** @typedef {{ n: string }} N */
+switch (name) {
+>name : void
+}
+
+/** @typedef {{ o: string }} O */
+fork: while (false) {
+>fork : any
+>false : false
+}
+
+/** @typedef {{ p: string }} P */
+throw new Error('Unreachable')
+>new Error('Unreachable') : Error
+>Error : ErrorConstructor
+>'Unreachable' : "Unreachable"
+
+/** @typedef {{ q: string }} Q */
+try {
+}
+catch (e) {
+>e : unknown
+}
+
+/**
+ * @param {A} a
+ * @param {B} b
+ * @param {C} c
+ * @param {D} d
+ * @param {E} e
+ * @param {F} f
+ * @param {G} g
+ * @param {H} h
+ * @param {I} i
+ * @param {J} j
+ * @param {K} k
+ * @param {L} l
+ * @param {M} m
+ * @param {N} n
+ * @param {O} o
+ * @param {P} p
+ * @param {Q} q
+ */
+function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
+>proof : (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K, l: L, m: M, n: N, o: O, p: P, q: Q) => void
+>a : A
+>b : B
+>c : C
+>d : D
+>e : E
+>f : F
+>g : G
+>h : H
+>i : I
+>j : J
+>k : K
+>l : L
+>m : M
+>n : N
+>o : O
+>p : P
+>q : Q
+
+    console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
+>console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a.a : string
+>a : A
+>a : string
+>b.b : string
+>b : B
+>b : string
+>c.c : string
+>c : C
+>c : string
+>d.d : string
+>d : D
+>d : string
+>e.e : string
+>e : E
+>e : string
+>f.f : string
+>f : F
+>f : string
+>g.g : string
+>g : G
+>g : string
+>h.h : string
+>h : H
+>h : string
+>i.i : string
+>i : I
+>i : string
+>j.j : string
+>j : J
+>j : string
+>k.k : string
+>k : K
+>k : string
+>l.l : string
+>l : L
+>l : string
+>m.m : string
+>m : M
+>m : string
+>n.n : string
+>n : N
+>n : string
+>o.o : string
+>o : O
+>o : string
+>p.p : string
+>p : P
+>p : string
+>q.q : string
+>q : Q
+>q : string
+
+    /** @type {Alpha} */
+    var alpha = { alpha: "aleph" }
+>alpha : { alpha: string; }
+>{ alpha: "aleph" } : { alpha: string; }
+>alpha : string
+>"aleph" : "aleph"
+
+    /** @typedef {{ alpha: string }} Alpha */
+    return
+}
+
+

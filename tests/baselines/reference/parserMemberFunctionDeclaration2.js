@@ -7,6 +7,6 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    C.Foo = function () { };
+    C.prototype.Foo = function () { };
     return C;
 }());

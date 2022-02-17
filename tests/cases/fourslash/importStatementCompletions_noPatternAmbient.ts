@@ -10,8 +10,12 @@
 //// import style/**/
 
 verify.completions({
+  isNewIdentifierLocation: true,
   marker: "",
-  exact: [],
+  exact: [{
+    name: "type",
+    sortText: completion.SortText.GlobalsOrKeywords,
+  }],
   preferences: {
     includeCompletionsForImportStatements: true,
     includeInsertTextCompletions: true,

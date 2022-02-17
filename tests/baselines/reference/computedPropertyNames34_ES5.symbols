@@ -16,6 +16,7 @@ class C<T> {
             [foo<T>()]() { }
 >[foo<T>()] : Symbol([foo<T>()], Decl(computedPropertyNames34_ES5.ts, 3, 19))
 >foo : Symbol(foo, Decl(computedPropertyNames34_ES5.ts, 0, 0))
+>T : Symbol(T)
 
         };
         return 0;

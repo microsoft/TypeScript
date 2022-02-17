@@ -1,5 +1,6 @@
 // @strict: true
-// @target: esnext
+// @target: esnext, es2022
+// @useDefineForClassFields: false
 
 class Foo {
     #p1: (v: any) => asserts v is string = (v) => {

@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @this {string} */
+export function f1() {}
+>f1 : (this: string) => void
+
+/** @this */
+export function f2() {}
+>f2 : (this: any) => void
+

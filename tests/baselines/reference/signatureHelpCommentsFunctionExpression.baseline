@@ -382,7 +382,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -408,7 +408,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

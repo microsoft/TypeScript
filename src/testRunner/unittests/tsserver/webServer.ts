@@ -36,7 +36,7 @@ namespace ts.projectSystem {
                 writeMessage: s => messages.push(s),
             };
             const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
-            const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger;
+            const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
             const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic }, logger);
             return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
 

@@ -9,7 +9,10 @@
 
 verify.completions({
     marker: "",
-    includes: [
-        { name: "foo", kind: "function", kindModifiers: "deprecated,declare" }
-    ]
+    includes: [{
+        name: "foo",
+        kind: "function",
+        kindModifiers: "deprecated,declare",
+        sortText: completion.SortText.DeprecatedLocationPriority
+    }]
 });

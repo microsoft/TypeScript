@@ -19,8 +19,8 @@ fs2(...s2, 'a'); // error on 'a'
 fs2(...s3); // error on ...s3
 fs2_(...s_); // error on ...s_
 fs2_(...s2n_); // error on ...s2n_
-fs2_(...s_, ...s_); // error         FIXME: bad error message
-fs2_(...s_, ...s_, ...s_); // error  FIXME: worse error message
+fs2_(...s_, ...s_); // error on ...s_
+fs2_(...s_, ...s_, ...s_); // error on ...s_
 // fs2n_(...s2, ...s_); //           FIXME: should be a type error
 fs2n_(...s2_); // error on ...s2_
 

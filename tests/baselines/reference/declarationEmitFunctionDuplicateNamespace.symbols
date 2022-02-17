@@ -1,0 +1,22 @@
+=== tests/cases/compiler/declarationEmitFunctionDuplicateNamespace.ts ===
+function f(a: 0): 0;
+>f : Symbol(f, Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 0), Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 1, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 4, 1))
+>a : Symbol(a, Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 11))
+
+function f(a: 1): 1;
+>f : Symbol(f, Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 0), Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 1, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 4, 1))
+>a : Symbol(a, Decl(declarationEmitFunctionDuplicateNamespace.ts, 1, 11))
+
+function f(a: 0 | 1) {
+>f : Symbol(f, Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 0), Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 1, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 4, 1))
+>a : Symbol(a, Decl(declarationEmitFunctionDuplicateNamespace.ts, 2, 11))
+
+    return a;
+>a : Symbol(a, Decl(declarationEmitFunctionDuplicateNamespace.ts, 2, 11))
+}
+
+f.x = 2;
+>f.x : Symbol(f.x, Decl(declarationEmitFunctionDuplicateNamespace.ts, 4, 1))
+>f : Symbol(f, Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 0), Decl(declarationEmitFunctionDuplicateNamespace.ts, 0, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 1, 20), Decl(declarationEmitFunctionDuplicateNamespace.ts, 4, 1))
+>x : Symbol(f.x, Decl(declarationEmitFunctionDuplicateNamespace.ts, 4, 1))
+

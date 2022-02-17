@@ -1,0 +1,807 @@
+// === /tests/cases/fourslash/findAllRefsRootSymbols.ts ===
+// interface I { /*FIND ALL REFS*/[|x|]: {}; }
+// interface J { x: {}; }
+// declare const o: (I | J) & { x: string };
+// o.[|x|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) I.x: {}",
+      "textSpan": {
+        "start": 14,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 14,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 14,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "contextSpan": {
+          "start": 14,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) x: {} & string",
+      "textSpan": {
+        "start": 14,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 14,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 90,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsRootSymbols.ts ===
+// interface I { x: {}; }
+// interface J { /*FIND ALL REFS*/[|x|]: {}; }
+// declare const o: (I | J) & { x: string };
+// o.[|x|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) J.x: {}",
+      "textSpan": {
+        "start": 37,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "J",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 37,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 37,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "contextSpan": {
+          "start": 37,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) x: {} & string",
+      "textSpan": {
+        "start": 14,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 14,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 90,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsRootSymbols.ts ===
+// interface I { x: {}; }
+// interface J { x: {}; }
+// declare const o: (I | J) & { /*FIND ALL REFS*/[|x|]: string };
+// o.[|x|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) x: string",
+      "textSpan": {
+        "start": 75,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 75,
+        "length": 9
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 75,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "contextSpan": {
+          "start": 75,
+          "length": 9
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) x: {} & string",
+      "textSpan": {
+        "start": 14,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 14,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 90,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsRootSymbols.ts ===
+// interface I { [|x|]: {}; }
+// interface J { [|x|]: {}; }
+// declare const o: (I | J) & { [|x|]: string };
+// o./*FIND ALL REFS*/[|x|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) I.x: {}",
+      "textSpan": {
+        "start": 14,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 14,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 14,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "contextSpan": {
+          "start": 14,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) J.x: {}",
+      "textSpan": {
+        "start": 37,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "J",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        }
+      ],
+      "contextSpan": {
+        "start": 37,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 37,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "contextSpan": {
+          "start": 37,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) x: string",
+      "textSpan": {
+        "start": 75,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 75,
+        "length": 9
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 75,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "contextSpan": {
+          "start": 75,
+          "length": 9
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+      "kind": "property",
+      "name": "(property) x: {} & string",
+      "textSpan": {
+        "start": 14,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "{",
+          "kind": "punctuation"
+        },
+        {
+          "text": "}",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "&",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 14,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 90,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsRootSymbols.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

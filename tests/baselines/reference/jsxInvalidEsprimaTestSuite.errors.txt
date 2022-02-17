@@ -8,7 +8,7 @@ tests/cases/conformance/jsx/10.tsx(1,13): error TS1005: '>' expected.
 tests/cases/conformance/jsx/10.tsx(1,14): error TS2304: Cannot find name 'c'.
 tests/cases/conformance/jsx/10.tsx(1,16): error TS1109: Expression expected.
 tests/cases/conformance/jsx/11.tsx(1,2): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/11.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
+tests/cases/conformance/jsx/11.tsx(1,10): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
 tests/cases/conformance/jsx/12.tsx(1,1): error TS1109: Expression expected.
 tests/cases/conformance/jsx/12.tsx(1,2): error TS1109: Expression expected.
 tests/cases/conformance/jsx/12.tsx(1,5): error TS1109: Expression expected.
@@ -73,9 +73,9 @@ tests/cases/conformance/jsx/31.tsx(1,4): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/4.tsx(1,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
-tests/cases/conformance/jsx/6.tsx(1,4): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/6.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
 tests/cases/conformance/jsx/7.tsx(1,13): error TS1002: Unterminated string literal.
-tests/cases/conformance/jsx/8.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
+tests/cases/conformance/jsx/8.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a:b'.
 tests/cases/conformance/jsx/9.tsx(1,2): error TS2304: Cannot find name 'a:b'.
 tests/cases/conformance/jsx/9.tsx(1,2): error TS2633: JSX property access expressions cannot include JSX namespace names
 tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
@@ -119,7 +119,7 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
 !!! error TS1005: '</' expected.
 ==== tests/cases/conformance/jsx/6.tsx (1 errors) ====
     <a></b>;
-       ~~~~
+         ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
 ==== tests/cases/conformance/jsx/7.tsx (1 errors) ====
     <a foo="bar;
@@ -127,7 +127,7 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
 !!! error TS1002: Unterminated string literal.
 ==== tests/cases/conformance/jsx/8.tsx (1 errors) ====
     <a:b></b>;
-         ~~~~
+           ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a:b'.
 ==== tests/cases/conformance/jsx/9.tsx (3 errors) ====
     <a:b.c></a:b.c>;
@@ -155,7 +155,7 @@ tests/cases/conformance/jsx/9.tsx(1,10): error TS2304: Cannot find name 'a:b'.
     <a.b.c></a>;
      ~
 !!! error TS2304: Cannot find name 'a'.
-           ~~~~
+             ~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
 ==== tests/cases/conformance/jsx/12.tsx (6 errors) ====
     <.a></.a>;

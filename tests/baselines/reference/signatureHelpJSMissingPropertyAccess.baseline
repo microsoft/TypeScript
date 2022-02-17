@@ -283,7 +283,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -300,7 +300,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -546,7 +546,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -563,7 +563,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

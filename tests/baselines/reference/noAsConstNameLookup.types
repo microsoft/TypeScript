@@ -1,0 +1,83 @@
+=== tests/cases/compiler/noAsConstNameLookup.ts ===
+// Repros from #44292
+
+type Store = { a: 123 }
+>Store : Store
+>a : 123
+
+export type Cleaner = <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
+>Cleaner : Cleaner
+>runner : FeatureRunner<W>
+
+export class FeatureRunner<W extends Store> {
+>FeatureRunner : FeatureRunner<W>
+
+    private readonly cleaners: Cleaner[] = []
+>cleaners : Cleaner[]
+>[] : never[]
+
+    async runFeature(): Promise<any> {
+>runFeature : () => Promise<any>
+
+        const objectWhichShouldBeConst = {
+>objectWhichShouldBeConst : { readonly flags: {}; readonly settings: {}; }
+>{            flags: {},            settings: {},        } as const : { readonly flags: {}; readonly settings: {}; }
+>{            flags: {},            settings: {},        } : { readonly flags: {}; readonly settings: {}; }
+
+            flags: {},
+>flags : {}
+>{} : {}
+
+            settings: {},
+>settings : {}
+>{} : {}
+
+        } as const;
+        return objectWhichShouldBeConst
+>objectWhichShouldBeConst : { readonly flags: {}; readonly settings: {}; }
+    }
+
+    async run(): Promise<any> {
+>run : () => Promise<any>
+
+        const result = {}
+>result : {}
+>{} : {}
+
+        this.cleaners.forEach(c => c(this))
+>this.cleaners.forEach(c => c(this)) : void
+>this.cleaners.forEach : (callbackfn: (value: Cleaner, index: number, array: Cleaner[]) => void, thisArg?: any) => void
+>this.cleaners : Cleaner[]
+>this : this
+>cleaners : Cleaner[]
+>forEach : (callbackfn: (value: Cleaner, index: number, array: Cleaner[]) => void, thisArg?: any) => void
+>c => c(this) : (c: Cleaner) => Promise<any>
+>c : Cleaner
+>c(this) : Promise<any>
+>c : Cleaner
+>this : this
+
+        return result
+>result : {}
+    }
+}
+
+export class C<T> {
+>C : C<T>
+
+    f(): void {
+>f : () => void
+
+        let one = 1 as const;
+>one : 1
+>1 as const : 1
+>1 : 1
+    }
+}
+new C<string>().f();
+>new C<string>().f() : void
+>new C<string>().f : () => void
+>new C<string>() : C<string>
+>C : typeof C
+>f : () => void
+

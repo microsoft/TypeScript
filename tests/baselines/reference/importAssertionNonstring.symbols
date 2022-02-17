@@ -1,0 +1,22 @@
+=== tests/cases/compiler/mod.mts ===
+import * as thing1 from "./mod.mjs" assert {field: 0};
+>thing1 : Symbol(thing1, Decl(mod.mts, 0, 6))
+
+import * as thing2 from "./mod.mjs" assert {field: `a`};
+>thing2 : Symbol(thing2, Decl(mod.mts, 2, 6))
+
+import * as thing3 from "./mod.mjs" assert {field: /a/g};
+>thing3 : Symbol(thing3, Decl(mod.mts, 4, 6))
+
+import * as thing4 from "./mod.mjs" assert {field: ["a"]};
+>thing4 : Symbol(thing4, Decl(mod.mts, 6, 6))
+
+import * as thing5 from "./mod.mjs" assert {field: { a: 0 }};
+>thing5 : Symbol(thing5, Decl(mod.mts, 8, 6))
+>a : Symbol(a, Decl(mod.mts, 8, 52))
+
+import * as thing6 from "./mod.mjs" assert {type: "json", field: 0..toString()}
+>thing6 : Symbol(thing6, Decl(mod.mts, 10, 6))
+>0..toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
