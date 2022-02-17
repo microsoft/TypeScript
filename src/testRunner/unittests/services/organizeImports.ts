@@ -875,18 +875,6 @@ export function frag(): void;
                 }
             );
 
-            testOrganizeImports("JsdocImports",
-                /*skipDestructiveCodeActions*/ false,
-                {
-                    path: "/test.tsx",
-                    content: `import type { ZodType } from 'zod';
-
-/** Intended to be used in combination with {@link ZodType} */
-export function fun() { /* ... */ }
-`,
-                },
-            );
-
             describe("Exports", () => {
 
                 testOrganizeExports("MoveToTop",
