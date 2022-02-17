@@ -513,6 +513,9 @@ namespace ts {
                     // TypeScript type assertions are removed, but their subtrees are preserved.
                     return visitAssertionExpression(node as AssertionExpression);
 
+                case SyntaxKind.SatisfiesExpression:
+                    return visitSatisfiesExpression(node as SatisfiesExpression);
+
                 case SyntaxKind.CallExpression:
                     return visitCallExpression(node as CallExpression);
 
@@ -2272,6 +2275,11 @@ namespace ts {
 
         function visitNonNullExpression(node: NonNullExpression): Expression {
             const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+            return factory.createPartiallyEmittedExpression(expression, node);
+        }
+
+        function visitSatisfiesExpression(node: SatisfiesExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isExpression);
             return factory.createPartiallyEmittedExpression(expression, node);
         }
 

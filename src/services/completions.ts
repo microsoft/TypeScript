@@ -2471,6 +2471,9 @@ namespace ts.Completions {
 
                     case SyntaxKind.ExtendsKeyword:
                         return parentKind === SyntaxKind.TypeParameter;
+
+                    case SyntaxKind.SatisfiesKeyword:
+                        return parentKind === SyntaxKind.SatisfiesExpression;
                 }
             }
             return false;
@@ -3650,6 +3653,7 @@ namespace ts.Completions {
         return kind === SyntaxKind.AsyncKeyword
             || kind === SyntaxKind.AwaitKeyword
             || kind === SyntaxKind.AsKeyword
+            || kind === SyntaxKind.SatisfiesKeyword
             || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }
 

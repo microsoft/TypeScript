@@ -26740,6 +26740,8 @@ namespace ts {
                 }
                 case SyntaxKind.NonNullExpression:
                     return getContextualType(parent as NonNullExpression, contextFlags);
+                case SyntaxKind.SatisfiesExpression:
+                    return getTypeFromTypeNode((parent as SatisfiesExpression).type);
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(parent as JsxExpression);
                 case SyntaxKind.JsxAttribute:
@@ -31576,6 +31578,20 @@ namespace ts {
             }
         }
 
+        function checkSatisfiesExpression(node: SatisfiesExpression) {
+            checkSourceElement(node.type);
+
+            const targetType = getTypeFromTypeNode(node.type);
+            if (isErrorType(targetType)) {
+                return targetType;
+            }
+
+            const exprType = checkExpression(node.expression);
+            checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, node.type, node.expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
+
+            return exprType;
+        }
+
         function checkMetaProperty(node: MetaProperty): Type {
             checkGrammarMetaProperty(node);
 
@@ -34340,6 +34356,8 @@ namespace ts {
                     return checkNonNullAssertion(node as NonNullExpression);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return checkExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                case SyntaxKind.SatisfiesExpression:
+                    return checkSatisfiesExpression(node as SatisfiesExpression);
                 case SyntaxKind.MetaProperty:
                     return checkMetaProperty(node as MetaProperty);
                 case SyntaxKind.DeleteExpression:

@@ -1072,6 +1072,10 @@
         "category": "Error",
         "code": 1359
     },
+    "Type '{0}' does not satisfy the expected type '{1}'.": {
+        "category": "Error",
+        "code": 1360
+    },
     "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
@@ -6203,6 +6207,10 @@
     "The tag was first specified here.": {
         "category": "Error",
         "code": 8034
+    },
+    "Type satisfaction expressions can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8035
     },
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",

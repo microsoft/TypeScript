@@ -1975,6 +1975,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.SatisfiesExpression:
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
@@ -2073,6 +2074,8 @@ namespace ts {
                 return (parent as ExpressionWithTypeArguments).expression === node && !isPartOfTypeNode(parent);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return (parent as ShorthandPropertyAssignment).objectAssignmentInitializer === node;
+            case SyntaxKind.SatisfiesExpression:
+                return node === (parent as SatisfiesExpression).expression;
             default:
                 return isExpressionNode(parent);
         }
@@ -3774,6 +3777,7 @@ namespace ts {
                 return OperatorPrecedence.Member;
 
             case SyntaxKind.AsExpression:
+            case SyntaxKind.SatisfiesExpression:
                 return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:
@@ -3832,6 +3836,7 @@ namespace ts {
             case SyntaxKind.InstanceOfKeyword:
             case SyntaxKind.InKeyword:
             case SyntaxKind.AsKeyword:
+            case SyntaxKind.SatisfiesKeyword:
                 return OperatorPrecedence.Relational;
             case SyntaxKind.LessThanLessThanToken:
             case SyntaxKind.GreaterThanGreaterThanToken:
@@ -5839,7 +5844,8 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.NonNullExpression:
                 case SyntaxKind.PartiallyEmittedExpression:
-                    node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression).expression;
+                case SyntaxKind.SatisfiesExpression:
+                    node = (node as CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression | SatisfiesExpression).expression;
                     continue;
             }
 

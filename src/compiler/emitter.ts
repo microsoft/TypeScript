@@ -1729,6 +1729,8 @@ namespace ts {
                         return emitNonNullExpression(node as NonNullExpression);
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                    case SyntaxKind.SatisfiesExpression:
+                        return emitSatisfiesExpression(node as SatisfiesExpression);
                     case SyntaxKind.MetaProperty:
                         return emitMetaProperty(node as MetaProperty);
                     case SyntaxKind.SyntheticExpression:
@@ -2805,6 +2807,16 @@ namespace ts {
         function emitNonNullExpression(node: NonNullExpression) {
             emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
             writeOperator("!");
+        }
+
+        function emitSatisfiesExpression(node: SatisfiesExpression) {
+            emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+            if (node.type) {
+                writeSpace();
+                writeKeyword("satisfies");
+                writeSpace();
+                emit(node.type);
+            }
         }
 
         function emitMetaProperty(node: MetaProperty) {

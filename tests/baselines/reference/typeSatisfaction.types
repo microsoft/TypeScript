@@ -1,0 +1,57 @@
+=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts ===
+interface I1 {
+    a: number;
+>a : number
+}
+
+type T1 = {
+>T1 : T1
+
+    a: "a" | "b";
+>a : "a" | "b"
+}
+
+type T2 = (x: string) => void;
+>T2 : T2
+>x : string
+
+const a1 = { a: 1 } satisfies I1; // Ok
+>a1 : { a: number; }
+>{ a: 1 } satisfies I1 : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+const a2 = { a: 1, b: 1 } satisfies I1; // Error
+>a2 : { a: number; b: number; }
+>{ a: 1, b: 1 } satisfies I1 : { a: number; b: number; }
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+
+const a3 = { } satisfies I1; // Error
+>a3 : {}
+>{ } satisfies I1 : {}
+>{ } : {}
+
+const a4: T1 = { a: "a" } satisfies T1; // Ok
+>a4 : T1
+>{ a: "a" } satisfies T1 : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+const a5 = (m => m.substring(0)) satisfies T2; // Ok
+>a5 : (m: string) => string
+>(m => m.substring(0)) satisfies T2 : (m: string) => string
+>(m => m.substring(0)) : (m: string) => string
+>m => m.substring(0) : (m: string) => string
+>m : string
+>m.substring(0) : string
+>m.substring : (start: number, end?: number) => string
+>m : string
+>substring : (start: number, end?: number) => string
+>0 : 0
+

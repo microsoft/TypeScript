@@ -277,6 +277,9 @@ namespace ts {
                     visitNode(cbNode, (node as AsExpression).type);
             case SyntaxKind.NonNullExpression:
                 return visitNode(cbNode, (node as NonNullExpression).expression);
+            case SyntaxKind.SatisfiesExpression:
+                return visitNode(cbNode, (node as SatisfiesExpression).expression) ||
+                    visitNode(cbNode, (node as SatisfiesExpression).type);
             case SyntaxKind.MetaProperty:
                 return visitNode(cbNode, (node as MetaProperty).name);
             case SyntaxKind.ConditionalExpression:
@@ -4680,7 +4683,7 @@ namespace ts {
                     break;
                 }
 
-                if (token() === SyntaxKind.AsKeyword) {
+                if (token() === SyntaxKind.AsKeyword || token() === SyntaxKind.SatisfiesKeyword) {
                     // Make sure we *do* perform ASI for constructs like this:
                     //    var x = foo
                     //    as (Bar)
@@ -4690,8 +4693,10 @@ namespace ts {
                         break;
                     }
                     else {
+                        const keywordKind = token();
                         nextToken();
-                        leftOperand = makeAsExpression(leftOperand, parseType());
+                        leftOperand = keywordKind === SyntaxKind.SatisfiesKeyword ? makeSatisfiesExpression(leftOperand, parseType()) :
+                            makeAsExpression(leftOperand, parseType());
                     }
                 }
                 else {
@@ -4708,6 +4713,10 @@ namespace ts {
             }
 
             return getBinaryOperatorPrecedence(token()) > 0;
+        }
+
+        function makeSatisfiesExpression(left: Expression, right: TypeNode): SatisfiesExpression {
+            return finishNode(factory.createSatisfiesExpression(left, right), left.pos);
         }
 
         function makeBinaryExpression(left: Expression, operatorToken: BinaryOperatorToken, right: Expression, pos: number): BinaryExpression {

@@ -852,6 +852,12 @@ namespace ts {
                     nodeVisitor(node.expression, visitor, isExpression),
                     nodeVisitor(node.type, visitor, isTypeNode));
 
+            case SyntaxKind.SatisfiesExpression:
+                Debug.type<SatisfiesExpression>(node);
+                return factory.updateSatisfiesExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.type, visitor, isTypeNode));
+
             case SyntaxKind.NonNullExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
                     Debug.type<NonNullChain>(node);

@@ -180,6 +180,7 @@ namespace ts {
         RequireKeyword,
         NumberKeyword,
         ObjectKeyword,
+        SatisfiesKeyword,
         SetKeyword,
         StringKeyword,
         SymbolKeyword,
@@ -273,6 +274,7 @@ namespace ts {
         NonNullExpression,
         MetaProperty,
         SyntheticExpression,
+        SatisfiesExpression,
 
         // Misc
         TemplateSpan,
@@ -602,6 +604,7 @@ namespace ts {
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
+        | SyntaxKind.SatisfiesKeyword
         | SyntaxKind.SetKeyword
         | SyntaxKind.StaticKeyword
         | SyntaxKind.StringKeyword
@@ -2484,6 +2487,12 @@ namespace ts {
         readonly kind: SyntaxKind.TypeAssertionExpression;
         readonly type: TypeNode;
         readonly expression: UnaryExpression;
+    }
+
+    export interface SatisfiesExpression extends Expression {
+        readonly kind: SyntaxKind.SatisfiesExpression;
+        readonly expression: Expression;
+        readonly type: TypeNode;
     }
 
     export type AssertionExpression =
@@ -7049,6 +7058,7 @@ namespace ts {
     export type OuterExpression =
         | ParenthesizedExpression
         | TypeAssertion
+        | SatisfiesExpression
         | AsExpression
         | NonNullExpression
         | PartiallyEmittedExpression;
@@ -7378,6 +7388,8 @@ namespace ts {
         updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain;
         createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty;
         updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty;
+        createSatisfiesExpression(expression: Expression, type: TypeNode): SatisfiesExpression;
+        updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression;
 
         //
         // Misc
