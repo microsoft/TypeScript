@@ -282,7 +282,7 @@ namespace ts {
         prepareCallHierarchy(fileName: string, position: number): string;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
-        provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string;
+        provideInlayHints(fileName: string, span: TextSpan, preference: UserPreferences | undefined): string;
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
@@ -351,7 +351,7 @@ namespace ts {
         private tracingEnabled = false;
 
         public resolveModuleNames: ((moduleName: string[], containingFile: string) => (ResolvedModuleFull | undefined)[]) | undefined;
-        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
+        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[] | readonly FileReference[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
         public directoryExists: ((directoryName: string) => boolean) | undefined;
 
         constructor(private shimHost: LanguageServiceShimHost) {
@@ -372,7 +372,7 @@ namespace ts {
             if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
                 this.resolveTypeReferenceDirectives = (typeDirectiveNames, containingFile) => {
                     const typeDirectivesForFile = JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)) as MapLike<ResolvedTypeReferenceDirective>; // TODO: GH#18217
-                    return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name));
+                    return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : name.fileName.toLowerCase()));
                 };
             }
         }
@@ -1069,7 +1069,7 @@ namespace ts {
             );
         }
 
-        public provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string {
+        public provideInlayHints(fileName: string, span: TextSpan, preference: UserPreferences | undefined): string {
             return this.forwardJSONCall(
                 `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
                 () => this.languageService.provideInlayHints(fileName, span, preference)

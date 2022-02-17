@@ -3,8 +3,7 @@ function f<T>() { }
 >f : <T>() => void
 
 var r = f<number>; // parse error
->r : void
->f<number> : void
+>r : () => void
 >f : <T>() => void
 
 class C<T> {

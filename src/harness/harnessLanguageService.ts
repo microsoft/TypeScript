@@ -600,7 +600,7 @@ namespace Harness.LanguageService {
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
         }
-        provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.InlayHintsOptions) {
+        provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.UserPreferences) {
             return unwrapJSONCallResult(this.shim.provideInlayHints(fileName, span, preference));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {

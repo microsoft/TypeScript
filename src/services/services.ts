@@ -2636,7 +2636,7 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
+        function provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences = emptyOptions): InlayHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));

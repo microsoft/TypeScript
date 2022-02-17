@@ -2,6 +2,4 @@
 var v: typeof A<B>
 >v : any
 >A : any
-><B> : B
-> : any
 
