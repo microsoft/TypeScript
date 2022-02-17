@@ -56,7 +56,7 @@ var c1 = new T;
 var c1: T<{}>;
 >c1 : T<unknown>
 
-var c2 = new T<string>; // Parse error
+var c2 = new T<string>;  // Ok
 >c2 : T<string>
 >new T<string> : T<string>
 >T : typeof T

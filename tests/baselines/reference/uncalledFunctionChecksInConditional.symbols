@@ -1,0 +1,103 @@
+=== tests/cases/compiler/uncalledFunctionChecksInConditional.ts ===
+declare function isFoo(): boolean;
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+declare function isBar(): boolean;
+>isBar : Symbol(isBar, Decl(uncalledFunctionChecksInConditional.ts, 0, 34))
+
+declare const isUndefinedFoo: (() => boolean) | undefined;
+>isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
+
+if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // error on isFoo
+}
+
+if (isFoo || isBar) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+>isBar : Symbol(isBar, Decl(uncalledFunctionChecksInConditional.ts, 0, 34))
+
+    // error on isFoo, isBar
+}
+
+if (isFoo || isFoo()) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // error on isFoo
+}
+
+if (isUndefinedFoo || isFoo()) {
+>isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // no error
+}
+
+if (isFoo && isFoo()) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // no error
+}
+
+declare const x: boolean;
+>x : Symbol(x, Decl(uncalledFunctionChecksInConditional.ts, 24, 13))
+
+declare const ux: boolean | undefined;
+>ux : Symbol(ux, Decl(uncalledFunctionChecksInConditional.ts, 25, 13))
+
+declare const y: boolean;
+>y : Symbol(y, Decl(uncalledFunctionChecksInConditional.ts, 26, 13))
+
+declare const uy: boolean | undefined;
+>uy : Symbol(uy, Decl(uncalledFunctionChecksInConditional.ts, 27, 13))
+
+declare function z(): boolean;
+>z : Symbol(z, Decl(uncalledFunctionChecksInConditional.ts, 27, 38))
+
+declare const uz: (() => boolean) | undefined;
+>uz : Symbol(uz, Decl(uncalledFunctionChecksInConditional.ts, 29, 13))
+
+if (x || isFoo) {
+>x : Symbol(x, Decl(uncalledFunctionChecksInConditional.ts, 24, 13))
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // error on isFoo
+}
+
+if (isFoo || x) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+>x : Symbol(x, Decl(uncalledFunctionChecksInConditional.ts, 24, 13))
+
+    // error on isFoo
+}
+
+if (x || y || z() || isFoo) {
+>x : Symbol(x, Decl(uncalledFunctionChecksInConditional.ts, 24, 13))
+>y : Symbol(y, Decl(uncalledFunctionChecksInConditional.ts, 26, 13))
+>z : Symbol(z, Decl(uncalledFunctionChecksInConditional.ts, 27, 38))
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // error on isFoo
+}
+
+if (x || uy || z || isUndefinedFoo) {
+>x : Symbol(x, Decl(uncalledFunctionChecksInConditional.ts, 24, 13))
+>uy : Symbol(uy, Decl(uncalledFunctionChecksInConditional.ts, 27, 13))
+>z : Symbol(z, Decl(uncalledFunctionChecksInConditional.ts, 27, 38))
+>isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
+
+    // error on z
+}
+
+if (ux || y || uz || isFoo) {
+>ux : Symbol(ux, Decl(uncalledFunctionChecksInConditional.ts, 25, 13))
+>y : Symbol(y, Decl(uncalledFunctionChecksInConditional.ts, 26, 13))
+>uz : Symbol(uz, Decl(uncalledFunctionChecksInConditional.ts, 29, 13))
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
+
+    // error on isFoo
+}
+

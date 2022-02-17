@@ -1616,7 +1616,7 @@ namespace ts {
         readonly type?: TypeNode;
     }
 
-    export interface TypeQueryNode extends TypeNode {
+    export interface TypeQueryNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeQuery;
         readonly exprName: EntityName;
     }
@@ -2446,9 +2446,8 @@ namespace ts {
         readonly expression: ImportExpression;
     }
 
-    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
+    export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
-        readonly parent: HeritageClause | JSDocAugmentsTag | JSDocImplementsTag;
         readonly expression: LeftHandSideExpression;
     }
 
@@ -5336,13 +5335,14 @@ namespace ts {
         // Flags that require TypeFlags.Object
         ContainsSpread   = 1 << 22,  // Object literal contains spread operation
         ObjectRestType   = 1 << 23,  // Originates in object rest declaration
+        InstantiationExpressionType = 1 << 24,  // Originates in instantiation expression
         /* @internal */
-        IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
+        IsClassInstanceClone = 1 << 25, // Type is a clone of a class instance type
         // Flags that require TypeFlags.Object and ObjectFlags.Reference
         /* @internal */
-        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
         /* @internal */
-        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
+        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
@@ -5525,6 +5525,11 @@ namespace ts {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
         instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+    }
+
+    /* @internal */
+    export interface InstantiationExpressionType extends AnonymousType {
+        node: ExpressionWithTypeArguments | TypeQueryNode;
     }
 
     /* @internal */
@@ -7245,8 +7250,8 @@ namespace ts {
         updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         /** @deprecated */
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        createTypeQueryNode(exprName: EntityName): TypeQueryNode;
-        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
+        createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
+        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
         createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;

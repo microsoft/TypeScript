@@ -1304,7 +1304,7 @@ namespace ts {
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+                return isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
             case SyntaxKind.TypeParameter:
                 return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
@@ -1344,7 +1344,7 @@ namespace ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                        return isHeritageClause(parent.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (parent as TypeParameterDeclaration).constraint;
                     case SyntaxKind.JSDocTemplateTag:
@@ -2070,7 +2070,7 @@ namespace ts {
             case SyntaxKind.SpreadAssignment:
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return (parent as ExpressionWithTypeArguments).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                return (parent as ExpressionWithTypeArguments).expression === node && !isPartOfTypeNode(parent);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return (parent as ShorthandPropertyAssignment).objectAssignmentInitializer === node;
             default:
