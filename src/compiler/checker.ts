@@ -40449,10 +40449,10 @@ namespace ts {
                         }
                         // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries.
                         // (TS Exceptions: namespaces, function overloads, enums, and interfaces)
-                        if (flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) {
+                        if (flags & (SymbolFlags.Namespace | SymbolFlags.Enum)) {
                             return;
                         }
-                        const exportedDeclarationsCount = countWhere(declarations, isNotOverloadAndNotAccessor);
+                        const exportedDeclarationsCount = countWhere(declarations, and(isNotOverloadAndNotAccessor, not(isInterfaceDeclaration)));
                         if (flags & SymbolFlags.TypeAlias && exportedDeclarationsCount <= 2) {
                             // it is legal to merge type alias with other values
                             // so count should be either 1 (just type alias) or 2 (type alias + merged value)
