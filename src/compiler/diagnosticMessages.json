@@ -335,7 +335,7 @@
         "category": "Error",
         "code": 1116
     },
-    "An object literal cannot have multiple properties with the same name in strict mode.": {
+    "An object literal cannot have multiple properties with the same name.": {
         "category": "Error",
         "code": 1117
     },
@@ -727,11 +727,11 @@
         "category": "Error",
         "code": 1231
     },
-    "An import declaration can only be used in a namespace or module.": {
+    "An import declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1232
     },
-    "An export declaration can only be used in a module.": {
+    "An export declaration can only be used at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1233
     },
@@ -739,7 +739,7 @@
         "category": "Error",
         "code": 1234
     },
-    "A namespace declaration is only allowed in a namespace or module.": {
+    "A namespace declaration is only allowed at the top level of a namespace or module.": {
         "category": "Error",
         "code": 1235
     },
@@ -867,6 +867,18 @@
         "category": "Error",
         "code": 1268
     },
+    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1269
+    },
+    "Decorator function return type '{0}' is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 1270
+    },
+    "Decorator function return type is '{0}' but is expected to be 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1271
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -920,15 +932,15 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.": {
         "category": "Error",
         "code": 1324
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Argument of dynamic import cannot be spread element.": {
         "category": "Error",
         "code": 1325
     },
@@ -992,7 +1004,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1116,7 +1128,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1140,10 +1152,6 @@
         "category": "Error",
         "code": 1383
     },
-    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
-        "category": "Error",
-        "code": 1384
-    },
     "Function type notation must be parenthesized when used in a union type.": {
         "category": "Error",
         "code": 1385
@@ -1163,6 +1171,10 @@
     "'{0}' is not allowed as a variable declaration name.": {
         "category": "Error",
         "code": 1389
+    },
+    "'{0}' is not allowed as a parameter name.": {
+        "category": "Error",
+        "code": 1390
     },
     "An import alias cannot use 'import type'": {
         "category": "Error",
@@ -1324,7 +1336,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1388,6 +1400,43 @@
         "category": "Message",
         "code": 1449
     },
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+        "category": "Message",
+        "code": 1450
+    },
+    "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
+        "category": "Error",
+        "code": 1451
+    },
+    "Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.": {
+        "category": "Error",
+        "code": 1452
+    },
+    "`resolution-mode` should be either `require` or `import`.": {
+        "category": "Error",
+        "code": 1453
+    },
+
+    "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
+        "category": "Error",
+        "code": 1470
+    },
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+        "category": "Error",
+        "code": 1471
+    },
+    "'catch' or 'finally' expected.": {
+        "category": "Error",
+        "code": 1472
+    },
+    "An import declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1473
+    },
+    "An export declaration can only be used at the top level of a module.": {
+        "category": "Error",
+        "code": 1474
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1416,6 +1465,14 @@
         "category": "Error",
         "code": 2205,
         "elidedInCompatabilityPyramid": true
+    },
+    "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.": {
+        "category": "Error",
+        "code": 2206
+    },
+    "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
+        "category": "Error",
+        "code": 2207
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1461,6 +1518,10 @@
     "Type '{0}' recursively references itself as a base type.": {
         "category": "Error",
         "code": 2310
+    },
+    "Cannot find name '{0}'. Did you mean to write this in an async function?": {
+        "category": "Error",
+        "code": 2311
     },
     "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
@@ -1650,7 +1711,7 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.": {
+    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
         "category": "Error",
         "code": 2360
     },
@@ -1714,7 +1775,7 @@
         "category": "Error",
         "code": 2375
     },
-    "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
+    "A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
     },
@@ -1805,6 +1866,10 @@
     "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
         "category": "Error",
         "code": 2400
+    },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.": {
+        "category": "Error",
+        "code": 2401
     },
     "Expression resolves to '_super' that compiler uses to capture base class reference.": {
         "category": "Error",
@@ -2634,6 +2699,10 @@
         "category": "Error",
         "code": 2634
     },
+    "Type '{0}' has no signatures for which the type argument list is applicable.": {
+        "category": "Error",
+        "code": 2635
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3240,10 +3309,6 @@
         "category": "Error",
         "code": 2804
     },
-    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
-        "category": "Error",
-        "code": 2805
-    },
     "Private accessor was defined without a getter.": {
         "category": "Error",
         "code": 2806
@@ -3259,10 +3324,6 @@
     "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
         "category": "Error",
         "code": 2809
-    },
-    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
-        "category": "Error",
-        "code": 2810
     },
     "Initializer for property '{0}'": {
         "category": "Error",
@@ -3299,6 +3360,38 @@
     "Namespace name cannot be '{0}'.": {
         "category": "Error",
         "code": 2819
+    },
+    "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2820
+    },
+    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+        "category": "Error",
+        "code": 2821
+    },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2822
+    },
+    "Cannot find namespace '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2833
+    },
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.": {
+        "category": "Error",
+        "code": 2834
+    },
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 2835
+    },
+    "Import assertions are not allowed on statements that transpile to commonjs 'require' calls.": {
+        "category": "Error",
+        "code": 2836
+    },
+    "Import assertion values must be string literal expressions.": {
+        "category": "Error",
+        "code": 2837
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3705,6 +3798,30 @@
         "category": "Error",
         "code": 4118
     },
+    "This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4121
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4122
+    },
+    "This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4123
+    },
+    "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 4124
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3943,10 +4060,6 @@
         "category": "Message",
         "code": 6002
     },
-    "Specify the location where debugger should locate map files instead of generated locations.": {
-        "category": "Message",
-        "code": 6003
-    },
     "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
         "code": 6004
@@ -4074,6 +4187,11 @@
     "FILE OR DIRECTORY": {
         "category": "Message",
         "code": 6040
+    },
+    "Errors  Files": {
+        "_locale_notes": "There is a double space, and the order cannot be changed (they're table headings) ^",
+        "category": "Message",
+        "code": 6041
     },
     "Generates corresponding '.map' file.": {
         "category": "Message",
@@ -4513,10 +4631,6 @@
         "category": "Message",
         "code": 6163
     },
-    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
-        "category": "Message",
-        "code": 6164
-    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -4857,6 +4971,47 @@
     "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
         "category": "Error",
         "code": 6258
+    },
+      "Found 1 error in {1}": {
+        "category": "Message",
+        "code": 6259
+    },
+    "Found {0} errors in the same file, starting at: {1}": {
+        "category": "Message",
+        "code": 6260
+    },
+    "Found {0} errors in {1} files.": {
+        "category": "Message",
+        "code": 6261
+    },
+
+    "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
+        "category": "Message",
+        "code": 6270
+    },
+    "Import specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6271
+    },
+    "Invalid import specifier '{0}' has no possible resolutions.": {
+        "category": "Message",
+        "code": 6272
+    },
+    "package.json scope '{0}' has no imports defined.": {
+        "category": "Message",
+        "code": 6273
+    },
+    "package.json scope '{0}' explicitly maps specifier '{1}' to null.": {
+        "category": "Message",
+        "code": 6274
+    },
+    "package.json scope '{0}' has invalid type for target of specifier '{1}'": {
+        "category": "Message",
+        "code": 6275
+    },
+    "Export specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6276
     },
 
     "Enable project compilation": {
@@ -5904,7 +6059,22 @@
         "category": "Error",
         "code": 7058
     },
-
+    "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.": {
+        "category": "Error",
+        "code": 7059
+    },
+    "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.": {
+        "category": "Error",
+        "code": 7060
+    },
+    "A mapped type may not declare properties or methods.": {
+        "category": "Error",
+        "code": 7061
+    },
+    "JSON imports are experimental in ES module mode imports.": {
+        "category": "Error",
+        "code": 7062
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -6127,7 +6297,7 @@
         "code": 18003
     },
 
-    "File is a CommonJS module; it may be converted to an ES6 module.": {
+    "File is a CommonJS module; it may be converted to an ES module.": {
         "category": "Suggestion",
         "code": 80001
     },
@@ -6204,17 +6374,13 @@
         "category": "Message",
         "code": 90012
     },
-    "Import '{0}' from module \"{1}\"": {
+    "Import '{0}' from \"{1}\"": {
         "category": "Message",
         "code": 90013
     },
     "Change '{0}' to '{1}'": {
         "category": "Message",
         "code": 90014
-    },
-    "Add '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90015
     },
     "Declare property '{0}'": {
         "category": "Message",
@@ -6280,14 +6446,6 @@
         "category": "Message",
         "code": 90031
     },
-    "Import default '{0}' from module \"{1}\"": {
-        "category": "Message",
-        "code": 90032
-    },
-    "Add default import '{0}' to existing import declaration from \"{1}\"": {
-        "category": "Message",
-        "code": 90033
-    },
     "Add parameter name": {
         "category": "Message",
         "code": 90034
@@ -6320,6 +6478,27 @@
         "category": "Message",
         "code": 90053
     },
+    "Includes imports of types referenced by '{0}'": {
+        "category": "Message",
+        "code": 90054
+    },
+    "Remove 'type' from import declaration from \"{0}\"": {
+        "category": "Message",
+        "code": 90055
+    },
+    "Remove 'type' from import of '{0}' from \"{1}\"": {
+        "category": "Message",
+        "code": 90056
+    },
+    "Add import from \"{0}\"": {
+        "category": "Message",
+        "code": 90057
+    },
+    "Update import from \"{0}\"": {
+        "category": "Message",
+        "code": 90058
+    },
+
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -6376,7 +6555,7 @@
         "category": "Message",
         "code": 95016
     },
-    "Convert to ES6 module": {
+    "Convert to ES module": {
         "category": "Message",
         "code": 95017
     },
@@ -6971,6 +7150,22 @@
     "Add 'undefined' to optional property type": {
         "category": "Message",
         "code": 95169
+    },
+    "Convert named imports to default import": {
+        "category": "Message",
+        "code": 95170
+    },
+    "Delete unused '@param' tag '{0}'": {
+        "category": "Message",
+        "code": 95171
+    },
+    "Delete all unused '@param' tags": {
+        "category": "Message",
+        "code": 95172
+    },
+    "Rename '@param' tag name '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95173
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

@@ -197,25 +197,24 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
-    type ES2020NumberFormatPartType = ES2018NumberFormatPartType | "compact" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unit" | "unknown";
-    interface NumberFormatPart {
-        type: ES2020NumberFormatPartType
-    }
-
     interface NumberFormatOptions {
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
-        signDisplay?: "auto" | "never" | "always" | undefined;
-        unit?: NumberFormatUnit | undefined;
+        signDisplay?: "auto" | "never" | "always" | "exceptZero" | undefined;
+        unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
+        currencyDisplay?: string | undefined;
+        currencySign?: string | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
         compactDisplay?: "short" | "long";
         notation?: "standard" | "scientific" | "engineering" | "compact";
-        signDisplay?: "auto" | "never" | "always";
-        unit?: NumberFormatUnit;
+        signDisplay?: "auto" | "never" | "always" | "exceptZero";
+        unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface DateTimeFormatOptions {
@@ -255,6 +254,10 @@ declare namespace Intl {
     }
 
     interface Locale extends LocaleOptions {
+        /** A string containing the language, and the script and region if available. */
+        baseName: string;
+        /** The primary language subtag associated with the locale. */
+        language: string;
         /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
         maximize(): Locale;
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
@@ -282,6 +285,7 @@ declare namespace Intl {
     };
 
      interface DisplayNamesOptions {
+        locale: UnicodeBCP47LocaleIdentifier;
         localeMatcher: RelativeTimeFormatLocaleMatcher;
         style: RelativeTimeFormatStyle;
         type: "language" | "region" | "script" | "currency";
@@ -304,7 +308,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/of).
          */
-        of(code: string): string;
+        of(code: string): string | undefined;
         /**
          * Returns a new object with properties reflecting the locale and style formatting options computed during the construction of the current
          * [`Intl/DisplayNames`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames) object.

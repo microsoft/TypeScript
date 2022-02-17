@@ -43,14 +43,14 @@ verify.completions(
     },
     {
         marker: "typeFooMember",
-        exact: [
+        unsorted: [
             { name: "Namespace", kind: "module", kindModifiers: "export" },
             ...warnings(["Foo", "value", "property1", "method1", "method3", "method4", "foo", "age", "SomeType", "x", "x1"]),
         ],
     },
     {
         marker: "NamespaceMember",
-        exact: [
+        unsorted: [
             { name: "SomeType", kind: "type" },
             ...warnings(["Foo", "value", "property1", "method1", "method3", "method4", "foo", "age", "Namespace", "x", "x1"]),
         ],
@@ -66,14 +66,14 @@ verify.completions(
     },
     {
         marker: "valueMemberOfSomeType",
-        exact: [
+        unsorted: [
             { name: "age", kind: "property" },
             ...warnings(["Foo", "value", "property1", "method1", "method3", "method4", "foo", "Namespace", "SomeType", "x", "x1"]),
         ],
     },
     {
         marker: "valueMemberOfFooInstance",
-        exact: [
+        unsorted: [
             { name: "property1", kind: "property" },
             { name: "method3", kind: "method" },
             { name: "method4", kind: "method" },
@@ -82,7 +82,7 @@ verify.completions(
     },
     {
         marker: "valueMemberOfFoo",
-        exact: [
+        unsorted: [
             { name: "prototype", kind: "property" },
             { name: "method1", kind: "method", kindModifiers: "static" },
             ...completion.functionMembers,

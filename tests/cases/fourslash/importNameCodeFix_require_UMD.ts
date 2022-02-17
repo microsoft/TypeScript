@@ -15,7 +15,7 @@
 goTo.file("index.js");
 verify.codeFix({
   index: 0,
-  description: `Import 'Foo' from module "./umd"`,
+  description: `Add import from "./umd"`,
   newFileContent:
 `const Foo = require("./umd");
 

@@ -33,7 +33,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/main.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -256,7 +256,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	node_modules/@angular/core/index.d.ts
 	  Imported via '@angular/core' from file 'src/main.ts'
 	src/main.ts

@@ -1,0 +1,75 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,29): error TS1109: Expression expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(19,24): error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(23,23): error TS1005: '(' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(31,2): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(35,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (10 errors) ====
+    declare let f: { <T>(): T, g<U>(): U };
+    
+    // Type arguments in member expressions
+    
+    const a1 = f<number>;  // { (): number; g<U>(): U; }
+    const a2 = f.g<number>;  // () => number
+    const a3 = f<number>.g;  // <U>() => U
+    const a4 = f<number>.g<number>;  // () => number
+    const a5 = f['g']<number>;  // () => number
+    
+    // `[` is an expression starter and cannot immediately follow a type argument list
+    
+    const a6 = f<number>['g'];  // Error
+               ~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
+                 ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+    const a7 = (f<number>)['g'];
+    
+    // An `<` cannot immediately follow a type argument list
+    
+    const a8 = f<number><number>;  // Relational operator error
+               ~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
+                 ~~~~~~
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+                                ~
+!!! error TS1109: Expression expected.
+    const a9 = (f<number>)<number>;  // Error, no applicable signatures
+                           ~~~~~~
+!!! error TS2635: Type '{ (): number; g<U>(): U; }' has no signatures for which the type argument list is applicable.
+    
+    // Type arguments with `?.` token
+    
+    const b1 = f?.<number>;  // Error, `(` expected
+                          ~
+!!! error TS1005: '(' expected.
+    const b2 = f?.<number>();
+    const b3 = f<number>?.();
+    const b4 = f<number>?.<number>();  // Error, expected no type arguments
+                           ~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    
+    // Parsed as function call, even though this differs from JavaScript
+    
+    const x1 = f<true>
+    (true);
+     ~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    
+    // Parsed as relational expression
+    
+    const x2 = f<true>
+               ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    true;
+    
+    // Parsed as instantiation expression
+    
+    const x3 = f<true>;
+    true;
+    

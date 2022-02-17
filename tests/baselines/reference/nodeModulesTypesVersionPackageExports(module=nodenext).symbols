@@ -1,0 +1,57 @@
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import * as mod from "inner";
+>mod : Symbol(mod, Decl(index.ts, 1, 6))
+
+mod.correctVersionApplied;
+>mod.correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>mod : Symbol(mod, Decl(index.ts, 1, 6))
+>correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+
+=== tests/cases/conformance/node/index.mts ===
+// esm format file
+import * as mod from "inner";
+>mod : Symbol(mod, Decl(index.mts, 1, 6))
+
+mod.correctVersionApplied;
+>mod.correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>mod : Symbol(mod, Decl(index.mts, 1, 6))
+>correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+
+=== tests/cases/conformance/node/index.cts ===
+// cjs format file
+import * as mod from "inner";
+>mod : Symbol(mod, Decl(index.cts, 1, 6))
+
+mod.correctVersionApplied;
+>mod.correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+>mod : Symbol(mod, Decl(index.cts, 1, 6))
+>correctVersionApplied : Symbol(mod.correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+// cjs format file
+export const noConditionsApplied = true;
+>noConditionsApplied : Symbol(noConditionsApplied, Decl(index.d.ts, 1, 12))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.mts ===
+// esm format file
+export const importConditionApplied = true;
+>importConditionApplied : Symbol(importConditionApplied, Decl(index.d.mts, 1, 12))
+
+=== tests/cases/conformance/node/node_modules/inner/index.d.cts ===
+// cjs format file
+export const wrongConditionApplied = true;
+>wrongConditionApplied : Symbol(wrongConditionApplied, Decl(index.d.cts, 1, 12))
+
+=== tests/cases/conformance/node/node_modules/inner/old-types.d.ts ===
+export const noVersionApplied = true;
+>noVersionApplied : Symbol(noVersionApplied, Decl(old-types.d.ts, 0, 12))
+
+=== tests/cases/conformance/node/node_modules/inner/new-types.d.ts ===
+export const correctVersionApplied = true;
+>correctVersionApplied : Symbol(correctVersionApplied, Decl(new-types.d.ts, 0, 12))
+
+=== tests/cases/conformance/node/node_modules/inner/future-types.d.ts ===
+export const futureVersionApplied = true;
+>futureVersionApplied : Symbol(futureVersionApplied, Decl(future-types.d.ts, 0, 12))
+

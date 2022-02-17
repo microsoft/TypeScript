@@ -127,7 +127,7 @@ namespace ts {
     /**
      * Gets a custom text range to use when emitting comments.
      */
-    export function getCommentRange(node: Node) {
+    export function getCommentRange(node: Node): TextRange {
         return node.emitNode?.commentRange ?? node;
     }
 
@@ -254,6 +254,24 @@ namespace ts {
         if (helpersRemoved > 0) {
             sourceEmitHelpers.length -= helpersRemoved;
         }
+    }
+
+    /**
+     * Gets the SnippetElement of a node.
+     */
+    /* @internal */
+    export function getSnippetElement(node: Node): SnippetElement | undefined {
+        return node.emitNode?.snippetElement;
+    }
+
+    /**
+     * Sets the SnippetElement of a node.
+     */
+    /* @internal */
+    export function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.snippetElement = snippet;
+        return node;
     }
 
     /* @internal */

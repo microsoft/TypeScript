@@ -1,0 +1,22 @@
+=== /mod.ts ===
+export type A = unknown;
+>A : unknown
+
+export type B = never;
+>B : never
+
+export type C = any;
+>C : any
+
+=== /index.ts ===
+import { type A, type B, type C } from "./mod.js";
+>A : any
+>B : any
+>C : any
+
+=== /reexport.ts ===
+export { type A, type B, type C } from "./mod.js";
+>A : any
+>B : any
+>C : any
+

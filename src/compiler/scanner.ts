@@ -83,6 +83,7 @@ namespace ts {
         any: SyntaxKind.AnyKeyword,
         as: SyntaxKind.AsKeyword,
         asserts: SyntaxKind.AssertsKeyword,
+        assert: SyntaxKind.AssertKeyword,
         bigint: SyntaxKind.BigIntKeyword,
         boolean: SyntaxKind.BooleanKeyword,
         break: SyntaxKind.BreakKeyword,
@@ -2373,6 +2374,7 @@ namespace ts {
                     tokenValue = tokenValue.slice(0, -1);
                     pos--;
                 }
+                return getIdentifierToken();
             }
             return token;
         }

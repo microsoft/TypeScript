@@ -1,6 +1,7 @@
 === tests/cases/compiler/intrinsics.ts ===
 var hasOwnProperty: hasOwnProperty; // Error
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(intrinsics.ts, 0, 3))
+>hasOwnProperty : Symbol(hasOwnProperty)
 
 module m1 {
 >m1 : Symbol(m1, Decl(intrinsics.ts, 0, 35))

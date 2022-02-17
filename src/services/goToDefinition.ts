@@ -159,7 +159,7 @@ namespace ts.GoToDefinition {
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
-            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
+            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
             return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
@@ -170,10 +170,10 @@ namespace ts.GoToDefinition {
             return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
-        if (sourceFile.resolvedModules?.size) {
-            const node = getTokenAtPosition(sourceFile, position);
-            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
-                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+        if (sourceFile.resolvedModules?.size()) {
+            const node = getTouchingToken(sourceFile, position);
+            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedFileName;
                 const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
                 return {
                     file: program.getSourceFile(fileName),
@@ -198,14 +198,17 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
-        const symbol = typeChecker.getSymbolAtLocation(node);
+        const symbol = getSymbol(node, typeChecker);
         if (!symbol) return undefined;
 
         const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
         const returnType = tryGetReturnTypeOfFunction(symbol, typeAtLocation, typeChecker);
         const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node);
         // If a function returns 'void' or some other type with no definition, just return the function definition.
-        return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+        const typeDefinitions = fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+        return typeDefinitions.length ? typeDefinitions
+            : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node)
+            : undefined;
     }
 
     function definitionFromType(type: Type, checker: TypeChecker, node: Node): readonly DefinitionInfo[] {
@@ -287,7 +290,7 @@ namespace ts.GoToDefinition {
                 return declaration.parent.kind === SyntaxKind.NamedImports;
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration);
+                return isInJSFile(declaration) && isVariableDeclarationInitializedToBareOrAccessedRequire(declaration);
             default:
                 return false;
         }

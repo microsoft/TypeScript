@@ -8,7 +8,7 @@ interface B<T, U> {
 
 interface B<U, T> { // error
     y: V;
->y : any
+>y : V
 }
 
 module M {

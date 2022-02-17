@@ -1,0 +1,1091 @@
+// === /tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts ===
+// abstract class Base {
+//     abstract /*FIND ALL REFS*/[|a|]: number;
+//     abstract method(): void;
+// }
+// class MyClass extends Base {
+//     [|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c.[|a|];
+// c.method();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "property",
+      "name": "(property) Base.a: number",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 26,
+        "length": 19
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 26,
+          "length": 19
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "property",
+      "name": "(property) MyClass.a: any",
+      "textSpan": {
+        "start": 110,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 110,
+        "length": 2
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 110,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 110,
+          "length": 2
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 151,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts ===
+// abstract class Base {
+//     abstract [|a|]: number;
+//     abstract method(): void;
+// }
+// class MyClass extends Base {
+//     /*FIND ALL REFS*/[|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c.[|a|];
+// c.method();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "property",
+      "name": "(property) Base.a: number",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 26,
+        "length": 19
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 26,
+          "length": 19
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "property",
+      "name": "(property) MyClass.a: any",
+      "textSpan": {
+        "start": 110,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 110,
+        "length": 2
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 110,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 110,
+          "length": 2
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 151,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts ===
+// abstract class Base {
+//     abstract [|a|]: number;
+//     abstract method(): void;
+// }
+// class MyClass extends Base {
+//     [|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c./*FIND ALL REFS*/[|a|];
+// c.method();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "property",
+      "name": "(property) Base.a: number",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 26,
+        "length": 19
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 26,
+          "length": 19
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "property",
+      "name": "(property) MyClass.a: any",
+      "textSpan": {
+        "start": 110,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 110,
+        "length": 2
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 110,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 110,
+          "length": 2
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 151,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts ===
+// abstract class Base {
+//     abstract a: number;
+//     abstract /*FIND ALL REFS*/[|method|](): void;
+// }
+// class MyClass extends Base {
+//     a;
+//     [|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c.[|method|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "method",
+      "name": "(method) Base.method(): void",
+      "textSpan": {
+        "start": 59,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 24
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 24
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "method",
+      "name": "(method) MyClass.method(): void",
+      "textSpan": {
+        "start": 117,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 117,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 117,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 117,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 156,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts ===
+// abstract class Base {
+//     abstract a: number;
+//     abstract [|method|](): void;
+// }
+// class MyClass extends Base {
+//     a;
+//     /*FIND ALL REFS*/[|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c.[|method|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "method",
+      "name": "(method) Base.method(): void",
+      "textSpan": {
+        "start": 59,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 24
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 24
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "method",
+      "name": "(method) MyClass.method(): void",
+      "textSpan": {
+        "start": 117,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 117,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 117,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 117,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 156,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts ===
+// abstract class Base {
+//     abstract a: number;
+//     abstract [|method|](): void;
+// }
+// class MyClass extends Base {
+//     a;
+//     [|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c./*FIND ALL REFS*/[|method|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "method",
+      "name": "(method) Base.method(): void",
+      "textSpan": {
+        "start": 59,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 50,
+        "length": 24
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 59,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 50,
+          "length": 24
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+      "kind": "method",
+      "name": "(method) MyClass.method(): void",
+      "textSpan": {
+        "start": 117,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 117,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 117,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "contextSpan": {
+          "start": 117,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 156,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingAbstractClass.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

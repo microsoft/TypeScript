@@ -56,7 +56,7 @@ Project '/user/username/projects/solution/api/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../shared/src/index.ts
 	  Imported via "../../shared/dist" from file 'src/server.ts'
 	src/server.ts
@@ -82,6 +82,7 @@ Open files:
 		Projects: /user/username/projects/solution/api/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/solution/api/src/server.ts","line":2,"offset":12},"seq":1,"type":"request"}
+Finding references to /user/username/projects/solution/api/src/server.ts position 56 in project /user/username/projects/solution/api/tsconfig.json
 Search path: /user/username/projects/solution/shared/src
 For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
 Creating configuration project /user/username/projects/solution/shared/tsconfig.json
@@ -99,7 +100,7 @@ Project '/user/username/projects/solution/shared/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -168,13 +169,15 @@ Project '/user/username/projects/solution/app/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../shared/src/index.ts
 	  Imported via "../../shared/dist" from file 'src/app.ts'
 	src/app.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
 -----------------------------------------------
+Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/app/tsconfig.json
 Search path: /user/username/projects/solution/shared/src
 For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/shared/tsconfig.json
 response:{"response":{"refs":[{"file":"/user/username/projects/solution/shared/src/index.ts","start":{"line":1,"offset":23},"end":{"line":1,"offset":26},"contextStart":{"line":1,"offset":23},"contextEnd":{"line":1,"offset":33},"lineText":"export const foo = {  baz: \"BAZ\" };","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/solution/api/src/server.ts","start":{"line":2,"offset":12},"end":{"line":2,"offset":15},"lineText":"shared.foo.baz;","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/solution/app/src/app.ts","start":{"line":2,"offset":12},"end":{"line":2,"offset":15},"lineText":"shared.foo.baz;","isWriteAccess":false,"isDefinition":false}],"symbolName":"baz","symbolStartOffset":12,"symbolDisplayString":"(property) baz: string"},"responseRequired":true}

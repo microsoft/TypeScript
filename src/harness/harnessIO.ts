@@ -41,6 +41,7 @@ namespace Harness {
     export const virtualFileSystemRoot = "/";
 
     function createNodeIO(): IO {
+        const workspaceRoot = Utils.findUpRoot();
         let fs: any, pathModule: any;
         if (require) {
             fs = require("fs");
@@ -154,7 +155,7 @@ namespace Harness {
             log: s => console.log(s),
             args: () => ts.sys.args,
             getExecutingFilePath: () => ts.sys.getExecutingFilePath(),
-            getWorkspaceRoot: () => vpath.resolve(__dirname, "../.."),
+            getWorkspaceRoot: () => workspaceRoot,
             exit: exitCode => ts.sys.exit(exitCode),
             readDirectory: (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth),
             getAccessibleFileSystemEntries,
@@ -271,7 +272,7 @@ namespace Harness {
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
-            switch (options.target) {
+            switch (ts.getEmitScriptTarget(options)) {
                 case ts.ScriptTarget.ESNext:
                 case ts.ScriptTarget.ES2017:
                     return "lib.es2017.d.ts";
@@ -303,21 +304,21 @@ namespace Harness {
 
         // Additional options not already in ts.optionDeclarations
         const harnessOptionDeclarations: ts.CommandLineOption[] = [
-            { name: "allowNonTsExtensions", type: "boolean" },
-            { name: "useCaseSensitiveFileNames", type: "boolean" },
+            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false },
+            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false },
             { name: "baselineFile", type: "string" },
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean" },
-            { name: "suppressOutputPathCheck", type: "boolean" },
-            { name: "noImplicitReferences", type: "boolean" },
+            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: false },
+            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: false },
+            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: false },
             { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
-            { name: "noTypesAndSymbols", type: "boolean" },
+            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
             // Emitted js baseline will print full paths for every output file
-            { name: "fullEmitPaths", type: "boolean" }
+            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
         ];
 
         let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
@@ -391,7 +392,7 @@ namespace Harness {
             symlinks?: vfs.FileSet
         ): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
-            options.target = options.target || ts.ScriptTarget.ES3;
+            options.target = ts.getEmitScriptTarget(options);
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
@@ -505,7 +506,7 @@ namespace Harness {
                     sourceFileName = outFile;
                 }
 
-                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
+                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.getDeclarationEmitExtensionForPath(sourceFileName);
                 return result.dts.get(dTsFileName);
             }
 
@@ -536,7 +537,7 @@ namespace Harness {
                 outputLines += content;
             }
             if (pretty) {
-                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), IO.newLine());
+                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), ts.getFilesInErrorForSummary(diagnostics), IO.newLine(), { getCurrentDirectory: () => "" });
             }
             return outputLines;
         }
@@ -897,7 +898,7 @@ namespace Harness {
                     jsCode += "\r\n";
                 }
                 if (!result.diagnostics.length && !ts.endsWith(file.file, ts.Extension.Json)) {
-                    const fileParseResult = ts.createSourceFile(file.file, file.text, options.target || ts.ScriptTarget.ES3, /*parentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
+                    const fileParseResult = ts.createSourceFile(file.file, file.text, ts.getEmitScriptTarget(options), /*parentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
                     if (ts.length(fileParseResult.parseDiagnostics)) {
                         jsCode += getErrorBaseline([file.asTestFile()], fileParseResult.parseDiagnostics);
                         return;

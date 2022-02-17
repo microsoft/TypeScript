@@ -40,7 +40,6 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(70,42): error TS2322: Type 'AsyncGenerator<number, any, undefined>' is not assignable to type 'Iterator<number, any, undefined>'.
   The types returned by 'next(...)' are incompatible between these types.
     Type 'Promise<IteratorResult<number, any>>' is not assignable to type 'IteratorResult<number, any>'.
-      Type 'Promise<IteratorResult<number, any>>' is missing the following properties from type 'IteratorReturnResult<any>': done, value
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(74,12): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 
 
@@ -183,7 +182,6 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
 !!! error TS2322: Type 'AsyncGenerator<number, any, undefined>' is not assignable to type 'Iterator<number, any, undefined>'.
 !!! error TS2322:   The types returned by 'next(...)' are incompatible between these types.
 !!! error TS2322:     Type 'Promise<IteratorResult<number, any>>' is not assignable to type 'IteratorResult<number, any>'.
-!!! error TS2322:       Type 'Promise<IteratorResult<number, any>>' is missing the following properties from type 'IteratorReturnResult<any>': done, value
         yield 1;
     }
     async function * yieldStar() {

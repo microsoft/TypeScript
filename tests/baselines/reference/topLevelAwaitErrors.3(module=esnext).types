@@ -1,0 +1,10 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts ===
+export {};
+
+// reparse binding pattern as await should fail
+var {await} = {await:1};
+>await : number
+>{await:1} : { await: number; }
+>await : number
+>1 : 1
+

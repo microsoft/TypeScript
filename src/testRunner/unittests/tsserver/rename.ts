@@ -14,16 +14,7 @@ namespace ts.projectSystem {
                     canRename: false,
                     localizedErrorMessage: "You cannot rename this element."
                 },
-                locs: [{
-                    file: bTs.path,
-                    locs: [
-                        protocolRenameSpanFromSubstring({
-                            fileText: bTs.content,
-                            text: "./a",
-                            contextText: bTs.content
-                        })
-                    ]
-                }],
+                locs: [],
             });
 
             // rename succeeds with allowRenameOfImportPath enabled in host

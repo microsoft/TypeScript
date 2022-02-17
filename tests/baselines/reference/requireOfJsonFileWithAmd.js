@@ -15,6 +15,11 @@ if (x) {
     "b": "hello"
 }
 
+//// [out/b.json]
+{
+    "a": true,
+    "b": "hello"
+}
 //// [out/file1.js]
 define(["require", "exports", "./b", "./b.json"], function (require, exports, b1, b2) {
     "use strict";

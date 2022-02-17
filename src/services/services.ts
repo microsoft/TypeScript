@@ -299,6 +299,9 @@ namespace ts {
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
 
+        contextualGetAccessorTags?: JSDocTagInfo[];
+        contextualSetAccessorTags?: JSDocTagInfo[];
+
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
             this.escapedName = name;
@@ -343,13 +346,11 @@ namespace ts {
             switch (context?.kind) {
                 case SyntaxKind.GetAccessor:
                     if (!this.contextualGetAccessorDocumentationComment) {
-                        this.contextualGetAccessorDocumentationComment = emptyArray;
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
                     return this.contextualGetAccessorDocumentationComment;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorDocumentationComment) {
-                        this.contextualSetAccessorDocumentationComment = emptyArray;
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
                     return this.contextualSetAccessorDocumentationComment;
@@ -360,10 +361,27 @@ namespace ts {
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations, checker);
+                this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
             }
 
             return this.tags;
+        }
+
+        getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+            switch (context?.kind) {
+                case SyntaxKind.GetAccessor:
+                    if (!this.contextualGetAccessorTags) {
+                        this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
+                    }
+                    return this.contextualGetAccessorTags;
+                case SyntaxKind.SetAccessor:
+                    if (!this.contextualSetAccessorTags) {
+                        this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
+                    }
+                    return this.contextualSetAccessorTags;
+                default:
+                    return this.getJsDocTags(checker);
+            }
         }
     }
 
@@ -401,6 +419,12 @@ namespace ts {
         public kind!: SyntaxKind.PrivateIdentifier;
         public escapedText!: __String;
         public symbol!: Symbol;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _updateExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
         constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
             super(pos, end);
         }
@@ -494,6 +518,9 @@ namespace ts {
         isClass(): this is InterfaceType {
             return !!(getObjectFlags(this) & ObjectFlags.Class);
         }
+        isIndexType(): this is IndexType {
+            return !!(this.flags & TypeFlags.Index);
+        }
         /**
          * This polyfills `referenceType.typeArguments` for API consumers
          */
@@ -539,16 +566,23 @@ namespace ts {
         getReturnType(): Type {
             return this.checker.getReturnTypeOfSignature(this);
         }
+        getTypeParameterAtPosition(pos: number): Type {
+            const type = this.checker.getParameterType(this, pos);
+            if (type.isIndexType() && isThisTypeParameter(type.type)) {
+                const constraint = type.type.getConstraint();
+                if (constraint) {
+                    return this.checker.getIndexType(constraint);
+                }
+            }
+            return type;
+        }
 
         getDocumentationComment(): SymbolDisplayPart[] {
             return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
         }
 
         getJsDocTags(): JSDocTagInfo[] {
-            if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? getJsDocTagsOfSignature(this.declaration, this.checker) : [];
-            }
-            return this.jsDocTags;
+            return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
         }
     }
 
@@ -561,12 +595,25 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
-    function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
-        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
-        if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
-            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
-            if (inheritedTags) {
-                tags = [...inheritedTags, ...tags];
+    function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+        if (!declarations) return emptyArray;
+
+        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
+        if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+            const seenSymbols = new Set<Symbol>();
+            for (const declaration of declarations) {
+                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol);
+                        if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                            return symbol.getContextualJsDocTags(declaration, checker);
+                        }
+                        return symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined;
+                    }
+                });
+                if (inheritedTags) {
+                    tags = [...inheritedTags, ...tags];
+                }
             }
         }
         return tags;
@@ -582,6 +629,9 @@ namespace ts {
                 const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
                     if (!seenSymbols.has(symbol)) {
                         seenSymbols.add(symbol);
+                        if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
+                            return symbol.getContextualDocumentationComment(declaration, checker);
+                        }
                         return symbol.getDocumentationComment(checker);
                     }
                 });
@@ -593,10 +643,11 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
+        if (hasStaticModifier(declaration)) return;
+
         const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
-        if (!classOrInterfaceDeclaration) {
-            return;
-        }
+        if (!classOrInterfaceDeclaration) return;
+
         return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
@@ -642,8 +693,8 @@ namespace ts {
         public languageVariant!: LanguageVariant;
         public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
         private namedDeclarations: ESMap<string, Declaration[]> | undefined;
@@ -1239,10 +1290,9 @@ namespace ts {
             : NoopCancellationToken;
 
         const currentDirectory = host.getCurrentDirectory();
-        // Check if the localized messages json is set, otherwise query the host for it
-        if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
-            setLocalizedDiagnosticMessages(host.getLocalizedDiagnosticMessages());
-        }
+
+        // Checks if the localized messages json is set, and if not, query the host for it
+        maybeSetLocalizedDiagnosticMessages(host.getLocalizedDiagnosticMessages?.bind(host));
 
         function log(message: string) {
             if (host.log) {
@@ -1356,6 +1406,7 @@ namespace ts {
                 hasChangedAutomaticTypeDirectiveNames,
                 trace: parseConfigHost.trace,
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
+                getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
                 getParsedCommandLine,
@@ -1586,7 +1637,7 @@ namespace ts {
             return [...program.getOptionsDiagnostics(cancellationToken), ...program.getGlobalDiagnostics(cancellationToken)];
         }
 
-        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions): CompletionInfo | undefined {
+        function getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions = emptyOptions, formattingSettings?: FormatCodeSettings): CompletionInfo | undefined {
             // Convert from deprecated options names to new names
             const fullPreferences: UserPreferences = {
                 ...identity<UserPreferences>(options), // avoid excess property check
@@ -1603,7 +1654,8 @@ namespace ts {
                 fullPreferences,
                 options.triggerCharacter,
                 options.triggerKind,
-                cancellationToken);
+                cancellationToken,
+                formattingSettings && formatting.getFormatContext(formattingSettings, host));
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -1744,6 +1796,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
+            if (!Rename.nodeIsEligibleForRename(node)) return undefined;
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
                 return [openingElement, closingElement].map((node): RenameLocation => {
@@ -1763,7 +1816,7 @@ namespace ts {
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, (entry, node, checker) => FindAllReferences.toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
         }
 
         function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
@@ -1784,7 +1837,8 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
+            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r, moduleSymbol));
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
@@ -2582,7 +2636,7 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
+        function provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences = emptyOptions): InlayHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));

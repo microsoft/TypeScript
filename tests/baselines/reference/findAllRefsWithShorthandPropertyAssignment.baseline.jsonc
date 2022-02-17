@@ -1,0 +1,468 @@
+// === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts ===
+// var /*FIND ALL REFS*/[|name|] = "Foo";
+// 
+// var obj = { [|name|] };
+// var obj1 = { name: [|name|] };
+// obj.name;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+      "kind": "var",
+      "name": "var name: string",
+      "textSpan": {
+        "start": 4,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "name",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts ===
+// var [|name|] = "Foo";
+// 
+// var obj = { [|name|] };
+// var obj1 = { name: /*FIND ALL REFS*/[|name|] };
+// obj.name;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+      "kind": "var",
+      "name": "var name: string",
+      "textSpan": {
+        "start": 4,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "name",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts ===
+// var [|name|] = "Foo";
+// 
+// var obj = { /*FIND ALL REFS*/[|name|] };
+// var obj1 = { name: [|name|] };
+// obj.[|name|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+      "kind": "var",
+      "name": "var name: string",
+      "textSpan": {
+        "start": 4,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "name",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+      "kind": "property",
+      "name": "(property) name: string",
+      "textSpan": {
+        "start": 31,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "name",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts ===
+// var name = "Foo";
+// 
+// var obj = { name };
+// var obj1 = { /*FIND ALL REFS*/[|name|]: name };
+// obj.name;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+      "kind": "property",
+      "name": "(property) name: string",
+      "textSpan": {
+        "start": 52,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "name",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 52,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 52,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "contextSpan": {
+          "start": 52,
+          "length": 10
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts ===
+// var name = "Foo";
+// 
+// var obj = { [|name|] };
+// var obj1 = { name: name };
+// obj./*FIND ALL REFS*/[|name|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+      "kind": "property",
+      "name": "(property) name: string",
+      "textSpan": {
+        "start": 31,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "name",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
