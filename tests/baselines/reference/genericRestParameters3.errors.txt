@@ -4,7 +4,6 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(17,11): error TS234
 tests/cases/conformance/types/rest/genericRestParameters3.ts(18,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[string] | [number, boolean]'.
   Type '[]' is not assignable to type '[number, boolean]'.
     Source has 0 element(s) but target requires 2.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(22,1): error TS2322: Type '(x: string, ...args: [string] | [number, boolean]) => void' is not assignable to type '(...args: [string, string] | [string, number, boolean]) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(23,1): error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
   Types of parameters 'y' and 'args' are incompatible.
     Type '[string] | [number, boolean]' is not assignable to type '[y: string]'.
@@ -15,7 +14,6 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(24,1): error TS2322
     Type '[string] | [number, boolean]' is not assignable to type '[y: number, z: boolean]'.
       Type '[string]' is not assignable to type '[y: number, z: boolean]'.
         Source has 1 element(s) but target requires 2.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(25,1): error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(35,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(36,21): error TS2345: Argument of type 'number' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(37,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
@@ -36,7 +34,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
     Source has 1 element(s) but target requires 2.
 
 
-==== tests/cases/conformance/types/rest/genericRestParameters3.ts (15 errors) ====
+==== tests/cases/conformance/types/rest/genericRestParameters3.ts (13 errors) ====
     declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
     declare let f2: (x: string, y: string) => void;
     declare let f3: (x: string, y: number, z: boolean) => void;
@@ -66,9 +64,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
     
     f2 = f1;
     f3 = f1;
-    f4 = f1;  // Error, misaligned complex rest types
-    ~~
-!!! error TS2322: Type '(x: string, ...args: [string] | [number, boolean]) => void' is not assignable to type '(...args: [string, string] | [string, number, boolean]) => void'.
+    f4 = f1;
     f1 = f2;  // Error
     ~~
 !!! error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
@@ -83,9 +79,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
 !!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[y: number, z: boolean]'.
 !!! error TS2322:       Type '[string]' is not assignable to type '[y: number, z: boolean]'.
 !!! error TS2322:         Source has 1 element(s) but target requires 2.
-    f1 = f4;  // Error, misaligned complex rest types
-    ~~
-!!! error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+    f1 = f4;
     
     // Repro from #26110
     
@@ -159,4 +153,23 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
     declare function foo2(...args: string[] | number[]): void;
     let x2: ReadonlyArray<string> = ["hello"];
     foo2(...x2);
+    
+    // Repros from #47754
+    
+    type RestParams = [y: string] | [y: number];
+    
+    type Signature = (x: string, ...rest: RestParams) => void;
+    
+    type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
+    
+    declare let ff1: (...rest: [string, string] | [string, number]) => void;
+    declare let ff2: (x: string, ...rest: [string] | [number]) => void;
+    
+    ff1 = ff2;
+    ff2 = ff1;
+    
+    function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
+        s1 = s2;
+        s2 = s1;
+    }
     
