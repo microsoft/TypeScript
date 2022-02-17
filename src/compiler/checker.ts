@@ -33203,7 +33203,7 @@ namespace ts {
                     if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                         if (operator === SyntaxKind.AmpersandAmpersandToken) {
                             const parent = walkUpParenthesizedExpressions(node.parent);
-                            checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
+                            checkTestingKnownTruthyCallableOrAwaitableType(node.left, isIfStatement(parent) ? parent.thenStatement : undefined);
                         }
                         checkTruthinessOfType(leftType, node.left);
                     }
@@ -33776,8 +33776,8 @@ namespace ts {
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
-            const type = checkTruthinessExpression(node.condition);
-            checkTestingKnownTruthyCallableOrAwaitableType(node.condition, type, node.whenTrue);
+            checkTruthinessExpression(node.condition);
+            checkTestingKnownTruthyCallableOrAwaitableType(node.condition, node.whenTrue);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -37274,8 +37274,8 @@ namespace ts {
         function checkIfStatement(node: IfStatement) {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
-            const type = checkTruthinessExpression(node.expression);
-            checkTestingKnownTruthyCallableOrAwaitableType(node.expression, type, node.thenStatement);
+            checkTruthinessExpression(node.expression);
+            checkTestingKnownTruthyCallableOrAwaitableType(node.expression, node.thenStatement);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -37285,48 +37285,57 @@ namespace ts {
             checkSourceElement(node.elseStatement);
         }
 
-        function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
+        function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, body?: Statement | Expression) {
             if (!strictNullChecks) return;
-            if (getFalsyFlags(type)) return;
 
-            const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
-            if (isPropertyAccessExpression(location) && isTypeAssertion(location.expression)) {
-                return;
+            helper(condExpr, body);
+            while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
+                condExpr = condExpr.left;
+                helper(condExpr, body);
             }
 
-            const testedNode = isIdentifier(location) ? location
-                : isPropertyAccessExpression(location) ? location.name
-                : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
-                : undefined;
+            function helper(condExpr: Expression, body: Expression | Statement | undefined) {
+                const location = isBinaryExpression(condExpr) &&
+                    (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)
+                    ? condExpr.right
+                    : condExpr;
+                const type = checkTruthinessExpression(location);
+                const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
+                if (getFalsyFlags(type) || isPropertyExpressionCast) return;
 
-            // While it technically should be invalid for any known-truthy value
-            // to be tested, we de-scope to functions and Promises unreferenced in
-            // the block as a heuristic to identify the most common bugs. There
-            // are too many false positives for values sourced from type
-            // definitions without strictNullChecks otherwise.
-            const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
-            const isPromise = !!getAwaitedTypeOfPromise(type);
-            if (callSignatures.length === 0 && !isPromise) {
-                return;
-            }
-
-            const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
-            if (!testedSymbol && !isPromise) {
-                return;
-            }
-
-            const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                || testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
-            if (!isUsed) {
-                if (isPromise) {
-                    errorAndMaybeSuggestAwait(
-                        location,
-                        /*maybeMissingAwait*/ true,
-                        Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined,
-                        getTypeNameForErrorDisplay(type));
+                // While it technically should be invalid for any known-truthy value
+                // to be tested, we de-scope to functions and Promises unreferenced in
+                // the block as a heuristic to identify the most common bugs. There
+                // are too many false positives for values sourced from type
+                // definitions without strictNullChecks otherwise.
+                const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+                const isPromise = !!getAwaitedTypeOfPromise(type);
+                if (callSignatures.length === 0 && !isPromise) {
+                    return;
                 }
-                else {
-                    error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
+
+                const testedNode = isIdentifier(location) ? location
+                    : isPropertyAccessExpression(location) ? location.name
+                    : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
+                    : undefined;
+                const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
+                if (!testedSymbol && !isPromise) {
+                    return;
+                }
+
+                const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+                    || testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
+                if (!isUsed) {
+                    if (isPromise) {
+                        errorAndMaybeSuggestAwait(
+                            location,
+                            /*maybeMissingAwait*/ true,
+                            Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined,
+                            getTypeNameForErrorDisplay(type));
+                    }
+                    else {
+                        error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                    }
                 }
             }
         }
