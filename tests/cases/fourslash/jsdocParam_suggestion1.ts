@@ -3,7 +3,6 @@
 //// /**
 ////  * @param options - whatever
 ////  * @param options.zone - equally bad
-////  * @param options.ugh - why
 ////  */
 //// declare function bad(options: any): void
 ////
