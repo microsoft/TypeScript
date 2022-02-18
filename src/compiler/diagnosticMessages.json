@@ -871,6 +871,14 @@
         "category": "Error",
         "code": 1269
     },
+    "Decorator function return type '{0}' is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 1270
+    },
+    "Decorator function return type is '{0}' but is expected to be 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1271
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
