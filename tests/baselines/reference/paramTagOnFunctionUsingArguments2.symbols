@@ -1,0 +1,16 @@
+=== tests/cases/conformance/jsdoc/paramTagOnFunctionUsingArguments2.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(paramTagOnFunctionUsingArguments2.ts, 0, 0))
+
+  /**
+   * @param {foo-module.Foo} foo
+   */
+  m(foo: unknown): void {
+>m : Symbol(Foo.m, Decl(paramTagOnFunctionUsingArguments2.ts, 0, 11))
+>foo : Symbol(foo, Decl(paramTagOnFunctionUsingArguments2.ts, 4, 4))
+
+      arguments;
+>arguments : Symbol(arguments)
+  }
+}
+

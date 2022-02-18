@@ -13688,10 +13688,12 @@ namespace ts {
                     if (!type) {
                         symbol = resolveTypeReferenceName(node, meaning, /*ignoreErrors*/ true);
                         if (symbol === unknownSymbol) {
-                            symbol = resolveTypeReferenceName(node, meaning | SymbolFlags.Value);
+                            symbol = resolveTypeReferenceName(node, meaning | SymbolFlags.Value, /*ignoreErrors*/ !isInJSFile(node));
                         }
                         else {
-                            resolveTypeReferenceName(node, meaning); // Resolve again to mark errors, if any
+                            if (isInJSFile(node)) {
+                                resolveTypeReferenceName(node, meaning); // Resolve again to mark errors, if any
+                            }
                         }
                         type = getTypeReferenceType(node, symbol);
                     }
