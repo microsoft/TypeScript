@@ -21,7 +21,7 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+    /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */
     // "incremental": true,                              /* Enable incremental compilation */
