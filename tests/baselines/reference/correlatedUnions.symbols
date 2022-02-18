@@ -675,3 +675,81 @@ function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 >y : Symbol(y, Decl(correlatedUnions.ts, 179, 59))
 }
 
+// Repro from #47890
+
+interface MyObj {
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+
+    someKey: {
+>someKey : Symbol(MyObj.someKey, Decl(correlatedUnions.ts, 185, 17))
+
+      name: string;
+>name : Symbol(name, Decl(correlatedUnions.ts, 186, 14))
+    }
+    someOtherKey: {
+>someOtherKey : Symbol(MyObj.someOtherKey, Decl(correlatedUnions.ts, 188, 5))
+
+      name: number;
+>name : Symbol(name, Decl(correlatedUnions.ts, 189, 19))
+    }
+}
+
+const ref: MyObj = {
+>ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+
+    someKey: { name: "" },
+>someKey : Symbol(someKey, Decl(correlatedUnions.ts, 194, 20))
+>name : Symbol(name, Decl(correlatedUnions.ts, 195, 14))
+
+    someOtherKey: { name: 42 }
+>someOtherKey : Symbol(someOtherKey, Decl(correlatedUnions.ts, 195, 26))
+>name : Symbol(name, Decl(correlatedUnions.ts, 196, 19))
+
+};
+
+function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
+>func : Symbol(func, Decl(correlatedUnions.ts, 197, 2))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>k : Symbol(k, Decl(correlatedUnions.ts, 199, 37))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+
+    const myObj: Partial<MyObj>[K] = ref[k];
+>myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
+>ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
+>k : Symbol(k, Decl(correlatedUnions.ts, 199, 37))
+
+    if (myObj) {
+>myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
+
+      return myObj.name;
+>myObj.name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+>myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
+>name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+    }
+    const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
+>myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
+>ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
+>k : Symbol(k, Decl(correlatedUnions.ts, 199, 37))
+
+    if (myObj2) {
+>myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
+
+      return myObj2.name;
+>myObj2.name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+>myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
+>name : Symbol(name, Decl(correlatedUnions.ts, 186, 14), Decl(correlatedUnions.ts, 189, 19))
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+

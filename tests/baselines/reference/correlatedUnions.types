@@ -624,3 +624,74 @@ function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 >y : Funcs[K]
 }
 
+// Repro from #47890
+
+interface MyObj {
+    someKey: {
+>someKey : { name: string; }
+
+      name: string;
+>name : string
+    }
+    someOtherKey: {
+>someOtherKey : { name: number; }
+
+      name: number;
+>name : number
+    }
+}
+
+const ref: MyObj = {
+>ref : MyObj
+>{    someKey: { name: "" },    someOtherKey: { name: 42 }} : { someKey: { name: string; }; someOtherKey: { name: number; }; }
+
+    someKey: { name: "" },
+>someKey : { name: string; }
+>{ name: "" } : { name: string; }
+>name : string
+>"" : ""
+
+    someOtherKey: { name: 42 }
+>someOtherKey : { name: number; }
+>{ name: 42 } : { name: number; }
+>name : number
+>42 : 42
+
+};
+
+function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
+>func : <K extends keyof MyObj>(k: K) => MyObj[K]['name'] | undefined
+>k : K
+
+    const myObj: Partial<MyObj>[K] = ref[k];
+>myObj : Partial<MyObj>[K]
+>ref[k] : MyObj[K]
+>ref : MyObj
+>k : K
+
+    if (myObj) {
+>myObj : Partial<MyObj>[K]
+
+      return myObj.name;
+>myObj.name : string | number
+>myObj : { name: string; } | { name: number; }
+>name : string | number
+    }
+    const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
+>myObj2 : { name: string; } | { name: number; } | undefined
+>ref[k] : { name: string; } | { name: number; }
+>ref : MyObj
+>k : K
+
+    if (myObj2) {
+>myObj2 : { name: string; } | { name: number; }
+
+      return myObj2.name;
+>myObj2.name : string | number
+>myObj2 : { name: string; } | { name: number; }
+>name : string | number
+    }
+    return undefined;
+>undefined : undefined
+}
+
