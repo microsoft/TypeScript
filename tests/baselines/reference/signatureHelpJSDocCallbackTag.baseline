@@ -52,7 +52,7 @@
               "name": "eventName",
               "documentation": [
                 {
-                  "text": "- So many words",
+                  "text": "So many words",
                   "kind": "text"
                 }
               ],
@@ -81,7 +81,7 @@
               "name": "eventName2",
               "documentation": [
                 {
-                  "text": "- Silence is golden",
+                  "text": "Silence is golden",
                   "kind": "text"
                 }
               ],
@@ -126,7 +126,7 @@
               "name": "eventName3",
               "documentation": [
                 {
-                  "text": "- Osterreich mos def",
+                  "text": "Osterreich mos def",
                   "kind": "text"
                 }
               ],
@@ -234,7 +234,7 @@
               "name": "eventName",
               "documentation": [
                 {
-                  "text": "- So many words",
+                  "text": "So many words",
                   "kind": "text"
                 }
               ],
@@ -263,7 +263,7 @@
               "name": "eventName2",
               "documentation": [
                 {
-                  "text": "- Silence is golden",
+                  "text": "Silence is golden",
                   "kind": "text"
                 }
               ],
@@ -308,7 +308,7 @@
               "name": "eventName3",
               "documentation": [
                 {
-                  "text": "- Osterreich mos def",
+                  "text": "Osterreich mos def",
                   "kind": "text"
                 }
               ],
@@ -416,7 +416,7 @@
               "name": "eventName",
               "documentation": [
                 {
-                  "text": "- So many words",
+                  "text": "So many words",
                   "kind": "text"
                 }
               ],
@@ -445,7 +445,7 @@
               "name": "eventName2",
               "documentation": [
                 {
-                  "text": "- Silence is golden",
+                  "text": "Silence is golden",
                   "kind": "text"
                 }
               ],
@@ -490,7 +490,7 @@
               "name": "eventName3",
               "documentation": [
                 {
-                  "text": "- Osterreich mos def",
+                  "text": "Osterreich mos def",
                   "kind": "text"
                 }
               ],
