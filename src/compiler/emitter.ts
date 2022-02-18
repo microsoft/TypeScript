@@ -5327,7 +5327,8 @@ namespace ts {
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
             const typeNode = getTypeNode(node);
-            if(typeNode){
+            if (typeNode) {
+
                 emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
             }
         }
