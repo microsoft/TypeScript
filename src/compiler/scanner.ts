@@ -1705,6 +1705,83 @@ namespace ts {
                     case CharacterCodes._9:
                         ({ type: token, value: tokenValue } = scanNumber());
                         return token;
+
+                    case CharacterCodes.slash:
+                        // Single-line comment
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                            pos += 2;
+
+                            while (pos < end) {
+                                if (isLineBreak(text.charCodeAt(pos))) {
+                                    break;
+                                }
+                                pos++;
+                            }
+
+                            commentDirectives = appendIfCommentDirective(
+                                commentDirectives,
+                                text.slice(tokenPos, pos),
+                                commentDirectiveRegExSingleLine,
+                                tokenPos,
+                            );
+
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.SingleLineCommentTrivia;
+                            }
+                        }
+                        // Multi-line comment
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
+                            pos += 2;
+                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash) {
+                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
+                            }
+
+                            let commentClosed = false;
+                            let lastLineStart = tokenPos;
+                            while (pos < end) {
+                                const ch = text.charCodeAt(pos);
+
+                                if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                                    pos += 2;
+                                    commentClosed = true;
+                                    break;
+                                }
+
+                                pos++;
+
+                                if (isLineBreak(ch)) {
+                                    lastLineStart = pos;
+                                    tokenFlags |= TokenFlags.PrecedingLineBreak;
+                                }
+                            }
+
+                            commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
+
+                            if (!commentClosed) {
+                                error(Diagnostics.Asterisk_Slash_expected);
+                            }
+
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                if (!commentClosed) {
+                                    tokenFlags |= TokenFlags.Unterminated;
+                                }
+                                return token = SyntaxKind.MultiLineCommentTrivia;
+                            }
+                        }
+
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
+                            return pos += 2, token = SyntaxKind.SlashEqualsToken;
+                        }
+
+                        pos++;
+                        return token = SyntaxKind.SlashToken;
+
                     case CharacterCodes.exclamation:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
@@ -1792,81 +1869,6 @@ namespace ts {
                         }
                         pos++;
                         return token = SyntaxKind.DotToken;
-                    case CharacterCodes.slash:
-                        // Single-line comment
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                            pos += 2;
-
-                            while (pos < end) {
-                                if (isLineBreak(text.charCodeAt(pos))) {
-                                    break;
-                                }
-                                pos++;
-                            }
-
-                            commentDirectives = appendIfCommentDirective(
-                                commentDirectives,
-                                text.slice(tokenPos, pos),
-                                commentDirectiveRegExSingleLine,
-                                tokenPos,
-                            );
-
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                return token = SyntaxKind.SingleLineCommentTrivia;
-                            }
-                        }
-                        // Multi-line comment
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
-                            pos += 2;
-                            if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash) {
-                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
-                            }
-
-                            let commentClosed = false;
-                            let lastLineStart = tokenPos;
-                            while (pos < end) {
-                                const ch = text.charCodeAt(pos);
-
-                                if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                                    pos += 2;
-                                    commentClosed = true;
-                                    break;
-                                }
-
-                                pos++;
-
-                                if (isLineBreak(ch)) {
-                                    lastLineStart = pos;
-                                    tokenFlags |= TokenFlags.PrecedingLineBreak;
-                                }
-                            }
-
-                            commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
-
-                            if (!commentClosed) {
-                                error(Diagnostics.Asterisk_Slash_expected);
-                            }
-
-                            if (skipTrivia) {
-                                continue;
-                            }
-                            else {
-                                if (!commentClosed) {
-                                    tokenFlags |= TokenFlags.Unterminated;
-                                }
-                                return token = SyntaxKind.MultiLineCommentTrivia;
-                            }
-                        }
-
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
-                            return pos += 2, token = SyntaxKind.SlashEqualsToken;
-                        }
-
-                        pos++;
-                        return token = SyntaxKind.SlashToken;
 
                     case CharacterCodes.colon:
                         pos++;
