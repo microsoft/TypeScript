@@ -1650,6 +1650,61 @@ namespace ts {
                             }
                             return token = SyntaxKind.NewLineTrivia;
                         }
+                    case CharacterCodes._0:
+                        if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
+                            pos += 2;
+                            tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
+                            if (!tokenValue) {
+                                error(Diagnostics.Hexadecimal_digit_expected);
+                                tokenValue = "0";
+                            }
+                            tokenValue = "0x" + tokenValue;
+                            tokenFlags |= TokenFlags.HexSpecifier;
+                            return token = checkBigIntSuffix();
+                        }
+                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                            pos += 2;
+                            tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
+                            if (!tokenValue) {
+                                error(Diagnostics.Binary_digit_expected);
+                                tokenValue = "0";
+                            }
+                            tokenValue = "0b" + tokenValue;
+                            tokenFlags |= TokenFlags.BinarySpecifier;
+                            return token = checkBigIntSuffix();
+                        }
+                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                            pos += 2;
+                            tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
+                            if (!tokenValue) {
+                                error(Diagnostics.Octal_digit_expected);
+                                tokenValue = "0";
+                            }
+                            tokenValue = "0o" + tokenValue;
+                            tokenFlags |= TokenFlags.OctalSpecifier;
+                            return token = checkBigIntSuffix();
+                        }
+                        // Try to parse as an octal
+                        if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
+                            tokenValue = "" + scanOctalDigits();
+                            tokenFlags |= TokenFlags.Octal;
+                            return token = SyntaxKind.NumericLiteral;
+                        }
+                    // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
+                    // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
+                    // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
+                    // falls through
+                    case CharacterCodes._1:
+                    case CharacterCodes._2:
+                    case CharacterCodes._3:
+                    case CharacterCodes._4:
+                    case CharacterCodes._5:
+                    case CharacterCodes._6:
+                    case CharacterCodes._7:
+                    case CharacterCodes._8:
+                    case CharacterCodes._9:
+                        ({ type: token, value: tokenValue } = scanNumber());
+                        return token;
                     case CharacterCodes.exclamation:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
@@ -1813,61 +1868,6 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.SlashToken;
 
-                    case CharacterCodes._0:
-                        if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
-                            pos += 2;
-                            tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
-                            if (!tokenValue) {
-                                error(Diagnostics.Hexadecimal_digit_expected);
-                                tokenValue = "0";
-                            }
-                            tokenValue = "0x" + tokenValue;
-                            tokenFlags |= TokenFlags.HexSpecifier;
-                            return token = checkBigIntSuffix();
-                        }
-                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
-                            pos += 2;
-                            tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
-                            if (!tokenValue) {
-                                error(Diagnostics.Binary_digit_expected);
-                                tokenValue = "0";
-                            }
-                            tokenValue = "0b" + tokenValue;
-                            tokenFlags |= TokenFlags.BinarySpecifier;
-                            return token = checkBigIntSuffix();
-                        }
-                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
-                            pos += 2;
-                            tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
-                            if (!tokenValue) {
-                                error(Diagnostics.Octal_digit_expected);
-                                tokenValue = "0";
-                            }
-                            tokenValue = "0o" + tokenValue;
-                            tokenFlags |= TokenFlags.OctalSpecifier;
-                            return token = checkBigIntSuffix();
-                        }
-                        // Try to parse as an octal
-                        if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
-                            tokenValue = "" + scanOctalDigits();
-                            tokenFlags |= TokenFlags.Octal;
-                            return token = SyntaxKind.NumericLiteral;
-                        }
-                    // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
-                    // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
-                    // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
-                    // falls through
-                    case CharacterCodes._1:
-                    case CharacterCodes._2:
-                    case CharacterCodes._3:
-                    case CharacterCodes._4:
-                    case CharacterCodes._5:
-                    case CharacterCodes._6:
-                    case CharacterCodes._7:
-                    case CharacterCodes._8:
-                    case CharacterCodes._9:
-                        ({ type: token, value: tokenValue } = scanNumber());
-                        return token;
                     case CharacterCodes.colon:
                         pos++;
                         return token = SyntaxKind.ColonToken;
