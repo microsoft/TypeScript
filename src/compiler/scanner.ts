@@ -1622,6 +1622,16 @@ namespace ts {
                     return token = identifierKind;
                 }
 
+                // Since this whitespace character is by far the most common one we check for it first.
+                // Bellow in the switch body we check for the other less common whitespace like characters
+                if (ch === CharacterCodes.space) {
+                    const isWhiteSpace = handleWhiteSpaceLike();
+                    if (!isWhiteSpace) {
+                        continue;
+                    }
+                    return token = isWhiteSpace;
+                }
+
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
@@ -1639,38 +1649,6 @@ namespace ts {
                                 pos++;
                             }
                             return token = SyntaxKind.NewLineTrivia;
-                        }
-                    case CharacterCodes.tab:
-                    case CharacterCodes.verticalTab:
-                    case CharacterCodes.formFeed:
-                    case CharacterCodes.space:
-                    case CharacterCodes.nonBreakingSpace:
-                    case CharacterCodes.ogham:
-                    case CharacterCodes.enQuad:
-                    case CharacterCodes.emQuad:
-                    case CharacterCodes.enSpace:
-                    case CharacterCodes.emSpace:
-                    case CharacterCodes.threePerEmSpace:
-                    case CharacterCodes.fourPerEmSpace:
-                    case CharacterCodes.sixPerEmSpace:
-                    case CharacterCodes.figureSpace:
-                    case CharacterCodes.punctuationSpace:
-                    case CharacterCodes.thinSpace:
-                    case CharacterCodes.hairSpace:
-                    case CharacterCodes.zeroWidthSpace:
-                    case CharacterCodes.narrowNoBreakSpace:
-                    case CharacterCodes.mathematicalSpace:
-                    case CharacterCodes.ideographicSpace:
-                    case CharacterCodes.byteOrderMark:
-                        if (skipTrivia) {
-                            pos++;
-                            continue;
-                        }
-                        else {
-                            while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
-                                pos++;
-                            }
-                            return token = SyntaxKind.WhitespaceTrivia;
                         }
                     case CharacterCodes.exclamation:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
@@ -2048,7 +2026,8 @@ namespace ts {
                                     return token = SyntaxKind.ShebangTrivia;
                                 }
                             }
-                        } else if (text[pos + 1] === "!") {
+                        }
+                        else if (text[pos + 1] === "!") {
                             error(Diagnostics.can_only_be_used_at_the_start_of_a_file);
                             pos++;
                             return token = SyntaxKind.Unknown;
@@ -2065,8 +2044,11 @@ namespace ts {
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
                         if (isWhiteSpaceSingleLine(ch)) {
-                            pos += charSize(ch);
-                            continue;
+                            const isWhiteSpace = handleWhiteSpaceLike();
+                            if (!isWhiteSpace) {
+                                continue;
+                            }
+                            return token = isWhiteSpace;
                         }
                         else if (isLineBreak(ch)) {
                             tokenFlags |= TokenFlags.PrecedingLineBreak;
@@ -2077,6 +2059,18 @@ namespace ts {
                         error(Diagnostics.Invalid_character, pos, size);
                         pos += size;
                         return token = SyntaxKind.Unknown;
+                }
+            }
+
+            function handleWhiteSpaceLike() {
+                if (skipTrivia) {
+                    pos++;
+                }
+                else {
+                    while (pos < end && isWhiteSpaceSingleLine(text.charCodeAt(pos))) {
+                        pos++;
+                    }
+                    return SyntaxKind.WhitespaceTrivia;
                 }
             }
         }
