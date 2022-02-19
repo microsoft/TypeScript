@@ -1617,17 +1617,6 @@ namespace ts {
                 }
                 const ch = codePointAt(text, pos);
 
-                // Special handling for shebang
-                if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
-                    pos = scanShebangTrivia(text, pos);
-                    if (skipTrivia) {
-                        continue;
-                    }
-                    else {
-                        return token = SyntaxKind.ShebangTrivia;
-                    }
-                }
-
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
@@ -2043,7 +2032,18 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.Unknown;
                     case CharacterCodes.hash:
-                        if (pos !== 0 && text[pos + 1] === "!") {
+                        // Special handling for shebang
+                        if (pos === 0) {
+                            if (isShebangTrivia(text, pos)) {
+                                pos = scanShebangTrivia(text, pos);
+                                if (skipTrivia) {
+                                    continue;
+                                }
+                                else {
+                                    return token = SyntaxKind.ShebangTrivia;
+                                }
+                            }
+                        } else if (text[pos + 1] === "!") {
                             error(Diagnostics.can_only_be_used_at_the_start_of_a_file);
                             pos++;
                             return token = SyntaxKind.Unknown;
