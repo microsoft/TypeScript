@@ -105,6 +105,7 @@ Project '/user/username/projects/solution/shared/tsconfig.json' (Configured)
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
 -----------------------------------------------
+Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/shared/tsconfig.json
 Loading configured project /user/username/projects/solution/tsconfig.json
 Config: /user/username/projects/solution/tsconfig.json : {
  "rootNames": [],
@@ -148,7 +149,6 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modu
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/solution/node_modules/@types 1 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /user/username/projects/solution/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Different program with same set of files
-Finding references to /user/username/projects/solution/shared/src/index.ts position 22 in project /user/username/projects/solution/shared/tsconfig.json
 Creating configuration project /user/username/projects/solution/app/tsconfig.json
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/app/src/app.ts 500 undefined WatchType: Closed Script info
