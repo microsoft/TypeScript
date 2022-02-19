@@ -1617,6 +1617,11 @@ namespace ts {
                 }
                 const ch = codePointAt(text, pos);
 
+                const identifierKind = scanIdentifier(ch, languageVersion);
+                if (identifierKind) {
+                    return token = identifierKind;
+                }
+
                 switch (ch) {
                     case CharacterCodes.lineFeed:
                     case CharacterCodes.carriageReturn:
@@ -2059,11 +2064,7 @@ namespace ts {
                         }
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
-                        const identifierKind = scanIdentifier(ch, languageVersion);
-                        if (identifierKind) {
-                            return token = identifierKind;
-                        }
-                        else if (isWhiteSpaceSingleLine(ch)) {
+                        if (isWhiteSpaceSingleLine(ch)) {
                             pos += charSize(ch);
                             continue;
                         }
