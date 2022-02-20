@@ -22879,6 +22879,19 @@ namespace ts {
                 if (assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType)) {
                     reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
                 }
+                // try to narrow to the narrowest constituent.
+                if (reducedType.flags & TypeFlags.Union) {
+                    reducedType = filterType(
+                        reducedType,
+                        (t) =>
+                            !some((reducedType as UnionType).types, (s) => {
+                                if (s === t || !isTypeSubtypeOf(s, t)) {
+                                    return false;
+                                }
+                                return everyType(assignedType, type => !(typeMaybeAssignableTo(type, t) && !typeMaybeAssignableTo(type, s)));
+                            })
+                    );
+                }
                 // Our crude heuristic produces an invalid result in some cases: see GH#26130.
                 // For now, when that happens, we give up and don't narrow at all.  (This also
                 // means we'll never narrow for erroneous assignments where the assigned type

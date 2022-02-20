@@ -343,39 +343,39 @@ const u: U = {} as any;
 >{} : {}
 
 u.a && u.b && f(u.a, u.b);
->u.a && u.b && f(u.a, u.b) : void | "" | undefined
->u.a && u.b : string | undefined
->u.a : string | undefined
->u : U
->a : string | undefined
->u.b : string | undefined
->u : U
->b : string | undefined
+>u.a && u.b && f(u.a, u.b) : void | ""
+>u.a && u.b : string
+>u.a : string
+>u : B
+>a : string
+>u.b : string
+>u : B
+>b : string
 >f(u.a, u.b) : void
 >f : (_a: string, _b: string) => void
 >u.a : string
->u : U
+>u : B
 >a : string
 >u.b : string
->u : U
+>u : B
 >b : string
 
 u.b && u.a && f(u.a, u.b);
->u.b && u.a && f(u.a, u.b) : void | "" | undefined
->u.b && u.a : string | undefined
->u.b : string | undefined
->u : U
->b : string | undefined
->u.a : string | undefined
->u : U
->a : string | undefined
+>u.b && u.a && f(u.a, u.b) : void | ""
+>u.b && u.a : string
+>u.b : string
+>u : B
+>b : string
+>u.a : string
+>u : B
+>a : string
 >f(u.a, u.b) : void
 >f : (_a: string, _b: string) => void
 >u.a : string
->u : U
+>u : B
 >a : string
 >u.b : string
->u : U
+>u : B
 >b : string
 
 // Repro from #29012

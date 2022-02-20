@@ -59,3 +59,93 @@ if ((o = fn()).done) {
 >o : Symbol(o, Decl(controlFlowAssignmentExpression.ts, 14, 3))
 >value : Symbol(value, Decl(controlFlowAssignmentExpression.ts, 12, 22))
 }
+
+// https://github.com/microsoft/TypeScript/issues/47731
+declare let a: object | any[] | undefined
+>a : Symbol(a, Decl(controlFlowAssignmentExpression.ts, 20, 11))
+
+if (a === undefined) {
+>a : Symbol(a, Decl(controlFlowAssignmentExpression.ts, 20, 11))
+>undefined : Symbol(undefined)
+
+    a = []
+>a : Symbol(a, Decl(controlFlowAssignmentExpression.ts, 20, 11))
+
+} else if (!Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowAssignmentExpression.ts, 20, 11))
+
+    throw new Error()
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+[...a] // any[]
+>a : Symbol(a, Decl(controlFlowAssignmentExpression.ts, 20, 11))
+
+interface Parent {
+>Parent : Symbol(Parent, Decl(controlFlowAssignmentExpression.ts, 27, 6))
+
+    parent: string;
+>parent : Symbol(Parent.parent, Decl(controlFlowAssignmentExpression.ts, 29, 18))
+}
+interface Child extends Parent {
+>Child : Symbol(Child, Decl(controlFlowAssignmentExpression.ts, 31, 1))
+>Parent : Symbol(Parent, Decl(controlFlowAssignmentExpression.ts, 27, 6))
+
+    child: string;
+>child : Symbol(Child.child, Decl(controlFlowAssignmentExpression.ts, 32, 32))
+}
+
+declare let p: Parent;
+>p : Symbol(p, Decl(controlFlowAssignmentExpression.ts, 36, 11))
+>Parent : Symbol(Parent, Decl(controlFlowAssignmentExpression.ts, 27, 6))
+
+declare let c: Child;
+>c : Symbol(c, Decl(controlFlowAssignmentExpression.ts, 37, 11))
+>Child : Symbol(Child, Decl(controlFlowAssignmentExpression.ts, 31, 1))
+
+declare let y: Parent | Child | undefined;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+>Parent : Symbol(Parent, Decl(controlFlowAssignmentExpression.ts, 27, 6))
+>Child : Symbol(Child, Decl(controlFlowAssignmentExpression.ts, 31, 1))
+
+y = p;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+>p : Symbol(p, Decl(controlFlowAssignmentExpression.ts, 36, 11))
+
+y;  // Parent
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+
+y = c;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+>c : Symbol(c, Decl(controlFlowAssignmentExpression.ts, 37, 11))
+
+y;  // Child
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+
+y = undefined as any as Parent | Child;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+>undefined : Symbol(undefined)
+>Parent : Symbol(Parent, Decl(controlFlowAssignmentExpression.ts, 27, 6))
+>Child : Symbol(Child, Decl(controlFlowAssignmentExpression.ts, 31, 1))
+
+y;  // Parent | Child
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+
+y = undefined as any as Parent | undefined;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+>undefined : Symbol(undefined)
+>Parent : Symbol(Parent, Decl(controlFlowAssignmentExpression.ts, 27, 6))
+
+y;  // Parent | undefined
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+
+y = undefined as any as Child | undefined;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+>undefined : Symbol(undefined)
+>Child : Symbol(Child, Decl(controlFlowAssignmentExpression.ts, 31, 1))
+
+y;  // Child | undefined
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 38, 11))
+

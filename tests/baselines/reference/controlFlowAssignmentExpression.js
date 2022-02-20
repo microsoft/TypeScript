@@ -18,7 +18,54 @@ if ((o = fn()).done) {
     const y: 1 = o.value;
 }
 
+// https://github.com/microsoft/TypeScript/issues/47731
+declare let a: object | any[] | undefined
+
+if (a === undefined) {
+    a = []
+} else if (!Array.isArray(a)) {
+    throw new Error()
+}
+[...a] // any[]
+
+interface Parent {
+    parent: string;
+}
+interface Child extends Parent {
+    child: string;
+}
+
+declare let p: Parent;
+declare let c: Child;
+declare let y: Parent | Child | undefined;
+
+y = p;
+y;  // Parent
+
+y = c;
+y;  // Child
+
+y = undefined as any as Parent | Child;
+y;  // Parent | Child
+
+y = undefined as any as Parent | undefined;
+y;  // Parent | undefined
+
+y = undefined as any as Child | undefined;
+y;  // Child | undefined
+
+
 //// [controlFlowAssignmentExpression.js]
+"use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var x;
 var obj;
 x = "";
@@ -29,5 +76,22 @@ x = true;
 x; // number
 var o;
 if ((o = fn()).done) {
-    var y = o.value;
+    var y_1 = o.value;
 }
+if (a === undefined) {
+    a = [];
+}
+else if (!Array.isArray(a)) {
+    throw new Error();
+}
+__spreadArray([], a, true); // any[]
+y = p;
+y; // Parent
+y = c;
+y; // Child
+y = undefined;
+y; // Parent | Child
+y = undefined;
+y; // Parent | undefined
+y = undefined;
+y; // Child | undefined

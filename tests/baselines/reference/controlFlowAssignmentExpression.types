@@ -76,3 +76,99 @@ if ((o = fn()).done) {
 >o : { done: true; value: 1; }
 >value : 1
 }
+
+// https://github.com/microsoft/TypeScript/issues/47731
+declare let a: object | any[] | undefined
+>a : object | any[] | undefined
+
+if (a === undefined) {
+>a === undefined : boolean
+>a : object | any[] | undefined
+>undefined : undefined
+
+    a = []
+>a = [] : never[]
+>a : object | any[] | undefined
+>[] : never[]
+
+} else if (!Array.isArray(a)) {
+>!Array.isArray(a) : boolean
+>Array.isArray(a) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>a : object | any[]
+
+    throw new Error()
+>new Error() : Error
+>Error : ErrorConstructor
+}
+[...a] // any[]
+>[...a] : any[]
+>...a : any
+>a : any[]
+
+interface Parent {
+    parent: string;
+>parent : string
+}
+interface Child extends Parent {
+    child: string;
+>child : string
+}
+
+declare let p: Parent;
+>p : Parent
+
+declare let c: Child;
+>c : Child
+
+declare let y: Parent | Child | undefined;
+>y : Parent | Child | undefined
+
+y = p;
+>y = p : Parent
+>y : Parent | Child | undefined
+>p : Parent
+
+y;  // Parent
+>y : Parent
+
+y = c;
+>y = c : Child
+>y : Parent | Child | undefined
+>c : Child
+
+y;  // Child
+>y : Child
+
+y = undefined as any as Parent | Child;
+>y = undefined as any as Parent | Child : Parent | Child
+>y : Parent | Child | undefined
+>undefined as any as Parent | Child : Parent | Child
+>undefined as any : any
+>undefined : undefined
+
+y;  // Parent | Child
+>y : Parent | Child
+
+y = undefined as any as Parent | undefined;
+>y = undefined as any as Parent | undefined : Parent | undefined
+>y : Parent | Child | undefined
+>undefined as any as Parent | undefined : Parent | undefined
+>undefined as any : any
+>undefined : undefined
+
+y;  // Parent | undefined
+>y : Parent | undefined
+
+y = undefined as any as Child | undefined;
+>y = undefined as any as Child | undefined : Child | undefined
+>y : Parent | Child | undefined
+>undefined as any as Child | undefined : Child | undefined
+>undefined as any : any
+>undefined : undefined
+
+y;  // Child | undefined
+>y : Child | undefined
+
