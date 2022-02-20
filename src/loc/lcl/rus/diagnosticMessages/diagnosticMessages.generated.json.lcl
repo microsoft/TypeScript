@@ -14984,11 +14984,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Visit https://aka.ms/tsconfig.json to read more about this file]]></Val>
+          <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Дополнительные сведения об этом файле: https://aka.ms/tsconfig.json.]]></Val>
+            <Val><![CDATA[Дополнительные сведения об этом файле: https://aka.ms/tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
