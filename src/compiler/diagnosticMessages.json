@@ -5852,7 +5852,6 @@
         "code": 6930
     },
 
-
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -6911,7 +6910,7 @@
         "category": "Message",
         "code": 95109
     },
-    "Visit https://aka.ms/tsconfig.json to read more about this file": {
+    "Visit https://aka.ms/tsconfig to read more about this file": {
         "category": "Message",
         "code": 95110
     },
