@@ -2216,7 +2216,6 @@ namespace ts {
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression));
             if (node.type) {
-
                 setTypeNode(updated.name, node.type);
             }
             return updated;
