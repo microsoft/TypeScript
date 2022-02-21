@@ -1,0 +1,32 @@
+=== tests/cases/compiler/useUnknownInCatchVariables02.ts ===
+try {}
+catch ({ name }) { name; }
+>name : any
+>name : any
+
+try {}
+catch ({ name }) {}
+>name : any
+
+try {}
+catch ({ a: { b } }) { b; }
+>a : any
+>b : any
+>b : any
+
+try {}
+catch ({ a: { b } }) {}
+>a : any
+>b : any
+
+try {}
+catch ([a, { b }]) { a; }
+>a : any
+>b : any
+>a : any
+
+try {}
+catch ([a, { b }]) {}
+>a : any
+>b : any
+
