@@ -3406,6 +3406,7 @@ namespace ts.server.protocol {
          * `class A { foo }`.
          */
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeProjectReferenceAutoImports?: "on" | "off";
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
