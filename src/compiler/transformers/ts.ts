@@ -3352,7 +3352,7 @@ namespace ts {
         }
 
         function safeMultiLineComment(value: string): string {
-            return value.replace(/\*\//, "*_/");
+            return value.replace(/\*\//g, "*_/");
         }
 
         function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
