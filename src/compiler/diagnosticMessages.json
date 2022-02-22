@@ -435,6 +435,10 @@
         "category": "Error",
         "code": 1144
     },
+    "'{' or JSX element expected.": {
+        "category": "Error",
+        "code": 1145
+    },
     "Declaration expected.": {
         "category": "Error",
         "code": 1146
