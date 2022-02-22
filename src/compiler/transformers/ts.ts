@@ -3351,6 +3351,10 @@ namespace ts {
             return substituteConstantValue(node);
         }
 
+        function safeMultiLineComment(value: string): string {
+            return value.replace(/\*\//, "*_/");
+        }
+
         function substituteConstantValue(node: PropertyAccessExpression | ElementAccessExpression): LeftHandSideExpression {
             const constantValue = tryGetConstEnumValue(node);
             if (constantValue !== undefined) {
@@ -3364,7 +3368,7 @@ namespace ts {
                         ? declarationNameToString(originalNode.name)
                         : getTextOfNode(originalNode.argumentExpression);
 
-                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
+                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(propertyName)} `);
                 }
 
                 return substitute;
