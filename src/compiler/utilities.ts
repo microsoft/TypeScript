@@ -6376,19 +6376,19 @@ namespace ts {
          * don't include automatic type reference directives. Must be called only when
          * `hasProcessedResolutions` returns false (once per cache instance).
          */
-        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void;
+        setSymlinksFromResolutions(projectName: string | undefined, files: readonly SourceFile[], typeReferenceDirectives: ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void;
         /**
          * @internal
-         * Whether `setSymlinksFromResolutions` has already been called.
+         * Whether `setSymlinksFromResolutions` has already been called for the given project.
          */
-        hasProcessedResolutions(): boolean;
+        hasProcessedResolutions(projectName: string | undefined): boolean;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
         let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
-        let hasProcessedResolutions = false;
+        let hasProcessedResolutions: Set<string> | boolean | undefined;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
@@ -6407,15 +6407,34 @@ namespace ts {
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
                 }
             },
-            setSymlinksFromResolutions(files, typeReferenceDirectives) {
-                Debug.assert(!hasProcessedResolutions);
-                hasProcessedResolutions = true;
+            setSymlinksFromResolutions(projectName, files, typeReferenceDirectives) {
+                if (projectName === undefined) {
+                    Debug.assert(!hasProcessedResolutions, "setSymlinksFromResolutions should only be called once per cache instance");
+                    hasProcessedResolutions = true;
+                }
+                else {
+                    Debug.assert(hasProcessedResolutions === undefined || typeof hasProcessedResolutions === "object");
+                    ((hasProcessedResolutions ||= new Set()) as Set<string>).add(projectName); // #44553
+                }
                 for (const file of files) {
                     file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
                 }
                 typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
             },
-            hasProcessedResolutions: () => hasProcessedResolutions,
+            hasProcessedResolutions: projectName => {
+                if (projectName !== undefined) {
+                    Debug.assert(
+                        hasProcessedResolutions === undefined || typeof hasProcessedResolutions === "object",
+                        "hasProcessedResolutions was called with a project name, but setSymlinksFromResolutions was not");
+                    return !!hasProcessedResolutions?.has(projectName);
+                }
+                else {
+                    Debug.assert(
+                        hasProcessedResolutions === undefined || typeof hasProcessedResolutions === "boolean",
+                        "hasProcessedResolutions was called without a project name, but setSymlinksFromResolutions was called with one");
+                    return !!hasProcessedResolutions;
+                }
+            },
         };
 
         function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {

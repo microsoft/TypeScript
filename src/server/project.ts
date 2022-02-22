@@ -357,10 +357,20 @@ namespace ts.server {
             if (!this.symlinks) {
                 this.symlinks = createSymlinkCache(this.getCurrentDirectory(), this.getCanonicalFileName);
             }
-            if (this.program && !this.symlinks.hasProcessedResolutions()) {
+            if (this.program && !this.symlinks.hasProcessedResolutions(this.projectName)) {
                 this.symlinks.setSymlinksFromResolutions(
+                    this.projectName,
                     this.program.getSourceFiles(),
                     this.program.getResolvedTypeReferenceDirectives());
+            }
+            if (typeof this.autoImportProviderHost === "object" &&
+                this.autoImportProviderHost.program &&
+                !this.symlinks.hasProcessedResolutions(this.autoImportProviderHost.projectName)
+            ) {
+                this.symlinks.setSymlinksFromResolutions(
+                    this.autoImportProviderHost.projectName,
+                    this.autoImportProviderHost.program.getSourceFiles(),
+                    this.autoImportProviderHost.program.getResolvedTypeReferenceDirectives());
             }
             return this.symlinks;
         }

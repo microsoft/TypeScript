@@ -61,7 +61,7 @@ namespace ts.projectSystem {
         it("works for paths close to the root", () => {
             const cache = createSymlinkCache("/", createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
             // Used to crash, #44953
-            cache.setSymlinksFromResolutions([], new Map([["foo", {
+            cache.setSymlinksFromResolutions(/*projectName*/ undefined, [], new Map([["foo", {
                 primary: true,
                 originalPath: "/foo",
                 resolvedFileName: "/one/two/foo",

@@ -368,9 +368,7 @@ namespace ts.codefix {
     function getAllReExportingModules(importingFile: SourceFile, targetSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, isJsxTagName: boolean, host: LanguageServiceHost, program: Program, preferences: UserPreferences): readonly SymbolExportInfo[] {
         const result: SymbolExportInfo[] = [];
         const compilerOptions = program.getCompilerOptions();
-        const getModuleSpecifierResolutionHost = memoizeOne((source: AutoImportSource) => {
-            return createModuleSpecifierResolutionHost(getProgramForAutoImport(source, program, host), host);
-        });
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
 
         forEachExternalModuleToImportFrom(program, host, preferences, (moduleSymbol, moduleFile, program, source) => {
             const checker = program.getTypeChecker();
@@ -380,20 +378,20 @@ namespace ts.codefix {
             }
 
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions), isJsxTagName) === symbolName) && skipAlias(defaultInfo.symbol, checker) === targetSymbol && isImportable(program, moduleFile, source)) {
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions), isJsxTagName) === symbolName) && skipAlias(defaultInfo.symbol, checker) === targetSymbol && isImportable(program, moduleFile)) {
                 result.push({ symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: moduleFile?.fileName, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(defaultInfo.symbol, checker).flags, source });
             }
 
             for (const exported of checker.getExportsAndPropertiesOfModule(moduleSymbol)) {
-                if (exported.name === symbolName && checker.getMergedSymbol(skipAlias(exported, checker)) === targetSymbol && isImportable(program, moduleFile, source)) {
+                if (exported.name === symbolName && checker.getMergedSymbol(skipAlias(exported, checker)) === targetSymbol && isImportable(program, moduleFile)) {
                     result.push({ symbol: exported, moduleSymbol, moduleFileName: moduleFile?.fileName, exportKind: ExportKind.Named, targetFlags: skipAlias(exported, checker).flags, source });
                 }
             }
         });
         return result;
 
-        function isImportable(program: Program, moduleFile: SourceFile | undefined, source: AutoImportSource) {
-            return !moduleFile || isImportableFile(program, importingFile, moduleFile, preferences, /*packageJsonFilter*/ undefined, getModuleSpecifierResolutionHost(source), host.getModuleSpecifierCache?.());
+        function isImportable(program: Program, moduleFile: SourceFile | undefined) {
+            return !moduleFile || isImportableFile(program, importingFile, moduleFile, preferences, /*packageJsonFilter*/ undefined, moduleSpecifierResolutionHost, host.getModuleSpecifierCache?.());
         }
     }
 
@@ -874,11 +872,8 @@ namespace ts.codefix {
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
         const packageJsonFilter = createPackageJsonImportFilter(fromFile, preferences, host);
         const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-        const getModuleSpecifierResolutionHost = memoizeOne((source: AutoImportSource) => {
-            return createModuleSpecifierResolutionHost(getProgramForAutoImport(source, program, host), host);
-        });
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
         function addSymbol(moduleSymbol: Symbol, toFile: SourceFile | undefined, exportedSymbol: Symbol, exportKind: ExportKind, program: Program, source: AutoImportSource): void {
-            const moduleSpecifierResolutionHost = getModuleSpecifierResolutionHost(source);
             if (toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
                 !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
             ) {

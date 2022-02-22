@@ -3918,8 +3918,8 @@ namespace ts {
             if (!symlinks) {
                 symlinks = createSymlinkCache(currentDirectory, getCanonicalFileName);
             }
-            if (files && resolvedTypeReferenceDirectives && !symlinks.hasProcessedResolutions()) {
-                symlinks.setSymlinksFromResolutions(files, resolvedTypeReferenceDirectives);
+            if (files && resolvedTypeReferenceDirectives && !symlinks.hasProcessedResolutions(/*projectName*/ undefined)) {
+                symlinks.setSymlinksFromResolutions(/*projectName*/ undefined, files, resolvedTypeReferenceDirectives);
             }
             return symlinks;
         }

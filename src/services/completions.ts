@@ -1978,9 +1978,7 @@ namespace ts.Completions {
         const symbolToSortTextIdMap: SymbolSortTextIdMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
         const isTypeOnlyLocation = isTypeOnlyCompletion();
-        const getModuleSpecifierResolutionHost = memoizeOne((source: AutoImportSource) => {
-            return createModuleSpecifierResolutionHost(getProgramForAutoImport(source, program, host), host);
-        });
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
 
         if (isRightOfDot || isRightOfQuestionDot) {
             getTypeScriptMemberSymbols();
@@ -2545,7 +2543,7 @@ namespace ts.Completions {
                         return false;
                     }
                     return packageJsonFilter
-                        ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.source))
+                        ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, moduleSpecifierResolutionHost)
                         : true;
                 }
                 return isImportableFile(
@@ -2554,7 +2552,7 @@ namespace ts.Completions {
                     moduleFile,
                     preferences,
                     packageJsonFilter,
-                    getModuleSpecifierResolutionHost(info.source),
+                    moduleSpecifierResolutionHost,
                     moduleSpecifierCache);
             }
         }
