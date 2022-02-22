@@ -365,9 +365,15 @@ namespace ts {
             for (const ref of resolvedReferencedProjects) {
                 const referencedProgram = host.getProgramForReferencedProject!(ref.sourceFile.fileName);
                 if (referencedProgram) {
+                    const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.()
+                        && !program.getCompilerOptions().disableSourceOfProjectReferenceRedirect;
                     forEachExternalModule(
                         referencedProgram.getTypeChecker(),
                         mapDefined(referencedProgram.getRootFileNames(), fileName => {
+                            if (!useSourceOfProjectReferenceRedirect) {
+                                // `seenModules` will contain the .d.ts outputs of these input files
+                                fileName = program.getProjectReferenceRedirect(fileName) || fileName;
+                            }
                             const file = referencedProgram.getSourceFile(fileName);
                             return file && !seenModules!.has(file.path) ? file : undefined;
                         }),
