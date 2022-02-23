@@ -4525,8 +4525,6 @@ declare namespace ts {
      * Moves matching emit helpers from a source node to a target node.
      */
     function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean): void;
-    function setTypeNode<T extends Node>(node: T, type: TypeNode): T;
-    function getTypeNode<T extends Node>(node: T): TypeNode | undefined;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
