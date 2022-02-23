@@ -775,6 +775,10 @@ namespace ts.Completions {
             }
         }
 
+        if (isObjectLiteralFunctionPropertyCompletion(symbol, location, contextToken, program.getTypeChecker())) {
+            getEntryForObjectLiteralFunctionCompletion(symbol, location);
+        }
+
         if (isJsxIdentifierExpected && !isRightOfOpenTag && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
@@ -1058,6 +1062,41 @@ namespace ts.Completions {
         }
         return undefined;
     }
+
+    function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, location: Node, contextToken: Node | undefined, checker: TypeChecker): boolean {
+        // >> TODO: check completion kind is memberlike
+        // TODO: support JS files.
+        if (isInJSFile(location)) {
+            return false;
+        }
+
+        /*
+            For an object type
+            `type Foo = {
+                bar(x: number): void;
+                foo: (x: string) => string;
+            }`,
+            `bar` will have symbol flag `Method`,
+            `foo` will have symbol flag `Property`.
+        */
+        if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method))) {
+            return false;
+        }
+
+        const type = checker.getTypeOfSymbol(symbol);
+        // We ignore non-function properties.
+        if (!type.getCallSignatures().length) {
+            return false;
+        }
+
+        // Check if we are in a position for object literal completion.
+        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
+        return !!objectLikeContainer && isObjectLiteralExpression(objectLikeContainer);
+    }
+
+    function getEntryForObjectLiteralFunctionCompletion(_symbol: Symbol, _location: Node) {
+        // >> TODO: implement this
+    };
 
     function createSnippetPrinter(
         printerOptions: PrinterOptions,
@@ -2963,31 +3002,6 @@ namespace ts.Completions {
             return GlobalsSearch.Success;
         }
 
-        /**
-         * Returns the immediate owning object literal or binding pattern of a context token,
-         * on the condition that one exists and that the context implies completion should be given.
-         */
-        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | ObjectBindingPattern | undefined {
-            if (contextToken) {
-                const { parent } = contextToken;
-                switch (contextToken.kind) {
-                    case SyntaxKind.OpenBraceToken:  // const x = { |
-                    case SyntaxKind.CommaToken:      // const x = { a: 0, |
-                        if (isObjectLiteralExpression(parent) || isObjectBindingPattern(parent)) {
-                            return parent;
-                        }
-                        break;
-                    case SyntaxKind.AsteriskToken:
-                        return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
-                    case SyntaxKind.Identifier:
-                        return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
-                            ? contextToken.parent.parent : undefined;
-                }
-            }
-
-            return undefined;
-        }
-
         function isConstructorParameterCompletion(node: Node): boolean {
             return !!node.parent && isParameter(node.parent) && isConstructorDeclaration(node.parent.parent)
                 && (isParameterPropertyModifier(node.kind) || isDeclarationName(node));
@@ -3461,6 +3475,31 @@ namespace ts.Completions {
         function isCurrentlyEditingNode(node: Node): boolean {
             return node.getStart(sourceFile) <= position && position <= node.getEnd();
         }
+    }
+
+    /**
+     * Returns the immediate owning object literal or binding pattern of a context token,
+     * on the condition that one exists and that the context implies completion should be given.
+     */
+    function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined): ObjectLiteralExpression | ObjectBindingPattern | undefined {
+        if (contextToken) {
+            const { parent } = contextToken;
+            switch (contextToken.kind) {
+                case SyntaxKind.OpenBraceToken:  // const x = { |
+                case SyntaxKind.CommaToken:      // const x = { a: 0, |
+                    if (isObjectLiteralExpression(parent) || isObjectBindingPattern(parent)) {
+                        return parent;
+                    }
+                    break;
+                case SyntaxKind.AsteriskToken:
+                    return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+                case SyntaxKind.Identifier:
+                    return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
+                        ? contextToken.parent.parent : undefined;
+            }
+        }
+
+        return undefined;
     }
 
     function getRelevantTokens(position: number, sourceFile: SourceFile): { contextToken: Node, previousToken: Node } | { contextToken: undefined, previousToken: undefined } {
