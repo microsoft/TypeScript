@@ -1,0 +1,18 @@
+=== tests/cases/compiler/emitOneLineVariableDeclarationRemoveCommentsFalse.ts ===
+let a = /*[[${something}]]*/ {};
+>a : Symbol(a, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 0, 3))
+
+let b: any = /*[[${something}]]*/ {};
+>b : Symbol(b, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 1, 3))
+
+let c: { hoge: boolean } = /*[[${something}]]*/ { hoge: true };
+>c : Symbol(c, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 2, 3))
+>hoge : Symbol(hoge, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 2, 8))
+>hoge : Symbol(hoge, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 2, 49))
+
+let d: any  /*[[${something}]]*/ = {};
+>d : Symbol(d, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 3, 3))
+
+let e/*[[${something}]]*/: any   = {};
+>e : Symbol(e, Decl(emitOneLineVariableDeclarationRemoveCommentsFalse.ts, 4, 3))
+

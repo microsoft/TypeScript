@@ -2227,12 +2227,16 @@ namespace ts {
         }
 
         function visitVariableDeclaration(node: VariableDeclaration) {
-            return factory.updateVariableDeclaration(
+            const updated = factory.updateVariableDeclaration(
                 node,
                 visitNode(node.name, visitor, isBindingName),
                 /*exclamationToken*/ undefined,
                 /*type*/ undefined,
                 visitNode(node.initializer, visitor, isExpression));
+            if (node.type) {
+                setTypeNode(updated.name, node.type);
+            }
+            return updated;
         }
 
         function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
