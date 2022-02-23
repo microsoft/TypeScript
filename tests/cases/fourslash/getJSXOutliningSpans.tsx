@@ -2,7 +2,7 @@
 ////
 ////export class Home extends Component[| {
 ////  render()[| {
-////    return (
+////    return [|(
 ////    [|<div>
 ////      [|<h1>Hello, world!</h1>|]
 ////      [|<ul>
@@ -29,7 +29,7 @@
 ////          text 
 ////      </>|]
 ////    </div>|]
-////    );
+////    )|];
 ////  }|]
 ////}|]
 

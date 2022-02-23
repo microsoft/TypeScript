@@ -36,6 +36,8 @@
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
         "@typescript-eslint/consistent-type-assertions": ["error", { "assertionStyle": "as" }],
 
+        "max-statements-per-line": ["error", { "max": 1 }],
+
         "no-duplicate-imports": "off",
         "@typescript-eslint/no-duplicate-imports": "error",
 

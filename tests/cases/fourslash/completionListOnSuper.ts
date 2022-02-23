@@ -16,4 +16,4 @@
 ////    }
 ////}
 
-verify.completions({ marker: "", exact: ["foo", "bar"] });
+verify.completions({ marker: "", exact: ["bar", "foo"] });

@@ -25,7 +25,7 @@ namespace ts.codefix {
         const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
         changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
             ? factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))
-            : factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required));
+            : factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required, /*assertClause*/ undefined));
     }
 
     interface Info {
@@ -62,7 +62,7 @@ namespace ts.codefix {
             if (!isIdentifier(element.name) || element.initializer) {
                 return undefined;
             }
-            importSpecifiers.push(factory.createImportSpecifier(tryCast(element.propertyName, isIdentifier), element.name));
+            importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, tryCast(element.propertyName, isIdentifier), element.name));
         }
 
         if (importSpecifiers.length) {

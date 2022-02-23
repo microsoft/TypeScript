@@ -2,7 +2,7 @@
 var v = List<number>.makeChild();
 >v : any
 >List<number>.makeChild() : any
+>List<number>.makeChild : any
 >List : any
->makeChild() : any
 >makeChild : any
 

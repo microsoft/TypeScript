@@ -1,0 +1,1091 @@
+// === /tests/cases/fourslash/referencesForClassMembers.ts ===
+// class Base {
+//     /*FIND ALL REFS*/[|a|]: number;
+//     method(): void { }
+// }
+// class MyClass extends Base {
+//     [|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c.[|a|];
+// c.method();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "property",
+      "name": "(property) Base.a: number",
+      "textSpan": {
+        "start": 17,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 17,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 17,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "property",
+      "name": "(property) MyClass.a: any",
+      "textSpan": {
+        "start": 86,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 2
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 2
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembers.ts ===
+// class Base {
+//     [|a|]: number;
+//     method(): void { }
+// }
+// class MyClass extends Base {
+//     /*FIND ALL REFS*/[|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c.[|a|];
+// c.method();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "property",
+      "name": "(property) Base.a: number",
+      "textSpan": {
+        "start": 17,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 17,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 17,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "property",
+      "name": "(property) MyClass.a: any",
+      "textSpan": {
+        "start": 86,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 2
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 2
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembers.ts ===
+// class Base {
+//     [|a|]: number;
+//     method(): void { }
+// }
+// class MyClass extends Base {
+//     [|a|];
+//     method() { }
+// }
+// 
+// var c: MyClass;
+// c./*FIND ALL REFS*/[|a|];
+// c.method();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "property",
+      "name": "(property) Base.a: number",
+      "textSpan": {
+        "start": 17,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 17,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 17,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "property",
+      "name": "(property) MyClass.a: any",
+      "textSpan": {
+        "start": 86,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 2
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 2
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 127,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembers.ts ===
+// class Base {
+//     a: number;
+//     /*FIND ALL REFS*/[|method|](): void { }
+// }
+// class MyClass extends Base {
+//     a;
+//     [|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c.[|method|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "method",
+      "name": "(method) Base.method(): void",
+      "textSpan": {
+        "start": 32,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 32,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 32,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 32,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "method",
+      "name": "(method) MyClass.method(): void",
+      "textSpan": {
+        "start": 93,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 93,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 93,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 132,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembers.ts ===
+// class Base {
+//     a: number;
+//     [|method|](): void { }
+// }
+// class MyClass extends Base {
+//     a;
+//     /*FIND ALL REFS*/[|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c.[|method|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "method",
+      "name": "(method) Base.method(): void",
+      "textSpan": {
+        "start": 32,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 32,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 32,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 32,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "method",
+      "name": "(method) MyClass.method(): void",
+      "textSpan": {
+        "start": 93,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 93,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 93,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 132,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/referencesForClassMembers.ts ===
+// class Base {
+//     a: number;
+//     [|method|](): void { }
+// }
+// class MyClass extends Base {
+//     a;
+//     [|method|]() { }
+// }
+// 
+// var c: MyClass;
+// c.a;
+// c./*FIND ALL REFS*/[|method|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "method",
+      "name": "(method) Base.method(): void",
+      "textSpan": {
+        "start": 32,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Base",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 32,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 32,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 32,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+      "kind": "method",
+      "name": "(method) MyClass.method(): void",
+      "textSpan": {
+        "start": 93,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MyClass",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 93,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "contextSpan": {
+          "start": 93,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 132,
+          "length": 6
+        },
+        "fileName": "/tests/cases/fourslash/referencesForClassMembers.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

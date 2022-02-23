@@ -46,7 +46,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-Found 1 error.
+Found 1 error in src/src/main.ts[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -63,6 +63,12 @@ Semantic diagnostics in builder refreshed for::
 /src/shared/types/db.ts
 /src/src/main.ts
 /src/src/other.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/shared/types/db.ts (used version)
+/src/src/main.ts (used version)
+/src/src/other.ts (used version)
 
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
@@ -166,7 +172,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-Found 1 error.
+Found 1 error in src/src/main.ts[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -179,6 +185,8 @@ Program files::
 /src/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 
 
@@ -205,6 +213,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /src/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/src/main.ts (computed .d.ts)
 
 
 //// [/src/dev-build/shared/types/db.js]
@@ -300,5 +311,7 @@ Program files::
 /src/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 

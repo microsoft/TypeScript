@@ -10,7 +10,7 @@ namespace ts {
         IncrementalDtsChange = "incremental-declaration-changes",
         IncrementalDtsUnchanged = "incremental-declaration-doesnt-change",
         IncrementalHeadersChange = "incremental-headers-change-without-dts-changes",
-        NoChangeRun ="no-change-run"
+        NoChangeRun = "no-change-run"
     }
 
     export const noChangeRun: TscIncremental = {
@@ -32,6 +32,7 @@ namespace ts {
         baselinePrograms?: boolean;
         baselineDependencies?: boolean;
         disableUseFileVersionAsSignature?: boolean;
+        environmentVariables?: Record<string, string>;
     }
 
     export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
@@ -77,14 +78,15 @@ namespace ts {
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
-            baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies
+            baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies,
+            environmentVariables
         } = input;
         if (modifyFs) modifyFs(inputFs);
         inputFs.makeReadonly();
         const fs = inputFs.shadow();
 
         // Create system
-        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
         if (input.disableUseFileVersionAsSignature) sys.disableUseFileVersionAsSignature = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const writtenFiles = sys.writtenFiles = new Set();

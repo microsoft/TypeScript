@@ -14,7 +14,9 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
+    return this;
+})();
 
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable no-in-operator */
@@ -149,7 +151,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
         getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
-        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
+        getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined, formattingSettings: FormatCodeSettings | undefined): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
@@ -280,7 +282,7 @@ namespace ts {
         prepareCallHierarchy(fileName: string, position: number): string;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
-
+        provideInlayHints(fileName: string, span: TextSpan, preference: UserPreferences | undefined): string;
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
@@ -349,7 +351,7 @@ namespace ts {
         private tracingEnabled = false;
 
         public resolveModuleNames: ((moduleName: string[], containingFile: string) => (ResolvedModuleFull | undefined)[]) | undefined;
-        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
+        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[] | readonly FileReference[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
         public directoryExists: ((directoryName: string) => boolean) | undefined;
 
         constructor(private shimHost: LanguageServiceShimHost) {
@@ -370,7 +372,7 @@ namespace ts {
             if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
                 this.resolveTypeReferenceDirectives = (typeDirectiveNames, containingFile) => {
                     const typeDirectivesForFile = JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)) as MapLike<ResolvedTypeReferenceDirective>; // TODO: GH#18217
-                    return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name));
+                    return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : name.fileName.toLowerCase()));
                 };
             }
         }
@@ -954,10 +956,10 @@ namespace ts {
          * to provide at the given source position and providing a member completion
          * list if requested.
          */
-        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined) {
+        public getCompletionsAtPosition(fileName: string, position: number, preferences: GetCompletionsAtPositionOptions | undefined, formattingSettings: FormatCodeSettings | undefined) {
             return this.forwardJSONCall(
-                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences})`,
-                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences)
+                `getCompletionsAtPosition('${fileName}', ${position}, ${preferences}, ${formattingSettings})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position, preferences, formattingSettings)
             );
         }
 
@@ -1064,6 +1066,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
                 () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
+            );
+        }
+
+        public provideInlayHints(fileName: string, span: TextSpan, preference: UserPreferences | undefined): string {
+            return this.forwardJSONCall(
+                `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
+                () => this.languageService.provideInlayHints(fileName, span, preference)
             );
         }
 

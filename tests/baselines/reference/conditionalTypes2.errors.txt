@@ -17,9 +17,6 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(24,5): error TS23
                     Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
                       Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
                         Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                          Type 'keyof B' is not assignable to type 'number'.
-                            Type 'string | number | symbol' is not assignable to type 'number'.
-                              Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.
   Types of property 'foo' are incompatible.
     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
@@ -85,9 +82,6 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:                     Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
 !!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
 !!! error TS2322:                         Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                           Type 'keyof B' is not assignable to type 'number'.
-!!! error TS2322:                             Type 'string | number | symbol' is not assignable to type 'number'.
-!!! error TS2322:                               Type 'string' is not assignable to type 'number'.
         b = a;  // Error
         ~
 !!! error TS2322: Type 'Invariant<A>' is not assignable to type 'Invariant<B>'.

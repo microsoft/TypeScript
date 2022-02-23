@@ -356,6 +356,25 @@ namespace ts {
     }
 
     /**
+     * Updates watchers based on the package json files used in module resolution
+     */
+    export function updatePackageJsonWatch(
+        lookups: readonly (readonly [Path, object | boolean])[],
+        packageJsonWatches: ESMap<Path, FileWatcher>,
+        createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
+    ) {
+        const newMap = new Map(lookups);
+        mutateMap(
+            packageJsonWatches,
+            newMap,
+            {
+                createNewValue: createPackageJsonWatch,
+                onDeleteValue: closeFileWatcher
+            }
+        );
+    }
+
+    /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
      */
     export function updateMissingFilePathsWatch(
@@ -480,7 +499,7 @@ namespace ts {
             // If its declaration directory: its not ignored if not excluded by config
             if (options.declarationDir) return false;
         }
-        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensions)) {
+        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensionsFlat)) {
             return false;
         }
 

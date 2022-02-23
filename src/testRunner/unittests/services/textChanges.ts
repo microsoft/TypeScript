@@ -535,7 +535,7 @@ import {
     x
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter10", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(factory.createIdentifier("b"), factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("b"), factory.createIdentifier("a")));
             });
         }
         {
@@ -544,7 +544,7 @@ import {
     x // this is x
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter11", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(factory.createIdentifier("b"), factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("b"), factory.createIdentifier("a")));
             });
         }
         {
@@ -554,7 +554,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter12", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, factory.createIdentifier("a")));
             });
         }
         {
@@ -564,7 +564,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter13", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, factory.createIdentifier("a")));
             });
         }
         {
@@ -574,7 +574,7 @@ import {
     x
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter14", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(factory.createIdentifier("b"), factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("b"), factory.createIdentifier("a")));
             });
         }
         {
@@ -584,7 +584,7 @@ import {
     x // this is x
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter15", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(factory.createIdentifier("b"), factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("b"), factory.createIdentifier("a")));
             });
         }
         {
@@ -595,7 +595,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter16", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, factory.createIdentifier("a")));
             });
         }
         {
@@ -606,7 +606,7 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter17", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, factory.createIdentifier("a")));
             });
         }
         {
@@ -616,14 +616,14 @@ import {
 } from "bar"`;
             runSingleFileTest("insertNodeInListAfter18", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
-                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier("a")));
+                changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, factory.createIdentifier("a")));
             });
         }
         {
             const runTest = (name: string, text: string) => runSingleFileTest(name, /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 for (const specifier of ["x3", "x4", "x5"]) {
                     // eslint-disable-next-line boolean-trivia
-                    changeTracker.insertNodeInListAfter(sourceFile, findChild("x2", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier(specifier)));
+                    changeTracker.insertNodeInListAfter(sourceFile, findChild("x2", sourceFile), factory.createImportSpecifier(/*isTypeOnly*/ false, undefined, factory.createIdentifier(specifier)));
                 }
             });
 

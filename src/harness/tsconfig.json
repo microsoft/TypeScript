@@ -28,6 +28,7 @@
         "evaluatorImpl.ts",
         "fakesHosts.ts",
         "client.ts",
+        "findUpDir.ts",
 
         "runnerbase.ts",
         "sourceMapRecorder.ts",
@@ -38,7 +39,6 @@
         "virtualFileSystemWithWatch.ts",
         "fourslashImpl.ts",
         "fourslashInterfaceImpl.ts",
-        "typeWriter.ts",
-        "loggedIO.ts"
+        "typeWriter.ts"
     ]
 }

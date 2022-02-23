@@ -21,13 +21,12 @@ and limitations under the License.
 declare namespace Intl {
 
     /**
-     * [BCP 47 language tag](http://tools.ietf.org/html/rfc5646) definition.
+     * [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers) definition.
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      *
-     * [Wikipedia](https://en.wikipedia.org/wiki/IETF_language_tag).
      */
-    type BCP47LanguageTag = string;
+    type UnicodeBCP47LocaleIdentifier = string;
 
     /**
      * Unit to use in the relative time internationalized message.
@@ -75,239 +74,6 @@ declare namespace Intl {
     type RelativeTimeFormatStyle = "long" | "short" | "narrow";
 
     /**
-     * Unicode Calendar Identifier
-     *
-     * [Reference](http://unicode.org/reports/tr35/#UnicodeCalendarIdentifier)
-     *
-     * [Source](https://github.com/unicode-org/cldr/blob/b805d0b/common/bcp47/calendar.xml)
-     */
-    type Calendar =
-        // Thai Buddhist calendar
-        | "buddhist"
-        // Traditional Chinese calendar
-        | "chinese"
-        // Coptic calendar
-        | "coptic"
-        // Traditional Korean calendar
-        | "dangi"
-        // Ethiopic calendar, Amete Alem (epoch approx. 5493 B.C.E)
-        | "ethiopic-amete-alem" | "ethioaa"
-        // Ethiopic calendar, Amete Mihret (epoch approx, 8 C.E.)
-        | "ethiopic"
-        // Gregorian calendar
-        | "gregorian"
-        // Gregorian calendar (alias)
-        | "gregory"
-        // Traditional Hebrew calendar
-        | "hebrew"
-        // Indian calendar
-        | "indian"
-        // Islamic calendar
-        | "islamic"
-        // Islamic calendar, Umm al-Qura
-        | "islamic-umalqura"
-        // Islamic calendar, tabular (intercalary years [2,5,7,10,13,16,18,21,24,26,29] - astronomical epoch)
-        | "islamic-tbla"
-        // Islamic calendar, tabular (intercalary years [2,5,7,10,13,16,18,21,24,26,29] - civil epoch)
-        | "islamic-civil"
-        | "islamicc"  // Deprecated alias
-        // Islamic calendar, Saudi Arabia sighting
-        | "islamic-rgsa"
-        // ISO calendar (Gregorian calendar using the ISO 8601 calendar week rules)
-        | "iso8601"
-        // Japanese Imperial calendar
-        | "japanese"
-        // Persian calendar
-        | "persian"
-        // Republic of China calendar
-        | "roc"
-        ;
-
-    /**
-     * Unicode Number System Identifier
-     *
-     * [Reference](http://unicode.org/reports/tr35/#UnicodeNumberSystemIdentifier)
-     *
-     * [Source](https://github.com/unicode-org/cldr/blob/be7a953/common/bcp47/number.xml)
-     */
-    type NumberingSystem =
-        // Adlam digits
-        | "adlm"
-        // Ahom digits
-        | "ahom"
-        // Arabic-Indic digits
-        | "arab"
-        // Extended Arabic-Indic digits
-        | "arabext"
-        // Armenian upper case numerals — algorithmic
-        | "armn"
-        // Armenian lower case numerals — algorithmic
-        | "armnlow"
-        // Balinese digits
-        | "bali"
-        // Bengali digits
-        | "beng"
-        // Bhaiksuki digits
-        | "bhks"
-        // Brahmi digits
-        | "brah"
-        // Chakma digits
-        | "cakm"
-        // Cham digits
-        | "cham"
-        // Cyrillic numerals — algorithmic
-        | "cyrl"
-        // Devanagari digits
-        | "deva"
-        // Dives Akuru digits
-        | "diak"
-        // Ethiopic numerals — algorithmic
-        | "ethi"
-        // Financial numerals — may be algorithmic
-        | "finance"
-        // Full width digits
-        | "fullwide"
-        // Georgian numerals — algorithmic
-        | "geor"
-        // Gunjala Gondi digits
-        | "gong"
-        // Masaram Gondi digits
-        | "gonm"
-        // Greek upper case numerals — algorithmic
-        | "grek"
-        // Greek lower case numerals — algorithmic
-        | "greklow"
-        // Gujarati digits
-        | "gujr"
-        // Gurmukhi digits
-        | "guru"
-        // Han-character day-of-month numbering for lunar/other traditional calendars"
-        | "hanidays"
-        // Positional decimal system using Chinese number ideographs as digits
-        | "hanidec"
-        // Simplified Chinese numerals — algorithmic
-        | "hans"
-        // Simplified Chinese financial numerals — algorithmic
-        | "hansfin"
-        // Traditional Chinese numerals — algorithmic
-        | "hant"
-        // Traditional Chinese financial numerals — algorithmic
-        | "hantfin"
-        // Hebrew numerals — algorithmic
-        | "hebr"
-        // Pahawh Hmong digits
-        | "hmng"
-        // Nyiakeng Puachue Hmong digits
-        | "hmnp"
-        // Javanese digits
-        | "java"
-        // Japanese numerals — algorithmic
-        | "jpan"
-        // Japanese financial numerals — algorithmic
-        | "jpanfin"
-        // Japanese first-year Gannen numbering for Japanese calendar
-        | "jpanyear"
-        // Kayah Li digits
-        | "kali"
-        // Khmer digits
-        | "khmr"
-        // Kannada digits
-        | "knda"
-        // Tai Tham Hora (secular) digits
-        | "lana"
-        // Tai Tham Tham (ecclesiastical) digits
-        | "lanatham"
-        // Lao digits
-        | "laoo"
-        // Latin digits
-        | "latn"
-        // Lepcha digits
-        | "lepc"
-        // Limbu digits
-        | "limb"
-        // Mathematical bold digits
-        | "mathbold"
-        // Mathematical double-struck digits
-        | "mathdbl"
-        // Mathematical monospace digits
-        | "mathmono"
-        // Mathematical sans-serif bold digits
-        | "mathsanb"
-        // Mathematical sans-serif digits
-        | "mathsans"
-        // Malayalam digits
-        | "mlym"
-        // Modi digits
-        | "modi"
-        // Mongolian digits
-        | "mong"
-        // Mro digits
-        | "mroo"
-        // Meetei Mayek digits
-        | "mtei"
-        // Myanmar digits
-        | "mymr"
-        // Myanmar Shan digits
-        | "mymrshan"
-        // Myanmar Tai Laing digits
-        | "mymrtlng"
-        // Native digits
-        | "native"
-        // Newa digits
-        | "newa"
-        // N'Ko digits
-        | "nkoo"
-        // Ol Chiki digits
-        | "olck"
-        // Oriya digits
-        | "orya"
-        // Osmanya digits
-        | "osma"
-        // Hanifi Rohingya digits
-        | "rohg"
-        // Roman upper case numerals — algorithmic
-        | "roman"
-        // Roman lowercase numerals — algorithmic
-        | "romanlow"
-        // Saurashtra digits
-        | "saur"
-        // Sharada digits
-        | "shrd"
-        // Khudawadi digits
-        | "sind"
-        // Sinhala Lith digits
-        | "sinh"
-        // Sora_Sompeng digits
-        | "sora"
-        // Sundanese digits
-        | "sund"
-        // Takri digits
-        | "takr"
-        // New Tai Lue digits
-        | "talu"
-        // Tamil numerals — algorithmic
-        | "taml"
-        // Modern Tamil decimal digits
-        | "tamldec"
-        // Telugu digits
-        | "telu"
-        // Thai digits
-        | "thai"
-        // Tirhuta digits
-        | "tirh"
-        // Tibetan digits
-        | "tibt"
-        // Traditional numerals — may be algorithmic
-        | "traditional" | "traditio"
-        // Vai digits
-        | "vaii"
-        // Warang Citi digits
-        | "wara"
-        // Wancho digits
-        | "wcho"
-        ;
-
-    /**
      * An object with some or all of properties of `options` parameter
      * of `Intl.RelativeTimeFormat` constructor.
      *
@@ -331,7 +97,7 @@ declare namespace Intl {
      * [Specification](https://tc39.es/ecma402/#table-relativetimeformat-resolvedoptions-properties)
      */
     interface ResolvedRelativeTimeFormatOptions {
-        locale: BCP47LanguageTag;
+        locale: UnicodeBCP47LocaleIdentifier;
         style: RelativeTimeFormatStyle;
         numeric: RelativeTimeFormatNumeric;
         numberingSystem: string;
@@ -474,7 +240,7 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-intl-relativetimeformat-constructor).
          */
         new(
-            locales?: BCP47LanguageTag | BCP47LanguageTag[],
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
         ): RelativeTimeFormat;
 
@@ -510,9 +276,9 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-Intl.RelativeTimeFormat.supportedLocalesOf).
          */
         supportedLocalesOf(
-            locales: BCP47LanguageTag | BCP47LanguageTag[],
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
-        ): BCP47LanguageTag[];
+        ): UnicodeBCP47LocaleIdentifier[];
     };
 
     interface NumberFormatOptions {
@@ -534,9 +300,9 @@ declare namespace Intl {
     interface DateTimeFormatOptions {
         dateStyle?: "full" | "long" | "medium" | "short";
         timeStyle?: "full" | "long" | "medium" | "short";
-        calendar?: Calendar;
+        calendar?: string;
         dayPeriod?: "narrow" | "short" | "long";
-        numberingSystem?: NumberingSystem;
+        numberingSystem?: string;
         hourCycle?: "h11" | "h12" | "h23" | "h24";
         fractionalSecondDigits?: 0 | 1 | 2 | 3;
     }

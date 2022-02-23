@@ -30,7 +30,7 @@ verify.completions({
 });
 
 edit.insert('bar.');
-verify.completions({ includes: ["substr"] });
+verify.completions({ includes: ["substring"] });
 edit.backspace('bar.'.length);
 
 edit.insert('union.');

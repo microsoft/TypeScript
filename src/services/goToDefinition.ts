@@ -12,14 +12,31 @@ namespace ts.GoToDefinition {
         if (node === sourceFile) {
             return undefined;
         }
-        const { parent } = node;
 
+        const { parent } = node;
         const typeChecker = program.getTypeChecker();
+
+        if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
+            return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+        }
 
         // Labels
         if (isJumpStatementTarget(node)) {
             const label = getTargetLabel(node.parent, node.text);
             return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
+        }
+
+        if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
+            const classDecl = node.parent.parent;
+            const symbol = getSymbol(classDecl, typeChecker);
+            const staticBlocks = filter(classDecl.members, isClassStaticBlockDeclaration);
+            const containerName = symbol ? typeChecker.symbolToString(symbol, classDecl) : "";
+            const sourceFile = node.getSourceFile();
+            return map(staticBlocks, staticBlock => {
+                let { pos } = moveRangePastModifiers(staticBlock);
+                pos = skipTrivia(sourceFile.text, pos);
+                return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, { start: pos, length: "static".length });
+            });
         }
 
         const symbol = getSymbol(node, typeChecker);
@@ -113,6 +130,26 @@ namespace ts.GoToDefinition {
         }
     }
 
+    function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node) {
+        const classElement = findAncestor(node, isClassElement);
+        if (!(classElement && classElement.name)) return;
+
+        const baseDeclaration = findAncestor(classElement, isClassLike);
+        if (!baseDeclaration) return;
+
+        const baseTypeNode = getEffectiveBaseTypeNode(baseDeclaration);
+        const baseType = baseTypeNode ? typeChecker.getTypeAtLocation(baseTypeNode) : undefined;
+        if (!baseType) return;
+
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
+        const symbol = hasStaticModifier(classElement)
+            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
+            : typeChecker.getPropertyOfType(baseType, name);
+        if (!symbol) return;
+
+        return getDefinitionFromSymbol(typeChecker, symbol, node);
+    }
+
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, unverified: boolean, file?: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
@@ -122,7 +159,7 @@ namespace ts.GoToDefinition {
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
-            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
+            const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
             return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
@@ -133,10 +170,10 @@ namespace ts.GoToDefinition {
             return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
-        if (sourceFile.resolvedModules?.size) {
-            const node = getTokenAtPosition(sourceFile, position);
-            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
-                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+        if (sourceFile.resolvedModules?.size()) {
+            const node = getTouchingToken(sourceFile, position);
+            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedFileName;
                 const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
                 return {
                     file: program.getSourceFile(fileName),
@@ -165,14 +202,17 @@ namespace ts.GoToDefinition {
             return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent);
         }
 
-        const symbol = typeChecker.getSymbolAtLocation(node);
+        const symbol = getSymbol(node, typeChecker);
         if (!symbol) return undefined;
 
         const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
         const returnType = tryGetReturnTypeOfFunction(symbol, typeAtLocation, typeChecker);
         const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node);
         // If a function returns 'void' or some other type with no definition, just return the function definition.
-        return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+        const typeDefinitions = fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+        return typeDefinitions.length ? typeDefinitions
+            : !(symbol.flags & SymbolFlags.Value) && symbol.flags & SymbolFlags.Type ? getDefinitionFromSymbol(typeChecker, skipAlias(symbol, typeChecker), node)
+            : undefined;
     }
 
     function definitionFromType(type: Type, checker: TypeChecker, node: Node): readonly DefinitionInfo[] {
@@ -216,12 +256,7 @@ namespace ts.GoToDefinition {
 
     // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
     function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
-        if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
-        const type = checker.getTypeAtLocation(node.parent.expression);
-        return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
-            const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
-            return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
-        });
+        return mapDefined(checker.getIndexInfosAtLocation(node), info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
     }
 
     function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {
@@ -259,7 +294,7 @@ namespace ts.GoToDefinition {
                 return declaration.parent.kind === SyntaxKind.NamedImports;
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration);
+                return isInJSFile(declaration) && isVariableDeclarationInitializedToBareOrAccessedRequire(declaration);
             default:
                 return false;
         }
@@ -314,10 +349,12 @@ namespace ts.GoToDefinition {
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
-        const name = getNameOfDeclaration(declaration) || declaration;
-        const sourceFile = name.getSourceFile();
-        const textSpan = createTextSpanFromNode(name, sourceFile);
+    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, textSpan?: TextSpan): DefinitionInfo {
+        const sourceFile = declaration.getSourceFile();
+        if (!textSpan) {
+            const name = getNameOfDeclaration(declaration) || declaration;
+            textSpan = createTextSpanFromNode(name, sourceFile);
+        }
         return {
             fileName: sourceFile.fileName,
             textSpan,

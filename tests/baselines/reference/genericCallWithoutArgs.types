@@ -6,6 +6,7 @@ function f<X, Y>(x: X, y: Y) {
 }
 
 f<number,string>.
->f<number,string>. : void
+>f<number,string>. : any
 >f : <X, Y>(x: X, y: Y) => void
+> : any
 

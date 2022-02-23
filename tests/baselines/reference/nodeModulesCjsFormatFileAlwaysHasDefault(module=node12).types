@@ -1,0 +1,14 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+export const a = 1;
+>a : 1
+>1 : 1
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import mod from "./subfolder/index.js";
+>mod : typeof mod
+
+mod;
+>mod : typeof mod
+

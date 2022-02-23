@@ -61,7 +61,7 @@ Output::
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -83,6 +83,11 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
@@ -92,6 +97,10 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/react/jsx-runtime/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
+/users/username/projects/project/node_modules/react/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -110,7 +119,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return jsx_runtime_1.jsx("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -189,7 +198,7 @@ Output::
 [7m [0m [91m                              ~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -211,6 +220,10 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (computed .d.ts)
+
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
@@ -220,6 +233,10 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/preact/jsx-runtime/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/preact/jsx-runtime/package.json","pollingInterval":250}
+/users/username/projects/project/node_modules/preact/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/preact/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -238,7 +255,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
-var App = function () { return jsx_runtime_1.jsx("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 

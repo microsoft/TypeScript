@@ -4,18 +4,18 @@ import WinJS = require('staticInstanceResolution5_0');
 
 // these 3 should be errors
 var x = (w1: WinJS) => { };
->x : (w1: any) => void
->(w1: WinJS) => { } : (w1: any) => void
->w1 : any
+>x : (w1: WinJS) => void
+>(w1: WinJS) => { } : (w1: WinJS) => void
+>w1 : WinJS
 
 var y = function (w2: WinJS) { }
->y : (w2: any) => void
->function (w2: WinJS) { } : (w2: any) => void
->w2 : any
+>y : (w2: WinJS) => void
+>function (w2: WinJS) { } : (w2: WinJS) => void
+>w2 : WinJS
 
 function z(w3: WinJS) { }
->z : (w3: any) => void
->w3 : any
+>z : (w3: WinJS) => void
+>w3 : WinJS
 
 === tests/cases/compiler/staticInstanceResolution5_0.ts ===
 export class Promise {

@@ -1,12 +1,9 @@
-tests/cases/compiler/genericCallsWithoutParens.ts(2,18): error TS1005: '(' expected.
 tests/cases/compiler/genericCallsWithoutParens.ts(7,8): error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
 
 
-==== tests/cases/compiler/genericCallsWithoutParens.ts (2 errors) ====
+==== tests/cases/compiler/genericCallsWithoutParens.ts (1 errors) ====
     function f<T>() { }
     var r = f<number>; // parse error
-                     ~
-!!! error TS1005: '(' expected.
     
     class C<T> {
         foo: T;

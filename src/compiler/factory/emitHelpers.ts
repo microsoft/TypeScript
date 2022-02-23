@@ -19,7 +19,7 @@ namespace ts {
         // ES2015 Helpers
         createExtendsHelper(name: Identifier): Expression;
         createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
-        createSpreadArrayHelper(to: Expression, from: Expression): Expression;
+        createSpreadArrayHelper(to: Expression, from: Expression, packFrom: boolean): Expression;
         // ES2015 Destructuring Helpers
         createValuesHelper(expression: Expression): Expression;
         createReadHelper(iteratorRecord: Expression, count: number | undefined): Expression;
@@ -34,10 +34,14 @@ namespace ts {
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
+        createClassPrivateFieldInHelper(state: Identifier, receiver: Expression): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
         const factory = context.factory;
+        const immutableTrue = memoize(() => setEmitFlags(factory.createTrue(), EmitFlags.Immutable));
+        const immutableFalse = memoize(() => setEmitFlags(factory.createFalse(), EmitFlags.Immutable));
+
         return {
             getUnscopedHelperName,
             // TypeScript Helpers
@@ -72,6 +76,7 @@ namespace ts {
             // Class Fields Helpers
             createClassPrivateFieldGetHelper,
             createClassPrivateFieldSetHelper,
+            createClassPrivateFieldInHelper
         };
 
         /**
@@ -133,7 +138,7 @@ namespace ts {
         // ES2018 Helpers
 
         function createAssignHelper(attributesSegments: Expression[]) {
-            if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
+            if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
                 return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
                                   /*typeArguments*/ undefined,
                                   attributesSegments);
@@ -282,12 +287,12 @@ namespace ts {
             );
         }
 
-        function createSpreadArrayHelper(to: Expression, from: Expression) {
+        function createSpreadArrayHelper(to: Expression, from: Expression, packFrom: boolean) {
             context.requestEmitHelper(spreadArrayHelper);
             return factory.createCallExpression(
                 getUnscopedHelperName("__spreadArray"),
                 /*typeArguments*/ undefined,
-                [to, from]
+                [to, from, packFrom ? immutableTrue() : immutableFalse()]
             );
         }
 
@@ -392,6 +397,10 @@ namespace ts {
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, args);
         }
 
+        function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
+            context.requestEmitHelper(classPrivateFieldInHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /* typeArguments*/ undefined, [state, receiver]);
+        }
     }
 
     /* @internal */
@@ -637,10 +646,14 @@ namespace ts {
         importName: "__spreadArray",
         scoped: false,
         text: `
-            var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-                for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-                    to[j] = from[i];
-                return to;
+            var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+                if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+                    if (ar || !(i in from)) {
+                        if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                        ar[i] = from[i];
+                    }
+                }
+                return to.concat(ar || Array.prototype.slice.call(from));
             };`
     };
 
@@ -770,7 +783,11 @@ namespace ts {
         text: `
             var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
                 if (k2 === undefined) k2 = k;
-                Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+                var desc = Object.getOwnPropertyDescriptor(m, k);
+                if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+                  desc = { enumerable: true, get: function() { return m[k]; } };
+                }
+                Object.defineProperty(o, k2, desc);
             }) : (function(o, m, k, k2) {
                 if (k2 === undefined) k2 = k;
                 o[k2] = m[k];
@@ -954,6 +971,29 @@ namespace ts {
             };`
     };
 
+    /**
+     * Parameters:
+     *  @param state — One of the following:
+     *      - A WeakMap when the member is a private instance field.
+     *      - A WeakSet when the member is a private instance method or accessor.
+     *      - A function value that should be the undecorated class constructor when the member is a private static field, method, or accessor.
+     *  @param receiver — The object being checked if it has the private member.
+     *
+     * Usage:
+     * This helper is used to transform `#field in expression` to
+     *      `__classPrivateFieldIn(<weakMap/weakSet/constructor>, expression)`
+     */
+    export const classPrivateFieldInHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateFieldIn",
+        importName: "__classPrivateFieldIn",
+        scoped: false,
+        text: `
+            var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(state, receiver) {
+                if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+                return typeof state === "function" ? receiver === state : state.has(receiver);
+            };`
+    };
+
     let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
 
     export function getAllUnscopedEmitHelpers() {
@@ -979,6 +1019,7 @@ namespace ts {
             exportStarHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
+            classPrivateFieldInHelper,
             createBindingHelper,
             setModuleDefaultHelper
         ], helper => helper.name));
@@ -1001,10 +1042,10 @@ namespace ts {
             })(name => super[name], (name, value) => super[name] = value);`
     };
 
-    export function isCallToHelper(firstSegment: Expression, helperName: __String) {
+    export function isCallToHelper(firstSegment: Expression, helperName: __String): boolean {
         return isCallExpression(firstSegment)
             && isIdentifier(firstSegment.expression)
-            && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+            && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName) !== 0
             && firstSegment.expression.escapedText === helperName;
     }
 }

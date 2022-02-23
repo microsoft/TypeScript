@@ -123,6 +123,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.ts (used version)
+/user/username/projects/sample1/core/index.ts (used version)
+
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"preserveWatchOutput":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
@@ -137,6 +142,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/index.d.ts
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.ts (used version)
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
 Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"preserveWatchOutput":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
@@ -154,6 +165,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/anotherModule.d.ts
 /user/username/projects/sample1/logic/index.d.ts
 /user/username/projects/sample1/tests/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/core/index.d.ts (used version)
+/user/username/projects/sample1/core/anothermodule.d.ts (used version)
+/user/username/projects/sample1/logic/index.d.ts (used version)
+/user/username/projects/sample1/tests/index.ts (used version)
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -486,6 +504,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/logic/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/logic/index.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
   {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
@@ -637,6 +658,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/core/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/core/index.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:

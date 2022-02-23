@@ -42,7 +42,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
 link.ts
@@ -68,6 +68,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/XY.ts
 /user/username/projects/myproject/link.ts
 /user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/xy.ts (used version)
+/user/username/projects/myproject/link.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -142,7 +148,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
 link.ts
@@ -165,6 +171,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/XY.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/xy.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

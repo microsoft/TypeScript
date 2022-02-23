@@ -75,7 +75,7 @@ namespace ts {
         }
 
         function getAccessorNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
-            if (hasSyntacticModifier(node, ModifierFlags.Static)) {
+            if (isStatic(node)) {
                 return symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                         Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -106,7 +106,7 @@ namespace ts {
         }
 
         function getMethodNameVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
-            if (hasSyntacticModifier(node, ModifierFlags.Static)) {
+            if (isStatic(node)) {
                 return symbolAccessibilityResult.errorModuleName ?
                     symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                         Diagnostics.Public_static_method_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -173,7 +173,7 @@ namespace ts {
             else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.PropertySignature ||
                 (node.kind === SyntaxKind.Parameter && hasSyntacticModifier(node.parent, ModifierFlags.Private))) {
                 // TODO(jfreeman): Deal with computed properties in error reporting.
-                if (hasSyntacticModifier(node, ModifierFlags.Static)) {
+                if (isStatic(node)) {
                     return symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -210,7 +210,7 @@ namespace ts {
             if (node.kind === SyntaxKind.SetAccessor) {
                 // Getters can infer the return type from the returned expression, but setters cannot, so the
                 // "_from_external_module_1_but_cannot_be_named" case cannot occur.
-                if (hasSyntacticModifier(node, ModifierFlags.Static)) {
+                if (isStatic(node)) {
                     diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                         Diagnostics.Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                         Diagnostics.Parameter_type_of_public_static_setter_0_from_exported_class_has_or_is_using_private_name_1;
@@ -222,7 +222,7 @@ namespace ts {
                 }
             }
             else {
-                if (hasSyntacticModifier(node, ModifierFlags.Static)) {
+                if (isStatic(node)) {
                     diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                         symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                             Diagnostics.Return_type_of_public_static_getter_0_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -270,7 +270,7 @@ namespace ts {
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    if (hasSyntacticModifier(node, ModifierFlags.Static)) {
+                    if (isStatic(node)) {
                         diagnosticMessage = symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
@@ -349,7 +349,7 @@ namespace ts {
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    if (hasSyntacticModifier(node.parent, ModifierFlags.Static)) {
+                    if (isStatic(node.parent)) {
                         return symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -417,7 +417,7 @@ namespace ts {
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    if (hasSyntacticModifier(node.parent, ModifierFlags.Static)) {
+                    if (isStatic(node.parent)) {
                         diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                     }
                     else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {

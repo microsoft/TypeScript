@@ -19,10 +19,10 @@ function f1() {
 >a : number
     }
     catch (e) {
->e : any
+>e : unknown
 
         throw e;
->e : any
+>e : unknown
     }
     finally {
         if (a != null && a.toFixed(0) == "123") { 
@@ -55,7 +55,7 @@ function f2() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         x = 2;
 >x = 2 : 2
@@ -63,7 +63,7 @@ function f2() {
 >2 : 2
 
         throw e;
->e : any
+>e : unknown
     }
     finally {
         x;  // 0 | 1 | 2
@@ -87,7 +87,7 @@ function f3() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         x = 2;
 >x = 2 : 2
@@ -118,7 +118,7 @@ function f4() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         x = 2;
 >x = 2 : 2
@@ -149,7 +149,7 @@ function f5() {
         return;
     }
     catch (e) {
->e : any
+>e : unknown
 
         x = 2;
 >x = 2 : 2
@@ -178,7 +178,7 @@ function f6() {
 >1 : 1
     }
     catch (e) {
->e : any
+>e : unknown
 
         x = 2;
 >x = 2 : 2
@@ -211,7 +211,7 @@ function f7() {
         return;
     }
     catch (e) {
->e : any
+>e : unknown
 
         x = 2;
 >x = 2 : 2
@@ -324,7 +324,7 @@ function f10() {
             return;
         }
         catch (e) {
->e : any
+>e : unknown
 
             x = 2;
 >x = 2 : 2
@@ -388,7 +388,7 @@ function f11() {
             }
         }
         catch (e) {
->e : any
+>e : unknown
 
             x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
@@ -466,7 +466,7 @@ function f12() {
             }
         }
         catch (e) {
->e : any
+>e : unknown
 
             x;  // 0 | 1 | 2
 >x : 0 | 1 | 2
@@ -576,7 +576,7 @@ function t1() {
 >'x' : "x"
         }
         catch (e) {
->e : any
+>e : unknown
 
             return null;
 >null : null
@@ -626,7 +626,7 @@ function notallowed(arg: number) {
         finally { }
     }
     catch (err) {
->err : any
+>err : unknown
 
         state.tag;
 >state.tag : "one" | "two" | "three"
@@ -770,7 +770,7 @@ function f21() {
 >x : 3 | 4 | 5
     }
     catch (e) {
->e : any
+>e : unknown
 
         x;  // 0 | 1 | 2 | 3 | 4 | 5
 >x : 0 | 1 | 2 | 3 | 4 | 5
