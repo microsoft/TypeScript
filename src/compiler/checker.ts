@@ -25127,6 +25127,9 @@ namespace ts {
                             if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                                 const pattern = declaration.parent;
                                 const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                                if (narrowedType.flags & TypeFlags.Never) {
+                                    return neverType;
+                                }
                                 return getBindingElementTypeFromParentType(declaration, narrowedType);
                             }
                         }
