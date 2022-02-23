@@ -22,3 +22,15 @@ let e/*[[${something}]]*/: any   = {};
 >e : any
 >{} : {}
 
+let f = /* comment1 */ d(e);
+>f : any
+>d(e) : any
+>d : any
+>e : any
+
+let g: any = /* comment2 */ d(e);
+>g : any
+>d(e) : any
+>d : any
+>e : any
+
