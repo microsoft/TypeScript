@@ -153,7 +153,7 @@ namespace ts.server {
 
                 // TODO: TS rewrites `import(...)` to `require`. Use eval to bypass this
                 // eslint-disable-next-line no-eval
-                return eval(`import(${JSON.stringify(scriptPath)})`);
+                return (await eval(`import(${JSON.stringify(scriptPath)})`)).default;
             },
             exit: notImplemented,
 
