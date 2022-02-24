@@ -518,7 +518,7 @@ namespace ts {
     }
 
     function isHexDigit(ch: number): boolean {
-        return isDigit(ch) || ch >= CharacterCodes.A && ch <= CharacterCodes.F || ch >= CharacterCodes.a && ch <= CharacterCodes.f;
+        return isDigit(ch) || ch >= CharacterCodes.a && ch <= CharacterCodes.f || ch >= CharacterCodes.A && ch <= CharacterCodes.F;
     }
 
     function isCodePoint(code: number): boolean {
@@ -896,13 +896,13 @@ namespace ts {
     }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
-        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
+        return ch >= CharacterCodes.a && ch <= CharacterCodes.z || ch >= CharacterCodes.A && ch <= CharacterCodes.Z ||
             ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
     }
 
     export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
-        return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
+        return ch >= CharacterCodes.a && ch <= CharacterCodes.z || ch >= CharacterCodes.A && ch <= CharacterCodes.Z ||
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             // "-" and ":" are valid in JSX Identifiers
             (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false) ||
