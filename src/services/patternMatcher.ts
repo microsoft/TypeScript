@@ -420,7 +420,7 @@ namespace ts {
     }
 
     function isWordChar(ch: number) {
-        return  isLowerCaseLetter(ch) || isUpperCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
+        return isLowerCaseLetter(ch) || isUpperCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
     }
 
     function breakPatternIntoTextChunks(pattern: string): TextChunk[] {
