@@ -3366,9 +3366,9 @@ namespace ts {
                     const originalNode = getOriginalNode(node, isAccessExpression);
                     const propertyName = isPropertyAccessExpression(originalNode)
                         ? declarationNameToString(originalNode.name)
-                        : getTextOfNode(originalNode.argumentExpression);
+                        : safeMultiLineComment(getTextOfNode(originalNode.argumentExpression));
 
-                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${safeMultiLineComment(propertyName)} `);
+                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
                 }
 
                 return substitute;
