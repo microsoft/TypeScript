@@ -420,7 +420,7 @@ namespace ts {
     }
 
     function isWordChar(ch: number) {
-        return isUpperCaseLetter(ch) || isLowerCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
+        return  isLowerCaseLetter(ch) || isUpperCaseLetter(ch) || isDigit(ch) || ch === CharacterCodes._ || ch === CharacterCodes.$;
     }
 
     function breakPatternIntoTextChunks(pattern: string): TextChunk[] {
@@ -553,8 +553,8 @@ namespace ts {
         // programs.
         return index !== wordStart
             && index + 1 < identifier.length
-            && isUpperCaseLetter(identifier.charCodeAt(index))
             && isLowerCaseLetter(identifier.charCodeAt(index + 1))
+            && isUpperCaseLetter(identifier.charCodeAt(index))
             && every(identifier, isUpperCaseLetter, wordStart, index);
     }
 
