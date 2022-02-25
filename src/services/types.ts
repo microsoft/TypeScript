@@ -468,6 +468,9 @@ namespace ts {
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAndBoundSpan(fileName: string, position: number, aliasesOnly: boolean): DefinitionInfoAndBoundSpan | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getImplementationAtPosition(fileName: string, position: number): readonly ImplementationLocation[] | undefined;
@@ -1028,6 +1031,8 @@ namespace ts {
         containerName: string;
         unverified?: boolean;
         /* @internal */ isLocal?: boolean;
+        /* @internal */ isAmbient?: boolean;
+        /* @internal */ isAliasTarget?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {

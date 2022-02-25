@@ -3114,21 +3114,31 @@ namespace ts {
     // export = <EntityNameExpression>
     // export default <EntityNameExpression>
     // module.exports = <EntityNameExpression>
-    // {<Identifier>}
-    // {name: <EntityNameExpression>}
+    // module.exports.x = <EntityNameExpression>
+    // const x = require("...")
+    // const { x } = require("...")
+    // const x = require("...").y
+    // const { x } = require("...").y
     export function isAliasSymbolDeclaration(node: Node): boolean {
-        return node.kind === SyntaxKind.ImportEqualsDeclaration ||
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
             node.kind === SyntaxKind.ImportClause && !!(node as ImportClause).name ||
             node.kind === SyntaxKind.NamespaceImport ||
             node.kind === SyntaxKind.NamespaceExport ||
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
-            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node as ExportAssignment) ||
+            node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node as ExportAssignment)
+        ) {
+            return true;
+        }
+
+        return isInJSFile(node) && (
             isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
-            isPropertyAccessExpression(node) && isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAliasableExpression(node.parent.right) ||
-            node.kind === SyntaxKind.ShorthandPropertyAssignment ||
-            node.kind === SyntaxKind.PropertyAssignment && isAliasableExpression((node as PropertyAssignment).initializer);
+            isPropertyAccessExpression(node)
+                && isBinaryExpression(node.parent)
+                && node.parent.left === node
+                && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
+                && isAliasableExpression(node.parent.right));
     }
 
     export function getAliasDeclarationFromName(node: EntityName): Declaration | undefined {
@@ -3139,6 +3149,7 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.NamespaceExport:
                 return node.parent as Declaration;
             case SyntaxKind.QualifiedName:
                 do {

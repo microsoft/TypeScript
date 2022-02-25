@@ -1239,6 +1239,36 @@ namespace ts.server {
         }
 
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
+        //     const { file, project } = this.getFileAndProject(args);
+        //     const position = this.getPositionInFile(args, file);
+        //     const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
+
+        //     const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
+
+        //     if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
+        //         return {
+        //             definitions: emptyArray,
+        //             textSpan: undefined! // TODO: GH#18217
+        //         };
+        //     }
+
+        //     const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
+        //     const { textSpan } = unmappedDefinitionAndBoundSpan;
+
+        //     if (simplifiedResult) {
+        //         return {
+        //             definitions: this.mapDefinitionInfo(definitions, project),
+        //             textSpan: toProtocolTextSpan(textSpan, scriptInfo)
+        //         };
+        //     }
+
+        //     return {
+        //         definitions: definitions.map(Session.mapToOriginalLocation),
+        //         textSpan,
+        //     };
+        // }
+
+        // private getSourceDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
@@ -1252,7 +1282,17 @@ namespace ts.server {
                 };
             }
 
-            const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
+            const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
+            const needsJsResolution = every(definitions.filter(d => d.isAliasTarget), d => !!d.isAmbient);
+            if (needsJsResolution) {
+                project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
+                    const jsDefinitions = auxiliaryProject.getLanguageService().getDefinitionAndBoundSpan(file, position);
+                    for (const jsDefinition of jsDefinitions?.definitions || emptyArray) {
+                        pushIfUnique(definitions, jsDefinition, (a, b) => a.fileName === b.fileName && a.textSpan.start === b.textSpan.start);
+                    }
+                });
+            }
+
             const { textSpan } = unmappedDefinitionAndBoundSpan;
 
             if (simplifiedResult) {
@@ -1266,6 +1306,30 @@ namespace ts.server {
                 definitions: definitions.map(Session.mapToOriginalLocation),
                 textSpan,
             };
+
+            // function getLocationsResolvingToDts(symbol: Symbol, checker: TypeChecker) {
+            //     let locations: DocumentPosition[] | undefined;
+            //     while (symbol.flags & SymbolFlags.Alias) {
+            //         const aliasDeclaration = find(symbol.declarations || emptyArray, isAliasSymbolDeclaration);
+            //         if (!aliasDeclaration) break;
+
+            //         const resolvedSymbol = checker.getImmediateAliasedSymbol(symbol);
+            //         if (!resolvedSymbol) break;
+
+            //         const hasUnmappedDtsDeclarations = some(resolvedSymbol.declarations, d => {
+            //             const sourceFile = getSourceFileOfNode(d);
+            //             if (!isDeclarationFileName(sourceFile.fileName)) return false;
+            //             const mappedFileName = project.getSourceMapper().tryGetSourcePosition(sourceFile)?.fileName;
+            //             if (mappedFileName && project.projectService.fileExists(toNormalizedPath(mappedFileName))) return false;
+            //         });
+            //         if (hasUnmappedDtsDeclarations) {
+            //             const sourceFile = getSourceFileOfNode(aliasDeclaration);
+            //             locations = append(locations, { fileName: sourceFile.fileName, pos: aliasDeclaration.getStart(sourceFile) });
+            //         }
+            //         symbol = resolvedSymbol;
+            //     }
+            //     return locations;
+            // }
         }
 
         private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {

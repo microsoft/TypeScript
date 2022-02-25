@@ -4646,7 +4646,6 @@ namespace ts {
     /* @internal */
     export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
-
     /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
 
@@ -6129,6 +6128,8 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        /*@internal*/
+        noDtsResolution?: boolean;
         noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;

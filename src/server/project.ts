@@ -5,6 +5,7 @@ namespace ts.server {
         Configured,
         External,
         AutoImportProvider,
+        Auxiliary,
     }
 
     /* @internal */
@@ -1768,6 +1769,28 @@ namespace ts.server {
         getIncompleteCompletionsCache() {
             return this.projectService.getIncompleteCompletionsCache();
         }
+
+        withAuxiliaryProjectForFiles(fileNames: string[], cb: (project: AuxiliaryProject) => void) {
+            const options: CompilerOptions = {
+                ...this.getCompilerOptions(),
+                noDtsResolution: true,
+                allowJs: true,
+                maxNodeModuleJsDepth: 3,
+                diagnostics: false,
+                skipLibCheck: true,
+                sourceMap: false,
+                types: ts.emptyArray,
+                lib: ts.emptyArray,
+                noLib: true,
+            };
+            const project = new AuxiliaryProject(this.projectService, this.documentRegistry, options);
+            for (const fileName of fileNames) {
+                project.addRoot(this.getScriptInfo(fileName)!);
+            }
+            project.updateGraph();
+            cb(project);
+            project.close();
+        }
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {
@@ -1901,6 +1924,34 @@ namespace ts.server {
                 include: ts.emptyArray,
                 exclude: ts.emptyArray
             };
+        }
+    }
+
+    export class AuxiliaryProject extends Project {
+        constructor(projectService: ProjectService, documentRegistry: DocumentRegistry, parentCompilerOptions: CompilerOptions) {
+            const options: CompilerOptions = {
+                ...parentCompilerOptions,
+                resolveJsOnly: true,
+                allowJs: true,
+                maxNodeModuleJsDepth: 3,
+                diagnostics: false,
+                skipLibCheck: true,
+                sourceMap: false,
+                types: ts.emptyArray,
+                lib: ts.emptyArray,
+                noLib: true,
+            };
+            super("js-analysis",
+                ProjectKind.Auxiliary,
+                projectService,
+                documentRegistry,
+                /*hasExplicitListOfFiles*/ false,
+                /*lastFileExceededProgramSize*/ undefined,
+                options,
+                /*compileOnSaveEnabled*/ false,
+                /*watchOptions*/ undefined,
+                projectService.host,
+                /*currentDirectory*/ undefined);
         }
     }
 

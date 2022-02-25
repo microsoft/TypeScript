@@ -1751,9 +1751,9 @@ namespace ts {
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
-        function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {
+        function getDefinitionAndBoundSpan(fileName: string, position: number, aliasesOnly?: boolean): DefinitionInfoAndBoundSpan | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position, aliasesOnly);
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined {

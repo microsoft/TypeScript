@@ -882,6 +882,13 @@ namespace ts {
             description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
             defaultValueDescription: false,
         },
+        {
+            name: "noDtsResolution",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            defaultValueDescription: false,
+        },
 
         // Source Maps
         {
