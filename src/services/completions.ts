@@ -1000,36 +1000,19 @@ namespace ts.Completions {
             isAbstract);
 
         if (completionNodes.length) {
+            const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
              // If we have access to formatting settings, we print the nodes using the emitter,
              // and then format the printed text.
             if (formatContext) {
-                // >> TODO: move this to snippet printer?
-                const syntheticFile = {
-                    text: printer.printSnippetList(
-                        ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
-                        factory.createNodeArray(completionNodes),
-                        sourceFile),
-                    getLineAndCharacterOfPosition(pos: number) {
-                        return getLineAndCharacterOfPosition(this, pos);
-                    },
-                };
-
-                const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
-                const changes = flatMap(completionNodes, node => {
-                    const nodeWithPos = textChanges.assignPositionsToNode(node);
-                    return formatting.formatNodeGivenIndentation(
-                        nodeWithPos,
-                        syntheticFile,
-                        sourceFile.languageVariant,
-                        /* indentation */ 0,
-                        /* delta */ 0,
-                        { ...formatContext, options: formatOptions });
-                });
-                insertText = textChanges.applyChanges(syntheticFile.text, changes);
+                insertText = printer.printAndFormatSnippetList(
+                    format,
+                    factory.createNodeArray(completionNodes),
+                    sourceFile,
+                    formatContext);
             }
             else { // Otherwise, just use emitter to print the new nodes.
                 insertText = printer.printSnippetList(
-                    ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
+                    format,
                     factory.createNodeArray(completionNodes),
                     sourceFile);
             }
@@ -1333,6 +1316,7 @@ namespace ts.Completions {
 
         return {
             printSnippetList,
+            printAndFormatSnippetList,
             printSnippet,
         };
 
@@ -1346,6 +1330,36 @@ namespace ts.Completions {
             writer.clear();
             printer.writeList(format, list, sourceFile, writer);
             return writer.getText();
+        }
+
+        function printAndFormatSnippetList(
+            format: ListFormat,
+            list: NodeArray<Node>,
+            sourceFile: SourceFile,
+            formatContext: formatting.FormatContext,
+        ): string {
+            const syntheticFile = {
+                text: printSnippetList(
+                    format,
+                    factory.createNodeArray(list),
+                    sourceFile),
+                getLineAndCharacterOfPosition(pos: number) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                },
+            };
+
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+            const changes = flatMap(list, node => {
+                const nodeWithPos = textChanges.assignPositionsToNode(node);
+                return formatting.formatNodeGivenIndentation(
+                    nodeWithPos,
+                    syntheticFile,
+                    sourceFile.languageVariant,
+                    /* indentation */ 0,
+                    /* delta */ 0,
+                    { ...formatContext, options: formatOptions });
+            });
+            return textChanges.applyChanges(syntheticFile.text, changes);
         }
 
         // >> TODO: will we need this?
