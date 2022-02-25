@@ -1449,7 +1449,7 @@ namespace ts.FindAllReferences {
                     }
                 });
             });
-            return references.length ? [{ definition: undefined, references }] : undefined;
+            return references.length ? [{ definition: { type: DefinitionKind.Keyword, node: references[0].node }, references }] : undefined;
         }
 
         function getAllReferencesForKeyword(sourceFiles: readonly SourceFile[], keywordKind: SyntaxKind, cancellationToken: CancellationToken, filter?: (node: Node) => boolean): SymbolAndEntries[] | undefined {
