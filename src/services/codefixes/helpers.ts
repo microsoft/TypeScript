@@ -146,6 +146,7 @@ namespace ts.codefix {
                     break;
                 }
 
+                // >> TODO: call `try get auto importable reference from type node` on type nodes?
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
@@ -176,6 +177,29 @@ namespace ts.codefix {
             if (method) addClassElement(method);
         }
     }
+
+    // export function addNewNodeObjectLiteralProperties(
+    //     // changes: textChanges.ChangeTracker,
+    //     // context: CodeFixContextBase,
+    //     sourceFile: SourceFile,
+    //     program: Program,
+    //     preferences: UserPreferences,
+    //     host: LanguageServiceHost,
+    //     // info: ObjectLiteralInfo,
+    //     properties: Symbol[],
+    //     addNodes: (nodes: PropertyAssignment[]) => void,
+    // ): void {
+    //     const importAdder = createImportAdder(sourceFile, program, preferences, host);
+    //     const quotePreference = getQuotePreference(sourceFile, preferences);
+    //     const target = getEmitScriptTarget(program.getCompilerOptions());
+    //     const checker = program.getTypeChecker();
+    //     const props = map(properties, prop => {
+    //         const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop));
+    //         return factory.createPropertyAssignment(createPropertyNameNodeForIdentifierOrLiteral(prop.name, target, quotePreference === QuotePreference.Single), initializer);
+    //     });
+
+    //     addNodes(props);
+    // }
 
     export function createSignatureDeclarationFromSignature(
         kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction,
@@ -366,10 +390,10 @@ namespace ts.codefix {
         return parameters;
     }
 
-    function createMethodImplementingSignatures(
+    export function createMethodImplementingSignatures(
         checker: TypeChecker,
         context: TypeConstructionContext,
-        enclosingDeclaration: ClassLikeDeclaration,
+        enclosingDeclaration: Node,
         signatures: readonly Signature[],
         name: PropertyName,
         optional: boolean,
@@ -420,7 +444,7 @@ namespace ts.codefix {
             body);
     }
 
-    function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
+    function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: Node): TypeNode | undefined {
         if (length(signatures)) {
             const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
             return checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));

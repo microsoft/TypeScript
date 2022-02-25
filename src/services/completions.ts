@@ -77,6 +77,14 @@ namespace ts.Completions {
         SymbolMemberExport   = SymbolMember | Export,
     }
 
+    const enum ObjectLiteralFunctionPropertyStyle {
+        // Auto, // >> ?
+        Method,
+        FunctionExpression,
+        ArrowFunction,
+        BracelessArrowFunction,
+    }
+
     interface SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
         isDefaultExport?: boolean;
@@ -775,8 +783,15 @@ namespace ts.Completions {
             }
         }
 
-        if (isObjectLiteralFunctionPropertyCompletion(symbol, location, contextToken, program.getTypeChecker())) {
-            getEntryForObjectLiteralFunctionCompletion(symbol, location);
+        const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, location, contextToken, program.getTypeChecker());
+        if (objLit) {
+            let importAdder;
+            ({ insertText, isSnippet, importAdder } = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, sourceFile, program, host, options, preferences, formatContext));
+            if (importAdder?.hasFixes()) {
+                hasAction = true;
+                source = CompletionSource.ClassMemberSnippet; // >> TODO: revisit & fix;
+                // >> TODO: change to bundling action with the completion entry instead of getting it separately, if possible
+            }
         }
 
         if (isJsxIdentifierExpected && !isRightOfOpenTag && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
@@ -988,6 +1003,7 @@ namespace ts.Completions {
              // If we have access to formatting settings, we print the nodes using the emitter,
              // and then format the printed text.
             if (formatContext) {
+                // >> TODO: move this to snippet printer?
                 const syntheticFile = {
                     text: printer.printSnippetList(
                         ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
@@ -1063,11 +1079,11 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, location: Node, contextToken: Node | undefined, checker: TypeChecker): boolean {
+    function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, location: Node, contextToken: Node | undefined, checker: TypeChecker): ObjectLiteralExpression | undefined {
         // >> TODO: check completion kind is memberlike
         // TODO: support JS files.
         if (isInJSFile(location)) {
-            return false;
+            return undefined;
         }
 
         /*
@@ -1075,28 +1091,228 @@ namespace ts.Completions {
             `type Foo = {
                 bar(x: number): void;
                 foo: (x: string) => string;
+                get prop(): number;
+                set prop(n: number);
             }`,
             `bar` will have symbol flag `Method`,
             `foo` will have symbol flag `Property`.
+            `prop` will have symbol flags `GetAccessor` and `SetAccessor`.
         */
-        if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method))) {
-            return false;
+        if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
+            return undefined;
         }
 
-        const type = checker.getTypeOfSymbol(symbol);
-        // We ignore non-function properties.
-        if (!type.getCallSignatures().length) {
-            return false;
+        if (symbol.flags & SymbolFlags.Property) {
+            const type = checker.getTypeOfSymbol(symbol);
+            // We ignore non-function properties.
+            if (!type.getCallSignatures().length) {
+                return undefined;
+            }
         }
-
         // Check if we are in a position for object literal completion.
         const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
-        return !!objectLikeContainer && isObjectLiteralExpression(objectLikeContainer);
+        return objectLikeContainer && tryCast(objectLikeContainer, isObjectLiteralExpression);
     }
 
-    function getEntryForObjectLiteralFunctionCompletion(_symbol: Symbol, _location: Node) {
-        // >> TODO: implement this
+    function getEntryForObjectLiteralFunctionCompletion(
+        symbol: Symbol,
+        name: string,
+        enclosingDeclaration: ObjectLiteralExpression,
+        sourceFile: SourceFile,
+        program: Program,
+        host: LanguageServiceHost,
+        options: CompilerOptions,
+        preferences: UserPreferences,
+        _formatContext: formatting.FormatContext | undefined,
+    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder } {
+        let isSnippet: true | undefined;
+        let insertText: string = name;
+
+        const style = ObjectLiteralFunctionPropertyStyle.ArrowFunction; // >> Get this from somewhere
+        const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
+        const body = factory.createBlock([]);
+        const functionProp = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
+
+        if (functionProp) {
+            const printer = createSnippetPrinter({
+                removeComments: true,
+                module: options.module,
+                target: options.target,
+                omitTrailingSemicolon: false, // >> ??
+                newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+            });
+
+            // insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
+            // ListFormat.ObjectLiteralExpressionProperties & ~(ListFormat.Braces | ListFormat.SpaceBetweenSiblings)
+            insertText = printer.printSnippetList(ListFormat.CommaDelimited, factory.createNodeArray(functionProp), sourceFile);
+
+            // if (formatContext) {
+            //
+            // }
+        }
+
+        return { isSnippet, insertText, importAdder };
     };
+
+    function createObjectLiteralFunctionProperty(
+        symbol: Symbol,
+        enclosingDeclaration: ObjectLiteralExpression,
+        sourceFile: SourceFile,
+        program: Program,
+        host: LanguageServiceHost,
+        preferences: UserPreferences,
+        importAdder: codefix.ImportAdder,
+        // addClassElement: (node: AddNode) => void,
+        body: Block,
+        style: ObjectLiteralFunctionPropertyStyle, // >> maybe this will be added to user preferences
+    ): (PropertyAssignment | MethodDeclaration | AccessorDeclaration)[] | undefined {
+        const declarations = symbol.getDeclarations();
+        if (!(declarations && declarations.length)) {
+            return undefined;
+        }
+        const checker = program.getTypeChecker();
+        const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+        const declaration = declarations[0];
+        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
+        const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
+        const quotePreference = getQuotePreference(sourceFile, preferences);
+        const builderFlags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
+        // >> TODO: implement each case, based on `addNewNodeForMemberSymbol`.
+
+        switch (declaration.kind) {
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.MethodDeclaration: {
+                const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+                if (signatures.length > 1) {
+                    // >> TODO: we have overloads?
+                    return undefined; // >> TODO: should we opt out of supporting overloads?
+                    // // >> refactor createmethodimplementingsignature to actually create a type node instead?
+                    // // >> then we can reuse `createFunctionFromType`, and this also fixes the auto-import issue
+                    // const method = codefix.createMethodImplementingSignatures(
+                    //     checker,
+                    //     { program, host },
+                    //     enclosingDeclaration,
+                    //     signatures,
+                    //     name,
+                    //     /*optional*/ false,
+                    //     /*modifiers*/ undefined,
+                    //     quotePreference,
+                    //     body);
+                    // // >> TODO: fix auto import of types, properly call `tryGetAutoImportableReferenceFromTypeNode`
+                    // return [factory.createPropertyAssignment(name, factory.createArrowFunction(
+                    //     /*modifiers*/ undefined,
+                    //     method.typeParameters,
+                    //     method.parameters,
+                    //     method.type,
+                    //     /*equalsGreaterThanToken*/ undefined,
+                    //     method.body!))];
+                }
+                const prop = createFunctionFromType(type, style);
+                return prop && [prop];
+            }
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor: {
+                // >> TODO: confusing to return both accessors in a completion scenario? They're kinda different functions. Return in different entries
+                let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+                const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+                if (importableReference) {
+                    typeNode = importableReference.typeNode;
+                    codefix.importSymbols(importAdder, importableReference.symbols);
+                }
+                const accessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
+                // >> Why does the order matter? Or maybe it doesn't, and we're just trying to get all the accessors?
+                const orderedAccessors = accessors.secondAccessor ? [accessors.firstAccessor, accessors.secondAccessor] : [accessors.firstAccessor];
+                const nodes = [];
+                for (const accessor of orderedAccessors) {
+                    if (isGetAccessorDeclaration(accessor)) {
+                        nodes.push(factory.createGetAccessorDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            name,
+                            emptyArray,
+                            typeNode,
+                            body || factory.createBlock([])));
+                    }
+                    else {
+                        Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
+                        const accessorParameter = getSetAccessorValueParameter(accessor);
+                        const paramName = accessorParameter && isIdentifier(accessorParameter.name) ? idText(accessorParameter.name) : "arg";
+                        const newParameter = factory.createParameterDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            paramName,
+                            /*questionToken*/ undefined,
+                            typeNode);
+                        nodes.push(factory.createSetAccessorDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            name,
+                            [newParameter],
+                            body || factory.createBlock([])));
+                    }
+                }
+                return nodes;
+            }
+            default:
+                return undefined;
+        }
+
+        function createFunctionFromType(type: Type, style: ObjectLiteralFunctionPropertyStyle): PropertyAssignment | MethodDeclaration | undefined {
+            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+            const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+            if (importableReference) {
+                typeNode = importableReference.typeNode;
+                codefix.importSymbols(importAdder, importableReference.symbols);
+            }
+            if (!typeNode) {
+                return undefined;
+            }
+            Debug.assert(isFunctionTypeNode(typeNode), `Expected function type node, got node of kind ${typeNode.kind}`); // >> TODO: properly display kind
+            switch (style) {
+                case ObjectLiteralFunctionPropertyStyle.Method:
+                    return factory.createMethodDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        /*asteriskToken*/ undefined,
+                        name,
+                        /*questionToken*/ undefined,
+                        typeNode.typeParameters,
+                        typeNode.parameters,
+                        typeNode.type,
+                        body);
+                case ObjectLiteralFunctionPropertyStyle.FunctionExpression:
+                    return factory.createPropertyAssignment(name, factory.createFunctionExpression(
+                        /*modifiers*/ undefined,
+                        /*asteriskToken*/ undefined,
+                        /*name*/ undefined,
+                        typeNode.typeParameters,
+                        typeNode.parameters,
+                        typeNode.type,
+                        body));
+                case ObjectLiteralFunctionPropertyStyle.ArrowFunction:
+                    return factory.createPropertyAssignment(name, factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        typeNode.typeParameters,
+                        typeNode.parameters,
+                        typeNode.type,
+                        /*equalsGreaterThanToken*/ undefined,
+                        body));
+                case ObjectLiteralFunctionPropertyStyle.BracelessArrowFunction:
+                    return factory.createPropertyAssignment(name, factory.createArrowFunction(
+                        /*modifiers*/ undefined,
+                        typeNode.typeParameters,
+                        typeNode.parameters,
+                        typeNode.type,
+                        /*equalsGreaterThanToken*/ undefined,
+                        factory.createOmittedExpression())); // >> TODO: figure out expression
+                default:
+                    Debug.assertNever(style);
+            }
+        }
+    }
 
     function createSnippetPrinter(
         printerOptions: PrinterOptions,
@@ -1117,6 +1333,7 @@ namespace ts.Completions {
 
         return {
             printSnippetList,
+            printSnippet,
         };
 
 
@@ -1128,6 +1345,17 @@ namespace ts.Completions {
         ): string {
             writer.clear();
             printer.writeList(format, list, sourceFile, writer);
+            return writer.getText();
+        }
+
+        // >> TODO: will we need this?
+        function printSnippet(
+            hint: EmitHint,
+            node: Node,
+            sourceFile: SourceFile | undefined,
+        ): string {
+            writer.clear();
+            printer.writeNode(hint, node, sourceFile, writer);
             return writer.getText();
         }
     }
