@@ -7286,9 +7286,5 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
-    },
-    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
-        "category": "Error",
-        "code": 18042
     }
 }
