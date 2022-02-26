@@ -15134,11 +15134,30 @@ namespace ts {
                         newTexts.push(text);
                         text = texts[i + 1];
                     }
+                    else if (t.flags & TypeFlags.Intersection){
+                        const addText = getTemplateStringForInterSectionType((t as IntersectionType));
+                        if (!addText) return false;
+                        text += addText;
+                        text += texts[i + 1];
+                    }
                     else {
                         return false;
                     }
                 }
                 return true;
+            }
+
+            function getTemplateStringForInterSectionType(type: IntersectionType): string | undefined {
+                for (const t of type.types) {
+                    if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
+                        return getTemplateStringForType(t) || "";
+                    }
+                    else if (t.flags & TypeFlags.TemplateLiteral) {
+                        if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) continue;
+                        return (t as TemplateLiteralType).texts[0];
+                    }
+                }
+                return undefined;
             }
         }
 
