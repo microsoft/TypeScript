@@ -145,7 +145,7 @@ Emit additional JavaScript to ease support for importing CommonJS modules. This 
 type: boolean
 default: false
 
-You can learn about all of the compiler options at https://aka.ms/tsconfig-reference
+You can learn about all of the compiler options at https://aka.ms/tsc
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 

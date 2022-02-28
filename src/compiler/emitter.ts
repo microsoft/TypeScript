@@ -1727,6 +1727,8 @@ namespace ts {
                         return emitAsExpression(node as AsExpression);
                     case SyntaxKind.NonNullExpression:
                         return emitNonNullExpression(node as NonNullExpression);
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
                     case SyntaxKind.MetaProperty:
                         return emitMetaProperty(node as MetaProperty);
                     case SyntaxKind.SyntheticExpression:
@@ -2227,6 +2229,7 @@ namespace ts {
             writeKeyword("typeof");
             writeSpace();
             emit(node.exprName);
+            emitTypeArguments(node, node.typeArguments);
         }
 
         function emitTypeLiteral(node: TypeLiteralNode) {
@@ -3115,7 +3118,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitInitializer(node.initializer, node.type?.end ?? node.name.emitNode?.typeNode?.end ?? node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -5341,6 +5344,10 @@ namespace ts {
                 commentsDisabled = false;
             }
             emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            const typeNode = getTypeNode(node);
+            if (typeNode) {
+                emitTrailingCommentsOfNode(node, emitFlags, typeNode.pos, typeNode.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+            }
         }
 
         function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {

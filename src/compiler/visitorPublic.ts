@@ -538,7 +538,8 @@ namespace ts {
             case SyntaxKind.TypeQuery:
                 Debug.type<TypeQueryNode>(node);
                 return factory.updateTypeQueryNode(node,
-                    nodeVisitor(node.exprName, visitor, isEntityName));
+                    nodeVisitor(node.exprName, visitor, isEntityName),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode));
 
             case SyntaxKind.TypeLiteral:
                 Debug.type<TypeLiteralNode>(node);

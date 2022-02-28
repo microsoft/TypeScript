@@ -264,7 +264,7 @@ verify.completions({
             insertText:
 `foo(a: string): string;
 foo(a: undefined, b: number): string;
-foo(a: any, b?: any): string {
+foo(a: unknown, b?: unknown): string {
 }`,
         }
     ],
