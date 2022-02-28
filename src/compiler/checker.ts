@@ -19747,9 +19747,10 @@ namespace ts {
                 // This ensures the subtype relationship is ordered, and preventing declaration order
                 // from deciding which type "wins" in union subtype reduction.
                 // They're still assignable to one another, since `readonly` doesn't affect assignability.
+                // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
                 if (
-                    (relation === subtypeRelation || relation === strictSubtypeRelation) &&
-                    !!(sourcePropFlags & ModifierFlags.Readonly) && !(targetPropFlags & ModifierFlags.Readonly)
+                    relation === strictSubtypeRelation &&
+                    isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)
                 ) {
                     return Ternary.False;
                 }
