@@ -5,7 +5,7 @@ const count = 26254.39;
 
 const date = new Date("2012-05-24");
 >date : Symbol(date, Decl(es2020IntlAPIs.ts, 2, 5))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
 
 function log(locale: string) {
 >log : Symbol(log, Decl(es2020IntlAPIs.ts, 2, 36))
