@@ -3687,12 +3687,18 @@ namespace ts {
                         return cloneTypeAsModuleType(symbol, defaultOnlyType, referenceParent);
                     }
 
-                    if (getESModuleInterop(compilerOptions)) {
+                    const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
+                    const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getUsageModeForExpression(reference), targetFile.impliedNodeFormat);
+                    if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
                         let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
                         if (!sigs || !sigs.length) {
                             sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
                         }
-                        if ((sigs && sigs.length) || getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true)) {
+                        if (
+                            (sigs && sigs.length) ||
+                            getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true) ||
+                            isEsmCjsRef
+                        ) {
                             const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, reference);
                             return cloneTypeAsModuleType(symbol, moduleType, referenceParent);
                         }
