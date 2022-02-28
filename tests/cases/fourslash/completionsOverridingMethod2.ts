@@ -23,11 +23,6 @@ verify.completions({
         {
             name: "$usd",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             isSnippet: true,
             insertText: "\"\\$usd\"(a: number): number {\n    $0\n}",
         }
