@@ -19749,7 +19749,7 @@ namespace ts {
                 // They're still assignable to one another, since `readonly` doesn't affect assignability.
                 if (
                     (relation === subtypeRelation || relation === strictSubtypeRelation) &&
-                    !!(sourcePropFlags & ModifierFlags.Readonly) && !(targetPropFlags & ModifierFlags.Readonly)
+                    isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)
                 ) {
                     return Ternary.False;
                 }
