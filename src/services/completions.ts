@@ -768,7 +768,7 @@ namespace ts.Completions {
             completionKind === CompletionKind.MemberLike &&
             isClassLikeMemberCompletion(symbol, location)) {
             let importAdder;
-            ({ insertText, isSnippet, importAdder } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+            ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
             if (importAdder?.hasFixes()) {
                 hasAction = true;
                 source = CompletionSource.ClassMemberSnippet;
@@ -894,13 +894,14 @@ namespace ts.Completions {
         location: Node,
         contextToken: Node | undefined,
         formatContext: formatting.FormatContext | undefined,
-    ): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder } {
+    ): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
         const classLikeDeclaration = findAncestor(location, isClassLike);
         if (!classLikeDeclaration) {
             return { insertText: name };
         }
 
         let isSnippet: true | undefined;
+        let replacementSpan: TextSpan | undefined;
         let insertText: string = name;
 
         const checker = program.getTypeChecker();
@@ -932,10 +933,8 @@ namespace ts.Completions {
         let modifiers = ModifierFlags.None;
         // Whether the suggested member should be abstract.
         // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-        // Note: We are relying on checking if the context token is `abstract`,
-        // since other visibility modifiers (e.g. `protected`) should come *before* `abstract`.
-        // However, that is not true for the e.g. `override` modifier, so this check has its limitations.
-        const isAbstract = contextToken && isModifierLike(contextToken) === SyntaxKind.AbstractKeyword;
+        const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken);
+        const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
         const completionNodes: Node[] = [];
         codefix.addNewNodeForMemberSymbol(
             symbol,
@@ -961,19 +960,14 @@ namespace ts.Completions {
                     requiredModifiers |= ModifierFlags.Override;
                 }
 
-                let presentModifiers = ModifierFlags.None;
                 if (!completionNodes.length) {
-                    // Omit already present modifiers from the first completion node/signature.
-                    if (contextToken) {
-                        presentModifiers = getPresentModifiers(contextToken);
-                    }
                     // Keep track of added missing required modifiers and modifiers already present.
                     // This is needed when we have overloaded signatures,
                     // so this callback will be called for multiple nodes/signatures,
                     // and we need to make sure the modifiers are uniform for all nodes/signatures.
                     modifiers = node.modifierFlagsCache | requiredModifiers | presentModifiers;
                 }
-                node = factory.updateModifiers(node, modifiers & (~presentModifiers));
+                node = factory.updateModifiers(node, modifiers);
                 completionNodes.push(node);
             },
             body,
@@ -981,6 +975,7 @@ namespace ts.Completions {
             isAbstract);
 
         if (completionNodes.length) {
+            replacementSpan = modifiersSpan;
              // If we have access to formatting settings, we print the nodes using the emitter,
              // and then format the printed text.
             if (formatContext) {
@@ -1015,11 +1010,15 @@ namespace ts.Completions {
             }
         }
 
-        return { insertText, isSnippet, importAdder };
+        return { insertText, isSnippet, importAdder, replacementSpan };
     }
 
-    function getPresentModifiers(contextToken: Node): ModifierFlags {
+    function getPresentModifiers(contextToken: Node | undefined): { modifiers: ModifierFlags, span?: TextSpan } {
+        if (!contextToken) {
+            return { modifiers: ModifierFlags.None };
+        }
         let modifiers = ModifierFlags.None;
+        let span;
         let contextMod;
         /*
         Cases supported:
@@ -1042,11 +1041,13 @@ namespace ts.Completions {
         */
         if (contextMod = isModifierLike(contextToken)) {
             modifiers |= modifierToFlag(contextMod);
+            span = createTextSpanFromNode(contextToken);
         }
         if (isPropertyDeclaration(contextToken.parent)) {
             modifiers |= modifiersToFlags(contextToken.parent.modifiers);
+            span = createTextSpanFromNode(contextToken.parent);
         }
-        return modifiers;
+        return { modifiers, span };
     }
 
     function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
