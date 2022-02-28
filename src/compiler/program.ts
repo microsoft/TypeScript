@@ -561,10 +561,6 @@ namespace ts {
         if (decl.importClause?.isTypeOnly) {
             return true;
         }
-        const bindings = decl.importClause?.namedBindings;
-        if (bindings && isNamedImports(bindings) && length(bindings.elements) && every(bindings.elements, b => b.isTypeOnly)) {
-            return true;
-        }
         return false;
     }
 

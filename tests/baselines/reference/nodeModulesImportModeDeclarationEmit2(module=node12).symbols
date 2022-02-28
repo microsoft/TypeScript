@@ -11,7 +11,6 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 >ImportInterface : Symbol(ImportInterface, Decl(index.ts, 1, 13))
 
 import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
->RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
 >Req : Symbol(Req, Decl(index.ts, 5, 8))
 
 import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };
