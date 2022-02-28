@@ -6039,11 +6039,8 @@ namespace ts {
                             importModuleSpecifierEnding: isBundle ? "minimal"
                                 : resolutionMode === ModuleKind.ESNext ? "js"
                                 : undefined,
-                            overrideImportMode:
-                                overrideImportMode === ModuleKind.CommonJS ? "require"
-                                : overrideImportMode === ModuleKind.ESNext ? "import"
-                                : undefined
                         },
+                        { overrideImportMode }
                     ));
                     links.specifierCache ??= new Map();
                     links.specifierCache.set(cacheKey, specifier);

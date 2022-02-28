@@ -4083,7 +4083,6 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
-        readonly overrideImportMode?: false | "require" | "import";
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {

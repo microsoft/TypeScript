@@ -287,7 +287,7 @@ namespace ts {
         moduleSpecifierCache: ModuleSpecifierCache | undefined,
     ): boolean {
         if (from === to) return false;
-        const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences);
+        const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
         if (cachedResult?.isAutoImportable !== undefined) {
             return cachedResult.isAutoImportable;
         }
@@ -310,7 +310,7 @@ namespace ts {
 
         if (packageJsonFilter) {
             const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, preferences, isAutoImportable);
+            moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, preferences, {}, isAutoImportable);
             return isAutoImportable;
         }
 
