@@ -412,7 +412,7 @@ const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
 
     const v: string = myRecord2[key]; // Should error
 >v : string
->myRecord2[key] : string | undefined
+>myRecord2[key] : undefined
 >myRecord2 : { [key: string]: string; a: string; b: string; }
 >key : Key
 
