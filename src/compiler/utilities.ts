@@ -987,7 +987,9 @@ namespace ts {
         return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteralLike(name.expression);
     }
 
-    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
+    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String;
+    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral, undefinedIfNotLiteral: boolean): __String | undefined;
+    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral, undefinedIfNotLiteral?: boolean): __String | undefined {
         switch (name.kind) {
             case SyntaxKind.Identifier:
             case SyntaxKind.PrivateIdentifier:
@@ -998,6 +1000,9 @@ namespace ts {
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
                 if (isStringOrNumericLiteralLike(name.expression)) return escapeLeadingUnderscores(name.expression.text);
+                if (undefinedIfNotLiteral) {
+                    return undefined;
+                }
                 return Debug.fail("Text of property name cannot be read from non-literal-valued ComputedPropertyNames");
             default:
                 return Debug.assertNever(name);
@@ -1573,7 +1578,7 @@ namespace ts {
     export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): readonly PropertyAssignment[] {
         return objectLiteral.properties.filter((property): property is PropertyAssignment => {
             if (property.kind === SyntaxKind.PropertyAssignment) {
-                const propName = getTextOfPropertyName(property.name);
+                const propName = getTextOfPropertyName(property.name, /*undefinedIfNotLiteral*/ true);
                 return key === propName || (!!key2 && key2 === propName);
             }
             return false;
