@@ -9328,8 +9328,8 @@ namespace ts {
             return isPrivateWithinAmbient(memberDeclaration);
         }
 
-        function tryGetTypeFromEffectiveTypeNode(declaration: Declaration) {
-            const typeNode = getEffectiveTypeAnnotationNode(declaration);
+        function tryGetTypeFromEffectiveTypeNode(node: Node) {
+            const typeNode = getEffectiveTypeAnnotationNode(node);
             if (typeNode) {
                 return getTypeFromTypeNode(typeNode);
             }
@@ -26740,6 +26740,8 @@ namespace ts {
                 }
                 case SyntaxKind.NonNullExpression:
                     return getContextualType(parent as NonNullExpression, contextFlags);
+                case SyntaxKind.ExportAssignment:
+                    return tryGetTypeFromEffectiveTypeNode(parent as ExportAssignment);
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(parent as JsxExpression);
                 case SyntaxKind.JsxAttribute:
