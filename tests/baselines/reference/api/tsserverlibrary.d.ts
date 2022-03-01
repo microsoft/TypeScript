@@ -6970,6 +6970,7 @@ declare namespace ts.server.protocol {
         OpenExternalProjects = "openExternalProjects",
         CloseExternalProject = "closeExternalProject",
         UpdateOpen = "updateOpen",
+        UpdateFileSystem = "updateFileSystem",
         GetOutliningSpans = "getOutliningSpans",
         TodoComments = "todoComments",
         Indentation = "indentation",
@@ -8216,6 +8217,7 @@ declare namespace ts.server.protocol {
     }
     /**
      * Request to synchronize list of open files with the client
+     * TODO: Lots of unit tests refer to this too, a good starting point for UpdateFileSystemRequest
      */
     interface UpdateOpenRequest extends Request {
         command: CommandTypes.UpdateOpen;
@@ -8230,13 +8232,40 @@ declare namespace ts.server.protocol {
          */
         openFiles?: OpenRequestArgs[];
         /**
-         * List of open files files that were changes
+         * List of open files files that were changed
          */
         changedFiles?: FileCodeEdits[];
         /**
          * List of files that were closed
          */
         closedFiles?: string[];
+    }
+    interface UpdateFileSystemRequest extends Request {
+        command: CommandTypes.UpdateFileSystem;
+        arguments: UpdateFileSystemRequestArgs;
+    }
+    interface UpdateFileSystemRequestArgs {
+        /** For now, only 'memfs', initially for exclusive in-memory operation, but it could be other in-memory names later */
+        fileSystem: string;
+        /** For now, a list of newly created or newly available files. Probably need to ADD mocked file watchers */
+        created: FileSystemRequestArgs[];
+        /** Just-deleted files. Also needs to trigger and then remove file watchers (I think) */
+        deleted: string[];
+        /** Needs to replace what file watchers would normally listen to */
+        updated: FileSystemRequestArgs[];
+    }
+    interface FileSystemRequestArgs extends FileRequestArgs {
+        /**
+         * Used to replace the content that would be on disk.
+         * Then the known content will be used upon opening instead of the disk copy
+         */
+        fileContent?: string;
+        /**
+         * Used to specify the script kind of the file explicitly. It could be one of the following:
+         *      "TS", "JS", "TSX", "JSX"
+         * TODO: Not 100% sure this is needed.
+         */
+        scriptKindName?: ScriptKindName;
     }
     /**
      * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.

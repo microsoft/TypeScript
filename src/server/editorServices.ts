@@ -3693,33 +3693,33 @@ namespace ts.server {
             // ugggggggggg have to copy over all that stuff to here
             // (though I probably need to create a vfs project anyway, so why not)
             
-            const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
-                files: {
-                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
-                    [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
-                    [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
-                    [srcFolder]: {}
-                },
-                cwd: srcFolder,
-                meta: { defaultLibLocation: builtFolder }
-            })
-            if (!this.fs)
-                this.fs = fs
-            if (createdFiles) {
-                for (const document of Array.from(createdFiles)) {
-                    fs.mkdirpSync(vpath.dirname(document.file));
-                    fs.writeFileSync(document.file, document.text, "utf8");
-                    fs.filemeta(document.file).set("document", document);
-                    // Add symlinks
-                    const symlink = document.meta.get("symlink");
-                    if (symlink) {
-                        for (const link of symlink.split(",").map(link => link.trim())) {
-                            fs.mkdirpSync(vpath.dirname(link));
-                            fs.symlinkSync(vpath.resolve(fs.cwd(), document.file), link);
-                        }
-                    }
-                }
-            }
+            // const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            //     files: {
+            //         [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
+            //         [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
+            //         [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
+            //         [srcFolder]: {}
+            //     },
+            //     cwd: srcFolder,
+            //     meta: { defaultLibLocation: builtFolder }
+            // })
+            // if (!this.fs)
+            //     this.fs = fs
+            // if (createdFiles) {
+            //     for (const document of Array.from(createdFiles)) {
+            //         fs.mkdirpSync(vpath.dirname(document.file));
+            //         fs.writeFileSync(document.file, document.text, "utf8");
+            //         fs.filemeta(document.file).set("document", document);
+            //         // Add symlinks
+            //         const symlink = document.meta.get("symlink");
+            //         if (symlink) {
+            //             for (const link of symlink.split(",").map(link => link.trim())) {
+            //                 fs.mkdirpSync(vpath.dirname(link));
+            //                 fs.symlinkSync(vpath.resolve(fs.cwd(), document.file), link);
+            //             }
+            //         }
+            //     }
+            // }
 
             // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
             //   - change this.host at least
