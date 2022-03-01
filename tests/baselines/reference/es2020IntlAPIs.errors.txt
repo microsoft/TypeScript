@@ -49,5 +49,5 @@ tests/cases/conformance/es2020/es2020IntlAPIs.ts(45,1): error TS2554: Expected 1
     new Intl.Locale(); // should error
     ~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 /.ts/lib.es2020.intl.d.ts:304:14: An argument for 'tag' was not provided.
+!!! related TS6210 /.ts/lib.es2020.intl.d.ts:311:14: An argument for 'tag' was not provided.
     new Intl.Locale(new Intl.Locale('en-US'));
