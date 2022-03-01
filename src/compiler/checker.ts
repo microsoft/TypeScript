@@ -28354,15 +28354,15 @@ namespace ts {
             return true;
         }
 
-        function getEnclosingClassFromThisParameter(node: Node) {
+        function getEnclosingClassFromThisParameter(node: Node): InterfaceType | undefined {
             let thisType = getThisTypeFromNodeContext(node);
 
             if (thisType && thisType.flags & TypeFlags.TypeParameter) {
                 thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
             }
 
-            if (thisType && getObjectFlags(thisType) & ObjectFlags.Reference) {
-                return (thisType as TypeReference).target;
+            if (thisType && getObjectFlags(thisType) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
+                return getTargetType(thisType) as InterfaceType;
             }
 
             return undefined;
