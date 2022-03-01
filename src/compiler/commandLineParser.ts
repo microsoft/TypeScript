@@ -3617,7 +3617,8 @@ namespace ts {
             case "boolean":
                 return true;
             case "string":
-                return option.isFilePath ? "./" : "";
+                const defaultValue = option.defaultValueDescription;
+                return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
             case "list":
                 return [];
             case "object":
