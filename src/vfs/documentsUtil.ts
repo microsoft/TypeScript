@@ -2,13 +2,19 @@
 //       support the eventual conversion of harness into a modular system.
 
 namespace documents {
+    export interface HarnessCompilerTestFile {
+        unitName: string;
+        content: string;
+        fileOptions?: any;
+    }
+
     export class TextDocument {
         public readonly meta: Map<string, string>;
         public readonly file: string;
         public readonly text: string;
 
         private _lineStarts: readonly number[] | undefined;
-        private _testFile: Harness.Compiler.TestFile | undefined;
+        private _testFile: HarnessCompilerTestFile | undefined;
 
         constructor(file: string, text: string, meta?: Map<string, string>) {
             this.file = file;
@@ -20,7 +26,7 @@ namespace documents {
             return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
         }
 
-        public static fromTestFile(file: Harness.Compiler.TestFile) {
+        public static fromTestFile(file: HarnessCompilerTestFile) {
             return new TextDocument(
                 file.unitName,
                 file.content,
