@@ -6438,6 +6438,7 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+        codeActions?: CodeAction[];
     }
     interface CompletionEntryDetails {
         name: string;
@@ -8669,6 +8670,10 @@ declare namespace ts.server.protocol {
          * items with the same name.
          */
         data?: unknown;
+        /**
+         * Additional code actions to be made to avoid errors.
+         */
+        codeActions?: CodeAction[];
     }
     /**
      * Additional completion entry details, available on demand

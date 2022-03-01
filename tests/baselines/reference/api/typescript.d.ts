@@ -6438,6 +6438,7 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+        codeActions?: CodeAction[];
     }
     interface CompletionEntryDetails {
         name: string;

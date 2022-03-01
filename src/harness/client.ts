@@ -211,12 +211,9 @@ namespace ts.server {
                 isMemberCompletion: response.body!.isMemberCompletion,
                 isNewIdentifierLocation: response.body!.isNewIdentifierLocation,
                 entries: response.body!.entries.map<CompletionEntry>(entry => { // TODO: GH#18217
-                    if (entry.replacementSpan !== undefined) {
-                        const res: CompletionEntry = { ...entry, data: entry.data as any, replacementSpan: this.decodeSpan(entry.replacementSpan, fileName) };
-                        return res;
-                    }
-
-                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
+                    const replacementSpan: TextSpan | undefined = entry.replacementSpan && this.decodeSpan(entry.replacementSpan, fileName);
+                    const codeActions: CodeAction[] | undefined = entry.codeActions && this.decodeCodeActions(entry.codeActions);
+                    return { ...entry, data: entry.data as any, replacementSpan, codeActions };
                 })
             };
         }
@@ -540,6 +537,13 @@ namespace ts.server {
             return createTextSpanFromBounds(
                 this.lineOffsetToPosition(fileName, span.start, lineMap),
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
+        }
+
+        private decodeCodeActions(codeActions: protocol.CodeAction[]): CodeAction[] {
+            return codeActions.map(action => {
+                const changes: FileTextChanges[] = action.changes.map(change => ({ ...change, textChanges: change.textChanges.map(edit => ({ newText: edit.newText, span: this.decodeSpan({ ...edit, file: change.fileName }) })) }));
+                return { ...action, changes } as CodeAction;
+            });
         }
 
         private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
