@@ -66,26 +66,26 @@ stringVal = bigintVal.toLocaleString();
 >stringVal = bigintVal.toLocaleString() : string
 >stringVal : string
 >bigintVal.toLocaleString() : string
->bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 
 stringVal = bigintVal.toLocaleString('de-DE');
 >stringVal = bigintVal.toLocaleString('de-DE') : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE') : string
->bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >'de-DE' : "de-DE"
 
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
->bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >'de-DE' : "de-DE"
 >{ style: 'currency' } : { style: string; }
 >style : string
@@ -95,9 +95,9 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
->bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >'de-DE' : "de-DE"
 >{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
 >style : string

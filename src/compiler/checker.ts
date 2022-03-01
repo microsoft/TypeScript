@@ -16854,7 +16854,7 @@ namespace ts {
                     // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                     // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                     result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                        mapTypeWithAlias(distributionType, t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
+                        mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
                         getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
                     root.instantiations!.set(id, result);
                 }
@@ -19747,9 +19747,10 @@ namespace ts {
                 // This ensures the subtype relationship is ordered, and preventing declaration order
                 // from deciding which type "wins" in union subtype reduction.
                 // They're still assignable to one another, since `readonly` doesn't affect assignability.
+                // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
                 if (
-                    (relation === subtypeRelation || relation === strictSubtypeRelation) &&
-                    !!(sourcePropFlags & ModifierFlags.Readonly) && !(targetPropFlags & ModifierFlags.Readonly)
+                    relation === strictSubtypeRelation &&
+                    isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)
                 ) {
                     return Ternary.False;
                 }

@@ -59,6 +59,13 @@ declare namespace Intl {
     type BCP47LanguageTag = string;
 
     /**
+     * The locale(s) to use
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     */
+    type LocalesArgument = UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[] | Locale | Locale[] | undefined;
+
+    /**
      * An object with some or all of properties of `options` parameter
      * of `Intl.RelativeTimeFormat` constructor.
      *

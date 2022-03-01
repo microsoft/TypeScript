@@ -1681,19 +1681,8 @@ namespace ts {
                 return;
             }
 
-            // If an initializer was parsed but there is still an error in finding the next semicolon,
-            // we generally know there was an error already reported in the initializer...
-            //   class Example { a = new Map([), ) }
-            //                                ~
             if (initializer) {
-                // ...unless we've found the start of a block after a property declaration, in which
-                // case we can know that regardless of the initializer we should complain on the block.
-                //   class Example { a = 0 {} }
-                //                         ~
-                if (token() === SyntaxKind.OpenBraceToken) {
-                    parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
-                }
-
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
                 return;
             }
 
