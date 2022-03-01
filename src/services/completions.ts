@@ -1111,12 +1111,12 @@ namespace ts.Completions {
         let isSnippet: true | undefined;
         let insertText: string = name;
 
-        const style = ObjectLiteralFunctionPropertyStyle.ArrowFunction; // >> Get this from somewhere
+        const style = ObjectLiteralFunctionPropertyStyle.ArrowFunction; // >> TODO: Get this from somewhere
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
         const body = factory.createBlock([]);
-        const functionProp = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
+        const functionProps = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
 
-        if (functionProp) {
+        if (functionProps) {
             const printer = createSnippetPrinter({
                 removeComments: true,
                 module: options.module,
@@ -1126,12 +1126,15 @@ namespace ts.Completions {
             });
 
             // insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
-            // ListFormat.ObjectLiteralExpressionProperties & ~(ListFormat.Braces | ListFormat.SpaceBetweenSiblings)
-            insertText = printer.printSnippetList(ListFormat.CommaDelimited, factory.createNodeArray(functionProp), sourceFile);
-
+            const format = ListFormat.CommaDelimited;
             // if (formatContext) {
-            //
+            //     // >> TODO: this is breaking get/set pairs because they're on the same line when printing
+            //     insertText = printer.printAndFormatSnippetList(format, factory.createNodeArray(functionProps), sourceFile, formatContext);
             // }
+            // else {
+            //     insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
+            // }
+            insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
         }
 
         return { isSnippet, insertText, importAdder };
@@ -1145,9 +1148,8 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         preferences: UserPreferences,
         importAdder: codefix.ImportAdder,
-        // addClassElement: (node: AddNode) => void,
         body: Block,
-        style: ObjectLiteralFunctionPropertyStyle, // >> maybe this will be added to user preferences
+        style: ObjectLiteralFunctionPropertyStyle,
     ): (PropertyAssignment | MethodDeclaration | AccessorDeclaration)[] | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
@@ -1160,7 +1162,6 @@ namespace ts.Completions {
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const quotePreference = getQuotePreference(sourceFile, preferences);
         const builderFlags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
-        // >> TODO: implement each case, based on `addNewNodeForMemberSymbol`.
 
         switch (declaration.kind) {
             case SyntaxKind.PropertySignature:
@@ -1169,28 +1170,8 @@ namespace ts.Completions {
             case SyntaxKind.MethodDeclaration: {
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
                 if (signatures.length > 1) {
-                    // >> TODO: we have overloads?
-                    return undefined; // >> TODO: should we opt out of supporting overloads?
-                    // // >> refactor createmethodimplementingsignature to actually create a type node instead?
-                    // // >> then we can reuse `createFunctionFromType`, and this also fixes the auto-import issue
-                    // const method = codefix.createMethodImplementingSignatures(
-                    //     checker,
-                    //     { program, host },
-                    //     enclosingDeclaration,
-                    //     signatures,
-                    //     name,
-                    //     /*optional*/ false,
-                    //     /*modifiers*/ undefined,
-                    //     quotePreference,
-                    //     body);
-                    // // >> TODO: fix auto import of types, properly call `tryGetAutoImportableReferenceFromTypeNode`
-                    // return [factory.createPropertyAssignment(name, factory.createArrowFunction(
-                    //     /*modifiers*/ undefined,
-                    //     method.typeParameters,
-                    //     method.parameters,
-                    //     method.type,
-                    //     /*equalsGreaterThanToken*/ undefined,
-                    //     method.body!))];
+                    // We don't support overloads in object literals.
+                    return undefined;
                 }
                 const prop = createFunctionFromType(type, style);
                 return prop && [prop];
@@ -1341,7 +1322,7 @@ namespace ts.Completions {
             const syntheticFile = {
                 text: printSnippetList(
                     format,
-                    factory.createNodeArray(list),
+                    list,
                     sourceFile),
                 getLineAndCharacterOfPosition(pos: number) {
                     return getLineAndCharacterOfPosition(this, pos);
