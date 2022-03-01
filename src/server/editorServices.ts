@@ -1746,11 +1746,11 @@ namespace ts.server {
                 if (configFileExistenceInfo) {
                     const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile?.get(info.path);
 
-                    // Delete the info from map, since this file is no more open
+                    // Delete the info from map, since this file is not open anymore
                     configFileExistenceInfo.openFilesImpactedByConfigFile?.delete(info.path);
 
                     // If the script info was not root of inferred project,
-                    // there wont be config file watch open because of this script info
+                    // there won't be config file watch open because of this script info
                     if (infoIsRootOfInferredProject) {
                         // But if it is a root, it could be the last script info that is root of inferred project
                         // and hence we would need to close the config file watcher
@@ -3683,6 +3683,66 @@ namespace ts.server {
             this.collectChanges(knownProjects, arrayFrom(this.configuredProjects.values()), includeProjectReferenceRedirectInfo, files);
             this.collectChanges(knownProjects, this.inferredProjects, includeProjectReferenceRedirectInfo, files);
             return files;
+        }
+
+        /* @internal */
+        updateFileSystem(createdFiles: Iterator<protocol.FileSystemRequestArgs> | undefined, updatedFiles?: Iterator<protocol.FileSystemRequestArgs>, deletedFiles?: string[]) {
+            // TODO: Maybe it is somehow gauche or verboten to use protocol types but the translation in applyChangesInOpenFiles seems stupid
+            // It is also WEIRD that we use iterators here not arrays
+            // TODO: Probably copy what vfsUtil does to hook up a virtual filesystem here. Maybe.
+            // ugggggggggg have to copy over all that stuff to here
+            // (though I probably need to create a vfs project anyway, so why not)
+            
+            const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+                files: {
+                    [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
+                    [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
+                    [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
+                    [srcFolder]: {}
+                },
+                cwd: srcFolder,
+                meta: { defaultLibLocation: builtFolder }
+            })
+            if (!this.fs)
+                this.fs = fs
+            if (createdFiles) {
+                for (const document of Array.from(createdFiles)) {
+                    fs.mkdirpSync(vpath.dirname(document.file));
+                    fs.writeFileSync(document.file, document.text, "utf8");
+                    fs.filemeta(document.file).set("document", document);
+                    // Add symlinks
+                    const symlink = document.meta.get("symlink");
+                    if (symlink) {
+                        for (const link of symlink.split(",").map(link => link.trim())) {
+                            fs.mkdirpSync(vpath.dirname(link));
+                            fs.symlinkSync(vpath.resolve(fs.cwd(), document.file), link);
+                        }
+                    }
+                }
+            }
+
+            // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
+            //   - change this.host at least
+            this.host // no, it's readonly, we get this from a parent object
+            //   - ScriptInfo instances might need to update their host -- what is textStorage?
+            //     - they deffo have FileWatcher instances
+            //   - TextStorage.host needs to update
+            // 2. create
+            // 3. update
+            // 4. delete
+            //   - closeClientFile -> closeOpenFile -> ScriptInfo.close
+            // 5. ???
+            // 6. success!
+            if (createdFiles) {
+            }
+            if (updatedFiles) {
+            }
+            if (deletedFiles) {
+                for (const file of deletedFiles) {
+                    this.closeClientFile(file) // maybe copy stuff from applyChanges -- mostly I just want to leave a pointer to more code
+
+                }
+            }
         }
 
         /* @internal */

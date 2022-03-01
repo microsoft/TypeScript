@@ -11,7 +11,8 @@
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
-        { "path": "../services" }
+        { "path": "../services" },
+        { "path": "../vfs" }
     ],
     "files": [
         "types.ts",

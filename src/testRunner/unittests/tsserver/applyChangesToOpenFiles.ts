@@ -1,4 +1,139 @@
 namespace ts.projectSystem {
+    // TODO: Make a separate file at some point
+    describe("unittests:: tsserver:: updateFileSystem", () => {
+        interface Verify {
+            applyChangesToOpen: (session: TestSession) => void;
+            openFile1Again: (session: TestSession) => void;
+        }
+        const configFile: protocol.FileSystemRequestArgs = {
+            file: "/a/b/tsconfig.json",
+            fileContent: "{}"
+        };
+        const file3: protocol.FileSystemRequestArgs = {
+            file: "/a/b/file3.ts",
+            fileContent: "export let xyz = 1;"
+        };
+        const app: protocol.FileSystemRequestArgs = {
+            file: "/a/b/app.ts",
+            fileContent: "import { xyz } from './file3'; let x = xyz"
+        };
+        function fileContentWithComment(file: protocol.FileSystemRequestArgs | File) {
+            return `// some copy right notice
+${'content' in file ? file.content :  file.fileContent}`;
+        }
+        function verify({ applyChangesToOpen, openFile1Again }: Verify) {
+            // TODO: Replace with createMemfsServerHost
+            const host = createServerHost([commonFile1, commonFile2, libFile]);
+            const session = createSession(host);
+            session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
+                command: protocol.CommandTypes.UpdateFileSystem,
+                arguments:{
+                    fileSystem: 'memfs',
+                    created: [configFile, file3, app],
+                    deleted: [], // string[];
+                    updated: [], //FileSystemRequestArgs[];
+                }
+            });
+            const service = session.getProjectService();
+            // session.host
+            const project = service.configuredProjects.get(configFile.file)!;
+            assert.isDefined(project);
+            verifyProjectVersion(project, 1);
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: app
+            });
+            verifyProjectVersion(project, 2);
+
+            // TODO: Verify file watchers have updated
+            // Verify Texts
+            verifyText(service, commonFile1.path, commonFile1.content);
+            verifyText(service, commonFile2.path, commonFile2.content);
+            verifyText(service, app.file, app.fileContent!);
+            verifyText(service, file3.file, fileContentWithComment(file3));
+
+            // Apply changes
+            applyChangesToOpen(session);
+
+            // Verify again
+            verifyProjectVersion(project, 3);
+            // Open file contents
+            verifyText(service, commonFile1.path, fileContentWithComment(commonFile1));
+            verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
+            verifyText(service, app.file, "let zzz = 10;let zz = 10;let z = 1;");
+            verifyText(service, file3.file, file3.fileContent!);
+
+            // Open file1 again
+            openFile1Again(session);
+            assert.isTrue(service.getScriptInfo(commonFile1.path)!.isScriptOpen());
+
+            // Verify that file1 contents are changed
+            verifyProjectVersion(project, 4);
+            verifyText(service, commonFile1.path, commonFile1.content);
+            verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
+            verifyText(service, app.file, "let zzz = 10;let zz = 10;let z = 1;");
+            verifyText(service, file3.file, file3.fileContent!);
+        }
+
+        function verifyText(service: server.ProjectService, file: string, expected: string) {
+            const info = service.getScriptInfo(file)!;
+            const snap = info.getSnapshot();
+            // Verified applied in reverse order
+            assert.equal(snap.getText(0, snap.getLength()), expected, `Text of changed file: ${file}`);
+        }
+
+        function verifyProjectVersion(project: server.Project, expected: number) {
+            assert.equal(Number(project.getProjectVersion()), expected);
+        }
+        it("with updateOpen request", () => {
+            verify({
+                applyChangesToOpen: session => session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                    command: protocol.CommandTypes.UpdateOpen,
+                    arguments: {
+                        openFiles: [
+                            {
+                                file: commonFile1.path,
+                                fileContent: fileContentWithComment(commonFile1)
+                            },
+                            {
+                                file: commonFile2.path,
+                                fileContent: fileContentWithComment(commonFile2)
+                            }
+                        ],
+                        changedFiles: [
+                            {
+                                fileName: app.file,
+                                textChanges: [
+                                    {
+                                        start: { line: 1, offset: 1 },
+                                        end: { line: 1, offset: 1 },
+                                        newText: "let zzz = 10;",
+                                    },
+                                    {
+                                        start: { line: 1, offset: 1 },
+                                        end: { line: 1, offset: 1 },
+                                        newText: "let zz = 10;",
+                                    }
+                                ]
+                            }
+                        ],
+                        closedFiles: [
+                            file3.file
+                        ]
+                    }
+                }),
+                openFile1Again: session => session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                    command: protocol.CommandTypes.UpdateOpen,
+                    arguments: {
+                        openFiles: [{
+                            file: commonFile1.path,
+                            fileContent: commonFile1.content
+                        }]
+                    }
+                }),
+            });
+        });
+    })
     describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
         const configFile: File = {
             path: "/a/b/tsconfig.json",
