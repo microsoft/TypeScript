@@ -165,7 +165,7 @@
           "length": 8
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -256,7 +256,7 @@
           "length": 13
         },
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   },

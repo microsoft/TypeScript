@@ -104,7 +104,7 @@
           "length": 9
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }

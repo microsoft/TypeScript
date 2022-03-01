@@ -199,7 +199,7 @@
           "length": 26
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -271,7 +271,7 @@
           "length": 16
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -406,7 +406,7 @@
           "length": 26
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -613,7 +613,7 @@
           "length": 26
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -807,7 +807,7 @@
           "length": 16
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -947,7 +947,7 @@
           "length": 16
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -1082,7 +1082,7 @@
           "length": 26
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }

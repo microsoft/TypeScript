@@ -100,7 +100,7 @@
           "length": 11
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -113,7 +113,7 @@
           "length": 11
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }

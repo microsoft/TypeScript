@@ -439,7 +439,7 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -633,7 +633,7 @@
           "length": 15
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   }
@@ -856,7 +856,7 @@
           "length": 12
         },
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": true
       }
     ]
   },

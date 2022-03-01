@@ -32,7 +32,7 @@ ${exportNestedObject}
         const referenceMainTs = (mainTs: File, text: string): protocol.ReferencesResponseItem =>
             makeReferenceItem({
                 file: mainTs,
-                isDefinition: false,
+                isDefinition: true,
                 isWriteAccess: true,
                 lineText: mainTs.content,
                 contextText: mainTs.content,
@@ -116,7 +116,7 @@ ${exportNestedObject}
                         { text: "valueC", lineText: exportObjectDestructured, contextText: "valueC: 0" },
                         {
                             options: { index: 1 },
-                            isDefinition: false,
+                            isDefinition: true,
                             isWriteAccess: true,
                         }),
                 ],
@@ -177,7 +177,7 @@ ${exportNestedObject}
                         },
                         {
                             options: { index: 1 },
-                            isDefinition: false,
+                            isDefinition: true,
                             isWriteAccess: true,
                         },
                     ),

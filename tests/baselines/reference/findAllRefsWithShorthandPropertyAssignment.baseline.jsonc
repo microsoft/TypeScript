@@ -69,7 +69,7 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -155,7 +155,7 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -232,7 +232,7 @@
           "length": 17
         },
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": true
       },
       {
         "textSpan": {
