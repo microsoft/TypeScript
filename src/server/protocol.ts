@@ -2317,6 +2317,10 @@ namespace ts.server.protocol {
          * items with the same name.
          */
         data?: unknown;
+        /**
+         * Additional code actions to be made to avoid errors.
+         */
+        codeActions?: CodeAction[];
     }
 
     /**

@@ -1240,6 +1240,7 @@ namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+        codeActions?: CodeAction[];
     }
 
     export interface CompletionEntryDetails {
