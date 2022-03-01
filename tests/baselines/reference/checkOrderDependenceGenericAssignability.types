@@ -1,0 +1,144 @@
+=== tests/cases/compiler/checkOrderDependenceGenericAssignability.ts ===
+// Repro from #44572 with interface types
+
+interface Parent1<A> {
+    child: Child1<A>;
+>child : Child1<A, unknown>
+
+    parent: Parent1<A>;
+>parent : Parent1<A>
+}
+
+interface Child1<A, B = unknown> extends Parent1<A> {
+    readonly a: A;
+>a : A
+
+    readonly b: B;
+>b : B
+}
+
+function fn1<A>(inp: Child1<A>) {
+>fn1 : <A>(inp: Child1<A>) => void
+>inp : Child1<A, unknown>
+
+    const a: Child1<unknown> = inp;
+>a : Child1<unknown, unknown>
+>inp : Child1<A, unknown>
+}
+
+declare let pu1: Parent1<unknown>;
+>pu1 : Parent1<unknown>
+
+declare let ps1: Parent1<string>;
+>ps1 : Parent1<string>
+
+pu1 = ps1;  // Ok
+>pu1 = ps1 : Parent1<string>
+>pu1 : Parent1<unknown>
+>ps1 : Parent1<string>
+
+ps1 = pu1;  // Error expected
+>ps1 = pu1 : Parent1<unknown>
+>ps1 : Parent1<string>
+>pu1 : Parent1<unknown>
+
+// Repro from #44572 with aliased object types
+
+type Parent2<A> = {
+>Parent2 : Parent2<A>
+
+    child: Child2<A>;
+>child : Child2<A, unknown>
+
+    parent: Parent2<A>;
+>parent : Parent2<A>
+}
+
+type Child2<A, B = unknown> = {
+>Child2 : Child2<A, B>
+
+    child: Child2<A>;
+>child : Child2<A, unknown>
+
+    parent: Parent2<A>;
+>parent : Parent2<A>
+
+    readonly a: A;
+>a : A
+
+    readonly b: B;
+>b : B
+}
+
+function fn2<A>(inp: Child2<A>) {
+>fn2 : <A>(inp: Child2<A>) => void
+>inp : Child2<A, unknown>
+
+    const a: Child2<unknown> = inp;
+>a : Child2<unknown, unknown>
+>inp : Child2<A, unknown>
+}
+
+declare let pu2: Parent2<unknown>;
+>pu2 : Parent2<unknown>
+
+declare let ps2: Parent2<string>;
+>ps2 : Parent2<string>
+
+pu2 = ps2;  // Ok
+>pu2 = ps2 : Parent2<string>
+>pu2 : Parent2<unknown>
+>ps2 : Parent2<string>
+
+ps2 = pu2;  // Error expected
+>ps2 = pu2 : Parent2<unknown>
+>ps2 : Parent2<string>
+>pu2 : Parent2<unknown>
+
+// Simpler repro for same issue
+
+interface Parent3<A> {
+    child: Child3<A[]>;
+>child : Child3<A[]>
+
+    parent: Parent3<A>;
+>parent : Parent3<A>
+}
+
+interface Child3<A> extends Parent3<A> {
+    readonly a: A;
+>a : A
+}
+
+declare let cu3: Child3<unknown>;
+>cu3 : Child3<unknown>
+
+declare let cs3: Child3<string>;
+>cs3 : Child3<string>
+
+cu3 = cs3;  // Ok
+>cu3 = cs3 : Child3<string>
+>cu3 : Child3<unknown>
+>cs3 : Child3<string>
+
+cs3 = cu3;  // Error expected
+>cs3 = cu3 : Child3<unknown>
+>cs3 : Child3<string>
+>cu3 : Child3<unknown>
+
+declare let pu3: Parent3<unknown>;
+>pu3 : Parent3<unknown>
+
+declare let ps3: Parent3<string>;
+>ps3 : Parent3<string>
+
+pu3 = ps3;  // Ok
+>pu3 = ps3 : Parent3<string>
+>pu3 : Parent3<unknown>
+>ps3 : Parent3<string>
+
+ps3 = pu3;  // Error expected
+>ps3 = pu3 : Parent3<unknown>
+>ps3 : Parent3<string>
+>pu3 : Parent3<unknown>
+
