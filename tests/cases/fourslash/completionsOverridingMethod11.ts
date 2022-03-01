@@ -32,21 +32,11 @@ verify.completions({
         {
             name: "a",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "a: string",
         },
         {
             name: "b",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText:
 `b(a: string): void {
 }`,
@@ -54,11 +44,6 @@ verify.completions({
         {
             name: "c",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText:
 `c(a: string): string
 c(a: number): number
