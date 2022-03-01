@@ -300,7 +300,7 @@ namespace ts.server {
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
-            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const request = this.processRequest<protocol.DefinitionAndBoundSpanRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
             const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
@@ -332,6 +332,26 @@ namespace ts.server {
                 kind: ScriptElementKind.unknown,
                 name: ""
             }));
+        }
+
+        getSourceDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.SourceDefinitionAndBoundSpanRequest>(CommandNames.SourceDefinitionAndBoundSpan, args);
+            const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
+            const body = Debug.checkDefined(response.body); // TODO: GH#18217
+
+            return {
+                definitions: body.definitions.map(entry => ({
+                    containerKind: ScriptElementKind.unknown,
+                    containerName: "",
+                    fileName: entry.file,
+                    textSpan: this.decodeSpan(entry),
+                    kind: ScriptElementKind.unknown,
+                    name: "",
+                    unverified: entry.unverified,
+                })),
+                textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
+            };
         }
 
         getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {

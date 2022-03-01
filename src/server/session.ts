@@ -1239,36 +1239,6 @@ namespace ts.server {
         }
 
         private getDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
-        //     const { file, project } = this.getFileAndProject(args);
-        //     const position = this.getPositionInFile(args, file);
-        //     const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
-
-        //     const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
-
-        //     if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
-        //         return {
-        //             definitions: emptyArray,
-        //             textSpan: undefined! // TODO: GH#18217
-        //         };
-        //     }
-
-        //     const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
-        //     const { textSpan } = unmappedDefinitionAndBoundSpan;
-
-        //     if (simplifiedResult) {
-        //         return {
-        //             definitions: this.mapDefinitionInfo(definitions, project),
-        //             textSpan: toProtocolTextSpan(textSpan, scriptInfo)
-        //         };
-        //     }
-
-        //     return {
-        //         definitions: definitions.map(Session.mapToOriginalLocation),
-        //         textSpan,
-        //     };
-        // }
-
-        // private getSourceDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
@@ -1282,17 +1252,7 @@ namespace ts.server {
                 };
             }
 
-            const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
-            const needsJsResolution = every(definitions.filter(d => d.isAliasTarget), d => !!d.isAmbient);
-            if (needsJsResolution) {
-                project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
-                    const jsDefinitions = auxiliaryProject.getLanguageService().getDefinitionAndBoundSpan(file, position);
-                    for (const jsDefinition of jsDefinitions?.definitions || emptyArray) {
-                        pushIfUnique(definitions, jsDefinition, (a, b) => a.fileName === b.fileName && a.textSpan.start === b.textSpan.start);
-                    }
-                });
-            }
-
+            const definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project);
             const { textSpan } = unmappedDefinitionAndBoundSpan;
 
             if (simplifiedResult) {
@@ -1306,30 +1266,47 @@ namespace ts.server {
                 definitions: definitions.map(Session.mapToOriginalLocation),
                 textSpan,
             };
+        }
 
-            // function getLocationsResolvingToDts(symbol: Symbol, checker: TypeChecker) {
-            //     let locations: DocumentPosition[] | undefined;
-            //     while (symbol.flags & SymbolFlags.Alias) {
-            //         const aliasDeclaration = find(symbol.declarations || emptyArray, isAliasSymbolDeclaration);
-            //         if (!aliasDeclaration) break;
+        private getSourceDefinitionAndBoundSpan(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.DefinitionInfoAndBoundSpan | DefinitionInfoAndBoundSpan {
+            const { file, project } = this.getFileAndProject(args);
+            const position = this.getPositionInFile(args, file);
+            const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
 
-            //         const resolvedSymbol = checker.getImmediateAliasedSymbol(symbol);
-            //         if (!resolvedSymbol) break;
+            const unmappedDefinitionAndBoundSpan = project.getLanguageService().getDefinitionAndBoundSpan(file, position);
 
-            //         const hasUnmappedDtsDeclarations = some(resolvedSymbol.declarations, d => {
-            //             const sourceFile = getSourceFileOfNode(d);
-            //             if (!isDeclarationFileName(sourceFile.fileName)) return false;
-            //             const mappedFileName = project.getSourceMapper().tryGetSourcePosition(sourceFile)?.fileName;
-            //             if (mappedFileName && project.projectService.fileExists(toNormalizedPath(mappedFileName))) return false;
-            //         });
-            //         if (hasUnmappedDtsDeclarations) {
-            //             const sourceFile = getSourceFileOfNode(aliasDeclaration);
-            //             locations = append(locations, { fileName: sourceFile.fileName, pos: aliasDeclaration.getStart(sourceFile) });
-            //         }
-            //         symbol = resolvedSymbol;
-            //     }
-            //     return locations;
-            // }
+            if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
+                return {
+                    definitions: emptyArray,
+                    textSpan: undefined! // TODO: GH#18217
+                };
+            }
+
+            let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
+            const needsJsResolution = every(definitions.filter(d => d.isAliasTarget), d => !!d.isAmbient);
+            if (needsJsResolution) {
+                project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
+                    const jsDefinitions = auxiliaryProject.getLanguageService().getDefinitionAndBoundSpan(file, position);
+                    for (const jsDefinition of jsDefinitions?.definitions || emptyArray) {
+                        pushIfUnique(definitions, jsDefinition, (a, b) => a.fileName === b.fileName && a.textSpan.start === b.textSpan.start);
+                    }
+                });
+            }
+
+            definitions = definitions.filter(d => !d.isAmbient);
+            const { textSpan } = unmappedDefinitionAndBoundSpan;
+
+            if (simplifiedResult) {
+                return {
+                    definitions: this.mapDefinitionInfo(definitions, project),
+                    textSpan: toProtocolTextSpan(textSpan, scriptInfo)
+                };
+            }
+
+            return {
+                definitions: definitions.map(Session.mapToOriginalLocation),
+                textSpan,
+            };
         }
 
         private getEmitOutput(args: protocol.EmitOutputRequestArgs): EmitOutput | protocol.EmitOutput {
@@ -2750,11 +2727,17 @@ namespace ts.server {
             [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionRequest) => {
+            [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionAndBoundSpanRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionRequest) => {
+            [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionAndBoundSpanRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.SourceDefinitionAndBoundSpan]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
+                return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.SourceDefinitionAndBoundSpanFull]: (request: protocol.SourceDefinitionAndBoundSpanRequest) => {
+                return this.requiredResponse(this.getSourceDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
                 return this.requiredResponse(this.getEmitOutput(request.arguments));
