@@ -63,7 +63,8 @@
           "length": 28
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -164,7 +165,8 @@
           "length": 20
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },

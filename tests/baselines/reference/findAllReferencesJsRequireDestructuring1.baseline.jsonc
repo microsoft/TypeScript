@@ -80,7 +80,8 @@
           "length": 36
         },
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

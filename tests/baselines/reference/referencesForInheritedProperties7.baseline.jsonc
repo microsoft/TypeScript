@@ -95,7 +95,8 @@
           "length": 13
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -281,7 +282,8 @@
           "length": 17
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -467,7 +469,8 @@
           "length": 16
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -653,7 +656,8 @@
           "length": 17
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -1003,7 +1007,8 @@
           "length": 13
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -1255,7 +1260,8 @@
           "length": 17
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {

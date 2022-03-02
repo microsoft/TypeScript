@@ -59,7 +59,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -174,7 +175,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -232,7 +234,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }
@@ -298,7 +301,8 @@
           "length": 12
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }
@@ -401,7 +405,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -504,7 +509,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForTypeKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

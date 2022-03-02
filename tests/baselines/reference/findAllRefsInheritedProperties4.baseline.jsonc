@@ -83,7 +83,8 @@
           "length": 14
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -331,7 +332,8 @@
           "length": 14
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -514,7 +516,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInheritedProperties4.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -605,7 +608,8 @@
           "length": 14
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }

@@ -78,7 +78,8 @@
           "length": 18
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -186,7 +187,8 @@
           "length": 10
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -290,7 +292,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -481,7 +484,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

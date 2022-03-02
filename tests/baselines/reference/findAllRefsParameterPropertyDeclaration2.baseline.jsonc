@@ -77,7 +77,8 @@
           "length": 26
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -304,7 +305,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -398,7 +400,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration2.ts",
         "isWriteAccess": true,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   },

@@ -29,7 +29,8 @@
         },
         "fileName": "/tests/cases/fourslash/Foo.js",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

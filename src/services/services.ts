@@ -1583,6 +1583,75 @@ namespace ts {
             return host.getPackageJsonAutoImportProvider?.();
         }
 
+        function updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean {
+            const checker = program.getTypeChecker();
+            const symbol = getSymbol();
+
+            if (!symbol) return false;
+
+            for (const referencedSymbol of referencedSymbols) {
+                for (const ref of referencedSymbol.references) {
+                    if (!ref.isDefinition) continue;
+
+                    const refNode = getNode(ref);
+                    Debug.assertIsDefined(refNode);
+                    if (knownSymbolSpans.has(ref) || isDeclarationOfSymbol(refNode, symbol)) {
+                        knownSymbolSpans.add(ref);
+                        const mappedSpan = getMappedDocumentSpan(ref, sourceMapper, maybeBind(host, host.fileExists));
+                        if (mappedSpan) {
+                            knownSymbolSpans.add(mappedSpan);
+                        }
+                    }
+                    else {
+                        ref.isDefinition = false;
+                    }
+                }
+            }
+
+            return true;
+
+            function getSymbol(): Symbol | undefined {
+                for (const referencedSymbol of referencedSymbols) {
+                    for (const ref of referencedSymbol.references) {
+                        if (knownSymbolSpans.has(ref)) {
+                            const refNode = getNode(ref);
+                            Debug.assertIsDefined(refNode);
+                            return checker.getSymbolAtLocation(refNode);
+                        }
+                        const mappedSpan = getMappedDocumentSpan(ref, sourceMapper, maybeBind(host, host.fileExists));
+                        if (mappedSpan && knownSymbolSpans.has(mappedSpan)) {
+                            const refNode = getNode(mappedSpan);
+                            if (refNode) {
+                                return checker.getSymbolAtLocation(refNode);
+                            }
+                        }
+                    }
+                }
+
+                return undefined;
+            }
+
+            function getNode(docSpan: DocumentSpan): Node | undefined {
+                const sourceFile = program.getSourceFile(docSpan.fileName);
+                if (!sourceFile) return undefined;
+                const rawNode = getTouchingPropertyName(sourceFile, docSpan.textSpan.start);
+                const adjustedNode = FindAllReferences.Core.getAdjustedNode(rawNode, { use: FindAllReferences.FindReferencesUse.References });
+                return adjustedNode;
+            }
+        }
+
+        /** Whether a reference, `node`, is a definition of the `target` symbol */
+        function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
+            if (!target) return false;
+            const source = getDeclarationFromName(node) ||
+                (node.kind === SyntaxKind.DefaultKeyword ? node.parent
+                : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
+                : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
+                : undefined);
+            const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as Declaration : undefined;
+            return !!(source && target.declarations?.some(d => d === source || d === commonjsSource));
+        }
+
         function cleanupSemanticCache(): void {
             program = undefined!; // TODO: GH#18217
         }
@@ -1842,7 +1911,7 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r));
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
@@ -2699,6 +2768,7 @@ namespace ts {
             getNonBoundSourceFile,
             getProgram,
             getAutoImportProvider,
+            updateIsDefinitionOfReferencedSymbols,
             getApplicableRefactors,
             getEditsForRefactor,
             toLineColumnOffset,

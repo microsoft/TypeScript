@@ -59,7 +59,8 @@
           "length": 25
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {

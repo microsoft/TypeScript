@@ -60,7 +60,8 @@
           "length": 17
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -164,7 +165,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -241,7 +243,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -384,7 +387,8 @@
           "length": 10
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }
@@ -461,7 +465,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

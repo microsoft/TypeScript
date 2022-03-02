@@ -41,7 +41,8 @@
         },
         "fileName": "/a.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {

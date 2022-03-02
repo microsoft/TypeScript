@@ -84,7 +84,8 @@
           "length": 10
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -262,7 +263,8 @@
           "length": 10
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -732,7 +734,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForUnionProperties.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

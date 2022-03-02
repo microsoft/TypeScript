@@ -92,7 +92,8 @@
           "length": 7
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -293,7 +294,8 @@
           "length": 14
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -402,7 +404,8 @@
           "length": 14
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -603,7 +606,8 @@
           "length": 7
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -721,7 +725,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -931,7 +936,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   },
@@ -1215,7 +1221,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -1324,7 +1331,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -1433,7 +1441,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

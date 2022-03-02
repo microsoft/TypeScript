@@ -95,7 +95,8 @@
           "length": 8
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -355,7 +356,8 @@
           "length": 2
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -550,7 +552,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingGenericClass.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -721,7 +724,8 @@
           "length": 31
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -1065,7 +1069,8 @@
           "length": 12
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -1336,7 +1341,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForClassMembersExtendingGenericClass.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

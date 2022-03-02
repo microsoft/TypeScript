@@ -73,7 +73,8 @@
           "length": 28
         },
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

@@ -46,7 +46,8 @@ undefined
           "length": 40
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }

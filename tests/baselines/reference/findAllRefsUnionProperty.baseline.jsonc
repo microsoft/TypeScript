@@ -76,7 +76,8 @@
           "length": 10
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -423,7 +424,8 @@
           "length": 10
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -769,7 +771,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -875,7 +878,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   },
@@ -1209,7 +1213,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnionProperty.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   },
@@ -1384,7 +1389,8 @@
           "length": 9
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -1555,7 +1561,8 @@
           "length": 12
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -1797,7 +1804,8 @@
           "length": 12
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }
@@ -1894,7 +1902,8 @@
           "length": 7
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }

@@ -57,7 +57,8 @@
           "length": 32
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -218,7 +219,8 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   }
@@ -292,7 +294,8 @@
         },
         "fileName": "/tests/cases/fourslash/getOccurrencesIsDefinitionOfBindingPattern.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

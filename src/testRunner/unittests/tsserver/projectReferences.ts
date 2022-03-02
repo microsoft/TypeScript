@@ -186,7 +186,7 @@ function foo() {
                             file: keyboardTestTs,
                             text: searchStr,
                             contextText: importStr,
-                            isDefinition: true,
+                            isDefinition: false,
                             isWriteAccess: true,
                             lineText: importStr
                         }),
@@ -201,7 +201,7 @@ function foo() {
                             file: terminalTs,
                             text: searchStr,
                             contextText: importStr,
-                            isDefinition: true,
+                            isDefinition: false,
                             isWriteAccess: true,
                             lineText: importStr
                         }),

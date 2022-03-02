@@ -30,7 +30,8 @@
         "fileName": "/a.ts",
         "isWriteAccess": false,
         "isDefinition": false,
-        "isInString": true
+        "isInString": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -88,7 +89,8 @@
         "fileName": "/a.ts",
         "isWriteAccess": false,
         "isDefinition": false,
-        "isInString": true
+        "isInString": true,
+        "isStartingPoint": true
       }
     ]
   }

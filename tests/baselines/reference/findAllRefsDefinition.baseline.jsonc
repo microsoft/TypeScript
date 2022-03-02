@@ -57,7 +57,8 @@
           "length": 12
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -140,7 +141,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsDefinition.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

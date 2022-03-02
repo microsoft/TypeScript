@@ -81,7 +81,8 @@
           "length": 16
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -377,7 +378,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -549,7 +551,8 @@
           "length": 16
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       }
     ]
   },
@@ -762,7 +765,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

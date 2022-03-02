@@ -66,7 +66,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -221,7 +222,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -376,7 +378,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -540,7 +543,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -695,7 +699,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -850,7 +855,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -1005,7 +1011,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -1160,7 +1167,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -1262,7 +1270,8 @@
         },
         "fileName": "/tests/cases/fourslash/referencesForExpressionKeywords.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

@@ -1184,7 +1184,7 @@ namespace FourSlash {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
                         definition: fullExpected.length > i && typeof fullExpected[i].definition === "string" ? text : { text, range: definition.textSpan },
-                        references,
+                        references: references.map(r => ({ ...r, isStartingPoint: undefined })), // TODO (acasey): fix up?
                     };
                 });
                 this.assertObjectsEqual(fullActual, fullExpected);

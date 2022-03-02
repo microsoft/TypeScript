@@ -330,7 +330,7 @@ namespace ts.server {
         for (const [project, projectResults] of arrayFrom(perProjectResults.entries())) {
             for (const result of projectResults) {
                 // If there's a mapped location, it'll appear in the results for another project
-                if (!seen.has(result) && !getMappedLocation(documentSpanLocation(result), project)) {
+                if (!seen.has(result) && !getMappedLocationForProject(documentSpanLocation(result), project)) {
                     results.push(result);
                     seen.add(result);
                 }
@@ -344,6 +344,23 @@ namespace ts.server {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
         const info = infos && firstOrUndefined(infos);
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
+    }
+
+    function getContainingReferenceEntry(referencedSymbols: readonly ReferencedSymbol[]): ReferenceEntry | undefined {
+        // This happens if FAR is invoked at an invalid location
+        if (!referencedSymbols.length) {
+            return undefined;
+        }
+
+        for (const referencedSymbol of referencedSymbols) {
+            for (const ref of referencedSymbol.references) {
+                if (ref.isStartingPoint) {
+                    return ref;
+                }
+            }
+        }
+
+        Debug.fail("Initial location was not itself a reference?");
     }
 
     function getReferencesWorker(
@@ -370,7 +387,51 @@ namespace ts.server {
 
         // No re-mapping is required if there's exactly one project
         if (isArray(perProjectResults)) {
+            const initialRef = getContainingReferenceEntry(perProjectResults);
+            if (initialRef) {
+                const knownSymbolSpans = createDocumentSpanSet();
+                knownSymbolSpans.add(initialRef); // TODO (acasey): realpath?
+                const mappedInitialSpan = getMappedDocumentSpanForProject(initialRef, defaultProject);
+                if (mappedInitialSpan) {
+                    knownSymbolSpans.add(mappedInitialSpan); // TODO (acasey): realpath?
+                }
+                defaultProject.getLanguageService().updateIsDefinitionOfReferencedSymbols(perProjectResults, knownSymbolSpans);
+            }
+
             return perProjectResults;
+        }
+
+        const initialRef = getContainingReferenceEntry(perProjectResults.get(defaultProject)!);
+        if (initialRef) {
+            const knownSymbolSpans = createDocumentSpanSet();
+            knownSymbolSpans.add(initialRef); // TODO (acasey): realpath?
+            const mappedInitialSpan = getMappedDocumentSpanForProject(initialRef, defaultProject);
+            if (mappedInitialSpan) {
+                knownSymbolSpans.add(mappedInitialSpan); // TODO (acasey): realpath?
+            }
+
+            const updatedProjects = new Set<Project>();
+            while (true) {
+                let progress = false;
+                for (const [project, referencedSymbols] of arrayFrom(perProjectResults.entries())) {
+                    if (updatedProjects.has(project)) continue;
+                    const updated = project.getLanguageService().updateIsDefinitionOfReferencedSymbols(referencedSymbols, knownSymbolSpans);
+                    if (updated) {
+                        updatedProjects.add(project);
+                        progress = true;
+                    }
+                }
+                if (!progress) break;
+            }
+
+            for (const [project, referencedSymbols] of arrayFrom(perProjectResults.entries())) {
+                if (updatedProjects.has(project)) continue;
+                for (const referencedSymbol of referencedSymbols) {
+                    for (const ref of referencedSymbol.references) {
+                        ref.isDefinition = false;
+                    }
+                }
+            }
         }
 
         // We need to de-duplicate and aggregate the results by choosing an authoritative version
@@ -380,14 +441,14 @@ namespace ts.server {
 
         for (const [project, projectResults] of arrayFrom(perProjectResults.entries())) {
             for (const referencedSymbol of projectResults) {
-                const mappedDefinitionFile = getMappedLocation(documentSpanLocation(referencedSymbol.definition), project);
+                const mappedDefinitionFile = getMappedLocationForProject(documentSpanLocation(referencedSymbol.definition), project);
                 const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
                     referencedSymbol.definition :
                     {
                         ...referencedSymbol.definition,
                         textSpan: createTextSpan(mappedDefinitionFile.pos, referencedSymbol.definition.textSpan.length), // Why would the length be the same in the original?
                         fileName: mappedDefinitionFile.fileName,
-                        contextSpan: getMappedContextSpan(referencedSymbol.definition, project)
+                        contextSpan: getMappedContextSpanForProject(referencedSymbol.definition, project)
                     };
 
                 let symbolToAddTo = find(results, o => documentSpansEqual(o.definition, definition));
@@ -397,7 +458,8 @@ namespace ts.server {
                 }
 
                 for (const ref of referencedSymbol.references) {
-                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocation(documentSpanLocation(ref), project)) {
+                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocationForProject(documentSpanLocation(ref), project)) { // TODO (acasey): set
+                        delete ref.isStartingPoint; // Don't send this over the wire
                         symbolToAddTo.references.push(ref);
                     }
                 }
@@ -592,39 +654,16 @@ namespace ts.server {
         return { fileName, pos: textSpan.start };
     }
 
-    function getMappedLocation(location: DocumentPosition, project: Project): DocumentPosition | undefined {
-        const mapsTo = project.getSourceMapper().tryGetSourcePosition(location);
-        return mapsTo && project.projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
+    function getMappedLocationForProject(location: DocumentPosition, project: Project): DocumentPosition | undefined {
+        return getMappedLocation(location, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
     }
 
-    function getMappedDocumentSpan(documentSpan: DocumentSpan, project: Project): DocumentSpan | undefined {
-        const newPosition = getMappedLocation(documentSpanLocation(documentSpan), project);
-        if (!newPosition) return undefined;
-        return {
-            fileName: newPosition.fileName,
-            textSpan: {
-                start: newPosition.pos,
-                length: documentSpan.textSpan.length
-            },
-            originalFileName: documentSpan.fileName,
-            originalTextSpan: documentSpan.textSpan,
-            contextSpan: getMappedContextSpan(documentSpan, project),
-            originalContextSpan: documentSpan.contextSpan
-        };
+    function getMappedDocumentSpanForProject(documentSpan: DocumentSpan, project: Project): DocumentSpan | undefined {
+        return getMappedDocumentSpan(documentSpan, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
     }
 
-    function getMappedContextSpan(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
-        const contextSpanStart = documentSpan.contextSpan && getMappedLocation(
-            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start },
-            project
-        );
-        const contextSpanEnd = documentSpan.contextSpan && getMappedLocation(
-            { fileName: documentSpan.fileName, pos: documentSpan.contextSpan.start + documentSpan.contextSpan.length },
-            project
-        );
-        return contextSpanStart && contextSpanEnd ?
-            { start: contextSpanStart.pos, length: contextSpanEnd.pos - contextSpanStart.pos } :
-            undefined;
+    function getMappedContextSpanForProject(documentSpan: DocumentSpan, project: Project): TextSpan | undefined {
+        return getMappedContextSpan(documentSpan, project.getSourceMapper(), p => project.projectService.fileExists(p as NormalizedPath));
     }
 
     const invalidPartialSemanticModeCommands: readonly CommandNames[] = [
@@ -1233,7 +1272,7 @@ namespace ts.server {
 
         private mapDefinitionInfoLocations(definitions: readonly DefinitionInfo[], project: Project): readonly DefinitionInfo[] {
             return definitions.map((info): DefinitionInfo => {
-                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                const newDocumentSpan = getMappedDocumentSpanForProject(info, project);
                 return !newDocumentSpan ? info : {
                     ...newDocumentSpan,
                     containerKind: info.containerKind,
@@ -1374,7 +1413,7 @@ namespace ts.server {
 
         private mapImplementationLocations(implementations: readonly ImplementationLocation[], project: Project): readonly ImplementationLocation[] {
             return implementations.map((info): ImplementationLocation => {
-                const newDocumentSpan = getMappedDocumentSpan(info, project);
+                const newDocumentSpan = getMappedDocumentSpanForProject(info, project);
                 return !newDocumentSpan ? info : {
                     ...newDocumentSpan,
                     kind: info.kind,
@@ -2183,7 +2222,7 @@ namespace ts.server {
             // Mutates `outputs`
             function addItemsForProject(project: Project) {
                 const projectItems = project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, /*filename*/ undefined, /*excludeDts*/ project.isNonTsProject());
-                const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocation(documentSpanLocation(item), project));
+                const unseenItems = filter(projectItems, item => tryAddSeenItem(item) && !getMappedLocationForProject(documentSpanLocation(item), project));
                 if (unseenItems.length) {
                     outputs.push({ project, navigateToItems: unseenItems });
                 }

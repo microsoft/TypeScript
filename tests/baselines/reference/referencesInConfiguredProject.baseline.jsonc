@@ -58,7 +58,8 @@
         },
         "fileName": "/referencesForGlobals_2.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

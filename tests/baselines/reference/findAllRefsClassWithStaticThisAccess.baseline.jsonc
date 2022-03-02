@@ -54,7 +54,8 @@
           "length": 166
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -138,7 +139,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -222,7 +224,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsClassWithStaticThisAccess.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

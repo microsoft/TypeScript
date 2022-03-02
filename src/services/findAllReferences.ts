@@ -206,14 +206,32 @@ namespace ts.FindAllReferences {
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
-        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, { use: FindReferencesUse.References });
+        const options = { use: FindReferencesUse.References };
+        const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options);
+        if (!referencedSymbols || !referencedSymbols.length) {
+            return undefined;
+        }
         const checker = program.getTypeChecker();
-        return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
+        const adjustedNode = Core.getAdjustedNode(node, options);
+        const result = mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && {
                 definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-                references: references.map(toReferenceEntry)
+                references: references.map(r => toReferenceEntry(r, adjustedNode))
             });
+        // TODO (acasey): drop assert
+        let count = 0;
+        if (result) {
+            for (const rs of result) {
+                for (const r of rs.references) {
+                    if (r.isStartingPoint) {
+                        count++;
+                    }
+                }
+            }
+        }
+        Debug.assertEqual(node.kind === SyntaxKind.SourceFile ? 0 : 1, count);
+        return result;
     }
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: readonly SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
@@ -387,10 +405,21 @@ namespace ts.FindAllReferences {
         return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
     }
 
-    export function toReferenceEntry(entry: Entry): ReferenceEntry {
+    export function toReferenceEntry(entry: Entry, adjustedStartingNode?: Node): ReferenceEntry {
         const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind === EntryKind.Span) {
-            return { ...documentSpan, isWriteAccess: false, isDefinition: false };
+            const isStartingPoint =
+                adjustedStartingNode &&
+                adjustedStartingNode.kind !== SyntaxKind.SourceFile &&
+                adjustedStartingNode.pos <= documentSpan.textSpan.start &&
+                documentSpan.textSpan.start + documentSpan.textSpan.length <= adjustedStartingNode.end &&
+                documentSpan.fileName === adjustedStartingNode.getSourceFile().fileName;
+            return {
+                ...documentSpan,
+                isWriteAccess: false,
+                isDefinition: false,
+                isStartingPoint: isStartingPoint ? true : undefined,
+            };
         }
         const { kind, node } = entry;
         return {
@@ -398,6 +427,7 @@ namespace ts.FindAllReferences {
             isWriteAccess: isWriteAccessForReference(node),
             isDefinition: isDefinitionForReference(node),
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
+            isStartingPoint: (adjustedStartingNode && !!findAncestor(node, n => n === adjustedStartingNode)) ? true : undefined, // TODO (acasey): depth limit
         };
     }
 
@@ -616,12 +646,7 @@ namespace ts.FindAllReferences {
     export namespace Core {
         /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
         export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
-            if (options.use === FindReferencesUse.References) {
-                node = getAdjustedReferenceLocation(node);
-            }
-            else if (options.use === FindReferencesUse.Rename) {
-                node = getAdjustedRenameLocation(node);
-            }
+            node = getAdjustedNode(node, options);
             if (isSourceFile(node)) {
                 const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
                 if (!resolvedRef?.file) {
@@ -687,6 +712,16 @@ namespace ts.FindAllReferences {
 
             const references = getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
             return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
+        }
+
+        export function getAdjustedNode(node: Node, options: Options) {
+            if (options.use === FindReferencesUse.References) {
+                node = getAdjustedReferenceLocation(node);
+            }
+            else if (options.use === FindReferencesUse.Rename) {
+                node = getAdjustedRenameLocation(node);
+            }
+            return node;
         }
 
         export function getReferencesForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly Entry[] {

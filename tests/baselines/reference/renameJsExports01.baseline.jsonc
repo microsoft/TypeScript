@@ -113,7 +113,8 @@
         },
         "fileName": "/tests/cases/fourslash/b.js",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

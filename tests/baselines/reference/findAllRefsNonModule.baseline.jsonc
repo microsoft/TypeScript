@@ -35,7 +35,8 @@
         },
         "fileName": "/import.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -105,7 +106,8 @@
         },
         "fileName": "/require.js",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -169,7 +171,8 @@
         "fileName": "/require.js",
         "isWriteAccess": false,
         "isDefinition": false,
-        "isInString": true
+        "isInString": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {

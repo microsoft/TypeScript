@@ -51,7 +51,8 @@
           "length": 38
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": true,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -173,7 +174,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -295,7 +297,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -417,7 +420,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -539,7 +543,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -661,7 +666,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -783,7 +789,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -866,7 +873,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {
@@ -967,7 +975,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -1005,7 +1014,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }
@@ -1096,7 +1106,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsUnresolvedSymbols3.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       }
     ]
   }

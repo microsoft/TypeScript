@@ -61,7 +61,8 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsImportEquals.ts",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {

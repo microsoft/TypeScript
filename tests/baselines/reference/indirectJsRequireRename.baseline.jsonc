@@ -115,7 +115,8 @@
         },
         "fileName": "/bin/serverless.js",
         "isWriteAccess": false,
-        "isDefinition": false
+        "isDefinition": false,
+        "isStartingPoint": true
       },
       {
         "textSpan": {

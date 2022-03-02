@@ -541,6 +541,11 @@ namespace ts {
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
 
+        /// Returns true if a suitable symbol was found in the project.
+        /// May set isDefinition properties in `referencedSymbols` to false.
+        /// May add elements to `knownSymbolSpans`.
+        /* @internal */ updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean;
+
         toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
         toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
         commentSelection(fileName: string, textRange: TextRange): TextChange[];
@@ -883,6 +888,9 @@ namespace ts {
         isWriteAccess: boolean;
         isDefinition: boolean;
         isInString?: true;
+        // If present, indicates that this was the location from which the search was started.
+        // If absent, indicates nothing.
+        /* @internal */isStartingPoint?: true;
     }
 
     export interface ImplementationLocation extends DocumentSpan {
