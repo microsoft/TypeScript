@@ -554,8 +554,34 @@ namespace ts {
     }
 
     /* @internal */
+    export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | ExportDeclaration) {
+        if (isExportDeclaration(decl)) {
+            return decl.isTypeOnly;
+        }
+        if (decl.importClause?.isTypeOnly) {
+            return true;
+        }
+        return false;
+    }
+
+    /* @internal */
     export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
         if (file.impliedNodeFormat === undefined) return undefined;
+        if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
+            const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
+            if (isTypeOnly) {
+                const override = getResolutionModeOverrideForClause(usage.parent.assertClause);
+                if (override) {
+                    return override;
+                }
+            }
+        }
+        if (usage.parent.parent && isImportTypeNode(usage.parent.parent)) {
+            const override = getResolutionModeOverrideForClause(usage.parent.parent.assertions?.assertClause);
+            if (override) {
+                return override;
+            }
+        }
         if (file.impliedNodeFormat !== ModuleKind.ESNext) {
             // in cjs files, import call expressions are esm format, otherwise everything is cjs
             return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
@@ -564,6 +590,27 @@ namespace ts {
         // imports are only parent'd up to their containing declaration/expression, so access farther parents with care
         const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
         return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
+    }
+
+    /* @internal */
+    export function getResolutionModeOverrideForClause(clause: AssertClause | undefined, grammarErrorOnNode?: (node: Node, diagnostic: DiagnosticMessage) => boolean) {
+        if (!clause) return undefined;
+        if (length(clause.elements) !== 1) {
+            grammarErrorOnNode?.(clause, Diagnostics.Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require);
+            return undefined;
+        }
+        const elem = clause.elements[0];
+        if (!isStringLiteralLike(elem.name)) return undefined;
+        if (elem.name.text !== "resolution-mode") {
+            grammarErrorOnNode?.(elem.name, Diagnostics.resolution_mode_is_the_only_valid_key_for_type_import_assertions);
+            return undefined;
+        }
+        if (!isStringLiteralLike(elem.value)) return undefined;
+        if (elem.value.text !== "import" && elem.value.text !== "require") {
+            grammarErrorOnNode?.(elem.value, Diagnostics.resolution_mode_should_be_either_require_or_import);
+            return undefined;
+        }
+        return elem.value.text === "import" ? ModuleKind.ESNext : ModuleKind.CommonJS;
     }
 
     /* @internal */

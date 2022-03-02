@@ -399,66 +399,67 @@ declare namespace ts {
         CatchClause = 291,
         AssertClause = 292,
         AssertEntry = 293,
-        PropertyAssignment = 294,
-        ShorthandPropertyAssignment = 295,
-        SpreadAssignment = 296,
-        EnumMember = 297,
-        UnparsedPrologue = 298,
-        UnparsedPrepend = 299,
-        UnparsedText = 300,
-        UnparsedInternalText = 301,
-        UnparsedSyntheticReference = 302,
-        SourceFile = 303,
-        Bundle = 304,
-        UnparsedSource = 305,
-        InputFiles = 306,
-        JSDocTypeExpression = 307,
-        JSDocNameReference = 308,
-        JSDocMemberName = 309,
-        JSDocAllType = 310,
-        JSDocUnknownType = 311,
-        JSDocNullableType = 312,
-        JSDocNonNullableType = 313,
-        JSDocOptionalType = 314,
-        JSDocFunctionType = 315,
-        JSDocVariadicType = 316,
-        JSDocNamepathType = 317,
-        JSDocComment = 318,
-        JSDocText = 319,
-        JSDocTypeLiteral = 320,
-        JSDocSignature = 321,
-        JSDocLink = 322,
-        JSDocLinkCode = 323,
-        JSDocLinkPlain = 324,
-        JSDocTag = 325,
-        JSDocAugmentsTag = 326,
-        JSDocImplementsTag = 327,
-        JSDocAuthorTag = 328,
-        JSDocDeprecatedTag = 329,
-        JSDocClassTag = 330,
-        JSDocPublicTag = 331,
-        JSDocPrivateTag = 332,
-        JSDocProtectedTag = 333,
-        JSDocReadonlyTag = 334,
-        JSDocOverrideTag = 335,
-        JSDocCallbackTag = 336,
-        JSDocEnumTag = 337,
-        JSDocParameterTag = 338,
-        JSDocReturnTag = 339,
-        JSDocThisTag = 340,
-        JSDocTypeTag = 341,
-        JSDocTemplateTag = 342,
-        JSDocTypedefTag = 343,
-        JSDocSeeTag = 344,
-        JSDocPropertyTag = 345,
-        SyntaxList = 346,
-        NotEmittedStatement = 347,
-        PartiallyEmittedExpression = 348,
-        CommaListExpression = 349,
-        MergeDeclarationMarker = 350,
-        EndOfDeclarationMarker = 351,
-        SyntheticReferenceExpression = 352,
-        Count = 353,
+        ImportTypeAssertionContainer = 294,
+        PropertyAssignment = 295,
+        ShorthandPropertyAssignment = 296,
+        SpreadAssignment = 297,
+        EnumMember = 298,
+        UnparsedPrologue = 299,
+        UnparsedPrepend = 300,
+        UnparsedText = 301,
+        UnparsedInternalText = 302,
+        UnparsedSyntheticReference = 303,
+        SourceFile = 304,
+        Bundle = 305,
+        UnparsedSource = 306,
+        InputFiles = 307,
+        JSDocTypeExpression = 308,
+        JSDocNameReference = 309,
+        JSDocMemberName = 310,
+        JSDocAllType = 311,
+        JSDocUnknownType = 312,
+        JSDocNullableType = 313,
+        JSDocNonNullableType = 314,
+        JSDocOptionalType = 315,
+        JSDocFunctionType = 316,
+        JSDocVariadicType = 317,
+        JSDocNamepathType = 318,
+        JSDocComment = 319,
+        JSDocText = 320,
+        JSDocTypeLiteral = 321,
+        JSDocSignature = 322,
+        JSDocLink = 323,
+        JSDocLinkCode = 324,
+        JSDocLinkPlain = 325,
+        JSDocTag = 326,
+        JSDocAugmentsTag = 327,
+        JSDocImplementsTag = 328,
+        JSDocAuthorTag = 329,
+        JSDocDeprecatedTag = 330,
+        JSDocClassTag = 331,
+        JSDocPublicTag = 332,
+        JSDocPrivateTag = 333,
+        JSDocProtectedTag = 334,
+        JSDocReadonlyTag = 335,
+        JSDocOverrideTag = 336,
+        JSDocCallbackTag = 337,
+        JSDocEnumTag = 338,
+        JSDocParameterTag = 339,
+        JSDocReturnTag = 340,
+        JSDocThisTag = 341,
+        JSDocTypeTag = 342,
+        JSDocTemplateTag = 343,
+        JSDocTypedefTag = 344,
+        JSDocSeeTag = 345,
+        JSDocPropertyTag = 346,
+        SyntaxList = 347,
+        NotEmittedStatement = 348,
+        PartiallyEmittedExpression = 349,
+        CommaListExpression = 350,
+        MergeDeclarationMarker = 351,
+        EndOfDeclarationMarker = 352,
+        SyntheticReferenceExpression = 353,
+        Count = 354,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -486,10 +487,10 @@ declare namespace ts {
         FirstStatement = 236,
         LastStatement = 252,
         FirstNode = 160,
-        FirstJSDocNode = 307,
-        LastJSDocNode = 345,
-        FirstJSDocTagNode = 325,
-        LastJSDocTagNode = 345,
+        FirstJSDocNode = 308,
+        LastJSDocNode = 346,
+        FirstJSDocTagNode = 326,
+        LastJSDocTagNode = 346,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -866,10 +867,17 @@ declare namespace ts {
     export interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
         readonly kind: TKind;
     }
+    export interface ImportTypeAssertionContainer extends Node {
+        readonly kind: SyntaxKind.ImportTypeAssertionContainer;
+        readonly parent: ImportTypeNode;
+        readonly assertClause: AssertClause;
+        readonly multiLine?: boolean;
+    }
     export interface ImportTypeNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.ImportType;
         readonly isTypeOf: boolean;
         readonly argument: TypeNode;
+        readonly assertions?: ImportTypeAssertionContainer;
         readonly qualifier?: EntityName;
     }
     export interface ThisTypeNode extends TypeNode {
@@ -3426,7 +3434,9 @@ declare namespace ts {
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
         createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
         updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
         createThisTypeNode(): ThisTypeNode;
@@ -3589,6 +3599,8 @@ declare namespace ts {
         updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
         createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
         updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+        createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
         createNamespaceExport(name: Identifier): NamespaceExport;
@@ -10801,9 +10813,15 @@ declare namespace ts {
     /** @deprecated Use `factory.updateInferTypeNode` or the factory supplied by your transformation context instead. */
     const updateInferTypeNode: (node: InferTypeNode, typeParameter: TypeParameterDeclaration) => InferTypeNode;
     /** @deprecated Use `factory.createImportTypeNode` or the factory supplied by your transformation context instead. */
-    const createImportTypeNode: (argument: TypeNode, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined) => ImportTypeNode;
+    const createImportTypeNode: {
+        (argument: TypeNode, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        (argument: TypeNode, assertions?: ImportTypeAssertionContainer | undefined, qualifier?: EntityName | undefined, typeArguments?: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+    };
     /** @deprecated Use `factory.updateImportTypeNode` or the factory supplied by your transformation context instead. */
-    const updateImportTypeNode: (node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined) => ImportTypeNode;
+    const updateImportTypeNode: {
+        (node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        (node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+    };
     /** @deprecated Use `factory.createParenthesizedType` or the factory supplied by your transformation context instead. */
     const createParenthesizedType: (type: TypeNode) => ParenthesizedTypeNode;
     /** @deprecated Use `factory.updateParenthesizedType` or the factory supplied by your transformation context instead. */

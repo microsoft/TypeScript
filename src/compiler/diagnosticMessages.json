@@ -1416,6 +1416,18 @@
         "category": "Error",
         "code": 1453
     },
+    "`resolution-mode` can only be set for type-only imports.": {
+        "category": "Error",
+        "code": 1454
+    },
+    "`resolution-mode` is the only valid key for type import assertions.": {
+        "category": "Error",
+        "code": 1455
+    },
+    "Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.": {
+        "category": "Error",
+        "code": 1456
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",

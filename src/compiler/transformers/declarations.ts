@@ -733,7 +733,7 @@ namespace ts {
                     decl.modifiers,
                     decl.importClause,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    /*assertClause*/ undefined
+                    getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -745,7 +745,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined);
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined);
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -755,7 +755,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -771,7 +771,7 @@ namespace ts {
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    /*assertClause*/ undefined
+                    getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined
                 );
             }
             // Augmentation of export depends on import
@@ -782,7 +782,7 @@ namespace ts {
                     decl.modifiers,
                     /*importClause*/ undefined,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    /*assertClause*/ undefined
+                    getResolutionModeOverrideForClause(decl.assertClause) ? decl.assertClause : undefined
                 );
             }
             // Nothing visible
@@ -1056,6 +1056,7 @@ namespace ts {
                         return cleanup(factory.updateImportTypeNode(
                             input,
                             factory.updateLiteralTypeNode(input.argument, rewriteModuleSpecifier(input, input.argument.literal)),
+                            input.assertions,
                             input.qualifier,
                             visitNodes(input.typeArguments, visitDeclarationSubtree, isTypeNode),
                             input.isTypeOf
@@ -1117,7 +1118,7 @@ namespace ts {
                         input.isTypeOnly,
                         input.exportClause,
                         rewriteModuleSpecifier(input, input.moduleSpecifier),
-                        /*assertClause*/ undefined
+                        getResolutionModeOverrideForClause(input.assertClause) ? input.assertClause : undefined
                     );
                 }
                 case SyntaxKind.ExportAssignment: {
