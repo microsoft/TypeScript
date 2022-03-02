@@ -41629,7 +41629,7 @@ namespace ts {
             if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
                 // inline property\index accesses only for const enums
                 const member = symbol.valueDeclaration as EnumMember;
-                if (isEnumConst(member.parent)) {
+                if (isEnumConst(member.parent) || host.getProjectReferenceRedirect(getSourceFileOfNode(member).originalFileName)) {
                     return getEnumMemberValue(member);
                 }
             }
