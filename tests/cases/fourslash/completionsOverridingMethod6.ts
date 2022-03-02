@@ -90,7 +90,7 @@ verify.completions({
             insertText:
 `fun(a: number): number;
 public fun(a: undefined, b: string): number;
-public fun(a: any, b?: any): number {
+public fun(a: unknown, b?: unknown): number {
 }`,
         },
     ],

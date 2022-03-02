@@ -901,7 +901,7 @@ declare namespace ts {
         readonly parameterName: Identifier | ThisTypeNode;
         readonly type?: TypeNode;
     }
-    export interface TypeQueryNode extends TypeNode {
+    export interface TypeQueryNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeQuery;
         readonly exprName: EntityName;
     }
@@ -1285,9 +1285,8 @@ declare namespace ts {
     export interface ImportCall extends CallExpression {
         readonly expression: ImportExpression;
     }
-    export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
+    export interface ExpressionWithTypeArguments extends MemberExpression, NodeWithTypeArguments {
         readonly kind: SyntaxKind.ExpressionWithTypeArguments;
-        readonly parent: HeritageClause | JSDocAugmentsTag | JSDocImplementsTag;
         readonly expression: LeftHandSideExpression;
     }
     export interface NewExpression extends PrimaryExpression, Declaration {
@@ -2662,6 +2661,7 @@ declare namespace ts {
         ClassOrInterface = 3,
         ContainsSpread = 4194304,
         ObjectRestType = 8388608,
+        InstantiationExpressionType = 16777216,
     }
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
@@ -3397,8 +3397,8 @@ declare namespace ts {
         updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         /** @deprecated */
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        createTypeQueryNode(exprName: EntityName): TypeQueryNode;
-        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
+        createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
+        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
         createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;
@@ -4058,6 +4058,13 @@ declare namespace ts {
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5882,15 +5889,6 @@ declare namespace ts {
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
-    interface InlayHintsOptions extends UserPreferences {
-        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-        readonly includeInlayFunctionParameterTypeHints?: boolean;
-        readonly includeInlayVariableTypeHints?: boolean;
-        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlayEnumMemberValueHints?: boolean;
-    }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
     interface SignatureHelpItemsOptions {
@@ -6694,7 +6692,7 @@ declare namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
-        preferences: InlayHintsOptions;
+        preferences: UserPreferences;
     }
 }
 declare namespace ts {
@@ -9572,6 +9570,13 @@ declare namespace ts.server.protocol {
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -10750,9 +10755,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateConstructorTypeNode` or the factory supplied by your transformation context instead. */
     const updateConstructorTypeNode: (node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode) => ConstructorTypeNode;
     /** @deprecated Use `factory.createTypeQueryNode` or the factory supplied by your transformation context instead. */
-    const createTypeQueryNode: (exprName: EntityName) => TypeQueryNode;
+    const createTypeQueryNode: (exprName: EntityName, typeArguments?: readonly TypeNode[] | undefined) => TypeQueryNode;
     /** @deprecated Use `factory.updateTypeQueryNode` or the factory supplied by your transformation context instead. */
-    const updateTypeQueryNode: (node: TypeQueryNode, exprName: EntityName) => TypeQueryNode;
+    const updateTypeQueryNode: (node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[] | undefined) => TypeQueryNode;
     /** @deprecated Use `factory.createTypeLiteralNode` or the factory supplied by your transformation context instead. */
     const createTypeLiteralNode: (members: readonly TypeElement[] | undefined) => TypeLiteralNode;
     /** @deprecated Use `factory.updateTypeLiteralNode` or the factory supplied by your transformation context instead. */

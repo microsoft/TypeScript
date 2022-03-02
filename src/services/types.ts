@@ -585,16 +585,6 @@ namespace ts {
         includeInsertTextCompletions?: boolean;
     }
 
-    export interface InlayHintsOptions extends UserPreferences {
-        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-        readonly includeInlayFunctionParameterTypeHints?: boolean,
-        readonly includeInlayVariableTypeHints?: boolean;
-        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlayEnumMemberValueHints?: boolean;
-    }
-
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
     export type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
 
@@ -1620,6 +1610,6 @@ namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
-        preferences: InlayHintsOptions;
+        preferences: UserPreferences;
     }
 }

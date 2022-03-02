@@ -1152,10 +1152,6 @@
         "category": "Error",
         "code": 1383
     },
-    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
-        "category": "Error",
-        "code": 1384
-    },
     "Function type notation must be parenthesized when used in a union type.": {
         "category": "Error",
         "code": 1385
@@ -2702,6 +2698,10 @@
     "'{0}' index signatures are incompatible.": {
         "category": "Error",
         "code": 2634
+    },
+    "Type '{0}' has no signatures for which the type argument list is applicable.": {
+        "category": "Error",
+        "code": 2635
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {

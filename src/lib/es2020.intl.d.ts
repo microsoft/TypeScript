@@ -254,6 +254,10 @@ declare namespace Intl {
     }
 
     interface Locale extends LocaleOptions {
+        /** A string containing the language, and the script and region if available. */
+        baseName: string;
+        /** The primary language subtag associated with the locale. */
+        language: string;
         /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
         maximize(): Locale;
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
