@@ -348,6 +348,7 @@ namespace ts {
         let inlineLevel = 0;
         let varianceLevel = 0;
         let nestedVarianceSymbols: Symbol[] | undefined;
+        let incompleteVariancesObserved = false;
         let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
@@ -20445,14 +20446,21 @@ namespace ts {
                 varianceLevel--;
                 // Recursive invocations of getVariancesWorker occur when two or more types circularly reference each
                 // other. In such cases, the nested invocations might observe in-process variance computations, i.e.
-                // cases where getVariancesWorker returns emptyArray, and thus might compute incomplete variances. For
-                // this reason we clear (and thus re-compute) the results of nested variance computations and only
-                // permanently record the outermost result. See #44572.
-                if (varianceLevel === 0 && nestedVarianceSymbols) {
-                    for (const sym of nestedVarianceSymbols) getSymbolLinks(sym).variances = undefined;
+                // cases where getVariancesWorker returns emptyArray. If that happens we clear (and thus re-compute) the
+                // results of nested variance computations and only permanently record the outermost result. See #44572.
+                if (varianceLevel === 0) {
+                    if (nestedVarianceSymbols && incompleteVariancesObserved) {
+                        for (const sym of nestedVarianceSymbols) {
+                            getSymbolLinks(sym).variances = undefined;
+                        }
+                    }
                     nestedVarianceSymbols = undefined;
+                    incompleteVariancesObserved = false;
                 }
                 tracing?.pop();
+            }
+            else {
+                incompleteVariancesObserved ||= links.variances === emptyArray;
             }
             return links.variances;
         }
