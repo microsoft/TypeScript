@@ -20,6 +20,8 @@
         "collectionsImpl.ts",
         "documentsUtil.ts",
         "vpathUtil.ts",
-        "vfsUtil.ts"
+        "vfsUtil.ts",
+        "util.ts",
+        "fakesHosts.ts"
     ]
 }
