@@ -1578,7 +1578,7 @@ namespace ts {
                 additions = ModifierFlags.None;
             }
             // Transform non-ambient const enums -> ambient non-const enums if preserveConstEnums is true
-            if (isEnumDeclaration(node) && shouldPreserveConstEnums(options)) {
+            if (!(node.flags & NodeFlags.Ambient) && isEnumDeclaration(node) && shouldPreserveConstEnums(options)) {
                 mask ^= ModifierFlags.Const;
             }
             return maskModifierFlags(node, mask, additions);
