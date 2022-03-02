@@ -43,12 +43,13 @@ verify.completions({
         {
             name: "bar",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            source: "ObjectLiteralMethodSnippet/",
             insertText: "bar: (x: number): void => { }",
+        },
+        {
+            name: "bar",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
         },
     ],
 });
@@ -62,22 +63,24 @@ verify.completions({
         {
             name: "bar",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            source: "ObjectLiteralMethodSnippet/",
             insertText: "bar: (x: number): void => { }",
+        },
+        {
+            name: "bar",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
         },
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            source: "ObjectLiteralMethodSnippet/",
             insertText: "foo: (x: string): string => { }",
+        },
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
         }
     ],
 });
@@ -91,13 +94,8 @@ verify.completions({
         {
             name: "buzz",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "buzz",
             // no declaration insert text, because this property has overloads
+            insertText: undefined,
         },
     ],
 });
@@ -111,11 +109,7 @@ verify.completions({
         {
             name: "prop",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            source: "ObjectLiteralMethodSnippet/",
             insertText: "get prop(): number { },set prop(n: number) { }",
         },
     ],

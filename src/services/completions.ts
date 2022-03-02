@@ -60,6 +60,8 @@ namespace ts.Completions {
         ThisProperty = "ThisProperty/",
         /** Auto-import that comes attached to a class member snippet */
         ClassMemberSnippet = "ClassMemberSnippet/",
+        /** Auto-import that comes attached to an object literal method snippet */
+        ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
         /** A type-only import that needs to be promoted in order to be used at the completion location */
         TypeOnlyAlias = "TypeOnlyAlias/",
     }
@@ -72,6 +74,7 @@ namespace ts.Completions {
         Nullable            = 1 << 4,
         ResolvedExport      = 1 << 5,
         TypeOnlyAlias       = 1 << 6,
+        ObjectLiteralMember = 1 << 7,
 
         SymbolMemberNoExport = SymbolMember,
         SymbolMemberExport   = SymbolMember | Export,
@@ -145,6 +148,10 @@ namespace ts.Completions {
 
     function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyAlias {
         return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
+    }
+
+    function originIsObjectLiteralMember(origin: SymbolOriginInfo | undefined): boolean {
+        return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMember);
     }
 
     interface UniqueNameSet {
@@ -783,14 +790,17 @@ namespace ts.Completions {
             }
         }
 
-        const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, location, contextToken, program.getTypeChecker());
+        const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, origin, location, contextToken, program.getTypeChecker());
         if (objLit) {
             let importAdder;
-            ({ insertText, isSnippet, importAdder } = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, sourceFile, program, host, options, preferences, formatContext));
+            const entry = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, sourceFile, program, host, options, preferences, formatContext);
+            if (!entry) {
+                return undefined;
+            }
+            ({ insertText, isSnippet, importAdder } = entry);
+            source = CompletionSource.ObjectLiteralMethodSnippet; // >> Needed for disambiguiation from normal completions (with just the method name).
             if (importAdder?.hasFixes()) {
-                hasAction = true;
-                source = CompletionSource.ClassMemberSnippet; // >> TODO: revisit & fix;
-                // >> TODO: change to bundling action with the completion entry instead of getting it separately, if possible
+                hasAction = true; // >> TODO: implement this computation in `getCompletionEntryDetails`.
             }
         }
 
@@ -1062,7 +1072,10 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, location: Node, contextToken: Node | undefined, checker: TypeChecker): ObjectLiteralExpression | undefined {
+    function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, origin: SymbolOriginInfo | undefined, location: Node, contextToken: Node | undefined, checker: TypeChecker): ObjectLiteralExpression | undefined {
+        if (!originIsObjectLiteralMember(origin)) {
+            return undefined;
+        }
         // >> TODO: check completion kind is memberlike
         // TODO: support JS files.
         if (isInJSFile(location)) {
@@ -1107,7 +1120,7 @@ namespace ts.Completions {
         options: CompilerOptions,
         preferences: UserPreferences,
         _formatContext: formatting.FormatContext | undefined,
-    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder } {
+    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder } | undefined {
         let isSnippet: true | undefined;
         let insertText: string = name;
 
@@ -1115,27 +1128,28 @@ namespace ts.Completions {
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
         const body = factory.createBlock([]);
         const functionProps = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
-
-        if (functionProps) {
-            const printer = createSnippetPrinter({
-                removeComments: true,
-                module: options.module,
-                target: options.target,
-                omitTrailingSemicolon: false, // >> ??
-                newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
-            });
-
-            // insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
-            const format = ListFormat.CommaDelimited;
-            // if (formatContext) {
-            //     // >> TODO: this is breaking get/set pairs because they're on the same line when printing
-            //     insertText = printer.printAndFormatSnippetList(format, factory.createNodeArray(functionProps), sourceFile, formatContext);
-            // }
-            // else {
-            //     insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
-            // }
-            insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
+        if (!functionProps) {
+            return undefined;
         }
+
+        const printer = createSnippetPrinter({
+            removeComments: true,
+            module: options.module,
+            target: options.target,
+            omitTrailingSemicolon: false, // >> ??
+            newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+        });
+
+        // insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
+        const format = ListFormat.CommaDelimited;
+        // if (formatContext) {
+        //     // >> TODO: this is breaking get/set pairs because they're on the same line when printing
+        //     insertText = printer.printAndFormatSnippetList(format, factory.createNodeArray(functionProps), sourceFile, formatContext);
+        // }
+        // else {
+        //     insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
+        // }
+        insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
 
         return { isSnippet, insertText, importAdder };
     };
@@ -2851,6 +2865,16 @@ namespace ts.Completions {
             symbols.push(symbol);
         }
 
+        /* Mutates `symbols` and `symbolToOriginInfoMap`. */
+        function collectObjectLiteralSymbols(members: Symbol[]) {
+            // >> TODO: only do this if user preferences for this completion scenario is enabled
+            for (const member of members) {
+                const origin = { kind: SymbolOriginInfoKind.ObjectLiteralMember };
+                symbolToOriginInfoMap[symbols.length] = origin;
+                symbols.push(member);
+            }
+        }
+
         /**
          * Finds the first node that "embraces" the position, so that one may
          * accurately aggregate locals from the closest containing scope.
@@ -3081,7 +3105,11 @@ namespace ts.Completions {
 
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
-                symbols = concatenate(symbols, filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers)));
+                const filteredMembers = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                    collectObjectLiteralSymbols(filteredMembers);
+                }
+                symbols = concatenate(symbols, filteredMembers);
             }
             setSortTextToOptionalMember();
 
