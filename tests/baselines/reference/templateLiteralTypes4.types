@@ -1,0 +1,244 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypes4.ts ===
+type Is<T extends U, U> = T;
+>Is : T
+
+type T0 = "100" extends `${Is<infer N, number>}` ? N : never; // 100
+>T0 : 100
+
+type T1 = "-100" extends `${Is<infer N, number>}` ? N : never; // -100
+>T1 : -100
+
+type T2 = "1.1" extends `${Is<infer N, number>}` ? N : never; // 1.1
+>T2 : 1.1
+
+type T3 = "8e-11" extends `${Is<infer N, number>}` ? N : never; // 8e-11 (0.00000000008)
+>T3 : 8e-11
+
+type T4 = "0x10" extends `${Is<infer N, number>}` ? N : never; // number (not round-trippable)
+>T4 : number
+
+type T5 = "0o10" extends `${Is<infer N, number>}` ? N : never; // number (not round-trippable)
+>T5 : number
+
+type T6 = "0b10" extends `${Is<infer N, number>}` ? N : never; // number (not round-trippable)
+>T6 : number
+
+type T7 = "10e2" extends `${Is<infer N, number>}` ? N : never; // number (not round-trippable)
+>T7 : number
+
+type T8 = "abcd" extends `${Is<infer N, number>}` ? N : never; // never
+>T8 : never
+
+type T10 = "100" extends `${Is<infer N, bigint>}` ? N : never; // 100n
+>T10 : 100n
+
+type T11 = "-100" extends `${Is<infer N, bigint>}` ? N : never; // -100n
+>T11 : -100n
+
+type T12 = "0x10" extends `${Is<infer N, bigint>}` ? N : never; // bigint (not round-trippable)
+>T12 : bigint
+
+type T13 = "0o10" extends `${Is<infer N, bigint>}` ? N : never; // bigint (not round-trippable)
+>T13 : bigint
+
+type T14 = "0b10" extends `${Is<infer N, bigint>}` ? N : never; // bigint (not round-trippable)
+>T14 : bigint
+
+type T15 = "1.1" extends `${Is<infer N, bigint>}` ? N : never; // never
+>T15 : never
+
+type T16 = "10e2" extends `${Is<infer N, bigint>}` ? N : never; // never
+>T16 : never
+
+type T17 = "abcd" extends `${Is<infer N, bigint>}` ? N : never; // never
+>T17 : never
+
+type T20 = "true" extends `${Is<infer T, boolean>}` ? T : never; // true
+>T20 : true
+
+type T21 = "false" extends `${Is<infer T, boolean>}` ? T : never; // false
+>T21 : false
+
+type T22 = "abcd" extends `${Is<infer T, boolean>}` ? T : never; // never
+>T22 : never
+
+type T30 = "null" extends `${Is<infer T, null>}` ? T : never; // null
+>T30 : null
+>null : null
+
+type T31 = "abcd" extends `${Is<infer T, null>}` ? T : never; // never
+>T31 : never
+>null : null
+
+type T40 = "undefined" extends `${Is<infer T, undefined>}` ? T : never; // undefined
+>T40 : undefined
+
+type T41 = "abcd" extends `${Is<infer T, undefined>}` ? T : never; // never
+>T41 : never
+
+type T50 = "100" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "100" | 100 | 100n
+>T50 : "100" | 100 | 100n
+>null : null
+
+type T51 = "1.1" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "100" | 1.1
+>T51 : "1.1" | 1.1
+>null : null
+
+type T52 = "true" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "true" | true
+>T52 : true | "true"
+>null : null
+
+type T53 = "false" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "false" | false
+>T53 : false | "false"
+>null : null
+
+type T54 = "null" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "null" | null
+>T54 : "null" | null
+>null : null
+
+type T55 = "undefined" extends `${Is<infer T, string | number | bigint | boolean | null | undefined>}` ? T : never; // "undefined" | undefined
+>T55 : "undefined" | undefined
+>null : null
+
+type NumberFor<S extends string> = S extends `${Is<infer N, number>}` ? N : never;
+>NumberFor : NumberFor<S>
+
+type T60 = NumberFor<"100">; // 100
+>T60 : 100
+
+type T61 = NumberFor<any>; // never
+>T61 : never
+
+type T62 = NumberFor<never>; // never
+>T62 : never
+
+// example use case:
+interface FieldDefinition {
+    readonly name: string;
+>name : string
+
+    readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";
+>type : "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64"
+}
+
+type FieldType<T extends FieldDefinition["type"]> =
+>FieldType : FieldType<T>
+
+    T extends "i8" | "i16" | "i32" | "u8" | "u16" | "u32" | "f32" | "f64" ? number :
+    T extends "f32" | "f64" ? bigint :
+    never;
+
+// Generates named members like `{ x: number, y: bigint }` from `[{ name: "x", type: "i32" }, { name: "y", type: "i64" }]`
+type TypedObjectNamedMembers<TDef extends readonly FieldDefinition[]> = {
+>TypedObjectNamedMembers : TypedObjectNamedMembers<TDef>
+
+    [P in TDef[number]["name"]]: FieldType<Extract<TDef[number], { readonly name: P }>["type"]>;
+>name : P
+
+};
+
+// Generates ordinal members like `{ 0: number, 1: bigint }` from `[{ name: "x", type: "i32" }, { name: "y", type: "i64" }]`
+type TypedObjectOrdinalMembers<TDef extends readonly FieldDefinition[]> = {
+>TypedObjectOrdinalMembers : TypedObjectOrdinalMembers<TDef>
+
+    [I in Extract<keyof TDef, `${number}`>]: FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
+};
+
+// Default members
+interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
+    // get/set a field by name
+    get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
+>get : <K extends TDef[number]["name"]>(key: K) => FieldType<Extract<TDef[number], {    readonly name: K;}>["type"]>
+>key : K
+>name : K
+
+    set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
+>set : <K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], {    readonly name: K;}>["type"]>) => void
+>key : K
+>value : FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
+>name : K
+
+    // get/set a field by index
+    getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
+>getIndex : <I extends NumberFor<Extract<keyof TDef, string>>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
+>index : I
+
+    setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
+>setIndex : <I extends NumberFor<Extract<keyof TDef, string>>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
+>index : I
+>value : FieldType<Extract<TDef[I], FieldDefinition>["type"]>
+}
+
+// Use constrained `infer` in template literal to get ordinal indices as numbers:
+type IndicesOf<T> = NumberFor<Extract<keyof T, string>>; // ordinal indices as number literals
+>IndicesOf : IndicesOf<T>
+
+type TypedObject<TDef extends readonly FieldDefinition[]> =
+>TypedObject : TypedObject<TDef>
+
+    & TypedObjectMembers<TDef>
+    & TypedObjectNamedMembers<TDef>
+    & TypedObjectOrdinalMembers<TDef>;
+
+// NOTE: type would normally be created from something like `const Point = TypedObject([...])` from which we would infer the type
+type Point = TypedObject<[
+>Point : Point
+
+    { name: "x", type: "f64" },
+>name : "x"
+>type : "f64"
+
+    { name: "y", type: "f64" },
+>name : "y"
+>type : "f64"
+
+]>;
+
+declare const p: Point;
+>p : Point
+
+p.getIndex(0); // ok, 0 is a valid index
+>p.getIndex(0) : number
+>p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>p : Point
+>getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>0 : 0
+
+p.getIndex(1); // ok, 1 is a valid index
+>p.getIndex(1) : number
+>p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>p : Point
+>getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>1 : 1
+
+p.getIndex(2); // error, 2 is not a valid index
+>p.getIndex(2) : number
+>p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>p : Point
+>getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
+>2 : 2
+
+p.setIndex(0, 0); // ok, 0 is a valid index
+>p.setIndex(0, 0) : void
+>p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>p : Point
+>setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>0 : 0
+>0 : 0
+
+p.setIndex(1, 0); // ok, 1 is a valid index
+>p.setIndex(1, 0) : void
+>p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>p : Point
+>setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>1 : 1
+>0 : 0
+
+p.setIndex(2, 3); // error, 2 is not a valid index
+>p.setIndex(2, 3) : void
+>p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>p : Point
+>setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
+>2 : 2
+>3 : 3
+

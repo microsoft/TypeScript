@@ -22109,13 +22109,31 @@ namespace ts {
                 sourceEnd.slice(sourceEnd.length - endLen) !== targetEnd.slice(targetEnd.length - endLen);
         }
 
-        function isValidBigIntString(s: string): boolean {
+        /**
+         * Tests whether the provided string can be parsed as a number.
+         * @param s The string to test.
+         * @param roundTripOnly Indicates the resulting number matches the input when converted back to a string.
+         */
+        function isValidNumberString(s: string, roundTripOnly: boolean): boolean {
+            if (s === "") return false;
+            const n = +s;
+            return isFinite(n) && (!roundTripOnly || "" + n === s);
+        }
+
+        /**
+         * Tests whether the provided string can be parsed as a bigint.
+         * @param s The string to test.
+         * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
+         */
+        function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
+            if (s === "") return false;
             const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
             let success = true;
             scanner.setOnError(() => success = false);
             scanner.setText(s + "n");
             let result = scanner.scan();
-            if (result === SyntaxKind.MinusToken) {
+            const negative = result === SyntaxKind.MinusToken;
+            if (negative) {
                 result = scanner.scan();
             }
             const flags = scanner.getTokenFlags();
@@ -22124,7 +22142,8 @@ namespace ts {
             // * a bigint can be scanned, and that when it is scanned, it is
             // * the full length of the input string (so the scanner is one character beyond the augmented input length)
             // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-            return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
+            return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
+                && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
         }
 
         function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
@@ -22133,8 +22152,8 @@ namespace ts {
             }
             if (source.flags & TypeFlags.StringLiteral) {
                 const value = (source as StringLiteralType).value;
-                return !!(target.flags & TypeFlags.Number && value !== "" && isFinite(+value) ||
-                    target.flags & TypeFlags.BigInt && value !== "" && isValidBigIntString(value) ||
+                return !!(target.flags & TypeFlags.Number && isValidNumberString(value, /*roundTripOnly*/ false) ||
+                    target.flags & TypeFlags.BigInt && isValidBigIntString(value, /*roundTripOnly*/ false) ||
                     target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (target as IntrinsicType).intrinsicName);
             }
             if (source.flags & TypeFlags.TemplateLiteral) {
@@ -22712,7 +22731,63 @@ namespace ts {
                 // succeed. That would be a pointless and confusing outcome.
                 if (matches || every(target.texts, s => s.length === 0)) {
                     for (let i = 0; i < types.length; i++) {
-                        inferFromTypes(matches ? matches[i] : neverType, types[i]);
+                        const source = matches ? matches[i] : neverType;
+                        const target = types[i];
+
+                        // If we are inferring from a string literal type to a type variable whose constraint includes one of the
+                        // allowed template literal placeholder types, infer from a literal type corresponding to the constraint.
+                        let sourceTypes: Type[] | undefined;
+                        if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.TypeVariable) {
+                            const inferenceContext = getInferenceInfoForType(target);
+                            const constraint = inferenceContext ? getConstraintOfTypeParameter(inferenceContext.typeParameter) : undefined;
+                            if (inferenceContext && constraint) {
+                                const str = (source as StringLiteralType).value;
+                                const constraintTypes = constraint.flags & TypeFlags.Union ? (constraint as UnionType).types : [constraint];
+                                for (const constraintType of constraintTypes) {
+                                    if (constraintType.flags & TypeFlags.StringLike) {
+                                        sourceTypes ??= [];
+                                        sourceTypes.push(source);
+                                    }
+                                    if (constraintType.flags & TypeFlags.NumberLike && isValidNumberString(str, /*roundTripOnly*/ true)) {
+                                        sourceTypes ??= [];
+                                        sourceTypes.push(getNumberLiteralType(+str));
+                                    }
+                                    if (constraintType.flags & TypeFlags.BigIntLike && isValidBigIntString(str, /*roundTripOnly*/ true)) {
+                                        const negative = str.startsWith("-");
+                                        const base10Value = parsePseudoBigInt(`${negative ? str.slice(1) : str}n`);
+                                        sourceTypes ??= [];
+                                        sourceTypes.push(getBigIntLiteralType({ negative, base10Value }));
+                                    }
+                                    if (constraintType.flags & TypeFlags.BooleanLike) {
+                                        if (str === trueType.intrinsicName) {
+                                            sourceTypes ??= [];
+                                            sourceTypes.push(trueType);
+                                        }
+                                        else if (str === falseType.intrinsicName) {
+                                            sourceTypes ??= [];
+                                            sourceTypes.push(falseType);
+                                        }
+                                    }
+                                    if (constraintType.flags & TypeFlags.Null && str === nullType.intrinsicName) {
+                                        sourceTypes ??= [];
+                                        sourceTypes.push(nullType);
+                                    }
+                                    if (constraintType.flags & TypeFlags.Undefined && str === undefinedType.intrinsicName) {
+                                        sourceTypes ??= [];
+                                        sourceTypes.push(undefinedType);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (sourceTypes) {
+                            for (const source of sourceTypes) {
+                                inferFromTypes(source, target);
+                            }
+                        }
+                        else {
+                            inferFromTypes(source, target);
+                        }
                     }
                 }
             }
