@@ -2132,7 +2132,7 @@ namespace ts {
             function toAbsolutePath(path: string | undefined): string | undefined;
             function toAbsolutePath(path: string | undefined): string | undefined {
                 if (path === undefined) return path;
-                return getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.());
+                return hostGetCanonicalFileName({ useCaseSensitiveFileNames })(getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.()));
             }
 
             function combineDirectoryPath(root: string, dir: string) {
@@ -2187,7 +2187,8 @@ namespace ts {
                         // But we do have more context! Just a tiny bit more! We're resolving an import _for some other input file_! And that input file, too
                         // must be inside the common source directory! So we propagate that tidbit of info all the way to here via state.requestContainingDirectory
                         let baseDir = state.compilerOptions.configFilePath ? toAbsolutePath(getDirectoryPath(state.compilerOptions.configFilePath)) : toAbsolutePath(state.host.getCurrentDirectory?.() || scope.packageDirectory);
-                        if (startsWith(state.requestContainingDirectory, baseDir)) {
+                        const containingDir = toAbsolutePath(state.requestContainingDirectory);
+                        if (startsWith(containingDir, baseDir)) {
                             // And we can try every folder between that request folder and the config/package base directory
                             // This technically can be wrong - we may load ./src/index.ts when ./src/sub/index.ts was right because we don't
                             // know if only `./src/sub` files were loaded by the program; but this has the best chance to be right of just about anything
@@ -2198,7 +2199,7 @@ namespace ts {
                             const outDirs = getOutputDirectoriesForBaseDirectory(baseDir);
                             commonSourceDirGuesses.push([baseDir, outDirs]);
 
-                            let fragment = ensureTrailingDirectorySeparator(state.requestContainingDirectory.slice(baseDir.length));
+                            let fragment = ensureTrailingDirectorySeparator(containingDir.slice(baseDir.length));
                             while (fragment && fragment.length > 1) {
                                 const parts = getPathComponents(fragment);
                                 parts.shift(); // shift out root
