@@ -711,13 +711,13 @@ let fooM: FooMethod = {
 
       cb(123)
 >cb(123) : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: number) => void
 >123 : 123
 
     } else {
       cb("abc")
 >cb("abc") : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: string) => void
 >"abc" : "abc"
     }
   }
@@ -755,13 +755,13 @@ let fooAsyncM: FooAsyncMethod = {
 
       cb(123)
 >cb(123) : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: number) => void
 >123 : 123
 
     } else {
       cb("abc")
 >cb("abc") : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: string) => void
 >"abc" : "abc"
     }
   }
@@ -799,13 +799,13 @@ let fooGenM: FooGenMethod = {
 
       cb(123)
 >cb(123) : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: number) => void
 >123 : 123
 
     } else {
       cb("abc")
 >cb("abc") : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: string) => void
 >"abc" : "abc"
     }
   }
@@ -843,13 +843,13 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 
       cb(123)
 >cb(123) : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: number) => void
 >123 : 123
 
     } else {
       cb("abc")
 >cb("abc") : void
->cb : ((e: string) => void) | ((e: number) => void)
+>cb : (e: string) => void
 >"abc" : "abc"
     }
   }
