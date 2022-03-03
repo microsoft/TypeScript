@@ -28321,11 +28321,9 @@ namespace ts {
             if (!enclosingClass) {
                 // allow PropertyAccessibility if context is in function with this parameter
                 // static member access is disallowed
-                if (
-                    flags & ModifierFlags.Static
-                    || !(enclosingClass = getEnclosingClassFromThisParameter(location))
-                    || !(enclosingClass = isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing))
-                ) {
+                enclosingClass = getEnclosingClassFromThisParameter(location);
+                enclosingClass = enclosingClass && isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing);
+                if (flags & ModifierFlags.Static || !enclosingClass) {
                     if (errorNode) {
                         error(errorNode,
                             Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses,
