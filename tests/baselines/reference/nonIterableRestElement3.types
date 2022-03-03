@@ -7,7 +7,7 @@ var c = { bogus: 0 };
 
 [...c] = ["", 0];
 >[...c] = ["", 0] : (string | number)[]
->[...c] : undefined[]
+>[...c] : unknown[]
 >...c : any
 >c : { bogus: number; }
 >["", 0] : (string | number)[]

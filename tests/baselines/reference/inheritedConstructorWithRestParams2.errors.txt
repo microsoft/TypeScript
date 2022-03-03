@@ -1,14 +1,14 @@
-tests/cases/compiler/inheritedConstructorWithRestParams2.ts(32,13): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+tests/cases/compiler/inheritedConstructorWithRestParams2.ts(32,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/inheritedConstructorWithRestParams2.ts(33,1): error TS2769: No overload matches this call.
   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
-    Argument of type '""' is not assignable to parameter of type 'number'.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
-    Argument of type '3' is not assignable to parameter of type 'string'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/inheritedConstructorWithRestParams2.ts(34,1): error TS2769: No overload matches this call.
   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
-    Argument of type '""' is not assignable to parameter of type 'number'.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
-    Argument of type '3' is not assignable to parameter of type 'string'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/inheritedConstructorWithRestParams2.ts (3 errors) ====
@@ -45,18 +45,18 @@ tests/cases/compiler/inheritedConstructorWithRestParams2.ts(34,1): error TS2769:
     // Errors
     new Derived(3);
                 ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new Derived("", 3, "", 3);
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
-!!! error TS2769:     Argument of type '""' is not assignable to parameter of type 'number'.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
-!!! error TS2769:     Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
     new Derived("", 3, "", "");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
-!!! error TS2769:     Argument of type '""' is not assignable to parameter of type 'number'.
+!!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
-!!! error TS2769:     Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.

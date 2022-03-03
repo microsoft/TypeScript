@@ -1,0 +1,28 @@
+=== tests/cases/compiler/circularBaseTypes.ts ===
+// Repro from #38098
+
+type M<T> = { value: T };
+>M : Symbol(M, Decl(circularBaseTypes.ts, 0, 0))
+>T : Symbol(T, Decl(circularBaseTypes.ts, 2, 7))
+>value : Symbol(value, Decl(circularBaseTypes.ts, 2, 13))
+>T : Symbol(T, Decl(circularBaseTypes.ts, 2, 7))
+
+interface M2 extends M<M3> {};  // Error
+>M2 : Symbol(M2, Decl(circularBaseTypes.ts, 2, 25))
+>M : Symbol(M, Decl(circularBaseTypes.ts, 0, 0))
+>M3 : Symbol(M3, Decl(circularBaseTypes.ts, 3, 30))
+
+type M3 = M2[keyof M2];  // Error
+>M3 : Symbol(M3, Decl(circularBaseTypes.ts, 3, 30))
+>M2 : Symbol(M2, Decl(circularBaseTypes.ts, 2, 25))
+>M2 : Symbol(M2, Decl(circularBaseTypes.ts, 2, 25))
+
+function f(m: M3) {
+>f : Symbol(f, Decl(circularBaseTypes.ts, 4, 23))
+>m : Symbol(m, Decl(circularBaseTypes.ts, 6, 11))
+>M3 : Symbol(M3, Decl(circularBaseTypes.ts, 3, 30))
+
+  return m.value;
+>m : Symbol(m, Decl(circularBaseTypes.ts, 6, 11))
+}
+

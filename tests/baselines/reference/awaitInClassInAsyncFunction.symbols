@@ -1,0 +1,20 @@
+=== tests/cases/compiler/awaitInClassInAsyncFunction.ts ===
+// https://github.com/microsoft/TypeScript/issues/34887
+
+async function bar() {
+>bar : Symbol(bar, Decl(awaitInClassInAsyncFunction.ts, 0, 0))
+
+    return 2;
+}
+
+async function foo() {
+>foo : Symbol(foo, Decl(awaitInClassInAsyncFunction.ts, 4, 1))
+
+    return new class {
+        baz = await bar();
+>baz : Symbol((Anonymous class).baz, Decl(awaitInClassInAsyncFunction.ts, 7, 22))
+>bar : Symbol(bar, Decl(awaitInClassInAsyncFunction.ts, 0, 0))
+
+    };
+}
+

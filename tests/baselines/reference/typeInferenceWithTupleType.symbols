@@ -97,4 +97,36 @@ var zipResultEleEle = zipResult[0][0]; // string
 >0 : Symbol(0)
 >0 : Symbol(0)
 
+// #33559 and #33752
+
+declare function f1<T1, T2>(values: [T1[], T2[]]): T1;
+>f1 : Symbol(f1, Decl(typeInferenceWithTupleType.ts, 22, 38))
+>T1 : Symbol(T1, Decl(typeInferenceWithTupleType.ts, 26, 20))
+>T2 : Symbol(T2, Decl(typeInferenceWithTupleType.ts, 26, 23))
+>values : Symbol(values, Decl(typeInferenceWithTupleType.ts, 26, 28))
+>T1 : Symbol(T1, Decl(typeInferenceWithTupleType.ts, 26, 20))
+>T2 : Symbol(T2, Decl(typeInferenceWithTupleType.ts, 26, 23))
+>T1 : Symbol(T1, Decl(typeInferenceWithTupleType.ts, 26, 20))
+
+declare function f2<T1, T2>(values: readonly [T1[], T2[]]): T1;
+>f2 : Symbol(f2, Decl(typeInferenceWithTupleType.ts, 26, 54))
+>T1 : Symbol(T1, Decl(typeInferenceWithTupleType.ts, 27, 20))
+>T2 : Symbol(T2, Decl(typeInferenceWithTupleType.ts, 27, 23))
+>values : Symbol(values, Decl(typeInferenceWithTupleType.ts, 27, 28))
+>T1 : Symbol(T1, Decl(typeInferenceWithTupleType.ts, 27, 20))
+>T2 : Symbol(T2, Decl(typeInferenceWithTupleType.ts, 27, 23))
+>T1 : Symbol(T1, Decl(typeInferenceWithTupleType.ts, 27, 20))
+
+let expected: "a";
+>expected : Symbol(expected, Decl(typeInferenceWithTupleType.ts, 29, 3))
+
+expected = f1(undefined as ["a"[], "b"[]]);
+>expected : Symbol(expected, Decl(typeInferenceWithTupleType.ts, 29, 3))
+>f1 : Symbol(f1, Decl(typeInferenceWithTupleType.ts, 22, 38))
+>undefined : Symbol(undefined)
+
+expected = f2(undefined as ["a"[], "b"[]]);
+>expected : Symbol(expected, Decl(typeInferenceWithTupleType.ts, 29, 3))
+>f2 : Symbol(f2, Decl(typeInferenceWithTupleType.ts, 26, 54))
+>undefined : Symbol(undefined)
 

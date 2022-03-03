@@ -1,0 +1,10 @@
+=== tests/cases/compiler/unionRelationshipCheckPasses.ts ===
+const item: { foo?: undefined } | { foo: number } = null as any as { foo?: number | undefined };
+>item : { foo?: undefined; } | { foo: number; }
+>foo : undefined
+>foo : number
+>null as any as { foo?: number | undefined } : { foo?: number | undefined; }
+>null as any : any
+>null : null
+>foo : number | undefined
+

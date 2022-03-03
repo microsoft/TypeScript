@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/typeFromPropertyAssignment40.js ===
+function Outer() {
+>Outer : Symbol(Outer, Decl(typeFromPropertyAssignment40.js, 0, 0))
+
+    var self = this
+>self : Symbol(self, Decl(typeFromPropertyAssignment40.js, 1, 7))
+>this : Symbol(Outer, Decl(typeFromPropertyAssignment40.js, 0, 0))
+
+    self.y = 2
+>self.y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+>self : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+>y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+}
+/** @type {Outer} */
+var ok
+>ok : Symbol(ok, Decl(typeFromPropertyAssignment40.js, 5, 3))
+
+ok.y
+>ok.y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+>ok : Symbol(ok, Decl(typeFromPropertyAssignment40.js, 5, 3))
+>y : Symbol(Outer.y, Decl(typeFromPropertyAssignment40.js, 1, 19))
+

@@ -3,7 +3,7 @@ function f<T>() { }
 >f : <T>() => void
 
 type T<T> = { };
->T : {}
+>T : globalThis.T<T>
 
 interface I<T> { };
 

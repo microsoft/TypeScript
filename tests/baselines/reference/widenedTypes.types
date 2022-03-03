@@ -71,7 +71,7 @@ u[3] = "";
 >"" : ""
 
 var ob: { x: typeof undefined } = { x: "" };
->ob : { x: any; }
+>ob : { x: typeof undefined; }
 >x : any
 >undefined : undefined
 >{ x: "" } : { x: string; }

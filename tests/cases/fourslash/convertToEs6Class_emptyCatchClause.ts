@@ -9,12 +9,12 @@
 
 verify.codeFix({
     description: "Convert function to an ES2015 class",
+    index: 0,
     newFileContent:
 `class MyClass {
     constructor() { }
     foo() {
-        try { }
-        catch () { }
+        try { } catch () { }
     }
 }
 `,

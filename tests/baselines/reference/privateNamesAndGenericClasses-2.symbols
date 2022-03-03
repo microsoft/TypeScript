@@ -1,0 +1,82 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndGenericClasses-2.ts ===
+class C<T> {
+>C : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+>T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+
+    #foo: T;
+>#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+>T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+
+    #bar(): T {
+>#bar : Symbol(C.#bar, Decl(privateNamesAndGenericClasses-2.ts, 1, 12))
+>T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+
+      return this.#foo;
+>this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+>this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+    }
+    constructor(t: T) {
+>t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 5, 16))
+>T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+
+      this.#foo = t;
+>this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+>this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+>t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 5, 16))
+
+      t = this.#bar();
+>t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 5, 16))
+>this.#bar : Symbol(C.#bar, Decl(privateNamesAndGenericClasses-2.ts, 1, 12))
+>this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+    }
+    set baz(t: T) {
+>baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+>t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 9, 12))
+>T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+
+      this.#foo = t;
+>this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+>this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+>t : Symbol(t, Decl(privateNamesAndGenericClasses-2.ts, 9, 12))
+
+    }
+    get baz(): T {
+>baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+>T : Symbol(T, Decl(privateNamesAndGenericClasses-2.ts, 0, 8))
+
+      return this.#foo;
+>this.#foo : Symbol(C.#foo, Decl(privateNamesAndGenericClasses-2.ts, 0, 12))
+>this : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+    }
+}
+
+let a = new C(3);
+>a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+>C : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+
+let b = new C("hello");
+>b : Symbol(b, Decl(privateNamesAndGenericClasses-2.ts, 19, 3))
+>C : Symbol(C, Decl(privateNamesAndGenericClasses-2.ts, 0, 0))
+
+a.baz = 5                                 // OK
+>a.baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+>a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+>baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+
+const x: number = a.baz                   // OK
+>x : Symbol(x, Decl(privateNamesAndGenericClasses-2.ts, 22, 5))
+>a.baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+>a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+>baz : Symbol(C.baz, Decl(privateNamesAndGenericClasses-2.ts, 8, 5), Decl(privateNamesAndGenericClasses-2.ts, 12, 5))
+
+a.#foo;                                   // Error
+>a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+
+a = b;                                    // Error
+>a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+>b : Symbol(b, Decl(privateNamesAndGenericClasses-2.ts, 19, 3))
+
+b = a;                                    // Error
+>b : Symbol(b, Decl(privateNamesAndGenericClasses-2.ts, 19, 3))
+>a : Symbol(a, Decl(privateNamesAndGenericClasses-2.ts, 18, 3))
+

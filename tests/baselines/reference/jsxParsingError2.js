@@ -31,8 +31,7 @@ let x5 = <div><span>
 //// [file.jsx]
 //// [Error1.jsx]
 // Issue error about missing span closing tag, not missing div closing tag
-var x1 = <div><span></div>;
-</>;
+var x1 = <div><span></></div>;
 //// [Error2.jsx]
 var x2 = <div></span>;
 //// [Error3.jsx]

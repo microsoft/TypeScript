@@ -30,16 +30,16 @@ namespace project {
         outputFiles?: readonly documents.TextDocument[];
     }
 
-    export class ProjectRunner extends RunnerBase {
+    export class ProjectRunner extends Harness.RunnerBase {
         public enumerateTestFiles() {
             const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
-            if (shards === 1) {
+            if (Harness.shards === 1) {
                 return all;
             }
-            return all.filter((_val, idx) => idx % shards === (shardId - 1));
+            return all.filter((_val, idx) => idx % Harness.shards === (Harness.shardId - 1));
         }
 
-        public kind(): TestRunnerKind {
+        public kind(): Harness.TestRunnerKind {
             return "project";
         }
 
@@ -56,14 +56,18 @@ namespace project {
             for (const { name, payload } of ProjectTestCase.getConfigurations(testCaseFileName)) {
                 describe("Compiling project for " + payload.testCase.scenario + ": testcase " + testCaseFileName + (name ? ` (${name})` : ``), () => {
                     let projectTestCase: ProjectTestCase | undefined;
-                    before(() => { projectTestCase = new ProjectTestCase(testCaseFileName, payload); });
+                    before(() => {
+                        projectTestCase = new ProjectTestCase(testCaseFileName, payload);
+                    });
                     it(`Correct module resolution tracing for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyResolution());
                     it(`Correct errors for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDiagnostics());
                     it(`Correct JS output for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyJavaScriptOutput());
                     // NOTE: This check was commented out in previous code. Leaving this here to eventually be restored if needed.
                     // it(`Correct sourcemap content for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifySourceMapRecord());
                     it(`Correct declarations for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDeclarations());
-                    after(() => { projectTestCase = undefined; });
+                    after(() => {
+                        projectTestCase = undefined;
+                    });
                 });
             }
         }
@@ -183,7 +187,7 @@ namespace project {
             }
 
             try {
-                testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText!);
+                testCase = JSON.parse(testFileText!) as ProjectRunnerTestCase & ts.CompilerOptions;
             }
             catch (e) {
                 throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
@@ -207,13 +211,13 @@ namespace project {
             const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
             resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
                 .map(({ fileName: input }) =>
-                    vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? utils.removeTestPathPrefixes(input) :
+                    vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
                     vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
                     input);
 
             resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
                 .map(output => output.meta.get("fileName") || output.file)
-                .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
+                .map(output => Utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
             const content = JSON.stringify(resolutionInfo, undefined, "    ");
             Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", content);
@@ -246,7 +250,7 @@ namespace project {
                             nonSubfolderDiskFiles++;
                         }
 
-                        const content = utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
+                        const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
                         Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
                     }
                     catch (e) {
@@ -412,7 +416,7 @@ namespace project {
 
         const inputFiles = inputSourceFiles.map<Harness.Compiler.TestFile>(sourceFile => ({
             unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
-                RunnerBase.removeFullPaths(sourceFile.fileName) :
+                Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
                 sourceFile.fileName,
             content: sourceFile.text
         }));
@@ -444,7 +448,7 @@ namespace project {
                 const option = optionNameMap.get(name);
                 if (option) {
                     const optType = option.type;
-                    let value = <any>testCase[name];
+                    let value = testCase[name] as any;
                     if (!ts.isString(optType)) {
                         const key = value.toLowerCase();
                         const optTypeValue = optType.get(key);

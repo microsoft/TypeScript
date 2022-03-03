@@ -1,0 +1,22 @@
+=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment6.js ===
+
+No type information for this code.=== tests/cases/compiler/a.js ===
+/**
+ * @typedef {Object} Foo
+ * @property {number} a
+ * @property {number} b
+ */
+
+/** @type {Foo} */
+export default { a: 1, b: 1, c: 1 };
+>a : Symbol(a, Decl(a.js, 7, 16))
+>b : Symbol(b, Decl(a.js, 7, 22))
+>c : Symbol(c, Decl(a.js, 7, 28))
+
+=== tests/cases/compiler/b.js ===
+import a from "./a";
+>a : Symbol(a, Decl(b.js, 0, 6))
+
+a;
+>a : Symbol(a, Decl(b.js, 0, 6))
+

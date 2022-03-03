@@ -14,7 +14,13 @@
 
 goTo.marker("c1");
 edit.insert(".");
-verify.completions({ includes: ["x", "prototype", "staticMethod"] });
+verify.completions({
+    includes: [
+        { name: "x", sortText: completion.SortText.LocationPriority },
+        { name: "prototype", sortText: completion.SortText.LocationPriority },
+        { name: "staticMethod", sortText: completion.SortText.LocalDeclarationPriority }
+    ]
+});
 
 goTo.marker("c2");
 edit.insert(".");

@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.js ===
+/** @constructor */
+module.exports.MyClass = function() {
+>module.exports.MyClass = function() {    this.x = 1} : typeof MyClass
+>module.exports.MyClass : typeof MyClass
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>MyClass : typeof MyClass
+>function() {    this.x = 1} : typeof MyClass
+
+    this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+}
+module.exports.MyClass.prototype = {
+>module.exports.MyClass.prototype = {    a: function() {    }} : { a: () => void; }
+>module.exports.MyClass.prototype : { a: () => void; }
+>module.exports.MyClass : typeof MyClass
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>MyClass : typeof MyClass
+>prototype : { a: () => void; }
+>{    a: function() {    }} : { a: () => void; }
+
+    a: function() {
+>a : () => void
+>function() {    } : () => void
+    }
+}
+

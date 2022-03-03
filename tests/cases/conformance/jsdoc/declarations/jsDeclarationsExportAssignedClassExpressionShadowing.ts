@@ -4,7 +4,6 @@
 // @outDir: ./out
 // @declaration: true
 // @filename: index.js
-// TODO: Fixup
 class A {
     member = new Q();
 }

@@ -1,0 +1,97 @@
+=== tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts ===
+const foo: Record<never, never> = {} // OK
+>foo : Record<never, never>
+>{} : {}
+
+interface RecordOfRecords extends Record<keyof any, RecordOfRecords> {}
+const recordOfRecords: RecordOfRecords = {}
+>recordOfRecords : RecordOfRecords
+>{} : {}
+
+recordOfRecords.propA = {...(foo !== undefined ? {foo} : {})} // OK
+>recordOfRecords.propA = {...(foo !== undefined ? {foo} : {})} : { foo?: Record<never, never> | undefined; }
+>recordOfRecords.propA : RecordOfRecords
+>recordOfRecords : RecordOfRecords
+>propA : RecordOfRecords
+>{...(foo !== undefined ? {foo} : {})} : { foo?: Record<never, never> | undefined; }
+>(foo !== undefined ? {foo} : {}) : { foo: Record<never, never>; } | {}
+>foo !== undefined ? {foo} : {} : { foo: Record<never, never>; } | {}
+>foo !== undefined : boolean
+>foo : Record<never, never>
+>undefined : undefined
+>{foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+>{} : {}
+
+recordOfRecords.propB = {...(foo && {foo})} // OK
+>recordOfRecords.propB = {...(foo && {foo})} : { foo: Record<never, never>; }
+>recordOfRecords.propB : RecordOfRecords
+>recordOfRecords : RecordOfRecords
+>propB : RecordOfRecords
+>{...(foo && {foo})} : { foo: Record<never, never>; }
+>(foo && {foo}) : { foo: Record<never, never>; }
+>foo && {foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+>{foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+
+recordOfRecords.propC = {...(foo !== undefined && {foo})} // error'd in 3.7 beta, should be OK
+>recordOfRecords.propC = {...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
+>recordOfRecords.propC : RecordOfRecords
+>recordOfRecords : RecordOfRecords
+>propC : RecordOfRecords
+>{...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
+>(foo !== undefined && {foo}) : false | { foo: Record<never, never>; }
+>foo !== undefined && {foo} : false | { foo: Record<never, never>; }
+>foo !== undefined : boolean
+>foo : Record<never, never>
+>undefined : undefined
+>{foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+
+interface RecordOfRecordsOrEmpty extends Record<keyof any, RecordOfRecordsOrEmpty | {}> {}
+const recordsOfRecordsOrEmpty: RecordOfRecordsOrEmpty = {}
+>recordsOfRecordsOrEmpty : RecordOfRecordsOrEmpty
+>{} : {}
+
+recordsOfRecordsOrEmpty.propA = {...(foo !== undefined ? {foo} : {})} // OK
+>recordsOfRecordsOrEmpty.propA = {...(foo !== undefined ? {foo} : {})} : { foo?: Record<never, never> | undefined; }
+>recordsOfRecordsOrEmpty.propA : {} | RecordOfRecordsOrEmpty
+>recordsOfRecordsOrEmpty : RecordOfRecordsOrEmpty
+>propA : {} | RecordOfRecordsOrEmpty
+>{...(foo !== undefined ? {foo} : {})} : { foo?: Record<never, never> | undefined; }
+>(foo !== undefined ? {foo} : {}) : { foo: Record<never, never>; } | {}
+>foo !== undefined ? {foo} : {} : { foo: Record<never, never>; } | {}
+>foo !== undefined : boolean
+>foo : Record<never, never>
+>undefined : undefined
+>{foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+>{} : {}
+
+recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} // OK
+>recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} : { foo: Record<never, never>; }
+>recordsOfRecordsOrEmpty.propB : {} | RecordOfRecordsOrEmpty
+>recordsOfRecordsOrEmpty : RecordOfRecordsOrEmpty
+>propB : {} | RecordOfRecordsOrEmpty
+>{...(foo && {foo})} : { foo: Record<never, never>; }
+>(foo && {foo}) : { foo: Record<never, never>; }
+>foo && {foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+>{foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+
+recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} // OK
+>recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
+>recordsOfRecordsOrEmpty.propC : {} | RecordOfRecordsOrEmpty
+>recordsOfRecordsOrEmpty : RecordOfRecordsOrEmpty
+>propC : {} | RecordOfRecordsOrEmpty
+>{...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
+>(foo !== undefined && {foo}) : false | { foo: Record<never, never>; }
+>foo !== undefined && {foo} : false | { foo: Record<never, never>; }
+>foo !== undefined : boolean
+>foo : Record<never, never>
+>undefined : undefined
+>{foo} : { foo: Record<never, never>; }
+>foo : Record<never, never>
+

@@ -31,6 +31,7 @@ appendToOptionalArray(foo, 'x', "no");  // should fail
 //// [paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.js]
 "use strict";
 exports.__esModule = true;
+exports.appendToOptionalArray = void 0;
 function appendToOptionalArray(object, key, value) {
     var array = object[key];
     if (array) {

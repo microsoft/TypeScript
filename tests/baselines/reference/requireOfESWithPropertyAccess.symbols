@@ -1,0 +1,29 @@
+=== tests/cases/conformance/salsa/main.js ===
+const x = require('./ch').x
+>x : Symbol(x, Decl(main.js, 0, 5))
+>require('./ch').x : Symbol(x, Decl(ch.js, 3, 8))
+>require : Symbol(require)
+>'./ch' : Symbol("tests/cases/conformance/salsa/ch", Decl(ch.js, 0, 0))
+>x : Symbol(x, Decl(ch.js, 3, 8))
+
+x
+>x : Symbol(x, Decl(main.js, 0, 5))
+
+x.grey
+>x.grey : Symbol(grey, Decl(ch.js, 0, 11))
+>x : Symbol(x, Decl(main.js, 0, 5))
+>grey : Symbol(grey, Decl(ch.js, 0, 11))
+
+x.x.grey
+>x : Symbol(x, Decl(main.js, 0, 5))
+
+=== tests/cases/conformance/salsa/ch.js ===
+const x = {
+>x : Symbol(x, Decl(ch.js, 0, 5))
+
+  grey: {}
+>grey : Symbol(grey, Decl(ch.js, 0, 11))
+}
+export { x }
+>x : Symbol(x, Decl(ch.js, 3, 8))
+

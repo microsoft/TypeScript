@@ -20,13 +20,29 @@ declare var a;
 declare var props;
 >props : any
 
+declare var value;
+>value : any
+
 <a />;
 ><a /> : any
 >a : any
 
-//<n:a n:v />; Namespace unsuported
+<n:a n:v />;
+><n:a n:v /> : any
+>n:a : any
+>n:v : true
 
-//<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
+<a n:foo="bar"> {value} <b><c /></b></a>;
+><a n:foo="bar"> {value} <b><c /></b></a> : any
+>a : any
+>n:foo : string
+>value : any
+><b><c /></b> : any
+>b : any
+><c /> : any
+>c : any
+>b : any
+>a : any
 
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
 ><a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" /> : any

@@ -4,7 +4,7 @@
     "end": 11,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "typeName": {
         "kind": "FirstNode",
         "pos": 1,

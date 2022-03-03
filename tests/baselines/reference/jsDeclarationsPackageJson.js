@@ -74,62 +74,34 @@ var j = require("./package.json");
 module.exports = j;
 
 
-//// [package.d.ts]
-export declare const name: string;
-export declare const version: string;
-export declare const description: string;
-export declare const main: string;
-export declare namespace bin {
-    export const cli: string;
-}
-export declare namespace engines {
-    export const node: string;
-}
-export declare namespace scripts {
-    export const scriptname: string;
-}
-export declare const devDependencies: {
-    "@ns/dep": string;
-};
-export declare namespace dependencies {
-    export const dep: string;
-}
-export declare const repository: string;
-export declare const keywords: string[];
-export declare const author: string;
-export declare const license: string;
-export declare const homepage: string;
-export declare namespace config {
-    export const o: string[];
-}
 //// [index.d.ts]
 export = j;
 declare const j: {
-    "name": string;
-    "version": string;
-    "description": string;
-    "main": string;
-    "bin": {
-        "cli": string;
+    name: string;
+    version: string;
+    description: string;
+    main: string;
+    bin: {
+        cli: string;
     };
-    "engines": {
-        "node": string;
+    engines: {
+        node: string;
     };
-    "scripts": {
-        "scriptname": string;
+    scripts: {
+        scriptname: string;
     };
-    "devDependencies": {
+    devDependencies: {
         "@ns/dep": string;
     };
-    "dependencies": {
-        "dep": string;
+    dependencies: {
+        dep: string;
     };
-    "repository": string;
-    "keywords": string[];
-    "author": string;
-    "license": string;
-    "homepage": string;
-    "config": {
-        "o": string[];
+    repository: string;
+    keywords: string[];
+    author: string;
+    license: string;
+    homepage: string;
+    config: {
+        o: string[];
     };
 };

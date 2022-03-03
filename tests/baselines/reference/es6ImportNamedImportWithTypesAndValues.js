@@ -22,6 +22,7 @@ export var cVal = new C();
 //// [server.js]
 "use strict";
 exports.__esModule = true;
+exports.C2 = exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
         this.prop = "hello";
@@ -39,6 +40,7 @@ exports.C2 = C2;
 //// [client.js]
 "use strict";
 exports.__esModule = true;
+exports.cVal = void 0;
 var server_1 = require("./server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 exports.cVal = new server_1.C();
 

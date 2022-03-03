@@ -10,7 +10,7 @@ fn("a" in { "a": true });
 >fn : (val: boolean) => boolean
 >"a" in { "a": true } : boolean
 >"a" : "a"
->{ "a": true } : { "a": boolean; }
+>{ "a": true } : { a: boolean; }
 >"a" : boolean
 >true : true
 

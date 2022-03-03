@@ -4,11 +4,13 @@
     "end": 17,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "parameters": {
         "length": 0,
         "pos": 6,
-        "end": 6
+        "end": 6,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     },
     "type": {
         "kind": "StringKeyword",
@@ -16,6 +18,6 @@
         "end": 17,
         "flags": "JSDoc",
         "modifierFlagsCache": 0,
-        "transformFlags": 0
+        "transformFlags": 1
     }
 }

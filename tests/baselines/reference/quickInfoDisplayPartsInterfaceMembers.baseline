@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 18
+      "position": 18,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "property",
@@ -59,7 +60,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 40
+      "position": 40,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "method",
@@ -124,7 +126,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 109
+      "position": 109,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "var",
@@ -165,7 +168,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 119
+      "position": 119,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "property",
@@ -222,7 +226,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 130
+      "position": 130,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "var",
@@ -263,7 +268,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 140
+      "position": 140,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "method",
@@ -328,7 +334,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 150
+      "position": 150,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "var",
@@ -397,7 +404,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 167
+      "position": 167,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "var",
@@ -438,7 +446,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts",
-      "position": 189
+      "position": 189,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "var",

@@ -1,0 +1,65 @@
+╭ name: bar
+├ kind: function
+├ file: /tests/cases/fourslash/callHierarchyClass.ts
+├ span:
+│ ╭ /tests/cases/fourslash/callHierarchyClass.ts:5:1-7:2
+│ │ 5: function bar() {
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 6:     new Baz();
+│ │    ^^^^^^^^^^^^^^
+│ │ 7: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/callHierarchyClass.ts:5:10-5:13
+│ │ 5: function bar() {
+│ │             ^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: foo
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyClass.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClass.ts:1:1-3:2
+│ │ │ │ 1: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 2:     bar();
+│ │ │ │    ^^^^^^^^^^
+│ │ │ │ 3: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClass.ts:1:10-1:13
+│ │ │ │ 1: function foo() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyClass.ts:2:5-2:8
+│ │ │ 2:     bar();
+│ │ │        ^^^
+│ ╰ ╰
+├ outgoing:
+│ ╭ to:
+│ │ ╭ name: Baz
+│ │ ├ kind: class
+│ │ ├ file: /tests/cases/fourslash/callHierarchyClass.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClass.ts:9:1-10:2
+│ │ │ │  9: class Baz {
+│ │ │ │     ^^^^^^^^^^^
+│ │ │ │ 10: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClass.ts:9:7-9:10
+│ │ │ │ 9: class Baz {
+│ │ │ │          ^^^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyClass.ts:6:9-6:12
+│ │ │ 6:     new Baz();
+│ │ │            ^^^
+╰ ╰ ╰

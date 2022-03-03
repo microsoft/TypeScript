@@ -1,0 +1,23 @@
+=== tests/cases/compiler/genericFunctionsNotContextSensitive.ts ===
+// Repro from #37110
+
+const f = <F extends (...args: any[]) => <G>(x: G) => void>(_: F): F => _;
+>f : Symbol(f, Decl(genericFunctionsNotContextSensitive.ts, 2, 5))
+>F : Symbol(F, Decl(genericFunctionsNotContextSensitive.ts, 2, 11))
+>args : Symbol(args, Decl(genericFunctionsNotContextSensitive.ts, 2, 22))
+>G : Symbol(G, Decl(genericFunctionsNotContextSensitive.ts, 2, 42))
+>x : Symbol(x, Decl(genericFunctionsNotContextSensitive.ts, 2, 45))
+>G : Symbol(G, Decl(genericFunctionsNotContextSensitive.ts, 2, 42))
+>_ : Symbol(_, Decl(genericFunctionsNotContextSensitive.ts, 2, 60))
+>F : Symbol(F, Decl(genericFunctionsNotContextSensitive.ts, 2, 11))
+>F : Symbol(F, Decl(genericFunctionsNotContextSensitive.ts, 2, 11))
+>_ : Symbol(_, Decl(genericFunctionsNotContextSensitive.ts, 2, 60))
+
+const a = f(<K extends string>(_: K) => _ => ({}));  // <K extends string>(_: K) => <G>(_: G) => {}
+>a : Symbol(a, Decl(genericFunctionsNotContextSensitive.ts, 4, 5))
+>f : Symbol(f, Decl(genericFunctionsNotContextSensitive.ts, 2, 5))
+>K : Symbol(K, Decl(genericFunctionsNotContextSensitive.ts, 4, 13))
+>_ : Symbol(_, Decl(genericFunctionsNotContextSensitive.ts, 4, 31))
+>K : Symbol(K, Decl(genericFunctionsNotContextSensitive.ts, 4, 13))
+>_ : Symbol(_, Decl(genericFunctionsNotContextSensitive.ts, 4, 39))
+

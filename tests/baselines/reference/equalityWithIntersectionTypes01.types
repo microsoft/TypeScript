@@ -47,24 +47,24 @@ else if (y !== z || z !== y) {
 >y : I1 & I3
 >z : I2
 >z !== y : boolean
->z : I2
->y : I1 & I3
+>z : never
+>y : never
 }
 else if (y == z || z == y) {
 >y == z || z == y : boolean
 >y == z : boolean
->y : I1 & I3
->z : I2
+>y : never
+>z : never
 >z == y : boolean
->z : I2
->y : I1 & I3
+>z : never
+>y : never
 }
 else if (y != z || z != y) {
 >y != z || z != y : boolean
 >y != z : boolean
->y : I1 & I3
->z : I2
+>y : never
+>z : never
 >z != y : boolean
->z : I2
->y : I1 & I3
+>z : never
+>y : never
 }

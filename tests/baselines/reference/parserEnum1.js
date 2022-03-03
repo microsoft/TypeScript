@@ -9,6 +9,7 @@
 //// [parserEnum1.js]
 "use strict";
 exports.__esModule = true;
+exports.SignatureFlags = void 0;
 var SignatureFlags;
 (function (SignatureFlags) {
     SignatureFlags[SignatureFlags["None"] = 0] = "None";

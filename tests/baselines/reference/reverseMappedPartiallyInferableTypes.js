@@ -94,6 +94,38 @@ const obj3 = id({
     }
 });
 
+// Repros from #40809
+
+type Mapped1<T> = {
+    [K in keyof T]: [T[K], (arg: T) => boolean];
+};
+
+declare function inferMapped1<T>(arg: Mapped1<T>): void;
+
+inferMapped1({
+    key: [3, arg => arg.key > 5]
+});
+
+type Mapped2<T> = {
+    [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
+};
+
+declare function inferMapped2<T>(arg: Mapped2<T>): void;
+
+inferMapped2({
+    key: [3, arg => arg.key > 5]
+});
+
+type MappedReadonly<T> = {
+    readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
+};
+
+declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
+
+inferMappedReadonly({
+    key: [3, arg => arg.key > 5]
+});
+
 
 //// [reverseMappedPartiallyInferableTypes.js]
 "use strict";
@@ -141,4 +173,13 @@ var obj3 = id({
             return k.length > 0;
         }
     }
+});
+inferMapped1({
+    key: [3, function (arg) { return arg.key > 5; }]
+});
+inferMapped2({
+    key: [3, function (arg) { return arg.key > 5; }]
+});
+inferMappedReadonly({
+    key: [3, function (arg) { return arg.key > 5; }]
 });

@@ -1,9 +1,9 @@
-tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts(1,42): error TS2307: Cannot find module 'm'.
+tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts(1,42): error TS2307: Cannot find module 'm' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts (1 errors) ====
     import {default as a, default as b} from "m";
                                              ~~~
-!!! error TS2307: Cannot find module 'm'.
+!!! error TS2307: Cannot find module 'm' or its corresponding type declarations.
     void a;
     void b;

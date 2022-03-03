@@ -1,5 +1,5 @@
-tests/cases/compiler/typeOfOperator1.ts(3,5): error TS2322: Type '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' is not assignable to type 'number'.
-  Type '"string"' is not assignable to type 'number'.
+tests/cases/compiler/typeOfOperator1.ts(3,5): error TS2322: Type 'string' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/typeOfOperator1.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/typeOfOperator1.ts(3,5): error TS2322: Type '"string" | "nu
     var y: string = typeof x;
     var z: number = typeof x;
         ~
-!!! error TS2322: Type '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' is not assignable to type 'number'.
-!!! error TS2322:   Type '"string"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.

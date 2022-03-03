@@ -1,159 +1,23 @@
 namespace ts {
     export type TscCompileSystem = fakes.System & {
-        writtenFiles: Map<true>;
-        baseLine(): void;
+        writtenFiles: Set<Path>;
+        baseLine(): { file: string; text: string; };
+        disableUseFileVersionAsSignature?: boolean;
     };
-    function executeCommandLine(sys: TscCompileSystem, commandLineArgs: readonly string[]) {
-        if (isBuild(commandLineArgs)) {
-            return performBuild(sys, commandLineArgs.slice(1));
-        }
-
-        const reportDiagnostic = createDiagnosticReporter(sys);
-        const commandLine = parseCommandLine(commandLineArgs, path => sys.readFile(path));
-        if (commandLine.options.build) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
-            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-        }
-
-        if (commandLine.errors.length > 0) {
-            commandLine.errors.forEach(reportDiagnostic);
-            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-        }
-
-        let configFileName: string | undefined;
-        if (commandLine.options.project) {
-            if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
-
-            const fileOrDirectory = normalizePath(commandLine.options.project);
-            if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
-                configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
-                if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project));
-                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                }
-            }
-            else {
-                configFileName = fileOrDirectory;
-                if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project));
-                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                }
-            }
-        }
-        else if (commandLine.fileNames.length === 0) {
-            const searchPath = normalizePath(sys.getCurrentDirectory());
-            configFileName = findConfigFile(searchPath, sys.fileExists);
-        }
-
-        Debug.assert(commandLine.fileNames.length !== 0 || !!configFileName);
-
-        if (configFileName) {
-            const configParseResult = Debug.assertDefined(parseConfigFileWithSystem(configFileName, commandLine.options, sys, reportDiagnostic));
-            if (isIncrementalCompilation(configParseResult.options)) {
-                performIncrementalCompilation(sys, configParseResult);
-            }
-            else {
-                performCompilation(sys, configParseResult);
-            }
-        }
-        else {
-            if (isIncrementalCompilation(commandLine.options)) {
-                performIncrementalCompilation(sys, commandLine);
-            }
-            else {
-                performCompilation(sys, commandLine);
-            }
-        }
-    }
-
-    function createReportErrorSummary(sys: TscCompileSystem, options: CompilerOptions): ReportEmitErrorSummary | undefined {
-        return options.pretty ?
-            errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
-            undefined;
-    }
-
-    function performCompilation(sys: TscCompileSystem, config: ParsedCommandLine) {
-        const { fileNames, options, projectReferences } = config;
-        const reportDiagnostic = createDiagnosticReporter(sys, options.pretty);
-        const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
-        const currentDirectory = host.getCurrentDirectory();
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        const program = createProgram({
-            rootNames: fileNames,
-            options,
-            projectReferences,
-            host,
-            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config)
-        });
-        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
-            program,
-            reportDiagnostic,
-            s => sys.write(s + sys.newLine),
-            createReportErrorSummary(sys, options)
-        );
-        baselineBuildInfo([config], sys.vfs, sys.writtenFiles);
-        return sys.exit(exitStatus);
-    }
-
-    function performIncrementalCompilation(sys: TscCompileSystem, config: ParsedCommandLine) {
-        const reportDiagnostic = createDiagnosticReporter(sys, config.options.pretty);
-        const { options, fileNames, projectReferences } = config;
-        const exitCode = ts.performIncrementalCompilation({
-            system: sys,
-            rootNames: fileNames,
-            options,
-            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
-            projectReferences,
-            reportDiagnostic,
-            reportErrorSummary: createReportErrorSummary(sys, options),
-        });
-        baselineBuildInfo([config], sys.vfs, sys.writtenFiles);
-        return sys.exit(exitCode);
-    }
-
-    function performBuild(sys: TscCompileSystem, args: string[]) {
-        const { buildOptions, projects, errors } = parseBuildCommand(args);
-        const reportDiagnostic = createDiagnosticReporter(sys, buildOptions.pretty);
-
-        if (errors.length > 0) {
-            errors.forEach(reportDiagnostic);
-            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-        }
-
-        Debug.assert(projects.length !== 0);
-
-        const buildHost = createSolutionBuilderHost(
-            sys,
-            /*createProgram*/ undefined,
-            reportDiagnostic,
-            createBuilderStatusReporter(sys, buildOptions.pretty),
-            createReportErrorSummary(sys, buildOptions)
-        );
-        fakes.patchSolutionBuilderHost(buildHost, sys);
-        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-        const exitCode = buildOptions.clean ? builder.clean() : builder.build();
-        baselineBuildInfo(builder.getAllParsedConfigs(), sys.vfs, sys.writtenFiles);
-        return sys.exit(exitCode);
-    }
-
-    function isBuild(commandLineArgs: readonly string[]) {
-        if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
-            const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
-            return firstOption === "build" || firstOption === "b";
-        }
-        return false;
-    }
 
     export enum BuildKind {
         Initial = "initial-build",
         IncrementalDtsChange = "incremental-declaration-changes",
         IncrementalDtsUnchanged = "incremental-declaration-doesnt-change",
-        IncrementalHeadersChange = "incremental-headers-change-without-dts-changes"
+        IncrementalHeadersChange = "incremental-headers-change-without-dts-changes",
+        NoChangeRun = "no-change-run"
     }
+
+    export const noChangeRun: TscIncremental = {
+        buildKind: BuildKind.NoChangeRun,
+        modifyFs: noop
+    };
+    export const noChangeOnlyRuns = [noChangeRun];
 
     export interface TscCompile {
         scenario: string;
@@ -165,25 +29,72 @@ namespace ts {
         modifyFs?: (fs: vfs.FileSystem) => void;
         baselineSourceMap?: boolean;
         baselineReadFileCalls?: boolean;
+        baselinePrograms?: boolean;
+        baselineDependencies?: boolean;
+        disableUseFileVersionAsSignature?: boolean;
+        environmentVariables?: Record<string, string>;
+    }
+
+    export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
+    export interface CommandLineCallbacks {
+        cb: ExecuteCommandLineCallbacks;
+        getPrograms: () => readonly CommandLineProgram[];
+    }
+
+    function isAnyProgram(program: Program | EmitAndSemanticDiagnosticsBuilderProgram | ParsedCommandLine): program is Program | EmitAndSemanticDiagnosticsBuilderProgram {
+        return !!(program as Program | EmitAndSemanticDiagnosticsBuilderProgram).getCompilerOptions;
+    }
+    export function commandLineCallbacks(
+        sys: System & { writtenFiles: ReadonlyCollection<Path>; },
+        originalReadCall?: System["readFile"],
+        originalWriteFile?: System["writeFile"],
+    ): CommandLineCallbacks {
+        let programs: CommandLineProgram[] | undefined;
+
+        return {
+            cb: program => {
+                if (isAnyProgram(program)) {
+                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall, originalWriteFile);
+                    (programs || (programs = [])).push(isBuilderProgram(program) ?
+                        [program.getProgram(), program] :
+                        [program]
+                    );
+                }
+                else {
+                    baselineBuildInfo(program.options, sys, originalReadCall, originalWriteFile);
+                }
+            },
+            getPrograms: () => {
+                const result = programs || emptyArray;
+                programs = undefined;
+                return result;
+            }
+        };
     }
 
     export function tscCompile(input: TscCompile) {
-        const baseFs = input.fs();
-        const fs = baseFs.shadow();
+        const initialFs = input.fs();
+        const inputFs = initialFs.shadow();
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
-            baselineSourceMap, baselineReadFileCalls
+            baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies,
+            environmentVariables
         } = input;
-        if (modifyFs) modifyFs(fs);
+        if (modifyFs) modifyFs(inputFs);
+        inputFs.makeReadonly();
+        const fs = inputFs.shadow();
 
         // Create system
-        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
-        const writtenFiles = sys.writtenFiles = createMap<true>();
+        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
+        if (input.disableUseFileVersionAsSignature) sys.disableUseFileVersionAsSignature = true;
+        fakes.patchHostForBuildInfoReadWrite(sys);
+        const writtenFiles = sys.writtenFiles = new Set();
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
-            assert.isFalse(writtenFiles.has(fileName));
-            writtenFiles.set(fileName, true);
+            const path = toPathWithSystem(sys, fileName);
+            assert.isFalse(writtenFiles.has(path));
+            writtenFiles.add(path);
             return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
         const actualReadFileMap: MapLike<number> = {};
@@ -198,45 +109,67 @@ namespace ts {
 
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        executeCommandLine(sys, commandLineArgs);
-        sys.write(`exitCode:: ${sys.exitCode}\n`);
+        const { cb, getPrograms } = commandLineCallbacks(sys, originalReadFile, originalWriteFile);
+        executeCommandLine(
+            sys,
+            cb,
+            commandLineArgs,
+        );
+        sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
+        if (baselinePrograms) {
+            const baseline: string[] = [];
+            tscWatch.baselinePrograms(baseline, getPrograms, emptyArray, baselineDependencies);
+            sys.write(baseline.join("\n"));
+        }
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
         }
-        if (baselineSourceMap) generateSourceMapBaselineFiles(fs, mapDefinedIterator(writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined));
+        if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
 
-        // Baseline the errors
-        fs.writeFileSync(`/lib/${buildKind || BuildKind.Initial}Output.txt`, sys.output.join(""));
         fs.makeReadonly();
 
         sys.baseLine = () => {
-            const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
-            // eslint-disable-next-line no-null/no-null
-            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+            const baseFsPatch = !buildKind || buildKind === BuildKind.Initial ?
+                inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true }) :
+                inputFs.diff(initialFs, { includeChangedFileWithSameContent: true });
+            const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
+            return {
+                file: `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`,
+                text: `Input::
+${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
+
+Output::
+${sys.output.join("")}
+
+${patch ? vfs.formatPatch(patch) : ""}`
+            };
         };
         return sys;
     }
 
-    export function verifyTscBaseline(sys: () => TscCompileSystem) {
+    export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
         it(`Generates files matching the baseline`, () => {
-            sys().baseLine();
+            const { file, text } = sys().baseLine();
+            Harness.Baseline.runBaseline(file, text);
         });
     }
 
     export function verifyTsc(input: TscCompile) {
-        describe(input.scenario, () => {
-            describe(input.subScenario, () => {
-                let sys: TscCompileSystem;
-                before(() => {
-                    sys = tscCompile({
-                        ...input,
-                        fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+        describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
+            describe(input.scenario, () => {
+                describe(input.subScenario, () => {
+                    let sys: TscCompileSystem;
+                    before(() => {
+                        sys = tscCompile({
+                            ...input,
+                            fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+                        });
                     });
+                    after(() => {
+                        sys = undefined!;
+                    });
+                    verifyTscBaseline(() => sys);
                 });
-                after(() => {
-                    sys = undefined!;
-                });
-                verifyTscBaseline(() => sys);
             });
         });
     }

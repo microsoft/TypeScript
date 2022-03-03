@@ -36,7 +36,4 @@ import * as React from "react";
 let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
 >x : Symbol(x, Decl(file.jsx, 3, 3))
 >MyComp : Symbol(MyComp, Decl(file.jsx, 0, 8))
->Prop : Symbol(Prop, Decl(file.jsx, 0, 16))
->a : Symbol(a, Decl(file.jsx, 3, 21))
->b : Symbol(b, Decl(file.jsx, 3, 28))
 

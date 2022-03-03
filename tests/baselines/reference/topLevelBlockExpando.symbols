@@ -1,0 +1,100 @@
+=== tests/cases/compiler/check.ts ===
+// https://github.com/microsoft/TypeScript/issues/31972
+
+
+
+// https://github.com/microsoft/TypeScript/issues/31972
+interface Person {
+>Person : Symbol(Person, Decl(check.ts, 0, 0))
+
+  first: string;
+>first : Symbol(Person.first, Decl(check.ts, 5, 18))
+
+  last: string;
+>last : Symbol(Person.last, Decl(check.ts, 6, 16))
+}
+
+{
+  const dice = () => Math.floor(Math.random() * 6);
+>dice : Symbol(dice, Decl(check.ts, 11, 7))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  dice.first = 'Rando';  
+>dice.first : Symbol(dice.first, Decl(check.ts, 11, 51))
+>dice : Symbol(dice, Decl(check.ts, 11, 7))
+>first : Symbol(dice.first, Decl(check.ts, 11, 51))
+
+  dice.last = 'Calrissian';
+>dice.last : Symbol(dice.last, Decl(check.ts, 12, 23))
+>dice : Symbol(dice, Decl(check.ts, 11, 7))
+>last : Symbol(dice.last, Decl(check.ts, 12, 23))
+
+  const diceP: Person = dice;  
+>diceP : Symbol(diceP, Decl(check.ts, 14, 7))
+>Person : Symbol(Person, Decl(check.ts, 0, 0))
+>dice : Symbol(dice, Decl(check.ts, 11, 7))
+}
+
+=== tests/cases/compiler/check.js ===
+// Creates a type { first:string, last: string }
+/**
+ * @typedef {Object} Human - creates a new type named 'SpecialType'
+ * @property {string} first - a string property of SpecialType
+ * @property {string} last - a number property of SpecialType
+ */
+
+/**
+ * @param {Human} param used as a validation tool
+ */
+function doHumanThings(param) {}
+>doHumanThings : Symbol(doHumanThings, Decl(check.js, 0, 0))
+>param : Symbol(param, Decl(check.js, 10, 23))
+
+const dice1 = () => Math.floor(Math.random() * 6);
+>dice1 : Symbol(dice1, Decl(check.js, 12, 5), Decl(check.js, 12, 50))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+// dice1.first = 'Rando';
+dice1.last = 'Calrissian';
+>dice1.last : Symbol(dice1.last, Decl(check.js, 12, 50))
+>dice1 : Symbol(dice1, Decl(check.js, 12, 5), Decl(check.js, 12, 50))
+>last : Symbol(dice1.last, Decl(check.js, 12, 50))
+
+// doHumanThings(dice)
+
+// but inside a block... you can't call  a human
+{
+  const dice2 = () => Math.floor(Math.random() * 6);
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  dice2.first = 'Rando';
+>dice2.first : Symbol(dice2.first, Decl(check.js, 20, 52))
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
+>first : Symbol(dice2.first, Decl(check.js, 20, 52))
+
+  dice2.last = 'Calrissian'; 
+>dice2.last : Symbol(dice2.last, Decl(check.js, 21, 24))
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
+>last : Symbol(dice2.last, Decl(check.js, 21, 24))
+  
+  doHumanThings(dice2)
+>doHumanThings : Symbol(doHumanThings, Decl(check.js, 0, 0))
+>dice2 : Symbol(dice2, Decl(check.js, 20, 7))
+}
+

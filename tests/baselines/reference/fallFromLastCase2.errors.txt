@@ -11,7 +11,7 @@ tests/cases/compiler/fallFromLastCase2.ts(21,9): error TS7029: Fallthrough case 
                 use("1");
                 break;
             case 2:
-            ~~~~
+            ~~~~~~~
 !!! error TS7029: Fallthrough case in switch.
                 use("2");
             case 3:
@@ -26,7 +26,7 @@ tests/cases/compiler/fallFromLastCase2.ts(21,9): error TS7029: Fallthrough case 
                 use("1");
                 break;
             default:
-            ~~~~~~~
+            ~~~~~~~~
 !!! error TS7029: Fallthrough case in switch.
                 use("2");
             case 2:

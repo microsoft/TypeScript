@@ -1,0 +1,215 @@
+// === /b.js ===
+// const { [|f|] } = require('./a')
+// /*FIND ALL REFS*/[|f|]
+
+// === /a.js ===
+// function f() { }
+// module.exports.[|f|] = f
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.js",
+      "kind": "alias",
+      "name": "(alias) function f(): void\nimport f",
+      "textSpan": {
+        "start": 8,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 28
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 8,
+          "length": 1
+        },
+        "fileName": "/b.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 28
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 29,
+          "length": 1
+        },
+        "fileName": "/b.js",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.js",
+      "kind": "alias",
+      "name": "(alias) function f(): void\nimport f",
+      "textSpan": {
+        "start": 32,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 17,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 32,
+          "length": 1
+        },
+        "fileName": "/a.js",
+        "contextSpan": {
+          "start": 17,
+          "length": 20
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

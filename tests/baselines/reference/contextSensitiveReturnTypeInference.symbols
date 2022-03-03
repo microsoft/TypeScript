@@ -1,0 +1,157 @@
+=== tests/cases/compiler/contextSensitiveReturnTypeInference.ts ===
+// Repro from #34849
+
+interface IData {
+>IData : Symbol(IData, Decl(contextSensitiveReturnTypeInference.ts, 0, 0))
+
+  bar: boolean
+>bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+}
+
+declare function test<TDependencies>(
+>test : Symbol(test, Decl(contextSensitiveReturnTypeInference.ts, 4, 1))
+>TDependencies : Symbol(TDependencies, Decl(contextSensitiveReturnTypeInference.ts, 6, 22))
+
+  getter: (deps: TDependencies, data: IData) => any,
+>getter : Symbol(getter, Decl(contextSensitiveReturnTypeInference.ts, 6, 37))
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 7, 11))
+>TDependencies : Symbol(TDependencies, Decl(contextSensitiveReturnTypeInference.ts, 6, 22))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 7, 31))
+>IData : Symbol(IData, Decl(contextSensitiveReturnTypeInference.ts, 0, 0))
+
+  deps: TDependencies,
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 7, 52))
+>TDependencies : Symbol(TDependencies, Decl(contextSensitiveReturnTypeInference.ts, 6, 22))
+
+): any 
+
+const DEPS = {
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+
+  foo: 1
+>foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+}
+
+test(
+>test : Symbol(test, Decl(contextSensitiveReturnTypeInference.ts, 4, 1))
+
+  (deps, data) => ({
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 16, 3))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 16, 8))
+
+    fn1: function() { return deps.foo },
+>fn1 : Symbol(fn1, Decl(contextSensitiveReturnTypeInference.ts, 16, 20))
+>deps.foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 16, 3))
+>foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+
+    fn2: data.bar
+>fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 17, 40))
+>data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 16, 8))
+>bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+
+  }),
+  DEPS
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+
+);
+
+test(
+>test : Symbol(test, Decl(contextSensitiveReturnTypeInference.ts, 4, 1))
+
+  (deps: typeof DEPS, data) => ({
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 24, 3))
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 24, 21))
+
+    fn1: function() { return deps.foo },
+>fn1 : Symbol(fn1, Decl(contextSensitiveReturnTypeInference.ts, 24, 33))
+>deps.foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 24, 3))
+>foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+
+    fn2: data.bar
+>fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 25, 40))
+>data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 24, 21))
+>bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+
+  }),
+  DEPS
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+
+);
+
+test(
+>test : Symbol(test, Decl(contextSensitiveReturnTypeInference.ts, 4, 1))
+
+  (deps, data) => ({
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 32, 3))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 32, 8))
+
+    fn1: () => deps.foo,
+>fn1 : Symbol(fn1, Decl(contextSensitiveReturnTypeInference.ts, 32, 20))
+>deps.foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 32, 3))
+>foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+
+    fn2: data.bar
+>fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 33, 24))
+>data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 32, 8))
+>bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+
+  }),
+  DEPS
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+
+);
+
+test(
+>test : Symbol(test, Decl(contextSensitiveReturnTypeInference.ts, 4, 1))
+
+  (deps, data) => {
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 40, 3))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 40, 8))
+
+    return {
+      fn1() { return deps.foo },
+>fn1 : Symbol(fn1, Decl(contextSensitiveReturnTypeInference.ts, 41, 12))
+>deps.foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 40, 3))
+>foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+
+      fn2: data.bar
+>fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 42, 32))
+>data.bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+>data : Symbol(data, Decl(contextSensitiveReturnTypeInference.ts, 40, 8))
+>bar : Symbol(IData.bar, Decl(contextSensitiveReturnTypeInference.ts, 2, 17))
+    }
+  },
+  DEPS
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+
+);
+
+test(
+>test : Symbol(test, Decl(contextSensitiveReturnTypeInference.ts, 4, 1))
+
+  (deps) => ({
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 50, 3))
+
+    fn1() { return deps.foo },
+>fn1 : Symbol(fn1, Decl(contextSensitiveReturnTypeInference.ts, 50, 14))
+>deps.foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+>deps : Symbol(deps, Decl(contextSensitiveReturnTypeInference.ts, 50, 3))
+>foo : Symbol(foo, Decl(contextSensitiveReturnTypeInference.ts, 11, 14))
+
+    fn2: 1
+>fn2 : Symbol(fn2, Decl(contextSensitiveReturnTypeInference.ts, 51, 30))
+
+  }),
+  DEPS
+>DEPS : Symbol(DEPS, Decl(contextSensitiveReturnTypeInference.ts, 11, 5))
+
+);
+

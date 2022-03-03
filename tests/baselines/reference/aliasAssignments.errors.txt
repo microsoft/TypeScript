@@ -1,4 +1,4 @@
-tests/cases/compiler/aliasAssignments_1.ts(3,1): error TS2322: Type '1' is not assignable to type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")'.
+tests/cases/compiler/aliasAssignments_1.ts(3,1): error TS2322: Type 'number' is not assignable to type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")'.
 tests/cases/compiler/aliasAssignments_1.ts(5,1): error TS2322: Type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")' is not assignable to type 'number'.
 
 
@@ -7,7 +7,7 @@ tests/cases/compiler/aliasAssignments_1.ts(5,1): error TS2322: Type 'typeof impo
     var x = moduleA;
     x = 1; // Should be error
     ~
-!!! error TS2322: Type '1' is not assignable to type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")'.
+!!! error TS2322: Type 'number' is not assignable to type 'typeof import("tests/cases/compiler/aliasAssignments_moduleA")'.
     var y = 1;
     y = moduleA; // should be error
     ~

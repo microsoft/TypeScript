@@ -57,27 +57,27 @@ function getFoo2(): Foo {
 >class {        static method1 = (arg) => {            arg.numProp = 10;        }        static method2 = (arg) => {            arg.strProp = "hello";        }    } : typeof (Anonymous class)
 
         static method1 = (arg) => {
->method1 : (arg: any) => void
->(arg) => {            arg.numProp = 10;        } : (arg: any) => void
->arg : any
+>method1 : (arg: A) => void
+>(arg) => {            arg.numProp = 10;        } : (arg: A) => void
+>arg : A
 
             arg.numProp = 10;
 >arg.numProp = 10 : 10
->arg.numProp : any
->arg : any
->numProp : any
+>arg.numProp : number
+>arg : A
+>numProp : number
 >10 : 10
         }
         static method2 = (arg) => {
->method2 : (arg: any) => void
->(arg) => {            arg.strProp = "hello";        } : (arg: any) => void
->arg : any
+>method2 : (arg: B) => void
+>(arg) => {            arg.strProp = "hello";        } : (arg: B) => void
+>arg : B
 
             arg.strProp = "hello";
 >arg.strProp = "hello" : "hello"
->arg.strProp : any
->arg : any
->strProp : any
+>arg.strProp : string
+>arg : B
+>strProp : string
 >"hello" : "hello"
         }
     }
@@ -90,27 +90,27 @@ function getFoo3(): Foo {
 >class {        static method1 = function (arg) {            arg.numProp = 10;        }        static method2 = function (arg) {            arg.strProp = "hello";        }    } : typeof (Anonymous class)
 
         static method1 = function (arg) {
->method1 : (arg: any) => void
->function (arg) {            arg.numProp = 10;        } : (arg: any) => void
->arg : any
+>method1 : (arg: A) => void
+>function (arg) {            arg.numProp = 10;        } : (arg: A) => void
+>arg : A
 
             arg.numProp = 10;
 >arg.numProp = 10 : 10
->arg.numProp : any
->arg : any
->numProp : any
+>arg.numProp : number
+>arg : A
+>numProp : number
 >10 : 10
         }
         static method2 = function (arg) {
->method2 : (arg: any) => void
->function (arg) {            arg.strProp = "hello";        } : (arg: any) => void
->arg : any
+>method2 : (arg: B) => void
+>function (arg) {            arg.strProp = "hello";        } : (arg: B) => void
+>arg : B
 
             arg.strProp = "hello";
 >arg.strProp = "hello" : "hello"
->arg.strProp : any
->arg : any
->strProp : any
+>arg.strProp : string
+>arg : B
+>strProp : string
 >"hello" : "hello"
         }
     }

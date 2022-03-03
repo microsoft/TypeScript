@@ -1,0 +1,12 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator12.ts ===
+const obj: { arr: any[] } = { arr: [] };
+>obj : Symbol(obj, Decl(nullishCoalescingOperator12.ts, 0, 5))
+>arr : Symbol(arr, Decl(nullishCoalescingOperator12.ts, 0, 12))
+>arr : Symbol(arr, Decl(nullishCoalescingOperator12.ts, 0, 29))
+
+for (const i of obj?.arr ?? []) { }
+>i : Symbol(i, Decl(nullishCoalescingOperator12.ts, 1, 10))
+>obj?.arr : Symbol(arr, Decl(nullishCoalescingOperator12.ts, 0, 12))
+>obj : Symbol(obj, Decl(nullishCoalescingOperator12.ts, 0, 5))
+>arr : Symbol(arr, Decl(nullishCoalescingOperator12.ts, 0, 12))
+

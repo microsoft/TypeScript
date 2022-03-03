@@ -1,0 +1,33 @@
+=== tests/cases/conformance/salsa/bug39167.js ===
+var test = {};
+>test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
+
+test.K = test.K ||
+>test.K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
+>K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>test.K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
+>K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+
+    function () {}
+
+test.K.prototype = {
+>test.K.prototype : Symbol(test.K.prototype, Decl(bug39167.js, 2, 18))
+>test.K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
+>K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>prototype : Symbol(test.K.prototype, Decl(bug39167.js, 2, 18))
+
+    add() {}
+>add : Symbol(add, Decl(bug39167.js, 4, 20))
+
+};
+
+new test.K().add;
+>new test.K().add : Symbol(add, Decl(bug39167.js, 4, 20))
+>test.K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>test : Symbol(test, Decl(bug39167.js, 0, 3), Decl(bug39167.js, 0, 14), Decl(bug39167.js, 2, 18))
+>K : Symbol(test.K, Decl(bug39167.js, 0, 14), Decl(bug39167.js, 4, 5))
+>add : Symbol(add, Decl(bug39167.js, 4, 20))
+

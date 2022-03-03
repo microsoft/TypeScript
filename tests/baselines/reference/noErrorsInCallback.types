@@ -6,8 +6,8 @@ class Bar {
 >foo : string
 }
 var one = new Bar({}); // Error
->one : any
->new Bar({}) : any
+>one : Bar
+>new Bar({}) : Bar
 >Bar : typeof Bar
 >{} : {}
 
@@ -19,8 +19,8 @@ var one = new Bar({}); // Error
 >() => {    var two = new Bar({}); // No error?} : () => void
 
     var two = new Bar({}); // No error?
->two : any
->new Bar({}) : any
+>two : Bar
+>new Bar({}) : Bar
 >Bar : typeof Bar
 >{} : {}
 

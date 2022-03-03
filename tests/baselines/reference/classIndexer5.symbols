@@ -1,0 +1,14 @@
+=== tests/cases/compiler/classIndexer5.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(classIndexer5.ts, 0, 0))
+
+    [key: string]: number;
+>key : Symbol(key, Decl(classIndexer5.ts, 1, 5))
+
+    #a: boolean;
+>#a : Symbol(Foo.#a, Decl(classIndexer5.ts, 1, 26))
+
+    #b = false;
+>#b : Symbol(Foo.#b, Decl(classIndexer5.ts, 3, 16))
+}
+

@@ -484,8 +484,8 @@ t0 = C; // static side
 
 // object literals
 export const o1 = {
->o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
->{    [c4]: 1,    [c5]: "a",    [s2]: true} : { [c4]: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
+>{    [c4]: 1,    [c5]: "a",    [s2]: true} : { a: number; 1: string; [s0]: boolean; }
 
     [c4]: 1,
 >[c4] : number
@@ -508,24 +508,24 @@ export const o1 = {
 export const o1_c4 = o1[c4];
 >o1_c4 : number
 >o1[c4] : number
->o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 >c4 : "a"
 
 export const o1_c5 = o1[c5];
 >o1_c5 : string
 >o1[c5] : string
->o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 >c5 : 1
 
 export const o1_s2 = o1[s2];
 >o1_s2 : boolean
 >o1[s2] : boolean
->o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 >s2 : unique symbol
 
 export const o2: T0 = o1;
 >o2 : T0
->o1 : { [c4]: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 
 // recursive declarations
 // (type parameter indirection courtesy of #20400)

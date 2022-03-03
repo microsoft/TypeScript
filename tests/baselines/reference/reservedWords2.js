@@ -13,7 +13,6 @@ function f(default: number) {}
 class C { m(null: string) {} }
 
 
-
 //// [reservedWords2.js]
 "use strict";
 exports.__esModule = true;

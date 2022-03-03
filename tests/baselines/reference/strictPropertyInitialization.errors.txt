@@ -1,12 +1,16 @@
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(4,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(6,5): error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(48,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(71,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(93,22): error TS2565: Property 'a' is used before being assigned.
-tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(94,23): error TS2565: Property 'b' is used before being assigned.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(8,5): error TS2564: Property '#f' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(10,5): error TS2564: Property '#h' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(62,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(63,5): error TS2564: Property '#b' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(90,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(113,22): error TS2565: Property 'a' is used before being assigned.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(114,23): error TS2565: Property 'b' is used before being assigned.
+tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts(115,23): error TS2565: Property '#d' is used before being assigned.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts (6 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts (10 errors) ====
     // Properties with non-undefined types require initialization
     
     class C1 {
@@ -18,6 +22,14 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         ~
 !!! error TS2564: Property 'c' has no initializer and is not definitely assigned in the constructor.
         d?: number;
+        #f: number; //Error
+        ~~
+!!! error TS2564: Property '#f' has no initializer and is not definitely assigned in the constructor.
+        #g: number | undefined;
+        #h: number | null; //Error
+        ~~
+!!! error TS2564: Property '#h' has no initializer and is not definitely assigned in the constructor.
+        #i?: number;
     }
     
     // No strict initialization checks in ambient contexts
@@ -27,6 +39,11 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         b: number | undefined;
         c: number | null;
         d?: number;
+        
+        #f: number;
+        #g: number | undefined;
+        #h: number | null;
+        #i?: number;
     }
     
     // No strict initialization checks for static members
@@ -44,14 +61,19 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         a = 0;
         b: number = 0;
         c: string = "abc";
+        #d = 0
+        #e: number = 0
+        #f: string= "abc"
     }
     
     // Assignment in constructor satisfies strict initialization check
     
     class C5 {
         a: number;
+        #b: number;
         constructor() {
             this.a = 0;
+            this.#b = 0;
         }
     }
     
@@ -61,22 +83,29 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         a: number;  // Error
         ~
 !!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        #b: number
+        ~~
+!!! error TS2564: Property '#b' has no initializer and is not definitely assigned in the constructor.
         constructor(cond: boolean) {
             if (cond) {
                 return;
             }
             this.a = 0;
+            this.#b = 0;
         }
     }
     
     class C7 {
         a: number;
+        #b: number;
         constructor(cond: boolean) {
             if (cond) {
                 this.a = 1;
+                this.#b = 1;
                 return;
             }
             this.a = 0;
+            this.#b = 1;
         }
     }
     
@@ -106,6 +135,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         a: number;
         b: number;
         c?: number;
+        #d: number;
         constructor() {
             let x = this.a;  // Error
                          ~
@@ -113,7 +143,11 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
             this.a = this.b;  // Error
                           ~
 !!! error TS2565: Property 'b' is used before being assigned.
+            this.b = this.#d //Error
+                          ~~
+!!! error TS2565: Property '#d' is used before being assigned.
             this.b = x;
+            this.#d = x;
             let y = this.c;
         }
     }
@@ -124,8 +158,10 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
     
     class C11 {
         a: number;
+        #b: number;
         constructor() {
             this.a = someValue();
+            this.#b = someValue();
         }
     }
     

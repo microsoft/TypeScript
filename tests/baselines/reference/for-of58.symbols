@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of58.ts ===
+type X = { x: 'x' };
+>X : Symbol(X, Decl(for-of58.ts, 0, 0))
+>x : Symbol(x, Decl(for-of58.ts, 0, 10))
+
+type Y = { y: 'y' };
+>Y : Symbol(Y, Decl(for-of58.ts, 0, 20))
+>y : Symbol(y, Decl(for-of58.ts, 1, 10))
+
+declare const arr: X[] & Y[];
+>arr : Symbol(arr, Decl(for-of58.ts, 3, 13))
+>X : Symbol(X, Decl(for-of58.ts, 0, 0))
+>Y : Symbol(Y, Decl(for-of58.ts, 0, 20))
+
+for (const item of arr) {
+>item : Symbol(item, Decl(for-of58.ts, 5, 10))
+>arr : Symbol(arr, Decl(for-of58.ts, 3, 13))
+
+    item.x;
+>item.x : Symbol(x, Decl(for-of58.ts, 0, 10))
+>item : Symbol(item, Decl(for-of58.ts, 5, 10))
+>x : Symbol(x, Decl(for-of58.ts, 0, 10))
+
+    item.y;
+>item.y : Symbol(y, Decl(for-of58.ts, 1, 10))
+>item : Symbol(item, Decl(for-of58.ts, 5, 10))
+>y : Symbol(y, Decl(for-of58.ts, 1, 10))
+}
+

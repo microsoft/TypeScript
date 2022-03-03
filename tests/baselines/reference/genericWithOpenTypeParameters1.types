@@ -19,8 +19,8 @@ x.foo(1); // no error
 >1 : 1
 
 var f = <T>(x: B<T>) => { return x.foo(1); } // error
->f : <T>(x: B<T>) => any
-><T>(x: B<T>) => { return x.foo(1); } : <T>(x: B<T>) => any
+>f : <T>(x: B<T>) => T
+><T>(x: B<T>) => { return x.foo(1); } : <T>(x: B<T>) => T
 >x : B<T>
 >x.foo(1) : T
 >x.foo : (x: T) => T
@@ -29,8 +29,8 @@ var f = <T>(x: B<T>) => { return x.foo(1); } // error
 >1 : 1
 
 var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
->f2 : <T>(x: B<T>) => any
-><T>(x: B<T>) => { return x.foo<T>(1); } : <T>(x: B<T>) => any
+>f2 : <T>(x: B<T>) => T
+><T>(x: B<T>) => { return x.foo<T>(1); } : <T>(x: B<T>) => T
 >x : B<T>
 >x.foo<T>(1) : T
 >x.foo : (x: T) => T
@@ -39,8 +39,8 @@ var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
 >1 : 1
 
 var f3 = <T>(x: B<T>) => { return x.foo<number>(1); } // error
->f3 : <T>(x: B<T>) => any
-><T>(x: B<T>) => { return x.foo<number>(1); } : <T>(x: B<T>) => any
+>f3 : <T>(x: B<T>) => T
+><T>(x: B<T>) => { return x.foo<number>(1); } : <T>(x: B<T>) => T
 >x : B<T>
 >x.foo<number>(1) : T
 >x.foo : (x: T) => T

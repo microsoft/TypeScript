@@ -1,6 +1,6 @@
 tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(2,15): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(3,15): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-  '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(3,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(4,15): error TS2558: Expected 0 type arguments, but got 1.
 
 
@@ -11,8 +11,8 @@ tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts(4,15): erro
 !!! error TS2558: Expected 0 type arguments, but got 1.
        var r2 = f(1);
                   ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-!!! error TS2345:   '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
        var r3 = f<any>(null);
                   ~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

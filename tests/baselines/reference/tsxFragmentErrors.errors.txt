@@ -1,9 +1,10 @@
+tests/cases/conformance/jsx/file.tsx(9,1): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/file.tsx(9,7): error TS17015: Expected corresponding closing tag for JSX fragment.
 tests/cases/conformance/jsx/file.tsx(9,11): error TS17014: JSX fragment has no corresponding closing tag.
 tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -13,12 +14,16 @@ tests/cases/conformance/jsx/file.tsx(11,17): error TS1005: '</' expected.
     declare var React: any;
     
     <>hi</div> // Error
+    ~~~~~~~~~~~~~~~~~~~
           ~~~
 !!! error TS17015: Expected corresponding closing tag for JSX fragment.
               ~~~~~~~~~
     
     
+    
     <>eof   // Error
+    ~~~~~~~~~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
     ~~
 !!! error TS17014: JSX fragment has no corresponding closing tag.
                     

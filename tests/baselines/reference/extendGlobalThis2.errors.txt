@@ -1,0 +1,10 @@
+tests/cases/compiler/extendGlobalThis2.ts(1,11): error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.
+
+
+==== tests/cases/compiler/extendGlobalThis2.ts (1 errors) ====
+    namespace globalThis {
+              ~~~~~~~~~~
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.
+        export function foo() { console.log("x"); }
+    }
+    

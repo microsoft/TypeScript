@@ -26,10 +26,12 @@ if(foo2.M2.x){
 //// [foo_0.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = void 0;
 exports.foo = 42;
 //// [foo_1.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f() {
     return 42;
 }
@@ -37,6 +39,7 @@ exports.f = f;
 //// [foo_2.js]
 "use strict";
 exports.__esModule = true;
+exports.M2 = void 0;
 var M2;
 (function (M2) {
     M2.x = true;

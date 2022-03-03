@@ -18,7 +18,7 @@
 ////}
 
 // @Filename: /a.ts
-////import bar from "bar";
+////import bar = require("bar");
 ////
 ////foo
 
@@ -27,25 +27,27 @@
 
 // @Filename: /c.ts
 ////import es from "es";
+////import bar = require("bar");
 ////
 ////foo
 
 // 1. Should match existing imports of 'export ='
 goTo.file('/a.ts');
-verify.importFixAtPosition([`import bar from "bar";
-import foo from "foo";
+verify.importFixAtPosition([`import bar = require("bar");
+import foo = require("foo");
 
 foo`]);
 
-// 2. Should default to ImportEquals
+// 2. Should default to default import
 goTo.file('/b.ts');
-verify.importFixAtPosition([`import foo = require("foo");
+verify.importFixAtPosition([`import foo from "foo";
 
 foo`]);
 
 // 3. Importing an 'export default' doesn’t count toward the usage heursitic
 goTo.file('/c.ts');
 verify.importFixAtPosition([`import es from "es";
+import bar = require("bar");
 import foo = require("foo");
 
 foo`]);

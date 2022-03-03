@@ -1,9 +1,11 @@
 //// [useSharedArrayBuffer6.ts]
 var foge = new SharedArrayBuffer(1024);
-var species = foge[Symbol.species];
-var stringTag = foge[Symbol.toStringTag];
+foge.length; // should error
+
+var length = SharedArrayBuffer.length;
+
 
 //// [useSharedArrayBuffer6.js]
 var foge = new SharedArrayBuffer(1024);
-var species = foge[Symbol.species];
-var stringTag = foge[Symbol.toStringTag];
+foge.length; // should error
+var length = SharedArrayBuffer.length;

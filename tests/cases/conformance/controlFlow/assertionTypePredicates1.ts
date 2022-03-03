@@ -1,4 +1,5 @@
 // @strict: true
+// @allowUnreachableCode: false
 // @declaration: true
 
 declare function isString(value: unknown): value is string;
@@ -32,10 +33,22 @@ function f01(x: unknown) {
         x[0].length;
     }
     if (!!true) {
+        assertIsArrayOfStrings(false);
+        x;
+    }
+    if (!!true) {
         assert(x === undefined || typeof x === "string");
         x;  // string | undefined
         assertDefined(x);
         x;  // string
+    }
+    if (!!true) {
+        assert(false);
+        x;  // Unreachable
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+        x;  // Unreachable
     }
 }
 
@@ -77,6 +90,10 @@ function f10(x: string | undefined) {
         Debug.assertDefined(x);
         x.length;
     }
+    if (!!true) {
+        Debug.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test {
@@ -108,10 +125,35 @@ class Test {
         this.assertIsTest2();
         this.z;
     }
+    baz(x: number) {
+        this.assert(false);
+        x;  // Unreachable
+    }
 }
 
 class Test2 extends Test {
     z = 0;
+}
+
+class Derived extends Test {
+    foo(x: unknown) {
+        super.assert(typeof x === "string");
+        x.length;
+    }
+    baz(x: number) {
+        super.assert(false);
+        x;  // Unreachable
+    }
+}
+
+function f11(items: Test[]) {
+    for (let item of items) {
+        if (item.isTest2()) {
+            item.z;
+        }
+        item.assertIsTest2();
+        item.z;
+    }
 }
 
 // Invalid constructs
@@ -136,4 +178,22 @@ function f20(x: unknown) {
     t1.assert(typeof x === "string");  // Error
     const t2: Test = new Test();
     t2.assert(typeof x === "string");
+}
+
+// Repro from #35940
+
+interface Thing {
+    good: boolean;
+    isGood(): asserts this is GoodThing;
+}
+
+interface GoodThing {
+    good: true;
+}
+
+function example1(things: Thing[]) {
+    for (let thing of things) {
+        thing.isGood();
+        thing.good;
+    }
 }

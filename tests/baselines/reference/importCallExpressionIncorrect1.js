@@ -7,6 +7,7 @@ export function foo() { return "foo"; }
 import
 import { foo } from './0';
 
+
 //// [0.js]
 export function foo() { return "foo"; }
 //// [1.js]

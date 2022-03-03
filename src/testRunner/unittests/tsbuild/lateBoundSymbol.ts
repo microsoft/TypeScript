@@ -1,22 +1,20 @@
 namespace ts {
     describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
-        let projFs: vfs.FileSystem;
-        before(() => {
-            projFs = loadProjectFromDisk("tests/projects/lateBoundSymbol");
-        });
-        after(() => {
-            projFs = undefined!; // Release the contents
-        });
-
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             subScenario: "interface is merged and contains late bound member",
-            fs: () => projFs,
+            fs: () => loadProjectFromDisk("tests/projects/lateBoundSymbol"),
             scenario: "lateBoundSymbol",
             commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsUnchanged,
-                modifyFs: fs => replaceText(fs, "/src/src/main.ts", "const x = 10;", ""),
-            }]
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => replaceText(fs, "/src/src/main.ts", "const x = 10;", ""),
+                },
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => appendText(fs, "/src/src/main.ts", "const x = 10;"),
+                },
+            ]
         });
     });
 }

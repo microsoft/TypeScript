@@ -226,3 +226,56 @@ a3 = a2;
 >a3 : [number, {}]
 >a2 : [number, number]
 
+type B = Pick<[number], 'length'>;
+>B : B
+
+declare const b: B;
+>b : B
+
+b.length = 0; // Error
+>b.length = 0 : 0
+>b.length : 1
+>b : B
+>length : 1
+>0 : 0
+
+declare const b1: readonly [number?];
+>b1 : readonly [number?]
+
+b1.length = 0; // Error
+>b1.length = 0 : 0
+>b1.length : any
+>b1 : readonly [number?]
+>length : any
+>0 : 0
+
+declare const b2: readonly [number, ...number[]];
+>b2 : readonly [number, ...number[]]
+
+b2.length = 0; // Error
+>b2.length = 0 : 0
+>b2.length : any
+>b2 : readonly [number, ...number[]]
+>length : any
+>0 : 0
+
+declare const b3: readonly number[];
+>b3 : readonly number[]
+
+b3.length = 0; // Error
+>b3.length = 0 : 0
+>b3.length : any
+>b3 : readonly number[]
+>length : any
+>0 : 0
+
+declare const b4: [number?];
+>b4 : [number?]
+
+b4.length = 0;
+>b4.length = 0 : 0
+>b4.length : 0 | 1
+>b4 : [number?]
+>length : 0 | 1
+>0 : 0
+

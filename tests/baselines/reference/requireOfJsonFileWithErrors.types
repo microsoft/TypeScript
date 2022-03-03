@@ -1,15 +1,15 @@
 === tests/cases/compiler/file1.ts ===
 import b1 = require('./b.json');
->b1 : { 'a': boolean; "b": string; }
+>b1 : { a: boolean; b: string; }
 
 let x = b1.a;
 >x : boolean
 >b1.a : boolean
->b1 : { 'a': boolean; "b": string; }
+>b1 : { a: boolean; b: string; }
 >a : boolean
 
 import b2 = require('./b.json');
->b2 : { 'a': boolean; "b": string; }
+>b2 : { a: boolean; b: string; }
 
 if (x) {
 >x : boolean
@@ -17,7 +17,7 @@ if (x) {
     let b = b2.b;
 >b : string
 >b2.b : string
->b2 : { 'a': boolean; "b": string; }
+>b2 : { a: boolean; b: string; }
 >b : string
 
     x = (b1.b === b);
@@ -26,14 +26,14 @@ if (x) {
 >(b1.b === b) : boolean
 >b1.b === b : boolean
 >b1.b : string
->b1 : { 'a': boolean; "b": string; }
+>b1 : { a: boolean; b: string; }
 >b : string
 >b : string
 }
 
 === tests/cases/compiler/b.json ===
 {
->{    'a': true,    "b": "hello"} : { 'a': boolean; "b": string; }
+>{    'a': true,    "b": "hello"} : { a: boolean; b: string; }
 
     'a': true,
 >'a' : boolean

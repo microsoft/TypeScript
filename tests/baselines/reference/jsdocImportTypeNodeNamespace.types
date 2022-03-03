@@ -1,0 +1,19 @@
+=== tests/cases/compiler/GeometryType.d.ts ===
+// #40767
+
+declare namespace _default {
+>_default : typeof _default
+
+  export const POINT: string;
+>POINT : string
+}
+export default _default;
+>_default : typeof _default
+
+=== tests/cases/compiler/Main.js ===
+export default function () {
+  return /** @type {import('./GeometryType.js').default} */ ('Point');
+>('Point') : typeof import("tests/cases/compiler/GeometryType").default
+>'Point' : "Point"
+}
+

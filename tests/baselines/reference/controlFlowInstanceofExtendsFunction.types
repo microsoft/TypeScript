@@ -44,9 +44,9 @@ class Y {
 
 console.log(X.now()) // works as expected
 >console.log(X.now()) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >X.now() : {}
 >X.now : () => {}
 >X : typeof X
@@ -54,9 +54,9 @@ console.log(X.now()) // works as expected
 
 console.log(Y.now()) // works as expected
 >console.log(Y.now()) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >Y.now() : string
 >Y.now : () => string
 >Y : typeof Y

@@ -2,8 +2,8 @@
 
 //// let a = "I am a non-trivial statement that appears before imports";
 //// import d from "other-ambient-module"
-//// [|import * as ns from "yet-another-ambient-module"
-//// var x = v1/*0*/ + 5;|]
+//// import * as ns from "yet-another-ambient-module"
+//// var x = v1/*0*/ + 5;
 
 // @Filename: ambientModule.ts
 //// declare module "ambient-module" {
@@ -24,7 +24,9 @@
 
 // test cases when there are no semicolons at the line end
 verify.importFixAtPosition([
-`import * as ns from "yet-another-ambient-module"
+`let a = "I am a non-trivial statement that appears before imports";
 import { v1 } from "ambient-module";
+import d from "other-ambient-module"
+import * as ns from "yet-another-ambient-module"
 var x = v1 + 5;`
 ]);

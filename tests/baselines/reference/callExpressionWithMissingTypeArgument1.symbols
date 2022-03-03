@@ -1,3 +1,6 @@
 === tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts ===
 Foo<a,,b>();
-No type information for this code.
+>a : Symbol(a)
+> : Symbol(unknown)
+>b : Symbol(b)
+

@@ -1,0 +1,155 @@
+=== tests/cases/compiler/typeGuardConstructorDerivedClass.ts ===
+// Derived class with different structures
+class C1 {
+>C1 : Symbol(C1, Decl(typeGuardConstructorDerivedClass.ts, 0, 0))
+
+    property1: number;
+>property1 : Symbol(C1.property1, Decl(typeGuardConstructorDerivedClass.ts, 1, 10))
+}
+
+class C2 extends C1 {
+>C2 : Symbol(C2, Decl(typeGuardConstructorDerivedClass.ts, 3, 1))
+>C1 : Symbol(C1, Decl(typeGuardConstructorDerivedClass.ts, 0, 0))
+
+    property2: number;
+>property2 : Symbol(C2.property2, Decl(typeGuardConstructorDerivedClass.ts, 5, 21))
+}
+
+let var1: C2 | string;
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+>C2 : Symbol(C2, Decl(typeGuardConstructorDerivedClass.ts, 3, 1))
+
+if (var1.constructor === C1) {
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C1 : Symbol(C1, Decl(typeGuardConstructorDerivedClass.ts, 0, 0))
+
+    var1; // never
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+
+    var1.property1; // error
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+}
+if (var1.constructor === C2) {
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C2 : Symbol(C2, Decl(typeGuardConstructorDerivedClass.ts, 3, 1))
+
+    var1; // C2
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+
+    var1.property1; // number
+>var1.property1 : Symbol(C1.property1, Decl(typeGuardConstructorDerivedClass.ts, 1, 10))
+>var1 : Symbol(var1, Decl(typeGuardConstructorDerivedClass.ts, 9, 3))
+>property1 : Symbol(C1.property1, Decl(typeGuardConstructorDerivedClass.ts, 1, 10))
+}
+
+// Derived classes with the same structure
+class C3 {}
+>C3 : Symbol(C3, Decl(typeGuardConstructorDerivedClass.ts, 17, 1))
+
+class C4 extends C3 {}
+>C4 : Symbol(C4, Decl(typeGuardConstructorDerivedClass.ts, 20, 11))
+>C3 : Symbol(C3, Decl(typeGuardConstructorDerivedClass.ts, 17, 1))
+
+let var2: C4 | string;
+>var2 : Symbol(var2, Decl(typeGuardConstructorDerivedClass.ts, 24, 3))
+>C4 : Symbol(C4, Decl(typeGuardConstructorDerivedClass.ts, 20, 11))
+
+if (var2.constructor === C3) {
+>var2.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardConstructorDerivedClass.ts, 24, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C3 : Symbol(C3, Decl(typeGuardConstructorDerivedClass.ts, 17, 1))
+
+    var2; // never
+>var2 : Symbol(var2, Decl(typeGuardConstructorDerivedClass.ts, 24, 3))
+}
+if (var2.constructor === C4) {
+>var2.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var2 : Symbol(var2, Decl(typeGuardConstructorDerivedClass.ts, 24, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C4 : Symbol(C4, Decl(typeGuardConstructorDerivedClass.ts, 20, 11))
+
+    var2; // C4
+>var2 : Symbol(var2, Decl(typeGuardConstructorDerivedClass.ts, 24, 3))
+}
+
+// Disjointly structured classes
+class C5 {
+>C5 : Symbol(C5, Decl(typeGuardConstructorDerivedClass.ts, 30, 1))
+
+    property1: number;
+>property1 : Symbol(C5.property1, Decl(typeGuardConstructorDerivedClass.ts, 33, 10))
+}
+
+class C6 {
+>C6 : Symbol(C6, Decl(typeGuardConstructorDerivedClass.ts, 35, 1))
+
+    property2: number;
+>property2 : Symbol(C6.property2, Decl(typeGuardConstructorDerivedClass.ts, 37, 10))
+}
+
+let let3: C6 | string;
+>let3 : Symbol(let3, Decl(typeGuardConstructorDerivedClass.ts, 41, 3))
+>C6 : Symbol(C6, Decl(typeGuardConstructorDerivedClass.ts, 35, 1))
+
+if (let3.constructor === C5) {
+>let3.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>let3 : Symbol(let3, Decl(typeGuardConstructorDerivedClass.ts, 41, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C5 : Symbol(C5, Decl(typeGuardConstructorDerivedClass.ts, 30, 1))
+
+    let3; // never
+>let3 : Symbol(let3, Decl(typeGuardConstructorDerivedClass.ts, 41, 3))
+}
+if (let3.constructor === C6) {
+>let3.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>let3 : Symbol(let3, Decl(typeGuardConstructorDerivedClass.ts, 41, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C6 : Symbol(C6, Decl(typeGuardConstructorDerivedClass.ts, 35, 1))
+
+    let3; // C6
+>let3 : Symbol(let3, Decl(typeGuardConstructorDerivedClass.ts, 41, 3))
+}
+
+// Classes with the same structure
+class C7 {
+>C7 : Symbol(C7, Decl(typeGuardConstructorDerivedClass.ts, 47, 1))
+
+    property1: number
+>property1 : Symbol(C7.property1, Decl(typeGuardConstructorDerivedClass.ts, 50, 10))
+}
+
+class C8 {
+>C8 : Symbol(C8, Decl(typeGuardConstructorDerivedClass.ts, 52, 1))
+
+    property1: number;
+>property1 : Symbol(C8.property1, Decl(typeGuardConstructorDerivedClass.ts, 54, 10))
+}
+
+let let4: C8 | string;
+>let4 : Symbol(let4, Decl(typeGuardConstructorDerivedClass.ts, 58, 3))
+>C8 : Symbol(C8, Decl(typeGuardConstructorDerivedClass.ts, 52, 1))
+
+if (let4.constructor === C7) {
+>let4.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>let4 : Symbol(let4, Decl(typeGuardConstructorDerivedClass.ts, 58, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C7 : Symbol(C7, Decl(typeGuardConstructorDerivedClass.ts, 47, 1))
+
+    let4; // never
+>let4 : Symbol(let4, Decl(typeGuardConstructorDerivedClass.ts, 58, 3))
+}
+if (let4.constructor === C8) {
+>let4.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>let4 : Symbol(let4, Decl(typeGuardConstructorDerivedClass.ts, 58, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>C8 : Symbol(C8, Decl(typeGuardConstructorDerivedClass.ts, 52, 1))
+
+    let4; // C8
+>let4 : Symbol(let4, Decl(typeGuardConstructorDerivedClass.ts, 58, 3))
+}
+

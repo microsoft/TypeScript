@@ -117,7 +117,7 @@ var c = /** @class */ (function () {
         set: function (val) {
             this.b = val;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** overload implementation signature*/

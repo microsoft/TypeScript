@@ -132,185 +132,305 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 2 >^^^^
 3 >    ^
 4 >     ^^
-5 >       ^^^^^^^^^^^^^^^^^^^
-6 >                          ^
-7 >                           ^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >       ^^^^^
+6 >            ^^^
+7 >               ^^^^^^
+8 >                     ^^^^^
+9 >                          ^
+10>                           ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >var 
 2 >
 3 >    a: string
-4 >     , { 
-5 >       name: nameA
-6 >                           } = robotA;
+4 >     , { name: 
+5 >       nameA
+6 >             } = 
+7 >               robotA
+8 >                     
+9 >                           } = robotA;
 1 >Emitted(4, 1) Source(11, 5) + SourceIndex(0)
 2 >Emitted(4, 5) Source(11, 5) + SourceIndex(0)
 3 >Emitted(4, 6) Source(11, 14) + SourceIndex(0)
-4 >Emitted(4, 8) Source(11, 18) + SourceIndex(0)
-5 >Emitted(4, 27) Source(11, 29) + SourceIndex(0)
-6 >Emitted(4, 28) Source(11, 41) + SourceIndex(0)
+4 >Emitted(4, 8) Source(11, 24) + SourceIndex(0)
+5 >Emitted(4, 13) Source(11, 29) + SourceIndex(0)
+6 >Emitted(4, 16) Source(11, 34) + SourceIndex(0)
+7 >Emitted(4, 22) Source(11, 40) + SourceIndex(0)
+8 >Emitted(4, 27) Source(11, 29) + SourceIndex(0)
+9 >Emitted(4, 28) Source(11, 41) + SourceIndex(0)
 ---
 >>>var b, nameB = robotB.name, skillB = robotB.skill;
 1->
 2 >^^^^
 3 >    ^
 4 >     ^^
-5 >       ^^^^^^^^^^^^^^^^^^^
-6 >                          ^^
-7 >                            ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                 ^
-9 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >       ^^^^^
+6 >            ^^^
+7 >               ^^^^^^
+8 >                     ^^^^^
+9 >                          ^^
+10>                            ^^^^^^
+11>                                  ^^^
+12>                                     ^^^^^^
+13>                                           ^^^^^^
+14>                                                 ^
+15>                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var 
 2 >
 3 >    b: string
-4 >     , { 
-5 >       name: nameB
-6 >                          , 
-7 >                            skill: skillB
-8 >                                                  } = robotB;
+4 >     , { name: 
+5 >       nameB
+6 >            , skill: skillB } = 
+7 >               robotB
+8 >                     
+9 >                          , skill: 
+10>                            skillB
+11>                                   } = 
+12>                                     robotB
+13>                                           
+14>                                                  } = robotB;
 1->Emitted(5, 1) Source(12, 5) + SourceIndex(0)
 2 >Emitted(5, 5) Source(12, 5) + SourceIndex(0)
 3 >Emitted(5, 6) Source(12, 14) + SourceIndex(0)
-4 >Emitted(5, 8) Source(12, 18) + SourceIndex(0)
-5 >Emitted(5, 27) Source(12, 29) + SourceIndex(0)
-6 >Emitted(5, 29) Source(12, 31) + SourceIndex(0)
-7 >Emitted(5, 50) Source(12, 44) + SourceIndex(0)
-8 >Emitted(5, 51) Source(12, 56) + SourceIndex(0)
+4 >Emitted(5, 8) Source(12, 24) + SourceIndex(0)
+5 >Emitted(5, 13) Source(12, 29) + SourceIndex(0)
+6 >Emitted(5, 16) Source(12, 49) + SourceIndex(0)
+7 >Emitted(5, 22) Source(12, 55) + SourceIndex(0)
+8 >Emitted(5, 27) Source(12, 29) + SourceIndex(0)
+9 >Emitted(5, 29) Source(12, 38) + SourceIndex(0)
+10>Emitted(5, 35) Source(12, 44) + SourceIndex(0)
+11>Emitted(5, 38) Source(12, 49) + SourceIndex(0)
+12>Emitted(5, 44) Source(12, 55) + SourceIndex(0)
+13>Emitted(5, 50) Source(12, 44) + SourceIndex(0)
+14>Emitted(5, 51) Source(12, 56) + SourceIndex(0)
 ---
 >>>var c, _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
 1->
 2 >^^^^
 3 >    ^
 4 >     ^^
-5 >       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-6 >                                                     ^^
-7 >                                                       ^^^^^^^^^^^^^^^
-8 >                                                                      ^^
-9 >                                                                        ^^^^^^^^^^^^^^^^^
-10>                                                                                         ^
+5 >       ^^^^^
+6 >            ^^
+7 >              ^^^^
+8 >                  ^^
+9 >                    ^^^^^^^
+10>                           ^^
+11>                             ^^^^^
+12>                                  ^^
+13>                                    ^^^^^^^^^^^^^^^
+14>                                                   ^^
+15>                                                     ^^
+16>                                                       ^^^^^
+17>                                                            ^^^^^^^^^^
+18>                                                                      ^^
+19>                                                                        ^^^^^^
+20>                                                                              ^^^^^^^^^^^
+21>                                                                                         ^
 1->
   >var 
 2 >
 3 >    c: string
 4 >     , 
-5 >       { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
-6 >                                                     
-7 >                                                       name: nameC
-8 >                                                                      , 
-9 >                                                                        skill: skillC } = { name: "Edger", skill: "cutting edges" }
-10>                                                                                         ;
+5 >       { name: nameC, skill: skillC } = 
+6 >            { 
+7 >              name
+8 >                  : 
+9 >                    "Edger"
+10>                           , 
+11>                             skill
+12>                                  : 
+13>                                    "cutting edges"
+14>                                                    }
+15>                                                     
+16>                                                       nameC
+17>                                                            
+18>                                                                      , skill: 
+19>                                                                        skillC
+20>                                                                               } = { name: "Edger", skill: "cutting edges" }
+21>                                                                                         ;
 1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(6, 6) Source(13, 14) + SourceIndex(0)
 4 >Emitted(6, 8) Source(13, 16) + SourceIndex(0)
-5 >Emitted(6, 54) Source(13, 90) + SourceIndex(0)
-6 >Emitted(6, 56) Source(13, 18) + SourceIndex(0)
-7 >Emitted(6, 71) Source(13, 29) + SourceIndex(0)
-8 >Emitted(6, 73) Source(13, 31) + SourceIndex(0)
-9 >Emitted(6, 90) Source(13, 90) + SourceIndex(0)
-10>Emitted(6, 91) Source(13, 91) + SourceIndex(0)
+5 >Emitted(6, 13) Source(13, 49) + SourceIndex(0)
+6 >Emitted(6, 15) Source(13, 51) + SourceIndex(0)
+7 >Emitted(6, 19) Source(13, 55) + SourceIndex(0)
+8 >Emitted(6, 21) Source(13, 57) + SourceIndex(0)
+9 >Emitted(6, 28) Source(13, 64) + SourceIndex(0)
+10>Emitted(6, 30) Source(13, 66) + SourceIndex(0)
+11>Emitted(6, 35) Source(13, 71) + SourceIndex(0)
+12>Emitted(6, 37) Source(13, 73) + SourceIndex(0)
+13>Emitted(6, 52) Source(13, 88) + SourceIndex(0)
+14>Emitted(6, 54) Source(13, 90) + SourceIndex(0)
+15>Emitted(6, 56) Source(13, 24) + SourceIndex(0)
+16>Emitted(6, 61) Source(13, 29) + SourceIndex(0)
+17>Emitted(6, 71) Source(13, 29) + SourceIndex(0)
+18>Emitted(6, 73) Source(13, 38) + SourceIndex(0)
+19>Emitted(6, 79) Source(13, 44) + SourceIndex(0)
+20>Emitted(6, 90) Source(13, 90) + SourceIndex(0)
+21>Emitted(6, 91) Source(13, 91) + SourceIndex(0)
 ---
 >>>var nameA = robotA.name, a = hello;
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^
-4 >                       ^^
-5 >                         ^
-6 >                          ^^^
-7 >                             ^^^^^
-8 >                                  ^
-9 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^
+6 >                  ^^^^^
+7 >                       ^^
+8 >                         ^
+9 >                          ^^^
+10>                             ^^^^^
+11>                                  ^
+12>                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >var { 
-2 >
-3 >    name: nameA
-4 >                        } = robotA, 
-5 >                         a
-6 >                           = 
-7 >                             hello
-8 >                                  ;
+2 >name: 
+3 >    nameA
+4 >          } = 
+5 >            robotA
+6 >                  
+7 >                        } = robotA, 
+8 >                         a
+9 >                           = 
+10>                             hello
+11>                                  ;
 1 >Emitted(7, 1) Source(15, 7) + SourceIndex(0)
-2 >Emitted(7, 5) Source(15, 7) + SourceIndex(0)
-3 >Emitted(7, 24) Source(15, 18) + SourceIndex(0)
-4 >Emitted(7, 26) Source(15, 31) + SourceIndex(0)
-5 >Emitted(7, 27) Source(15, 32) + SourceIndex(0)
-6 >Emitted(7, 30) Source(15, 35) + SourceIndex(0)
-7 >Emitted(7, 35) Source(15, 40) + SourceIndex(0)
-8 >Emitted(7, 36) Source(15, 41) + SourceIndex(0)
+2 >Emitted(7, 5) Source(15, 13) + SourceIndex(0)
+3 >Emitted(7, 10) Source(15, 18) + SourceIndex(0)
+4 >Emitted(7, 13) Source(15, 23) + SourceIndex(0)
+5 >Emitted(7, 19) Source(15, 29) + SourceIndex(0)
+6 >Emitted(7, 24) Source(15, 18) + SourceIndex(0)
+7 >Emitted(7, 26) Source(15, 31) + SourceIndex(0)
+8 >Emitted(7, 27) Source(15, 32) + SourceIndex(0)
+9 >Emitted(7, 30) Source(15, 35) + SourceIndex(0)
+10>Emitted(7, 35) Source(15, 40) + SourceIndex(0)
+11>Emitted(7, 36) Source(15, 41) + SourceIndex(0)
 ---
 >>>var nameB = robotB.name, skillB = robotB.skill, b = " hello";
 1->
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^
-4 >                       ^^
-5 >                         ^^^^^^^^^^^^^^^^^^^^^
-6 >                                              ^^
-7 >                                                ^
-8 >                                                 ^^^
-9 >                                                    ^^^^^^^^
-10>                                                            ^
-11>                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^
+4 >         ^^^
+5 >            ^^^^^^
+6 >                  ^^^^^
+7 >                       ^^
+8 >                         ^^^^^^
+9 >                               ^^^
+10>                                  ^^^^^^
+11>                                        ^^^^^^
+12>                                              ^^
+13>                                                ^
+14>                                                 ^^^
+15>                                                    ^^^^^^^^
+16>                                                            ^
+17>                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var { 
-2 >
-3 >    name: nameB
-4 >                       , 
-5 >                         skill: skillB
-6 >                                               } = robotB, 
-7 >                                                b
-8 >                                                  = 
-9 >                                                    " hello"
-10>                                                            ;
+2 >name: 
+3 >    nameB
+4 >         , skill: skillB } = 
+5 >            robotB
+6 >                  
+7 >                       , skill: 
+8 >                         skillB
+9 >                                } = 
+10>                                  robotB
+11>                                        
+12>                                               } = robotB, 
+13>                                                b
+14>                                                  = 
+15>                                                    " hello"
+16>                                                            ;
 1->Emitted(8, 1) Source(16, 7) + SourceIndex(0)
-2 >Emitted(8, 5) Source(16, 7) + SourceIndex(0)
-3 >Emitted(8, 24) Source(16, 18) + SourceIndex(0)
-4 >Emitted(8, 26) Source(16, 20) + SourceIndex(0)
-5 >Emitted(8, 47) Source(16, 33) + SourceIndex(0)
-6 >Emitted(8, 49) Source(16, 46) + SourceIndex(0)
-7 >Emitted(8, 50) Source(16, 47) + SourceIndex(0)
-8 >Emitted(8, 53) Source(16, 50) + SourceIndex(0)
-9 >Emitted(8, 61) Source(16, 58) + SourceIndex(0)
-10>Emitted(8, 62) Source(16, 59) + SourceIndex(0)
+2 >Emitted(8, 5) Source(16, 13) + SourceIndex(0)
+3 >Emitted(8, 10) Source(16, 18) + SourceIndex(0)
+4 >Emitted(8, 13) Source(16, 38) + SourceIndex(0)
+5 >Emitted(8, 19) Source(16, 44) + SourceIndex(0)
+6 >Emitted(8, 24) Source(16, 18) + SourceIndex(0)
+7 >Emitted(8, 26) Source(16, 27) + SourceIndex(0)
+8 >Emitted(8, 32) Source(16, 33) + SourceIndex(0)
+9 >Emitted(8, 35) Source(16, 38) + SourceIndex(0)
+10>Emitted(8, 41) Source(16, 44) + SourceIndex(0)
+11>Emitted(8, 47) Source(16, 33) + SourceIndex(0)
+12>Emitted(8, 49) Source(16, 46) + SourceIndex(0)
+13>Emitted(8, 50) Source(16, 47) + SourceIndex(0)
+14>Emitted(8, 53) Source(16, 50) + SourceIndex(0)
+15>Emitted(8, 61) Source(16, 58) + SourceIndex(0)
+16>Emitted(8, 62) Source(16, 59) + SourceIndex(0)
 ---
 >>>var _b = { name: "Edger", skill: "cutting edges" }, nameC = _b.name, skillC = _b.skill, c = hello;
 1->
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                  ^^
-5 >                                                    ^^^^^^^^^^^^^^^
-6 >                                                                   ^^
-7 >                                                                     ^^^^^^^^^^^^^^^^^
-8 >                                                                                      ^^
-9 >                                                                                        ^
-10>                                                                                         ^^^
-11>                                                                                            ^^^^^
-12>                                                                                                 ^
+3 >    ^^^^^
+4 >         ^^
+5 >           ^^^^
+6 >               ^^
+7 >                 ^^^^^^^
+8 >                        ^^
+9 >                          ^^^^^
+10>                               ^^
+11>                                 ^^^^^^^^^^^^^^^
+12>                                                ^^
+13>                                                  ^^
+14>                                                    ^^^^^
+15>                                                         ^^^^^^^^^^
+16>                                                                   ^^
+17>                                                                     ^^^^^^
+18>                                                                           ^^^^^^^^^^^
+19>                                                                                      ^^
+20>                                                                                        ^
+21>                                                                                         ^^^
+22>                                                                                            ^^^^^
+23>                                                                                                 ^
 1->
   >var 
 2 >
-3 >    { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
-4 >                                                  
-5 >                                                    name: nameC
-6 >                                                                   , 
-7 >                                                                     skill: skillC
-8 >                                                                                       } = { name: "Edger", skill: "cutting edges" }, 
-9 >                                                                                        c
-10>                                                                                          = 
-11>                                                                                            hello
-12>                                                                                                 ;
+3 >    { name: nameC, skill: skillC } = 
+4 >         { 
+5 >           name
+6 >               : 
+7 >                 "Edger"
+8 >                        , 
+9 >                          skill
+10>                               : 
+11>                                 "cutting edges"
+12>                                                 }
+13>                                                  
+14>                                                    nameC
+15>                                                         
+16>                                                                   , skill: 
+17>                                                                     skillC
+18>                                                                           
+19>                                                                                       } = { name: "Edger", skill: "cutting edges" }, 
+20>                                                                                        c
+21>                                                                                          = 
+22>                                                                                            hello
+23>                                                                                                 ;
 1->Emitted(9, 1) Source(17, 5) + SourceIndex(0)
 2 >Emitted(9, 5) Source(17, 5) + SourceIndex(0)
-3 >Emitted(9, 51) Source(17, 79) + SourceIndex(0)
-4 >Emitted(9, 53) Source(17, 7) + SourceIndex(0)
-5 >Emitted(9, 68) Source(17, 18) + SourceIndex(0)
-6 >Emitted(9, 70) Source(17, 20) + SourceIndex(0)
-7 >Emitted(9, 87) Source(17, 33) + SourceIndex(0)
-8 >Emitted(9, 89) Source(17, 81) + SourceIndex(0)
-9 >Emitted(9, 90) Source(17, 82) + SourceIndex(0)
-10>Emitted(9, 93) Source(17, 85) + SourceIndex(0)
-11>Emitted(9, 98) Source(17, 90) + SourceIndex(0)
-12>Emitted(9, 99) Source(17, 91) + SourceIndex(0)
+3 >Emitted(9, 10) Source(17, 38) + SourceIndex(0)
+4 >Emitted(9, 12) Source(17, 40) + SourceIndex(0)
+5 >Emitted(9, 16) Source(17, 44) + SourceIndex(0)
+6 >Emitted(9, 18) Source(17, 46) + SourceIndex(0)
+7 >Emitted(9, 25) Source(17, 53) + SourceIndex(0)
+8 >Emitted(9, 27) Source(17, 55) + SourceIndex(0)
+9 >Emitted(9, 32) Source(17, 60) + SourceIndex(0)
+10>Emitted(9, 34) Source(17, 62) + SourceIndex(0)
+11>Emitted(9, 49) Source(17, 77) + SourceIndex(0)
+12>Emitted(9, 51) Source(17, 79) + SourceIndex(0)
+13>Emitted(9, 53) Source(17, 13) + SourceIndex(0)
+14>Emitted(9, 58) Source(17, 18) + SourceIndex(0)
+15>Emitted(9, 68) Source(17, 18) + SourceIndex(0)
+16>Emitted(9, 70) Source(17, 27) + SourceIndex(0)
+17>Emitted(9, 76) Source(17, 33) + SourceIndex(0)
+18>Emitted(9, 87) Source(17, 33) + SourceIndex(0)
+19>Emitted(9, 89) Source(17, 81) + SourceIndex(0)
+20>Emitted(9, 90) Source(17, 82) + SourceIndex(0)
+21>Emitted(9, 93) Source(17, 85) + SourceIndex(0)
+22>Emitted(9, 98) Source(17, 90) + SourceIndex(0)
+23>Emitted(9, 99) Source(17, 91) + SourceIndex(0)
 ---
 >>>var a = hello, nameA = robotA.name, a1 = "hello";
 1 >
@@ -319,13 +439,16 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 4 >     ^^^
 5 >        ^^^^^
 6 >             ^^
-7 >               ^^^^^^^^^^^^^^^^^^^
-8 >                                  ^^
-9 >                                    ^^
-10>                                      ^^^
-11>                                         ^^^^^^^
-12>                                                ^
-13>                                                 ^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >               ^^^^^
+8 >                    ^^^
+9 >                       ^^^^^^
+10>                             ^^^^^
+11>                                  ^^
+12>                                    ^^
+13>                                      ^^^
+14>                                         ^^^^^^^
+15>                                                ^
+16>                                                 ^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
@@ -333,25 +456,31 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 3 >    a
 4 >      = 
 5 >        hello
-6 >             , { 
-7 >               name: nameA
-8 >                                   } = robotA, 
-9 >                                    a1
-10>                                      = 
-11>                                         "hello"
-12>                                                ;
+6 >             , { name: 
+7 >               nameA
+8 >                     } = 
+9 >                       robotA
+10>                             
+11>                                   } = robotA, 
+12>                                    a1
+13>                                      = 
+14>                                         "hello"
+15>                                                ;
 1 >Emitted(10, 1) Source(19, 1) + SourceIndex(0)
 2 >Emitted(10, 5) Source(19, 5) + SourceIndex(0)
 3 >Emitted(10, 6) Source(19, 6) + SourceIndex(0)
 4 >Emitted(10, 9) Source(19, 9) + SourceIndex(0)
 5 >Emitted(10, 14) Source(19, 14) + SourceIndex(0)
-6 >Emitted(10, 16) Source(19, 18) + SourceIndex(0)
-7 >Emitted(10, 35) Source(19, 29) + SourceIndex(0)
-8 >Emitted(10, 37) Source(19, 42) + SourceIndex(0)
-9 >Emitted(10, 39) Source(19, 44) + SourceIndex(0)
-10>Emitted(10, 42) Source(19, 46) + SourceIndex(0)
-11>Emitted(10, 49) Source(19, 53) + SourceIndex(0)
-12>Emitted(10, 50) Source(19, 54) + SourceIndex(0)
+6 >Emitted(10, 16) Source(19, 24) + SourceIndex(0)
+7 >Emitted(10, 21) Source(19, 29) + SourceIndex(0)
+8 >Emitted(10, 24) Source(19, 34) + SourceIndex(0)
+9 >Emitted(10, 30) Source(19, 40) + SourceIndex(0)
+10>Emitted(10, 35) Source(19, 29) + SourceIndex(0)
+11>Emitted(10, 37) Source(19, 42) + SourceIndex(0)
+12>Emitted(10, 39) Source(19, 44) + SourceIndex(0)
+13>Emitted(10, 42) Source(19, 46) + SourceIndex(0)
+14>Emitted(10, 49) Source(19, 53) + SourceIndex(0)
+15>Emitted(10, 50) Source(19, 54) + SourceIndex(0)
 ---
 >>>var b = hello, nameB = robotB.name, skillB = robotB.skill, b1 = "hello";
 1->
@@ -360,44 +489,62 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 4 >     ^^^
 5 >        ^^^^^
 6 >             ^^
-7 >               ^^^^^^^^^^^^^^^^^^^
-8 >                                  ^^
-9 >                                    ^^^^^^^^^^^^^^^^^^^^^
-10>                                                         ^^
-11>                                                           ^^
-12>                                                             ^^^
-13>                                                                ^^^^^^^
-14>                                                                       ^
-15>                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >               ^^^^^
+8 >                    ^^^
+9 >                       ^^^^^^
+10>                             ^^^^^
+11>                                  ^^
+12>                                    ^^^^^^
+13>                                          ^^^
+14>                                             ^^^^^^
+15>                                                   ^^^^^^
+16>                                                         ^^
+17>                                                           ^^
+18>                                                             ^^^
+19>                                                                ^^^^^^^
+20>                                                                       ^
+21>                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >var 
 3 >    b
 4 >      = 
 5 >        hello
-6 >             , { 
-7 >               name: nameB
-8 >                                  , 
-9 >                                    skill: skillB
-10>                                                          } = robotB, 
-11>                                                           b1
-12>                                                              = 
-13>                                                                "hello"
-14>                                                                       ;
+6 >             , { name: 
+7 >               nameB
+8 >                    , skill: skillB } = 
+9 >                       robotB
+10>                             
+11>                                  , skill: 
+12>                                    skillB
+13>                                           } = 
+14>                                             robotB
+15>                                                   
+16>                                                          } = robotB, 
+17>                                                           b1
+18>                                                              = 
+19>                                                                "hello"
+20>                                                                       ;
 1->Emitted(11, 1) Source(20, 1) + SourceIndex(0)
 2 >Emitted(11, 5) Source(20, 5) + SourceIndex(0)
 3 >Emitted(11, 6) Source(20, 6) + SourceIndex(0)
 4 >Emitted(11, 9) Source(20, 9) + SourceIndex(0)
 5 >Emitted(11, 14) Source(20, 14) + SourceIndex(0)
-6 >Emitted(11, 16) Source(20, 18) + SourceIndex(0)
-7 >Emitted(11, 35) Source(20, 29) + SourceIndex(0)
-8 >Emitted(11, 37) Source(20, 31) + SourceIndex(0)
-9 >Emitted(11, 58) Source(20, 44) + SourceIndex(0)
-10>Emitted(11, 60) Source(20, 57) + SourceIndex(0)
-11>Emitted(11, 62) Source(20, 59) + SourceIndex(0)
-12>Emitted(11, 65) Source(20, 62) + SourceIndex(0)
-13>Emitted(11, 72) Source(20, 69) + SourceIndex(0)
-14>Emitted(11, 73) Source(20, 70) + SourceIndex(0)
+6 >Emitted(11, 16) Source(20, 24) + SourceIndex(0)
+7 >Emitted(11, 21) Source(20, 29) + SourceIndex(0)
+8 >Emitted(11, 24) Source(20, 49) + SourceIndex(0)
+9 >Emitted(11, 30) Source(20, 55) + SourceIndex(0)
+10>Emitted(11, 35) Source(20, 29) + SourceIndex(0)
+11>Emitted(11, 37) Source(20, 38) + SourceIndex(0)
+12>Emitted(11, 43) Source(20, 44) + SourceIndex(0)
+13>Emitted(11, 46) Source(20, 49) + SourceIndex(0)
+14>Emitted(11, 52) Source(20, 55) + SourceIndex(0)
+15>Emitted(11, 58) Source(20, 44) + SourceIndex(0)
+16>Emitted(11, 60) Source(20, 57) + SourceIndex(0)
+17>Emitted(11, 62) Source(20, 59) + SourceIndex(0)
+18>Emitted(11, 65) Source(20, 62) + SourceIndex(0)
+19>Emitted(11, 72) Source(20, 69) + SourceIndex(0)
+20>Emitted(11, 73) Source(20, 70) + SourceIndex(0)
 ---
 >>>var c = hello, _c = { name: "Edger", skill: "cutting edges" }, nameC = _c.name, skillC = _c.skill, c1 = hello;
 1->
@@ -406,16 +553,27 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 4 >     ^^^
 5 >        ^^^^^
 6 >             ^^
-7 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                             ^^
-9 >                                                               ^^^^^^^^^^^^^^^
-10>                                                                              ^^
-11>                                                                                ^^^^^^^^^^^^^^^^^
-12>                                                                                                 ^^
-13>                                                                                                   ^^
-14>                                                                                                     ^^^
-15>                                                                                                        ^^^^^
-16>                                                                                                             ^
+7 >               ^^^^^
+8 >                    ^^
+9 >                      ^^^^
+10>                          ^^
+11>                            ^^^^^^^
+12>                                   ^^
+13>                                     ^^^^^
+14>                                          ^^
+15>                                            ^^^^^^^^^^^^^^^
+16>                                                           ^^
+17>                                                             ^^
+18>                                                               ^^^^^
+19>                                                                    ^^^^^^^^^^
+20>                                                                              ^^
+21>                                                                                ^^^^^^
+22>                                                                                      ^^^^^^^^^^^
+23>                                                                                                 ^^
+24>                                                                                                   ^^
+25>                                                                                                     ^^^
+26>                                                                                                        ^^^^^
+27>                                                                                                             ^
 1->
   >
 2 >var 
@@ -423,32 +581,54 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 4 >      = 
 5 >        hello
 6 >             , 
-7 >               { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
-8 >                                                             
-9 >                                                               name: nameC
-10>                                                                              , 
-11>                                                                                skill: skillC
-12>                                                                                                  } = { name: "Edger", skill: "cutting edges" }, 
-13>                                                                                                   c1
-14>                                                                                                      = 
-15>                                                                                                        hello
-16>                                                                                                             ;
+7 >               { name: nameC, skill: skillC } = 
+8 >                    { 
+9 >                      name
+10>                          : 
+11>                            "Edger"
+12>                                   , 
+13>                                     skill
+14>                                          : 
+15>                                            "cutting edges"
+16>                                                            }
+17>                                                             
+18>                                                               nameC
+19>                                                                    
+20>                                                                              , skill: 
+21>                                                                                skillC
+22>                                                                                      
+23>                                                                                                  } = { name: "Edger", skill: "cutting edges" }, 
+24>                                                                                                   c1
+25>                                                                                                      = 
+26>                                                                                                        hello
+27>                                                                                                             ;
 1->Emitted(12, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(12, 5) Source(21, 5) + SourceIndex(0)
 3 >Emitted(12, 6) Source(21, 6) + SourceIndex(0)
 4 >Emitted(12, 9) Source(21, 9) + SourceIndex(0)
 5 >Emitted(12, 14) Source(21, 14) + SourceIndex(0)
 6 >Emitted(12, 16) Source(21, 16) + SourceIndex(0)
-7 >Emitted(12, 62) Source(21, 90) + SourceIndex(0)
-8 >Emitted(12, 64) Source(21, 18) + SourceIndex(0)
-9 >Emitted(12, 79) Source(21, 29) + SourceIndex(0)
-10>Emitted(12, 81) Source(21, 31) + SourceIndex(0)
-11>Emitted(12, 98) Source(21, 44) + SourceIndex(0)
-12>Emitted(12, 100) Source(21, 92) + SourceIndex(0)
-13>Emitted(12, 102) Source(21, 94) + SourceIndex(0)
-14>Emitted(12, 105) Source(21, 97) + SourceIndex(0)
-15>Emitted(12, 110) Source(21, 102) + SourceIndex(0)
-16>Emitted(12, 111) Source(21, 103) + SourceIndex(0)
+7 >Emitted(12, 21) Source(21, 49) + SourceIndex(0)
+8 >Emitted(12, 23) Source(21, 51) + SourceIndex(0)
+9 >Emitted(12, 27) Source(21, 55) + SourceIndex(0)
+10>Emitted(12, 29) Source(21, 57) + SourceIndex(0)
+11>Emitted(12, 36) Source(21, 64) + SourceIndex(0)
+12>Emitted(12, 38) Source(21, 66) + SourceIndex(0)
+13>Emitted(12, 43) Source(21, 71) + SourceIndex(0)
+14>Emitted(12, 45) Source(21, 73) + SourceIndex(0)
+15>Emitted(12, 60) Source(21, 88) + SourceIndex(0)
+16>Emitted(12, 62) Source(21, 90) + SourceIndex(0)
+17>Emitted(12, 64) Source(21, 24) + SourceIndex(0)
+18>Emitted(12, 69) Source(21, 29) + SourceIndex(0)
+19>Emitted(12, 79) Source(21, 29) + SourceIndex(0)
+20>Emitted(12, 81) Source(21, 38) + SourceIndex(0)
+21>Emitted(12, 87) Source(21, 44) + SourceIndex(0)
+22>Emitted(12, 98) Source(21, 44) + SourceIndex(0)
+23>Emitted(12, 100) Source(21, 92) + SourceIndex(0)
+24>Emitted(12, 102) Source(21, 94) + SourceIndex(0)
+25>Emitted(12, 105) Source(21, 97) + SourceIndex(0)
+26>Emitted(12, 110) Source(21, 102) + SourceIndex(0)
+27>Emitted(12, 111) Source(21, 103) + SourceIndex(0)
 ---
 >>>if (nameA == nameB) {
 1 >

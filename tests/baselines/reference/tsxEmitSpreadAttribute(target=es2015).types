@@ -1,0 +1,105 @@
+=== tests/cases/conformance/jsx/test.tsx ===
+declare const React: any;
+>React : any
+
+export function T1(a: any) {
+>T1 : (a: any) => any
+>a : any
+
+    return <div className={"T1"} { ...a }>T1</div>;
+><div className={"T1"} { ...a }>T1</div> : error
+>div : any
+>className : string
+>"T1" : "T1"
+>a : any
+>div : any
+}
+
+export function T2(a: any, b: any) {
+>T2 : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return <div className={"T2"} { ...a } { ...b }>T2</div>;
+><div className={"T2"} { ...a } { ...b }>T2</div> : error
+>div : any
+>className : string
+>"T2" : "T2"
+>a : any
+>b : any
+>div : any
+}
+
+export function T3(a: any, b: any) {
+>T3 : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return <div { ...a } className={"T3"} { ...b }>T3</div>;
+><div { ...a } className={"T3"} { ...b }>T3</div> : error
+>div : any
+>a : any
+>className : string
+>"T3" : "T3"
+>b : any
+>div : any
+}
+
+export function T4(a: any, b: any) {
+>T4 : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return <div className={"T4"} { ...{ ...a, ...b } }>T4</div>;
+><div className={"T4"} { ...{ ...a, ...b } }>T4</div> : error
+>div : any
+>className : string
+>"T4" : "T4"
+>{ ...a, ...b } : any
+>a : any
+>b : any
+>div : any
+}
+
+export function T5(a: any, b: any, c: any, d: any) {
+>T5 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div>;
+><div className={"T5"} { ...{ ...a, ...b, ...{ c, d } } }>T5</div> : error
+>div : any
+>className : string
+>"T5" : "T5"
+>{ ...a, ...b, ...{ c, d } } : any
+>a : any
+>b : any
+>{ c, d } : { c: any; d: any; }
+>c : any
+>d : any
+>div : any
+}
+
+export function T6(a: any, b: any, c: any, d: any) {
+>T6 : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+
+    return <div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div>;
+><div className={"T6"} { ...{ ...a, ...b, ...{ ...c, ...d } } }>T6</div> : error
+>div : any
+>className : string
+>"T6" : "T6"
+>{ ...a, ...b, ...{ ...c, ...d } } : any
+>a : any
+>b : any
+>{ ...c, ...d } : any
+>c : any
+>d : any
+>div : any
+}
+

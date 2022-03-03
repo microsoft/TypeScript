@@ -1,0 +1,11 @@
+tests/cases/conformance/es2017/useSharedArrayBuffer6.ts(2,6): error TS2339: Property 'length' does not exist on type 'SharedArrayBuffer'.
+
+
+==== tests/cases/conformance/es2017/useSharedArrayBuffer6.ts (1 errors) ====
+    var foge = new SharedArrayBuffer(1024);
+    foge.length; // should error
+         ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'SharedArrayBuffer'.
+    
+    var length = SharedArrayBuffer.length;
+    

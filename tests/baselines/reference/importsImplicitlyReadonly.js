@@ -23,6 +23,7 @@ a3.y = 1;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.y = exports.x = void 0;
 exports.x = 1;
 var y = 1;
 exports.y = y;

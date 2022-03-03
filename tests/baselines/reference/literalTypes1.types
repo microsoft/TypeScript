@@ -99,7 +99,7 @@ function f3(x: Falsy) {
 }
 
 function f4(x: 0 | 1 | true | string) {
->f4 : (x: string | true | 0 | 1) => void
+>f4 : (x: 0 | 1 | true | string) => void
 >x : string | true | 0 | 1
 >true : true
 

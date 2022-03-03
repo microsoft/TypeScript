@@ -13,6 +13,7 @@ f(a, "");
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 var x = require("something");
 exports.x = x;
 //// [b.js]

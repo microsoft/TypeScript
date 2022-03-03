@@ -23,4 +23,4 @@ var C = /** @class */ (function () {
     return C;
 }());
 var c = new C; // C<any>
-var c2 = new C(); // error, type params are actually part of the arg list so you need both
+var c2 = new C; // error, type params are actually part of the arg list so you need both

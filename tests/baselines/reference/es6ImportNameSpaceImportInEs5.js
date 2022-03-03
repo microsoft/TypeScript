@@ -12,6 +12,7 @@ import * as nameSpaceBinding2 from "./es6ImportNameSpaceImportInEs5_0"; // elide
 //// [es6ImportNameSpaceImportInEs5_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
 exports.a = 10;
 //// [es6ImportNameSpaceImportInEs5_1.js]
 "use strict";

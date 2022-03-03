@@ -1,0 +1,102 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts ===
+class B {
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+
+    static readonly [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature4.ts, 1, 21))
+
+    static readonly [s: number]: 42 | 233
+>s : Symbol(s, Decl(staticIndexSignature4.ts, 2, 21))
+}
+
+class D {
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+
+    static [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature4.ts, 6, 12))
+
+    static [s: number]: 42 | 233
+>s : Symbol(s, Decl(staticIndexSignature4.ts, 7, 12))
+}
+
+interface IB {
+>IB : Symbol(IB, Decl(staticIndexSignature4.ts, 8, 1))
+
+    static [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature4.ts, 11, 12))
+
+    static [s: number]: 42 | 233;
+>s : Symbol(s, Decl(staticIndexSignature4.ts, 12, 12))
+}
+
+declare const v: number
+>v : Symbol(v, Decl(staticIndexSignature4.ts, 15, 13))
+
+declare const i: IB
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+>IB : Symbol(IB, Decl(staticIndexSignature4.ts, 8, 1))
+
+if (v === 0) {
+>v : Symbol(v, Decl(staticIndexSignature4.ts, 15, 13))
+
+    B.a = D.a
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+
+    B[2] = D[2]
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+
+} else if (v === 1) {
+>v : Symbol(v, Decl(staticIndexSignature4.ts, 15, 13))
+
+    D.a = B.a
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+
+    D[2] = B[2]
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+
+} else if (v === 2) {
+>v : Symbol(v, Decl(staticIndexSignature4.ts, 15, 13))
+
+    B.a = i.a
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+
+    B[2] = i[2]
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+
+    D.a = i.a
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+
+    D[2] = i [2]
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+
+} else if (v === 3) {
+>v : Symbol(v, Decl(staticIndexSignature4.ts, 15, 13))
+
+    i.a = B.a
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+
+    i[2] = B[2]
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+
+} else if (v === 4) {
+>v : Symbol(v, Decl(staticIndexSignature4.ts, 15, 13))
+
+    i.a = D.a
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+>D : Symbol(D, Decl(staticIndexSignature4.ts, 3, 1))
+
+    i[2] = B[2]
+>i : Symbol(i, Decl(staticIndexSignature4.ts, 16, 13))
+>B : Symbol(B, Decl(staticIndexSignature4.ts, 0, 0))
+}
+

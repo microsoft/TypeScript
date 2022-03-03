@@ -9,7 +9,6 @@ namespace ts.JsTyping {
     }
 
     interface PackageJson {
-        _requiredBy?: string[];
         dependencies?: MapLike<string>;
         devDependencies?: MapLike<string>;
         name?: string;
@@ -29,8 +28,9 @@ namespace ts.JsTyping {
         return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
-    export const nodeCoreModuleList: readonly string[] = [
+    const unprefixedNodeCoreModuleList = [
         "assert",
+        "assert/strict",
         "async_hooks",
         "buffer",
         "child_process",
@@ -39,14 +39,18 @@ namespace ts.JsTyping {
         "constants",
         "crypto",
         "dgram",
+        "diagnostics_channel",
         "dns",
+        "dns/promises",
         "domain",
         "events",
         "fs",
+        "fs/promises",
         "http",
         "https",
         "http2",
         "inspector",
+        "module",
         "net",
         "os",
         "path",
@@ -57,18 +61,28 @@ namespace ts.JsTyping {
         "readline",
         "repl",
         "stream",
+        "stream/promises",
         "string_decoder",
         "timers",
+        "timers/promises",
         "tls",
+        "trace_events",
         "tty",
         "url",
         "util",
+        "util/types",
         "v8",
         "vm",
+        "wasi",
+        "worker_threads",
         "zlib"
     ];
 
-    export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+    export const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
+
+    export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
+
+    export const nodeCoreModules = new Set(nodeCoreModuleList);
 
     export function nonRelativeModuleNameForTypingCache(moduleName: string) {
         return nodeCoreModules.has(moduleName) ? "node" : moduleName;
@@ -77,17 +91,17 @@ namespace ts.JsTyping {
     /**
      * A map of loose file names to library names that we are confident require typings
      */
-    export type SafeList = ReadonlyMap<string>;
+    export type SafeList = ReadonlyESMap<string, string>;
 
     export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
         const result = readConfigFile(safeListPath, path => host.readFile(path));
-        return createMapFromTemplate<string>(result.config);
+        return new Map(getEntries<string>(result.config));
     }
 
     export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
         const result = readConfigFile(typesMapPath, path => host.readFile(path));
         if (result.config) {
-            return createMapFromTemplate<string>(result.config.simpleMap);
+            return new Map(getEntries<string>(result.config.simpleMap));
         }
         return undefined;
     }
@@ -107,10 +121,10 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeList: SafeList,
-        packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
+        packageNameToTypingLocation: ReadonlyESMap<string, CachedTyping>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: readonly string[],
-        typesRegistry: ReadonlyMap<MapLike<string>>):
+        typesRegistry: ReadonlyESMap<string, MapLike<string>>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
@@ -118,7 +132,7 @@ namespace ts.JsTyping {
         }
 
         // A typing name to typing file path mapping
-        const inferredTypings = createMap<string>();
+        const inferredTypings = new Map<string, string>();
 
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
@@ -134,23 +148,15 @@ namespace ts.JsTyping {
         const exclude = typeAcquisition.exclude || [];
 
         // Directories to search for package.json, bower.json and other typing information
-        const possibleSearchDirs = arrayToSet(fileNames, getDirectoryPath);
-        possibleSearchDirs.set(projectRootPath, true);
-        possibleSearchDirs.forEach((_true, searchDir) => {
-            const packageJsonPath = combinePaths(searchDir, "package.json");
-            getTypingNamesFromJson(packageJsonPath, filesToWatch);
-
-            const bowerJsonPath = combinePaths(searchDir, "bower.json");
-            getTypingNamesFromJson(bowerJsonPath, filesToWatch);
-
-            const bowerComponentsPath = combinePaths(searchDir, "bower_components");
-            getTypingNamesFromPackagesFolder(bowerComponentsPath, filesToWatch);
-
-            const nodeModulesPath = combinePaths(searchDir, "node_modules");
-            getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
+        const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
+        possibleSearchDirs.add(projectRootPath);
+        possibleSearchDirs.forEach((searchDir) => {
+            getTypingNames(searchDir, "bower.json", "bower_components", filesToWatch);
+            getTypingNames(searchDir, "package.json", "node_modules", filesToWatch);
         });
-        getTypingNamesFromSourceFileNames(fileNames);
-
+        if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
+            getTypingNamesFromSourceFileNames(fileNames);
+        }
         // add typings for unresolved imports
         if (unresolvedImports) {
             const module = deduplicate<string>(
@@ -198,17 +204,104 @@ namespace ts.JsTyping {
         }
 
         /**
-         * Get the typing info from common package manager json files like package.json or bower.json
+         * Adds inferred typings from manifest/module pairs (think package.json + node_modules)
+         *
+         * @param projectRootPath is the path to the directory where to look for package.json, bower.json and other typing information
+         * @param manifestName is the name of the manifest (package.json or bower.json)
+         * @param modulesDirName is the directory name for modules (node_modules or bower_components). Should be lowercase!
+         * @param filesToWatch are the files to watch for changes. We will push things into this array.
          */
-        function getTypingNamesFromJson(jsonPath: string, filesToWatch: Push<string>) {
-            if (!host.fileExists(jsonPath)) {
+        function getTypingNames(projectRootPath: string, manifestName: string, modulesDirName: string, filesToWatch: string[]): void {
+            // First, we check the manifests themselves. They're not
+            // _required_, but they allow us to do some filtering when dealing
+            // with big flat dep directories.
+            const manifestPath = combinePaths(projectRootPath, manifestName);
+            let manifest;
+            let manifestTypingNames;
+            if (host.fileExists(manifestPath)) {
+                filesToWatch.push(manifestPath);
+                manifest = readConfigFile(manifestPath, path => host.readFile(path)).config;
+                manifestTypingNames = flatMap([manifest.dependencies, manifest.devDependencies, manifest.optionalDependencies, manifest.peerDependencies], getOwnKeys);
+                addInferredTypings(manifestTypingNames, `Typing names in '${manifestPath}' dependencies`);
+            }
+
+            // Now we scan the directories for typing information in
+            // already-installed dependencies (if present). Note that this
+            // step happens regardless of whether a manifest was present,
+            // which is certainly a valid configuration, if an unusual one.
+            const packagesFolderPath = combinePaths(projectRootPath, modulesDirName);
+            filesToWatch.push(packagesFolderPath);
+            if (!host.directoryExists(packagesFolderPath)) {
                 return;
             }
 
-            filesToWatch.push(jsonPath);
-            const jsonConfig: PackageJson = readConfigFile(jsonPath, path => host.readFile(path)).config;
-            const jsonTypingNames = flatMap([jsonConfig.dependencies, jsonConfig.devDependencies, jsonConfig.optionalDependencies, jsonConfig.peerDependencies], getOwnKeys);
-            addInferredTypings(jsonTypingNames, `Typing names in '${jsonPath}' dependencies`);
+            // There's two cases we have to take into account here:
+            // 1. If manifest is undefined, then we're not using a manifest.
+            //    That means that we should scan _all_ dependencies at the top
+            //    level of the modulesDir.
+            // 2. If manifest is defined, then we can do some special
+            //    filtering to reduce the amount of scanning we need to do.
+            //
+            // Previous versions of this algorithm checked for a `_requiredBy`
+            // field in the package.json, but that field is only present in
+            // `npm@>=3 <7`.
+
+            // Package names that do **not** provide their own typings, so
+            // we'll look them up.
+            const packageNames: string[] = [];
+
+            const dependencyManifestNames = manifestTypingNames
+                // This is #1 described above.
+                ? manifestTypingNames.map(typingName => combinePaths(packagesFolderPath, typingName, manifestName))
+                // And #2. Depth = 3 because scoped packages look like `node_modules/@foo/bar/package.json`
+                : host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 3)
+                    .filter(manifestPath => {
+                        if (getBaseFileName(manifestPath) !== manifestName) {
+                            return false;
+                        }
+                        // It's ok to treat
+                        // `node_modules/@foo/bar/package.json` as a manifest,
+                        // but not `node_modules/jquery/nested/package.json`.
+                        // We only assume depth 3 is ok for formally scoped
+                        // packages. So that needs this dance here.
+                        const pathComponents = getPathComponents(normalizePath(manifestPath));
+                        const isScoped = pathComponents[pathComponents.length - 3][0] === "@";
+                        return isScoped && pathComponents[pathComponents.length - 4].toLowerCase() === modulesDirName || // `node_modules/@foo/bar`
+                            !isScoped && pathComponents[pathComponents.length - 3].toLowerCase() === modulesDirName; // `node_modules/foo`
+                    });
+
+            if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
+
+            // Once we have the names of things to look up, we iterate over
+            // and either collect their included typings, or add them to the
+            // list of typings we need to look up separately.
+            for (const manifestPath of dependencyManifestNames) {
+                const normalizedFileName = normalizePath(manifestPath);
+                const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
+                const manifest: PackageJson = result.config;
+
+                // If the package has its own d.ts typings, those will take precedence. Otherwise the package name will be used
+                // to download d.ts files from DefinitelyTyped
+                if (!manifest.name) {
+                    continue;
+                }
+                const ownTypes = manifest.types || manifest.typings;
+                if (ownTypes) {
+                    const absolutePath = getNormalizedAbsolutePath(ownTypes, getDirectoryPath(normalizedFileName));
+                    if (host.fileExists(absolutePath)) {
+                        if (log) log(`    Package '${manifest.name}' provides its own types.`);
+                        inferredTypings.set(manifest.name, absolutePath);
+                    }
+                    else {
+                        if (log) log(`    Package '${manifest.name}' provides its own types but they are missing.`);
+                    }
+                }
+                else {
+                    packageNames.push(manifest.name);
+                }
+            }
+
+            addInferredTypings(packageNames, "    Found package names");
         }
 
         /**
@@ -235,58 +328,6 @@ namespace ts.JsTyping {
                 addInferredTyping("react");
             }
         }
-
-        /**
-         * Infer typing names from packages folder (ex: node_module, bower_components)
-         * @param packagesFolderPath is the path to the packages folder
-         */
-        function getTypingNamesFromPackagesFolder(packagesFolderPath: string, filesToWatch: Push<string>) {
-            filesToWatch.push(packagesFolderPath);
-
-            // Todo: add support for ModuleResolutionHost too
-            if (!host.directoryExists(packagesFolderPath)) {
-                return;
-            }
-
-            // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
-            const fileNames = host.readDirectory(packagesFolderPath, [Extension.Json], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
-            if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(fileNames)}`);
-            const packageNames: string[] = [];
-            for (const fileName of fileNames) {
-                const normalizedFileName = normalizePath(fileName);
-                const baseFileName = getBaseFileName(normalizedFileName);
-                if (baseFileName !== "package.json" && baseFileName !== "bower.json") {
-                    continue;
-                }
-                const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
-                const packageJson: PackageJson = result.config;
-
-                // npm 3's package.json contains a "_requiredBy" field
-                // we should include all the top level module names for npm 2, and only module names whose
-                // "_requiredBy" field starts with "#" or equals "/" for npm 3.
-                if (baseFileName === "package.json" && packageJson._requiredBy &&
-                    filter(packageJson._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
-                    continue;
-                }
-
-                // If the package has its own d.ts typings, those will take precedence. Otherwise the package name will be used
-                // to download d.ts files from DefinitelyTyped
-                if (!packageJson.name) {
-                    continue;
-                }
-                const ownTypes = packageJson.types || packageJson.typings;
-                if (ownTypes) {
-                    const absolutePath = getNormalizedAbsolutePath(ownTypes, getDirectoryPath(normalizedFileName));
-                    if (log) log(`    Package '${packageJson.name}' provides its own types.`);
-                    inferredTypings.set(packageJson.name, absolutePath);
-                }
-                else {
-                    packageNames.push(packageJson.name);
-                }
-            }
-            addInferredTypings(packageNames, "    Found package names");
-        }
-
     }
 
     export const enum NameValidationResult {

@@ -1,5 +1,4 @@
-// @strictNullChecks: true
-// @strictFunctionTypes: true
+// @strict: true
 
 function assertNever(x: never) {
     return x;
@@ -249,6 +248,20 @@ function narrowingNarrows(x: {} | undefined) {
         case 'undefined': assertUndefined(x); return;
         case 'number': assertNever(x); return;
         default: const _y: {} = x; return;
+    }
+}
+
+function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertNever(x); return;
+        case 'symbol': assertNever(x); return;
+        case 'object': const _: {} = assertNever(x); return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+        case 'number': assertNever(x); return;
+        default: const _y: {} = assertNever(x); return;
     }
 }
 

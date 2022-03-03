@@ -13,7 +13,7 @@ let rest: { };
 >rest : {}
 
 let complex: { x: { ka, ki }, y: number };
->complex : { x: { ka: any; ki: any; }; y: number; }
+>complex : { x: {    ka;    ki;}; y: number; }
 >x : { ka: any; ki: any; }
 >ka : any
 >ki : any
@@ -34,7 +34,7 @@ let complex: { x: { ka, ki }, y: number };
 
 // should be:
 let overEmit: { a: { ka: string, x: string }[], b: { z: string, ki: string, ku: string }, ke: string, ko: string };
->overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
+>overEmit : { a: {    ka: string;    x: string;}[]; b: {    z: string;    ki: string;    ku: string;}; ke: string; ko: string; }
 >a : { ka: string; x: string; }[]
 >ka : string
 >x : string

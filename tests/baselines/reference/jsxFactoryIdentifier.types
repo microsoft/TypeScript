@@ -91,7 +91,7 @@ let createElement = Element.createElement;
 >createElement : (args: any[]) => {}
 
 let c: {
->c : { a?: { b: string; }; }
+>c : { a?: {    b: string;}; }
 
 	a?: {
 >a : { b: string; }

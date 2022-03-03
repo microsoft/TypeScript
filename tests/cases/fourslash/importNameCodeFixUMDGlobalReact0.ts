@@ -29,8 +29,8 @@
 goTo.file("/a.tsx");
 
 verify.importFixAtPosition([
-    `import { Component } from "react";
-import * as React from "react";
+    `import * as React from "react";
+import { Component } from "react";
 export class MyMap extends Component { }
 <MyMap/>;`]);
 
@@ -38,6 +38,6 @@ export class MyMap extends Component { }
 goTo.file("/b.tsx");
 
 verify.importFixAtPosition([
-`import { Component } from "react";
-import * as React from "react";
+`import * as React from "react";
+import { Component } from "react";
 <></>;`]);

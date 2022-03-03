@@ -47,7 +47,7 @@ export as namespace Math2d;
 >Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
 
 export = M2D;
->M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index")
+>M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
 
 declare namespace M2D {
 >M2D : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts")
@@ -97,7 +97,7 @@ declare module 'math2d' {
 	// Add a method to the class
 	interface Vector {
 		reverse(): Math2d.Point;
->reverse : () => Point
+>reverse : () => Math2d.Point
 >Math2d : any
 	}
 }

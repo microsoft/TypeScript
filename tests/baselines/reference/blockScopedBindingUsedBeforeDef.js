@@ -15,7 +15,7 @@ for (var _i = 0, _a = [{}]; _i < _a.length; _i++) {
     continue;
 }
 // 2:
-for (var _c = a, a = {}[_c]; false;)
+for (var _c = {}, _d = a, a = _c[_d]; false;)
     continue;
 // 3:
-var _d = b, b = {}[_d];
+var _e = {}, _f = b, b = _e[_f];

@@ -1,0 +1,38 @@
+tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts(3,5): error TS6133: '#unused' is declared but its value is never read.
+tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts(11,5): error TS6133: '#unused' is declared but its value is never read.
+tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts(21,9): error TS6133: '#unused' is declared but its value is never read.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts (3 errors) ====
+    export class A {
+        #used = "used";
+        #unused = "unused";
+        ~~~~~~~
+!!! error TS6133: '#unused' is declared but its value is never read.
+        constructor () {
+            console.log(this.#used);
+        }
+    }
+    
+    export class A2 {
+        #used() {  };
+        #unused() { };
+        ~~~~~~~
+!!! error TS6133: '#unused' is declared but its value is never read.
+        constructor () {
+            console.log(this.#used());
+        }
+    }
+    
+    export class A3 {
+        get #used() { return 0 };
+        set #used(value: number) {  };
+        
+        get #unused() { return 0 };
+            ~~~~~~~
+!!! error TS6133: '#unused' is declared but its value is never read.
+        set #unused(value: number) {  };
+        constructor () {
+            console.log(this.#used);
+        }
+    }

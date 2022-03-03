@@ -41,5 +41,96 @@ namespace ts.projectSystem {
             const diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
         });
+
+        it("works when renaming file with different casing", () => {
+            const loggerFile: File = {
+                path: `${tscWatch.projectRoot}/Logger.ts`,
+                content: `export class logger { }`
+            };
+            const anotherFile: File = {
+                path: `${tscWatch.projectRoot}/another.ts`,
+                content: `import { logger } from "./Logger"; new logger();`
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { forceConsistentCasingInFileNames: true }
+                })
+            };
+
+            const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession([{ file: loggerFile, projectRootPath: tscWatch.projectRoot }], session);
+            verifyGetErrRequest({ session, host, files: [loggerFile] });
+
+            const newLoggerPath = loggerFile.path.toLowerCase();
+            host.renameFile(loggerFile.path, newLoggerPath);
+            closeFilesForSession([loggerFile], session);
+            openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: tscWatch.projectRoot }], session);
+
+            // Apply edits for rename
+            openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: anotherFile.path,
+                        textChanges: [{
+                            newText: "./logger",
+                            ...protocolTextSpanFromSubstring(
+                                anotherFile.content,
+                                "./Logger"
+                            )
+                        }]
+                    }]
+                }
+            });
+
+            // Check errors in both files
+            verifyGetErrRequest({ session, host, files: [newLoggerPath, anotherFile] });
+            baselineTsserverLogs("forceConsistentCasingInFileNames", "works when renaming file with different casing", session);
+        });
+
+        it("when changing module name with different casing", () => {
+            const loggerFile: File = {
+                path: `${tscWatch.projectRoot}/Logger.ts`,
+                content: `export class logger { }`
+            };
+            const anotherFile: File = {
+                path: `${tscWatch.projectRoot}/another.ts`,
+                content: `import { logger } from "./Logger"; new logger();`
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { forceConsistentCasingInFileNames: true }
+                })
+            };
+
+            const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
+            verifyGetErrRequest({ session, host, files: [anotherFile] });
+
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: anotherFile.path,
+                        textChanges: [{
+                            newText: "./logger",
+                            ...protocolTextSpanFromSubstring(
+                                anotherFile.content,
+                                "./Logger"
+                            )
+                        }]
+                    }]
+                }
+            });
+
+            // Check errors in both files
+            verifyGetErrRequest({ host, session, files: [anotherFile] });
+            baselineTsserverLogs("forceConsistentCasingInFileNames", "when changing module name with different casing", session);
+        });
     });
 }

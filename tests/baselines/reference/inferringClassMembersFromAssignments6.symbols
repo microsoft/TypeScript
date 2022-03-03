@@ -1,0 +1,61 @@
+=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.js ===
+function Foonly() {
+>Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
+
+    var self = this
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
+>this : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
+
+    self.x = 1
+>self.x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+>self : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+>x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+
+    self.m = function() {
+>self.m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
+>self : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
+>m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
+
+        console.log(self.x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>self.x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
+>x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+    }
+}
+Foonly.prototype.mreal = function() {
+>Foonly.prototype : Symbol(Foonly.mreal, Decl(inferringClassMembersFromAssignments6.js, 6, 1))
+>Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>mreal : Symbol(Foonly.mreal, Decl(inferringClassMembersFromAssignments6.js, 6, 1))
+
+    var self = this
+>self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 8, 7))
+>this : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
+
+    self.y = 2
+>self.y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
+>self : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
+>y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
+}
+const foo = new Foonly()
+>foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
+>Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
+
+foo.x
+>foo.x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+>foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
+>x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
+
+foo.y
+>foo.y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
+>foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
+>y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
+
+foo.m()
+>foo.m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
+>foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
+>m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
+

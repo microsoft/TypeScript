@@ -7,7 +7,7 @@ namespace ts {
 
     interface Test {
         source: string;
-        ranges: Map<Range>;
+        ranges: ESMap<string, Range>;
     }
 
     export function extractTest(source: string): Test {
@@ -15,7 +15,7 @@ namespace ts {
         let text = "";
         let lastPos = 0;
         let pos = 0;
-        const ranges = createMap<Range>();
+        const ranges = new Map<string, Range>();
 
         while (pos < source.length) {
             if (source.charCodeAt(pos) === CharacterCodes.openBracket &&
@@ -86,7 +86,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source }, includeLib);
+            const { program } = makeProgram({ path, content: t.source }, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -102,26 +102,26 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatSettings),
+                formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.equal(rangeToExtract.errors, undefined, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-            const infos = refactor.extractSymbol.getAvailableActions(context);
+            const infos = refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
             const actions = find(infos, info => info.description === description.message)!.actions;
 
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);
             data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
             for (const action of actions) {
-                const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
+                const { renameLocation, edits } = refactor.extractSymbol.getRefactorEditsToExtractSymbol(context, action.name)!;
                 assert.lengthOf(edits, 1);
                 data.push(`// ==SCOPE::${action.description}==`);
                 const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
                 const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                 data.push(newTextWithRename);
 
-                const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                const { program: diagProgram } = makeProgram({ path, content: newText }, includeLib);
                 assert.isFalse(hasSyntacticDiagnostics(diagProgram));
             }
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
@@ -132,7 +132,8 @@ namespace ts {
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
-            return program;
+            const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
+            return { program, autoImportProvider };
         }
 
         function hasSyntacticDiagnostics(program: Program) {
@@ -164,12 +165,12 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatSettings),
+                formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
             assert.isUndefined(rangeToExtract.errors, rangeToExtract.errors && "Range error: " + rangeToExtract.errors[0].messageText);
-            const infos = refactor.extractSymbol.getAvailableActions(context);
+            const infos = refactor.extractSymbol.getRefactorActionsToExtractSymbol(context);
             assert.isUndefined(find(infos, info => info.description === description.message));
         });
     }

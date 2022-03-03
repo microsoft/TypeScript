@@ -16,6 +16,7 @@ class C {
 
     d: typeof this.z; // error
 >d : Symbol(C.d, Decl(initializerReferencingConstructorLocals.ts, 5, 15))
+>this : Symbol(C, Decl(initializerReferencingConstructorLocals.ts, 0, 0))
 
     constructor(x) {
 >x : Symbol(x, Decl(initializerReferencingConstructorLocals.ts, 7, 16))
@@ -40,6 +41,7 @@ class D<T> {
 
     d: typeof this.z; // error
 >d : Symbol(D.d, Decl(initializerReferencingConstructorLocals.ts, 15, 15))
+>this : Symbol(D, Decl(initializerReferencingConstructorLocals.ts, 10, 1))
 
     constructor(x: T) {
 >x : Symbol(x, Decl(initializerReferencingConstructorLocals.ts, 17, 16))

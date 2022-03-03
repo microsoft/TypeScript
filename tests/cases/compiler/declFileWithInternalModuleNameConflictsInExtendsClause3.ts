@@ -5,7 +5,7 @@ module X.A.C {
     }
 }
 module X.A.B.C {
-    export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
+    export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
     }
 }
 

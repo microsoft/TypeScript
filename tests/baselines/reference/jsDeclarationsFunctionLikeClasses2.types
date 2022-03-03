@@ -11,9 +11,9 @@ export function Vec(len) {
      */
     this.storage = new Array(len);
 >this.storage = new Array(len) : any[]
->this.storage : any
->this : any
->storage : any
+>this.storage : number[]
+>this : this
+>storage : number[]
 >new Array(len) : any[]
 >Array : ArrayConstructor
 >len : number
@@ -142,7 +142,7 @@ export function Point2D(x, y) {
 >!(this instanceof Point2D) : boolean
 >(this instanceof Point2D) : boolean
 >this instanceof Point2D : boolean
->this : any
+>this : this
 >Point2D : typeof Point2D
 
         return new Point2D(x, y);
@@ -156,21 +156,21 @@ export function Point2D(x, y) {
 >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >Vec : typeof Vec
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->this : any
+>this : this
 >2 : 2
 
     this.x = x;
 >this.x = x : number
->this.x : any
->this : any
->x : any
+>this.x : number
+>this : this
+>x : number
 >x : number
 
     this.y = y;
 >this.y = y : number
->this.y : any
->this : any
->y : any
+>this.y : number
+>this : this
+>y : number
 >y : number
 }
 

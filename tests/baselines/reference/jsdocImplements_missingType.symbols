@@ -1,0 +1,12 @@
+=== /a.js ===
+class A { constructor() { this.x = 0; } }
+>A : Symbol(A, Decl(a.js, 0, 0))
+>this.x : Symbol(A.x, Decl(a.js, 0, 25))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>x : Symbol(A.x, Decl(a.js, 0, 25))
+
+/** @implements */
+class B  {
+>B : Symbol(B, Decl(a.js, 0, 41))
+}
+

@@ -1,4 +1,4 @@
-tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(28,15): error TS2304: Cannot find name 'T'.
 
 
@@ -25,7 +25,7 @@ tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(28,15): error 
     z.t = 2
     z.u = false
     ~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     /** @type {number} */
     let answer = z.add(3, { nested: 4 })
     

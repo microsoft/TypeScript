@@ -17,9 +17,9 @@ if (x = o ?? true) {
 "use strict";
 // assignments in shortcutting rhs
 var a;
-(o !== null && o !== void 0 ? o : (a = 1));
+o !== null && o !== void 0 ? o : (a = 1);
 a.toString();
 var x;
-if (x = (o !== null && o !== void 0 ? o : true)) {
+if (x = o !== null && o !== void 0 ? o : true) {
     x;
 }

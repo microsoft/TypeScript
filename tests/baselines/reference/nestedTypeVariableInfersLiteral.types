@@ -5,12 +5,12 @@ declare function direct<A extends string>(a: A | A[]): Record<A, string>
 >a : A | A[]
 
 declare function nested<A extends string>(a: { fields: A }): Record<A, string>
->nested : <A extends string>(a: { fields: A; }) => Record<A, string>
+>nested : <A extends string>(a: {    fields: A;}) => Record<A, string>
 >a : { fields: A; }
 >fields : A
 
 declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>
->nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
+>nestedUnion : <A extends string>(a: {    fields: A | A[];}) => Record<A, string>
 >a : { fields: A | A[]; }
 >fields : A | A[]
 
@@ -55,7 +55,7 @@ const nestedUnionArray = nestedUnion({fields: ["z", "y"]})
 >"y" : "y"
 
 declare function hasZField(arg: { z: string }): void
->hasZField : (arg: { z: string; }) => void
+>hasZField : (arg: {    z: string;}) => void
 >arg : { z: string; }
 >z : string
 

@@ -27,6 +27,7 @@ exports.default = createExperiment({
 "use strict";
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.obj = void 0;
 var other2 = require("./other");
 exports.obj = (_a = {},
     _a[other2.default.name] = 1,
@@ -40,7 +41,6 @@ declare type Experiment<Name> = {
 declare const _default: Experiment<"foo">;
 export default _default;
 //// [main.d.ts]
-import * as other2 from "./other";
 export declare const obj: {
-    [other2.default.name]: number;
+    foo: number;
 };

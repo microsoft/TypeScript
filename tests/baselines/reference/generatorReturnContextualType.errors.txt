@@ -1,0 +1,29 @@
+tests/cases/conformance/generators/generatorReturnContextualType.ts(17,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type '"x"'.
+
+
+==== tests/cases/conformance/generators/generatorReturnContextualType.ts (1 errors) ====
+    // #35995
+    
+    function* f1(): Generator<any, { x: 'x' }, any> {
+      return { x: 'x' };
+    }
+    
+    async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
+      return { x: 'x' };
+    }
+    
+    async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
+      return Promise.resolve({ x: 'x' });
+    }
+    
+    async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
+      const ret = { x: 'x' };
+      return Promise.resolve(ret); // Error
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"x"'.
+    }
+    

@@ -9,7 +9,7 @@ namespace ts {
         const diagnostics: DiagnosticWithLocation[] = [];
         compilerOptions = fixupCompilerOptions(compilerOptions!, diagnostics); // TODO: GH#18217
         const nodes = isArray(source) ? source : [source];
-        const result = transformNodes(/*resolver*/ undefined, /*emitHost*/ undefined, compilerOptions, nodes, transformers, /*allowDtsFiles*/ true);
+        const result = transformNodes(/*resolver*/ undefined, /*emitHost*/ undefined, factory, compilerOptions, nodes, transformers, /*allowDtsFiles*/ true);
         result.diagnostics = concatenate(result.diagnostics, diagnostics);
         return result;
     }

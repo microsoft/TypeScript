@@ -1,2 +1,3 @@
 //// [file1.js.map]
 {"version":3,"file":"file1.js","sourceRoot":"","sources":["file1.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC"}
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IHZhciB4ID0gMTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWZpbGUxLmpzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmlsZTEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlMS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDIn0=,ZXhwb3J0IHZhciB4ID0gMTs=

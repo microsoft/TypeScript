@@ -1,0 +1,770 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts ===
+function Field() {
+>Field : Symbol(Field, Decl(privateNameDuplicateField.ts, 0, 0))
+
+    // Error
+    class A_Field_Field {
+>A_Field_Field : Symbol(A_Field_Field, Decl(privateNameDuplicateField.ts, 0, 18))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_Field.#foo, Decl(privateNameDuplicateField.ts, 3, 25), Decl(privateNameDuplicateField.ts, 4, 21))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_Field.#foo, Decl(privateNameDuplicateField.ts, 3, 25), Decl(privateNameDuplicateField.ts, 4, 21))
+    }
+
+    // Error
+    class A_Field_Method {
+>A_Field_Method : Symbol(A_Field_Method, Decl(privateNameDuplicateField.ts, 6, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_Method.#foo, Decl(privateNameDuplicateField.ts, 9, 26))
+
+        #foo() { }
+>#foo : Symbol(A_Field_Method.#foo, Decl(privateNameDuplicateField.ts, 10, 21))
+    }
+
+    // Error
+    class A_Field_Getter {
+>A_Field_Getter : Symbol(A_Field_Getter, Decl(privateNameDuplicateField.ts, 12, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_Getter.#foo, Decl(privateNameDuplicateField.ts, 15, 26))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Field_Getter.#foo, Decl(privateNameDuplicateField.ts, 16, 21))
+    }
+
+    // Error
+    class A_Field_Setter {
+>A_Field_Setter : Symbol(A_Field_Setter, Decl(privateNameDuplicateField.ts, 18, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_Setter.#foo, Decl(privateNameDuplicateField.ts, 21, 26))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Field_Setter.#foo, Decl(privateNameDuplicateField.ts, 22, 21))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 23, 17))
+    }
+
+    // Error
+    class A_Field_StaticField {
+>A_Field_StaticField : Symbol(A_Field_StaticField, Decl(privateNameDuplicateField.ts, 24, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_StaticField.#foo, Decl(privateNameDuplicateField.ts, 27, 31))
+
+        static #foo = "foo";
+>#foo : Symbol(A_Field_StaticField.#foo, Decl(privateNameDuplicateField.ts, 28, 21))
+    }
+
+    // Error
+    class A_Field_StaticMethod {
+>A_Field_StaticMethod : Symbol(A_Field_StaticMethod, Decl(privateNameDuplicateField.ts, 30, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 33, 32))
+
+        static #foo() { }
+>#foo : Symbol(A_Field_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 34, 21))
+    }
+
+    // Error
+    class A_Field_StaticGetter {
+>A_Field_StaticGetter : Symbol(A_Field_StaticGetter, Decl(privateNameDuplicateField.ts, 36, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 39, 32))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_Field_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 40, 21))
+    }
+
+    // Error
+    class A_Field_StaticSetter {
+>A_Field_StaticSetter : Symbol(A_Field_StaticSetter, Decl(privateNameDuplicateField.ts, 42, 5))
+
+        #foo = "foo";
+>#foo : Symbol(A_Field_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 45, 32))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_Field_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 46, 21))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 47, 24))
+    }
+}
+
+function Method() {
+>Method : Symbol(Method, Decl(privateNameDuplicateField.ts, 49, 1))
+
+    // Error
+    class A_Method_Field {
+>A_Method_Field : Symbol(A_Method_Field, Decl(privateNameDuplicateField.ts, 51, 19))
+
+        #foo() { }
+>#foo : Symbol(A_Method_Field.#foo, Decl(privateNameDuplicateField.ts, 53, 26), Decl(privateNameDuplicateField.ts, 54, 18))
+
+        #foo = "foo";
+>#foo : Symbol(A_Method_Field.#foo, Decl(privateNameDuplicateField.ts, 53, 26), Decl(privateNameDuplicateField.ts, 54, 18))
+    }
+
+    // Error
+    class A_Method_Method {
+>A_Method_Method : Symbol(A_Method_Method, Decl(privateNameDuplicateField.ts, 56, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_Method.#foo, Decl(privateNameDuplicateField.ts, 59, 27), Decl(privateNameDuplicateField.ts, 60, 18))
+
+        #foo() { }
+>#foo : Symbol(A_Method_Method.#foo, Decl(privateNameDuplicateField.ts, 59, 27), Decl(privateNameDuplicateField.ts, 60, 18))
+    }
+
+    // Error
+    class A_Method_Getter {
+>A_Method_Getter : Symbol(A_Method_Getter, Decl(privateNameDuplicateField.ts, 62, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_Getter.#foo, Decl(privateNameDuplicateField.ts, 65, 27))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Method_Getter.#foo, Decl(privateNameDuplicateField.ts, 66, 18))
+    }
+
+    // Error
+    class A_Method_Setter {
+>A_Method_Setter : Symbol(A_Method_Setter, Decl(privateNameDuplicateField.ts, 68, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_Setter.#foo, Decl(privateNameDuplicateField.ts, 71, 27))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Method_Setter.#foo, Decl(privateNameDuplicateField.ts, 72, 18))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 73, 17))
+    }
+
+    // Error
+    class A_Method_StaticField {
+>A_Method_StaticField : Symbol(A_Method_StaticField, Decl(privateNameDuplicateField.ts, 74, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_StaticField.#foo, Decl(privateNameDuplicateField.ts, 77, 32))
+
+        static #foo = "foo";
+>#foo : Symbol(A_Method_StaticField.#foo, Decl(privateNameDuplicateField.ts, 78, 18))
+    }
+
+    // Error
+    class A_Method_StaticMethod {
+>A_Method_StaticMethod : Symbol(A_Method_StaticMethod, Decl(privateNameDuplicateField.ts, 80, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 83, 33))
+
+        static #foo() { }
+>#foo : Symbol(A_Method_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 84, 18))
+    }
+
+    // Error
+    class A_Method_StaticGetter {
+>A_Method_StaticGetter : Symbol(A_Method_StaticGetter, Decl(privateNameDuplicateField.ts, 86, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 89, 33))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_Method_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 90, 18))
+    }
+
+    // Error
+    class A_Method_StaticSetter {
+>A_Method_StaticSetter : Symbol(A_Method_StaticSetter, Decl(privateNameDuplicateField.ts, 92, 5))
+
+        #foo() { }
+>#foo : Symbol(A_Method_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 95, 33))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_Method_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 96, 18))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 97, 24))
+    }
+}
+
+
+function Getter() {
+>Getter : Symbol(Getter, Decl(privateNameDuplicateField.ts, 99, 1))
+
+    // Error
+    class A_Getter_Field {
+>A_Getter_Field : Symbol(A_Getter_Field, Decl(privateNameDuplicateField.ts, 102, 19))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_Field.#foo, Decl(privateNameDuplicateField.ts, 104, 26), Decl(privateNameDuplicateField.ts, 105, 31))
+
+        #foo = "foo";
+>#foo : Symbol(A_Getter_Field.#foo, Decl(privateNameDuplicateField.ts, 104, 26), Decl(privateNameDuplicateField.ts, 105, 31))
+    }
+
+    // Error
+    class A_Getter_Method {
+>A_Getter_Method : Symbol(A_Getter_Method, Decl(privateNameDuplicateField.ts, 107, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_Method.#foo, Decl(privateNameDuplicateField.ts, 110, 27))
+
+        #foo() { }
+>#foo : Symbol(A_Getter_Method.#foo, Decl(privateNameDuplicateField.ts, 111, 31))
+    }
+
+    // Error
+    class A_Getter_Getter {
+>A_Getter_Getter : Symbol(A_Getter_Getter, Decl(privateNameDuplicateField.ts, 113, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_Getter.#foo, Decl(privateNameDuplicateField.ts, 116, 27))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_Getter.#foo, Decl(privateNameDuplicateField.ts, 117, 31))
+    }
+
+    //OK
+    class A_Getter_Setter {
+>A_Getter_Setter : Symbol(A_Getter_Setter, Decl(privateNameDuplicateField.ts, 119, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_Setter.#foo, Decl(privateNameDuplicateField.ts, 122, 27), Decl(privateNameDuplicateField.ts, 123, 31))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Getter_Setter.#foo, Decl(privateNameDuplicateField.ts, 122, 27), Decl(privateNameDuplicateField.ts, 123, 31))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 124, 17))
+    }
+
+    // Error
+    class A_Getter_StaticField {
+>A_Getter_StaticField : Symbol(A_Getter_StaticField, Decl(privateNameDuplicateField.ts, 125, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 128, 32))
+
+        static #foo() { }
+>#foo : Symbol(A_Getter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 129, 31))
+    }
+
+    // Error
+    class A_Getter_StaticMethod {
+>A_Getter_StaticMethod : Symbol(A_Getter_StaticMethod, Decl(privateNameDuplicateField.ts, 131, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 134, 33))
+
+        static #foo() { }
+>#foo : Symbol(A_Getter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 135, 31))
+    }
+
+    // Error
+    class A_Getter_StaticGetter {
+>A_Getter_StaticGetter : Symbol(A_Getter_StaticGetter, Decl(privateNameDuplicateField.ts, 137, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 140, 33))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_Getter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 141, 31))
+    }
+
+    // Error
+    class A_Getter_StaticSetter {
+>A_Getter_StaticSetter : Symbol(A_Getter_StaticSetter, Decl(privateNameDuplicateField.ts, 143, 5))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Getter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 146, 33))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_Getter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 147, 31))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 148, 24))
+    }
+}
+
+function Setter() {
+>Setter : Symbol(Setter, Decl(privateNameDuplicateField.ts, 150, 1))
+
+    // Error
+    class A_Setter_Field {
+>A_Setter_Field : Symbol(A_Setter_Field, Decl(privateNameDuplicateField.ts, 152, 19))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_Field.#foo, Decl(privateNameDuplicateField.ts, 154, 26), Decl(privateNameDuplicateField.ts, 155, 35))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 155, 17))
+
+        #foo = "foo";
+>#foo : Symbol(A_Setter_Field.#foo, Decl(privateNameDuplicateField.ts, 154, 26), Decl(privateNameDuplicateField.ts, 155, 35))
+    }
+
+    // Error
+    class A_Setter_Method {
+>A_Setter_Method : Symbol(A_Setter_Method, Decl(privateNameDuplicateField.ts, 157, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_Method.#foo, Decl(privateNameDuplicateField.ts, 160, 27))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 161, 17))
+
+        #foo() { }
+>#foo : Symbol(A_Setter_Method.#foo, Decl(privateNameDuplicateField.ts, 161, 35))
+    }
+
+    // OK
+    class A_Setter_Getter {
+>A_Setter_Getter : Symbol(A_Setter_Getter, Decl(privateNameDuplicateField.ts, 163, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_Getter.#foo, Decl(privateNameDuplicateField.ts, 166, 27), Decl(privateNameDuplicateField.ts, 167, 35))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 167, 17))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_Setter_Getter.#foo, Decl(privateNameDuplicateField.ts, 166, 27), Decl(privateNameDuplicateField.ts, 167, 35))
+    }
+
+    // Error
+    class A_Setter_Setter {
+>A_Setter_Setter : Symbol(A_Setter_Setter, Decl(privateNameDuplicateField.ts, 169, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_Setter.#foo, Decl(privateNameDuplicateField.ts, 172, 27))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 173, 17))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_Setter.#foo, Decl(privateNameDuplicateField.ts, 173, 35))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 174, 17))
+    }
+
+    // Error
+    class A_Setter_StaticField {
+>A_Setter_StaticField : Symbol(A_Setter_StaticField, Decl(privateNameDuplicateField.ts, 175, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 178, 32))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 179, 17))
+
+        static #foo = "foo";
+>#foo : Symbol(A_Setter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 179, 35))
+    }
+
+    // Error
+    class A_Setter_StaticMethod {
+>A_Setter_StaticMethod : Symbol(A_Setter_StaticMethod, Decl(privateNameDuplicateField.ts, 181, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 184, 33))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 185, 17))
+
+        static #foo() { }
+>#foo : Symbol(A_Setter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 185, 35))
+    }
+
+    // Error
+    class A_Setter_StaticGetter {
+>A_Setter_StaticGetter : Symbol(A_Setter_StaticGetter, Decl(privateNameDuplicateField.ts, 187, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 190, 33))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 191, 17))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_Setter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 191, 35))
+    }
+
+    // Error
+    class A_Setter_StaticSetter {
+>A_Setter_StaticSetter : Symbol(A_Setter_StaticSetter, Decl(privateNameDuplicateField.ts, 193, 5))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_Setter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 196, 33))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 197, 17))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_Setter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 197, 35))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 198, 24))
+    }
+}
+
+function StaticField() {
+>StaticField : Symbol(StaticField, Decl(privateNameDuplicateField.ts, 200, 1))
+
+    // Error
+    class A_StaticField_Field {
+>A_StaticField_Field : Symbol(A_StaticField_Field, Decl(privateNameDuplicateField.ts, 202, 24))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_Field.#foo, Decl(privateNameDuplicateField.ts, 204, 31))
+
+        #foo = "foo";
+>#foo : Symbol(A_StaticField_Field.#foo, Decl(privateNameDuplicateField.ts, 205, 28))
+    }
+
+    // Error
+    class A_StaticField_Method {
+>A_StaticField_Method : Symbol(A_StaticField_Method, Decl(privateNameDuplicateField.ts, 207, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_Method.#foo, Decl(privateNameDuplicateField.ts, 210, 32))
+
+        #foo() { }
+>#foo : Symbol(A_StaticField_Method.#foo, Decl(privateNameDuplicateField.ts, 211, 28))
+    }
+
+    // Error
+    class A_StaticField_Getter {
+>A_StaticField_Getter : Symbol(A_StaticField_Getter, Decl(privateNameDuplicateField.ts, 213, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_Getter.#foo, Decl(privateNameDuplicateField.ts, 216, 32))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_StaticField_Getter.#foo, Decl(privateNameDuplicateField.ts, 217, 28))
+    }
+
+    // Error
+    class A_StaticField_Setter {
+>A_StaticField_Setter : Symbol(A_StaticField_Setter, Decl(privateNameDuplicateField.ts, 219, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_Setter.#foo, Decl(privateNameDuplicateField.ts, 222, 32))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_StaticField_Setter.#foo, Decl(privateNameDuplicateField.ts, 223, 28))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 224, 17))
+    }
+
+    // Error
+    class A_StaticField_StaticField {
+>A_StaticField_StaticField : Symbol(A_StaticField_StaticField, Decl(privateNameDuplicateField.ts, 225, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_StaticField.#foo, Decl(privateNameDuplicateField.ts, 228, 37), Decl(privateNameDuplicateField.ts, 229, 28))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_StaticField.#foo, Decl(privateNameDuplicateField.ts, 228, 37), Decl(privateNameDuplicateField.ts, 229, 28))
+    }
+
+    // Error
+    class A_StaticField_StaticMethod {
+>A_StaticField_StaticMethod : Symbol(A_StaticField_StaticMethod, Decl(privateNameDuplicateField.ts, 231, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 234, 38))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticField_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 235, 28))
+    }
+
+    // Error
+    class A_StaticField_StaticGetter {
+>A_StaticField_StaticGetter : Symbol(A_StaticField_StaticGetter, Decl(privateNameDuplicateField.ts, 237, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 240, 38))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticField_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 241, 28))
+    }
+
+    // Error
+    class A_StaticField_StaticSetter {
+>A_StaticField_StaticSetter : Symbol(A_StaticField_StaticSetter, Decl(privateNameDuplicateField.ts, 243, 5))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticField_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 246, 38))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticField_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 247, 28))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 248, 24))
+    }
+}
+
+function StaticMethod() {
+>StaticMethod : Symbol(StaticMethod, Decl(privateNameDuplicateField.ts, 250, 1))
+
+    // Error
+    class A_StaticMethod_Field {
+>A_StaticMethod_Field : Symbol(A_StaticMethod_Field, Decl(privateNameDuplicateField.ts, 252, 25))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_Field.#foo, Decl(privateNameDuplicateField.ts, 254, 32))
+
+        #foo = "foo";
+>#foo : Symbol(A_StaticMethod_Field.#foo, Decl(privateNameDuplicateField.ts, 255, 25))
+    }
+
+    // Error
+    class A_StaticMethod_Method {
+>A_StaticMethod_Method : Symbol(A_StaticMethod_Method, Decl(privateNameDuplicateField.ts, 257, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_Method.#foo, Decl(privateNameDuplicateField.ts, 260, 33))
+
+        #foo() { }
+>#foo : Symbol(A_StaticMethod_Method.#foo, Decl(privateNameDuplicateField.ts, 261, 25))
+    }
+
+    // Error
+    class A_StaticMethod_Getter {
+>A_StaticMethod_Getter : Symbol(A_StaticMethod_Getter, Decl(privateNameDuplicateField.ts, 263, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_Getter.#foo, Decl(privateNameDuplicateField.ts, 266, 33))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_StaticMethod_Getter.#foo, Decl(privateNameDuplicateField.ts, 267, 25))
+    }
+
+    // Error
+    class A_StaticMethod_Setter {
+>A_StaticMethod_Setter : Symbol(A_StaticMethod_Setter, Decl(privateNameDuplicateField.ts, 269, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_Setter.#foo, Decl(privateNameDuplicateField.ts, 272, 33))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_StaticMethod_Setter.#foo, Decl(privateNameDuplicateField.ts, 273, 25))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 274, 17))
+    }
+
+    // Error
+    class A_StaticMethod_StaticField {
+>A_StaticMethod_StaticField : Symbol(A_StaticMethod_StaticField, Decl(privateNameDuplicateField.ts, 275, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_StaticField.#foo, Decl(privateNameDuplicateField.ts, 278, 38), Decl(privateNameDuplicateField.ts, 279, 25))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticMethod_StaticField.#foo, Decl(privateNameDuplicateField.ts, 278, 38), Decl(privateNameDuplicateField.ts, 279, 25))
+    }
+
+    // Error
+    class A_StaticMethod_StaticMethod {
+>A_StaticMethod_StaticMethod : Symbol(A_StaticMethod_StaticMethod, Decl(privateNameDuplicateField.ts, 281, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 284, 39), Decl(privateNameDuplicateField.ts, 285, 25))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 284, 39), Decl(privateNameDuplicateField.ts, 285, 25))
+    }
+
+    // Error
+    class A_StaticMethod_StaticGetter {
+>A_StaticMethod_StaticGetter : Symbol(A_StaticMethod_StaticGetter, Decl(privateNameDuplicateField.ts, 287, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 290, 39))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticMethod_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 291, 25))
+    }
+
+    // Error
+    class A_StaticMethod_StaticSetter {
+>A_StaticMethod_StaticSetter : Symbol(A_StaticMethod_StaticSetter, Decl(privateNameDuplicateField.ts, 293, 5))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticMethod_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 296, 39))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticMethod_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 297, 25))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 298, 24))
+    }
+}
+
+function StaticGetter() {
+>StaticGetter : Symbol(StaticGetter, Decl(privateNameDuplicateField.ts, 300, 1))
+
+    // Error
+    class A_StaticGetter_Field {
+>A_StaticGetter_Field : Symbol(A_StaticGetter_Field, Decl(privateNameDuplicateField.ts, 302, 25))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_Field.#foo, Decl(privateNameDuplicateField.ts, 305, 32))
+
+        #foo = "foo";
+>#foo : Symbol(A_StaticGetter_Field.#foo, Decl(privateNameDuplicateField.ts, 306, 38))
+    }
+
+    // Error
+    class A_StaticGetter_Method {
+>A_StaticGetter_Method : Symbol(A_StaticGetter_Method, Decl(privateNameDuplicateField.ts, 308, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_Method.#foo, Decl(privateNameDuplicateField.ts, 311, 33))
+
+        #foo() { }
+>#foo : Symbol(A_StaticGetter_Method.#foo, Decl(privateNameDuplicateField.ts, 312, 38))
+    }
+
+    // Error
+    class A_StaticGetter_Getter {
+>A_StaticGetter_Getter : Symbol(A_StaticGetter_Getter, Decl(privateNameDuplicateField.ts, 314, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_Getter.#foo, Decl(privateNameDuplicateField.ts, 317, 33))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_Getter.#foo, Decl(privateNameDuplicateField.ts, 318, 38))
+    }
+
+    // Error
+    class A_StaticGetter_Setter {
+>A_StaticGetter_Setter : Symbol(A_StaticGetter_Setter, Decl(privateNameDuplicateField.ts, 320, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_Setter.#foo, Decl(privateNameDuplicateField.ts, 323, 33))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_StaticGetter_Setter.#foo, Decl(privateNameDuplicateField.ts, 324, 38))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 325, 17))
+    }
+
+    // Error
+    class A_StaticGetter_StaticField {
+>A_StaticGetter_StaticField : Symbol(A_StaticGetter_StaticField, Decl(privateNameDuplicateField.ts, 326, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 329, 38))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticGetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 330, 38))
+    }
+
+    // Error
+    class A_StaticGetter_StaticMethod {
+>A_StaticGetter_StaticMethod : Symbol(A_StaticGetter_StaticMethod, Decl(privateNameDuplicateField.ts, 332, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 335, 39))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticGetter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 336, 38))
+    }
+
+    // Error
+    class A_StaticGetter_StaticGetter {
+>A_StaticGetter_StaticGetter : Symbol(A_StaticGetter_StaticGetter, Decl(privateNameDuplicateField.ts, 338, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 341, 39))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 342, 38))
+    }
+    // OK
+    class A_StaticGetter_StaticSetter {
+>A_StaticGetter_StaticSetter : Symbol(A_StaticGetter_StaticSetter, Decl(privateNameDuplicateField.ts, 344, 5))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticGetter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 346, 39), Decl(privateNameDuplicateField.ts, 347, 38))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticGetter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 346, 39), Decl(privateNameDuplicateField.ts, 347, 38))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 348, 24))
+    }
+}
+
+function StaticSetter() {
+>StaticSetter : Symbol(StaticSetter, Decl(privateNameDuplicateField.ts, 350, 1))
+
+    // Error
+    class A_StaticSetter_Field {
+>A_StaticSetter_Field : Symbol(A_StaticSetter_Field, Decl(privateNameDuplicateField.ts, 352, 25))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_Field.#foo, Decl(privateNameDuplicateField.ts, 354, 32))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 355, 24))
+
+        #foo = "foo";
+>#foo : Symbol(A_StaticSetter_Field.#foo, Decl(privateNameDuplicateField.ts, 355, 42))
+    }
+
+    // Error
+    class A_StaticSetter_Method {
+>A_StaticSetter_Method : Symbol(A_StaticSetter_Method, Decl(privateNameDuplicateField.ts, 357, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_Method.#foo, Decl(privateNameDuplicateField.ts, 360, 33))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 361, 24))
+
+        #foo() { }
+>#foo : Symbol(A_StaticSetter_Method.#foo, Decl(privateNameDuplicateField.ts, 361, 42))
+    }
+
+
+    // Error
+    class A_StaticSetter_Getter {
+>A_StaticSetter_Getter : Symbol(A_StaticSetter_Getter, Decl(privateNameDuplicateField.ts, 363, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_Getter.#foo, Decl(privateNameDuplicateField.ts, 367, 33))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 368, 24))
+
+        get #foo() { return ""}
+>#foo : Symbol(A_StaticSetter_Getter.#foo, Decl(privateNameDuplicateField.ts, 368, 42))
+    }
+
+    // Error
+    class A_StaticSetter_Setter {
+>A_StaticSetter_Setter : Symbol(A_StaticSetter_Setter, Decl(privateNameDuplicateField.ts, 370, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_Setter.#foo, Decl(privateNameDuplicateField.ts, 373, 33))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 374, 24))
+
+        set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_Setter.#foo, Decl(privateNameDuplicateField.ts, 374, 42))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 375, 17))
+    }
+
+    // Error
+    class A_StaticSetter_StaticField {
+>A_StaticSetter_StaticField : Symbol(A_StaticSetter_StaticField, Decl(privateNameDuplicateField.ts, 376, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 379, 38), Decl(privateNameDuplicateField.ts, 380, 42))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 380, 24))
+
+        static #foo = "foo";
+>#foo : Symbol(A_StaticSetter_StaticField.#foo, Decl(privateNameDuplicateField.ts, 379, 38), Decl(privateNameDuplicateField.ts, 380, 42))
+    }
+
+    // Error
+    class A_StaticSetter_StaticMethod {
+>A_StaticSetter_StaticMethod : Symbol(A_StaticSetter_StaticMethod, Decl(privateNameDuplicateField.ts, 382, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 385, 39))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 386, 24))
+
+        static #foo() { }
+>#foo : Symbol(A_StaticSetter_StaticMethod.#foo, Decl(privateNameDuplicateField.ts, 386, 42))
+    }
+
+    // OK
+    class A_StaticSetter_StaticGetter {
+>A_StaticSetter_StaticGetter : Symbol(A_StaticSetter_StaticGetter, Decl(privateNameDuplicateField.ts, 388, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 391, 39), Decl(privateNameDuplicateField.ts, 392, 42))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 392, 24))
+
+        static get #foo() { return ""}
+>#foo : Symbol(A_StaticSetter_StaticGetter.#foo, Decl(privateNameDuplicateField.ts, 391, 39), Decl(privateNameDuplicateField.ts, 392, 42))
+    }
+
+    // Error
+    class A_StaticSetter_StaticSetter {
+>A_StaticSetter_StaticSetter : Symbol(A_StaticSetter_StaticSetter, Decl(privateNameDuplicateField.ts, 394, 5))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 397, 39))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 398, 24))
+
+        static set #foo(value: string) { }
+>#foo : Symbol(A_StaticSetter_StaticSetter.#foo, Decl(privateNameDuplicateField.ts, 398, 42))
+>value : Symbol(value, Decl(privateNameDuplicateField.ts, 399, 24))
+    }
+}
+

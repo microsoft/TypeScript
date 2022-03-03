@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/clone/clone.js(167,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
 node_modules/clone/clone.js(167,23): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.

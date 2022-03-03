@@ -1,0 +1,18 @@
+=== tests/cases/compiler/privateNameWeakMapCollision.ts ===
+function test() {
+>test : Symbol(test, Decl(privateNameWeakMapCollision.ts, 0, 0))
+
+    let WeakMap;
+>WeakMap : Symbol(WeakMap, Decl(privateNameWeakMapCollision.ts, 1, 7))
+
+    let WeakSet;
+>WeakSet : Symbol(WeakSet, Decl(privateNameWeakMapCollision.ts, 2, 7))
+
+    class C {
+>C : Symbol(C, Decl(privateNameWeakMapCollision.ts, 2, 16))
+
+        #x;
+>#x : Symbol(C.#x, Decl(privateNameWeakMapCollision.ts, 3, 13))
+    }
+}
+

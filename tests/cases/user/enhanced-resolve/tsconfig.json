@@ -7,10 +7,18 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ],
         "module": "CommonJS",
-        "target": "esnext",
+        "target": "esnext"
     },
-    "include": ["node_modules/enhanced-resolve"]
+    "include": [
+        "node_modules/enhanced-resolve",
+        "index.ts"
+    ]
 }

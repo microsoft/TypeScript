@@ -13,11 +13,12 @@ namespace ts.codefix {
 
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");
-            variations.push(createAction(context, sourceFile, node, createImportEqualsDeclaration(
+            variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
                 namespace.name,
-                createExternalModuleReference(node.moduleSpecifier)
+                factory.createExternalModuleReference(node.moduleSpecifier)
             )));
         }
 
@@ -26,7 +27,7 @@ namespace ts.codefix {
 
     function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-        return createCodeFixActionNoFixId(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
+        return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 
     registerCodeFix({
@@ -56,9 +57,8 @@ namespace ts.codefix {
             Diagnostics.Type_0_is_not_assignable_to_type_1.code,
             Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated.code,
             Diagnostics.Type_predicate_0_is_not_assignable_to_1.code,
-            Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2.code,
-            Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2.code,
-            Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1.code,
+            Diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3.code,
+            Diagnostics._0_index_type_1_is_not_assignable_to_2_index_type_3.code,
             Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2.code,
             Diagnostics.Property_0_in_type_1_is_not_assignable_to_type_2.code,
             Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property.code,
@@ -88,8 +88,8 @@ namespace ts.codefix {
         }
         if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
             const sourceFile = context.sourceFile;
-            const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
-            fixes.push(createCodeFixActionNoFixId(fixName, changes, Diagnostics.Use_synthetic_default_member));
+            const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
+            fixes.push(createCodeFixActionWithoutFixAll(fixName, changes, Diagnostics.Use_synthetic_default_member));
         }
         return fixes;
     }

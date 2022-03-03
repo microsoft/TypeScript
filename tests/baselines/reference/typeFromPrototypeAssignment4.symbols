@@ -3,6 +3,8 @@ function Multimap4() {
 >Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
 
   this._map = {};
+>this._map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
+>this : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
 >_map : Symbol(Multimap4._map, Decl(a.js, 0, 22))
 
 };

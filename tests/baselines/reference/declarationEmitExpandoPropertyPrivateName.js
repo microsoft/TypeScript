@@ -13,15 +13,17 @@ q.val = f();
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f() { return null; }
 exports.f = f;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.q = void 0;
 var a_1 = require("./a");
 function q() { }
 exports.q = q;
-q.val = a_1.f();
+q.val = (0, a_1.f)();
 
 
 //// [a.d.ts]

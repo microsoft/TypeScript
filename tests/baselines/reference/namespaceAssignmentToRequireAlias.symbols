@@ -1,0 +1,12 @@
+=== tests/cases/conformance/salsa/bug40140.js ===
+const u = require('untyped');
+>u : Symbol(u, Decl(bug40140.js, 0, 5))
+>require : Symbol(require)
+
+u.assignment.nested = true
+>u : Symbol(u, Decl(bug40140.js, 0, 5))
+
+u.noError()
+>u : Symbol(u, Decl(bug40140.js, 0, 5))
+
+

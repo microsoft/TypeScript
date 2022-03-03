@@ -1,0 +1,8 @@
+=== tests/cases/conformance/salsa/bug38934.js ===
+var x = {};
+>x : Symbol(x, Decl(bug38934.js, 0, 3))
+
+// should not crash and also should not result in a property '0' on x.
+x[(0)] = 1;
+>x : Symbol(x, Decl(bug38934.js, 0, 3))
+

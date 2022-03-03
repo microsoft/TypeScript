@@ -41,10 +41,10 @@ export class D {}
 >D : D
 
 Object.defineProperty(D.prototype, "x", {
->Object.defineProperty(D.prototype, "x", {    get() {        return 12;    }}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(D.prototype, "x", {    get() {        return 12;    }}) : D
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >D.prototype : D
 >D : typeof D
 >prototype : D
@@ -63,10 +63,10 @@ export class E {}
 >E : E
 
 Object.defineProperty(E.prototype, "x", {
->Object.defineProperty(E.prototype, "x", {    /**     * @param {number} _arg     */    set(_arg) {}}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(E.prototype, "x", {    /**     * @param {number} _arg     */    set(_arg) {}}) : E
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >E.prototype : E
 >E : typeof E
 >prototype : E
@@ -86,10 +86,10 @@ export class F {}
 >F : F
 
 Object.defineProperty(F.prototype, "x", {
->Object.defineProperty(F.prototype, "x", {    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(F.prototype, "x", {    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}}) : F
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >F.prototype : F
 >F : typeof F
 >prototype : F

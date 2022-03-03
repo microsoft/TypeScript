@@ -2,10 +2,12 @@
     "files": [],
     "include": [],
     "references": [
+        { "path": "./shims" },
         { "path": "./tsc" },
         { "path": "./tsserver" },
         { "path": "./typingsInstaller" },
         { "path": "./watchGuard" },
+        { "path": "./debug" },
         { "path": "./cancellationToken" },
         { "path": "./testRunner" }
     ]

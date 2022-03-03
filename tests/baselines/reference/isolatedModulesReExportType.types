@@ -8,7 +8,7 @@ export import T2 = require("./exportEqualsT");
 
 // OK, has a value side
 export { C } from "./exportValue";
->C : typeof import("/exportValue").C
+>C : typeof CC
 
 // OK, even though the namespace it exports is only types.
 import * as NS from "./exportT";
@@ -29,6 +29,22 @@ export { T as T4 };
 >T : any
 >T4 : any
 
+// Ok, type-only import indicates that the export can be elided.
+import type { T as TT } from "./exportT";
+>T : any
+>TT : number
+
+export { TT };
+>TT : any
+
+// Error, type-only declaration is in a different file.
+import { C as CC } from "./reExportValueAsTypeOnly";
+>C : typeof CC
+>CC : typeof CC
+
+export { CC };
+>CC : typeof CC
+
 === /exportT.ts ===
 export type T = number;
 >T : number
@@ -43,4 +59,8 @@ declare type T = number;
 
 export = T;
 >T : number
+
+=== /reExportValueAsTypeOnly.ts ===
+export type { C } from "./exportValue";
+>C : import("/exportValue").C
 

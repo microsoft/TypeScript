@@ -94,7 +94,7 @@ namespace ts.projectSystem {
                 content: `export {}; declare module "./a" {  export const y: number; }`
             };
             files.push(bFile);
-            host.reloadFS(files);
+            host.writeFile(bFile.path, bFile.content);
             service.openClientFile(bFile.path, /*fileContent*/ undefined, ScriptKind.TS, projectFolder);
             verifyProject();
 
@@ -103,6 +103,85 @@ namespace ts.projectSystem {
                 const project = service.configuredProjects.get(configFile.path)!;
                 checkProjectActualFiles(project, files.map(f => f.path));
             }
+        });
+
+        it("can open same file again", () => {
+            const projectFolder = "/user/someuser/projects/myproject";
+            const aFile: File = {
+                path: `${projectFolder}/src/a.ts`,
+                content: "export const x = 0;"
+            };
+            const configFile: File = {
+                path: `${projectFolder}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [aFile, configFile, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            verifyProject(aFile.content);
+            verifyProject(`${aFile.content}export const y = 10;`);
+
+            function verifyProject(aFileContent: string) {
+                service.openClientFile(aFile.path, aFileContent, ScriptKind.TS, projectFolder);
+                const project = service.configuredProjects.get(configFile.path)!;
+                checkProjectActualFiles(project, files.map(f => f.path));
+                assert.equal(project.getCurrentProgram()?.getSourceFile(aFile.path)!.text, aFileContent);
+            }
+        });
+
+        it("when file makes edits to add/remove comment directives, they are handled correcrly", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: `const x = 10;
+function foo() {
+    // @ts-ignore
+    let y: string = x;
+    return y;
+}
+function bar() {
+    // @ts-ignore
+    let z : string = x;
+    return z;
+}
+foo();
+bar();`
+            };
+            const host = createServerHost([file, libFile]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession([file], session);
+            verifyGetErrRequest({ session, host, files: [file] });
+
+            // Remove first ts-ignore and check only first error is reported
+            const tsIgnoreComment = `// @ts-ignore`;
+            const locationOfTsIgnore = protocolTextSpanFromSubstring(file.content, tsIgnoreComment);
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: file.path,
+                        textChanges: [{
+                            newText: "             ",
+                            ...locationOfTsIgnore
+                        }]
+                    }]
+                }
+            });
+            verifyGetErrRequest({ session, host, files: [file] });
+            // Revert the change and no errors should be reported
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: file.path,
+                        textChanges: [{
+                            newText: tsIgnoreComment,
+                            ...locationOfTsIgnore
+                        }]
+                    }]
+                }
+            });
+            verifyGetErrRequest({ session, host, files: [file] });
+            baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
         });
     });
 }

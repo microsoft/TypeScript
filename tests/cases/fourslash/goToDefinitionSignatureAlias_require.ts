@@ -9,4 +9,8 @@
 ////const f = require("./a");
 ////[|/*use*/f|]();
 
-verify.goToDefinition("use", "f");
+// @Filename: /bar.ts
+////import f = require("./a");
+////[|/*useTs*/f|]();
+
+verify.goToDefinition(["use", "useTs"], "f");

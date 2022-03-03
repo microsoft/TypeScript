@@ -2,18 +2,18 @@
 // Repro from #29067
 
 function test<T extends { a: string }>(obj: T) {
->test : <T extends { a: string; }>(obj: T) => Pick<T, Exclude<keyof T, "a">> & { b: string; }
+>test : <T extends { a: string; }>(obj: T) => Omit<T, "a"> & { b: string; }
 >a : string
 >obj : T
 
     let { a, ...rest } = obj;
 >a : string
->rest : Pick<T, Exclude<keyof T, "a">>
+>rest : Omit<T, "a">
 >obj : T
 
     return { ...rest, b: a };
->{ ...rest, b: a } : Pick<T, Exclude<keyof T, "a">> & { b: string; }
->rest : Pick<T, Exclude<keyof T, "a">>
+>{ ...rest, b: a } : Omit<T, "a"> & { b: string; }
+>rest : Omit<T, "a">
 >b : string
 >a : string
 }
@@ -30,7 +30,7 @@ let o2: { b: string, x: number } = test(o1);
 >o2 : { b: string; x: number; }
 >b : string
 >x : number
->test(o1) : Pick<{ a: string; x: number; }, "x"> & { b: string; }
->test : <T extends { a: string; }>(obj: T) => Pick<T, Exclude<keyof T, "a">> & { b: string; }
+>test(o1) : Omit<{ a: string; x: number; }, "a"> & { b: string; }
+>test : <T extends { a: string; }>(obj: T) => Omit<T, "a"> & { b: string; }
 >o1 : { a: string; x: number; }
 

@@ -45,3 +45,34 @@ x = true;
 x; // number
 >x : number
 
+// https://github.com/microsoft/TypeScript/issues/35484
+type D = { done: true, value: 1 } | { done: false, value: 2 };
+>D : D
+>done : true
+>true : true
+>value : 1
+>done : false
+>false : false
+>value : 2
+
+declare function fn(): D;
+>fn : () => D
+
+let o: D;
+>o : D
+
+if ((o = fn()).done) {
+>(o = fn()).done : boolean
+>(o = fn()) : D
+>o = fn() : D
+>o : D
+>fn() : D
+>fn : () => D
+>done : boolean
+
+    const y: 1 = o.value;
+>y : 1
+>o.value : 1
+>o : { done: true; value: 1; }
+>value : 1
+}

@@ -18,7 +18,7 @@ interface G<T, U extends B> {
 
 
 var v1: {
->v1 : { x: { a: string; }; y: { a: string; b: string; c: string; }; }
+>v1 : { x: {    a: string;}; y: {    a: string;    b: string;    c: string;}; }
 
     x: { a: string; }
 >x : { a: string; }

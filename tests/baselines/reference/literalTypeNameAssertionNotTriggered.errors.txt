@@ -1,4 +1,4 @@
-/a.ts(1,20): error TS2307: Cannot find module 'something'.
+/a.ts(1,20): error TS2307: Cannot find module 'something' or its corresponding type declarations.
 /b.ts(3,6): error TS2345: Argument of type '""' is not assignable to parameter of type '"x"'.
 
 
@@ -12,6 +12,6 @@
 ==== /a.ts (1 errors) ====
     import x = require("something");
                        ~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'something'.
+!!! error TS2307: Cannot find module 'something' or its corresponding type declarations.
     export { x };
     

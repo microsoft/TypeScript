@@ -10,7 +10,7 @@ o3.b?.c;
 
 
 //// [propertyAccessChain.2.js]
-var _a, _b, _c;
-(_a = o1) === null || _a === void 0 ? void 0 : _a.b;
-(_b = o2) === null || _b === void 0 ? void 0 : _b.b.c;
-(_c = o3.b) === null || _c === void 0 ? void 0 : _c.c;
+var _a;
+o1 === null || o1 === void 0 ? void 0 : o1.b;
+o2 === null || o2 === void 0 ? void 0 : o2.b.c;
+(_a = o3.b) === null || _a === void 0 ? void 0 : _a.c;

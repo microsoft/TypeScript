@@ -1,0 +1,84 @@
+=== tests/cases/compiler/doesNotNarrowUnionOfConstructorsWithInstanceof.ts ===
+class A {
+>A : A
+
+    length: 1
+>length : 1
+
+    constructor() {
+      this.length = 1
+>this.length = 1 : 1
+>this.length : 1
+>this : this
+>length : 1
+>1 : 1
+    }
+}
+
+class B {
+>B : B
+
+    length: 2
+>length : 2
+
+    constructor() {
+      this.length = 2
+>this.length = 2 : 2
+>this.length : 2
+>this : this
+>length : 2
+>2 : 2
+    }
+}
+
+function getTypedArray(flag: boolean) {
+>getTypedArray : (flag: boolean) => A | B
+>flag : boolean
+
+  return flag ? new A() : new B();
+>flag ? new A() : new B() : A | B
+>flag : boolean
+>new A() : A
+>A : typeof A
+>new B() : B
+>B : typeof B
+}
+function getTypedArrayConstructor(flag: boolean) {
+>getTypedArrayConstructor : (flag: boolean) => typeof A | typeof B
+>flag : boolean
+
+  return flag ? A : B;
+>flag ? A : B : typeof A | typeof B
+>flag : boolean
+>A : typeof A
+>B : typeof B
+}
+const a = getTypedArray(true);              // A | B
+>a : A | B
+>getTypedArray(true) : A | B
+>getTypedArray : (flag: boolean) => A | B
+>true : true
+
+const b = getTypedArrayConstructor(false);  // A constructor | B constructor
+>b : typeof A | typeof B
+>getTypedArrayConstructor(false) : typeof A | typeof B
+>getTypedArrayConstructor : (flag: boolean) => typeof A | typeof B
+>false : false
+
+if (!(a instanceof b)) {
+>!(a instanceof b) : boolean
+>(a instanceof b) : boolean
+>a instanceof b : boolean
+>a : A | B
+>b : typeof A | typeof B
+
+  console.log(a.length);  // Used to be property 'length' does not exist on type 'never'.
+>console.log(a.length) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a.length : 1 | 2
+>a : A | B
+>length : 1 | 2
+}
+

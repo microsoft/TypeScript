@@ -1,0 +1,14 @@
+tests/cases/conformance/es2019/globalThisGlobalExportAsGlobal.ts(2,9): error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+tests/cases/conformance/es2019/globalThisGlobalExportAsGlobal.ts(3,14): error TS2661: Cannot export 'globalThis'. Only local declarations can be exported from a module.
+
+
+==== tests/cases/conformance/es2019/globalThisGlobalExportAsGlobal.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/33754
+    declare global {
+            ~~~~~~
+!!! error TS2669: Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.
+        export { globalThis as global }
+                 ~~~~~~~~~~
+!!! error TS2661: Cannot export 'globalThis'. Only local declarations can be exported from a module.
+    }
+    

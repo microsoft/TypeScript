@@ -71,7 +71,7 @@ interface myArray extends Array<Number> { }
 interface myArray2 extends Array<Number|String> { }
 var c0: tup = [...temp2];                         // Error
 >c0 : tup
->[...temp2] : (number[] | string[])[]
+>[...temp2] : [number[], string[]]
 >...temp2 : number[] | string[]
 >temp2 : [number[], string[]]
 

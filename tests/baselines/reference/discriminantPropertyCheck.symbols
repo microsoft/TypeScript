@@ -508,3 +508,159 @@ function func3(value: Partial<UnionOfBar>) {
     }
 }
 
+// Repro from #30557
+
+interface TypeA {
+>TypeA : Symbol(TypeA, Decl(discriminantPropertyCheck.ts, 174, 1))
+
+    Name: "TypeA";
+>Name : Symbol(TypeA.Name, Decl(discriminantPropertyCheck.ts, 178, 17))
+
+    Value1: "Cool stuff!";
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantPropertyCheck.ts, 179, 18))
+}
+
+interface TypeB {
+>TypeB : Symbol(TypeB, Decl(discriminantPropertyCheck.ts, 181, 1))
+
+    Name: "TypeB";
+>Name : Symbol(TypeB.Name, Decl(discriminantPropertyCheck.ts, 183, 17))
+
+    Value2: 0;
+>Value2 : Symbol(TypeB.Value2, Decl(discriminantPropertyCheck.ts, 184, 18))
+}
+
+type Type = TypeA | TypeB;
+>Type : Symbol(Type, Decl(discriminantPropertyCheck.ts, 186, 1))
+>TypeA : Symbol(TypeA, Decl(discriminantPropertyCheck.ts, 174, 1))
+>TypeB : Symbol(TypeB, Decl(discriminantPropertyCheck.ts, 181, 1))
+
+declare function isType(x: unknown): x is Type;
+>isType : Symbol(isType, Decl(discriminantPropertyCheck.ts, 188, 26))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 190, 24))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 190, 24))
+>Type : Symbol(Type, Decl(discriminantPropertyCheck.ts, 186, 1))
+
+function WorksProperly(data: Type) {
+>WorksProperly : Symbol(WorksProperly, Decl(discriminantPropertyCheck.ts, 190, 47))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 192, 23))
+>Type : Symbol(Type, Decl(discriminantPropertyCheck.ts, 186, 1))
+
+    if (data.Name === "TypeA") {
+>data.Name : Symbol(Name, Decl(discriminantPropertyCheck.ts, 178, 17), Decl(discriminantPropertyCheck.ts, 183, 17))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 192, 23))
+>Name : Symbol(Name, Decl(discriminantPropertyCheck.ts, 178, 17), Decl(discriminantPropertyCheck.ts, 183, 17))
+
+        const value1 = data.Value1;
+>value1 : Symbol(value1, Decl(discriminantPropertyCheck.ts, 194, 13))
+>data.Value1 : Symbol(TypeA.Value1, Decl(discriminantPropertyCheck.ts, 179, 18))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 192, 23))
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantPropertyCheck.ts, 179, 18))
+    }
+}
+
+function DoesNotWork(data: unknown) {
+>DoesNotWork : Symbol(DoesNotWork, Decl(discriminantPropertyCheck.ts, 196, 1))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 198, 21))
+
+    if (isType(data)) {
+>isType : Symbol(isType, Decl(discriminantPropertyCheck.ts, 188, 26))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 198, 21))
+
+        if (data.Name === "TypeA") {
+>data.Name : Symbol(Name, Decl(discriminantPropertyCheck.ts, 178, 17), Decl(discriminantPropertyCheck.ts, 183, 17))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 198, 21))
+>Name : Symbol(Name, Decl(discriminantPropertyCheck.ts, 178, 17), Decl(discriminantPropertyCheck.ts, 183, 17))
+
+            const value1 = data.Value1;
+>value1 : Symbol(value1, Decl(discriminantPropertyCheck.ts, 201, 17))
+>data.Value1 : Symbol(TypeA.Value1, Decl(discriminantPropertyCheck.ts, 179, 18))
+>data : Symbol(data, Decl(discriminantPropertyCheck.ts, 198, 21))
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantPropertyCheck.ts, 179, 18))
+        }
+    }
+}
+
+// Repro from #36777
+
+type TestA = {
+>TestA : Symbol(TestA, Decl(discriminantPropertyCheck.ts, 204, 1))
+
+    type: 'testA';
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14))
+
+    bananas: 3;
+>bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+}
+  
+type TestB = {
+>TestB : Symbol(TestB, Decl(discriminantPropertyCheck.ts, 211, 1))
+
+    type: 'testB';
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 213, 14))
+
+    apples: 5;
+>apples : Symbol(apples, Decl(discriminantPropertyCheck.ts, 214, 18))
+}
+  
+type AllTests = TestA | TestB;
+>AllTests : Symbol(AllTests, Decl(discriminantPropertyCheck.ts, 216, 1))
+>TestA : Symbol(TestA, Decl(discriminantPropertyCheck.ts, 204, 1))
+>TestB : Symbol(TestB, Decl(discriminantPropertyCheck.ts, 211, 1))
+
+type MapOfAllTests = Record<string, AllTests>;
+>MapOfAllTests : Symbol(MapOfAllTests, Decl(discriminantPropertyCheck.ts, 218, 30))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>AllTests : Symbol(AllTests, Decl(discriminantPropertyCheck.ts, 216, 1))
+
+const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
+>doTestingStuff : Symbol(doTestingStuff, Decl(discriminantPropertyCheck.ts, 222, 5))
+>mapOfTests : Symbol(mapOfTests, Decl(discriminantPropertyCheck.ts, 222, 24))
+>MapOfAllTests : Symbol(MapOfAllTests, Decl(discriminantPropertyCheck.ts, 218, 30))
+>ids : Symbol(ids, Decl(discriminantPropertyCheck.ts, 222, 50))
+
+    ids.forEach(id => {
+>ids.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>ids : Symbol(ids, Decl(discriminantPropertyCheck.ts, 222, 50))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(discriminantPropertyCheck.ts, 223, 16))
+
+        let test;
+>test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
+
+        test = mapOfTests[id];
+>test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
+>mapOfTests : Symbol(mapOfTests, Decl(discriminantPropertyCheck.ts, 222, 24))
+>id : Symbol(id, Decl(discriminantPropertyCheck.ts, 223, 16))
+
+        if (test.type === 'testA') {
+>test.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14), Decl(discriminantPropertyCheck.ts, 213, 14))
+>test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14), Decl(discriminantPropertyCheck.ts, 213, 14))
+
+            console.log(test.bananas);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>test.bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
+>bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+        }
+        switch (test.type) {
+>test.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14), Decl(discriminantPropertyCheck.ts, 213, 14))
+>test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 208, 14), Decl(discriminantPropertyCheck.ts, 213, 14))
+
+            case 'testA': {
+                console.log(test.bananas);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>test.bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+>test : Symbol(test, Decl(discriminantPropertyCheck.ts, 224, 11))
+>bananas : Symbol(bananas, Decl(discriminantPropertyCheck.ts, 209, 18))
+            }
+        }
+    });
+};
+

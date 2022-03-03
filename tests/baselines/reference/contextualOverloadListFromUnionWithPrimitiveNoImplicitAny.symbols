@@ -1,0 +1,47 @@
+=== tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts ===
+// must target esnext for `String.normalize` to exist
+type Validate = (text: string, pos: number, self: Rule) => number | boolean;
+>Validate : Symbol(Validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 0, 0))
+>text : Symbol(text, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 1, 17))
+>pos : Symbol(pos, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 1, 30))
+>self : Symbol(self, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 1, 43))
+>Rule : Symbol(Rule, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 5, 1))
+
+interface FullRule {
+>FullRule : Symbol(FullRule, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 1, 76))
+
+    validate: string | RegExp | Validate;
+>validate : Symbol(FullRule.validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 2, 20))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 1 more)
+>Validate : Symbol(Validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 0, 0))
+
+    normalize?: (match: {x: string}) => void;
+>normalize : Symbol(FullRule.normalize, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 3, 41))
+>match : Symbol(match, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 4, 17))
+>x : Symbol(x, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 4, 25))
+}
+
+type Rule = string | FullRule;
+>Rule : Symbol(Rule, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 5, 1))
+>FullRule : Symbol(FullRule, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 1, 76))
+
+const obj: {field: Rule} = {
+>obj : Symbol(obj, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 9, 5))
+>field : Symbol(field, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 9, 12))
+>Rule : Symbol(Rule, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 5, 1))
+
+    field: {
+>field : Symbol(field, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 9, 28))
+
+        validate: (_t, _p, _s) => false,
+>validate : Symbol(validate, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 10, 12))
+>_t : Symbol(_t, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 11, 19))
+>_p : Symbol(_p, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 11, 22))
+>_s : Symbol(_s, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 11, 26))
+
+        normalize: match => match.x,
+>normalize : Symbol(normalize, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 11, 40))
+>match : Symbol(match, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 12, 18))
+>match : Symbol(match, Decl(contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts, 12, 18))
+    }
+};

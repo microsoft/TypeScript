@@ -1,0 +1,60 @@
+=== tests/cases/conformance/controlFlow/controlFlowBindingPatternOrder.ts ===
+// https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 2, 7))
+
+    const [{ [(a = 1)]: b } = [9, a] as const] = [];
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 3, 12))
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 2, 7))
+>const : Symbol(const)
+
+    const bb: 0 = b;
+>bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 4, 9))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 3, 12))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 7, 7))
+
+    const [{ [a]: b } = [9, a = 0] as const] = [];
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 7, 7))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 8, 12))
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 7, 7))
+>const : Symbol(const)
+
+    const bb: 9 = b;
+>bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 9, 9))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 8, 12))
+}
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
+
+    const [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 13, 12))
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 12, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 14, 9))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 13, 12))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
+
+    const [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 18, 12))
+>a : Symbol(a, Decl(controlFlowBindingPatternOrder.ts, 17, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowBindingPatternOrder.ts, 19, 9))
+>b : Symbol(b, Decl(controlFlowBindingPatternOrder.ts, 18, 12))
+}

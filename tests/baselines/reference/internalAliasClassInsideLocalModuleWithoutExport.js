@@ -18,6 +18,7 @@ export module m2 {
 //// [internalAliasClassInsideLocalModuleWithoutExport.js]
 "use strict";
 exports.__esModule = true;
+exports.m2 = exports.x = void 0;
 var x;
 (function (x) {
     var c = /** @class */ (function () {

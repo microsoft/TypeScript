@@ -15,6 +15,7 @@
 /////*placeOpenBraceOnNewLineForControlBlocks*/if (true)   {
 ////}
 /////*insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces*/{          var t = 1}; var  {a,b  }    = {   a: 'sw',  b:'r'   };function f(  {  a, b}) { }
+/////*insertSpaceAfterOpeningAndBeforeClosingEmptyBraces*/constructor() {        }
 
 const defaultFormatOption = format.copyFormatOptions();
 
@@ -31,6 +32,7 @@ runTest("insertSpaceBeforeTypeAnnotation", "const bar : number = 1;", "const bar
 runTest("placeOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
 runTest("placeOpenBraceOnNewLineForControlBlocks", "if (true)", "if (true) {");
 runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces", "{ var t = 1 }; var { a, b } = { a: 'sw', b: 'r' }; function f({ a, b }) { }", "{var t = 1}; var {a, b} = {a: 'sw', b: 'r'}; function f({a, b}) {}");
+runTest("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces", "constructor() { }", "constructor() {}");
 
 function runTest(propertyName: string, expectedStringWhenTrue: string, expectedStringWhenFalse: string) {
     // Go to the correct file

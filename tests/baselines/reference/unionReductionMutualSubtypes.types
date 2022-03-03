@@ -1,0 +1,38 @@
+=== tests/cases/compiler/unionReductionMutualSubtypes.ts ===
+// Repro from #35414
+
+interface ReturnVal {
+    something(): void;
+>something : () => void
+}
+
+const k: ReturnVal = { something() { } }
+>k : ReturnVal
+>{ something() { } } : { something(): void; }
+>something : () => void
+
+declare const val: ReturnVal;
+>val : ReturnVal
+
+function run(options: { something?(b?: string): void }) {
+>run : (options: { something?(b?: string | undefined): void; }) => void
+>options : { something?(b?: string | undefined): void; }
+>something : ((b?: string | undefined) => void) | undefined
+>b : string | undefined
+
+    const something = options.something ?? val.something;
+>something : (b?: string | undefined) => void
+>options.something ?? val.something : (b?: string | undefined) => void
+>options.something : ((b?: string | undefined) => void) | undefined
+>options : { something?(b?: string | undefined): void; }
+>something : ((b?: string | undefined) => void) | undefined
+>val.something : () => void
+>val : ReturnVal
+>something : () => void
+
+    something('');
+>something('') : void
+>something : (b?: string | undefined) => void
+>'' : ""
+}
+

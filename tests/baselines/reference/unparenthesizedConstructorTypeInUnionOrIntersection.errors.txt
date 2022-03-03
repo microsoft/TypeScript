@@ -1,0 +1,78 @@
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(1,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(2,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(3,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(4,12): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(5,19): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(8,4): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(11,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(12,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(13,12): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(14,12): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(15,19): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(18,4): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(20,37): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(21,31): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(22,16): error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts(22,41): error TS1386: Constructor type notation must be parenthesized when used in a union type.
+
+
+==== tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts (16 errors) ====
+    type U1 = string | new () => void;
+                      ~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    type U2 = string | new (foo: number) => void
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    type U3 = | new () => number
+               ~~~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    type U4 = | new (foo?: number) => void;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    type U5 = string | new (number: number, foo?: string) => void | number;
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    type U6 =
+      | string
+      | new (...args: any[]) => void
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      | number;
+    ~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    
+    type I1 = string & new () => void;
+                      ~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    type I2 = string & new (...foo: number[]) => void;
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    type I3 = & new () => boolean
+               ~~~~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    type I4 = & new () => boolean & null;
+               ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    type I5 = string & new (any: any, any2: any) => any & any;
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    type I6 =
+      & string
+      & new (foo: any) => void;
+       ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    
+    type M1 = string | number & string | new () => number;
+                                        ~~~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    type M2 = any & string | any & new () => void;
+                                  ~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+    type M3 = any & new (foo: any) => void | new () => void & any;
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1388: Constructor type notation must be parenthesized when used in an intersection type.
+                                            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1386: Constructor type notation must be parenthesized when used in a union type.
+    
+    type OK1 = string | (new ()=> void);
+    type OK2 = string | (new ()=> string | number);
+    

@@ -1,7 +1,7 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const ado = require("azure-devops-node-api");
 const { default: fetch } = require("node-fetch");
 
@@ -23,17 +23,15 @@ async function main() {
     const tgzUrl = new URL(artifact.resource.url);
     tgzUrl.search = `artifactName=tgz&fileId=${file.blob.id}&fileName=${file.path}`;
     const link = "" + tgzUrl;
-    const gh = new Octokit();
-    gh.authenticate({
-        type: "token",
-        token: process.argv[2]
+    const gh = new Octokit({
+        auth: process.argv[2]
     });
 
     // Please keep the strings "an installable tgz" and "packed" in this message, as well as the devDependencies section,
     // so that the playgrounds deployment process can find these comments.
 
     await gh.issues.createComment({
-        number: +process.env.SOURCE_ISSUE,
+        issue_number: +process.env.SOURCE_ISSUE,
         owner: "Microsoft",
         repo: "TypeScript",
         body: `Hey @${process.env.REQUESTING_USER}, I've packed this into [an installable tgz](${link}). You can install it for testing by referencing it in your \`package.json\` like so:
@@ -48,21 +46,20 @@ and then running \`npm install\`.
 `
     });
 
-    // Send a ping to https://github.com/orta/make-monaco-builds#pull-request-builds
-    await gh.request("POST /repos/orta/make-monaco-builds/dispatches", { event_type: +process.env.SOURCE_ISSUE })
+    // Temporarily disable until we get access controls set up right
+    // Send a ping to https://github.com/microsoft/typescript-make-monaco-builds#pull-request-builds
+    await gh.request("POST /repos/microsoft/typescript-make-monaco-builds/dispatches", { event_type: process.env.SOURCE_ISSUE, headers: { Accept: "application/vnd.github.everest-preview+json" }});
 }
 
 main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
-        const gh = new Octokit();
-        gh.authenticate({
-            type: "token",
-            token: process.argv[2]
+        const gh = new Octokit({
+            auth: process.argv[2]
         });
         await gh.issues.createComment({
-            number: +process.env.SOURCE_ISSUE,
+            issue_number: +process.env.SOURCE_ISSUE,
             owner: "Microsoft",
             repo: "TypeScript",
             body: `Hey @${process.env.REQUESTING_USER}, something went wrong when looking for the build artifact. ([You can check the log here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary)).`

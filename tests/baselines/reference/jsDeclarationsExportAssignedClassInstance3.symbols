@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+    static stat = 10;
+>stat : Symbol(Foo.stat, Decl(index.js, 0, 11))
+
+    member = 10;
+>member : Symbol(Foo.member, Decl(index.js, 1, 21))
+}
+
+module.exports = new Foo();
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 3, 1))
+>exports : Symbol(export=, Decl(index.js, 3, 1))
+>Foo : Symbol(Foo, Decl(index.js, 0, 0))
+
+module.exports.additional = 20;
+>module.exports.additional : Symbol(additional, Decl(index.js, 5, 27))
+>module.exports : Symbol(additional, Decl(index.js, 5, 27))
+>module : Symbol(module, Decl(index.js, 3, 1))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>additional : Symbol(additional, Decl(index.js, 5, 27))
+

@@ -1,0 +1,12 @@
+=== /b.ts ===
+const { Foo } = require("./a");
+>Foo : Symbol(Foo, Decl(b.ts, 0, 7))
+>require : Symbol(require, Decl(index.d.ts, 0, 13))
+
+export default class extends Foo {}
+>Foo : Symbol(Foo, Decl(b.ts, 0, 7))
+
+=== /node_modules/@types/node/index.d.ts ===
+declare const require: any;
+>require : Symbol(require, Decl(index.d.ts, 0, 13))
+

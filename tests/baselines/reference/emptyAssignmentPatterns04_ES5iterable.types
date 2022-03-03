@@ -29,6 +29,6 @@ let x, y, z, a1, a2, a3;
 >a2 : any
 >a3 : any
 >[] = a : any
->[] : undefined[]
+>[] : []
 >a : any
 

@@ -16,13 +16,4 @@ verify.codeFix({
 }`
 });
 
-verify.codeFixAll({
-  fixAllDescription: ts.Diagnostics.Fix_all_expressions_possibly_missing_await.message,
-  fixId: "addMissingAwait",
-  newFileContent:
-`async function fn(a: string, b: Promise<string>) {
-  const x = await b;
-  const y = await b;
-  x + y;
-}`
-});
+verify.not.codeFixAllAvailable("addMissingAwait");

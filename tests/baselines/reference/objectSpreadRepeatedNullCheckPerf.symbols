@@ -1,0 +1,306 @@
+=== tests/cases/conformance/types/spread/objectSpreadRepeatedNullCheckPerf.ts ===
+interface Props {
+>Props : Symbol(Props, Decl(objectSpreadRepeatedNullCheckPerf.ts, 0, 0))
+
+    readonly a?: string
+>a : Symbol(Props.a, Decl(objectSpreadRepeatedNullCheckPerf.ts, 0, 17))
+
+    readonly b?: string
+>b : Symbol(Props.b, Decl(objectSpreadRepeatedNullCheckPerf.ts, 1, 23))
+
+    readonly c?: string
+>c : Symbol(Props.c, Decl(objectSpreadRepeatedNullCheckPerf.ts, 2, 23))
+
+    readonly d?: string
+>d : Symbol(Props.d, Decl(objectSpreadRepeatedNullCheckPerf.ts, 3, 23))
+
+    readonly e?: string
+>e : Symbol(Props.e, Decl(objectSpreadRepeatedNullCheckPerf.ts, 4, 23))
+
+    readonly f?: string
+>f : Symbol(Props.f, Decl(objectSpreadRepeatedNullCheckPerf.ts, 5, 23))
+
+    readonly g?: string
+>g : Symbol(Props.g, Decl(objectSpreadRepeatedNullCheckPerf.ts, 6, 23))
+
+    readonly h?: string
+>h : Symbol(Props.h, Decl(objectSpreadRepeatedNullCheckPerf.ts, 7, 23))
+
+    readonly i?: string
+>i : Symbol(Props.i, Decl(objectSpreadRepeatedNullCheckPerf.ts, 8, 23))
+
+    readonly j?: string
+>j : Symbol(Props.j, Decl(objectSpreadRepeatedNullCheckPerf.ts, 9, 23))
+
+    readonly k?: string
+>k : Symbol(Props.k, Decl(objectSpreadRepeatedNullCheckPerf.ts, 10, 23))
+
+    readonly l?: string
+>l : Symbol(Props.l, Decl(objectSpreadRepeatedNullCheckPerf.ts, 11, 23))
+
+    readonly m?: string
+>m : Symbol(Props.m, Decl(objectSpreadRepeatedNullCheckPerf.ts, 12, 23))
+
+    readonly n?: string
+>n : Symbol(Props.n, Decl(objectSpreadRepeatedNullCheckPerf.ts, 13, 23))
+
+    readonly o?: string
+>o : Symbol(Props.o, Decl(objectSpreadRepeatedNullCheckPerf.ts, 14, 23))
+
+    readonly p?: string
+>p : Symbol(Props.p, Decl(objectSpreadRepeatedNullCheckPerf.ts, 15, 23))
+
+    readonly q?: string
+>q : Symbol(Props.q, Decl(objectSpreadRepeatedNullCheckPerf.ts, 16, 23))
+
+    readonly r?: string
+>r : Symbol(Props.r, Decl(objectSpreadRepeatedNullCheckPerf.ts, 17, 23))
+
+    readonly s?: string
+>s : Symbol(Props.s, Decl(objectSpreadRepeatedNullCheckPerf.ts, 18, 23))
+
+    readonly t?: string
+>t : Symbol(Props.t, Decl(objectSpreadRepeatedNullCheckPerf.ts, 19, 23))
+
+    readonly u?: string
+>u : Symbol(Props.u, Decl(objectSpreadRepeatedNullCheckPerf.ts, 20, 23))
+
+    readonly v?: string
+>v : Symbol(Props.v, Decl(objectSpreadRepeatedNullCheckPerf.ts, 21, 23))
+
+    readonly w?: string
+>w : Symbol(Props.w, Decl(objectSpreadRepeatedNullCheckPerf.ts, 22, 23))
+
+    readonly x?: string
+>x : Symbol(Props.x, Decl(objectSpreadRepeatedNullCheckPerf.ts, 23, 23))
+
+    readonly y?: string
+>y : Symbol(Props.y, Decl(objectSpreadRepeatedNullCheckPerf.ts, 24, 23))
+
+    readonly z?: string
+>z : Symbol(Props.z, Decl(objectSpreadRepeatedNullCheckPerf.ts, 25, 23))
+}
+
+function parseWithSpread(config: Record<string, number>): Props {
+>parseWithSpread : Symbol(parseWithSpread, Decl(objectSpreadRepeatedNullCheckPerf.ts, 27, 1))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(objectSpreadRepeatedNullCheckPerf.ts, 0, 0))
+
+    return {
+        ...config.a !== undefined && { a: config.a.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(objectSpreadRepeatedNullCheckPerf.ts, 31, 38))
+>config.a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.b !== undefined && { b: config.b.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>b : Symbol(b, Decl(objectSpreadRepeatedNullCheckPerf.ts, 32, 38))
+>config.b.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.c !== undefined && { c: config.c.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(objectSpreadRepeatedNullCheckPerf.ts, 33, 38))
+>config.c.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.d !== undefined && { d: config.d.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>d : Symbol(d, Decl(objectSpreadRepeatedNullCheckPerf.ts, 34, 38))
+>config.d.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.e !== undefined && { e: config.e.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>e : Symbol(e, Decl(objectSpreadRepeatedNullCheckPerf.ts, 35, 38))
+>config.e.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.f !== undefined && { f: config.f.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>f : Symbol(f, Decl(objectSpreadRepeatedNullCheckPerf.ts, 36, 38))
+>config.f.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.g !== undefined && { g: config.g.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>g : Symbol(g, Decl(objectSpreadRepeatedNullCheckPerf.ts, 37, 38))
+>config.g.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.h !== undefined && { h: config.h.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>h : Symbol(h, Decl(objectSpreadRepeatedNullCheckPerf.ts, 38, 38))
+>config.h.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.i !== undefined && { i: config.i.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>i : Symbol(i, Decl(objectSpreadRepeatedNullCheckPerf.ts, 39, 38))
+>config.i.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.j !== undefined && { j: config.j.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>j : Symbol(j, Decl(objectSpreadRepeatedNullCheckPerf.ts, 40, 38))
+>config.j.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.k !== undefined && { k: config.k.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>k : Symbol(k, Decl(objectSpreadRepeatedNullCheckPerf.ts, 41, 38))
+>config.k.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.l !== undefined && { l: config.l.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>l : Symbol(l, Decl(objectSpreadRepeatedNullCheckPerf.ts, 42, 38))
+>config.l.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.m !== undefined && { m: config.m.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>m : Symbol(m, Decl(objectSpreadRepeatedNullCheckPerf.ts, 43, 38))
+>config.m.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.n !== undefined && { n: config.n.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>n : Symbol(n, Decl(objectSpreadRepeatedNullCheckPerf.ts, 44, 38))
+>config.n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.o !== undefined && { o: config.o.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>o : Symbol(o, Decl(objectSpreadRepeatedNullCheckPerf.ts, 45, 38))
+>config.o.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.p !== undefined && { p: config.p.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>p : Symbol(p, Decl(objectSpreadRepeatedNullCheckPerf.ts, 46, 38))
+>config.p.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.q !== undefined && { q: config.q.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>q : Symbol(q, Decl(objectSpreadRepeatedNullCheckPerf.ts, 47, 38))
+>config.q.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.r !== undefined && { r: config.r.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>r : Symbol(r, Decl(objectSpreadRepeatedNullCheckPerf.ts, 48, 38))
+>config.r.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.s !== undefined && { s: config.s.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>s : Symbol(s, Decl(objectSpreadRepeatedNullCheckPerf.ts, 49, 38))
+>config.s.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.t !== undefined && { t: config.t.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>t : Symbol(t, Decl(objectSpreadRepeatedNullCheckPerf.ts, 50, 38))
+>config.t.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.u !== undefined && { u: config.u.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>u : Symbol(u, Decl(objectSpreadRepeatedNullCheckPerf.ts, 51, 38))
+>config.u.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.v !== undefined && { v: config.v.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>v : Symbol(v, Decl(objectSpreadRepeatedNullCheckPerf.ts, 52, 38))
+>config.v.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.w !== undefined && { w: config.w.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>w : Symbol(w, Decl(objectSpreadRepeatedNullCheckPerf.ts, 53, 38))
+>config.w.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.x !== undefined && { x: config.x.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(objectSpreadRepeatedNullCheckPerf.ts, 54, 38))
+>config.x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.y !== undefined && { y: config.y.toString() },
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>y : Symbol(y, Decl(objectSpreadRepeatedNullCheckPerf.ts, 55, 38))
+>config.y.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+        ...config.z !== undefined && { z: config.z.toString() }
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>undefined : Symbol(undefined)
+>z : Symbol(z, Decl(objectSpreadRepeatedNullCheckPerf.ts, 56, 38))
+>config.z.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>config : Symbol(config, Decl(objectSpreadRepeatedNullCheckPerf.ts, 29, 25))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+parseWithSpread({ a: 1, b: 2, z: 26 })
+>parseWithSpread : Symbol(parseWithSpread, Decl(objectSpreadRepeatedNullCheckPerf.ts, 27, 1))
+>a : Symbol(a, Decl(objectSpreadRepeatedNullCheckPerf.ts, 60, 17))
+>b : Symbol(b, Decl(objectSpreadRepeatedNullCheckPerf.ts, 60, 23))
+>z : Symbol(z, Decl(objectSpreadRepeatedNullCheckPerf.ts, 60, 29))
+

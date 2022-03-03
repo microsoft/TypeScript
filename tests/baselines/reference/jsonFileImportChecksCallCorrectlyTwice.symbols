@@ -1,0 +1,41 @@
+=== tests/cases/compiler/index.ts ===
+import data from "./data.json";
+>data : Symbol(data, Decl(index.ts, 0, 6))
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(index.ts, 0, 31))
+
+  str: string;
+>str : Symbol(Foo.str, Decl(index.ts, 2, 15))
+}
+
+fn(data.foo);
+>fn : Symbol(fn, Decl(index.ts, 7, 13))
+>data.foo : Symbol("foo", Decl(data.json, 0, 1))
+>data : Symbol(data, Decl(index.ts, 0, 6))
+>foo : Symbol("foo", Decl(data.json, 0, 1))
+
+fn(data.foo); // <-- shouldn't error!
+>fn : Symbol(fn, Decl(index.ts, 7, 13))
+>data.foo : Symbol("foo", Decl(data.json, 0, 1))
+>data : Symbol(data, Decl(index.ts, 0, 6))
+>foo : Symbol("foo", Decl(data.json, 0, 1))
+
+function fn(arg: Foo[]) { }
+>fn : Symbol(fn, Decl(index.ts, 7, 13))
+>arg : Symbol(arg, Decl(index.ts, 9, 12))
+>Foo : Symbol(Foo, Decl(index.ts, 0, 31))
+
+=== tests/cases/compiler/data.json ===
+{
+    "foo": [
+>"foo" : Symbol("foo", Decl(data.json, 0, 1))
+      {
+        "bool": true,
+>"bool" : Symbol("bool", Decl(data.json, 2, 7))
+
+        "str": "123"
+>"str" : Symbol("str", Decl(data.json, 3, 21))
+      }
+    ]
+}

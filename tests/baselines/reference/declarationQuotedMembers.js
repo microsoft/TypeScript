@@ -5,6 +5,7 @@ export const example = mapped;
 //// [declarationQuotedMembers.js]
 "use strict";
 exports.__esModule = true;
+exports.example = void 0;
 exports.example = exports.mapped;
 
 

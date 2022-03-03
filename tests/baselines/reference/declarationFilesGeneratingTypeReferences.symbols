@@ -13,3 +13,4 @@ namespace Test {
 >x : Symbol(x, Decl(app.ts, 2, 14))
 >JQuery : Symbol(JQuery, Decl(index.d.ts, 0, 0))
 }
+

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/privatePropertyInUnion.ts ===
+// Repro from #38236
+
+type Type = string | object;
+>Type : Type
+
+class SyncableObject {
+>SyncableObject : SyncableObject
+
+  private foo: unknown;
+>foo : unknown
+}
+
+interface SyncableRef<T extends ISyncableObject> {}
+
+interface ISyncableObject<T = object> extends SyncableObject {}
+
+type __ValueDescriptorType<T extends string | object> = T extends ISyncableObject ? SyncableRef<T> : T;
+>__ValueDescriptorType : __ValueDescriptorType<T>
+

@@ -109,4 +109,32 @@ var zipResultEleEle = zipResult[0][0]; // string
 >0 : 0
 >0 : 0
 
+// #33559 and #33752
+
+declare function f1<T1, T2>(values: [T1[], T2[]]): T1;
+>f1 : <T1, T2>(values: [T1[], T2[]]) => T1
+>values : [T1[], T2[]]
+
+declare function f2<T1, T2>(values: readonly [T1[], T2[]]): T1;
+>f2 : <T1, T2>(values: readonly [T1[], T2[]]) => T1
+>values : readonly [T1[], T2[]]
+
+let expected: "a";
+>expected : "a"
+
+expected = f1(undefined as ["a"[], "b"[]]);
+>expected = f1(undefined as ["a"[], "b"[]]) : "a"
+>expected : "a"
+>f1(undefined as ["a"[], "b"[]]) : "a"
+>f1 : <T1, T2>(values: [T1[], T2[]]) => T1
+>undefined as ["a"[], "b"[]] : ["a"[], "b"[]]
+>undefined : undefined
+
+expected = f2(undefined as ["a"[], "b"[]]);
+>expected = f2(undefined as ["a"[], "b"[]]) : "a"
+>expected : "a"
+>f2(undefined as ["a"[], "b"[]]) : "a"
+>f2 : <T1, T2>(values: readonly [T1[], T2[]]) => T1
+>undefined as ["a"[], "b"[]] : ["a"[], "b"[]]
+>undefined : undefined
 

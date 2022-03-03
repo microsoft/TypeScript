@@ -87,3 +87,68 @@ const obj: Union = {
     // should have error here
     href: 'foo',
 };
+
+// Repro from #34611
+
+interface IValue {
+  value: string
+}
+
+interface StringKeys { 
+    [propertyName: string]: IValue;
+};
+
+interface NumberKeys {
+    [propertyName: number]: IValue;
+}
+
+type ObjectDataSpecification = StringKeys | NumberKeys;
+
+
+const dataSpecification: ObjectDataSpecification = {  // Error
+    foo: "asdfsadffsd"
+};
+
+// Repro from #34611
+
+const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  // Error
+const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
+
+// Repro from #33732
+
+interface I1 {
+    prop1: string;
+}
+
+interface I2 {
+    prop2: string;
+}
+
+interface I3 extends Record<string, string> {
+
+}
+
+type Properties =
+    | { [key: string]: never }
+    | I1
+    | I2
+    | I3
+    ;
+
+
+declare const prop1: string;
+declare const prop2: string | undefined;
+
+function F1(_arg: { props: Properties }) { }
+F1({
+    props: {
+        prop1,
+        prop2,
+    },
+});
+
+function F2(_props: Properties) { }
+F2({
+    prop1,
+    prop2,
+});

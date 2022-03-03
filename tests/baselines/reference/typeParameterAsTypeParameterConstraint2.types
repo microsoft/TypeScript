@@ -9,13 +9,13 @@ function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an erro
 >y : U
 
 foo(1, '');
->foo(1, '') : any
+>foo(1, '') : number
 >foo : <T, U extends T>(x: T, y: U) => U
 >1 : 1
 >'' : ""
 
 foo(1, {});
->foo(1, {}) : any
+>foo(1, {}) : number
 >foo : <T, U extends T>(x: T, y: U) => U
 >1 : 1
 >{} : {}
@@ -28,8 +28,8 @@ var n: NumberVariant;
 >n : NumberVariant
 
 var r3 = foo(1, n);
->r3 : any
->foo(1, n) : any
+>r3 : number
+>foo(1, n) : number
 >foo : <T, U extends T>(x: T, y: U) => U
 >1 : 1
 >n : NumberVariant
@@ -42,7 +42,7 @@ function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is n
 >y : U
 
 foo2(1, { length: '' });
->foo2(1, { length: '' }) : any
+>foo2(1, { length: '' }) : { length: number; }
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >1 : 1
 >{ length: '' } : { length: string; }
@@ -50,7 +50,7 @@ foo2(1, { length: '' });
 >'' : ""
 
 foo2(1, { length: {} });
->foo2(1, { length: {} }) : any
+>foo2(1, { length: {} }) : { length: number; }
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >1 : 1
 >{ length: {} } : { length: {}; }
@@ -58,7 +58,7 @@ foo2(1, { length: {} });
 >{} : {}
 
 foo2([], ['']);
->foo2([], ['']) : any
+>foo2([], ['']) : { length: any[]; }
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >[] : undefined[]
 >[''] : string[]

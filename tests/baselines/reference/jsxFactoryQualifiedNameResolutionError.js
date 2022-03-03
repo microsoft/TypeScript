@@ -14,6 +14,7 @@ export class AppComponent {
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppComponent = void 0;
 class AppComponent {
     render(createElement) {
         return MyElement.createElement("div", null);

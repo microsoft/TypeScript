@@ -1,16 +1,21 @@
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(116,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(117,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(118,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(121,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(122,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(123,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(124,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(129,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(131,5): error TS2776: Assertions require the call target to be an identifier or qualified name.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(43,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(47,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(91,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(126,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(141,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(157,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(158,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(159,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(162,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(163,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(164,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(165,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(170,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(172,5): error TS2776: Assertions require the call target to be an identifier or qualified name.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(174,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 
 
-==== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts (10 errors) ====
+==== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts (15 errors) ====
     declare function isString(value: unknown): value is string;
     declare function isArrayOfStrings(value: unknown): value is string[];
     
@@ -42,10 +47,26 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS
             x[0].length;
         }
         if (!!true) {
+            assertIsArrayOfStrings(false);
+            x;
+        }
+        if (!!true) {
             assert(x === undefined || typeof x === "string");
             x;  // string | undefined
             assertDefined(x);
             x;  // string
+        }
+        if (!!true) {
+            assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+        if (!!true) {
+            assert(false && x === undefined);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -87,6 +108,12 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS
             Debug.assertDefined(x);
             x.length;
         }
+        if (!!true) {
+            Debug.assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
     }
     
     class Test {
@@ -118,10 +145,39 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS
             this.assertIsTest2();
             this.z;
         }
+        baz(x: number) {
+            this.assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
     }
     
     class Test2 extends Test {
         z = 0;
+    }
+    
+    class Derived extends Test {
+        foo(x: unknown) {
+            super.assert(typeof x === "string");
+            x.length;
+        }
+        baz(x: number) {
+            super.assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    function f11(items: Test[]) {
+        for (let item of items) {
+            if (item.isTest2()) {
+                item.z;
+            }
+            item.assertIsTest2();
+            item.z;
+        }
     }
     
     // Invalid constructs
@@ -156,7 +212,7 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS
         assert(typeof x === "string");  // Error
         ~~~~~~
 !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-!!! related TS2728 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:128:11: 'assert' is declared here.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:169:11: 'assert' needs an explicit type annotation.
         const a = [assert];
         a[0](typeof x === "string");  // Error
         ~~~~
@@ -165,8 +221,26 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(133,5): error TS
         t1.assert(typeof x === "string");  // Error
         ~~~~~~~~~
 !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-!!! related TS2728 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:132:11: 't1' is declared here.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:173:11: 't1' needs an explicit type annotation.
         const t2: Test = new Test();
         t2.assert(typeof x === "string");
+    }
+    
+    // Repro from #35940
+    
+    interface Thing {
+        good: boolean;
+        isGood(): asserts this is GoodThing;
+    }
+    
+    interface GoodThing {
+        good: true;
+    }
+    
+    function example1(things: Thing[]) {
+        for (let thing of things) {
+            thing.isGood();
+            thing.good;
+        }
     }
     

@@ -1,0 +1,12 @@
+tests/cases/conformance/classes/members/privateNames/privateNameNotAccessibleOutsideDefiningClass.ts(5,9): error TS18013: Property '#foo' is not accessible outside class 'A' because it has a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameNotAccessibleOutsideDefiningClass.ts (1 errors) ====
+    class A {
+        #foo: number = 3;
+    }
+    
+    new A().#foo = 4;               // Error
+            ~~~~
+!!! error TS18013: Property '#foo' is not accessible outside class 'A' because it has a private identifier.
+    

@@ -1,0 +1,9 @@
+Exit Code: 1
+Standard output:
+
+
+
+Standard error:
+npm ERR! missing script: build_all
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log

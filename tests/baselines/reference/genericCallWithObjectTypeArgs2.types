@@ -22,7 +22,7 @@ class Derived2 extends Base {
 
 // returns {}[]
 function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[]
+>f : <T extends Base, U extends Base>(a: {    x: T;    y: U;}) => (T | U)[]
 >a : { x: T; y: U; }
 >x : T
 >y : U
@@ -63,7 +63,7 @@ var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
 
 
 function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
+>f2 : <T extends Base, U extends Base>(a: {    x: T;    y: U;}) => (x: T) => U
 >a : { x: T; y: U; }
 >x : T
 >y : U

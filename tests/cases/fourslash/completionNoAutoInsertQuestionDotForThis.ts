@@ -13,8 +13,8 @@ verify.completions({
     marker: "",
     exact: [
         { name: "city", text: "(property) Address.city: string", insertText: undefined },
+        { name: "method" },
         { name: "postal code", text: "(property) Address[\"postal code\"]: string", insertText: "[\"postal code\"]", replacementSpan: test.ranges()[0] },
-        { name: "method" }
     ],
     preferences: { includeInsertTextCompletions: true },
 });

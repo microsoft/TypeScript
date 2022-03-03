@@ -47,17 +47,17 @@
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 >numbers : Symbol(numbers, Decl(contextuallyTypedIife.ts, 17, 2))
->numbers.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>numbers.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >numbers : Symbol(numbers, Decl(contextuallyTypedIife.ts, 17, 2))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 31))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 31))
 
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >mixed : Symbol(mixed, Decl(contextuallyTypedIife.ts, 18, 2))
->mixed.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>mixed.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(contextuallyTypedIife.ts, 18, 2))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 27))
 >n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 27))
 

@@ -1,0 +1,16 @@
+/a.js(2,7): error TS2420: Class 'B' incorrectly implements interface 'Sig'.
+  Index signature for type 'string' is missing in type 'B'.
+
+
+==== /defs.d.ts (0 errors) ====
+    interface Sig {
+        [index: string]: string
+    }
+==== /a.js (1 errors) ====
+    /** @implements {Sig} */
+    class B  {
+          ~
+!!! error TS2420: Class 'B' incorrectly implements interface 'Sig'.
+!!! error TS2420:   Index signature for type 'string' is missing in type 'B'.
+    }
+    

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/circularOptionalityRemoval.ts ===
+// Constructed repro
+function fn1(x: number | undefined = x > 0 ? x : 0) { }
+>fn1 : Symbol(fn1, Decl(circularOptionalityRemoval.ts, 0, 0))
+>x : Symbol(x, Decl(circularOptionalityRemoval.ts, 1, 13))
+>x : Symbol(x, Decl(circularOptionalityRemoval.ts, 1, 13))
+>x : Symbol(x, Decl(circularOptionalityRemoval.ts, 1, 13))
+
+// Report from user
+function fn2(x?: string = someCondition ? 'value1' : x) { }
+>fn2 : Symbol(fn2, Decl(circularOptionalityRemoval.ts, 1, 55))
+>x : Symbol(x, Decl(circularOptionalityRemoval.ts, 4, 13))
+>x : Symbol(x, Decl(circularOptionalityRemoval.ts, 4, 13))
+

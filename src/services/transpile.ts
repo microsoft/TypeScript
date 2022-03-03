@@ -48,13 +48,13 @@ namespace ts {
 
         // if jsx is specified then treat file as .tsx
         const inputFileName = transpileOptions.fileName || (transpileOptions.compilerOptions && transpileOptions.compilerOptions.jsx ? "module.tsx" : "module.ts");
-        const sourceFile = createSourceFile(inputFileName, input, options.target!); // TODO: GH#18217
+        const sourceFile = createSourceFile(inputFileName, input, getEmitScriptTarget(options));
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
         if (transpileOptions.renamedDependencies) {
-            sourceFile.renamedDependencies = createMapFromTemplate(transpileOptions.renamedDependencies);
+            sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
         }
 
         const newLine = getNewLineCharacter(options);
@@ -117,8 +117,8 @@ namespace ts {
     /*@internal*/
     export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
-        commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"));
+        commandLineOptionsStringToEnum = commandLineOptionsStringToEnum ||
+            filter(optionDeclarations, o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number")) as CommandLineOptionOfCustomType[];
 
         options = cloneCompilerOptions(options);
 

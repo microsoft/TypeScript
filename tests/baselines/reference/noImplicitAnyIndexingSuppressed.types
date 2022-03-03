@@ -24,8 +24,8 @@ var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var strRepresentation3 = MyEmusEnum["monehh"];
->strRepresentation3 : error
->MyEmusEnum["monehh"] : error
+>strRepresentation3 : any
+>MyEmusEnum["monehh"] : any
 >MyEmusEnum : typeof MyEmusEnum
 >"monehh" : "monehh"
 
@@ -39,15 +39,15 @@ var strRepresentation4 = MyEmusEnum["emu"];
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var x = {}["hi"];
->x : error
->{}["hi"] : error
+>x : undefined
+>{}["hi"] : undefined
 >{} : {}
 >"hi" : "hi"
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
->y : error
->{}[10] : error
+>y : undefined
+>{}[10] : undefined
 >{} : {}
 >10 : 10
 
@@ -61,8 +61,8 @@ var emptyObj = {};
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var z1 = emptyObj[hi];
->z1 : error
->emptyObj[hi] : error
+>z1 : any
+>emptyObj[hi] : any
 >emptyObj : {}
 >hi : any
 

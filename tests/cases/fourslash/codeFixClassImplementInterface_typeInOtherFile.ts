@@ -15,10 +15,10 @@ goTo.file("/C.ts");
 verify.codeFix({
     description: "Implement interface 'I'",
     newFileContent:
-`import { I } from "./I";
+`import { I, J } from "./I";
 export class C implements I {
-    x: import("./I").J;
-    m(): import("./I").J {
+    x: J;
+    m(): J {
         throw new Error("Method not implemented.");
     }
 }`,

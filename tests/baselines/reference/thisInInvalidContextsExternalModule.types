@@ -1,13 +1,4 @@
 === tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts ===
-//'this' in static member initializer
-class ErrClass1 {
->ErrClass1 : ErrClass1
-
-    static t = this; // Error
->t : typeof ErrClass1
->this : typeof ErrClass1
-}
-
 class BaseErrClass {
 >BaseErrClass : BaseErrClass
 
@@ -72,7 +63,7 @@ genericFunc<this>(undefined);  // Should be an error
 
 class ErrClass3 extends this {
 >ErrClass3 : ErrClass3
->this : typeof globalThis
+>this : undefined
 
 }
 

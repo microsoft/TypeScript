@@ -28,12 +28,12 @@ function foo2(x: any) { }
 >x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
+>foo3 : { (x: typeof a): any; (x: (x: string) => string): any; }
 >x : (x: string) => string
 >a : (x: string) => string
 
 function foo3(x: typeof a); // error
->foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
+>foo3 : { (x: (x: string) => string): any; (x: typeof a): any; }
 >x : (x: string) => string
 >a : (x: string) => string
 
@@ -60,7 +60,7 @@ function foo13(x: I);
 >x : I
 
 function foo13(x: typeof a); // error
->foo13 : { (x: I): any; (x: (x: string) => string): any; }
+>foo13 : { (x: I): any; (x: typeof a): any; }
 >x : (x: string) => string
 >a : (x: string) => string
 
@@ -81,7 +81,7 @@ function foo14(x: any) { }
 >x : any
 
 function foo14b(x: typeof a);
->foo14b : { (x: (x: string) => string): any; (x: I2<string>): any; }
+>foo14b : { (x: typeof a): any; (x: I2<string>): any; }
 >x : (x: string) => string
 >a : (x: string) => string
 

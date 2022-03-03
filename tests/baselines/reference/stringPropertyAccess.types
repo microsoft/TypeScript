@@ -14,9 +14,9 @@ var a = x.charAt(0);
 var b = x.hasOwnProperty('charAt');
 >b : boolean
 >x.hasOwnProperty('charAt') : boolean
->x.hasOwnProperty : (v: string | number | symbol) => boolean
+>x.hasOwnProperty : (v: PropertyKey) => boolean
 >x : string
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >'charAt' : "charAt"
 
 var c = x['charAt'](0);
@@ -30,7 +30,7 @@ var c = x['charAt'](0);
 var e = x['hasOwnProperty']('toFixed');
 >e : boolean
 >x['hasOwnProperty']('toFixed') : boolean
->x['hasOwnProperty'] : (v: string | number | symbol) => boolean
+>x['hasOwnProperty'] : (v: PropertyKey) => boolean
 >x : string
 >'hasOwnProperty' : "hasOwnProperty"
 >'toFixed' : "toFixed"

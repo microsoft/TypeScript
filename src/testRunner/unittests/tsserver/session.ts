@@ -1,6 +1,6 @@
-const expect: typeof _chai.expect = _chai.expect;
-
 namespace ts.server {
+    const _chai: typeof import("chai") = require("chai");
+    const expect: typeof _chai.expect = _chai.expect;
     let lastWrittenToHost: string;
     const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
@@ -48,7 +48,7 @@ namespace ts.server {
                 typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
-                logger: projectSystem.nullLogger,
+                logger: projectSystem.nullLogger(),
                 canUseEvents: true
             };
             return new TestSession(opts);
@@ -100,7 +100,8 @@ namespace ts.server {
                     seq: 0,
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
-                    success: false
+                    success: false,
+                    performanceData: undefined,
                 };
                 expect(lastSent).to.deep.equal(expected);
             });
@@ -126,7 +127,8 @@ namespace ts.server {
                     success: true,
                     request_seq: 0,
                     seq: 0,
-                    body: undefined
+                    body: undefined,
+                    performanceData: undefined,
                 });
             });
             it("should handle literal types in request", () => {
@@ -162,14 +164,14 @@ namespace ts.server {
                 session.onMessage(JSON.stringify(setOptionsRequest));
                 assert.deepEqual(
                     session.getProjectService().getCompilerOptionsForInferredProjects(),
-                    <CompilerOptions>{
+                    {
                         module: ModuleKind.System,
                         target: ScriptTarget.ES5,
                         jsx: JsxEmit.React,
                         newLine: NewLineKind.LineFeed,
                         moduleResolution: ModuleResolutionKind.NodeJs,
                         allowNonTsExtensions: true // injected by tsserver
-                    });
+                    } as CompilerOptions);
             });
 
             it("Status request gives ts.version", () => {
@@ -179,7 +181,9 @@ namespace ts.server {
                     type: "request"
                 };
 
-                const expected: protocol.StatusResponseBody = { version };
+                const expected: protocol.StatusResponseBody = {
+                    version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
         });
@@ -203,6 +207,8 @@ namespace ts.server {
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,
+                CommandNames.FileReferences,
+                CommandNames.FileReferencesFull,
                 CommandNames.Format,
                 CommandNames.Formatonkey,
                 CommandNames.FormatFull,
@@ -265,6 +271,14 @@ namespace ts.server {
                 CommandNames.GetEditsForFileRename,
                 CommandNames.GetEditsForFileRenameFull,
                 CommandNames.SelectionRange,
+                CommandNames.PrepareCallHierarchy,
+                CommandNames.ProvideCallHierarchyIncomingCalls,
+                CommandNames.ProvideCallHierarchyOutgoingCalls,
+                CommandNames.ToggleLineComment,
+                CommandNames.ToggleMultilineComment,
+                CommandNames.CommentSelection,
+                CommandNames.UncommentSelection,
+                CommandNames.ProvideInlayHints
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -315,14 +329,15 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(req));
 
-                expect(lastSent).to.deep.equal(<protocol.ConfigureResponse>{
+                expect(lastSent).to.deep.equal({
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,
                     request_seq: 0,
                     seq: 0,
-                    body: undefined
-                });
+                    body: undefined,
+                    performanceData: undefined,
+                } as protocol.ConfigureResponse);
             });
         });
 
@@ -335,7 +350,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist; // eslint-disable-line no-unused-expressions
+                expect(session.send(msg)).to.not.exist; // eslint-disable-line @typescript-eslint/no-unused-expressions
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -411,7 +426,8 @@ namespace ts.server {
                     type: "response",
                     command,
                     body,
-                    success: true
+                    success: true,
+                    performanceData: undefined,
                 });
             });
         });
@@ -454,7 +470,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.nullLogger,
+                    logger: projectSystem.nullLogger(),
                     canUseEvents: true
                 });
                 this.addProtocolHandler(command, this.exceptionRaisingHandler);
@@ -501,7 +517,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.createHasErrorMessageLogger().logger,
+                    logger: projectSystem.createHasErrorMessageLogger(),
                     canUseEvents: true
                 });
                 this.addProtocolHandler(this.customHandler, () => {
@@ -530,7 +546,8 @@ namespace ts.server {
                 type: "response",
                 command,
                 body,
-                success: true
+                success: true,
+                performanceData: undefined,
             });
         });
         it("can add and respond to new protocol handlers", () => {
@@ -568,7 +585,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.createHasErrorMessageLogger().logger,
+                    logger: projectSystem.createHasErrorMessageLogger(),
                     canUseEvents: true
                 });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
@@ -611,11 +628,11 @@ namespace ts.server {
             private server: InProcSession | undefined;
             private seq = 0;
             private callbacks: ((resp: protocol.Response) => void)[] = [];
-            private eventHandlers = createMap<(args: any) => void>();
+            private eventHandlers = new Map<string, (args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
-                    const response = <protocol.Response>msg;
+                    const response = msg as protocol.Response;
                     const handler = this.callbacks[response.request_seq];
                     if (handler) {
                         handler(response);
@@ -623,7 +640,7 @@ namespace ts.server {
                     }
                 }
                 else if (msg.type === "event") {
-                    const event = <protocol.Event>msg;
+                    const event = msg as protocol.Event;
                     this.emit(event.event, event.body);
                 }
             }

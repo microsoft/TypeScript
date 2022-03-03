@@ -17,7 +17,7 @@ class Derived extends Base {
 }
 
 function f<T extends Base>(x: { foo: T; bar: T }) {
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
+>f : <T extends Base>(x: {    foo: T;    bar: T;}) => T
 >x : { foo: T; bar: T; }
 >foo : T
 >bar : T

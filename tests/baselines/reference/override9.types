@@ -1,0 +1,23 @@
+=== tests/cases/conformance/override/override9.ts ===
+interface B {
+    foo (): void
+>foo : () => void
+
+    bar (): void
+>bar : () => void
+}
+
+interface D extends B {
+    foo (): void;
+>foo : () => void
+
+    override bar(): void;
+>bar : () => void
+
+    baz(): void;
+>baz : () => void
+
+    override bazz(): void;
+>bazz : () => void
+}
+

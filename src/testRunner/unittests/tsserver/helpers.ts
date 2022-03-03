@@ -27,7 +27,7 @@ namespace ts.projectSystem {
     }
 
     export const customTypesMap = {
-        path: <Path>"/typesMap.json",
+        path: "/typesMap.json" as Path,
         content: `{
             "typesMap": {
                 "jquery": {
@@ -55,44 +55,79 @@ namespace ts.projectSystem {
         readonly callback: TI.RequestCompletedAction;
     }
 
-    export const nullLogger: server.Logger = {
-        close: noop,
-        hasLevel: returnFalse,
-        loggingEnabled: returnFalse,
-        perftrc: noop,
-        info: noop,
-        msg: noop,
-        startGroup: noop,
-        endGroup: noop,
-        getLogFileName: returnUndefined,
-    };
-
-    export function createHasErrorMessageLogger() {
-        let hasErrorMsg = false;
-        const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
-        const logger: server.Logger = {
-            close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
-            msg: (s, type) => {
-                Debug.fail(`Error: ${s}, type: ${type}`);
-                hasErrorMsg = true;
-            }
-        };
-        return { logger, hasErrorMsg: () => hasErrorMsg };
+    export interface Logger extends server.Logger {
+        logs: string[];
     }
 
-    export function createLoggerWritingToConsole(): server.Logger {
-        const { close, startGroup, endGroup, getLogFileName } = nullLogger;
+    export function nullLogger(): Logger {
         return {
-            close,
+            close: noop,
+            hasLevel: returnFalse,
+            loggingEnabled: returnFalse,
+            perftrc: noop,
+            info: noop,
+            msg: noop,
+            startGroup: noop,
+            endGroup: noop,
+            getLogFileName: returnUndefined,
+            logs: [],
+        };
+    }
+
+    export function createHasErrorMessageLogger(): Logger {
+        return {
+            ...nullLogger(),
+            msg: (s, type) => Debug.fail(`Error: ${s}, type: ${type}`),
+        };
+    }
+
+    export function createLoggerWritingToConsole(): Logger {
+        return {
+            ...nullLogger(),
             hasLevel: returnTrue,
             loggingEnabled: returnTrue,
             perftrc: s => console.log(s),
             info: s => console.log(s),
             msg: (s, type) => console.log(`${type}:: ${s}`),
-            startGroup,
-            endGroup,
-            getLogFileName
         };
+    }
+
+    export function createLoggerWithInMemoryLogs(): Logger {
+        const logger = createHasErrorMessageLogger();
+        return {
+            ...logger,
+            hasLevel: returnTrue,
+            loggingEnabled: returnTrue,
+            info: s => logger.logs.push(
+                s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+                    .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
+                    .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
+                    .replace(`"version":"${version}"`, `"version":"FakeVersion"`)
+            )
+        };
+    }
+
+    export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: TestSession | TestProjectService) {
+        Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
+        Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+    }
+
+    export function appendAllScriptInfos(service: server.ProjectService, logs: string[]) {
+        logs.push("");
+        logs.push(`ScriptInfos:`);
+        service.filenameToScriptInfo.forEach(info => logs.push(`path: ${info.path} fileName: ${info.fileName}`));
+        logs.push("");
+    }
+
+    export function appendProjectFileText(project: server.Project, logs: string[]) {
+        logs.push("");
+        logs.push(`Project: ${project.getProjectName()}`);
+        project.getCurrentProgram()?.getSourceFiles().forEach(f => {
+            logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
+            logs.push(f.text);
+            logs.push("");
+        });
+        logs.push("");
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
@@ -101,7 +136,7 @@ namespace ts.projectSystem {
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
             installTypingHost: server.ServerHost,
-            readonly typesRegistry = createMap<MapLike<string>>(),
+            readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
             super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
         }
@@ -165,7 +200,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",
@@ -177,7 +212,7 @@ namespace ts.projectSystem {
             "ts2.6": "1.3.0",
             "ts2.7": "1.3.0"
         };
-        const map = createMap<MapLike<string>>();
+        const map = new Map<string, MapLike<string>>();
         for (const l of list) {
             map.set(l, versionMap);
         }
@@ -194,18 +229,6 @@ namespace ts.projectSystem {
 
     export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
         return { ts: 0, tsSize: 0, tsx: 0, tsxSize: 0, dts: 0, dtsSize: 0, js: 0, jsSize: 0, jsx: 0, jsxSize: 0, deferred: 0, deferredSize: 0, ...nonZeroStats };
-    }
-
-    export interface ConfigFileDiagnostic {
-        fileName: string | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string;
-        category: DiagnosticCategory;
-        code: number;
-        reportsUnnecessary?: {};
-        source?: string;
-        relatedInformation?: DiagnosticRelatedInformation[];
     }
 
     export class TestServerEventManager {
@@ -241,21 +264,11 @@ namespace ts.projectSystem {
                 }
                 return true;
             });
-            return Debug.assertDefined(eventData);
+            return Debug.checkDefined(eventData);
         }
 
         hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
             this.events.forEach(event => assert.notEqual(event.eventName, eventName));
-        }
-
-        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string, errors: readonly ConfigFileDiagnostic[]) {
-            const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
-            assert.equal(eventData.configFileName, configFileName);
-            assert.equal(eventData.triggerFile, triggerFile);
-            const actual = eventData.diagnostics.map(({ file, messageText, ...rest }) => ({ fileName: file && file.fileName, messageText: isString(messageText) ? messageText : "", ...rest }));
-            if (errors) {
-                assert.deepEqual(actual, errors);
-            }
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
@@ -276,7 +289,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }
@@ -289,10 +302,20 @@ namespace ts.projectSystem {
         }
     }
 
+    export interface TestSessionOptions extends server.SessionOptions {
+        logger: Logger;
+    }
+
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
         public testhost: TestServerHost = this.host as TestServerHost;
+        public logger: Logger;
+
+        constructor(opts: TestSessionOptions) {
+            super(opts);
+            this.logger = opts.logger;
+        }
 
         getProjectService() {
             return this.projectService;
@@ -306,11 +329,19 @@ namespace ts.projectSystem {
             return this.seq + 1;
         }
 
+        public executeCommand(request: protocol.Request) {
+            const verboseLogging = this.logger.hasLevel(server.LogLevel.verbose);
+            if (verboseLogging) this.logger.info(`request:${JSON.stringify(request)}`);
+            const result = super.executeCommand(request);
+            if (verboseLogging) this.logger.info(`response:${JSON.stringify(result)}`);
+            return result;
+        }
+
         public executeCommandSeq<T extends server.protocol.Request>(request: Partial<T>) {
             this.seq++;
             request.seq = this.seq;
             request.type = "request";
-            return this.executeCommand(<T>request);
+            return this.executeCommand(request as T);
         }
 
         public event<T extends object>(body: T, eventName: string) {
@@ -324,7 +355,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
+    export function createSession(host: server.ServerHost, opts: Partial<TestSessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
             opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
         }
@@ -333,7 +364,7 @@ namespace ts.projectSystem {
             opts.canUseEvents = true;
         }
 
-        const sessionOptions: server.SessionOptions = {
+        const sessionOptions: TestSessionOptions = {
             host,
             cancellationToken: server.nullCancellationToken,
             useSingleInferredProject: false,
@@ -341,7 +372,7 @@ namespace ts.projectSystem {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: opts.logger || createHasErrorMessageLogger().logger,
+            logger: opts.logger || createHasErrorMessageLogger(),
             canUseEvents: false
         };
 
@@ -361,7 +392,7 @@ namespace ts.projectSystem {
         return { session, events };
     }
 
-    export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<server.SessionOptions> = {}) {
+    export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
         const session = createSession(host, { canUseEvents: true, ...opts });
 
         return {
@@ -382,26 +413,22 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface CreateProjectServiceParameters {
-        cancellationToken?: HostCancellationToken;
-        logger?: server.Logger;
-        useSingleInferredProject?: boolean;
-        typingsInstaller?: server.ITypingsInstaller;
-        eventHandler?: server.ProjectServiceEventHandler;
+    export interface TestProjectServiceOptions extends server.ProjectServiceOptions {
+        logger: Logger;
     }
 
     export class TestProjectService extends server.ProjectService {
-        constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-            typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler, opts: Partial<server.ProjectServiceOptions> = {}) {
+        constructor(host: server.ServerHost, public logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
+            typingsInstaller: server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
             super({
                 host,
                 logger,
+                session: undefined,
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
                 typesMapLocation: customTypesMap.path,
-                eventHandler,
                 ...opts
             });
         }
@@ -410,11 +437,12 @@ namespace ts.projectSystem {
             checkNumberOfProjects(this, count);
         }
     }
-    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
-        const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || createHasErrorMessageLogger().logger;
-        const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
+
+    export function createProjectService(host: server.ServerHost, options?: Partial<TestProjectServiceOptions>) {
+        const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
+        const logger = options?.logger || createHasErrorMessageLogger();
+        const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
@@ -447,12 +475,19 @@ namespace ts.projectSystem {
         return iterResult.value;
     }
 
+    export function checkOrphanScriptInfos(service: server.ProjectService, expectedFiles: readonly string[]) {
+        checkArray("Orphan ScriptInfos:", arrayFrom(mapDefinedIterator(
+            service.filenameToScriptInfo.values(),
+            v => v.containingProjects.length === 0 ? v.fileName : undefined
+        )), expectedFiles);
+    }
+
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }
 
     export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -495,8 +530,8 @@ namespace ts.projectSystem {
         checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
-    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-        const start = str.indexOf(substring);
+    export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
     }
@@ -587,8 +622,8 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
-    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
     }
 
     export interface SpanFromSubstringOptions {
@@ -664,7 +699,7 @@ namespace ts.projectSystem {
         session.executeCommand(makeSessionRequest(command, args));
     }
 
-    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string })[], session: server.Session): void {
+    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
                 "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
@@ -677,70 +712,136 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface ErrorInformation {
-        diagnosticMessage: DiagnosticMessage;
-        errorTextArguments?: string[];
-    }
-
-    function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
-        return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
-    }
-
-    export function verifyDiagnostics(actual: readonly server.protocol.Diagnostic[], expected: readonly ErrorInformation[]) {
-        const expectedErrors = expected.map(getProtocolDiagnosticMessage);
-        assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
-    }
-
-    export function verifyNoDiagnostics(actual: server.protocol.Diagnostic[]) {
-        verifyDiagnostics(actual, []);
-    }
-
-    export function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
-        checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
-    }
-
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
-    }
-
-    export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
-        checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
-    }
-
-    export function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
-        checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
-    }
-
-    export function checkNoDiagnosticEvents(session: TestSession) {
-        for (const event of session.events) {
-            assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
-        }
-    }
-
-    export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
-        const events = session.events;
-        assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
-
-        const outputs = session.testhost.getOutput();
-        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.testhost.newLine));
-
-        if (isMostRecent) {
-            assert.strictEqual(events.length, index + 1, JSON.stringify(events));
-            assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
-        }
-    }
-
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
+        isWriteAccess?: boolean;
         lineText: string;
     }
 
-    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+    export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanWithContextFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
             lineText,
         };
+    }
+
+    export interface VerifyGetErrRequestBase {
+        session: TestSession;
+        host: TestServerHost;
+        existingTimeouts?: number;
+    }
+    export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
+        files: readonly (string | File)[];
+        skip?: CheckAllErrors["skip"];
+    }
+    export function verifyGetErrRequest(request: VerifyGetErrRequest) {
+        const { session, files } = request;
+        session.executeCommandSeq<protocol.GeterrRequest>({
+            command: protocol.CommandTypes.Geterr,
+            arguments: { delay: 0, files: files.map(filePath) }
+        });
+        checkAllErrors(request);
+    }
+
+    interface SkipErrors { semantic?: true; suggestion?: true };
+    export interface CheckAllErrors extends VerifyGetErrRequestBase {
+        files: readonly any[];
+        skip?: readonly (SkipErrors | undefined)[];
+    }
+    function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckAllErrors) {
+        Debug.assert(session.logger.logs.length);
+        for (let i = 0; i < files.length; i++) {
+            if (existingTimeouts !== undefined) {
+                host.checkTimeoutQueueLength(existingTimeouts + 1);
+                host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
+            }
+            else {
+                host.checkTimeoutQueueLengthAndRun(1);
+            }
+            if (!skip?.[i]?.semantic) host.runQueuedImmediateCallbacks(1);
+            if (!skip?.[i]?.suggestion) host.runQueuedImmediateCallbacks(1);
+        }
+    }
+
+    function filePath(file: string | File) {
+        return isString(file) ? file : file.path;
+    }
+
+    function verifyErrorsUsingGeterr({scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
+        it("verifies the errors in open file", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession(openFiles(), session);
+
+            verifyGetErrRequest({ session, host, files: getErrRequest() });
+            baselineTsserverLogs(scenario, `${subScenario} getErr`, session);
+        });
+    }
+
+    function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
+        it("verifies the errors in projects", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession(openFiles(), session);
+
+            for (const expected of getErrForProjectRequest()) {
+                session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                    command: protocol.CommandTypes.GeterrForProject,
+                    arguments: { delay: 0, file: filePath(expected.project) }
+                });
+                checkAllErrors({ session, host, files: expected.files });
+            }
+            baselineTsserverLogs(scenario, `${subScenario} geterrForProject`, session);
+        });
+    }
+
+    function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
+        it("verifies the errors using sync commands", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            openFilesForSession(openFiles(), session);
+            for (const { file, project } of syncDiagnostics()) {
+                const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
+                session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                    arguments: reqArgs
+                });
+                session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SemanticDiagnosticsSync,
+                    arguments: reqArgs
+                });
+                session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SuggestionDiagnosticsSync,
+                    arguments: reqArgs
+                });
+            }
+            baselineTsserverLogs(scenario, `${subScenario} gerErr with sync commands`, session);
+        });
+    }
+
+    export interface GetErrForProjectDiagnostics {
+        project: string | File;
+        files: readonly (string | File)[];
+        skip?: CheckAllErrors["skip"];
+    }
+    export interface SyncDiagnostics {
+        file: string | File;
+        project?: string | File;
+    }
+    export interface VerifyGetErrScenario {
+        scenario: string;
+        subScenario: string;
+        allFiles: () => readonly File[];
+        openFiles: () => readonly File[];
+        getErrRequest: () => VerifyGetErrRequest["files"];
+        getErrForProjectRequest: () => readonly GetErrForProjectDiagnostics[];
+        syncDiagnostics: () => readonly SyncDiagnostics[];
+    }
+    export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
+        verifyErrorsUsingGeterr(scenario);
+        verifyErrorsUsingGeterrForProject(scenario);
+        verifyErrorsUsingSyncMethods(scenario);
     }
 }

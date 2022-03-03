@@ -1,40 +1,12 @@
 namespace ts {
     describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
         let projFs: vfs.FileSystem;
-        const allExpectedOutputs = [
-            "/src/a.js", "/src/a.d.ts",
-            "/src/b.js", "/src/b.d.ts",
-            "/src/c.js"
-        ];
-        const expectedFileTraces = [
-            "/lib/lib.d.ts",
-            "/src/a.ts",
-            "/lib/lib.d.ts",
-            "/src/a.d.ts",
-            "/src/b.ts",
-            "/lib/lib.d.ts",
-            "/src/a.d.ts",
-            "/src/b.d.ts",
-            "/src/refs/a.d.ts",
-            "/src/c.ts"
-        ];
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
         });
         after(() => {
             projFs = undefined!; // Release the contents
         });
-
-        function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: readonly string[], expectedFileTraces: readonly string[], ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
-            const fs = projFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
-            modifyDiskLayout(fs);
-            const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
-            builder.build();
-            host.assertDiagnosticMessages(...expectedDiagnostics);
-            verifyOutputsPresent(fs, allExpectedOutputs);
-            assert.deepEqual(host.traces, expectedFileTraces);
-        }
 
         function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
             fs.writeFileSync("/src/b.ts", `import {A} from 'a';
@@ -49,35 +21,27 @@ export const b = new A();`);
             }));
         }
 
-        it("verify that it builds correctly", () => {
-            verifyBuild(noop, allExpectedOutputs, expectedFileTraces);
+        verifyTsc({
+            scenario: "transitiveReferences",
+            subScenario: "builds correctly",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
         });
 
-        it("verify that it builds correctly when the referenced project uses different module resolution", () => {
-            verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, expectedFileTraces);
+        verifyTsc({
+            scenario: "transitiveReferences",
+            subScenario: "builds correctly when the referenced project uses different module resolution",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
+            modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "classic"),
         });
 
-        it("verify that it build reports error about module not found with node resolution with external module name", () => {
-            // Error in b build only a
-            const allExpectedOutputs = ["/src/a.js", "/src/a.d.ts"];
-            const expectedFileTraces = [
-                "/lib/lib.d.ts",
-                "/src/a.ts",
-                "/lib/lib.d.ts",
-                "/src/b.ts"
-            ];
-            verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
-                allExpectedOutputs,
-                expectedFileTraces,
-                {
-                    message: [Diagnostics.Cannot_find_module_0, "a"],
-                    location: {
-                        file: "/src/b.ts",
-                        start: `import {A} from 'a';`.indexOf(`'a'`),
-                        length: `'a'`.length
-                    }
-                },
-            );
+        verifyTsc({
+            scenario: "transitiveReferences",
+            subScenario: "reports error about module not found with node resolution with external module name",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
+            modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "node"),
         });
     });
 }

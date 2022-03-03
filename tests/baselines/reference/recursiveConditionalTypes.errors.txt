@@ -1,0 +1,236 @@
+tests/cases/compiler/recursiveConditionalTypes.ts(16,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/recursiveConditionalTypes.ts(20,5): error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
+  Type 'T' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/compiler/recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
+  Type 'number extends M ? number[] : _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
+    Type 'number[] | _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
+      Type 'number[]' is not assignable to type 'TupleOf<number, N>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(51,5): error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
+  Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
+    Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
+      Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
+  Type '[] | Grow2<[string], T>' is not assignable to type 'Grow1<[], T>'.
+    Type '[]' is not assignable to type 'Grow1<[], T>'.
+      Type 'Grow2<[string], T>' is not assignable to type 'Grow1<[number], T>'.
+        Type '[string] | Grow2<[string, string], T>' is not assignable to type 'Grow1<[number], T>'.
+          Type '[string]' is not assignable to type 'Grow1<[number], T>'.
+            Type '[string]' is not assignable to type '[number]'.
+              Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
+
+
+==== tests/cases/compiler/recursiveConditionalTypes.ts (10 errors) ====
+    // Awaiting promises
+    
+    type __Awaited<T> =
+        T extends null | undefined ? T :
+        T extends PromiseLike<infer U> ? __Awaited<U> :
+        T;
+    
+    type MyPromise<T> = {
+        then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
+    }
+    
+    type InfinitePromise<T> = Promise<InfinitePromise<T>>;
+    
+    type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+    type P1 = __Awaited<any>;
+    type P2 = __Awaited<InfinitePromise<number>>;  // Error
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    
+    function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
+        ta = ua;
+        ua = ta;  // Error
+        ~~
+!!! error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+        ta = tx;  // Error
+        ~~
+!!! error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
+        tx = ta;  // Error
+        ~~
+!!! error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
+    }
+    
+    // Flattening arrays
+    
+    type Flatten<T extends readonly unknown[]> = T extends unknown[] ? _Flatten<T>[] : readonly _Flatten<T>[];
+    type _Flatten<T> = T extends readonly (infer U)[] ? _Flatten<U> : T;
+    
+    type InfiniteArray<T> = InfiniteArray<T>[];
+    
+    type B0 = Flatten<string[][][]>;
+    type B1 = Flatten<string[][] | readonly (number[] | boolean[][])[]>;
+    type B2 = Flatten<InfiniteArray<string>>;
+    type B3 = B2[0];  // Error
+              ~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    
+    // Repeating tuples
+    
+    type TupleOf<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
+    type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
+    
+    type TT0 = TupleOf<string, 4>;
+    type TT1 = TupleOf<number, 0 | 2 | 4>;
+    type TT2 = TupleOf<number, number>;
+    type TT3 = TupleOf<number, any>;
+    type TT4 = TupleOf<number, 100>;
+    type TT5 = TupleOf<number, 1000>;  // Depth error
+               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    
+    function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
+        tn = tm;
+        ~~
+!!! error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
+!!! error TS2322:   Type 'number extends M ? number[] : _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
+!!! error TS2322:     Type 'number[] | _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
+!!! error TS2322:       Type 'number[]' is not assignable to type 'TupleOf<number, N>'.
+        tm = tn;
+        ~~
+!!! error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
+!!! error TS2322:   Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
+!!! error TS2322:     Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
+!!! error TS2322:       Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
+    }
+    
+    declare function f23<T>(t: TupleOf<T, 3>): T;
+    
+    f23(['a', 'b', 'c']);  // string
+    
+    // Inference to recursive type
+    
+    interface Box<T> { value: T };
+    type RecBox<T> = T | Box<RecBox<T>>;
+    type InfBox<T> = Box<InfBox<T>>;
+    
+    declare function unbox<T>(box: RecBox<T>): T
+    
+    type T1 = Box<string>;
+    type T2 = Box<T1>;
+    type T3 = Box<T2>;
+    type T4 = Box<T3>;
+    type T5 = Box<T4>;
+    type T6 = Box<T5>;
+    
+    declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+    declare let b2: T6;
+    declare let b3: InfBox<string>;
+    declare let b4: { value: { value: { value: typeof b4 }}};
+    
+    unbox(b1);  // string
+    unbox(b2);  // string
+    unbox(b3);  // InfBox<string>
+    unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
+    unbox(b4);  // { value: { value: typeof b4 }}
+    unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
+    
+    // Inference from nested instantiations of same generic types
+    
+    type Box1<T> = { value: T };
+    type Box2<T> = { value: T };
+    
+    declare function foo<T>(x: Box1<Box1<T>>): T;
+    
+    declare let z: Box2<Box2<string>>;
+    
+    foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+    
+    // Intersect tuple element types
+    
+    type Intersect<U extends any[], R = unknown> = U extends [infer H, ...infer T] ? Intersect<T, R & H> : R;
+    
+    type QQ = Intersect<[string[], number[], 7]>;
+    
+    // Infer between structurally identical recursive conditional types
+    
+    type Unpack1<T> = T extends (infer U)[] ? Unpack1<U> : T;
+    type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
+    
+    function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
+        x = y;
+        y = x;
+        f20(y, x);
+    }
+    
+    type Grow1<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow1<[number, ...T], N>;
+    type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow2<[string, ...T], N>;
+    
+    function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
+        f21(y, x);  // Error
+            ~
+!!! error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
+!!! error TS2345:   Type '[] | Grow2<[string], T>' is not assignable to type 'Grow1<[], T>'.
+!!! error TS2345:     Type '[]' is not assignable to type 'Grow1<[], T>'.
+!!! error TS2345:       Type 'Grow2<[string], T>' is not assignable to type 'Grow1<[number], T>'.
+!!! error TS2345:         Type '[string] | Grow2<[string, string], T>' is not assignable to type 'Grow1<[number], T>'.
+!!! error TS2345:           Type '[string]' is not assignable to type 'Grow1<[number], T>'.
+!!! error TS2345:             Type '[string]' is not assignable to type '[number]'.
+!!! error TS2345:               Type 'string' is not assignable to type 'number'.
+    }
+    
+    // Repros from #41756
+    
+    type ParseSuccess<R extends string> = { rest: R };
+    
+    type ParseManyWhitespace<S extends string> =
+        S extends ` ${infer R0}` ?
+            ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
+            ParseSuccess<S>;
+    
+    type TP1 = ParseManyWhitespace<" foo">;
+    
+    type ParseManyWhitespace2<S extends string> =
+        S extends ` ${infer R0}` ?
+            Helper<ParseManyWhitespace2<R0>> :
+            ParseSuccess<S>;
+    
+    type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+    
+    type TP2 = ParseManyWhitespace2<" foo">;
+    
+    // Repro from #46183
+    
+    type NTuple<N extends number, Tup extends unknown[] = []> =
+        Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
+    
+    type Add<A extends number, B extends number> =
+        [...NTuple<A>, ...NTuple<B>]['length'];
+    
+    let five: Add<2, 3>;
+    
+    // Repro from #46316
+    
+    type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
+        ? [T, ...A] extends [...infer X] 
+            ? X
+            : never
+        : never;
+    
+    type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
+        ? A
+        : _Enumerate<_PrependNextNum<A>, N> & number;
+    
+    type Enumerate<N extends number> = number extends N
+        ? number
+        : _Enumerate<[], N> extends (infer E)[]
+        ? E
+        : never;
+    
+    function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
+        return value.length;  // Error
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'Enumerate<T["length"]>'.
+    }
+    

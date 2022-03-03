@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 const Obj = require("./obj");
->Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
->require("./obj") : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>Obj : typeof Obj
+>require("./obj") : typeof Obj
 >require : any
 >"./obj" : "./obj"
 
@@ -10,19 +10,19 @@ class Container {
 
     constructor() {
         this.usage = new Obj();
->this.usage = new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
->this.usage : import("tests/cases/conformance/jsdoc/declarations/obj")
+>this.usage = new Obj() : Obj
+>this.usage : any
 >this : this
->usage : import("tests/cases/conformance/jsdoc/declarations/obj")
->new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
->Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>usage : any
+>new Obj() : Obj
+>Obj : typeof Obj
     }
 }
 
 module.exports = Container;
 >module.exports = Container : typeof Container
 >module.exports : typeof Container
->module : { "tests/cases/conformance/jsdoc/declarations/index": typeof Container; }
+>module : { exports: typeof Container; }
 >exports : typeof Container
 >Container : typeof Container
 
@@ -30,7 +30,7 @@ module.exports = Container;
 module.exports = class Obj {
 >module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
->module : { "tests/cases/conformance/jsdoc/declarations/obj": typeof import("tests/cases/conformance/jsdoc/declarations/obj"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/obj"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
 >class Obj {    constructor() {        this.x = 12;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
 >Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
@@ -38,9 +38,9 @@ module.exports = class Obj {
     constructor() {
         this.x = 12;
 >this.x = 12 : 12
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >12 : 12
     }
 }

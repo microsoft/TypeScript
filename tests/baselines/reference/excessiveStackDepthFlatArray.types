@@ -1,0 +1,108 @@
+=== tests/cases/compiler/index.tsx ===
+interface MiddlewareArray<T> extends Array<T> {}
+declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
+>configureStore : (options: {    middleware: MiddlewareArray<any>;}) => void
+>options : { middleware: MiddlewareArray<any>; }
+>middleware : MiddlewareArray<any>
+
+declare const defaultMiddleware: MiddlewareArray<any>;
+>defaultMiddleware : MiddlewareArray<any>
+
+configureStore({
+>configureStore({  middleware: [...defaultMiddleware], // Should not error}) : void
+>configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
+>{  middleware: [...defaultMiddleware], // Should not error} : { middleware: any[]; }
+
+  middleware: [...defaultMiddleware], // Should not error
+>middleware : any[]
+>[...defaultMiddleware] : any[]
+>...defaultMiddleware : any
+>defaultMiddleware : MiddlewareArray<any>
+
+});
+
+declare namespace React {
+  type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
+>DetailedHTMLProps : E
+
+  interface HTMLAttributes<T> {
+    children?: ReactNode;
+>children : ReactNode
+  }
+  type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
+>ReactNode : ReactNode
+>null : null
+
+  type ReactText = string | number;
+>ReactText : ReactText
+
+  type ReactChild = ReactText;
+>ReactChild : ReactText
+
+  type ReactFragment = {} | ReactNodeArray;
+>ReactFragment : ReactFragment
+
+  interface ReactNodeArray extends Array<ReactNode> {}
+}
+declare namespace JSX {
+  interface IntrinsicElements {
+    ul: React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+>ul : React.HTMLAttributes<HTMLUListElement>
+>React : any
+>React : any
+
+    li: React.DetailedHTMLProps<React.HTMLAttributes<HTMLLIElement>, HTMLLIElement>;
+>li : React.HTMLAttributes<HTMLLIElement>
+>React : any
+>React : any
+  }
+}
+declare var React: any;
+>React : any
+
+const Component = () => {
+>Component : () => any
+>() => {  const categories = ['Fruit', 'Vegetables'];  return (    <ul>      <li>All</li>      {categories.map((category) => (        <li key={category}>{category}</li> // Error about 'key' only      ))}    </ul>  );} : () => any
+
+  const categories = ['Fruit', 'Vegetables'];
+>categories : string[]
+>['Fruit', 'Vegetables'] : string[]
+>'Fruit' : "Fruit"
+>'Vegetables' : "Vegetables"
+
+  return (
+>(    <ul>      <li>All</li>      {categories.map((category) => (        <li key={category}>{category}</li> // Error about 'key' only      ))}    </ul>  ) : any
+
+    <ul>
+><ul>      <li>All</li>      {categories.map((category) => (        <li key={category}>{category}</li> // Error about 'key' only      ))}    </ul> : any
+>ul : any
+
+      <li>All</li>
+><li>All</li> : any
+>li : any
+>li : any
+
+      {categories.map((category) => (
+>categories.map((category) => (        <li key={category}>{category}</li> // Error about 'key' only      )) : any[]
+>categories.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>categories : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>(category) => (        <li key={category}>{category}</li> // Error about 'key' only      ) : (category: string) => any
+>category : string
+>(        <li key={category}>{category}</li> // Error about 'key' only      ) : any
+
+        <li key={category}>{category}</li> // Error about 'key' only
+><li key={category}>{category}</li> : any
+>li : any
+>key : string
+>category : string
+>category : string
+>li : any
+
+      ))}
+    </ul>
+>ul : any
+
+  );
+};
+

@@ -8,12 +8,12 @@ export default Obj;
 
 === tests/cases/compiler/b.js ===
 import Obj from './a';
->Obj : typeof Obj
+>Obj : {}
 
 Obj.fn = function() {};
 >Obj.fn = function() {} : () => void
->Obj.fn : () => void
->Obj : typeof Obj
->fn : () => void
+>Obj.fn : error
+>Obj : {}
+>fn : any
 >function() {} : () => void
 

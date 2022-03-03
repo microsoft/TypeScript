@@ -142,10 +142,10 @@
     >foo1(robotA)
     >:=> (line 18, col 0) to (line 18, col 12)
 --------------------------------
-19 >foo1(["roomba", ["vaccum", "mopping"]]);
+19 >foo1(["roomba", ["vacuum", "mopping"]]);
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (543 to 583)  SpanInfo: {"start":543,"length":39}
-    >foo1(["roomba", ["vaccum", "mopping"]])
+    >foo1(["roomba", ["vacuum", "mopping"]])
     >:=> (line 19, col 0) to (line 19, col 39)
 --------------------------------
 20 >foo2(robotA);
@@ -154,10 +154,10 @@
     >foo2(robotA)
     >:=> (line 20, col 0) to (line 20, col 12)
 --------------------------------
-21 >foo2(["roomba", ["vaccum", "mopping"]]);
+21 >foo2(["roomba", ["vacuum", "mopping"]]);
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (598 to 638)  SpanInfo: {"start":598,"length":39}
-    >foo2(["roomba", ["vaccum", "mopping"]])
+    >foo2(["roomba", ["vacuum", "mopping"]])
     >:=> (line 21, col 0) to (line 21, col 39)
 --------------------------------
 22 >foo3(robotA);
@@ -166,7 +166,7 @@
     >foo3(robotA)
     >:=> (line 22, col 0) to (line 22, col 12)
 --------------------------------
-23 >foo3(["roomba", ["vaccum", "mopping"]]);
+23 >foo3(["roomba", ["vacuum", "mopping"]]);
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (653 to 692)  SpanInfo: {"start":653,"length":39}
-    >foo3(["roomba", ["vaccum", "mopping"]])
+    >foo3(["roomba", ["vacuum", "mopping"]])
     >:=> (line 23, col 0) to (line 23, col 39)

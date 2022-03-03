@@ -14,9 +14,10 @@ declare const moduleFile: number;
 import(getSpecifier());
 >getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionDeclarationEmit1.ts, 0, 0))
 
-var p0 = import(`${directory}\${moduleFile}`);
+var p0 = import(`${directory}\\${moduleFile}`);
 >p0 : Symbol(p0, Decl(importCallExpressionDeclarationEmit1.ts, 7, 3))
 >directory : Symbol(directory, Decl(importCallExpressionDeclarationEmit1.ts, 2, 13))
+>moduleFile : Symbol(moduleFile, Decl(importCallExpressionDeclarationEmit1.ts, 3, 13))
 
 var p1 = import(getSpecifier());
 >p1 : Symbol(p1, Decl(importCallExpressionDeclarationEmit1.ts, 8, 3))

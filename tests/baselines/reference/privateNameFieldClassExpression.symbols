@@ -1,0 +1,29 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldClassExpression.ts ===
+class B {
+>B : Symbol(B, Decl(privateNameFieldClassExpression.ts, 0, 0))
+
+    #foo = class {
+>#foo : Symbol(B.#foo, Decl(privateNameFieldClassExpression.ts, 0, 9))
+
+        constructor() {
+            console.log("hello");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+        }
+        static test = 123;
+>test : Symbol((Anonymous class).test, Decl(privateNameFieldClassExpression.ts, 4, 9))
+
+    };
+    #foo2 = class Foo {
+>#foo2 : Symbol(B.#foo2, Decl(privateNameFieldClassExpression.ts, 6, 6))
+>Foo : Symbol(Foo, Decl(privateNameFieldClassExpression.ts, 7, 11))
+
+        static otherClass = 123;
+>otherClass : Symbol(Foo.otherClass, Decl(privateNameFieldClassExpression.ts, 7, 23))
+
+    };
+}
+
+
+

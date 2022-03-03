@@ -1,0 +1,94 @@
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+    /** @return {number} */
+    method() { throw new Error(); }
+>method : Symbol(A.method, Decl(a.js, 0, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+/** @implements {A} */
+class B  {
+>B : Symbol(B, Decl(a.js, 3, 1))
+
+    method() { return 0 }
+>method : Symbol(B.method, Decl(a.js, 5, 10))
+}
+
+/** @implements A */
+class B2  {
+>B2 : Symbol(B2, Decl(a.js, 7, 1))
+
+    /** @return {string} */
+    method() { return "" }
+>method : Symbol(B2.method, Decl(a.js, 10, 11))
+}
+
+/** @implements {A} */
+class B3  {
+>B3 : Symbol(B3, Decl(a.js, 13, 1))
+}
+
+
+var Ns = {};
+>Ns : Symbol(Ns, Decl(a.js, 20, 3), Decl(a.js, 20, 12), Decl(a.js, 44, 7))
+
+/** @implements {A} */
+Ns.C1 = class {
+>Ns.C1 : Symbol(Ns.C1, Decl(a.js, 20, 12))
+>Ns : Symbol(Ns, Decl(a.js, 20, 3), Decl(a.js, 20, 12), Decl(a.js, 44, 7))
+>C1 : Symbol(Ns.C1, Decl(a.js, 20, 12))
+
+    method() { return 11; }
+>method : Symbol(C1.method, Decl(a.js, 22, 15))
+}
+/** @implements {A} */
+var C2 = class {
+>C2 : Symbol(C2, Decl(a.js, 26, 3))
+
+    method() { return 12; }
+>method : Symbol(C2.method, Decl(a.js, 26, 16))
+}
+var o = {
+>o : Symbol(o, Decl(a.js, 29, 3))
+
+    /** @implements {A} */
+    C3: class {
+>C3 : Symbol(C3, Decl(a.js, 29, 9))
+
+        method() { return 13; }
+>method : Symbol(C3.method, Decl(a.js, 31, 15))
+    }
+}
+class CC {
+>CC : Symbol(CC, Decl(a.js, 34, 1))
+
+    /** @implements {A} */
+    C4 = class {
+>C4 : Symbol(CC.C4, Decl(a.js, 35, 10))
+
+        method() {
+>method : Symbol((Anonymous class).method, Decl(a.js, 37, 16))
+
+            return 14;
+        }
+    }
+}
+
+var C5;
+>C5 : Symbol(C5, Decl(a.js, 44, 3))
+
+/** @implements {A} */
+Ns.C5 = C5 || class {
+>Ns.C5 : Symbol(Ns.C5, Decl(a.js, 44, 7))
+>Ns : Symbol(Ns, Decl(a.js, 20, 3), Decl(a.js, 20, 12), Decl(a.js, 44, 7))
+>C5 : Symbol(Ns.C5, Decl(a.js, 44, 7))
+>C5 : Symbol(C5, Decl(a.js, 44, 3))
+
+    method() {
+>method : Symbol(C5.method, Decl(a.js, 46, 21))
+
+        return 15;
+    }
+}
+

@@ -38,7 +38,7 @@ var v: B;
 v({ s: "", n: 0 }).toLowerCase();
 >v({ s: "", n: 0 }).toLowerCase() : any
 >v({ s: "", n: 0 }).toLowerCase : any
->v({ s: "", n: 0 }) : any
+>v({ s: "", n: 0 }) : never
 >v : A
 >{ s: "", n: 0 } : { s: string; n: number; }
 >s : string
@@ -56,7 +56,7 @@ var w: C;
 w({ s: "", n: 0 }).toLowerCase();
 >w({ s: "", n: 0 }).toLowerCase() : any
 >w({ s: "", n: 0 }).toLowerCase : any
->w({ s: "", n: 0 }) : any
+>w({ s: "", n: 0 }) : never
 >w : A
 >{ s: "", n: 0 } : { s: string; n: number; }
 >s : string

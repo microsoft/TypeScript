@@ -1,0 +1,24 @@
+/a.ts(4,17): error TS2456: Type alias 'T' circularly references itself.
+/b.ts(4,17): error TS2456: Type alias 'T' circularly references itself.
+
+
+==== /a.ts (1 errors) ====
+    import type { ns2 } from './b';
+    export namespace ns1 {
+      export namespace nested {
+        export type T = ns2.nested.T;
+                    ~
+!!! error TS2456: Type alias 'T' circularly references itself.
+      }
+    }
+    
+==== /b.ts (1 errors) ====
+    import type { ns1 } from './a';
+    export namespace ns2 {
+      export namespace nested {
+        export type T = ns1.nested.T;
+                    ~
+!!! error TS2456: Type alias 'T' circularly references itself.
+      }
+    }
+    

@@ -1,5 +1,5 @@
-tests/cases/compiler/genericWithOpenTypeParameters1.ts(7,40): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-  '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+tests/cases/compiler/genericWithOpenTypeParameters1.ts(7,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/compiler/genericWithOpenTypeParameters1.ts(8,41): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,41): error TS2558: Expected 0 type arguments, but got 1.
 
@@ -13,8 +13,8 @@ tests/cases/compiler/genericWithOpenTypeParameters1.ts(9,41): error TS2558: Expe
     x.foo(1); // no error
     var f = <T>(x: B<T>) => { return x.foo(1); } // error
                                            ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
-!!! error TS2345:   '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
     var f2 = <T>(x: B<T>) => { return x.foo<T>(1); } // error
                                             ~
 !!! error TS2558: Expected 0 type arguments, but got 1.

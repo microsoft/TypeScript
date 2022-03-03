@@ -16,8 +16,7 @@ async function innerPromise(): Promise<string> {
     try {
         const { blob } = await resp.blob();
         result = [0, blob.byteOffset];
-    }
-    catch ({ message }) {
+    } catch ({ message }) {
         result = ['Error ', message];
     }
     const [x, y] = result;

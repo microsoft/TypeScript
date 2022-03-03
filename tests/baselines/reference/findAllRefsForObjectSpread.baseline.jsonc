@@ -1,0 +1,488 @@
+// === /tests/cases/fourslash/findAllRefsForObjectSpread.ts ===
+// interface A1 { readonly /*FIND ALL REFS*/[|a|]: string };
+// interface A2 { a?: number };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12.[|a|];
+// a1.[|a|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+      "kind": "property",
+      "name": "(property) A1.a: string",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 15,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "contextSpan": {
+          "start": 15,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 128,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForObjectSpread.ts ===
+// interface A1 { readonly a: string };
+// interface A2 { /*FIND ALL REFS*/[|a|]?: number };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12.[|a|];
+// a1.a;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+      "kind": "property",
+      "name": "(property) A2.a?: number",
+      "textSpan": {
+        "start": 52,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A2",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 52,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 52,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "contextSpan": {
+          "start": 52,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForObjectSpread.ts ===
+// interface A1 { readonly [|a|]: string };
+// interface A2 { [|a|]?: number };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12./*FIND ALL REFS*/[|a|];
+// a1.[|a|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+      "kind": "property",
+      "name": "(property) A1.a: string",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 15,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "contextSpan": {
+          "start": 15,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 128,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+      "kind": "property",
+      "name": "(property) A2.a?: number",
+      "textSpan": {
+        "start": 52,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A2",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 52,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 52,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "contextSpan": {
+          "start": 52,
+          "length": 10
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForObjectSpread.ts ===
+// interface A1 { readonly [|a|]: string };
+// interface A2 { a?: number };
+// let a1: A1;
+// let a2: A2;
+// let a12 = { ...a1, ...a2 };
+// a12.[|a|];
+// a1./*FIND ALL REFS*/[|a|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+      "kind": "property",
+      "name": "(property) A1.a: string",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 15,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "contextSpan": {
+          "start": 15,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 128,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForObjectSpread.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

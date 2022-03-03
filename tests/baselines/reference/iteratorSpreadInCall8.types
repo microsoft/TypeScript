@@ -29,9 +29,9 @@ class SymbolIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
         return this;
 >this : this
@@ -60,9 +60,9 @@ class _StringIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
         return this;
 >this : this
@@ -70,7 +70,7 @@ class _StringIterator {
 }
 
 new Foo(...new SymbolIterator, ...new _StringIterator);
->new Foo(...new SymbolIterator, ...new _StringIterator) : any
+>new Foo(...new SymbolIterator, ...new _StringIterator) : Foo<symbol>
 >Foo : typeof Foo
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

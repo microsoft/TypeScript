@@ -1,0 +1,78 @@
+tests/cases/conformance/node/index.cts(3,23): error TS1471: Module 'inner/mjs/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1471: Module 'inner/mjs/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: Module 'inner/mjs/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+
+==== tests/cases/conformance/node/index.ts (0 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index.cjs";
+    import * as mjsi from "inner/mjs/index.mjs";
+    import * as typei from "inner/js/index.js";
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/index.mts (0 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/index.cjs";
+    import * as mjsi from "inner/mjs/index.mjs";
+    import * as typei from "inner/js/index.js";
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/index.cts (1 errors) ====
+    // cjs format file
+    import * as cjsi from "inner/cjs/index.cjs";
+    import * as mjsi from "inner/mjs/index.mjs";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module 'inner/mjs/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as typei from "inner/js/index.js";
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/node_modules/inner/index.d.ts (2 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index.cjs";
+                ~~~
+!!! error TS2303: Circular definition of import alias 'cjs'.
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module 'inner/mjs/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as type from "inner/js/index.js";
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    import * as cjs from "inner/cjs/index.cjs";
+    import * as mjs from "inner/mjs/index.mjs";
+    import * as type from "inner/js/index.js";
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/node_modules/inner/index.d.cts (1 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/index.cjs";
+    import * as mjs from "inner/mjs/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module 'inner/mjs/index.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as type from "inner/js/index.js";
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+    }
+==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs/*.cjs": "./*.cjs",
+            "./mjs/*.mjs": "./*.mjs",
+            "./js/*.js": "./*.js"
+        }
+    }

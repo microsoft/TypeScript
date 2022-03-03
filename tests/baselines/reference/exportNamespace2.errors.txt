@@ -1,0 +1,20 @@
+tests/cases/conformance/externalModules/typeOnly/d.ts(2,5): error TS1361: 'a' cannot be used as a value because it was imported using 'import type'.
+
+
+==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+    export class A {}
+    
+==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
+    export * as a from './a';
+    
+==== tests/cases/conformance/externalModules/typeOnly/c.ts (0 errors) ====
+    import type { a } from './b';
+    export { a };
+    
+==== tests/cases/conformance/externalModules/typeOnly/d.ts (1 errors) ====
+    import { a } from './c';
+    new a.A(); // Error
+        ~
+!!! error TS1361: 'a' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/c.ts:1:15: 'a' was imported here.
+    

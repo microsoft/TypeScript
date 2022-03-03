@@ -18,7 +18,7 @@ class Chain<T> {
 
         // Ok to go down the chain, but error to climb up the chain
         (new Chain(t)).then(tt => s).then(ss => t);
->(new Chain(t)).then(tt => s).then(ss => t) : any
+>(new Chain(t)).then(tt => s).then(ss => t) : Chain<S>
 >(new Chain(t)).then(tt => s).then : <S extends S>(cb: (x: S) => S) => Chain<S>
 >(new Chain(t)).then(tt => s) : Chain<S>
 >(new Chain(t)).then : <S extends T>(cb: (x: T) => S) => Chain<S>
@@ -37,7 +37,7 @@ class Chain<T> {
 
         // But error to try to climb up the chain
         (new Chain(s)).then(ss => t);
->(new Chain(s)).then(ss => t) : any
+>(new Chain(s)).then(ss => t) : Chain<S>
 >(new Chain(s)).then : <S extends S>(cb: (x: S) => S) => Chain<S>
 >(new Chain(s)) : Chain<S>
 >new Chain(s) : Chain<S>

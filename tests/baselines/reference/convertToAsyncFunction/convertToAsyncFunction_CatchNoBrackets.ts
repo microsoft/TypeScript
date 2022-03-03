@@ -9,8 +9,7 @@ async function f():Promise<void> {
     try {
         const result = await fetch('https://typescriptlang.org');
         return console.log(result);
-    }
-    catch (err) {
+    } catch (err) {
         return console.log(err);
     }
 }

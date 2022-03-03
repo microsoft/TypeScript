@@ -9,6 +9,7 @@ export function Point(x, y) {
 >y : Symbol(y, Decl(source.js, 4, 24))
 
     if (!(this instanceof Point)) {
+>this : Symbol(Point, Decl(source.js, 0, 0))
 >Point : Symbol(Point, Decl(source.js, 0, 0))
 
         return new Point(x, y);
@@ -17,10 +18,14 @@ export function Point(x, y) {
 >y : Symbol(y, Decl(source.js, 4, 24))
     }
     this.x = x;
+>this.x : Symbol(Point.x, Decl(source.js, 7, 5))
+>this : Symbol(Point, Decl(source.js, 0, 0))
 >x : Symbol(Point.x, Decl(source.js, 7, 5))
 >x : Symbol(x, Decl(source.js, 4, 22))
 
     this.y = y;
+>this.y : Symbol(Point.y, Decl(source.js, 8, 15))
+>this : Symbol(Point, Decl(source.js, 0, 0))
 >y : Symbol(Point.y, Decl(source.js, 8, 15))
 >y : Symbol(y, Decl(source.js, 4, 24))
 }

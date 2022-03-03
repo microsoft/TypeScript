@@ -14,3 +14,14 @@ o4.b?.c.d?.e;
 
 declare const o5: { b?(): { c: { d?: { e: string } } } };
 o5.b?.().c.d?.e;
+
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+o6<number>()?.x;
+
+// GH#34109
+o1?.b ? 1 : 0;
+
+// GH#36031
+o2?.b!.c;
+o2?.b!.c!;

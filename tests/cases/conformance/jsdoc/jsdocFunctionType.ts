@@ -70,3 +70,15 @@ var E = function(n) {
 
 
 var y3 = id2(E);
+
+// Repro from #39229
+
+/**
+ * @type {(...args: [string, string] | [number, string, string]) => void}
+ */
+function foo(...args) {
+  args;
+}
+
+foo('abc', 'def');
+foo(42, 'abc', 'def');

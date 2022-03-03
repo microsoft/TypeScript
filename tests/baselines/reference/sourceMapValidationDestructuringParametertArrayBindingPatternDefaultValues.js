@@ -40,7 +40,7 @@ function foo1(_a) {
     console.log(nameA);
 }
 function foo2(_a) {
-    var _b = (_a === void 0 ? [-1, "name", "skill"] : _a)[0], numberB = _b === void 0 ? -1 : _b;
+    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberB = _c === void 0 ? -1 : _c;
     console.log(numberB);
 }
 function foo3(_a) {
