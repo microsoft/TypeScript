@@ -1989,7 +1989,7 @@ namespace ts {
         // @api
         function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
             const node = createBaseNode<ConditionalTypeNode>(SyntaxKind.ConditionalType);
-            node.checkType = parenthesizerRules().parenthesizeMemberOfConditionalType(checkType);
+            node.checkType = parenthesizerRules().parenthesizeCheckTypeOfConditionalType(checkType);
             node.extendsType = parenthesizerRules().parenthesizeMemberOfConditionalType(extendsType);
             node.trueType = trueType;
             node.falseType = falseType;

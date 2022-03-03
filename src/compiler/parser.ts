@@ -3077,6 +3077,10 @@ namespace ts {
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
+            return parseTypeParameterWorker(/*canHaveDefault*/ true);
+        }
+
+        function parseTypeParameterWorker(canHaveDefault: boolean): TypeParameterDeclaration {
             const pos = getNodePos();
             const name = parseIdentifier();
             let constraint: TypeNode | undefined;
@@ -3101,7 +3105,7 @@ namespace ts {
                 }
             }
 
-            const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
+            const defaultType = canHaveDefault && parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
             const node = factory.createTypeParameterDeclaration(name, constraint, defaultType);
             node.expression = expression;
             return finishNode(node, pos);
@@ -3859,22 +3863,10 @@ namespace ts {
             return finishNode(factory.createTypeOperatorNode(operator, parseTypeOperatorOrHigher()), pos);
         }
 
-        function parseTypeParameterOfInferType() {
-            const pos = getNodePos();
-            return finishNode(
-                factory.createTypeParameterDeclaration(
-                    parseIdentifier(),
-                    /*constraint*/ undefined,
-                    /*defaultType*/ undefined
-                ),
-                pos
-            );
-        }
-
         function parseInferType(): InferTypeNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.InferKeyword);
-            return finishNode(factory.createInferTypeNode(parseTypeParameterOfInferType()), pos);
+            return finishNode(factory.createInferTypeNode(parseTypeParameterWorker(/*canHaveDefault*/ false)), pos);
         }
 
         function parseTypeOperatorOrHigher(): TypeNode {

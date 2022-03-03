@@ -7090,6 +7090,7 @@ namespace ts {
         parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
+        parenthesizeCheckTypeOfConditionalType(member: TypeNode): TypeNode;
         parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode;
         parenthesizeMemberOfElementType(member: TypeNode): TypeNode;
         parenthesizeElementTypeOfArrayType(member: TypeNode): TypeNode;

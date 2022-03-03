@@ -1,0 +1,11 @@
+=== tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts ===
+// infer twice with different constraints (same behavior as class/interface)
+type X10<T> =
+>X10 : X10<T>
+
+    T extends { a: infer U extends string, b: infer U extends number } ? U :
+>a : U
+>b : U
+
+    never;
+

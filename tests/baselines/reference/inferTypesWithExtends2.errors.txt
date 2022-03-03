@@ -1,0 +1,14 @@
+tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts(3,26): error TS2838: All declarations of 'U' must have identical constraints.
+tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts(3,53): error TS2838: All declarations of 'U' must have identical constraints.
+
+
+==== tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts (2 errors) ====
+    // infer twice with different constraints (same behavior as class/interface)
+    type X10<T> =
+        T extends { a: infer U extends string, b: infer U extends number } ? U :
+                             ~
+!!! error TS2838: All declarations of 'U' must have identical constraints.
+                                                        ~
+!!! error TS2838: All declarations of 'U' must have identical constraints.
+        never;
+    
