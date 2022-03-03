@@ -8,5 +8,6 @@ export * from "./a";
 
 
 //// [a.js]
+export {};
 //// [b.js]
 export * from "./a";

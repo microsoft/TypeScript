@@ -1,0 +1,27 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameReadonly.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
+
+    #bar() {}
+>#bar : Symbol(C.#bar, Decl(privateNameReadonly.ts, 0, 17))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))
+
+        this.#bar = console.log("should log this then throw");
+>this.#bar : Symbol(C.#bar, Decl(privateNameReadonly.ts, 0, 17))
+>this : Symbol(C, Decl(privateNameReadonly.ts, 0, 9))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+}
+
+console.log(new C().foo());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>new C().foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))
+>C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
+>foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))
+

@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts ===
 // errors
 var y = {
->y : { "stringLiteral": any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
->{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { "stringLiteral": any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+>y : { stringLiteral: any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+>{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { stringLiteral: any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
 
     "stringLiteral",
 >"stringLiteral" : any
@@ -41,8 +41,8 @@ var y = {
 > : any
 
 var x = {
->x : { a: any; (Missing): any; ["ss"]: any; [1]: any; }
->{    a.b,    a["ss"],    a[1],} : { a: any; (Missing): any; ["ss"]: any; [1]: any; }
+>x : { a: any; "": any; ss: any; 1: any; }
+>{    a.b,    a["ss"],    a[1],} : { a: any; "": any; ss: any; 1: any; }
 
     a.b,
 >a : any

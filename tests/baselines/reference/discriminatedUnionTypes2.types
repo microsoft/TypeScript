@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/union/discriminatedUnionTypes2.ts ===
 function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
->f10 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
+>f10 : (x: {    kind: false;    a: string;} | {    kind: true;    b: string;} | {    kind: string;    c: string;}) => void
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
 >kind : false
 >false : false
@@ -44,7 +44,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 }
 
 function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
->f11 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
+>f11 : (x: {    kind: false;    a: string;} | {    kind: true;    b: string;} | {    kind: string;    c: string;}) => void
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
 >kind : false
 >false : false
@@ -87,7 +87,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 }
 
 function f13(x: { a: null; b: string } | { a: string, c: number }) {
->f13 : (x: { a: null; b: string; } | { a: string; c: number; }) => void
+>f13 : (x: {    a: null;    b: string;} | {    a: string;    c: number;}) => void
 >x : { a: null; b: string; } | { a: string; c: number; }
 >a : null
 >null : null
@@ -108,7 +108,7 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 }
 
 function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
->f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
+>f14 : <T>(x: {    a: 0;    b: string;} | {    a: T;    c: number;}) => void
 >x : { a: 0; b: string; } | { a: T; c: number; }
 >a : 0
 >b : string
@@ -286,6 +286,129 @@ function f31(foo: Foo) {
     else {
         foo;
 >foo : { tag: false; y: number; } | { [x: string]: string; }
+    }
+}
+
+// Repro from #33448
+
+type a = {
+>a : a
+
+    type: 'a',
+>type : "a"
+
+    data: string
+>data : string
+}
+type b = {
+>b : b
+
+    type: 'b',
+>type : "b"
+
+    name: string
+>name : string
+}
+type c = {
+>c : c
+
+    type: 'c',
+>type : "c"
+
+    other: string
+>other : string
+}
+
+type abc = a | b | c;
+>abc : abc
+
+function f(problem: abc & (b | c)) {
+>f : (problem: abc & (b | c)) => void
+>problem : b | c
+
+    if (problem.type === 'b') {
+>problem.type === 'b' : boolean
+>problem.type : "b" | "c"
+>problem : b | c
+>type : "b" | "c"
+>'b' : "b"
+
+        problem.name;
+>problem.name : string
+>problem : b
+>name : string
+    }
+    else {
+        problem.other;
+>problem.other : string
+>problem : c
+>other : string
+    }
+}
+
+type RuntimeValue =
+>RuntimeValue : RuntimeValue
+
+    | { type: 'number', value: number }
+>type : "number"
+>value : number
+
+    | { type: 'string', value: string }
+>type : "string"
+>value : string
+
+    | { type: 'boolean', value: boolean };
+>type : "boolean"
+>value : boolean
+
+function foo1(x: RuntimeValue & { type: 'number' }) {
+>foo1 : (x: RuntimeValue & {    type: 'number';}) => void
+>x : { type: "number"; value: number; } & { type: 'number'; }
+>type : "number"
+
+    if (x.type === 'number') {
+>x.type === 'number' : boolean
+>x.type : "number"
+>x : { type: "number"; value: number; } & { type: "number"; }
+>type : "number"
+>'number' : "number"
+
+        x.value;  // number
+>x.value : number
+>x : { type: "number"; value: number; } & { type: "number"; }
+>value : number
+    }
+    else {
+        x.value;  // number
+>x.value : number
+>x : { type: "number"; value: number; } & { type: "number"; }
+>value : number
+    }
+}
+
+function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
+>foo2 : (x: RuntimeValue & ({    type: 'number';} | {    type: 'string';})) => void
+>x : ({ type: "number"; value: number; } & { type: 'number'; }) | ({ type: "string"; value: string; } & { type: 'string'; })
+>type : "number"
+>type : "string"
+
+    if (x.type === 'number') {
+>x.type === 'number' : boolean
+>x.type : "string" | "number"
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+>type : "string" | "number"
+>'number' : "number"
+
+        x.value;  // number
+>x.value : number
+>x : { type: "number"; value: number; } & { type: "number"; }
+>value : number
+    }
+    else {
+        x.value;  // string
+>x.value : string
+>x : { type: "string"; value: string; } & { type: "string"; }
+>value : string
     }
 }
 

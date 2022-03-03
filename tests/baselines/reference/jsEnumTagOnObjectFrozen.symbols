@@ -8,7 +8,9 @@ const { Thing, useThing, cbThing } = require("./index");
 
 useThing(Thing.a);
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
+>Thing.a : Symbol(a, Decl(index.js, 1, 29))
 >Thing : Symbol(Thing, Decl(usage.js, 0, 7))
+>a : Symbol(a, Decl(index.js, 1, 29))
 
 /**
  * @typedef {Object} LogEntry
@@ -53,9 +55,9 @@ const Thing = Object.freeze({
 });
 
 exports.Thing = Thing;
->exports.Thing : Symbol(Thing, Decl(index.js, 4, 3), Decl(index.js, 0, 4))
->exports : Symbol(Thing, Decl(index.js, 4, 3), Decl(index.js, 0, 4))
->Thing : Symbol(Thing, Decl(index.js, 4, 3), Decl(index.js, 0, 4))
+>exports.Thing : Symbol(Thing, Decl(index.js, 4, 3))
+>exports : Symbol(Thing, Decl(index.js, 4, 3))
+>Thing : Symbol(Thing, Decl(index.js, 4, 3))
 >Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
 
 /**

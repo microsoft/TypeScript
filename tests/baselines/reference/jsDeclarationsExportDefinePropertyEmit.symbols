@@ -1,0 +1,228 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+Object.defineProperty(module.exports, "a", { value: function a() {} });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"a" : Symbol(a, Decl(index.js, 0, 0))
+>value : Symbol(value, Decl(index.js, 0, 44))
+>a : Symbol(a, Decl(index.js, 0, 51))
+
+Object.defineProperty(module.exports, "b", { value: function b() {} });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"b" : Symbol(b, Decl(index.js, 0, 71), Decl(index.js, 3, 37))
+>value : Symbol(value, Decl(index.js, 2, 44))
+>b : Symbol(b, Decl(index.js, 2, 51))
+
+Object.defineProperty(module.exports.b, "cat", { value: "cat" });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports.b : Symbol(b, Decl(index.js, 0, 71), Decl(index.js, 3, 37))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>b : Symbol(b, Decl(index.js, 0, 71), Decl(index.js, 3, 37))
+>"cat" : Symbol(b.cat, Decl(index.js, 2, 71))
+>value : Symbol(value, Decl(index.js, 3, 48))
+
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string} 
+ */
+function d(a, b) { return /** @type {*} */(null); }
+>d : Symbol(d, Decl(index.js, 3, 65))
+>a : Symbol(a, Decl(index.js, 10, 11))
+>b : Symbol(b, Decl(index.js, 10, 13))
+
+Object.defineProperty(module.exports, "d", { value: d });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"d" : Symbol(d, Decl(index.js, 10, 51))
+>value : Symbol(value, Decl(index.js, 11, 44))
+>d : Symbol(d, Decl(index.js, 3, 65))
+
+
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U} 
+ */
+function e(a, b) { return /** @type {*} */(null); }
+>e : Symbol(e, Decl(index.js, 11, 57))
+>a : Symbol(a, Decl(index.js, 20, 11))
+>b : Symbol(b, Decl(index.js, 20, 13))
+
+Object.defineProperty(module.exports, "e", { value: e });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"e" : Symbol(e, Decl(index.js, 20, 51))
+>value : Symbol(value, Decl(index.js, 21, 44))
+>e : Symbol(e, Decl(index.js, 11, 57))
+
+/**
+ * @template T
+ * @param {T} a
+ */
+function f(a) {
+>f : Symbol(f, Decl(index.js, 21, 57))
+>a : Symbol(a, Decl(index.js, 27, 11))
+
+    return a;
+>a : Symbol(a, Decl(index.js, 27, 11))
+}
+Object.defineProperty(module.exports, "f", { value: f });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"f" : Symbol(f, Decl(index.js, 29, 1), Decl(index.js, 31, 37))
+>value : Symbol(value, Decl(index.js, 30, 44))
+>f : Symbol(f, Decl(index.js, 21, 57))
+
+Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports.f : Symbol(f, Decl(index.js, 29, 1), Decl(index.js, 31, 37))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>f : Symbol(f, Decl(index.js, 29, 1), Decl(index.js, 31, 37))
+>"self" : Symbol(f.self, Decl(index.js, 30, 57))
+>value : Symbol(value, Decl(index.js, 31, 49))
+>module.exports.f : Symbol(f, Decl(index.js, 29, 1), Decl(index.js, 31, 37))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>f : Symbol(f, Decl(index.js, 29, 1), Decl(index.js, 31, 37))
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
+function g(a, b) {
+>g : Symbol(g, Decl(index.js, 31, 77))
+>a : Symbol(a, Decl(index.js, 37, 11))
+>b : Symbol(b, Decl(index.js, 37, 13))
+
+    return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 34, 12))
+>a : Symbol(a, Decl(index.js, 37, 11))
+>x : Symbol(x, Decl(index.js, 34, 12))
+>b.y : Symbol(y, Decl(index.js, 35, 12))
+>b : Symbol(b, Decl(index.js, 37, 13))
+>y : Symbol(y, Decl(index.js, 35, 12))
+}
+Object.defineProperty(module.exports, "g", { value: g });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"g" : Symbol(g, Decl(index.js, 39, 1))
+>value : Symbol(value, Decl(index.js, 40, 44))
+>g : Symbol(g, Decl(index.js, 31, 77))
+
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
+function hh(a, b) {
+>hh : Symbol(hh, Decl(index.js, 40, 57))
+>a : Symbol(a, Decl(index.js, 47, 12))
+>b : Symbol(b, Decl(index.js, 47, 14))
+
+    return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 44, 12))
+>a : Symbol(a, Decl(index.js, 47, 12))
+>x : Symbol(x, Decl(index.js, 44, 12))
+>b.y : Symbol(y, Decl(index.js, 45, 12))
+>b : Symbol(b, Decl(index.js, 47, 14))
+>y : Symbol(y, Decl(index.js, 45, 12))
+}
+Object.defineProperty(module.exports, "h", { value: hh });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"h" : Symbol(h, Decl(index.js, 49, 1))
+>value : Symbol(value, Decl(index.js, 50, 44))
+>hh : Symbol(hh, Decl(index.js, 40, 57))
+
+Object.defineProperty(module.exports, "i", { value: function i(){} });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"i" : Symbol(i, Decl(index.js, 50, 58))
+>value : Symbol(value, Decl(index.js, 52, 44))
+>i : Symbol(i, Decl(index.js, 52, 51))
+
+Object.defineProperty(module.exports, "ii", { value: module.exports.i });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"ii" : Symbol(ii, Decl(index.js, 52, 70))
+>value : Symbol(value, Decl(index.js, 53, 45))
+>module.exports.i : Symbol(i, Decl(index.js, 50, 58))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>i : Symbol(i, Decl(index.js, 50, 58))
+
+// note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
+Object.defineProperty(module.exports, "jj", { value: module.exports.j });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"jj" : Symbol(jj, Decl(index.js, 53, 73))
+>value : Symbol(value, Decl(index.js, 56, 45))
+>module.exports.j : Symbol(j, Decl(index.js, 56, 73))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>j : Symbol(j, Decl(index.js, 56, 73))
+
+Object.defineProperty(module.exports, "j", { value: function j() {} });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 0, 22), Decl(index.js, 31, 56), Decl(index.js, 53, 52), Decl(index.js, 56, 52))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>"j" : Symbol(j, Decl(index.js, 56, 73))
+>value : Symbol(value, Decl(index.js, 57, 44))
+>j : Symbol(j, Decl(index.js, 57, 51))
+

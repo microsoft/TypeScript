@@ -13,7 +13,7 @@ namespace foo {
 >a : Symbol(a, Decl(file1.ts, 3, 35))
 }
 export = foo;
->foo : Symbol(foo, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 12))
+>foo : Symbol(foo, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 12), Decl(file2.ts, 1, 10))
 
 === tests/cases/compiler/file2.ts ===
 import x = require("./file1"); 

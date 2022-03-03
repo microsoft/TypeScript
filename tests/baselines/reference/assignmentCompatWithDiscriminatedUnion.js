@@ -193,6 +193,15 @@ namespace GH20889 {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/39357
+namespace GH39357 {
+    type A = ["a", number] | ["b", number] | ["c", string];
+    type B = "a" | "b" | "c";
+    declare const b: B;
+    const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+}
+
+
 //// [assignmentCompatWithDiscriminatedUnion.js]
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 // IteratorResult
@@ -289,3 +298,8 @@ var GH20889;
         };
     }
 })(GH20889 || (GH20889 = {}));
+// https://github.com/microsoft/TypeScript/issues/39357
+var GH39357;
+(function (GH39357) {
+    var a = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+})(GH39357 || (GH39357 = {}));

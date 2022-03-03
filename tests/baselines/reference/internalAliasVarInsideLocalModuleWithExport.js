@@ -13,6 +13,7 @@ export module c {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.c = exports.a = void 0;
     var a;
     (function (a) {
         a.x = 10;

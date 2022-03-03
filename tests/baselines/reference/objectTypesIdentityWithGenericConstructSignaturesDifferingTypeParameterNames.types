@@ -77,12 +77,12 @@ function foo2(x: any) { }
 >x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: new <Z>(x: Z) => B<Z>): any; (x: new <Z>(x: Z) => B<Z>): any; }
+>foo3 : { (x: typeof a): any; (x: new <Z>(x: Z) => B<Z>): any; }
 >x : new <Z>(x: Z) => B<Z>
 >a : new <Z>(x: Z) => B<Z>
 
 function foo3(x: typeof a); // error
->foo3 : { (x: new <Z>(x: Z) => B<Z>): any; (x: new <Z>(x: Z) => B<Z>): any; }
+>foo3 : { (x: new <Z>(x: Z) => B<Z>): any; (x: typeof a): any; }
 >x : new <Z>(x: Z) => B<Z>
 >a : new <Z>(x: Z) => B<Z>
 
@@ -91,12 +91,12 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { new<A>(x: A): C<A>; }): any; (x: { new<A>(x: A): C<A>; }): any; }
+>foo4 : { (x: typeof b): any; (x: { new<A>(x: A): C<A>; }): any; }
 >x : { new<A>(x: A): C<A>; }
 >b : { new<A>(x: A): C<A>; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { new<A>(x: A): C<A>; }): any; (x: { new<A>(x: A): C<A>; }): any; }
+>foo4 : { (x: { new<A>(x: A): C<A>; }): any; (x: typeof b): any; }
 >x : { new<A>(x: A): C<A>; }
 >b : { new<A>(x: A): C<A>; }
 
@@ -133,7 +133,7 @@ function foo10(x: B<string>);
 >x : B<string>
 
 function foo10(x: typeof a); // BUG 832086
->foo10 : { (x: B<string>): any; (x: new <Z>(x: Z) => B<Z>): any; }
+>foo10 : { (x: B<string>): any; (x: typeof a): any; }
 >x : new <Z>(x: Z) => B<Z>
 >a : new <Z>(x: Z) => B<Z>
 
@@ -146,7 +146,7 @@ function foo11(x: B<string>);
 >x : B<string>
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B<string>): any; (x: { new<A>(x: A): C<A>; }): any; }
+>foo11 : { (x: B<string>): any; (x: typeof b): any; }
 >x : { new<A>(x: A): C<A>; }
 >b : { new<A>(x: A): C<A>; }
 
@@ -183,7 +183,7 @@ function foo13(x: I<string>);
 >x : I<string>
 
 function foo13(x: typeof a); // BUG 832086
->foo13 : { (x: I<string>): any; (x: new <Z>(x: Z) => B<Z>): any; }
+>foo13 : { (x: I<string>): any; (x: typeof a): any; }
 >x : new <Z>(x: Z) => B<Z>
 >a : new <Z>(x: Z) => B<Z>
 
@@ -196,7 +196,7 @@ function foo14(x: I<string>);
 >x : I<string>
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I<string>): any; (x: { new<A>(x: A): C<A>; }): any; }
+>foo14 : { (x: I<string>): any; (x: typeof b): any; }
 >x : { new<A>(x: A): C<A>; }
 >b : { new<A>(x: A): C<A>; }
 

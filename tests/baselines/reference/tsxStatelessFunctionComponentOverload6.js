@@ -61,6 +61,7 @@ const b12 = <MainButton data-format="Hello world" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
+    exports.MainButton = void 0;
     var obj = {
         children: "hi",
         to: "boo"

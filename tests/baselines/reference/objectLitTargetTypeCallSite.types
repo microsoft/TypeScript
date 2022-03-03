@@ -1,6 +1,6 @@
 === tests/cases/compiler/objectLitTargetTypeCallSite.ts ===
 function process( x: {a:number; b:string;}) {
->process : (x: { a: number; b: string; }) => number
+>process : (x: {    a: number;    b: string;}) => number
 >x : { a: number; b: string; }
 >a : number
 >b : string

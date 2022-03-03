@@ -10,6 +10,7 @@ scripts
 src
 tests
 Jakefile.js
+.devcontainer
 .eslintrc
 .eslintignore
 .editorconfig
@@ -32,3 +33,7 @@ CONTRIBUTING.md
 TEST-results.xml
 .dockerignore
 Dockerfile
+.DS_Store
+.eslintrc.json
+.yarnrc
+tmp

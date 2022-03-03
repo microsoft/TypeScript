@@ -1,0 +1,10 @@
+=== tests/cases/compiler/reachabilityChecks8.ts ===
+try {
+    for (
+        (function () { throw "1"; })();
+        (function () { throw "2"; })();
+        (function () { throw "3"; })()
+    ) {}
+} catch (e) {}
+>e : Symbol(e, Decl(reachabilityChecks8.ts, 6, 9))
+

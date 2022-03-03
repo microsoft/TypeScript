@@ -1,0 +1,121 @@
+=== tests/cases/compiler/typeGuardConstructorPrimitiveTypes.ts ===
+// Narrow a union of primitive types
+let var1: string | number | boolean | any[] | symbol | bigint;
+>var1 : string | number | bigint | boolean | symbol | any[]
+
+if (var1.constructor === String) {
+>var1.constructor === String : boolean
+>var1.constructor : Function
+>var1 : string | number | bigint | boolean | symbol | any[]
+>constructor : Function
+>String : StringConstructor
+
+    var1; // string
+>var1 : string
+}
+if (var1.constructor === Number) {
+>var1.constructor === Number : boolean
+>var1.constructor : Function
+>var1 : string | number | bigint | boolean | symbol | any[]
+>constructor : Function
+>Number : NumberConstructor
+
+    var1; // number
+>var1 : number
+}
+if (var1.constructor === Boolean) {
+>var1.constructor === Boolean : boolean
+>var1.constructor : Function
+>var1 : string | number | bigint | boolean | symbol | any[]
+>constructor : Function
+>Boolean : BooleanConstructor
+
+    var1; // boolean
+>var1 : boolean
+}
+if (var1.constructor === Array) {
+>var1.constructor === Array : boolean
+>var1.constructor : Function
+>var1 : string | number | bigint | boolean | symbol | any[]
+>constructor : Function
+>Array : ArrayConstructor
+
+    var1; // any[]
+>var1 : any[]
+}
+if (var1.constructor === Symbol) {
+>var1.constructor === Symbol : boolean
+>var1.constructor : Function
+>var1 : string | number | bigint | boolean | symbol | any[]
+>constructor : Function
+>Symbol : SymbolConstructor
+
+    var1; // symbol
+>var1 : symbol
+}
+if (var1.constructor === BigInt) {
+>var1.constructor === BigInt : boolean
+>var1.constructor : Function
+>var1 : string | number | bigint | boolean | symbol | any[]
+>constructor : Function
+>BigInt : BigIntConstructor
+
+    var1; // bigint
+>var1 : bigint
+}
+
+// Narrow a union of primitive object types
+let var2: String | Number | Boolean | Symbol | BigInt;
+>var2 : String | Number | Boolean | BigInt | Symbol
+
+if (var2.constructor === String) {
+>var2.constructor === String : boolean
+>var2.constructor : Function
+>var2 : String | Number | Boolean | BigInt | Symbol
+>constructor : Function
+>String : StringConstructor
+
+    var2; // String
+>var2 : String
+}
+if (var2.constructor === Number) {
+>var2.constructor === Number : boolean
+>var2.constructor : Function
+>var2 : String | Number | Boolean | BigInt | Symbol
+>constructor : Function
+>Number : NumberConstructor
+
+    var2; // Number
+>var2 : Number
+}
+if (var2.constructor === Boolean) {
+>var2.constructor === Boolean : boolean
+>var2.constructor : Function
+>var2 : String | Number | Boolean | BigInt | Symbol
+>constructor : Function
+>Boolean : BooleanConstructor
+
+    var2; // Boolean
+>var2 : Boolean
+}
+if (var2.constructor === Symbol) {
+>var2.constructor === Symbol : boolean
+>var2.constructor : Function
+>var2 : String | Number | Boolean | BigInt | Symbol
+>constructor : Function
+>Symbol : SymbolConstructor
+
+    var2; // Symbol
+>var2 : Symbol
+}
+if (var2.constructor === BigInt) {
+>var2.constructor === BigInt : boolean
+>var2.constructor : Function
+>var2 : String | Number | Boolean | BigInt | Symbol
+>constructor : Function
+>BigInt : BigIntConstructor
+
+    var2; // BigInt
+>var2 : BigInt
+}
+

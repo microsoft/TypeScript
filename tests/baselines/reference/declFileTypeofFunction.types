@@ -5,7 +5,7 @@ function f(n: typeof f): string;
 >f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
 
 function f(n: typeof g): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : { (n: typeof f): string; (n: typeof g): string; }
 >n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
 >g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
 
@@ -19,7 +19,7 @@ function g(n: typeof g): number;
 >g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
 
 function g(n: typeof f): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : { (n: typeof g): number; (n: typeof f): number; }
 >n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
 >f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
 
@@ -28,8 +28,8 @@ function g() { return undefined; }
 >undefined : undefined
 
 var b: () => typeof b;
->b : () => any
->b : () => any
+>b : () => typeof b
+>b : () => typeof b
 
 function b1() {
 >b1 : () => typeof b1

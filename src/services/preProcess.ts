@@ -89,7 +89,7 @@ namespace ts {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                         // import("mod");
                         recordModuleName();
                         return true;
@@ -101,6 +101,21 @@ namespace ts {
                     return true;
                 }
                 else {
+                    if (token === SyntaxKind.TypeKeyword) {
+                        const skipTypeKeyword = scanner.lookAhead(() => {
+                            const token = scanner.scan();
+                            return token !== SyntaxKind.FromKeyword && (
+                                token === SyntaxKind.AsteriskToken ||
+                                token === SyntaxKind.OpenBraceToken ||
+                                token === SyntaxKind.Identifier ||
+                                isKeyword(token)
+                            );
+                        });
+                        if (skipTypeKeyword) {
+                            token = nextToken();
+                        }
+                    }
+
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
                         token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
@@ -176,6 +191,16 @@ namespace ts {
             if (token === SyntaxKind.ExportKeyword) {
                 markAsExternalModuleIfTopLevel();
                 token = nextToken();
+                if (token === SyntaxKind.TypeKeyword) {
+                    const skipTypeKeyword = scanner.lookAhead(() => {
+                        const token = scanner.scan();
+                        return token === SyntaxKind.AsteriskToken ||
+                            token === SyntaxKind.OpenBraceToken;
+                    });
+                    if (skipTypeKeyword) {
+                        token = nextToken();
+                    }
+                }
                 if (token === SyntaxKind.OpenBraceToken) {
                     token = nextToken();
                     // consume "{ a as B, c, d as D}" clauses
@@ -208,6 +233,16 @@ namespace ts {
                 }
                 else if (token === SyntaxKind.ImportKeyword) {
                     token = nextToken();
+                    if (token === SyntaxKind.TypeKeyword) {
+                        const skipTypeKeyword = scanner.lookAhead(() => {
+                            const token = scanner.scan();
+                            return token === SyntaxKind.Identifier ||
+                                isKeyword(token);
+                        });
+                        if (skipTypeKeyword) {
+                            token = nextToken();
+                        }
+                    }
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
                         token = nextToken();
                         if (token === SyntaxKind.EqualsToken) {
@@ -224,13 +259,14 @@ namespace ts {
             return false;
         }
 
-        function tryConsumeRequireCall(skipCurrentToken: boolean): boolean {
+        function tryConsumeRequireCall(skipCurrentToken: boolean, allowTemplateLiterals = false): boolean {
             let token = skipCurrentToken ? nextToken() : scanner.getToken();
             if (token === SyntaxKind.RequireKeyword) {
                 token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
                     token = nextToken();
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral ||
+                        allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                         //  require("mod");
                         recordModuleName();
                     }
@@ -249,7 +285,7 @@ namespace ts {
                 }
 
                 token = nextToken();
-                if (token === SyntaxKind.StringLiteral) {
+                if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     // looks like define ("modname", ... - skip string literal and comma
                     token = nextToken();
                     if (token === SyntaxKind.CommaToken) {
@@ -271,7 +307,7 @@ namespace ts {
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                     // record string literals as module names
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NoSubstitutionTemplateLiteral) {
                         recordModuleName();
                     }
 
@@ -313,7 +349,10 @@ namespace ts {
                 if (tryConsumeDeclare() ||
                     tryConsumeImport() ||
                     tryConsumeExport() ||
-                    (detectJavaScriptImports && (tryConsumeRequireCall(/*skipCurrentToken*/ false) || tryConsumeDefine()))) {
+                    (detectJavaScriptImports && (
+                        tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true) ||
+                        tryConsumeDefine()
+                    ))) {
                     continue;
                 }
                 else {

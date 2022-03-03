@@ -1,0 +1,23 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(3,12): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(11,11): error TS2339: Property '#foo' does not exist on type 'B'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts (2 errors) ====
+    class A {
+        #foo = 1;
+        static #foo = true; // error (duplicate)
+               ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+                            // because static and instance private names
+                            // share the same lexical scope
+                            // https://tc39.es/proposal-class-fields/#prod-ClassBody
+    }
+    class B {
+        static #foo = true;
+        test(x: B) {
+            x.#foo; // error (#foo is a static property on B, not an instance property)
+              ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'B'.
+        }
+    }
+    

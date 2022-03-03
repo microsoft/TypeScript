@@ -39,6 +39,7 @@ export var tests: TestRunner = (function () {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.tests = exports.TestRunner = exports.TestCase = void 0;
     var TestCase = /** @class */ (function () {
         function TestCase(name, test, errorMessageRegEx) {
             this.name = name;

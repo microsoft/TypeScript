@@ -1,4 +1,4 @@
-tests/cases/compiler/typeofClass.ts(8,4): error TS2576: Property 'bar' is a static member of type 'K'
+tests/cases/compiler/typeofClass.ts(8,4): error TS2576: Property 'bar' does not exist on type 'K'. Did you mean to access the static member 'K.bar' instead?
 tests/cases/compiler/typeofClass.ts(10,4): error TS2339: Property 'foo' does not exist on type 'typeof K'.
 
 
@@ -12,7 +12,7 @@ tests/cases/compiler/typeofClass.ts(10,4): error TS2339: Property 'foo' does not
     k1.foo;
     k1.bar;
        ~~~
-!!! error TS2576: Property 'bar' is a static member of type 'K'
+!!! error TS2576: Property 'bar' does not exist on type 'K'. Did you mean to access the static member 'K.bar' instead?
     var k2: typeof K;
     k2.foo;
        ~~~

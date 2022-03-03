@@ -1,0 +1,75 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 15,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocTag",
+            "pos": 3,
+            "end": 6,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 4,
+                "end": 5,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "a"
+            }
+        },
+        "1": {
+            "kind": "JSDocTag",
+            "pos": 6,
+            "end": 9,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 7,
+                "end": 8,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "b"
+            }
+        },
+        "2": {
+            "kind": "JSDocTag",
+            "pos": 9,
+            "end": 11,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 10,
+                "end": 11,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "c"
+            }
+        },
+        "3": {
+            "kind": "JSDocTag",
+            "pos": 11,
+            "end": 13,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 12,
+                "end": 13,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "d"
+            }
+        },
+        "length": 4,
+        "pos": 3,
+        "end": 13,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

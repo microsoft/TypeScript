@@ -1,0 +1,26 @@
+tests/cases/conformance/dynamicImport/2.ts(4,24): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
+tests/cases/conformance/dynamicImport/2.ts(6,24): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'null'.
+
+
+==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
+    export class B {
+        print() { return "I am B"}
+    }
+    
+    export function foo() { return "foo" }
+    
+==== tests/cases/conformance/dynamicImport/1.ts (0 errors) ====
+    export function backup() { return "backup"; }
+    
+==== tests/cases/conformance/dynamicImport/2.ts (2 errors) ====
+    declare function bar(): boolean;
+    const specify = bar() ? "./0" : undefined;
+    let myModule = import(specify);
+    let myModule1 = import(undefined);
+                           ~~~~~~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
+    let myModule2 = import(bar() ? "./1" : null);
+    let myModule3 = import(null);
+                           ~~~~
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'null'.
+    

@@ -1,4 +1,4 @@
-tests/cases/compiler/functionCall6.ts(3,5): error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.
+tests/cases/compiler/functionCall6.ts(3,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/functionCall6.ts(4,12): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/compiler/functionCall6.ts(5,1): error TS2554: Expected 1 arguments, but got 0.
 
@@ -8,7 +8,7 @@ tests/cases/compiler/functionCall6.ts(5,1): error TS2554: Expected 1 arguments, 
     foo('bar');
     foo(2);
         ~
-!!! error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 'bar');
                ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.

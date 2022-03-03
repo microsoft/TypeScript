@@ -1,0 +1,67 @@
+=== tests/cases/compiler/unwitnessedTypeParameterVariance.ts ===
+// Repros from #33872
+
+export interface CalcObj<O> {
+>CalcObj : Symbol(CalcObj, Decl(unwitnessedTypeParameterVariance.ts, 0, 0))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 2, 25))
+
+    read: (origin: O) => CalcValue<O>;
+>read : Symbol(CalcObj.read, Decl(unwitnessedTypeParameterVariance.ts, 2, 29))
+>origin : Symbol(origin, Decl(unwitnessedTypeParameterVariance.ts, 3, 11))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 2, 25))
+>CalcValue : Symbol(CalcValue, Decl(unwitnessedTypeParameterVariance.ts, 4, 1))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 2, 25))
+}
+
+export type CalcValue<O> = CalcObj<O>;
+>CalcValue : Symbol(CalcValue, Decl(unwitnessedTypeParameterVariance.ts, 4, 1))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 6, 22))
+>CalcObj : Symbol(CalcObj, Decl(unwitnessedTypeParameterVariance.ts, 0, 0))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 6, 22))
+
+function foo<O>() {
+>foo : Symbol(foo, Decl(unwitnessedTypeParameterVariance.ts, 6, 38))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 8, 13))
+
+    const unk: CalcObj<unknown> = { read: (origin: unknown) => unk }
+>unk : Symbol(unk, Decl(unwitnessedTypeParameterVariance.ts, 9, 9))
+>CalcObj : Symbol(CalcObj, Decl(unwitnessedTypeParameterVariance.ts, 0, 0))
+>read : Symbol(read, Decl(unwitnessedTypeParameterVariance.ts, 9, 35))
+>origin : Symbol(origin, Decl(unwitnessedTypeParameterVariance.ts, 9, 43))
+>unk : Symbol(unk, Decl(unwitnessedTypeParameterVariance.ts, 9, 9))
+
+    const x: CalcObj<O> = unk;
+>x : Symbol(x, Decl(unwitnessedTypeParameterVariance.ts, 10, 9))
+>CalcObj : Symbol(CalcObj, Decl(unwitnessedTypeParameterVariance.ts, 0, 0))
+>O : Symbol(O, Decl(unwitnessedTypeParameterVariance.ts, 8, 13))
+>unk : Symbol(unk, Decl(unwitnessedTypeParameterVariance.ts, 9, 9))
+}
+
+type A<T> = B<T>;
+>A : Symbol(A, Decl(unwitnessedTypeParameterVariance.ts, 11, 1))
+>T : Symbol(T, Decl(unwitnessedTypeParameterVariance.ts, 13, 7))
+>B : Symbol(B, Decl(unwitnessedTypeParameterVariance.ts, 13, 17))
+>T : Symbol(T, Decl(unwitnessedTypeParameterVariance.ts, 13, 7))
+
+interface B<T> {
+>B : Symbol(B, Decl(unwitnessedTypeParameterVariance.ts, 13, 17))
+>T : Symbol(T, Decl(unwitnessedTypeParameterVariance.ts, 15, 12))
+
+    prop: A<T>;
+>prop : Symbol(B.prop, Decl(unwitnessedTypeParameterVariance.ts, 15, 16))
+>A : Symbol(A, Decl(unwitnessedTypeParameterVariance.ts, 11, 1))
+>T : Symbol(T, Decl(unwitnessedTypeParameterVariance.ts, 15, 12))
+}
+
+declare let a: A<number>;
+>a : Symbol(a, Decl(unwitnessedTypeParameterVariance.ts, 19, 11))
+>A : Symbol(A, Decl(unwitnessedTypeParameterVariance.ts, 11, 1))
+
+declare let b: A<3>;
+>b : Symbol(b, Decl(unwitnessedTypeParameterVariance.ts, 20, 11))
+>A : Symbol(A, Decl(unwitnessedTypeParameterVariance.ts, 11, 1))
+ 
+b = a;
+>b : Symbol(b, Decl(unwitnessedTypeParameterVariance.ts, 20, 11))
+>a : Symbol(a, Decl(unwitnessedTypeParameterVariance.ts, 19, 11))
+

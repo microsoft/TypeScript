@@ -1,0 +1,16 @@
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	constructor() {
+		/**
+		 * @type object
+		 */
+		this.foo = arguments;
+>this.foo : Symbol(A.foo, Decl(a.js, 1, 16))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>foo : Symbol(A.foo, Decl(a.js, 1, 16))
+>arguments : Symbol(arguments)
+	}
+}
+

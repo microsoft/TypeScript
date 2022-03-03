@@ -35,8 +35,18 @@ const enum Enum1 {
     W2 = Enum1.A0,
     W3 = Enum1["A0"],
     W4 = Enum1["W"],
+    W5 = Enum1[`V`],
 }
 
+const enum Comments {
+    "//",
+    "/*",
+    "*/",
+    "///",
+    "#",
+    "<!--",
+    "-->",
+}
 
 module A {
     export module B {
@@ -54,6 +64,7 @@ module A {
         export module C {
             export const enum E {
                 V3 = A.B.C.E["V2"] & 200,
+                V4 = A.B.C.E[`V1`] << 1,
             }
         }
     }
@@ -134,7 +145,7 @@ function foo(x: Enum1) {
         case Enum1.R:
         case Enum1.S:
         case Enum1["T"]:
-        case Enum1.U:
+        case Enum1[`U`]:
         case Enum1.V:
         case Enum1.W:
         case Enum1.W1:
@@ -152,6 +163,20 @@ function bar(e: A.B.C.E): number {
         case A.B.C.E.V3: return 1;
     }
 }
+
+function baz(c: Comments) {
+    switch (c) {
+        case Comments["//"]:
+        case Comments["/*"]:
+        case Comments["*/"]:
+        case Comments["///"]:
+        case Comments["#"]:
+        case Comments["<!--"]:
+        case Comments["-->"]:
+        break;
+    }
+}
+
 
 //// [constEnums.js]
 var A2;
@@ -207,7 +232,7 @@ function foo(x) {
         case 0 /* R */:
         case 0 /* S */:
         case 11 /* "T" */:
-        case 11 /* U */:
+        case 11 /* `U` */:
         case 11 /* V */:
         case 11 /* W */:
         case 100 /* W1 */:
@@ -222,5 +247,17 @@ function bar(e) {
         case 1 /* V1 */: return 1;
         case 101 /* V2 */: return 1;
         case 64 /* V3 */: return 1;
+    }
+}
+function baz(c) {
+    switch (c) {
+        case 0 /* "//" */:
+        case 1 /* "/*" */:
+        case 2 /* "*_/" */:
+        case 3 /* "///" */:
+        case 4 /* "#" */:
+        case 5 /* "<!--" */:
+        case 6 /* "-->" */:
+            break;
     }
 }

@@ -23,7 +23,7 @@ var MyClass = /** @class */ (function () {
         set: function (value) {
             //
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return MyClass;
@@ -32,5 +32,6 @@ var MyClass = /** @class */ (function () {
 
 //// [properties.d.ts]
 declare class MyClass {
-    Count: number;
+    get Count(): number;
+    set Count(value: number);
 }

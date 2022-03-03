@@ -1,0 +1,91 @@
+=== tests/cases/conformance/types/mapped/mappedTypeOverlappingStringEnumKeys.ts ===
+// #37859
+
+enum TerrestrialAnimalTypes {
+>TerrestrialAnimalTypes : TerrestrialAnimalTypes
+
+  CAT = "cat",
+>CAT : TerrestrialAnimalTypes.CAT
+>"cat" : "cat"
+
+  DOG = "dog"
+>DOG : TerrestrialAnimalTypes.DOG
+>"dog" : "dog"
+
+};
+
+enum AlienAnimalTypes {
+>AlienAnimalTypes : AlienAnimalTypes
+
+  CAT = "cat",
+>CAT : AlienAnimalTypes.CAT
+>"cat" : "cat"
+
+};
+
+type AnimalTypes = TerrestrialAnimalTypes | AlienAnimalTypes;
+>AnimalTypes : AnimalTypes
+
+interface TerrestrialCat {
+  type: TerrestrialAnimalTypes.CAT;
+>type : TerrestrialAnimalTypes.CAT
+>TerrestrialAnimalTypes : any
+
+  address: string;
+>address : string
+}
+
+interface AlienCat {
+  type: AlienAnimalTypes.CAT
+>type : AlienAnimalTypes
+>AlienAnimalTypes : any
+
+  planet: string;
+>planet : string
+}
+
+type Cats = TerrestrialCat | AlienCat;
+>Cats : Cats
+
+type CatMap = {
+>CatMap : CatMap
+
+  [V in AnimalTypes]: Extract<Cats, { type: V }>[]
+>type : V
+
+};
+
+const catMap: CatMap = {
+>catMap : CatMap
+>{  cat: [    { type: TerrestrialAnimalTypes.CAT, address: "" },    { type: AlienAnimalTypes.CAT, planet: "" }  ],  dog: [] as never[]} : { cat: ({ type: TerrestrialAnimalTypes.CAT; address: string; } | { type: AlienAnimalTypes.CAT; planet: string; })[]; dog: never[]; }
+
+  cat: [
+>cat : ({ type: TerrestrialAnimalTypes.CAT; address: string; } | { type: AlienAnimalTypes.CAT; planet: string; })[]
+>[    { type: TerrestrialAnimalTypes.CAT, address: "" },    { type: AlienAnimalTypes.CAT, planet: "" }  ] : ({ type: TerrestrialAnimalTypes.CAT; address: string; } | { type: AlienAnimalTypes.CAT; planet: string; })[]
+
+    { type: TerrestrialAnimalTypes.CAT, address: "" },
+>{ type: TerrestrialAnimalTypes.CAT, address: "" } : { type: TerrestrialAnimalTypes.CAT; address: string; }
+>type : TerrestrialAnimalTypes.CAT
+>TerrestrialAnimalTypes.CAT : TerrestrialAnimalTypes.CAT
+>TerrestrialAnimalTypes : typeof TerrestrialAnimalTypes
+>CAT : TerrestrialAnimalTypes.CAT
+>address : string
+>"" : ""
+
+    { type: AlienAnimalTypes.CAT, planet: "" }
+>{ type: AlienAnimalTypes.CAT, planet: "" } : { type: AlienAnimalTypes.CAT; planet: string; }
+>type : AlienAnimalTypes.CAT
+>AlienAnimalTypes.CAT : AlienAnimalTypes
+>AlienAnimalTypes : typeof AlienAnimalTypes
+>CAT : AlienAnimalTypes
+>planet : string
+>"" : ""
+
+  ],
+  dog: [] as never[]
+>dog : never[]
+>[] as never[] : never[]
+>[] : undefined[]
+
+};
+

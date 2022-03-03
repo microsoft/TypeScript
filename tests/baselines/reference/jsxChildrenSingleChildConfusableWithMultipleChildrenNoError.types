@@ -5,12 +5,12 @@ import * as React from 'react'
 >React : typeof React
 
 type Tab = [string, React.ReactNode]  // [tabName, tabContent]
->Tab : [string, React.ReactNode]
+>Tab : Tab
 >React : any
 
 interface Props {
     children: Tab[]
->children : [string, React.ReactNode][]
+>children : Tab[]
 }
 
 function TabLayout(props: Props) {

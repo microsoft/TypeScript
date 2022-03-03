@@ -1,0 +1,59 @@
+=== tests/cases/conformance/salsa/usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport2.js");
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport2.js") : typeof x
+>require : any
+>"./lateBoundAssignmentDeclarationSupport2.js" : "./lateBoundAssignmentDeclarationSupport2.js"
+
+const y = x["my-fake-sym"];
+>y : any
+>x["my-fake-sym"] : any
+>x : typeof x
+>"my-fake-sym" : "my-fake-sym"
+
+const z = x[x.S];
+>z : any
+>x[x.S] : any
+>x : typeof x
+>x.S : unique symbol
+>x : typeof x
+>S : unique symbol
+
+=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2.js ===
+// currently unsupported
+const _sym = Symbol();
+>_sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const _str = "my-fake-sym";
+>_str : "my-fake-sym"
+>"my-fake-sym" : "my-fake-sym"
+
+module.exports[_sym] = "ok";
+>module.exports[_sym] = "ok" : "ok"
+>module.exports[_sym] : any
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>_sym : unique symbol
+>"ok" : "ok"
+
+module.exports[_str] = "ok";
+>module.exports[_str] = "ok" : "ok"
+>module.exports[_str] : any
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>_str : "my-fake-sym"
+>"ok" : "ok"
+
+module.exports.S = _sym;
+>module.exports.S = _sym : unique symbol
+>module.exports.S : unique symbol
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>S : unique symbol
+>_sym : unique symbol
+

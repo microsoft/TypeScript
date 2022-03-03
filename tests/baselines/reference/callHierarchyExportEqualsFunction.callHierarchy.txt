@@ -1,0 +1,47 @@
+╭ name: /tests/cases/fourslash/other.ts
+├ kind: module
+├ file: /tests/cases/fourslash/other.ts
+├ span:
+│ ╭ /tests/cases/fourslash/other.ts:1:1-6:2
+│ │ 1: export = function () {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     baz();
+│ │    ^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ │ 4:
+│ │    ^
+│ │ 5: function baz() {
+│ │    ^^^^^^^^^^^^^^^^
+│ │ 6: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/other.ts:1:1-1:1
+│ │ 1: export = function () {
+│ │    <
+│ ╰
+├ incoming: none
+├ outgoing:
+│ ╭ to:
+│ │ ╭ name: baz
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/other.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/other.ts:5:1-6:2
+│ │ │ │ 5: function baz() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/other.ts:5:10-5:13
+│ │ │ │ 5: function baz() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/other.ts:2:5-2:8
+│ │ │ 2:     baz();
+│ │ │        ^^^
+╰ ╰ ╰

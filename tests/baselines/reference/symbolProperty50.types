@@ -9,8 +9,8 @@ module M {
 
         [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
     }
 }

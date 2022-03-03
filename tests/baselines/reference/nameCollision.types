@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts ===
 module A {
->A : typeof A
+>A : typeof globalThis.A
 
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.
@@ -22,7 +22,7 @@ module B {
 }
 
 module B {
->B : typeof B
+>B : typeof globalThis.B
 
     // re-opened module with colliding name
     // this should add an underscore.
@@ -35,21 +35,21 @@ module B {
 }
 
 module X {
->X : typeof X
+>X : typeof globalThis.X
 
     var X = 13;
 >X : number
 >13 : 13
 
     export module Y {
->Y : typeof X.Y
+>Y : typeof globalThis.X.Y
 
         var Y = 13;
 >Y : number
 >13 : 13
 
         export module Z {
->Z : typeof X.Y.Z
+>Z : typeof globalThis.X.Y.Z
 
             var X = 12;
 >X : number
@@ -67,8 +67,8 @@ module X {
 }
 
 module Y.Y {
->Y : typeof Y
->Y : typeof Y.Y
+>Y : typeof globalThis.Y
+>Y : typeof globalThis.Y.Y
 
     export enum Y {
 >Y : Y

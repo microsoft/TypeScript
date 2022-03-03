@@ -53,6 +53,7 @@ class A {
 //// [Element.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createElement = exports.Element = void 0;
 var Element;
 (function (Element) {
     function isElement(el) {

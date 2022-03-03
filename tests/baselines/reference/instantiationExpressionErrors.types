@@ -1,0 +1,124 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts ===
+declare let f: { <T>(): T, g<U>(): U };
+>f : { <T>(): T; g<U>(): U; }
+>g : <U>() => U
+
+// Type arguments in member expressions
+
+const a1 = f<number>;  // { (): number; g<U>(): U; }
+>a1 : { (): number; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+
+const a2 = f.g<number>;  // () => number
+>a2 : () => number
+>f.g : <U>() => U
+>f : { <T>(): T; g<U>(): U; }
+>g : <U>() => U
+
+const a3 = f<number>.g;  // <U>() => U
+>a3 : <U>() => U
+>f<number>.g : <U>() => U
+>f : { <T>(): T; g<U>(): U; }
+>g : <U>() => U
+
+const a4 = f<number>.g<number>;  // () => number
+>a4 : () => number
+>f<number>.g : <U>() => U
+>f : { <T>(): T; g<U>(): U; }
+>g : <U>() => U
+
+const a5 = f['g']<number>;  // () => number
+>a5 : () => number
+>f['g'] : <U>() => U
+>f : { <T>(): T; g<U>(): U; }
+>'g' : "g"
+
+// `[` is an expression starter and cannot immediately follow a type argument list
+
+const a6 = f<number>['g'];  // Error
+>a6 : boolean
+>f<number>['g'] : boolean
+>f<number : boolean
+>f : { <T>(): T; g<U>(): U; }
+>number : any
+>['g'] : string[]
+>'g' : "g"
+
+const a7 = (f<number>)['g'];
+>a7 : <U>() => U
+>(f<number>)['g'] : <U>() => U
+>(f<number>) : { (): number; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+>'g' : "g"
+
+// An `<` cannot immediately follow a type argument list
+
+const a8 = f<number><number>;  // Relational operator error
+>a8 : boolean
+>f<number><number> : boolean
+>f<number : boolean
+>f : { <T>(): T; g<U>(): U; }
+>number : any
+><number> : number
+> : any
+
+const a9 = (f<number>)<number>;  // Error, no applicable signatures
+>a9 : { g<U>(): U; }
+>(f<number>) : { (): number; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+
+// Type arguments with `?.` token
+
+const b1 = f?.<number>;  // Error, `(` expected
+>b1 : number
+>f?.<number> : number
+>f : { <T>(): T; g<U>(): U; }
+
+const b2 = f?.<number>();
+>b2 : number
+>f?.<number>() : number
+>f : { <T>(): T; g<U>(): U; }
+
+const b3 = f<number>?.();
+>b3 : number
+>f<number>?.() : number
+>f : { <T>(): T; g<U>(): U; }
+
+const b4 = f<number>?.<number>();  // Error, expected no type arguments
+>b4 : number
+>f<number>?.<number>() : number
+>f : { <T>(): T; g<U>(): U; }
+
+// Parsed as function call, even though this differs from JavaScript
+
+const x1 = f<true>
+>x1 : true
+>f<true>(true) : true
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+(true);
+>true : true
+
+// Parsed as relational expression
+
+const x2 = f<true>
+>x2 : boolean
+>f<true>true : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+true;
+>true : true
+
+// Parsed as instantiation expression
+
+const x3 = f<true>;
+>x3 : { (): true; g<U>(): U; }
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+true;
+>true : true
+

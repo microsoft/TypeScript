@@ -15,7 +15,7 @@ interface CoachMarkAnchorProps<C> {
 >anchor : C
 }
 type AnchorType<P> = Component<P>;
->AnchorType : Component<P, {}>
+>AnchorType : AnchorType<P>
 
 class CoachMarkAnchorDecorator {
 >CoachMarkAnchorDecorator : CoachMarkAnchorDecorator
@@ -27,28 +27,28 @@ class CoachMarkAnchorDecorator {
         return class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {
 >class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {            private _onAnchorRef = (anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            }        } : typeof CoachMarkAnchor
 >CoachMarkAnchor : typeof CoachMarkAnchor
->Component : Component<CoachMarkAnchorProps<Component<P, {}>> & P, {}>
+>Component : Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}>
 
             private _onAnchorRef = (anchor: AnchorType<P>) => {
->_onAnchorRef : (anchor: Component<P, {}>) => void
->(anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            } : (anchor: Component<P, {}>) => void
->anchor : Component<P, {}>
+>_onAnchorRef : (anchor: AnchorType<P>) => void
+>(anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            } : (anchor: AnchorType<P>) => void
+>anchor : AnchorType<P>
 
                 const anchorRef = this.props.anchorRef;
->anchorRef : (CoachMarkAnchorProps<Component<P, {}>> & P)["anchorRef"] | undefined
->this.props.anchorRef : (CoachMarkAnchorProps<Component<P, {}>> & P)["anchorRef"] | undefined
->this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<Component<P, {}>> & P>
+>anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+>this.props.anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+>this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
 >this : this
->props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<Component<P, {}>> & P>
->anchorRef : (CoachMarkAnchorProps<Component<P, {}>> & P)["anchorRef"] | undefined
+>props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
+>anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
 
                 if (anchorRef) {
->anchorRef : (CoachMarkAnchorProps<Component<P, {}>> & P)["anchorRef"] | undefined
+>anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
 
                     anchorRef(anchor);
 >anchorRef(anchor) : void
->anchorRef : (anchor: Component<P, {}>) => void
->anchor : Component<P, {}>
+>anchorRef : (anchor: AnchorType<P>) => void
+>anchor : AnchorType<P>
                 }
             }
         };

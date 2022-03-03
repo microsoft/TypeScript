@@ -1,0 +1,76 @@
+=== tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : Symbol(React, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 6))
+
+interface MyProps {
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+
+    x: number;
+>x : Symbol(MyProps.x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 4, 19))
+}
+
+function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {
+>MyComp4 : Symbol(MyComp4, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 6, 1))
+>props : Symbol(props, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 17))
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+>context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 32))
+>bad : Symbol(bad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 46))
+>verybad : Symbol(verybad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 8, 56))
+
+    return <div></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+function MyComp3(props: MyProps, context: any, bad: any) {
+>MyComp3 : Symbol(MyComp3, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 10, 1))
+>props : Symbol(props, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 11, 17))
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+>context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 11, 32))
+>bad : Symbol(bad, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 11, 46))
+
+    return <div></div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+function MyComp2(props: MyProps, context: any) {
+>MyComp2 : Symbol(MyComp2, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 13, 1))
+>props : Symbol(props, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 14, 17))
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+>context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 14, 32))
+
+    return <div></div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+>a : Symbol(a, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 18, 5))
+>MyComp4 : Symbol(MyComp4, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 6, 1))
+>x : Symbol(x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 18, 18))
+
+const b = <MyComp3 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+>b : Symbol(b, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 19, 5))
+>MyComp3 : Symbol(MyComp3, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 10, 1))
+>x : Symbol(x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 19, 18))
+
+const c  = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react rules
+>c : Symbol(c, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 20, 5))
+>MyComp2 : Symbol(MyComp2, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 13, 1))
+>x : Symbol(x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 20, 19))
+
+declare function MyTagWithOptionalNonJSXBits(props: MyProps, context: any, nonReactArg?: string): JSX.Element;
+>MyTagWithOptionalNonJSXBits : Symbol(MyTagWithOptionalNonJSXBits, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 20, 28))
+>props : Symbol(props, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 45))
+>MyProps : Symbol(MyProps, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 2, 31))
+>context : Symbol(context, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 60))
+>nonReactArg : Symbol(nonReactArg, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 22, 74))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
+
+const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably questionable
+>d : Symbol(d, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 23, 5))
+>MyTagWithOptionalNonJSXBits : Symbol(MyTagWithOptionalNonJSXBits, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 20, 28))
+>x : Symbol(x, Decl(jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx, 23, 38))
+

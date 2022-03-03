@@ -1,6 +1,6 @@
-tests/cases/conformance/jsdoc/returns.js(6,5): error TS2322: Type '5' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/returns.js(13,5): error TS2322: Type 'true | 5' is not assignable to type 'string | number'.
-  Type 'true' is not assignable to type 'string | number'.
+tests/cases/conformance/jsdoc/returns.js(6,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsdoc/returns.js(13,5): error TS2322: Type 'number | boolean' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
 
 
 ==== tests/cases/conformance/jsdoc/returns.js (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/conformance/jsdoc/returns.js(13,5): error TS2322: Type 'true | 5' is
     function f() {
         return 5;
         ~~~~~~~~~
-!!! error TS2322: Type '5' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     }
     
     /**
@@ -20,6 +20,6 @@ tests/cases/conformance/jsdoc/returns.js(13,5): error TS2322: Type 'true | 5' is
     function f1() {
         return 5 || true;
         ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'true | 5' is not assignable to type 'string | number'.
-!!! error TS2322:   Type 'true' is not assignable to type 'string | number'.
+!!! error TS2322: Type 'number | boolean' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
     }

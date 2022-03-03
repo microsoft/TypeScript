@@ -15,8 +15,7 @@ async function f(){
     try {
         const res = await fetch("https://typescriptlang.org");
         result = 0;
-    }
-    catch (rej) {
+    } catch (rej) {
         result = 1;
     }
     return res(result);

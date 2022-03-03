@@ -9,7 +9,7 @@ interface c { c }
 >c : any
 
 type T1 = ([a, b, c]);
->T1 : [a, b, c]
+>T1 : T1
 
 type F1 = ([a, b, c]) => void;
 >F1 : F1
@@ -26,7 +26,7 @@ type F2 = ({ a }) => void;
 >a : any
 
 type T3 = ([{ a: b }, { b: a }]);
->T3 : [{ a: b; }, { b: a; }]
+>T3 : T3
 >a : b
 >b : a
 
@@ -38,7 +38,7 @@ type F3 = ([{ a: b }, { b: a }]) => void;
 >a : any
 
 type T4 = ([{ a: [b, c] }]);
->T4 : [{ a: [b, c]; }]
+>T4 : T4
 >a : [b, c]
 
 type F4 = ([{ a: [b, c] }]) => void;

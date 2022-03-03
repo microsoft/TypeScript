@@ -1,0 +1,25 @@
+=== tests/cases/conformance/expressions/functions/voidParamAssignmentCompatibility.ts ===
+declare function g(a: void): void;
+>g : (a: void) => void
+>a : void
+
+let gg: () => void = g;
+>gg : () => void
+>g : (a: void) => void
+
+interface Obj<T> {
+    method(value: T): void;
+>method : (value: T) => void
+>value : T
+}
+
+declare const o: Obj<void>;
+>o : Obj<void>
+
+gg = o.method;
+>gg = o.method : (value: void) => void
+>gg : () => void
+>o.method : (value: void) => void
+>o : Obj<void>
+>method : (value: void) => void
+

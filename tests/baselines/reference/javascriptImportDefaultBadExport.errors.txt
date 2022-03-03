@@ -1,0 +1,16 @@
+/b.js(1,8): error TS1259: Module '"/a"' can only be default-imported using the 'esModuleInterop' flag
+
+
+==== /a.js (0 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/34481
+    
+    
+    const alias = {};
+    module.exports = alias;
+    
+==== /b.js (1 errors) ====
+    import a from "./a";
+           ~
+!!! error TS1259: Module '"/a"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 /a.js:5:1: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+    

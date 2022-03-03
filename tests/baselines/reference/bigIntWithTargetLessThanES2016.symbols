@@ -1,0 +1,13 @@
+=== tests/cases/compiler/bigIntWithTargetLessThanES2016.ts ===
+BigInt(1) ** BigInt(1); // should error
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+let foo = BigInt(2);
+>foo : Symbol(foo, Decl(bigIntWithTargetLessThanES2016.ts, 2, 3))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+foo **= BigInt(2); // should error
+>foo : Symbol(foo, Decl(bigIntWithTargetLessThanES2016.ts, 2, 3))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+

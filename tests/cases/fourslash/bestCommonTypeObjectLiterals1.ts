@@ -21,6 +21,9 @@
 ////var /*4*/c3 = [i, a];
 
 verify.quickInfos({
+    4: "var c3: I[]"
+});
+verify.quickInfos({
     1: "var c: {\n    name: string;\n    age: number;\n}[]",
     2: "var c1: {\n    name: string;\n    age: number;\n}[]",
     3:

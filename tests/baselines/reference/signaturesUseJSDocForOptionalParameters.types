@@ -5,7 +5,7 @@ function MyClass() {
   this.prop = null;
 >this.prop = null : null
 >this.prop : any
->this : any
+>this : this
 >prop : any
 >null : null
 }

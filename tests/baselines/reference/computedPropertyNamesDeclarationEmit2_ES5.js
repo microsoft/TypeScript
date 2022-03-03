@@ -12,12 +12,12 @@ var C = /** @class */ (function () {
     C["" + ""] = function () { };
     Object.defineProperty(C, "" + "", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "" + "", {
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

@@ -98,10 +98,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -117,14 +119,14 @@ var a = /** @class */ (function () {
         },
         set: function (a) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(a, "p2", {
         get: function () {
             return { x: 30, y: 40 };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     a.d2 = function () {
@@ -133,7 +135,7 @@ var a = /** @class */ (function () {
         get: function () {
             return "string";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     a.prototype.foo = function (ns) {
@@ -218,13 +220,14 @@ declare class a {
     constructor(s: string);
     pgF(): void;
     pv: any;
-    d: number;
-    static readonly p2: {
+    get d(): number;
+    set d(a: number);
+    static get p2(): {
         x: number;
         y: number;
     };
     private static d2;
-    private static readonly p3;
+    private static get p3();
     private pv3;
     private foo;
 }

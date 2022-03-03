@@ -1,0 +1,48 @@
+// === /b/b.ts ===
+// /// <reference path="../a/index.d.ts" />
+// new [|A|]/*FIND ALL REFS*/();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a/index.ts",
+      "kind": "class",
+      "name": "class A",
+      "textSpan": {
+        "start": 10,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 45,
+          "length": 1
+        },
+        "fileName": "/b/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

@@ -3,7 +3,7 @@ tests/cases/conformance/salsa/first.js(31,5): error TS2416: Property 'load' in t
   Type '(files: string[], format: "csv" | "json" | "xmlolololol") => void' is not assignable to type '(supplies?: any[]) => void'.
 tests/cases/conformance/salsa/first.js(47,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 tests/cases/conformance/salsa/generic.js(19,19): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/conformance/salsa/generic.js(20,32): error TS2345: Argument of type '0' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
+tests/cases/conformance/salsa/generic.js(20,32): error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
 tests/cases/conformance/salsa/second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
 tests/cases/conformance/salsa/second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
   Types of property 'circle' are incompatible.
@@ -11,7 +11,7 @@ tests/cases/conformance/salsa/second.ts(14,7): error TS2417: Class static side '
       Types of parameters 'others' and 'wagons' are incompatible.
         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
-tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '"nope"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
 ==== tests/cases/conformance/salsa/first.js (3 errors) ====
@@ -102,7 +102,7 @@ tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '
             // error: wrong type
             super('nope');
                   ~~~~~~
-!!! error TS2345: Argument of type '"nope"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
         }
         // should error since others is not optional
         static circle(others: (typeof Wagon)[]) {
@@ -138,6 +138,6 @@ tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '
 !!! related TS6210 tests/cases/conformance/salsa/generic.js:5:15: An argument for 'flavour' was not provided.
     var errorArgType = new Chowder(0);
                                    ~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
     
     

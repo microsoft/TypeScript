@@ -7,12 +7,18 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
     "include": [
         "node_modules/bcryptjs/scripts",
         "node_modules/bcryptjs/src",
-        "node_modules/bcryptjs/tests"
+        "node_modules/bcryptjs/tests",
+        "index.ts"
     ]
 }

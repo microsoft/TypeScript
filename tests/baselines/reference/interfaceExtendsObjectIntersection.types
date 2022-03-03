@@ -15,10 +15,10 @@ type T4 = new () => { a: number };
 >a : number
 
 type T5 = number[];
->T5 : number[]
+>T5 : T5
 
 type T6 = [string, number];
->T6 : [string, number]
+>T6 : T6
 
 type T7 = { [P in 'a' | 'b' | 'c']: string };
 >T7 : T7

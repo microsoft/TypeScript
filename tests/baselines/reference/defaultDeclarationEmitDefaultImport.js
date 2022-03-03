@@ -11,6 +11,7 @@ export const instance = getSomething();
 //// [root.js]
 "use strict";
 exports.__esModule = true;
+exports.getSomething = void 0;
 function getSomething() { return null; }
 exports.getSomething = getSomething;
 var Something = /** @class */ (function () {
@@ -22,8 +23,9 @@ exports["default"] = Something;
 //// [main.js]
 "use strict";
 exports.__esModule = true;
+exports.instance = void 0;
 var root_1 = require("./root");
-exports.instance = root_1.getSomething();
+exports.instance = (0, root_1.getSomething)();
 
 
 //// [root.d.ts]

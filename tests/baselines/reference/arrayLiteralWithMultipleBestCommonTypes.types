@@ -56,28 +56,28 @@ var es = [(x: string) => 2, (x: Object) => 1]; // { (x:string) => number }[]
 >1 : 1
 
 var fs = [(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2]; // (a: { x: number; y?: number }) => number[]
->fs : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
->[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
->(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number; }) => number
+>fs : (((a: {    x: number;    y?: number;}) => number) | ((b: {    x: number;    z?: number;}) => number))[]
+>[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : (((a: {    x: number;    y?: number;}) => number) | ((b: {    x: number;    z?: number;}) => number))[]
+>(a: { x: number; y?: number }) => 1 : (a: {    x: number;    y?: number;}) => number
 >a : { x: number; y?: number; }
 >x : number
 >y : number
 >1 : 1
->(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number; }) => number
+>(b: { x: number; z?: number }) => 2 : (b: {    x: number;    z?: number;}) => number
 >b : { x: number; z?: number; }
 >x : number
 >z : number
 >2 : 2
 
 var gs = [(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1]; // (b: { x: number; z?: number }) => number[]
->gs : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
->[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
->(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number; }) => number
+>gs : (((b: {    x: number;    z?: number;}) => number) | ((a: {    x: number;    y?: number;}) => number))[]
+>[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : (((b: {    x: number;    z?: number;}) => number) | ((a: {    x: number;    y?: number;}) => number))[]
+>(b: { x: number; z?: number }) => 2 : (b: {    x: number;    z?: number;}) => number
 >b : { x: number; z?: number; }
 >x : number
 >z : number
 >2 : 2
->(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number; }) => number
+>(a: { x: number; y?: number }) => 1 : (a: {    x: number;    y?: number;}) => number
 >a : { x: number; y?: number; }
 >x : number
 >y : number

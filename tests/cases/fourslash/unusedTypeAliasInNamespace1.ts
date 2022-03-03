@@ -7,7 +7,7 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'hw'",
+    description: "Remove unused declaration for: 'hw'",
     newFileContent: `namespace greeter {
     export type nw = "No" | "Way";
 }`,

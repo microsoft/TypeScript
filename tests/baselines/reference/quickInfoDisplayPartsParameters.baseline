@@ -2,13 +2,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 9
+      "position": 33,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
-        "start": 9,
+        "start": 33,
         "length": 3
       },
       "displayParts": [
@@ -153,19 +154,31 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": [
+        {
+          "name": "return",
+          "text": [
+            {
+              "text": "*crunch*",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 13
+      "position": 37,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 13,
+        "start": 37,
         "length": 5
       },
       "displayParts": [
@@ -208,13 +221,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 28
+      "position": 52,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 28,
+        "start": 52,
         "length": 13
       },
       "displayParts": [
@@ -257,13 +271,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 52
+      "position": 76,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 52,
+        "start": 76,
         "length": 20
       },
       "displayParts": [
@@ -306,13 +321,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 87
+      "position": 111,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 87,
+        "start": 111,
         "length": 9
       },
       "displayParts": [
@@ -363,13 +379,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 114
+      "position": 138,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 114,
+        "start": 138,
         "length": 5
       },
       "displayParts": [
@@ -412,13 +429,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 135
+      "position": 159,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 135,
+        "start": 159,
         "length": 13
       },
       "displayParts": [
@@ -461,13 +479,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 164
+      "position": 188,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 164,
+        "start": 188,
         "length": 20
       },
       "displayParts": [
@@ -510,13 +529,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsParameters.ts",
-      "position": 200
+      "position": 224,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
-        "start": 200,
+        "start": 224,
         "length": 9
       },
       "displayParts": [

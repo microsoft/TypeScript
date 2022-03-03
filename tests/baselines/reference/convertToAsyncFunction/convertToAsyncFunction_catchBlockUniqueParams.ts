@@ -11,8 +11,7 @@ async function f() {
     try {
         const x = await Promise.resolve();
         x_2 = 1;
-    }
-    catch (x_1) {
+    } catch (x_1) {
         x_2 = "a";
     }
     return !!x_2;

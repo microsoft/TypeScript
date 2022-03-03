@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterface.ts",
-      "position": 10
+      "position": 10,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "interface",
@@ -31,7 +32,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterface.ts",
-      "position": 20
+      "position": 20,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "var",
@@ -72,7 +74,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsInterface.ts",
-      "position": 31
+      "position": 31,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "interface",

@@ -6,6 +6,7 @@ export function foo() { return "foo"; }
 //// [1.ts]
 var p1 = import("./0");
 
+
 //// [0.js]
 export function foo() { return "foo"; }
 //// [1.js]

@@ -9,7 +9,7 @@ declare function takeTwo(x: any, y: any): void;
 >y : any
 
 declare function withRest(a: any, ...args: Array<any>): void;
->withRest : (a: any, ...args: any[]) => void
+>withRest : (a: any, ...args: Array<any>) => void
 >a : any
 >args : any[]
 

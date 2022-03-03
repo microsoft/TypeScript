@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/jsdocPrivateName1.js ===
+class A {
+>A : Symbol(A, Decl(jsdocPrivateName1.js, 0, 0))
+
+    /** @type {boolean} some number value */
+    #foo = 3 // Error because not assignable to boolean
+>#foo : Symbol(A.#foo, Decl(jsdocPrivateName1.js, 0, 9))
+}
+

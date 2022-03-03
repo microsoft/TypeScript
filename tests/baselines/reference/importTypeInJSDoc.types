@@ -37,20 +37,20 @@ export = MyClass;
  */
 
 let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
->a : MyClass
->(/** @type {*} */(undefined)) : MyClass
+>a : import("tests/cases/conformance/types/import/externs")
+>(/** @type {*} */(undefined)) : import("tests/cases/conformance/types/import/externs")
 >(undefined) : any
 >undefined : undefined
 
 a = new Foo({doer: Foo.Bar});
->a = new Foo({doer: Foo.Bar}) : MyClass
->a : MyClass
->new Foo({doer: Foo.Bar}) : MyClass
->Foo : typeof MyClass
+>a = new Foo({doer: Foo.Bar}) : import("tests/cases/conformance/types/import/externs")
+>a : import("tests/cases/conformance/types/import/externs")
+>new Foo({doer: Foo.Bar}) : import("tests/cases/conformance/types/import/externs")
+>Foo : typeof import("tests/cases/conformance/types/import/externs")
 >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
 >doer : (x: string, y?: number) => void
 >Foo.Bar : (x: string, y?: number) => void
->Foo : typeof MyClass
+>Foo : typeof import("tests/cases/conformance/types/import/externs")
 >Bar : (x: string, y?: number) => void
 
 const q = /** @type {import("./externs").Bar} */({ doer: q => q });

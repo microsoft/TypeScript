@@ -1,0 +1,104 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/** @enum {string} */
+export const Target = {
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
+
+    START: "start",
+>START : Symbol(START, Decl(index.js, 1, 23))
+
+    MIDDLE: "middle",
+>MIDDLE : Symbol(MIDDLE, Decl(index.js, 2, 19))
+
+    END: "end",
+>END : Symbol(END, Decl(index.js, 3, 21))
+
+    /** @type {number} */
+    OK_I_GUESS: 2
+>OK_I_GUESS : Symbol(OK_I_GUESS, Decl(index.js, 4, 15))
+}
+/** @enum number */
+export const Second = {
+>Second : Symbol(Second, Decl(index.js, 9, 12), Decl(index.js, 8, 4))
+
+    OK: 1,
+>OK : Symbol(OK, Decl(index.js, 9, 23))
+
+    /** @type {number} */
+    FINE: 2,
+>FINE : Symbol(FINE, Decl(index.js, 10, 10))
+}
+/** @enum {function(number): number} */
+export const Fs = {
+>Fs : Symbol(Fs, Decl(index.js, 15, 12), Decl(index.js, 14, 4))
+
+    ADD1: n => n + 1,
+>ADD1 : Symbol(ADD1, Decl(index.js, 15, 19))
+>n : Symbol(n, Decl(index.js, 16, 9))
+>n : Symbol(n, Decl(index.js, 16, 9))
+
+    ID: n => n,
+>ID : Symbol(ID, Decl(index.js, 16, 21))
+>n : Symbol(n, Decl(index.js, 17, 7))
+>n : Symbol(n, Decl(index.js, 17, 7))
+
+    SUB1: n => n - 1
+>SUB1 : Symbol(SUB1, Decl(index.js, 17, 15))
+>n : Symbol(n, Decl(index.js, 18, 9))
+>n : Symbol(n, Decl(index.js, 18, 9))
+}
+
+/**
+ * @param {Target} t
+ * @param {Second} s
+ * @param {Fs} f
+ */
+export function consume(t,s,f) {
+>consume : Symbol(consume, Decl(index.js, 19, 1))
+>t : Symbol(t, Decl(index.js, 26, 24))
+>s : Symbol(s, Decl(index.js, 26, 26))
+>f : Symbol(f, Decl(index.js, 26, 28))
+
+    /** @type {string} */
+    var str = t
+>str : Symbol(str, Decl(index.js, 28, 7))
+>t : Symbol(t, Decl(index.js, 26, 24))
+
+    /** @type {number} */
+    var num = s
+>num : Symbol(num, Decl(index.js, 30, 7))
+>s : Symbol(s, Decl(index.js, 26, 26))
+
+    /** @type {(n: number) => number} */
+    var fun = f
+>fun : Symbol(fun, Decl(index.js, 32, 7))
+>f : Symbol(f, Decl(index.js, 26, 28))
+
+    /** @type {Target} */
+    var v = Target.START
+>v : Symbol(v, Decl(index.js, 34, 7))
+>Target.START : Symbol(START, Decl(index.js, 1, 23))
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
+>START : Symbol(START, Decl(index.js, 1, 23))
+
+    v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
+>v : Symbol(v, Decl(index.js, 34, 7))
+}
+/** @param {string} s */
+export function ff(s) {
+>ff : Symbol(ff, Decl(index.js, 36, 1))
+>s : Symbol(s, Decl(index.js, 38, 19))
+
+    // element access with arbitrary string is an error only with noImplicitAny
+    if (!Target[s]) {
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
+>s : Symbol(s, Decl(index.js, 38, 19))
+
+        return null
+    }
+    else {
+        return Target[s]
+>Target : Symbol(Target, Decl(index.js, 1, 12), Decl(index.js, 0, 4))
+>s : Symbol(s, Decl(index.js, 38, 19))
+    }
+}
+

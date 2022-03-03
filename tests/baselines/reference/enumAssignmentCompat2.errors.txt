@@ -1,8 +1,8 @@
 tests/cases/compiler/enumAssignmentCompat2.ts(25,5): error TS2322: Type 'typeof W' is not assignable to type 'number'.
-tests/cases/compiler/enumAssignmentCompat2.ts(27,5): error TS2322: Type 'W.a' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat2.ts(29,5): error TS2322: Type '3' is not assignable to type 'typeof W'.
-tests/cases/compiler/enumAssignmentCompat2.ts(31,5): error TS2322: Type 'W.a' is not assignable to type 'WStatic'.
-tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type '5' is not assignable to type 'WStatic'.
+tests/cases/compiler/enumAssignmentCompat2.ts(27,5): error TS2322: Type 'W' is not assignable to type 'typeof W'.
+tests/cases/compiler/enumAssignmentCompat2.ts(29,5): error TS2322: Type 'number' is not assignable to type 'typeof W'.
+tests/cases/compiler/enumAssignmentCompat2.ts(31,5): error TS2322: Type 'W' is not assignable to type 'WStatic'.
+tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type 'number' is not assignable to type 'WStatic'.
 
 
 ==== tests/cases/compiler/enumAssignmentCompat2.ts (5 errors) ====
@@ -36,18 +36,18 @@ tests/cases/compiler/enumAssignmentCompat2.ts(32,5): error TS2322: Type '5' is n
     var a: number = W.a;
     var b: typeof W = W.a; // error
         ~
-!!! error TS2322: Type 'W.a' is not assignable to type 'typeof W'.
+!!! error TS2322: Type 'W' is not assignable to type 'typeof W'.
     var c: typeof W.a = W.a;
     var d: typeof W = 3; // error
         ~
-!!! error TS2322: Type '3' is not assignable to type 'typeof W'.
+!!! error TS2322: Type 'number' is not assignable to type 'typeof W'.
     var e: typeof W.a = 4;
     var f: WStatic = W.a; // error
         ~
-!!! error TS2322: Type 'W.a' is not assignable to type 'WStatic'.
+!!! error TS2322: Type 'W' is not assignable to type 'WStatic'.
     var g: WStatic = 5; // error
         ~
-!!! error TS2322: Type '5' is not assignable to type 'WStatic'.
+!!! error TS2322: Type 'number' is not assignable to type 'WStatic'.
     var h: W = 3;
     var i: W = W.a;
     i = W.a;

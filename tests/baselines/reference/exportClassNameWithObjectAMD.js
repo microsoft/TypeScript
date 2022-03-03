@@ -6,6 +6,7 @@ export class Object {}
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Object = void 0;
     var Object = /** @class */ (function () {
         function Object() {
         }

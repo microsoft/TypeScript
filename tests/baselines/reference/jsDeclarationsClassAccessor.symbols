@@ -1,0 +1,68 @@
+=== tests/cases/conformance/jsdoc/declarations/supplement.d.ts ===
+export { };
+declare module "./argument.js" {
+>"./argument.js" : Symbol("tests/cases/conformance/jsdoc/declarations/argument", Decl(argument.js, 0, 0), Decl(supplement.d.ts, 0, 11))
+
+    interface Argument {
+>Argument : Symbol(Argument, Decl(argument.js, 0, 33), Decl(supplement.d.ts, 1, 32))
+
+        idlType: any;
+>idlType : Symbol(Argument.idlType, Decl(supplement.d.ts, 2, 24))
+
+        default: null;
+>default : Symbol(Argument.default, Decl(supplement.d.ts, 3, 21))
+    }
+}
+=== tests/cases/conformance/jsdoc/declarations/base.js ===
+export class Base {
+>Base : Symbol(Base, Decl(base.js, 0, 0))
+
+    constructor() { }
+
+    toJSON() {
+>toJSON : Symbol(Base.toJSON, Decl(base.js, 1, 21))
+
+        const json = { type: undefined, name: undefined, inheritance: undefined };
+>json : Symbol(json, Decl(base.js, 4, 13))
+>type : Symbol(type, Decl(base.js, 4, 22))
+>undefined : Symbol(undefined)
+>name : Symbol(name, Decl(base.js, 4, 39))
+>undefined : Symbol(undefined)
+>inheritance : Symbol(inheritance, Decl(base.js, 4, 56))
+>undefined : Symbol(undefined)
+
+        return json;
+>json : Symbol(json, Decl(base.js, 4, 13))
+    }
+}
+=== tests/cases/conformance/jsdoc/declarations/argument.js ===
+import { Base } from "./base.js";
+>Base : Symbol(Base, Decl(argument.js, 0, 8))
+
+export class Argument extends Base {
+>Argument : Symbol(Argument, Decl(argument.js, 0, 33), Decl(supplement.d.ts, 1, 32))
+>Base : Symbol(Base, Decl(argument.js, 0, 8))
+
+    /**
+     * @param {*} tokeniser
+     */
+    static parse(tokeniser) {
+>parse : Symbol(Argument.parse, Decl(argument.js, 1, 36))
+>tokeniser : Symbol(tokeniser, Decl(argument.js, 5, 17))
+
+        return;
+    }
+
+    get type() {
+>type : Symbol(Argument.type, Decl(argument.js, 7, 5))
+
+        return "argument";
+    }
+
+    /**
+     * @param {*} defs
+     */
+    *validate(defs) { }
+>validate : Symbol(Argument.validate, Decl(argument.js, 11, 5))
+>defs : Symbol(defs, Decl(argument.js, 16, 14))
+}

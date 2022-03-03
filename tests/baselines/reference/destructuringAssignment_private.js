@@ -15,7 +15,7 @@ const nameO = "o";
 
 
 //// [destructuringAssignment_private.js]
-var _a, _b;
+var _a, _b, _c, _d;
 var C = /** @class */ (function () {
     function C() {
         this.x = 0;
@@ -27,6 +27,6 @@ var x;
 (x = [{ a: new C() }][0].a.x);
 (x = new C().o[0].a);
 var nameX = "x";
-(_a = nameX, x = [{ a: new C() }][0].a[_a]);
+(_a = [{ a: new C() }], _b = nameX, x = _a[0].a[_b]);
 var nameO = "o";
-(_b = nameO, x = new C()[_b][0].a);
+(_c = new C(), _d = nameO, x = _c[_d][0].a);

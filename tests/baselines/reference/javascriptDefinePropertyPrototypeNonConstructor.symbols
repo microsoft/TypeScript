@@ -1,0 +1,23 @@
+=== /a.js ===
+function Graphic() {
+>Graphic : Symbol(Graphic, Decl(a.js, 0, 0))
+}
+
+Object.defineProperty(Graphic.prototype, "instance", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Graphic.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Graphic : Symbol(Graphic, Decl(a.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>"instance" : Symbol(Graphic.instance, Decl(a.js, 1, 1))
+
+  get: function() {
+>get : Symbol(get, Decl(a.js, 3, 54))
+
+    return this;
+>this : Symbol(Graphic, Decl(a.js, 0, 0))
+  }
+});
+
+

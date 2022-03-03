@@ -1,0 +1,31 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 55,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocTag",
+            "pos": 7,
+            "end": 53,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 15,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "example"
+            },
+            "comment": "Some\n\ntext\r\nwith newlines."
+        },
+        "length": 1,
+        "pos": 7,
+        "end": 53,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

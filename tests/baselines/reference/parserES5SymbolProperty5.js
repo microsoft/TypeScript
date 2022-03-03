@@ -9,3 +9,4 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
+Symbol.isRegExp;

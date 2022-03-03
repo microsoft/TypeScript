@@ -1,0 +1,122 @@
+=== tests/cases/conformance/expressions/optionalChaining/optionalChainingInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/34579
+declare function unbox<T>(box: { value: T | undefined }): T;
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>T : Symbol(T, Decl(optionalChainingInference.ts, 1, 23))
+>box : Symbol(box, Decl(optionalChainingInference.ts, 1, 26))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 1, 32))
+>T : Symbol(T, Decl(optionalChainingInference.ts, 1, 23))
+>T : Symbol(T, Decl(optionalChainingInference.ts, 1, 23))
+
+declare const su: string | undefined;
+>su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+
+declare const fnu: (() => number) | undefined;
+>fnu : Symbol(fnu, Decl(optionalChainingInference.ts, 3, 13))
+
+declare const osu: { prop: string } | undefined;
+>osu : Symbol(osu, Decl(optionalChainingInference.ts, 4, 13))
+>prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+
+declare const ofnu: { prop: () => number } | undefined;
+>ofnu : Symbol(ofnu, Decl(optionalChainingInference.ts, 5, 13))
+>prop : Symbol(prop, Decl(optionalChainingInference.ts, 5, 21))
+
+const b1 = { value: su?.length };
+>b1 : Symbol(b1, Decl(optionalChainingInference.ts, 7, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 7, 12))
+>su?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const v1: number = unbox(b1);
+>v1 : Symbol(v1, Decl(optionalChainingInference.ts, 8, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b1 : Symbol(b1, Decl(optionalChainingInference.ts, 7, 5))
+
+const b2 = { value: su?.length as number | undefined };
+>b2 : Symbol(b2, Decl(optionalChainingInference.ts, 10, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 10, 12))
+>su?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const v2: number = unbox(b2);
+>v2 : Symbol(v2, Decl(optionalChainingInference.ts, 11, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b2 : Symbol(b2, Decl(optionalChainingInference.ts, 10, 5))
+
+const b3: { value: number | undefined } = { value: su?.length };
+>b3 : Symbol(b3, Decl(optionalChainingInference.ts, 13, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 13, 11))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 13, 43))
+>su?.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const v3: number = unbox(b3);
+>v3 : Symbol(v3, Decl(optionalChainingInference.ts, 14, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b3 : Symbol(b3, Decl(optionalChainingInference.ts, 13, 5))
+
+const b4 = { value: fnu?.() };
+>b4 : Symbol(b4, Decl(optionalChainingInference.ts, 16, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 16, 12))
+>fnu : Symbol(fnu, Decl(optionalChainingInference.ts, 3, 13))
+
+const v4: number = unbox(b4);
+>v4 : Symbol(v4, Decl(optionalChainingInference.ts, 17, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b4 : Symbol(b4, Decl(optionalChainingInference.ts, 16, 5))
+
+const b5 = { value: su?.["length"] };
+>b5 : Symbol(b5, Decl(optionalChainingInference.ts, 19, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 19, 12))
+>su : Symbol(su, Decl(optionalChainingInference.ts, 2, 13))
+>"length" : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const v5: number = unbox(b5);
+>v5 : Symbol(v5, Decl(optionalChainingInference.ts, 20, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b5 : Symbol(b5, Decl(optionalChainingInference.ts, 19, 5))
+
+const b6 = { value: osu?.prop.length };
+>b6 : Symbol(b6, Decl(optionalChainingInference.ts, 22, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 22, 12))
+>osu?.prop.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>osu?.prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+>osu : Symbol(osu, Decl(optionalChainingInference.ts, 4, 13))
+>prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const v6: number = unbox(b6);
+>v6 : Symbol(v6, Decl(optionalChainingInference.ts, 23, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b6 : Symbol(b6, Decl(optionalChainingInference.ts, 22, 5))
+
+const b7 = { value: osu?.prop["length"] };
+>b7 : Symbol(b7, Decl(optionalChainingInference.ts, 25, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 25, 12))
+>osu?.prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+>osu : Symbol(osu, Decl(optionalChainingInference.ts, 4, 13))
+>prop : Symbol(prop, Decl(optionalChainingInference.ts, 4, 20))
+>"length" : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const v7: number = unbox(b7);
+>v7 : Symbol(v7, Decl(optionalChainingInference.ts, 26, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b7 : Symbol(b7, Decl(optionalChainingInference.ts, 25, 5))
+
+const b8 = { value: ofnu?.prop() };
+>b8 : Symbol(b8, Decl(optionalChainingInference.ts, 28, 5))
+>value : Symbol(value, Decl(optionalChainingInference.ts, 28, 12))
+>ofnu?.prop : Symbol(prop, Decl(optionalChainingInference.ts, 5, 21))
+>ofnu : Symbol(ofnu, Decl(optionalChainingInference.ts, 5, 13))
+>prop : Symbol(prop, Decl(optionalChainingInference.ts, 5, 21))
+
+const v8: number = unbox(b8);
+>v8 : Symbol(v8, Decl(optionalChainingInference.ts, 29, 5))
+>unbox : Symbol(unbox, Decl(optionalChainingInference.ts, 0, 0))
+>b8 : Symbol(b8, Decl(optionalChainingInference.ts, 28, 5))
+
+

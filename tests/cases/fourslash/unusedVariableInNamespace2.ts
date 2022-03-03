@@ -9,7 +9,7 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'b'",
+    description: "Remove unused declaration for: 'b'",
     index: 0,
     newRangeContent: 'let a = "dummy entry", c = 0;',
 });

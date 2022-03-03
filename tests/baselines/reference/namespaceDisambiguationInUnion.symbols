@@ -1,0 +1,42 @@
+=== tests/cases/compiler/namespaceDisambiguationInUnion.ts ===
+namespace Foo {
+>Foo : Symbol(Foo, Decl(namespaceDisambiguationInUnion.ts, 0, 0))
+
+  export type Yep = { type: "foo.yep" };
+>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
+>type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 1, 21))
+}
+
+namespace Bar {
+>Bar : Symbol(Bar, Decl(namespaceDisambiguationInUnion.ts, 2, 1))
+
+  export type Yep = { type: "bar.yep" };
+>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
+>type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 5, 21))
+}
+
+const x = { type: "wat.nup" };
+>x : Symbol(x, Decl(namespaceDisambiguationInUnion.ts, 8, 5))
+>type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 8, 11))
+
+const val1: Foo.Yep | Bar.Yep = x;
+>val1 : Symbol(val1, Decl(namespaceDisambiguationInUnion.ts, 9, 5))
+>Foo : Symbol(Foo, Decl(namespaceDisambiguationInUnion.ts, 0, 0))
+>Yep : Symbol(Foo.Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
+>Bar : Symbol(Bar, Decl(namespaceDisambiguationInUnion.ts, 2, 1))
+>Yep : Symbol(Bar.Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
+>x : Symbol(x, Decl(namespaceDisambiguationInUnion.ts, 8, 5))
+
+const y = [{ type: "a" }, { type: "b" }];
+>y : Symbol(y, Decl(namespaceDisambiguationInUnion.ts, 11, 5))
+>type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 11, 12))
+>type : Symbol(type, Decl(namespaceDisambiguationInUnion.ts, 11, 27))
+
+const val2: [Foo.Yep, Bar.Yep] = y;
+>val2 : Symbol(val2, Decl(namespaceDisambiguationInUnion.ts, 12, 5))
+>Foo : Symbol(Foo, Decl(namespaceDisambiguationInUnion.ts, 0, 0))
+>Yep : Symbol(Foo.Yep, Decl(namespaceDisambiguationInUnion.ts, 0, 15))
+>Bar : Symbol(Bar, Decl(namespaceDisambiguationInUnion.ts, 2, 1))
+>Yep : Symbol(Bar.Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
+>y : Symbol(y, Decl(namespaceDisambiguationInUnion.ts, 11, 5))
+

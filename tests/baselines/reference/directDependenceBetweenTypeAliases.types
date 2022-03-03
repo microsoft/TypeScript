@@ -17,7 +17,7 @@ type T0_3 = T0_1
 // A type reference directly depends on the referenced type and each of the type arguments, if any.
 interface I<T> {}
 type T1 = I<T1>
->T1 : any
+>T1 : T1
 
 // A union type directly depends on each of the constituent types.
 type T2 = T2 | string
@@ -27,15 +27,15 @@ class C<T> {}
 >C : C<T>
 
 type T2_1 = T2_1[] | number
->T2_1 : any
+>T2_1 : T2_1
 
 // An array type directly depends on its element type.
 type T3 = T3[]
->T3 : any
+>T3 : T3
 
 // A tuple type directly depends on each of its element types.
 type T4 = [number, T4]
->T4 : any
+>T4 : T4
 
 // A type query directly depends on the type of the referenced entity.
 var x: T5[] = []
@@ -50,17 +50,17 @@ class C1<T> {}
 >C1 : C1<T>
 
 type T6 = T7 | number
->T6 : any
+>T6 : T6
 
 type T7 = typeof yy
->T7 : any
->yy : any
+>T7 : [string, T8[]]
+>yy : [string, T8[]]
 
 var yy: [string, T8[]];
->yy : any
+>yy : [string, T8[]]
 
 type T8 = C<T6>
->T8 : any
+>T8 : T8
 
 // legal cases
 type T9 = () => T9
@@ -72,17 +72,17 @@ type T10 = { x: T10 } | { new(v: T10): string }
 >v : T10
 
 type T11 = T12[]
->T11 : [{ x: [any, string][]; }, string][]
+>T11 : T11
 
 type T12 = [T13, string]
->T12 : [{ x: [any, string][]; }, string]
+>T12 : T12
 
 type T13 = typeof zz
->T13 : { x: [any, string][]; }
->zz : { x: [any, string][]; }
+>T13 : { x: T11; }
+>zz : { x: T11; }
 
 var zz: { x: T11 }
->zz : { x: [any, string][]; }
->x : [{ x: [any, string][]; }, string][]
+>zz : { x: T11; }
+>x : T11
 
 

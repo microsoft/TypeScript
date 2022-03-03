@@ -49,10 +49,10 @@ const nameX = "x";
 ([{ a: { [nameX]: x } }] = [{ a: new C() }]);
 >([{ a: { [nameX]: x } }] = [{ a: new C() }]) : [{ a: C; }]
 >[{ a: { [nameX]: x } }] = [{ a: new C() }] : [{ a: C; }]
->[{ a: { [nameX]: x } }] : [{ a: { [nameX]: number; }; }]
->{ a: { [nameX]: x } } : { a: { [nameX]: number; }; }
->a : { [nameX]: number; }
->{ [nameX]: x } : { [nameX]: number; }
+>[{ a: { [nameX]: x } }] : [{ a: { x: number; }; }]
+>{ a: { [nameX]: x } } : { a: { x: number; }; }
+>a : { x: number; }
+>{ [nameX]: x } : { x: number; }
 >[nameX] : number
 >nameX : "x"
 >x : number
@@ -69,7 +69,7 @@ const nameO = "o";
 ({ [nameO]: [{ a: x }]} = new C());
 >({ [nameO]: [{ a: x }]} = new C()) : C
 >{ [nameO]: [{ a: x }]} = new C() : C
->{ [nameO]: [{ a: x }]} : { [nameO]: [{ a: number; }]; }
+>{ [nameO]: [{ a: x }]} : { o: [{ a: number; }]; }
 >[nameO] : [{ a: number; }]
 >nameO : "o"
 >[{ a: x }] : [{ a: number; }]

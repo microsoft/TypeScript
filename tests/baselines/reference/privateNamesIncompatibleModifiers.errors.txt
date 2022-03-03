@@ -1,0 +1,108 @@
+error TS2318: Cannot find global type 'AsyncIterableIterator'.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(2,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(3,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(4,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(6,5): error TS18019: 'declare' modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(8,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(9,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(10,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(11,5): error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(12,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(17,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(18,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(19,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(20,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(21,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(22,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(23,5): error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(24,5): error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(25,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(26,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(27,5): error TS1042: 'async' modifier cannot be used here.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(28,5): error TS1042: 'async' modifier cannot be used here.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(32,5): error TS18019: 'abstract' modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(32,14): error TS1267: Property '#quux' cannot have an initializer because it is marked abstract.
+
+
+!!! error TS2318: Cannot find global type 'AsyncIterableIterator'.
+==== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts (23 errors) ====
+    class A {
+        public #foo = 3;         // Error
+        ~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        private #bar = 3;        // Error
+        ~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        protected #baz = 3;      // Error
+        ~~~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        readonly #qux = 3;       // OK
+        declare #what: number;   // Error
+        ~~~~~~~
+!!! error TS18019: 'declare' modifier cannot be used with a private identifier.
+    
+        public #fooMethod() { return  3; }         // Error
+        ~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        private #barMethod() { return  3; }        // Error
+        ~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        protected #bazMethod() { return  3; }      // Error
+        ~~~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        readonly #quxMethod() { return  3; }       // Error
+        ~~~~~~~~
+!!! error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+        declare #whatMethod()                      // Error
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+        async #asyncMethod() { return 1; }         //OK
+        *#genMethod() { return 1; }                //OK
+        async *#asyncGenMethod() { return 1; }     //OK
+    
+        public get #fooProp() { return  3; }         // Error
+        ~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        public set #fooProp(value: number) {  }      // Error
+        ~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        private get #barProp() { return  3; }        // Error
+        ~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        private set #barProp(value: number) {  }     // Error
+        ~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        protected get #bazProp() { return  3; }      // Error
+        ~~~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        protected set #bazProp(value: number) {  }   // Error
+        ~~~~~~~~~
+!!! error TS18010: An accessibility modifier cannot be used with a private identifier.
+        readonly get #quxProp() { return  3; }       // Error
+        ~~~~~~~~
+!!! error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+        readonly set #quxProp(value: number) {  }    // Error
+        ~~~~~~~~
+!!! error TS1024: 'readonly' modifier can only appear on a property declaration or index signature.
+        declare get #whatProp()                      // Error
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+        declare set #whatProp(value: number)         // Error
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+        async get #asyncProp() { return 1; }         // Error
+        ~~~~~
+!!! error TS1042: 'async' modifier cannot be used here.
+        async set #asyncProp(value: number) { }      // Error
+        ~~~~~
+!!! error TS1042: 'async' modifier cannot be used here.
+    }
+    
+    abstract class B {
+        abstract #quux = 3;      // Error
+        ~~~~~~~~
+!!! error TS18019: 'abstract' modifier cannot be used with a private identifier.
+                 ~~~~~
+!!! error TS1267: Property '#quux' cannot have an initializer because it is marked abstract.
+    }
+    

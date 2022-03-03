@@ -48,6 +48,7 @@ var \u0079ield = 12; // ok
 function* gen() {
     yield 12; //not ok
 }
+export {};
 //// [file2.js]
 var x = "hello"; // not ok
 var \u{0061}wait = 12; // ok
@@ -59,4 +60,5 @@ function* gen() {
     yield 12; //not ok
 }
 const a = { def\u0061ult: 12 }; // OK, `default` not in keyword position
+export {};
 // chrome and jsc may still error on this, ref https://bugs.chromium.org/p/chromium/issues/detail?id=993000 and https://bugs.webkit.org/show_bug.cgi?id=200638

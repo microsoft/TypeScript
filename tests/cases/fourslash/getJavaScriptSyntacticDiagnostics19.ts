@@ -2,9 +2,6 @@
 
 // @allowJs: true
 // @Filename: a.js
-////enum [|E|] { }
+////enum E { }
 
-verify.getSyntacticDiagnostics([{
-    message: "'enum declarations' can only be used in a .ts file.",
-    code: 8015
-}]);
+verify.baselineSyntacticDiagnostics();

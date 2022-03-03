@@ -7,7 +7,7 @@
 ////}
 
 // @Filename: a.ts
-////import { /*1*/ } from "./file.ts";  // no globals in imports - export found
+////import { /*1*/ } from "./file.ts";  // no globals in imports - export not found
 
 //@Filename: file.tsx
 /////// <reference path="/*2*/..\services\services.ts" /> // no globals in reference paths
@@ -36,17 +36,19 @@
 ////var user = </*16*/User name=/*17*/{ /*18*/window.isLoggedIn ? window.name : '/*19*/'} />; // globals only in JSX expression (but not in JSX expression strings)
 
 const x = ["test", "A", "B", "C", "y", "z", "x", "user"];
-const globals: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [...x, ...completion.globals]
+const globals = completion.sorted([...x, ...completion.globals])
 verify.completions(
-    { marker: ["1", "3", "6", "8", "12", "14"], exact: undefined, isGlobalCompletion: false },
+    { marker: ["1", "3"], exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isNewIdentifierLocation: true, isGlobalCompletion: false },
+    { marker: ["6", "8", "12", "14"], exact: undefined, isGlobalCompletion: false },
     { marker: "2", exact: ["a.ts", "file.ts"], isGlobalCompletion: false, isNewIdentifierLocation: true },
     { marker: ["4", "19"], exact: [], isGlobalCompletion: false },
-    { marker: ["5", "11", "18"], exact: globals, isGlobalCompletion: true },
+    { marker: ["5", "11"], exact: globals, isGlobalCompletion: true },
+    { marker: ["18"], exact: globals.filter(name => name !== 'user'), isGlobalCompletion: true },
     { marker: "7", exact: completion.globalsInsideFunction(x), isGlobalCompletion: true },
     { marker: "9", exact: ["x", "y"], isGlobalCompletion: false },
     { marker: "10", exact: completion.classElementKeywords, isGlobalCompletion: false, isNewIdentifierLocation: true },
     { marker: "13", exact: globals, isGlobalCompletion: false },
-    { marker: "15", exact: globals, isGlobalCompletion: true, isNewIdentifierLocation: true },
-    { marker: "16", exact: [...x, completion.globalThisEntry, ...completion.globalsVars, completion.undefinedVarEntry], isGlobalCompletion: false },
+    { marker: "15", exact: globals.filter(name => name !== 'x'), isGlobalCompletion: true, isNewIdentifierLocation: true },
+    { marker: "16", unsorted: [...x, completion.globalThisEntry, ...completion.globalsVars, completion.undefinedVarEntry].filter(name => name !== 'user'), isGlobalCompletion: false },
     { marker: "17", exact: completion.globalKeywords, isGlobalCompletion: false },
 );

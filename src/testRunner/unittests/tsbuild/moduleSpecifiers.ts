@@ -1,16 +1,16 @@
 namespace ts {
     // https://github.com/microsoft/TypeScript/issues/31696
     describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
-        let projFs: vfs.FileSystem;
-        const { time, tick } = getTime();
-        before(() => {
-            projFs = loadProjectFromFiles({
-                "/src/common/nominal.ts": utils.dedent`
+        verifyTsc({
+            scenario: "moduleSpecifiers",
+            subScenario: `synthesized module specifiers resolve correctly`,
+            fs: () => loadProjectFromFiles({
+                "/src/solution/common/nominal.ts": Utils.dedent`
                     export declare type Nominal<T, Name extends string> = T & {
                         [Symbol.species]: Name;
                     };
                     `,
-                "/src/common/tsconfig.json": utils.dedent`
+                "/src/solution/common/tsconfig.json": Utils.dedent`
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -18,12 +18,12 @@ namespace ts {
                         },
                         "include": ["nominal.ts"]
                     }`,
-                "/src/sub-project/index.ts": utils.dedent`
+                "/src/solution/sub-project/index.ts": Utils.dedent`
                     import { Nominal } from '../common/nominal';
 
                     export type MyNominal = Nominal<string, 'MyNominal'>;
                     `,
-                "/src/sub-project/tsconfig.json": utils.dedent`
+                "/src/solution/sub-project/tsconfig.json": Utils.dedent`
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -34,7 +34,7 @@ namespace ts {
                         ],
                         "include": ["./index.ts"]
                     }`,
-                "/src/sub-project-2/index.ts": utils.dedent`
+                "/src/solution/sub-project-2/index.ts": Utils.dedent`
                     import { MyNominal } from '../sub-project/index';
 
                     const variable = {
@@ -45,7 +45,7 @@ namespace ts {
                         return 'key';
                     }
                     `,
-                "/src/sub-project-2/tsconfig.json": utils.dedent`
+                "/src/solution/sub-project-2/tsconfig.json": Utils.dedent`
                     {
                         "extends": "../../tsconfig.base.json",
                         "compilerOptions": {
@@ -56,7 +56,7 @@ namespace ts {
                         ],
                         "include": ["./index.ts"]
                     }`,
-                "/src/tsconfig.json": utils.dedent`
+                "/src/solution/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "composite": true
@@ -67,7 +67,7 @@ namespace ts {
                         ],
                         "include": []
                     }`,
-                "/tsconfig.base.json": utils.dedent`
+                "/src/tsconfig.base.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "skipLibCheck": true,
@@ -75,31 +75,114 @@ namespace ts {
                             "outDir": "lib",
                         }
                     }`,
-                "/tsconfig.json": utils.dedent`{
+                "/src/tsconfig.json": Utils.dedent`{
                     "compilerOptions": {
                         "composite": true
                     },
                     "references": [
-                        { "path": "./src" }
+                        { "path": "./solution" }
                     ],
                     "include": []
                 }`
-            }, time, symbolLibContent);
+            }, symbolLibContent),
+            commandLineArgs: ["-b", "/src", "--verbose"]
         });
-        after(() => {
-            projFs = undefined!;
-        });
-        verifyTsbuildOutput({
-            scenario: `synthesized module specifiers resolve correctly`,
-            projFs: () => projFs,
-            time,
-            tick,
-            proj: "moduleSpecifiers",
-            rootNames: ["/"],
-            initialBuild: {
-                modifyFs: noop,
+    });
+
+    // https://github.com/microsoft/TypeScript/issues/44434 but with `module: node12`, some `exports` maps blocking direct access, and no `baseUrl`
+    describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers across referenced projects resolve correctly", () => {
+        verifyTsc({
+            scenario: "moduleSpecifiers",
+            subScenario: `synthesized module specifiers across projects resolve correctly`,
+            fs: () => loadProjectFromFiles({
+                "/src/src-types/index.ts": Utils.dedent`
+                    export * from './dogconfig.js';`,
+                "/src/src-types/dogconfig.ts": Utils.dedent`
+                    export interface DogConfig {
+                        name: string;
+                    }`,
+                "/src/src-dogs/index.ts": Utils.dedent`
+                    export * from 'src-types';
+                    export * from './lassie/lassiedog.js';
+                    `,
+                "/src/src-dogs/dogconfig.ts": Utils.dedent`
+                    import { DogConfig } from 'src-types';
+
+                    export const DOG_CONFIG: DogConfig = {
+                        name: 'Default dog',
+                    };
+                    `,
+                "/src/src-dogs/dog.ts": Utils.dedent`
+                    import { DogConfig } from 'src-types';
+                    import { DOG_CONFIG } from './dogconfig.js';
+                    
+                    export abstract class Dog {
+                    
+                        public static getCapabilities(): DogConfig {
+                            return DOG_CONFIG;
+                        }
+                    }
+                    `,
+                "/src/src-dogs/lassie/lassiedog.ts": Utils.dedent`
+                    import { Dog } from '../dog.js';
+                    import { LASSIE_CONFIG } from './lassieconfig.js';
+                    
+                    export class LassieDog extends Dog {
+                        protected static getDogConfig = () => LASSIE_CONFIG;
+                    }
+                    `,
+                "/src/src-dogs/lassie/lassieconfig.ts": Utils.dedent`
+                    import { DogConfig } from 'src-types';
+
+                    export const LASSIE_CONFIG: DogConfig = { name: 'Lassie' };
+                    `,
+                "/src/tsconfig-base.json": Utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "declaration": true,
+                            "module": "node12"
+                        }
+                    }`,
+                "/src/src-types/package.json": Utils.dedent`
+                    {
+                        "type": "module",
+                        "exports": "./index.js"
+                    }`,
+                "/src/src-dogs/package.json": Utils.dedent`
+                    {
+                        "type": "module",
+                        "exports": "./index.js"
+                    }`,
+                "/src/src-types/tsconfig.json": Utils.dedent`
+                    {
+                        "extends": "../tsconfig-base.json",
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "include": [
+                            "**/*"
+                        ]
+                    }`,
+                "/src/src-dogs/tsconfig.json": Utils.dedent`
+                    {
+                        "extends": "../tsconfig-base.json",
+                        "compilerOptions": {
+                            "composite": true
+                        },
+                        "references": [
+                            { "path": "../src-types" }
+                        ],
+                        "include": [
+                            "**/*"
+                        ]
+                    }`,
+            }, ""),
+            modifyFs: fs => {
+                fs.writeFileSync("/lib/lib.es2020.full.d.ts", tscWatch.libFile.content);
+                fs.symlinkSync("/src", "/src/src-types/node_modules");
+                fs.symlinkSync("/src", "/src/src-dogs/node_modules");
             },
-            baselineOnly: true
+            commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"]
         });
     });
 }

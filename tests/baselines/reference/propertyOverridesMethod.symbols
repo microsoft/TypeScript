@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesMethod.ts ===
+class A {
+>A : Symbol(A, Decl(propertyOverridesMethod.ts, 0, 0))
+
+    m() { }
+>m : Symbol(A.m, Decl(propertyOverridesMethod.ts, 0, 9))
+}
+class B extends A {
+>B : Symbol(B, Decl(propertyOverridesMethod.ts, 2, 1))
+>A : Symbol(A, Decl(propertyOverridesMethod.ts, 0, 0))
+
+    m = () => 1
+>m : Symbol(B.m, Decl(propertyOverridesMethod.ts, 3, 19))
+}
+

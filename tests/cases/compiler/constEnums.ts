@@ -34,8 +34,18 @@ const enum Enum1 {
     W2 = Enum1.A0,
     W3 = Enum1["A0"],
     W4 = Enum1["W"],
+    W5 = Enum1[`V`],
 }
 
+const enum Comments {
+    "//",
+    "/*",
+    "*/",
+    "///",
+    "#",
+    "<!--",
+    "-->",
+}
 
 module A {
     export module B {
@@ -53,6 +63,7 @@ module A {
         export module C {
             export const enum E {
                 V3 = A.B.C.E["V2"] & 200,
+                V4 = A.B.C.E[`V1`] << 1,
             }
         }
     }
@@ -133,7 +144,7 @@ function foo(x: Enum1) {
         case Enum1.R:
         case Enum1.S:
         case Enum1["T"]:
-        case Enum1.U:
+        case Enum1[`U`]:
         case Enum1.V:
         case Enum1.W:
         case Enum1.W1:
@@ -149,5 +160,18 @@ function bar(e: A.B.C.E): number {
         case A.B.C.E.V1: return 1;
         case A.B.C.E.V2: return 1;
         case A.B.C.E.V3: return 1;
+    }
+}
+
+function baz(c: Comments) {
+    switch (c) {
+        case Comments["//"]:
+        case Comments["/*"]:
+        case Comments["*/"]:
+        case Comments["///"]:
+        case Comments["#"]:
+        case Comments["<!--"]:
+        case Comments["-->"]:
+        break;
     }
 }

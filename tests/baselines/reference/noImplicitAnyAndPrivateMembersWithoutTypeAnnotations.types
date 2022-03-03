@@ -14,5 +14,12 @@ declare class Something
 
     private someVar;
 >someVar : any
+
+    private get getter();
+>getter : any
+
+    private set setter(v);
+>setter : any
+>v : any
 }
 

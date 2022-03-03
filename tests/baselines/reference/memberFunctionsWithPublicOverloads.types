@@ -17,7 +17,7 @@ class C {
 >y : any
 
     public bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public bar(x: string);
@@ -49,7 +49,7 @@ class C {
 >y : any
 
     public static bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public static bar(x: string);
@@ -85,7 +85,7 @@ class D<T> {
 >y : any
 
     public bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
 >x : "hi"
 
     public bar(x: string);
@@ -117,7 +117,7 @@ class D<T> {
 >y : any
 
     public static bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public static bar(x: string);

@@ -1,0 +1,82 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts ===
+declare const a: string | undefined
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+
+declare const b: string | undefined
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+
+declare const c: string | undefined
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// should be a syntax error
+a ?? b || c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// should be a syntax error
+a || b ?? c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// should be a syntax error
+a ?? b && c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// should be a syntax error
+a && b ?? c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+a ?? (b || c);
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+(a ?? b) || c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+(a || b) ?? c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+a || (b ?? c);
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+a ?? (b && c);
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+(a ?? b) && c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+(a && b) ?? c;
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+
+// Valid according to spec
+a && (b ?? c);
+>a : Symbol(a, Decl(nullishCoalescingOperator5.ts, 0, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator5.ts, 1, 13))
+>c : Symbol(c, Decl(nullishCoalescingOperator5.ts, 2, 13))
+

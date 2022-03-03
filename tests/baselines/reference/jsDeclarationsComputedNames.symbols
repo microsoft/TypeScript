@@ -1,0 +1,68 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const TopLevelSym = Symbol();
+>TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const InnerSym = Symbol();
+>InnerSym : Symbol(InnerSym, Decl(index.js, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 1, 26))
+>exports : Symbol(export=, Decl(index.js, 1, 26))
+
+    [TopLevelSym](x = 12) {
+>[TopLevelSym] : Symbol([TopLevelSym], Decl(index.js, 2, 18))
+>TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))
+>x : Symbol(x, Decl(index.js, 3, 18))
+
+        return x;
+>x : Symbol(x, Decl(index.js, 3, 18))
+
+    },
+    items: {
+>items : Symbol(items, Decl(index.js, 5, 6))
+
+        [InnerSym]: (arg = {x: 12}) => arg.x
+>[InnerSym] : Symbol([InnerSym], Decl(index.js, 6, 12))
+>InnerSym : Symbol(InnerSym, Decl(index.js, 1, 5))
+>arg : Symbol(arg, Decl(index.js, 7, 21))
+>x : Symbol(x, Decl(index.js, 7, 28))
+>arg.x : Symbol(x, Decl(index.js, 7, 28))
+>arg : Symbol(arg, Decl(index.js, 7, 21))
+>x : Symbol(x, Decl(index.js, 7, 28))
+    }
+}
+
+=== tests/cases/conformance/jsdoc/declarations/index2.js ===
+const TopLevelSym = Symbol();
+>TopLevelSym : Symbol(TopLevelSym, Decl(index2.js, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const InnerSym = Symbol();
+>InnerSym : Symbol(InnerSym, Decl(index2.js, 1, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export class MyClass {
+>MyClass : Symbol(MyClass, Decl(index2.js, 1, 26))
+
+    static [TopLevelSym] = 12;
+>[TopLevelSym] : Symbol(MyClass[TopLevelSym], Decl(index2.js, 3, 22))
+>TopLevelSym : Symbol(TopLevelSym, Decl(index2.js, 0, 5))
+
+    [InnerSym] = "ok";
+>[InnerSym] : Symbol(MyClass[InnerSym], Decl(index2.js, 4, 30))
+>InnerSym : Symbol(InnerSym, Decl(index2.js, 1, 5))
+
+    /**
+     * @param {typeof TopLevelSym | typeof InnerSym} _p
+     */
+    constructor(_p = InnerSym) {
+>_p : Symbol(_p, Decl(index2.js, 9, 16))
+>InnerSym : Symbol(InnerSym, Decl(index2.js, 1, 5))
+
+        // switch on _p
+    }
+}
+

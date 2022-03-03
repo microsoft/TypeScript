@@ -1,0 +1,143 @@
+=== tests/cases/conformance/externalModules/index.ts ===
+export const x = 1;
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+await x;
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+// reparse element access as await
+await [x];
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+await [x, x];
+>x : Symbol(x, Decl(index.ts, 0, 12))
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+// reparse call as await
+declare function f(): number;
+>f : Symbol(f, Decl(index.ts, 5, 13))
+
+await (x);
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+await (f(), x);
+>f : Symbol(f, Decl(index.ts, 5, 13))
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+await <number>(x);
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+await <number>(f(), x);
+>f : Symbol(f, Decl(index.ts, 5, 13))
+>x : Symbol(x, Decl(index.ts, 0, 12))
+
+// reparse tagged template as await
+await ``;
+await <string> ``;
+
+// member names should be ok
+class C1 {
+>C1 : Symbol(C1, Decl(index.ts, 16, 18))
+
+    await() {}
+>await : Symbol(C1.await, Decl(index.ts, 19, 10))
+}
+class C2 {
+>C2 : Symbol(C2, Decl(index.ts, 21, 1))
+
+    get await() { return 1; }
+>await : Symbol(C2.await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
+
+    set await(value) { }
+>await : Symbol(C2.await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
+>value : Symbol(value, Decl(index.ts, 24, 14))
+}
+class C3 {
+>C3 : Symbol(C3, Decl(index.ts, 25, 1))
+
+    await = 1;
+>await : Symbol(C3.await, Decl(index.ts, 26, 10))
+}
+({
+    await() {}
+>await : Symbol(await, Decl(index.ts, 29, 2))
+
+});
+({
+    get await() { return 1 },
+>await : Symbol(await, Decl(index.ts, 32, 2), Decl(index.ts, 33, 29))
+
+    set await(value) { }
+>await : Symbol(await, Decl(index.ts, 32, 2), Decl(index.ts, 33, 29))
+>value : Symbol(value, Decl(index.ts, 34, 14))
+
+});
+({
+    await: 1
+>await : Symbol(await, Decl(index.ts, 36, 2))
+
+});
+
+// property access name should be ok
+C1.prototype.await;
+>C1.prototype.await : Symbol(C1.await, Decl(index.ts, 19, 10))
+>C1.prototype : Symbol(C1.prototype)
+>C1 : Symbol(C1, Decl(index.ts, 16, 18))
+>prototype : Symbol(C1.prototype)
+>await : Symbol(C1.await, Decl(index.ts, 19, 10))
+
+// await in decorators
+declare const dec: any;
+>dec : Symbol(dec, Decl(index.ts, 44, 13))
+
+@(await dec)
+>dec : Symbol(dec, Decl(index.ts, 44, 13))
+
+class C {
+>C : Symbol(C, Decl(index.ts, 44, 23))
+}
+
+// await allowed in aliased import
+import { await as _await } from "./other";
+>await : Symbol(await, Decl(other.ts, 3, 8))
+>_await : Symbol(_await, Decl(index.ts, 50, 8))
+
+// newlines
+// await in throw
+throw await
+    1;
+
+// await in var
+let y = await
+>y : Symbol(y, Decl(index.ts, 58, 3))
+
+    1;
+
+// await in expression statement;
+await
+    1;
+
+=== tests/cases/conformance/externalModules/other.ts ===
+const _await = 1;
+>_await : Symbol(_await, Decl(other.ts, 0, 5))
+
+// await allowed in aliased export
+export { _await as await };
+>_await : Symbol(_await, Decl(other.ts, 0, 5))
+>await : Symbol(await, Decl(other.ts, 3, 8))
+
+// for-await-of
+const arr = [Promise.resolve()];
+>arr : Symbol(arr, Decl(other.ts, 6, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+for await (const item of arr) {
+>item : Symbol(item, Decl(other.ts, 8, 16))
+>arr : Symbol(arr, Decl(other.ts, 6, 5))
+
+  item;
+>item : Symbol(item, Decl(other.ts, 8, 16))
+}
+

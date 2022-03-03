@@ -1,0 +1,72 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameAndAny.ts, 0, 0))
+
+    #foo = true;
+>#foo : Symbol(A.#foo, Decl(privateNameAndAny.ts, 0, 9))
+
+    static #baz = 10;
+>#baz : Symbol(A.#baz, Decl(privateNameAndAny.ts, 1, 16))
+
+    static #m() {}
+>#m : Symbol(A.#m, Decl(privateNameAndAny.ts, 2, 21))
+
+    method(thing: any) {
+>method : Symbol(A.method, Decl(privateNameAndAny.ts, 3, 18))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+
+        thing.#foo; // OK
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+
+        thing.#m();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+
+        thing.#baz;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+
+        thing.#bar; // Error
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+
+        thing.#foo();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
+    }
+    methodU(thing: unknown) {
+>methodU : Symbol(A.methodU, Decl(privateNameAndAny.ts, 10, 5))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
+        thing.#foo;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
+        thing.#m();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
+        thing.#baz;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
+        thing.#bar;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
+        thing.#foo();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+    }
+    methodN(thing: never) {
+>methodN : Symbol(A.methodN, Decl(privateNameAndAny.ts, 17, 5))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#foo;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#m();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#baz;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#bar;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#foo();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+    }
+};
+

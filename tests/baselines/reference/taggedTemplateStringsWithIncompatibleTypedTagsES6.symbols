@@ -45,7 +45,9 @@ f `abc`.member
 >member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 
 f `abc${1}def${2}ghi`.member;
+>f `abc${1}def${2}ghi`.member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 >f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 
 f `abc`["member"];
 >f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
@@ -53,6 +55,7 @@ f `abc`["member"];
 
 f `abc${1}def${2}ghi`["member"];
 >f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>"member" : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 
 f `abc`[0].member `abc${1}def${2}ghi`;
 >f `abc`[0].member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
@@ -60,7 +63,10 @@ f `abc`[0].member `abc${1}def${2}ghi`;
 >member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 
 f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
+>f `abc${1}def${2}ghi`["member"].member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 >f : Symbol(f, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 9, 3))
+>"member" : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
+>member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))
 
 f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi`;
 >f `abc${ true }def${ true }ghi`["member"].member : Symbol(I.member, Decl(taggedTemplateStringsWithIncompatibleTypedTagsES6.ts, 3, 9))

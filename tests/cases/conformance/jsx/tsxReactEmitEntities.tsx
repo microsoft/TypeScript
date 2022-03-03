@@ -19,4 +19,6 @@ declare var React: any;
 // Does not happen for a string literal that happens to be inside an attribute (and escapes then work)
 <div attr={"&#0123;&hellip;&#x7D;\""}></div>;
 // Preserves single quotes
-<div attr='"'></div>
+<div attr='"'></div>;
+// https://github.com/microsoft/TypeScript/issues/35732
+<div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;

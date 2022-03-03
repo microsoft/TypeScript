@@ -1,4 +1,4 @@
-tests/cases/compiler/typePredicateInLoop.ts(17,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
+tests/cases/compiler/typePredicateInLoop.ts(17,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
 ==== tests/cases/compiler/typePredicateInLoop.ts (1 errors) ====
@@ -20,7 +20,7 @@ tests/cases/compiler/typePredicateInLoop.ts(17,11): error TS1345: An expression 
         for (const ITEM of arg.arr) {
           if (otherFunc(ITEM, arg)) {
               ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
           }
         }
       }

@@ -256,7 +256,7 @@ const v5 = v && v;
 >v5 : void
 >v && v : void
 >v : void
->v : void
+>v : never
 
 const v6 = v && u;
 >v6 : void

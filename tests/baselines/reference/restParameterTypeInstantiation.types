@@ -1,0 +1,33 @@
+=== tests/cases/compiler/restParameterTypeInstantiation.ts ===
+// Repro from #33823
+
+interface TestGeneric<TG> {
+  f: string
+>f : string
+
+  g: TG
+>g : TG
+}
+
+const removeF = <TX>({ f, ...rest }: TestGeneric<TX>) => {
+>removeF : <TX>({ f, ...rest }: TestGeneric<TX>) => { g: TX; }
+><TX>({ f, ...rest }: TestGeneric<TX>) => {  return rest} : <TX>({ f, ...rest }: TestGeneric<TX>) => { g: TX; }
+>f : string
+>rest : { g: TX; }
+
+  return rest
+>rest : { g: TX; }
+}
+
+const result: number = removeF<number>({ f: '', g: 3 }).g
+>result : number
+>removeF<number>({ f: '', g: 3 }).g : number
+>removeF<number>({ f: '', g: 3 }) : { g: number; }
+>removeF : <TX>({ f, ...rest }: TestGeneric<TX>) => { g: TX; }
+>{ f: '', g: 3 } : { f: string; g: number; }
+>f : string
+>'' : ""
+>g : number
+>3 : 3
+>g : number
+

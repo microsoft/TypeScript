@@ -1,0 +1,23 @@
+=== /x.js ===
+module.exports.x = 1;
+>module.exports.x = 1 : 1
+>module.exports.x : number
+>module.exports : typeof import("/y")
+>module : { exports: typeof import("/y"); }
+>exports : typeof import("/y")
+>x : number
+>1 : 1
+
+module.exports = require("./y.js");
+>module.exports = require("./y.js") : typeof import("/y")
+>module.exports : typeof import("/y")
+>module : { exports: typeof import("/y"); }
+>exports : typeof import("/y")
+>require("./y.js") : typeof import("/y")
+>require : any
+>"./y.js" : "./y.js"
+
+=== /y.d.ts ===
+export declare type x = 1;
+>x : 1
+

@@ -26,7 +26,8 @@ class D extends A {
     public s: number = 9;
 
     constructor () {
-        var x = 1; // Error
+        var x = 1; // No error
+        var y = this.s; // Error
         super();
         "use strict";
     }
@@ -65,10 +66,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -103,9 +106,10 @@ var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         var _this = this;
-        _this.s = 9;
-        var x = 1; // Error
+        var x = 1; // No error
+        var y = _this.s; // Error
         _this = _super.call(this) || this;
+        _this.s = 9;
         "use strict";
         return _this;
     }
@@ -133,10 +137,10 @@ var Cs = /** @class */ (function (_super) {
 var Ds = /** @class */ (function (_super) {
     __extends(Ds, _super);
     function Ds() {
+        "use strict";
         var _this = this;
         var x = 1; // no Error
         _this = _super.call(this) || this;
-        "use strict";
         return _this;
     }
     Ds.s = 9;

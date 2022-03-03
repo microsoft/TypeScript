@@ -75,8 +75,8 @@ var p: M2.Point;
 >M2 : any
 
 var p2: { Origin() : { x: number; y: number; } };
->p2 : { Origin(): { x: number; y: number; }; }
->Origin : () => { x: number; y: number; }
+>p2 : { Origin(): {    x: number;    y: number;}; }
+>Origin : () => {    x: number;    y: number;}
 >x : number
 >y : number
 

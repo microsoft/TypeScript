@@ -8,6 +8,7 @@ class A { }
 //// [b.ts]
 class B { }
 
+
 //// [c.js]
 // --out and --outFile error
 var A = /** @class */ (function () {

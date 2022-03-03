@@ -19,5 +19,5 @@ verify.quickInfos({
     2: "var r1: Date",
     3: "var r2: string"
 });
-verify.completions({ marker: "4", exact: ["foo", ...completion.functionMembersWithPrototype] });
+verify.completions({ marker: "4", exact: completion.functionMembersWithPrototypePlus(["foo"]) });
 verify.noErrors();

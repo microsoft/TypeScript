@@ -5,20 +5,10 @@
 
 ////let x = 0;
 ////x = 1;
-////
-////export class C {
-////    private p: number;
-////
-////    m() { this.p = 0; }
-////}
+////export {};
 
-verify.codeFixAll({
-    fixId: "unusedIdentifier_delete",
-    fixAllDescription: "Delete all unused declarations",
+verify.codeFix({
+    description: "Remove unused declaration for: 'x'",
     newFileContent:
-`
-export class C {
-
-    m() { }
-}`,
+`export {};`,
 });

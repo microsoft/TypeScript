@@ -6,14 +6,14 @@ namespace ts.codefix {
     ];
     registerCodeFix({
         errorCodes,
-        getCodeActions: (context) => {
+        getCodeActions: function getCodeActionsToEnableExperimentalDecorators(context) {
             const { configFile } = context.program.getCompilerOptions();
             if (configFile === undefined) {
                 return undefined;
             }
 
             const changes = textChanges.ChangeTracker.with(context, changeTracker => doChange(changeTracker, configFile));
-            return [createCodeFixActionNoFixId(fixId, changes, Diagnostics.Enable_the_experimentalDecorators_option_in_your_configuration_file)];
+            return [createCodeFixActionWithoutFixAll(fixId, changes, Diagnostics.Enable_the_experimentalDecorators_option_in_your_configuration_file)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes) => {
@@ -26,6 +26,6 @@ namespace ts.codefix {
     });
 
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
-        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", createTrue());
+        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", factory.createTrue());
     }
 }

@@ -2,7 +2,7 @@
 
 //// /// <reference path="./module.ts" /> trailing
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/// "),
     c.punctuation("<"),

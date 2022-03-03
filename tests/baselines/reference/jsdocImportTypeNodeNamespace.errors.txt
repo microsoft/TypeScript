@@ -1,0 +1,18 @@
+tests/cases/compiler/Main.js(2,21): error TS2352: Conversion of type 'string' to type 'typeof _default' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== tests/cases/compiler/GeometryType.d.ts (0 errors) ====
+    // #40767
+    
+    declare namespace _default {
+      export const POINT: string;
+    }
+    export default _default;
+    
+==== tests/cases/compiler/Main.js (1 errors) ====
+    export default function () {
+      return /** @type {import('./GeometryType.js').default} */ ('Point');
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'string' to type 'typeof _default' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    }
+    

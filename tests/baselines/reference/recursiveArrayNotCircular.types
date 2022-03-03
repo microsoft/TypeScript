@@ -1,0 +1,114 @@
+=== tests/cases/compiler/recursiveArrayNotCircular.ts ===
+type Action<T, P> = P extends void ? { type : T } : { type: T, payload: P }
+>Action : Action<T, P>
+>type : T
+>type : T
+>payload : P
+
+enum ActionType {
+>ActionType : ActionType
+
+    Foo,
+>Foo : ActionType.Foo
+
+    Bar,
+>Bar : ActionType.Bar
+
+    Baz,
+>Baz : ActionType.Baz
+
+    Batch
+>Batch : ActionType.Batch
+}
+
+type ReducerAction =
+>ReducerAction : ReducerAction
+
+  | Action<ActionType.Bar, number>
+>ActionType : any
+
+  | Action<ActionType.Baz, boolean>
+>ActionType : any
+
+  | Action<ActionType.Foo, string>
+>ActionType : any
+
+  | Action<ActionType.Batch, ReducerAction[]>
+>ActionType : any
+
+function assertNever(a: never): never {
+>assertNever : (a: never) => never
+>a : never
+
+    throw new Error("Unreachable!");
+>new Error("Unreachable!") : Error
+>Error : ErrorConstructor
+>"Unreachable!" : "Unreachable!"
+}
+
+function reducer(action: ReducerAction): void {
+>reducer : (action: ReducerAction) => void
+>action : ReducerAction
+
+    switch(action.type) {
+>action.type : ActionType
+>action : ReducerAction
+>type : ActionType
+
+        case ActionType.Bar:
+>ActionType.Bar : ActionType.Bar
+>ActionType : typeof ActionType
+>Bar : ActionType.Bar
+
+            const x: number = action.payload;
+>x : number
+>action.payload : number
+>action : { type: ActionType.Bar; payload: number; }
+>payload : number
+
+            break;
+        case ActionType.Baz:
+>ActionType.Baz : ActionType.Baz
+>ActionType : typeof ActionType
+>Baz : ActionType.Baz
+
+            const y: boolean = action.payload;
+>y : boolean
+>action.payload : boolean
+>action : { type: ActionType.Baz; payload: false; } | { type: ActionType.Baz; payload: true; }
+>payload : boolean
+
+            break;
+        case ActionType.Foo:
+>ActionType.Foo : ActionType.Foo
+>ActionType : typeof ActionType
+>Foo : ActionType.Foo
+
+            const z: string = action.payload;
+>z : string
+>action.payload : string
+>action : { type: ActionType.Foo; payload: string; }
+>payload : string
+
+            break;
+        case ActionType.Batch:
+>ActionType.Batch : ActionType.Batch
+>ActionType : typeof ActionType
+>Batch : ActionType.Batch
+
+            action.payload.map(reducer);
+>action.payload.map(reducer) : void[]
+>action.payload.map : <U>(callbackfn: (value: ReducerAction, index: number, array: ReducerAction[]) => U, thisArg?: any) => U[]
+>action.payload : ReducerAction[]
+>action : { type: ActionType.Batch; payload: ReducerAction[]; }
+>payload : ReducerAction[]
+>map : <U>(callbackfn: (value: ReducerAction, index: number, array: ReducerAction[]) => U, thisArg?: any) => U[]
+>reducer : (action: ReducerAction) => void
+
+            break;
+        default: return assertNever(action);
+>assertNever(action) : never
+>assertNever : (a: never) => never
+>action : never
+    }
+}

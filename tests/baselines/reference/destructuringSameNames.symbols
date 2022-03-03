@@ -1,0 +1,133 @@
+=== tests/cases/conformance/es6/destructuring/destructuringSameNames.ts ===
+// Valid cases
+
+let { foo, foo: bar } = { foo: 1 };
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 25))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 25))
+
+({ foo, foo } = { foo: 2 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 3, 2), Decl(destructuringSameNames.ts, 3, 7))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 3, 2), Decl(destructuringSameNames.ts, 3, 7))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 3, 17))
+
+({ foo, foo: bar } = { foo: 3 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 4, 2), Decl(destructuringSameNames.ts, 4, 7))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 4, 2), Decl(destructuringSameNames.ts, 4, 7))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 4, 22))
+
+({ foo: bar, foo } = { foo: 4 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 5, 2), Decl(destructuringSameNames.ts, 5, 12))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 5, 2), Decl(destructuringSameNames.ts, 5, 12))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 5, 22))
+
+({ foo, bar: foo } = { foo: 3, bar: 33 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 6, 2))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 6, 7))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 6, 22))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 6, 30))
+
+({ bar: foo, foo } = { foo: 4, bar: 44 });
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 7, 2))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 7, 12))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 7, 22))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 7, 30))
+
+({ foo: bar, foo: bar } = { foo: 5 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 8, 2), Decl(destructuringSameNames.ts, 8, 12))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 8, 2), Decl(destructuringSameNames.ts, 8, 12))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 8, 27))
+
+({ foo: bar, bar: foo } = { foo: 6, bar: 66 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 9, 2))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 9, 12))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 9, 27))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 9, 35))
+
+({ foo: bar, foo: bar } = { foo: 7 });
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 10, 2), Decl(destructuringSameNames.ts, 10, 12))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 10, 2), Decl(destructuringSameNames.ts, 10, 12))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 10, 27))
+
+[foo, foo] = [111, 1111];
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+
+[foo, foo] = [222, 2222];
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+
+[bar, foo, foo] = [333, 3333, 33333];
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+
+[foo, bar, foo] = [333, 3333, 33333];
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+
+[foo, foo, bar] = [444, 4444, 44444];
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>foo : Symbol(foo, Decl(destructuringSameNames.ts, 2, 5))
+>bar : Symbol(bar, Decl(destructuringSameNames.ts, 2, 10))
+
+// Error cases
+
+let { foo1, foo1 } = { foo1: 10 };
+>foo1 : Symbol(foo1, Decl(destructuringSameNames.ts, 20, 5))
+>foo1 : Symbol(foo1, Decl(destructuringSameNames.ts, 20, 11))
+>foo1 : Symbol(foo1, Decl(destructuringSameNames.ts, 20, 22))
+
+let { foo2, bar2: foo2 } = { foo2: 20, bar2: 220 };
+>foo2 : Symbol(foo2, Decl(destructuringSameNames.ts, 21, 5))
+>bar2 : Symbol(bar2, Decl(destructuringSameNames.ts, 21, 38))
+>foo2 : Symbol(foo2, Decl(destructuringSameNames.ts, 21, 11))
+>foo2 : Symbol(foo2, Decl(destructuringSameNames.ts, 21, 28))
+>bar2 : Symbol(bar2, Decl(destructuringSameNames.ts, 21, 38))
+
+let { bar3: foo3, foo3 } = { foo3: 30, bar3: 330 };
+>bar3 : Symbol(bar3, Decl(destructuringSameNames.ts, 22, 38))
+>foo3 : Symbol(foo3, Decl(destructuringSameNames.ts, 22, 5))
+>foo3 : Symbol(foo3, Decl(destructuringSameNames.ts, 22, 17))
+>foo3 : Symbol(foo3, Decl(destructuringSameNames.ts, 22, 28))
+>bar3 : Symbol(bar3, Decl(destructuringSameNames.ts, 22, 38))
+
+const { foo4, foo4 } = { foo4: 40 };
+>foo4 : Symbol(foo4, Decl(destructuringSameNames.ts, 23, 7))
+>foo4 : Symbol(foo4, Decl(destructuringSameNames.ts, 23, 13))
+>foo4 : Symbol(foo4, Decl(destructuringSameNames.ts, 23, 24))
+
+const { foo5, bar5: foo5 } = { foo5: 50, bar5: 550 };
+>foo5 : Symbol(foo5, Decl(destructuringSameNames.ts, 24, 7))
+>bar5 : Symbol(bar5, Decl(destructuringSameNames.ts, 24, 40))
+>foo5 : Symbol(foo5, Decl(destructuringSameNames.ts, 24, 13))
+>foo5 : Symbol(foo5, Decl(destructuringSameNames.ts, 24, 30))
+>bar5 : Symbol(bar5, Decl(destructuringSameNames.ts, 24, 40))
+
+const { bar6: foo6, foo6 } = { foo6: 60, bar6: 660 };
+>bar6 : Symbol(bar6, Decl(destructuringSameNames.ts, 25, 40))
+>foo6 : Symbol(foo6, Decl(destructuringSameNames.ts, 25, 7))
+>foo6 : Symbol(foo6, Decl(destructuringSameNames.ts, 25, 19))
+>foo6 : Symbol(foo6, Decl(destructuringSameNames.ts, 25, 30))
+>bar6 : Symbol(bar6, Decl(destructuringSameNames.ts, 25, 40))
+
+let [blah1, blah1] = [111, 222];
+>blah1 : Symbol(blah1, Decl(destructuringSameNames.ts, 27, 5))
+>blah1 : Symbol(blah1, Decl(destructuringSameNames.ts, 27, 11))
+
+const [blah2, blah2] = [333, 444];
+>blah2 : Symbol(blah2, Decl(destructuringSameNames.ts, 28, 7))
+>blah2 : Symbol(blah2, Decl(destructuringSameNames.ts, 28, 13))
+

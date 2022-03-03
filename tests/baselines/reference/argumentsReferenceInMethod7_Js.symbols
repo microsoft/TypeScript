@@ -1,0 +1,20 @@
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	m() {
+>m : Symbol(A.m, Decl(a.js, 0, 9))
+
+		/**
+		 * @type Function
+		 */
+		this.callee = arguments.callee;
+>this.callee : Symbol(A.callee, Decl(a.js, 1, 6))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>callee : Symbol(A.callee, Decl(a.js, 1, 6))
+>arguments.callee : Symbol(IArguments.callee, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>callee : Symbol(IArguments.callee, Decl(lib.es5.d.ts, --, --))
+	}
+}
+

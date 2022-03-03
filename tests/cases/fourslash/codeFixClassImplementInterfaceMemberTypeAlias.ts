@@ -10,8 +10,8 @@ verify.codeFix({
 `type MyType = [string, number];
 interface I { x: MyType; test(a: MyType): void; }
 class C implements I {
-    x: [string, number];
-    test(a: [string, number]): void {
+    x: MyType;
+    test(a: MyType): void {
         throw new Error("Method not implemented.");
     }
 }`,

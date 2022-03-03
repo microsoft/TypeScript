@@ -1,6 +1,8 @@
 === /a.js ===
 function C() { this.x = false; };
 >C : Symbol(C, Decl(a.js, 0, 0))
+>this.x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))
+>this : Symbol(C, Decl(a.js, 0, 0))
 >x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))
 
 /** @type {number} */

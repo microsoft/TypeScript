@@ -56,5 +56,5 @@ verify.codeFixAvailable([
     ...fixes("j", "A", { noInitializer: true }),
     ...fixes("k", "AT"),
     ...fixes("l", "Foo"),
-    { description: "Remove declaration for: 'c'" },
+    { description: "Remove unused declaration for: 'c'" },
 ]);

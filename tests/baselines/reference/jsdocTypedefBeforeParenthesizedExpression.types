@@ -1,0 +1,31 @@
+=== tests/cases/compiler/test.js ===
+// @ts-check
+/** @typedef {number} NotADuplicateIdentifier */
+
+(2 * 2);
+>(2 * 2) : number
+>2 * 2 : number
+>2 : 2
+>2 : 2
+
+/** @typedef {number} AlsoNotADuplicate */
+
+(2 * 2) + 1;
+>(2 * 2) + 1 : number
+>(2 * 2) : number
+>2 * 2 : number
+>2 : 2
+>2 : 2
+>1 : 1
+
+
+/**
+ * 
+ * @param a {NotADuplicateIdentifier}
+ * @param b {AlsoNotADuplicate}
+ */
+function makeSureTypedefsAreStillRecognized(a, b) {}
+>makeSureTypedefsAreStillRecognized : (a: number, b: number) => void
+>a : number
+>b : number
+

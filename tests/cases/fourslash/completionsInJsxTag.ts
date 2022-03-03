@@ -9,6 +9,8 @@
 ////        div: {
 ////            /** Doc */
 ////            foo: string
+////            /** Label docs */
+////            "aria-label": string
 ////        }
 ////    }
 ////}
@@ -21,11 +23,20 @@
 
 verify.completions({
     marker: ["1", "2"],
-    exact: {
-        name: "foo",
-        text: "(JSX attribute) foo: string",
-        documentation: "Doc",
-        kind: "JSX attribute",
-        kindModifiers: "declare",
-    },
+    exact: [
+        {
+            name: "aria-label",
+            text: "(property) \"aria-label\": string",
+            documentation: "Label docs",
+            kind: "property",
+            kindModifiers: "declare",
+        },
+        {
+            name: "foo",
+            text: "(property) foo: string",
+            documentation: "Doc",
+            kind: "property",
+            kindModifiers: "declare",
+        },
+    ],
 });

@@ -1,0 +1,8 @@
+/*====== /tests/cases/fourslash/renameFunctionParameter2.ts ======*/
+
+/**
+ * @param {number} RENAME
+ */
+const foo = function foo([|RENAME|]) {
+    return RENAME;
+}

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/recursiveConditionalEvaluationNonInfinite.ts ===
+type Test<T> = [T] extends [any[]] ? { array: Test<T[0]> } : { notArray: T };
+>Test : Symbol(Test, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 10))
+>T : Symbol(T, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 10))
+>array : Symbol(array, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 38))
+>Test : Symbol(Test, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 10))
+>notArray : Symbol(notArray, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 62))
+>T : Symbol(T, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 10))
+
+declare const x: Test<number[]>;
+>x : Symbol(x, Decl(recursiveConditionalEvaluationNonInfinite.ts, 1, 13))
+>Test : Symbol(Test, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 0))
+
+const y: { array: { notArray: number } } = x; // Error
+>y : Symbol(y, Decl(recursiveConditionalEvaluationNonInfinite.ts, 2, 5))
+>array : Symbol(array, Decl(recursiveConditionalEvaluationNonInfinite.ts, 2, 10))
+>notArray : Symbol(notArray, Decl(recursiveConditionalEvaluationNonInfinite.ts, 2, 19))
+>x : Symbol(x, Decl(recursiveConditionalEvaluationNonInfinite.ts, 1, 13))
+
+declare const a: Test<number>;
+>a : Symbol(a, Decl(recursiveConditionalEvaluationNonInfinite.ts, 3, 13))
+>Test : Symbol(Test, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 0))
+
+const b: { notArray: number } = a; // Works
+>b : Symbol(b, Decl(recursiveConditionalEvaluationNonInfinite.ts, 4, 5))
+>notArray : Symbol(notArray, Decl(recursiveConditionalEvaluationNonInfinite.ts, 4, 10))
+>a : Symbol(a, Decl(recursiveConditionalEvaluationNonInfinite.ts, 3, 13))
+

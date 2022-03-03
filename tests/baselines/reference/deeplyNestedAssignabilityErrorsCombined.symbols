@@ -1,0 +1,63 @@
+=== tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts ===
+let x = { a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } };
+>x : Symbol(x, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 3))
+>a : Symbol(a, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 9))
+>b : Symbol(b, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 14))
+>c : Symbol(c, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 19))
+>d : Symbol(d, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 24))
+>e : Symbol(e, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 29))
+>f : Symbol(f, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 34))
+>g : Symbol(g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 49))
+
+let y = { a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } };
+>y : Symbol(y, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 3))
+>a : Symbol(a, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 9))
+>b : Symbol(b, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 14))
+>c : Symbol(c, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 19))
+>d : Symbol(d, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 24))
+>e : Symbol(e, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 29))
+>f : Symbol(f, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 34))
+>g : Symbol(g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 49))
+
+x = y;
+>x : Symbol(x, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 0, 3))
+>y : Symbol(y, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 1, 3))
+
+class Ctor1 {
+>Ctor1 : Symbol(Ctor1, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 2, 6))
+
+    g = "ok"
+>g : Symbol(Ctor1.g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 4, 13))
+}
+
+class Ctor2 {
+>Ctor2 : Symbol(Ctor2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 6, 1))
+
+    g = 12;
+>g : Symbol(Ctor2.g, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 8, 13))
+}
+
+let x2 = { a: { b: { c: { d: { e: { f: Ctor1 } } } } } };
+>x2 : Symbol(x2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 3))
+>a : Symbol(a, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 10))
+>b : Symbol(b, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 15))
+>c : Symbol(c, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 20))
+>d : Symbol(d, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 25))
+>e : Symbol(e, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 30))
+>f : Symbol(f, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 35))
+>Ctor1 : Symbol(Ctor1, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 2, 6))
+
+let y2 = { a: { b: { c: { d: { e: { f: Ctor2 } } } } } };
+>y2 : Symbol(y2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 3))
+>a : Symbol(a, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 10))
+>b : Symbol(b, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 15))
+>c : Symbol(c, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 20))
+>d : Symbol(d, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 25))
+>e : Symbol(e, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 30))
+>f : Symbol(f, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 35))
+>Ctor2 : Symbol(Ctor2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 6, 1))
+
+x2 = y2;
+>x2 : Symbol(x2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 12, 3))
+>y2 : Symbol(y2, Decl(deeplyNestedAssignabilityErrorsCombined.ts, 13, 3))
+

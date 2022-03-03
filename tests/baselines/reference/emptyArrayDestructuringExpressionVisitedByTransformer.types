@@ -2,7 +2,7 @@
 var a = [] = [1].map(_ => _);
 >a : number[]
 >[] = [1].map(_ => _) : number[]
->[] : undefined[]
+>[] : []
 >[1].map(_ => _) : number[]
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >[1] : number[]

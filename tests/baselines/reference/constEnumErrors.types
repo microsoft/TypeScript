@@ -19,7 +19,7 @@ const enum E1 {
 
     // illegal case
     // forward reference to the element of the same enum
-    X = Y, 
+    X = Y,
 >X : E1
 >Y : E1
 
@@ -58,6 +58,13 @@ var y1 = E2[name];
 >y1 : any
 >E2[name] : any
 >E2 : typeof E2
+>name : string
+
+var y2 = E2[`${name}`];
+>y2 : any
+>E2[`${name}`] : any
+>E2 : typeof E2
+>`${name}` : string
 >name : string
 
 var x = E2;

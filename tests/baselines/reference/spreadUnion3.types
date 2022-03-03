@@ -1,12 +1,12 @@
 === tests/cases/conformance/types/spread/spreadUnion3.ts ===
 function f(x: { y: string } | undefined): { y: string } {
->f : (x: { y: string; } | undefined) => { y: string; }
+>f : (x: {    y: string;} | undefined) => {    y: string;}
 >x : { y: string; } | undefined
 >y : string
 >y : string
 
     return { y: 123, ...x } // y: string | number
->{ y: 123, ...x } : { y: number; } | { y: string; }
+>{ y: 123, ...x } : { y: string | number; }
 >y : number
 >123 : 123
 >x : { y: string; } | undefined
@@ -24,15 +24,15 @@ function g(t?: { a: number } | null): void {
 >null : null
 
     let b = { ...t };
->b : {}
->{ ...t } : {} | {} | { a: number; }
+>b : { a?: number | undefined; }
+>{ ...t } : { a?: number | undefined; }
 >t : { a: number; } | null | undefined
 
     let c: number = b.a;  // might not have 'a'
 >c : number
->b.a : any
->b : {}
->a : any
+>b.a : number | undefined
+>b : { a?: number | undefined; }
+>a : number | undefined
 }
 g()
 >g() : void

@@ -12,8 +12,8 @@ class A {
 }
 
 var X = { 0b11: '', 3: '' };
->X : { 0b11: string; }
->{ 0b11: '', 3: '' } : { 0b11: string; }
+>X : { 3: string; }
+>{ 0b11: '', 3: '' } : { 3: string; }
 >0b11 : string
 >'' : ""
 >3 : string

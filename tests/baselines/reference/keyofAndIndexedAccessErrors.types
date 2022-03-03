@@ -23,22 +23,22 @@ type T00 = keyof K0;  // Error
 >T00 : string | number | symbol
 
 type T01 = keyof Object;
->T01 : "toString" | "valueOf" | "toLocaleString" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>T01 : keyof Object
 
 type T02 = keyof keyof Object;
->T02 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T02 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type T03 = keyof keyof keyof Object;
 >T03 : "toString" | "valueOf"
 
 type T04 = keyof keyof keyof keyof Object;
->T04 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T04 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : "toString" | "valueOf"
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
->T06 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
+>T06 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
 
 type T10 = Shape["name"];
 >T10 : string
@@ -162,15 +162,15 @@ function f10(shape: Shape) {
 >"name" : "name"
 
     let x2 = getProperty(shape, "size");  // Error
->x2 : any
->getProperty(shape, "size") : any
+>x2 : string | number | boolean
+>getProperty(shape, "size") : string | number | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >"size" : "size"
 
     let x3 = getProperty(shape, cond ? "name" : "size");  // Error
->x3 : any
->getProperty(shape, cond ? "name" : "size") : any
+>x3 : string | number | boolean
+>getProperty(shape, cond ? "name" : "size") : string | number | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"
@@ -186,14 +186,14 @@ function f10(shape: Shape) {
 >"rectangle" : "rectangle"
 
     setProperty(shape, "size", 10);  // Error
->setProperty(shape, "size", 10) : any
+>setProperty(shape, "size", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >"size" : "size"
 >10 : 10
 
     setProperty(shape, cond ? "name" : "size", 10);  // Error
->setProperty(shape, cond ? "name" : "size", 10) : any
+>setProperty(shape, cond ? "name" : "size", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"
@@ -204,7 +204,7 @@ function f10(shape: Shape) {
 }
 
 function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
->f20 : <T, U>(x: T | U, y: T & U, k1: keyof T & keyof U, k2: keyof T & keyof U, k3: keyof T | keyof U, k4: keyof T | keyof U) => void
+>f20 : <T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) => void
 >x : T | U
 >y : T & U
 >k1 : keyof T & keyof U

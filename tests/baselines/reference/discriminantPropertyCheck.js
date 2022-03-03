@@ -175,10 +175,72 @@ function func3(value: Partial<UnionOfBar>) {
     }
 }
 
+// Repro from #30557
+
+interface TypeA {
+    Name: "TypeA";
+    Value1: "Cool stuff!";
+}
+
+interface TypeB {
+    Name: "TypeB";
+    Value2: 0;
+}
+
+type Type = TypeA | TypeB;
+
+declare function isType(x: unknown): x is Type;
+
+function WorksProperly(data: Type) {
+    if (data.Name === "TypeA") {
+        const value1 = data.Value1;
+    }
+}
+
+function DoesNotWork(data: unknown) {
+    if (isType(data)) {
+        if (data.Name === "TypeA") {
+            const value1 = data.Value1;
+        }
+    }
+}
+
+// Repro from #36777
+
+type TestA = {
+    type: 'testA';
+    bananas: 3;
+}
+  
+type TestB = {
+    type: 'testB';
+    apples: 5;
+}
+  
+type AllTests = TestA | TestB;
+
+type MapOfAllTests = Record<string, AllTests>;
+
+const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
+    ids.forEach(id => {
+        let test;
+        test = mapOfTests[id];
+        if (test.type === 'testA') {
+            console.log(test.bananas);
+        }
+        switch (test.type) {
+            case 'testA': {
+                console.log(test.bananas);
+            }
+        }
+    });
+};
+
 
 //// [discriminantPropertyCheck.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = void 0;
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
         x.foo.length;
@@ -268,3 +330,29 @@ function func3(value) {
         }
     }
 }
+function WorksProperly(data) {
+    if (data.Name === "TypeA") {
+        var value1 = data.Value1;
+    }
+}
+function DoesNotWork(data) {
+    if (isType(data)) {
+        if (data.Name === "TypeA") {
+            var value1 = data.Value1;
+        }
+    }
+}
+var doTestingStuff = function (mapOfTests, ids) {
+    ids.forEach(function (id) {
+        var test;
+        test = mapOfTests[id];
+        if (test.type === 'testA') {
+            console.log(test.bananas);
+        }
+        switch (test.type) {
+            case 'testA': {
+                console.log(test.bananas);
+            }
+        }
+    });
+};

@@ -7,7 +7,6 @@ class c {
 
 // @filename: b.ts
 /// <reference path="c.js"/>
-// error on above reference when emitting declarations
 function foo() {
 }
 

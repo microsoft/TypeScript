@@ -1,0 +1,55 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+export function Point(x, y) {
+>Point : Symbol(Point, Decl(source.js, 0, 0))
+>x : Symbol(x, Decl(source.js, 4, 22))
+>y : Symbol(y, Decl(source.js, 4, 24))
+
+    if (!(this instanceof Point)) {
+>this : Symbol(Point, Decl(source.js, 0, 0))
+>Point : Symbol(Point, Decl(source.js, 0, 0))
+
+        return new Point(x, y);
+>Point : Symbol(Point, Decl(source.js, 0, 0))
+>x : Symbol(x, Decl(source.js, 4, 22))
+>y : Symbol(y, Decl(source.js, 4, 24))
+    }
+    this.x = x;
+>this.x : Symbol(Point.x, Decl(source.js, 7, 5))
+>this : Symbol(Point, Decl(source.js, 0, 0))
+>x : Symbol(Point.x, Decl(source.js, 7, 5))
+>x : Symbol(x, Decl(source.js, 4, 22))
+
+    this.y = y;
+>this.y : Symbol(Point.y, Decl(source.js, 8, 15))
+>this : Symbol(Point, Decl(source.js, 0, 0))
+>y : Symbol(Point.y, Decl(source.js, 8, 15))
+>y : Symbol(y, Decl(source.js, 4, 24))
+}
+
+=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+import {Point} from "./source";
+>Point : Symbol(Point, Decl(referencer.js, 0, 8))
+
+/**
+ * @param {Point} p
+ */
+export function magnitude(p) {
+>magnitude : Symbol(magnitude, Decl(referencer.js, 0, 31))
+>p : Symbol(p, Decl(referencer.js, 5, 26))
+
+    return Math.sqrt(p.x ** 2 + p.y ** 2);
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>p.x : Symbol(Point.x, Decl(source.js, 7, 5))
+>p : Symbol(p, Decl(referencer.js, 5, 26))
+>x : Symbol(Point.x, Decl(source.js, 7, 5))
+>p.y : Symbol(Point.y, Decl(source.js, 8, 15))
+>p : Symbol(p, Decl(referencer.js, 5, 26))
+>y : Symbol(Point.y, Decl(source.js, 8, 15))
+}
+

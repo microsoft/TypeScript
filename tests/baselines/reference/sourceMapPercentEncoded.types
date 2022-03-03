@@ -1,0 +1,13 @@
+=== tests/cases/compiler/①Ⅻㄨㄩ 啊阿鼾齄丂丄狚狛狜狝﨨﨩ˊˋ˙–⿻〇㐀㐁䶴䶵U1[]U2[]U3[].ts ===
+var a = 1;
+>a : number
+>1 : 1
+
+var b = 2;
+>b : number
+>2 : 2
+
+var c = 3;
+>c : number
+>3 : 3
+

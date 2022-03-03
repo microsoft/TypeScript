@@ -78,4 +78,4 @@ label: var b = 1;
 label: var c = 1;
 label: ;
 label: ;
-label: 
+label: ;

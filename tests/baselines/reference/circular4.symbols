@@ -1,0 +1,36 @@
+=== /a.ts ===
+import type { ns2 } from './b';
+>ns2 : Symbol(ns2, Decl(a.ts, 0, 13))
+
+export namespace ns1 {
+>ns1 : Symbol(ns1, Decl(a.ts, 0, 31))
+
+  export namespace nested {
+>nested : Symbol(nested, Decl(a.ts, 1, 22))
+
+    export type T = ns2.nested.T;
+>T : Symbol(T, Decl(a.ts, 2, 27))
+>ns2 : Symbol(ns2, Decl(a.ts, 0, 13))
+>nested : Symbol(ns2.nested, Decl(b.ts, 1, 22))
+>T : Symbol(ns2.nested.T, Decl(b.ts, 2, 27))
+  }
+}
+
+=== /b.ts ===
+import type { ns1 } from './a';
+>ns1 : Symbol(ns1, Decl(b.ts, 0, 13))
+
+export namespace ns2 {
+>ns2 : Symbol(ns2, Decl(b.ts, 0, 31))
+
+  export namespace nested {
+>nested : Symbol(nested, Decl(b.ts, 1, 22))
+
+    export type T = ns1.nested.T;
+>T : Symbol(T, Decl(b.ts, 2, 27))
+>ns1 : Symbol(ns1, Decl(b.ts, 0, 13))
+>nested : Symbol(ns1.nested, Decl(a.ts, 1, 22))
+>T : Symbol(ns1.nested.T, Decl(a.ts, 2, 27))
+  }
+}
+

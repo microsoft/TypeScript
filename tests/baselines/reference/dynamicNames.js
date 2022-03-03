@@ -157,12 +157,14 @@ declare class RC<T extends "a" | "b"> {
 //// [module.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.s0 = exports.c1 = exports.c0 = void 0;
 exports.c0 = "a";
 exports.c1 = 1;
 exports.s0 = Symbol();
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.o2 = exports.o1_s2 = exports.o1_c5 = exports.o1_c4 = exports.o1 = exports.s2 = exports.c5 = exports.c4 = void 0;
 const module_1 = require("./module");
 var N;
 (function (N) {
@@ -240,9 +242,9 @@ export declare const c4 = "a";
 export declare const c5 = 1;
 export declare const s2: typeof s0;
 export declare const o1: {
-    [c4]: number;
-    [c5]: string;
-    [s2]: boolean;
+    a: number;
+    1: string;
+    [s0]: boolean;
 };
 export declare const o1_c4: number;
 export declare const o1_c5: string;

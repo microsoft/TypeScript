@@ -18,7 +18,6 @@ verify.codeFixAll({
     fixAllDescription: "Add all missing imports",
     newFileContent:
 `import { xyz } from "foo";
-
 import { qrs } from "./node_modules/bar/index";
 
 xyz;

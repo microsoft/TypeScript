@@ -1,6 +1,6 @@
 === tests/cases/compiler/mappedTypeUnionConstraintInferences.ts ===
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
->Omit : Pick<T, Exclude<keyof T, K>>
+>Omit : Omit<T, K>
 
 export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
 >PartialProperties : PartialProperties<T, K>

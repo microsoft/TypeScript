@@ -1,0 +1,137 @@
+=== tests/cases/compiler/genericFunctionsAndConditionalInference.ts ===
+type Boxified<T> = { [P in keyof T]: { value: T[P]} };
+>Boxified : Boxified<T>
+>value : T[P]
+
+declare function unboxify<T>(obj: Boxified<T>): T;
+>unboxify : <T>(obj: Boxified<T>) => T
+>obj : Boxified<T>
+
+function foo<U, V>(obj: { u: { value: U }, v: { value: V } }) {
+>foo : <U, V>(obj: {    u: {        value: U;    };    v: {        value: V;    };}) => { u: U; v: V; }
+>obj : { u: {    value: U;}; v: {    value: V;}; }
+>u : { value: U; }
+>value : U
+>v : { value: V; }
+>value : V
+
+    return unboxify(obj);
+>unboxify(obj) : { u: U; v: V; }
+>unboxify : <T>(obj: Boxified<T>) => T
+>obj : { u: { value: U; }; v: { value: V; }; }
+}
+
+let qq = foo({ u: { value: 10 }, v: { value: 'hello'} });  // { u: U, v: V } but should be { u: number, v: string }
+>qq : { u: number; v: string; }
+>foo({ u: { value: 10 }, v: { value: 'hello'} }) : { u: number; v: string; }
+>foo : <U, V>(obj: { u: { value: U; }; v: { value: V; }; }) => { u: U; v: V; }
+>{ u: { value: 10 }, v: { value: 'hello'} } : { u: { value: number; }; v: { value: string; }; }
+>u : { value: number; }
+>{ value: 10 } : { value: number; }
+>value : number
+>10 : 10
+>v : { value: string; }
+>{ value: 'hello'} : { value: string; }
+>value : string
+>'hello' : "hello"
+
+// From #42385
+interface Targets<A> {
+    left: A
+>left : A
+
+    right: A
+>right : A
+}
+type Target = keyof Targets<any>
+>Target : keyof Targets<any>
+
+type Result<F extends Target, A> = Targets<A>[F]
+>Result : Result<F, A>
+
+type LR<F extends Target, L, R> = [F] extends ["left"] ? L : R
+>LR : LR<F, L, R>
+
+interface Ops<F extends Target> {
+    _f: F
+>_f : F
+
+    str: Result<F, string>
+>str : Result<F, string>
+
+    num: Result<F, number>
+>num : Result<F, number>
+
+    lr<I, O>(a: Result<F, I>, o: Result<F, O>): Result<F, LR<F, I, O>>
+>lr : <I, O>(a: Result<F, I>, o: Result<F, O>) => Result<F, LR<F, I, O>>
+>a : Result<F, I>
+>o : Result<F, O>
+
+    dict: <P>(p: {[k in keyof P]: Result<F, P[k]>}) => Result<F, P>
+>dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
+>p : { [k in keyof P]: Result<F, P[k]>; }
+}
+const left: Ops<"left"> = {} as any
+>left : Ops<"left">
+>{} as any : any
+>{} : {}
+
+const right: Ops<"right"> = {} as any
+>right : Ops<"right">
+>{} as any : any
+>{} : {}
+
+const ok = <F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)})
+>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
+><F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)}) : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
+>at : Ops<F>
+>({lr: at.lr(at.str, at.num)}) : { lr: Result<F, LR<F, string, number>>; }
+>{lr: at.lr(at.str, at.num)} : { lr: Result<F, LR<F, string, number>>; }
+>lr : Result<F, LR<F, string, number>>
+>at.lr(at.str, at.num) : Result<F, LR<F, string, number>>
+>at.lr : <I, O>(a: Result<F, I>, o: Result<F, O>) => Result<F, LR<F, I, O>>
+>at : Ops<F>
+>lr : <I, O>(a: Result<F, I>, o: Result<F, O>) => Result<F, LR<F, I, O>>
+>at.str : Result<F, string>
+>at : Ops<F>
+>str : Result<F, string>
+>at.num : Result<F, number>
+>at : Ops<F>
+>num : Result<F, number>
+
+const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
+>orphaned : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
+><F extends Target>(at: Ops<F>) => at.dict(ok(at)) : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
+>at : Ops<F>
+>at.dict(ok(at)) : Result<F, { lr: LR<F, string, number>; }>
+>at.dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
+>at : Ops<F>
+>dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
+>ok(at) : { lr: Result<F, LR<F, string, number>>; }
+>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
+>at : Ops<F>
+
+const leftOk = ok(left)
+>leftOk : { lr: string; }
+>ok(left) : { lr: string; }
+>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
+>left : Ops<"left">
+
+const leftOrphaned = orphaned(left)
+>leftOrphaned : { lr: string; }
+>orphaned(left) : { lr: string; }
+>orphaned : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
+>left : Ops<"left">
+
+const rightOk = ok(right)
+>rightOk : { lr: number; }
+>ok(right) : { lr: number; }
+>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
+>right : Ops<"right">
+
+const rightOrphaned = orphaned(right)
+>rightOrphaned : { lr: number; }
+>orphaned(right) : { lr: number; }
+>orphaned : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
+>right : Ops<"right">
+

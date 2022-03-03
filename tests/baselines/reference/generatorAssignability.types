@@ -164,9 +164,9 @@ async function f3() {
 >o : { [Symbol.asyncIterator]: () => Generator<1 | 2, void, unknown>; }
 >{[Symbol.asyncIterator]: syncGenerator} : { [Symbol.asyncIterator]: () => Generator<1 | 2, void, unknown>; }
 >[Symbol.asyncIterator] : () => Generator<1 | 2, void, unknown>
->Symbol.asyncIterator : symbol
+>Symbol.asyncIterator : unique symbol
 >Symbol : SymbolConstructor
->asyncIterator : symbol
+>asyncIterator : unique symbol
 >syncGenerator : () => Generator<1 | 2, void, unknown>
 
     for await (const x of o) {

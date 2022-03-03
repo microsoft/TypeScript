@@ -1,0 +1,133 @@
+=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts ===
+// es2016
+const testIncludes = ["hello"].includes("world");
+>testIncludes : Symbol(testIncludes, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 1, 5))
+
+// es2017
+const testStringPadStart = "".padStart(2);
+>testStringPadStart : Symbol(testStringPadStart, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 4, 5))
+
+const testStringPadEnd = "".padEnd(2);
+>testStringPadEnd : Symbol(testStringPadEnd, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 5, 5))
+
+const testObjectConstructorValues = Object.values({});
+>testObjectConstructorValues : Symbol(testObjectConstructorValues, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 6, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorEntries = Object.entries({});
+>testObjectConstructorEntries : Symbol(testObjectConstructorEntries, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 7, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorGetOwnPropertyDescriptors = Object.getOwnPropertyDescriptors({});
+>testObjectConstructorGetOwnPropertyDescriptors : Symbol(testObjectConstructorGetOwnPropertyDescriptors, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 8, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
+>testIntlFormatToParts : Symbol(testIntlFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 9, 5))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
+>testAtomics : Symbol(testAtomics, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 10, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testSharedArrayBuffer = new SharedArrayBuffer(5);
+>testSharedArrayBuffer : Symbol(testSharedArrayBuffer, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 11, 5))
+
+// es2018
+const testPromiseFinally = new Promise(() => {}).finally();
+>testPromiseFinally : Symbol(testPromiseFinally, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 14, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
+>testRegExpMatchArrayGroups : Symbol(testRegExpMatchArrayGroups, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 15, 5))
+>"2019-04-30".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
+>testRegExpExecArrayGroups : Symbol(testRegExpExecArrayGroups, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 16, 5))
+>/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+
+const testRegExpDotAll = /foo/g.dotAll;
+>testRegExpDotAll : Symbol(testRegExpDotAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 17, 5))
+
+const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
+>testIntlPluralRules : Symbol(testIntlPluralRules, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 18, 5))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+
+const testAsyncGenerator: AsyncGenerator<any> = null as any;
+>testAsyncGenerator : Symbol(testAsyncGenerator, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 19, 5))
+>AsyncGenerator : Symbol(AsyncGenerator)
+
+const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
+>testAsyncGeneratorFunction : Symbol(testAsyncGeneratorFunction, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 20, 5))
+>AsyncGeneratorFunction : Symbol(AsyncGeneratorFunction)
+
+const testAsyncIterable: AsyncIterable<any> = null as any;
+>testAsyncIterable : Symbol(testAsyncIterable, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 21, 5))
+>AsyncIterable : Symbol(AsyncIterable)
+
+const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
+>testAsyncIterableIterator : Symbol(testAsyncIterableIterator, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 22, 5))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator)
+
+const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+>testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 23, 5))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// es2019
+const testArrayFlat = [].flat();
+>testArrayFlat : Symbol(testArrayFlat, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 26, 5))
+
+const testArrayFlatMap = [].flatMap();
+>testArrayFlatMap : Symbol(testArrayFlatMap, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 27, 5))
+
+const testObjectConstructorFromEntries = Object.fromEntries({});
+>testObjectConstructorFromEntries : Symbol(testObjectConstructorFromEntries, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 28, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testStringTrimStart = "".trimStart();
+>testStringTrimStart : Symbol(testStringTrimStart, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 29, 5))
+
+const testStringTrimEnd = "".trimEnd();
+>testStringTrimEnd : Symbol(testStringTrimEnd, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 30, 5))
+
+const testStringTrimLeft = "".trimLeft();
+>testStringTrimLeft : Symbol(testStringTrimLeft, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 31, 5))
+
+const testStringTrimRight = "".trimRight();
+>testStringTrimRight : Symbol(testStringTrimRight, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 32, 5))
+
+const testSymbolDescription = Symbol("foo").description;
+>testSymbolDescription : Symbol(testSymbolDescription, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 33, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+// es2020
+const testPromiseAllSettled = Promise.allSettled([]);
+>testPromiseAllSettled : Symbol(testPromiseAllSettled, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 36, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testStringMatchAll = "".matchAll();
+>testStringMatchAll : Symbol(testStringMatchAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 37, 5))
+
+const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
+>testRegExpMatchAll : Symbol(testRegExpMatchAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 38, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testBigInt = BigInt(123);
+>testBigInt : Symbol(testBigInt, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 39, 5))
+
+// es2021
+const testPromiseAny = Promise.any([]);
+>testPromiseAny : Symbol(testPromiseAny, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 42, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testStringReplaceAll = "".replaceAll();
+>testStringReplaceAll : Symbol(testStringReplaceAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 43, 5))
+
+// esnext
+

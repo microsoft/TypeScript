@@ -67,11 +67,13 @@ Other.Cls = class {
 >this.method : Symbol(Cls.method, Decl(index.js, 1, 19))
 >this : Symbol(Cls, Decl(index.js, 1, 11))
 >method : Symbol(Cls.method, Decl(index.js, 1, 19))
+>Host.UserMetrics.Action.WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
 >Host.UserMetrics.Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
 >Host.UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
 >Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 0, 14), Decl(enumDef.js, 1, 22), Decl(enumDef.js, 8, 2), Decl(enumDef.js, 10, 21))
 >UserMetrics : Symbol(Host.UserMetrics, Decl(enumDef.js, 0, 14), Decl(enumDef.js, 3, 5), Decl(enumDef.js, 15, 5), Decl(enumDef.js, 10, 26))
 >Action : Symbol(Host.UserMetrics.Action, Decl(enumDef.js, 1, 22), Decl(enumDef.js, 3, 17), Decl(enumDef.js, 2, 4))
+>WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
     }
 }
 

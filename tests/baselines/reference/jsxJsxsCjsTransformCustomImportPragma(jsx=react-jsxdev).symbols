@@ -1,0 +1,39 @@
+=== tests/cases/conformance/jsx/jsxs/react.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
+import "./preact";
+const a = <>
+>a : Symbol(a, Decl(react.tsx, 3, 5))
+
+  <p></p>
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+
+  text
+  <div className="foo"></div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(react.tsx, 6, 6))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+</>
+
+export {};
+=== tests/cases/conformance/jsx/jsxs/preact.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
+const a = <>
+>a : Symbol(a, Decl(preact.tsx, 2, 5))
+
+  <p></p>
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+
+  text
+  <div className="foo"></div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>className : Symbol(className, Decl(preact.tsx, 5, 6))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+</>
+
+export {};

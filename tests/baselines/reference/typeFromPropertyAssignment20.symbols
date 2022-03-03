@@ -11,6 +11,8 @@
 >Async : Symbol(Async, Decl(bluebird.js, 1, 23))
 
             this._trampolineEnabled = true;
+>this._trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
+>this : Symbol(Async, Decl(bluebird.js, 1, 23))
 >_trampolineEnabled : Symbol(Async._trampolineEnabled, Decl(bluebird.js, 2, 26), Decl(bluebird.js, 7, 20))
         }
 

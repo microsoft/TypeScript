@@ -1,0 +1,80 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+    static #foo(a: number) {}
+>#foo : Symbol(A.#foo, Decl(privateNamesAndStaticMethods.ts, 0, 9))
+>a : Symbol(a, Decl(privateNamesAndStaticMethods.ts, 1, 16))
+
+    static async #bar(a: number) {}
+>#bar : Symbol(A.#bar, Decl(privateNamesAndStaticMethods.ts, 1, 29))
+>a : Symbol(a, Decl(privateNamesAndStaticMethods.ts, 2, 22))
+
+    static async *#baz(a: number) {
+>#baz : Symbol(A.#baz, Decl(privateNamesAndStaticMethods.ts, 2, 35))
+>a : Symbol(a, Decl(privateNamesAndStaticMethods.ts, 3, 23))
+
+        return 3;
+    }
+    static #_quux: number;
+>#_quux : Symbol(A.#_quux, Decl(privateNamesAndStaticMethods.ts, 5, 5))
+
+    static get #quux (): number {
+>#quux : Symbol(A.#quux, Decl(privateNamesAndStaticMethods.ts, 6, 26), Decl(privateNamesAndStaticMethods.ts, 9, 5))
+
+        return this.#_quux;
+>this.#_quux : Symbol(A.#_quux, Decl(privateNamesAndStaticMethods.ts, 5, 5))
+>this : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+    }
+    static set #quux (val: number) {
+>#quux : Symbol(A.#quux, Decl(privateNamesAndStaticMethods.ts, 6, 26), Decl(privateNamesAndStaticMethods.ts, 9, 5))
+>val : Symbol(val, Decl(privateNamesAndStaticMethods.ts, 10, 22))
+
+        this.#_quux = val; 
+>this.#_quux : Symbol(A.#_quux, Decl(privateNamesAndStaticMethods.ts, 5, 5))
+>this : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+>val : Symbol(val, Decl(privateNamesAndStaticMethods.ts, 10, 22))
+    }
+    constructor () {
+        A.#foo(30);
+>A.#foo : Symbol(A.#foo, Decl(privateNamesAndStaticMethods.ts, 0, 9))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+        A.#bar(30);
+>A.#bar : Symbol(A.#bar, Decl(privateNamesAndStaticMethods.ts, 1, 29))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+        A.#bar(30);
+>A.#bar : Symbol(A.#bar, Decl(privateNamesAndStaticMethods.ts, 1, 29))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+        A.#quux = A.#quux + 1;
+>A.#quux : Symbol(A.#quux, Decl(privateNamesAndStaticMethods.ts, 6, 26), Decl(privateNamesAndStaticMethods.ts, 9, 5))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+>A.#quux : Symbol(A.#quux, Decl(privateNamesAndStaticMethods.ts, 6, 26), Decl(privateNamesAndStaticMethods.ts, 9, 5))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+        A.#quux++;
+>A.#quux : Symbol(A.#quux, Decl(privateNamesAndStaticMethods.ts, 6, 26), Decl(privateNamesAndStaticMethods.ts, 9, 5))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+ }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(privateNamesAndStaticMethods.ts, 20, 1))
+>A : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+    static #foo(a: string) {}
+>#foo : Symbol(B.#foo, Decl(privateNamesAndStaticMethods.ts, 22, 19))
+>a : Symbol(a, Decl(privateNamesAndStaticMethods.ts, 23, 16))
+
+    constructor () {
+        super();
+>super : Symbol(A, Decl(privateNamesAndStaticMethods.ts, 0, 0))
+
+        B.#foo("str");
+>B.#foo : Symbol(B.#foo, Decl(privateNamesAndStaticMethods.ts, 22, 19))
+>B : Symbol(B, Decl(privateNamesAndStaticMethods.ts, 20, 1))
+    }
+}
+

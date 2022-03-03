@@ -1,0 +1,54 @@
+=== tests/cases/compiler/file.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(file.ts, 0, 0), Decl(augment.ts, 2, 29))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(file.ts, 0, 22))
+}
+=== tests/cases/compiler/reexport.ts ===
+export * from "./file";
+No type information for this code.=== tests/cases/compiler/augment.ts ===
+import * as ns from "./reexport";
+>ns : Symbol(ns, Decl(augment.ts, 0, 6))
+
+declare module "./reexport" {
+>"./reexport" : Symbol(ns, Decl(reexport.ts, 0, 0), Decl(augment.ts, 0, 33))
+
+    export interface Foo {
+>Foo : Symbol(Foo, Decl(file.ts, 0, 0), Decl(augment.ts, 2, 29))
+
+        self: Foo;
+>self : Symbol(Foo.self, Decl(augment.ts, 3, 26))
+>Foo : Symbol(Foo, Decl(file.ts, 0, 0), Decl(augment.ts, 2, 29))
+    }
+}
+
+declare const f: ns.Foo;
+>f : Symbol(f, Decl(augment.ts, 8, 13))
+>ns : Symbol(ns, Decl(augment.ts, 0, 6))
+>Foo : Symbol(ns.Foo, Decl(file.ts, 0, 0), Decl(augment.ts, 2, 29))
+
+f.x;
+>f.x : Symbol(ns.Foo.x, Decl(file.ts, 0, 22))
+>f : Symbol(f, Decl(augment.ts, 8, 13))
+>x : Symbol(ns.Foo.x, Decl(file.ts, 0, 22))
+
+f.self;
+>f.self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+>f : Symbol(f, Decl(augment.ts, 8, 13))
+>self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+
+f.self.x;
+>f.self.x : Symbol(ns.Foo.x, Decl(file.ts, 0, 22))
+>f.self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+>f : Symbol(f, Decl(augment.ts, 8, 13))
+>self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+>x : Symbol(ns.Foo.x, Decl(file.ts, 0, 22))
+
+f.self.self;
+>f.self.self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+>f.self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+>f : Symbol(f, Decl(augment.ts, 8, 13))
+>self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+>self : Symbol(ns.Foo.self, Decl(augment.ts, 3, 26))
+

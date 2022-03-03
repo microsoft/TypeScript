@@ -7,17 +7,19 @@ class C {
 }
 
 //// [symbolDeclarationEmit11.js]
+var _a;
 class C {
-    static [Symbol.isConcatSpreadable]() { }
+    static [(_a = Symbol.iterator, Symbol.isConcatSpreadable)]() { }
     static get [Symbol.toPrimitive]() { return ""; }
     static set [Symbol.toPrimitive](x) { }
 }
-C[Symbol.iterator] = 0;
+C[_a] = 0;
 
 
 //// [symbolDeclarationEmit11.d.ts]
 declare class C {
     static [Symbol.iterator]: number;
     static [Symbol.isConcatSpreadable](): void;
-    static [Symbol.toPrimitive]: string;
+    static get [Symbol.toPrimitive](): string;
+    static set [Symbol.toPrimitive](x: string);
 }

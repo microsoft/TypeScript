@@ -1,10 +1,10 @@
-tests/cases/conformance/salsa/bug28576.js(1,15): error TS2307: Cannot find module 'arglebaz'.
+tests/cases/conformance/salsa/bug28576.js(1,15): error TS2307: Cannot find module 'arglebaz' or its corresponding type declarations.
 
 
 ==== tests/cases/conformance/salsa/bug28576.js (1 errors) ====
     import x from 'arglebaz'
                   ~~~~~~~~~~
-!!! error TS2307: Cannot find module 'arglebaz'.
+!!! error TS2307: Cannot find module 'arglebaz' or its corresponding type declarations.
     {
         x.bar = 1
     }

@@ -1,0 +1,65 @@
+╭ name: default
+├ kind: function
+├ file: /tests/cases/fourslash/other.ts
+├ span:
+│ ╭ /tests/cases/fourslash/other.ts:1:1-3:2
+│ │ 1: export default function () {
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ 2:     baz();
+│ │    ^^^^^^^^^^
+│ │ 3: }
+│ │    ^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/other.ts:1:8-1:15
+│ │ 1: export default function () {
+│ │           ^^^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: foo
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/main.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/main.ts:3:1-5:2
+│ │ │ │ 3: function foo() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 4:     bar();
+│ │ │ │    ^^^^^^^^^^
+│ │ │ │ 5: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/main.ts:3:10-3:13
+│ │ │ │ 3: function foo() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/main.ts:4:5-4:8
+│ │ │ 4:     bar();
+│ │ │        ^^^
+│ ╰ ╰
+├ outgoing:
+│ ╭ to:
+│ │ ╭ name: baz
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/other.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/other.ts:5:1-6:2
+│ │ │ │ 5: function baz() {
+│ │ │ │    ^^^^^^^^^^^^^^^^
+│ │ │ │ 6: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/other.ts:5:10-5:13
+│ │ │ │ 5: function baz() {
+│ │ │ │             ^^^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/other.ts:2:5-2:8
+│ │ │ 2:     baz();
+│ │ │        ^^^
+╰ ╰ ╰

@@ -33,3 +33,25 @@ class B {
         // it should error here because it returns undefined
     }
 }
+class C {
+>C : Symbol(C, Decl(getterControlFlowStrictNull.ts, 17, 1))
+
+    get a() {
+>a : Symbol(C.a, Decl(getterControlFlowStrictNull.ts, 18, 9), Decl(getterControlFlowStrictNull.ts, 25, 5))
+
+        if (Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return 0;
+        }
+
+        // it should error here because it returns undefined
+    }
+
+    set a(value: number) {
+>a : Symbol(C.a, Decl(getterControlFlowStrictNull.ts, 18, 9), Decl(getterControlFlowStrictNull.ts, 25, 5))
+>value : Symbol(value, Decl(getterControlFlowStrictNull.ts, 27, 10))
+    }
+}

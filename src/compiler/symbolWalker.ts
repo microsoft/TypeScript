@@ -8,9 +8,9 @@ namespace ts {
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
-        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type | undefined,
         getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
-        getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
+        getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
+        getTypeArguments: (type: TypeReference) => readonly Type[]) {
 
         return getSymbolWalker;
 
@@ -89,7 +89,7 @@ namespace ts {
 
             function visitTypeReference(type: TypeReference): void {
                 visitType(type.target);
-                forEach(type.typeArguments, visitType);
+                forEach(getTypeArguments(type), visitType);
             }
 
             function visitTypeParameter(type: TypeParameter): void {
@@ -139,13 +139,11 @@ namespace ts {
             }
 
             function visitObjectType(type: ObjectType): void {
-                const stringIndexType = getIndexTypeOfStructuredType(type, IndexKind.String);
-                visitType(stringIndexType);
-                const numberIndexType = getIndexTypeOfStructuredType(type, IndexKind.Number);
-                visitType(numberIndexType);
-
-                // The two checks above *should* have already resolved the type (if needed), so this should be cached
                 const resolved = resolveStructuredTypeMembers(type);
+                for (const info of resolved.indexInfos) {
+                    visitType(info.keyType);
+                    visitType(info.type);
+                }
                 for (const signature of resolved.callSignatures) {
                     visitSignature(signature);
                 }

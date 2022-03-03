@@ -32,9 +32,9 @@ for (const i of [0, 1, 2, 3, 4]) {
         }
         console.log(i);
 >console.log(i) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >i : number
 
     } catch (err) {
@@ -42,9 +42,9 @@ for (const i of [0, 1, 2, 3, 4]) {
 
         console.log('E %s %s', i, err);
 >console.log('E %s %s', i, err) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'E %s %s' : "E %s %s"
 >i : number
 >err : any

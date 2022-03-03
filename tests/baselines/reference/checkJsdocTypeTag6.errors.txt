@@ -1,11 +1,11 @@
-tests/cases/conformance/jsdoc/test.js(1,5): error TS8030: The type of a function declaration must match the function's signature.
+tests/cases/conformance/jsdoc/test.js(1,12): error TS8030: The type of a function declaration must match the function's signature.
 tests/cases/conformance/jsdoc/test.js(7,5): error TS2741: Property 'prop' is missing in type '(prop: any) => void' but required in type '{ prop: string; }'.
-tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a function declaration must match the function's signature.
+tests/cases/conformance/jsdoc/test.js(10,12): error TS8030: The type of a function declaration must match the function's signature.
 
 
 ==== tests/cases/conformance/jsdoc/test.js (3 errors) ====
     /** @type {number} */
-        ~~~~~~~~~~~~~~
+               ~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function f() {
         return 1
@@ -19,7 +19,7 @@ tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a functio
     }
     
     /** @type {(a: number) => number} */
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function add1(a, b) { return a + b; }
     

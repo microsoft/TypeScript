@@ -50,6 +50,7 @@ addToZoo(manBeer);
 //// [errorsOnUnionsOfOverlappingObjects01.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 ;
 exports.x = { a: '', b: '' };
 f(exports.x);

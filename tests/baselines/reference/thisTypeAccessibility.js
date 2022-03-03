@@ -14,6 +14,15 @@ interface MyClass {
     extension3(p: number): void;
 }
 
+class MyGenericClass<T> {
+    private p: T;
+    protected pp: T;
+    public ppp: T;
+    private static sp: number;
+    protected static spp: number;
+    public static sppp: number;
+}
+
 MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
     this.p = p;
     this.pp = p;
@@ -43,6 +52,15 @@ function extension3<T extends MyClass> (this: T, p: number) {
 
 MyClass.prototype.extension3 = extension3;
 
+function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
+    this.p = p;
+    this.pp = p;
+    this.ppp = p;
+    MyGenericClass.sp = p;
+    MyGenericClass.spp = p;
+    MyGenericClass.sppp = p;
+}
+
 
 //// [thisTypeAccessibility.js]
 var MyClass = /** @class */ (function () {
@@ -55,6 +73,11 @@ var MyClass = /** @class */ (function () {
     MyClass.spp = 123;
     MyClass.sppp = 123;
     return MyClass;
+}());
+var MyGenericClass = /** @class */ (function () {
+    function MyGenericClass() {
+    }
+    return MyGenericClass;
 }());
 MyClass.prototype.extension1 = function (p) {
     this.p = p;
@@ -81,3 +104,11 @@ function extension3(p) {
     MyClass.sppp = p;
 }
 MyClass.prototype.extension3 = extension3;
+function extension4(p) {
+    this.p = p;
+    this.pp = p;
+    this.ppp = p;
+    MyGenericClass.sp = p;
+    MyGenericClass.spp = p;
+    MyGenericClass.sppp = p;
+}

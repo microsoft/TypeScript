@@ -45,9 +45,9 @@ var ys: any[];
 var ys = realanys.filter(Boolean)
 >ys : any[]
 >realanys.filter(Boolean) : any[]
->realanys.filter : { <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
+>realanys.filter : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
 >realanys : any[]
->filter : { <S extends any>(callbackfn: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
+>filter : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): any[]; }
 >Boolean : BooleanConstructor
 
 var foo = [{ name: 'x' }]
@@ -64,9 +64,9 @@ var foor: Array<{name: string}>
 var foor = foo.filter(x => x.name)
 >foor : { name: string; }[]
 >foo.filter(x => x.name) : { name: string; }[]
->foo.filter : { <S extends { name: string; }>(callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
+>foo.filter : { <S extends { name: string; }>(predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
 >foo : { name: string; }[]
->filter : { <S extends { name: string; }>(callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
+>filter : { <S extends { name: string; }>(predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (predicate: (value: { name: string; }, index: number, array: { name: string; }[]) => unknown, thisArg?: any): { name: string; }[]; }
 >x => x.name : (x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string
@@ -79,13 +79,13 @@ var foos: Array<boolean>
 var foos = [true, true, false, null].filter((thing): thing is boolean => thing !== null)
 >foos : boolean[]
 >[true, true, false, null].filter((thing): thing is boolean => thing !== null) : boolean[]
->[true, true, false, null].filter : { <S extends boolean>(callbackfn: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
+>[true, true, false, null].filter : { <S extends boolean>(predicate: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (predicate: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
 >[true, true, false, null] : boolean[]
 >true : true
 >true : true
 >false : false
 >null : null
->filter : { <S extends boolean>(callbackfn: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
+>filter : { <S extends boolean>(predicate: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (predicate: (value: boolean, index: number, array: boolean[]) => unknown, thisArg?: any): boolean[]; }
 >(thing): thing is boolean => thing !== null : (thing: boolean) => thing is boolean
 >thing : boolean
 >thing !== null : boolean

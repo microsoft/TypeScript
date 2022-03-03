@@ -1,25 +1,27 @@
-tests/cases/conformance/classes/mixinAccessModifiers.ts(38,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Private2'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(42,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Protected'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(46,4): error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Public'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(38,4): error TS2339: Property 'p' does not exist on type 'never'.
+  The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(42,4): error TS2339: Property 'p' does not exist on type 'never'.
+  The intersection 'Private & Protected' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(46,4): error TS2339: Property 'p' does not exist on type 'never'.
+  The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(50,4): error TS2445: Property 'p' is protected and only accessible within class 'Protected & Protected2' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(65,7): error TS2415: Class 'C1' incorrectly extends base class 'Private & Private2'.
-  Type 'C1' is not assignable to type 'Private'.
-    Property 'p' has conflicting declarations and is inaccessible in type 'C1'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(66,7): error TS2415: Class 'C2' incorrectly extends base class 'Private & Protected'.
-  Type 'C2' is not assignable to type 'Private'.
-    Property 'p' has conflicting declarations and is inaccessible in type 'C2'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(67,7): error TS2415: Class 'C3' incorrectly extends base class 'Private & Public'.
-  Type 'C3' is not assignable to type 'Private'.
-    Property 'p' has conflicting declarations and is inaccessible in type 'C3'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(65,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+  The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(66,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+  The intersection 'Private & Protected' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(67,18): error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+  The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(84,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(89,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(97,6): error TS2445: Property 'p' is protected and only accessible within class 'C4' and its subclasses.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(102,6): error TS2445: Property 's' is protected and only accessible within class 'typeof C4' and its subclasses.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(119,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(120,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(124,4): error TS2546: Property 'privateMethod' has conflicting declarations and is inaccessible in type 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>'.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(125,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' and its subclasses.
-tests/cases/conformance/classes/mixinAccessModifiers.ts(129,4): error TS2546: Property 'privateMethod' has conflicting declarations and is inaccessible in type 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>'.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(124,4): error TS2339: Property 'privateMethod' does not exist on type 'never'.
+  The intersection 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' was reduced to 'never' because property 'privateMethod' exists in multiple constituents and is private in some.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(125,4): error TS2339: Property 'protectedMethod' does not exist on type 'never'.
+  The intersection 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' was reduced to 'never' because property 'privateMethod' exists in multiple constituents and is private in some.
+tests/cases/conformance/classes/mixinAccessModifiers.ts(129,4): error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
 tests/cases/conformance/classes/mixinAccessModifiers.ts(130,4): error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.
 
 
@@ -63,19 +65,22 @@ tests/cases/conformance/classes/mixinAccessModifiers.ts(130,4): error TS2445: Pr
     function f1(x: Private & Private2) {
     	x.p;  // Error, private constituent makes property inaccessible
     	  ~
-!!! error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Private2'.
+!!! error TS2339: Property 'p' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
     }
     
     function f2(x: Private & Protected) {
     	x.p;  // Error, private constituent makes property inaccessible
     	  ~
-!!! error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Protected'.
+!!! error TS2339: Property 'p' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Private & Protected' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
     }
     
     function f3(x: Private & Public) {
     	x.p;  // Error, private constituent makes property inaccessible
     	  ~
-!!! error TS2546: Property 'p' has conflicting declarations and is inaccessible in type 'Private & Public'.
+!!! error TS2339: Property 'p' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
     }
     
     function f4(x: Protected & Protected2) {
@@ -97,20 +102,17 @@ tests/cases/conformance/classes/mixinAccessModifiers.ts(130,4): error TS2445: Pr
     // Can't derive from type with inaccessible properties
     
     class C1 extends Mix(Private, Private2) {}
-          ~~
-!!! error TS2415: Class 'C1' incorrectly extends base class 'Private & Private2'.
-!!! error TS2415:   Type 'C1' is not assignable to type 'Private'.
-!!! error TS2415:     Property 'p' has conflicting declarations and is inaccessible in type 'C1'.
+                     ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+!!! error TS2509:   The intersection 'Private & Private2' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
     class C2 extends Mix(Private, Protected) {}
-          ~~
-!!! error TS2415: Class 'C2' incorrectly extends base class 'Private & Protected'.
-!!! error TS2415:   Type 'C2' is not assignable to type 'Private'.
-!!! error TS2415:     Property 'p' has conflicting declarations and is inaccessible in type 'C2'.
+                     ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+!!! error TS2509:   The intersection 'Private & Protected' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
     class C3 extends Mix(Private, Public) {}
-          ~~
-!!! error TS2415: Class 'C3' incorrectly extends base class 'Private & Public'.
-!!! error TS2415:   Type 'C3' is not assignable to type 'Private'.
-!!! error TS2415:     Property 'p' has conflicting declarations and is inaccessible in type 'C3'.
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type 'never' is not an object type or intersection of object types with statically known members.
+!!! error TS2509:   The intersection 'Private & Public' was reduced to 'never' because property 'p' exists in multiple constituents and is private in some.
     
     class C4 extends Mix(Protected, Protected2) {
     	f(c4: C4, c5: C5, c6: C6) {
@@ -181,16 +183,18 @@ tests/cases/conformance/classes/mixinAccessModifiers.ts(130,4): error TS2445: Pr
     function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
     	x.privateMethod(); // Error, private constituent makes method inaccessible
     	  ~~~~~~~~~~~~~
-!!! error TS2546: Property 'privateMethod' has conflicting declarations and is inaccessible in type 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>'.
+!!! error TS2339: Property 'privateMethod' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' was reduced to 'never' because property 'privateMethod' exists in multiple constituents and is private in some.
     	x.protectedMethod(); // Error, protected when all constituents are protected
     	  ~~~~~~~~~~~~~~~
-!!! error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' and its subclasses.
+!!! error TS2339: Property 'protectedMethod' does not exist on type 'never'.
+!!! error TS2339:   The intersection 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>' was reduced to 'never' because property 'privateMethod' exists in multiple constituents and is private in some.
     }
     
     function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
     	x.privateMethod(); // Error, private constituent makes method inaccessible
     	  ~~~~~~~~~~~~~
-!!! error TS2546: Property 'privateMethod' has conflicting declarations and is inaccessible in type 'ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>'.
+!!! error TS2341: Property 'privateMethod' is private and only accessible within class 'ProtectedGeneric<T>'.
     	x.protectedMethod(); // Error, protected when all constituents are protected
     	  ~~~~~~~~~~~~~~~
 !!! error TS2445: Property 'protectedMethod' is protected and only accessible within class 'ProtectedGeneric<T>' and its subclasses.

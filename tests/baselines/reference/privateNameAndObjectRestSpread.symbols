@@ -1,0 +1,44 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts ===
+class C {
+>C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
+
+    #prop = 1;
+>#prop : Symbol(C.#prop, Decl(privateNameAndObjectRestSpread.ts, 0, 9))
+
+    static #propStatic = 1;
+>#propStatic : Symbol(C.#propStatic, Decl(privateNameAndObjectRestSpread.ts, 1, 14))
+
+    method(other: C) {
+>method : Symbol(C.method, Decl(privateNameAndObjectRestSpread.ts, 2, 27))
+>other : Symbol(other, Decl(privateNameAndObjectRestSpread.ts, 4, 11))
+>C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
+
+        const obj = { ...other };
+>obj : Symbol(obj, Decl(privateNameAndObjectRestSpread.ts, 5, 13))
+>other : Symbol(other, Decl(privateNameAndObjectRestSpread.ts, 4, 11))
+
+        obj.#prop;
+>obj : Symbol(obj, Decl(privateNameAndObjectRestSpread.ts, 5, 13))
+
+        const { ...rest } = other;
+>rest : Symbol(rest, Decl(privateNameAndObjectRestSpread.ts, 7, 15))
+>other : Symbol(other, Decl(privateNameAndObjectRestSpread.ts, 4, 11))
+
+        rest.#prop;
+>rest : Symbol(rest, Decl(privateNameAndObjectRestSpread.ts, 7, 15))
+
+        const statics = { ... C};
+>statics : Symbol(statics, Decl(privateNameAndObjectRestSpread.ts, 10, 13))
+>C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
+
+        statics.#propStatic
+>statics : Symbol(statics, Decl(privateNameAndObjectRestSpread.ts, 10, 13))
+
+        const { ...sRest } = C;
+>sRest : Symbol(sRest, Decl(privateNameAndObjectRestSpread.ts, 12, 15))
+>C : Symbol(C, Decl(privateNameAndObjectRestSpread.ts, 0, 0))
+
+        sRest.#propStatic;
+>sRest : Symbol(sRest, Decl(privateNameAndObjectRestSpread.ts, 12, 15))
+    }
+}

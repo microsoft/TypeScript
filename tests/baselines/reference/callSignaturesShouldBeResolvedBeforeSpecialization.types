@@ -19,7 +19,7 @@ function foo() {
 >"expects boolean instead of string" : "expects boolean instead of string"
 
     test(true); // should error - string expected
->test(true) : any
+>test(true) : void
 >test : I1<string>
 >true : true
 }

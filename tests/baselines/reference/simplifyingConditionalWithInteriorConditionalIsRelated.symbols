@@ -1,0 +1,68 @@
+=== tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts ===
+// from https://github.com/microsoft/TypeScript/issues/30706
+type ConditionalType<T> = T extends string ? string : number;
+>ConditionalType : Symbol(ConditionalType, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 0, 0))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 1, 21))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 1, 21))
+
+function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
+>ConditionalOrUndefined : Symbol(ConditionalOrUndefined, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 1, 61))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 3, 32))
+>ConditionalType : Symbol(ConditionalType, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 0, 0))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 3, 32))
+
+    return 0 as any;
+}
+
+function JustConditional<T>(): ConditionalType<T> {
+>JustConditional : Symbol(JustConditional, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 5, 1))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 7, 25))
+>ConditionalType : Symbol(ConditionalType, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 0, 0))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 7, 25))
+
+    return ConditionalOrUndefined<T>()!; // shouldn't error
+>ConditionalOrUndefined : Symbol(ConditionalOrUndefined, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 1, 61))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 7, 25))
+}
+
+
+// For comparison...
+function genericOrUndefined<T>(): T | undefined {
+>genericOrUndefined : Symbol(genericOrUndefined, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 9, 1))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 13, 28))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 13, 28))
+
+    return 0 as any;
+}
+
+function JustGeneric<T>(): T {
+>JustGeneric : Symbol(JustGeneric, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 15, 1))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 17, 21))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 17, 21))
+
+    return genericOrUndefined<T>()!; // no error
+>genericOrUndefined : Symbol(genericOrUndefined, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 9, 1))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 17, 21))
+}
+
+// Simplified example:
+
+function f<T>() {
+>f : Symbol(f, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 19, 1))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 23, 11))
+
+    type One = T extends string ? string : string;
+>One : Symbol(One, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 23, 17))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 23, 11))
+
+    type A = T extends number ? One : never;
+>A : Symbol(A, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 24, 50))
+>T : Symbol(T, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 23, 11))
+>One : Symbol(One, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 23, 17))
+
+    const x: One = null as any as A;
+>x : Symbol(x, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 26, 9))
+>One : Symbol(One, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 23, 17))
+>A : Symbol(A, Decl(simplifyingConditionalWithInteriorConditionalIsRelated.ts, 24, 50))
+}
+

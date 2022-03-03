@@ -1,0 +1,55 @@
+=== tests/cases/conformance/types/spread/spreadOverwritesProperty.ts ===
+// without strict null checks, none of these should be an error
+declare var ab: { a: number, b: number };
+>ab : { a: number; b: number; }
+>a : number
+>b : number
+
+declare var abq: { a: number, b?: number };
+>abq : { a: number; b?: number; }
+>a : number
+>b : number
+
+var unused1 = { b: 1, ...ab }
+>unused1 : { a: number; b: number; }
+>{ b: 1, ...ab } : { a: number; b: number; }
+>b : number
+>1 : 1
+>ab : { a: number; b: number; }
+
+var unused2 = { ...ab, ...ab }
+>unused2 : { a: number; b: number; }
+>{ ...ab, ...ab } : { a: number; b: number; }
+>ab : { a: number; b: number; }
+>ab : { a: number; b: number; }
+
+var unused3 = { b: 1, ...abq }
+>unused3 : { a: number; b: number; }
+>{ b: 1, ...abq } : { a: number; b: number; }
+>b : number
+>1 : 1
+>abq : { a: number; b?: number; }
+
+function g(obj: { x: number | undefined }) {
+>g : (obj: {    x: number | undefined;}) => { x: number | undefined; }
+>obj : { x: number | undefined; }
+>x : number
+
+    return { x: 1, ...obj };
+>{ x: 1, ...obj } : { x: number; }
+>x : number
+>1 : 1
+>obj : { x: number; }
+}
+function h(obj: { x: number }) {
+>h : (obj: {    x: number;}) => { x: number; }
+>obj : { x: number; }
+>x : number
+
+    return { x: 1, ...obj };
+>{ x: 1, ...obj } : { x: number; }
+>x : number
+>1 : 1
+>obj : { x: number; }
+}
+

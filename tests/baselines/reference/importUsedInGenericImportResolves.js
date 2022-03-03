@@ -14,4 +14,5 @@ export const a: import("./test1").T<typeof import("./test2").theme> = null as an
 //// [test3.js]
 "use strict";
 exports.__esModule = true;
+exports.a = void 0;
 exports.a = null;

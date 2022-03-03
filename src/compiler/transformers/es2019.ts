@@ -1,7 +1,8 @@
 /*@internal*/
 namespace ts {
     export function transformES2019(context: TransformationContext) {
-        return chainBundle(transformSourceFile);
+        const factory = context.factory;
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -25,9 +26,9 @@ namespace ts {
 
         function visitCatchClause(node: CatchClause): CatchClause {
             if (!node.variableDeclaration) {
-                return updateCatchClause(
+                return factory.updateCatchClause(
                     node,
-                    createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)),
+                    factory.createVariableDeclaration(factory.createTempVariable(/*recordTempVariable*/ undefined)),
                     visitNode(node.block, visitor, isBlock)
                 );
             }

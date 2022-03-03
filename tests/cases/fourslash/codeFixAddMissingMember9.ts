@@ -8,9 +8,9 @@
 ////    }
 ////}
 
-verify.codeFixAll({
-    fixId: "addMissingMember",
-    fixAllDescription: "Add all missing members",
+verify.codeFix({
+    index: 0,
+    description: ignoreInterpolations(ts.Diagnostics.Declare_method_0),
     newFileContent:
 `class C {
     z: boolean = true;

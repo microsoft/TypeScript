@@ -2,9 +2,9 @@
 function C() { this.x = false; };
 >C : typeof C
 >this.x = false : false
->this.x : any
->this : any
->x : any
+>this.x : number
+>this : this
+>x : number
 >false : false
 
 /** @type {number} */

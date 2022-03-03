@@ -12,13 +12,13 @@ async function * yield() {
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts ===
 async function * f4(await) {
->f4 : () => any
->await : () => AsyncGenerator<never, void, unknown>
+>f4 : (await: any) => AsyncGenerator<never, void, unknown>
+>await : any
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts ===
 async function * f5(yield) {
->f5 : () => any
->yield : () => AsyncGenerator<never, void, unknown>
+>f5 : (yield: any) => AsyncGenerator<never, void, unknown>
+>yield : any
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts ===
 async function * f6(a = await 1) {
@@ -43,23 +43,20 @@ async function * f8() {
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
 async function * f9() {
->f9 : () => AsyncGenerator<() => void, void, unknown>
+>f9 : () => AsyncGenerator<never, void, unknown>
 
     function yield() {
-> : () => any
->yield() {    } : any
->() {    } : () => void
+>yield : () => void
     }
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
 async function * f10() {
->f10 : () => AsyncGenerator<() => void, void, unknown>
+>f10 : () => AsyncGenerator<never, void, unknown>
 
     const x = function yield() {
->x : () => any
->function : () => any
->yield() {    } : any
->() {    } : () => void
+>x : () => void
+>function yield() {    } : () => void
+>yield : () => void
 
     };
 }
@@ -68,21 +65,17 @@ async function * f11() {
 >f11 : () => AsyncGenerator<never, void, unknown>
 
     function await() {
-> : () => any
->await() : any
->() : any
-> : any
+>await : () => void
     }
 }
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
 async function * f12() {
->f12 : () => AsyncGenerator<() => void, void, unknown>
+>f12 : () => AsyncGenerator<never, void, unknown>
 
     const x = function yield() {
->x : () => any
->function : () => any
->yield() {    } : any
->() {    } : () => void
+>x : () => void
+>function yield() {    } : () => void
+>yield : () => void
 
     };
 }

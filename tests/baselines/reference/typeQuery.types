@@ -1,0 +1,12 @@
+=== /a.ts ===
+export class A { }
+>A : A
+
+=== /b.ts ===
+import type { A } from './a';
+>A : A
+
+let AConstructor: typeof A;
+>AConstructor : typeof A
+>A : typeof A
+

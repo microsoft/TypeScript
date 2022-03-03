@@ -9,9 +9,9 @@ const a\u{0061} = 12;
 
 console.log(a + aa);
 >console.log(a + aa) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a + aa : number
 >a : 12
 >aa : 12

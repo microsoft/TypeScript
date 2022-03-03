@@ -1,0 +1,16 @@
+=== tests/cases/conformance/jsdoc/ex.d.ts ===
+export var config: {}
+>config : {}
+
+=== tests/cases/conformance/jsdoc/test.js ===
+/** @param {import('./ex')} a */
+function demo(a) {
+>demo : (a: typeof import("tests/cases/conformance/jsdoc/ex")) => void
+>a : typeof import("tests/cases/conformance/jsdoc/ex")
+
+    a.config
+>a.config : {}
+>a : typeof import("tests/cases/conformance/jsdoc/ex")
+>config : {}
+}
+

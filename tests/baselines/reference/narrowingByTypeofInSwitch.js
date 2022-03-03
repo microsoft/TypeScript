@@ -250,8 +250,73 @@ function narrowingNarrows(x: {} | undefined) {
     }
 }
 
+function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertNever(x); return;
+        case 'symbol': assertNever(x); return;
+        case 'object': const _: {} = assertNever(x); return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+        case 'number': assertNever(x); return;
+        default: const _y: {} = assertNever(x); return;
+    }
+}
+
+/* Template literals */
+
+function testUnionWithTempalte(x: Basic) {
+    switch (typeof x) {
+        case `number`: assertNumber(x); return;
+        case `boolean`: assertBoolean(x); return;
+        case `function`: assertFunction(x); return;
+        case `symbol`: assertSymbol(x); return;
+        case `object`: assertObject(x); return;
+        case `string`: assertString(x); return;
+        case `undefined`: assertUndefined(x); return;
+    }
+    assertNever(x);
+}
+
+function fallThroughTestWithTempalte(x: string | number | boolean | object) {
+    switch (typeof x) {
+        case `number`:
+            assertNumber(x)
+        case `string`:
+            assertStringOrNumber(x)
+            break;
+        default:
+            assertObject(x);
+        case `number`:
+        case `boolean`:
+            assertBooleanOrObject(x);
+            break;
+    }
+}
+
+function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
+    function assertKeyofS(k1: keyof S) { }
+    switch (typeof k) {
+        case `number`: assertNumber(k); assertKeyofS(k); return;
+        case `symbol`: assertSymbol(k); assertKeyofS(k); return;
+        case `string`: assertString(k); assertKeyofS(k); return;
+    }
+}
+
+/* Both string literals and template literals */
+
+function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
+    switch (typeof xy) {
+        case `function`: return [xy, 1];
+        case 'object': return [xy, 'two'];
+        case `number`: return [xy]
+    }
+}
+
 
 //// [narrowingByTypeofInSwitch.js]
+"use strict";
 function assertNever(x) {
     return x;
 }
@@ -583,5 +648,103 @@ function narrowingNarrows(x) {
         default:
             var _y = x;
             return;
+    }
+}
+function narrowingNarrows2(x) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x);
+            return;
+        case 'boolean':
+            assertBoolean(x);
+            return;
+        case 'function':
+            assertNever(x);
+            return;
+        case 'symbol':
+            assertNever(x);
+            return;
+        case 'object':
+            var _ = assertNever(x);
+            return;
+        case 'string':
+            assertString(x);
+            return;
+        case 'undefined':
+            assertUndefined(x);
+            return;
+        case 'number':
+            assertNever(x);
+            return;
+        default:
+            var _y = assertNever(x);
+            return;
+    }
+}
+/* Template literals */
+function testUnionWithTempalte(x) {
+    switch (typeof x) {
+        case "number":
+            assertNumber(x);
+            return;
+        case "boolean":
+            assertBoolean(x);
+            return;
+        case "function":
+            assertFunction(x);
+            return;
+        case "symbol":
+            assertSymbol(x);
+            return;
+        case "object":
+            assertObject(x);
+            return;
+        case "string":
+            assertString(x);
+            return;
+        case "undefined":
+            assertUndefined(x);
+            return;
+    }
+    assertNever(x);
+}
+function fallThroughTestWithTempalte(x) {
+    switch (typeof x) {
+        case "number":
+            assertNumber(x);
+        case "string":
+            assertStringOrNumber(x);
+            break;
+        default:
+            assertObject(x);
+        case "number":
+        case "boolean":
+            assertBooleanOrObject(x);
+            break;
+    }
+}
+function keyofNarrowingWithTemplate(k) {
+    function assertKeyofS(k1) { }
+    switch (typeof k) {
+        case "number":
+            assertNumber(k);
+            assertKeyofS(k);
+            return;
+        case "symbol":
+            assertSymbol(k);
+            assertKeyofS(k);
+            return;
+        case "string":
+            assertString(k);
+            assertKeyofS(k);
+            return;
+    }
+}
+/* Both string literals and template literals */
+function multipleGenericFuseWithBoth(xy) {
+    switch (typeof xy) {
+        case "function": return [xy, 1];
+        case 'object': return [xy, 'two'];
+        case "number": return [xy];
     }
 }

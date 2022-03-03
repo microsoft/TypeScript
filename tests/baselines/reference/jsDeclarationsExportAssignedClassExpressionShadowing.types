@@ -1,0 +1,43 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+class A {
+>A : A
+
+    member = new Q();
+>member : Q
+>new Q() : Q
+>Q : typeof Q
+}
+class Q {
+>Q : Q
+
+    x = 42;
+>x : number
+>42 : 42
+}
+module.exports = class Q {
+>module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>class Q {    constructor() {        this.x = new A();    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>Q : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+
+    constructor() {
+        this.x = new A();
+>this.x = new A() : A
+>this.x : any
+>this : this
+>x : any
+>new A() : A
+>A : typeof A
+    }
+}
+module.exports.Another = Q;
+>module.exports.Another = Q : typeof Q
+>module.exports.Another : typeof Q
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>Another : typeof Q
+>Q : typeof Q
+

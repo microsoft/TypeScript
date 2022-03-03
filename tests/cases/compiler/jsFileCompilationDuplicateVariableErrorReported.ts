@@ -5,4 +5,4 @@
 var x = "hello";
 
 // @filename: a.ts
-var x = 10; // Error reported so no declaration file generated?
+var x = 10; // Error reported

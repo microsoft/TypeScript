@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 function SFC1(prop: { x: number }) {
->SFC1 : (prop: { x: number; }) => JSX.Element
+>SFC1 : (prop: {    x: number;}) => JSX.Element
 >prop : { x: number; }
 >x : number
 
@@ -15,7 +15,7 @@ function SFC1(prop: { x: number }) {
 };
 
 function SFC2(prop: { x: boolean }) {
->SFC2 : (prop: { x: boolean; }) => JSX.Element
+>SFC2 : (prop: {    x: boolean;}) => JSX.Element
 >prop : { x: boolean; }
 >x : boolean
 

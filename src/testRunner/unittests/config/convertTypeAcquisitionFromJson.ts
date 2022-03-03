@@ -67,7 +67,7 @@ namespace ts {
                         include: ["0.d.ts", "1.d.ts"],
                         exclude: ["0.js", "1.js"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 }
             );
         });
@@ -90,7 +90,7 @@ namespace ts {
                         include: ["0.d.ts", "1.d.ts"],
                         exclude: ["0.js", "1.js"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -111,8 +111,8 @@ namespace ts {
                     },
                     errors: [
                         {
-                            category: Diagnostics.Unknown_type_acquisition_option_0.category,
-                            code: Diagnostics.Unknown_type_acquisition_option_0.code,
+                            category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                            code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                             file: undefined,
                             start: 0,
                             length: 0,
@@ -131,7 +131,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -150,7 +150,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -172,7 +172,7 @@ namespace ts {
                         include: ["0.d.ts"],
                         exclude: ["0.js"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -185,7 +185,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -206,8 +206,8 @@ namespace ts {
                     },
                     errors: [
                         {
-                            category: Diagnostics.Unknown_type_acquisition_option_0.category,
-                            code: Diagnostics.Unknown_type_acquisition_option_0.code,
+                            category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                            code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                             file: undefined,
                             start: 0,
                             length: 0,
@@ -232,7 +232,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
     });

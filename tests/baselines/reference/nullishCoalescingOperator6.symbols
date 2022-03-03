@@ -1,0 +1,7 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator6.ts ===
+function foo(foo: string, bar = foo ?? "bar") { }
+>foo : Symbol(foo, Decl(nullishCoalescingOperator6.ts, 0, 0))
+>foo : Symbol(foo, Decl(nullishCoalescingOperator6.ts, 0, 13))
+>bar : Symbol(bar, Decl(nullishCoalescingOperator6.ts, 0, 25))
+>foo : Symbol(foo, Decl(nullishCoalescingOperator6.ts, 0, 13))
+

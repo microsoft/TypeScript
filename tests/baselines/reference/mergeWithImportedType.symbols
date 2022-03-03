@@ -7,7 +7,6 @@ export enum E {X}
 import {E} from "./f1";
 >E : Symbol(E, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))
 
-// partial revert of https://github.com/Microsoft/TypeScript/pull/7583 to prevent breaking changes
 export type E = E;
 >E : Symbol(E, Decl(f2.ts, 0, 23))
 >E : Symbol(E, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))

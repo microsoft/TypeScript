@@ -1,7 +1,7 @@
 === tests/cases/conformance/es2019/globalThisPropertyAssignment.js ===
 this.x = 1
 >this.x : Symbol(x, Decl(globalThisPropertyAssignment.js, 0, 0))
->this : Symbol(globalThis)
+>this : Symbol(globalThis, Decl(globalThisPropertyAssignment.js, 3, 12))
 >x : Symbol(x, Decl(globalThisPropertyAssignment.js, 0, 0))
 
 var y = 2
@@ -14,6 +14,6 @@ window.z = 3
 // should work in JS (even though it's a secondary declaration)
 globalThis.alpha = 4
 >globalThis.alpha : Symbol(alpha, Decl(globalThisPropertyAssignment.js, 3, 12))
->globalThis : Symbol(globalThis)
+>globalThis : Symbol(globalThis, Decl(globalThisPropertyAssignment.js, 3, 12))
 >alpha : Symbol(alpha, Decl(globalThisPropertyAssignment.js, 3, 12))
 

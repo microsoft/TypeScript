@@ -5,9 +5,9 @@ var a = 0;
 
 console.log(a);
 >console.log(a) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a : number
 
 === tests/cases/compiler/b.ts ===
@@ -17,8 +17,8 @@ var b = 0;
 
 console.log(b);
 >console.log(b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >b : number
 

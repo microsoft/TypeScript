@@ -1,0 +1,71 @@
+=== /a.ts ===
+enum SyntaxKind {
+>SyntaxKind : SyntaxKind
+
+  ImportClause,
+>ImportClause : SyntaxKind.ImportClause
+
+  ExportDeclaration
+>ExportDeclaration : SyntaxKind.ExportDeclaration
+}
+
+const enum SymbolFlags {
+>SymbolFlags : SymbolFlags
+
+  Type = "Type",
+>Type : SymbolFlags.Type
+>"Type" : "Type"
+
+  Value = "Value"
+>Value : SymbolFlags.Value
+>"Value" : "Value"
+}
+
+export type { SyntaxKind };
+>SyntaxKind : SyntaxKind
+
+export { SymbolFlags };
+>SymbolFlags : typeof SymbolFlags
+
+=== /b.ts ===
+import type { SyntaxKind, SymbolFlags } from './a';
+>SyntaxKind : SyntaxKind
+>SymbolFlags : SymbolFlags
+
+SyntaxKind.ImportClause;
+>SyntaxKind.ImportClause : SyntaxKind.ImportClause
+>SyntaxKind : typeof SyntaxKind
+>ImportClause : SyntaxKind.ImportClause
+
+SymbolFlags.Type;
+>SymbolFlags.Type : SymbolFlags.Type
+>SymbolFlags : typeof SymbolFlags
+>Type : SymbolFlags.Type
+
+let kind: SyntaxKind.ImportClause;
+>kind : SyntaxKind.ImportClause
+>SyntaxKind : any
+
+let flags: SymbolFlags;
+>flags : SymbolFlags
+
+type TypeFlag = SymbolFlags.Type;
+>TypeFlag : SymbolFlags.Type
+>SymbolFlags : any
+
+export type { TypeFlag };
+>TypeFlag : SymbolFlags.Type
+
+=== /c.ts ===
+import { SymbolFlags } from './a';
+>SymbolFlags : typeof SymbolFlags
+
+import type { TypeFlag } from './b';
+>TypeFlag : SymbolFlags.Type
+
+const flags: TypeFlag = SymbolFlags.Type;
+>flags : SymbolFlags.Type
+>SymbolFlags.Type : SymbolFlags.Type
+>SymbolFlags : typeof SymbolFlags
+>Type : SymbolFlags.Type
+

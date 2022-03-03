@@ -1,0 +1,20 @@
+tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts(4,5): error TS7022: '["#bar"]' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts(6,14): error TS2339: Property '#f' does not exist on type 'A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameAndIndexSignature.ts (2 errors) ====
+    class A {
+        [k: string]: any;
+        #foo = 3;
+        ["#bar"] = this["#bar"]   // Error (private identifiers should not prevent circularity checking for computeds)
+        ~~~~~~~~
+!!! error TS7022: '["#bar"]' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        constructor(message: string) {
+            this.#f = 3           // Error (index signatures do not implicitly declare private names)
+                 ~~
+!!! error TS2339: Property '#f' does not exist on type 'A'.
+            this["#foo"] = 3;     // Okay (type has index signature and "#foo" does not collide with private identifier #foo)
+    
+        }
+    }
+    

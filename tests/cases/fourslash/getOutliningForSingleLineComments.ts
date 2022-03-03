@@ -72,6 +72,18 @@
 ////// One single line comment should not be collapsed
 ////class WithOneSingleLineComment[| {
 ////}|]
+////
+////function Foo()[| {
+////   [|// comment 1
+////     // comment 2|]
+////    this.method = function (param)[| {
+////    }|]
+////
+////   [|// comment 1
+////     // comment 2|]
+////    function method(param)[| {
+////    }|]
+////}|]
 
 verify.outliningSpansInCurrentFile(test.ranges());
 

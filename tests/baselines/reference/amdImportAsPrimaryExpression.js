@@ -16,6 +16,7 @@ if(foo.E1.A === 0){
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.E1 = void 0;
     var E1;
     (function (E1) {
         E1[E1["A"] = 0] = "A";

@@ -110,3 +110,40 @@ class Test5<T> {
     }
 }
 
+class Test6 {
+>Test6 : Symbol(Test6, Decl(unusedPrivateMembers.ts, 46, 1))
+
+    private get a() {
+>a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+
+        return 0;
+    }
+    private set a(v) {
+>a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+>v : Symbol(v, Decl(unusedPrivateMembers.ts, 52, 18))
+
+        v;
+>v : Symbol(v, Decl(unusedPrivateMembers.ts, 52, 18))
+    }
+    private b = 0;
+>b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
+
+    public test() {
+>test : Symbol(Test6.test, Decl(unusedPrivateMembers.ts, 55, 18))
+
+        var x = new Test6();
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+>Test6 : Symbol(Test6, Decl(unusedPrivateMembers.ts, 46, 1))
+
+        x.a++;
+>x.a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+>a : Symbol(Test6.a, Decl(unusedPrivateMembers.ts, 48, 13), Decl(unusedPrivateMembers.ts, 51, 5))
+
+        x.b++;
+>x.b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
+>x : Symbol(x, Decl(unusedPrivateMembers.ts, 58, 11))
+>b : Symbol(Test6.b, Decl(unusedPrivateMembers.ts, 54, 5))
+    }
+}
+

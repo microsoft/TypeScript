@@ -14,6 +14,7 @@ class NavigateAction {
 //// [externalModuleQualification.js]
 "use strict";
 exports.__esModule = true;
+exports.DiffEditor = exports.ID = void 0;
 exports.ID = "test";
 var DiffEditor = /** @class */ (function () {
     function DiffEditor(id) {

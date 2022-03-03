@@ -5,7 +5,6 @@ class c {
 
 === tests/cases/compiler/b.ts ===
 /// <reference path="c.js"/>
-// error on above reference when emitting declarations
 function foo() {
 >foo : Symbol(foo, Decl(b.ts, 0, 0))
 }
@@ -14,3 +13,4 @@ function foo() {
 function bar() {
 >bar : Symbol(bar, Decl(c.js, 0, 0))
 }
+

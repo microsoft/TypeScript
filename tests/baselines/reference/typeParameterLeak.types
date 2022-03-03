@@ -1,0 +1,50 @@
+=== tests/cases/compiler/typeParameterLeak.ts ===
+// Repro from #35655
+
+interface Box<T> { data: T }
+>data : T
+
+type BoxTypes = Box<{ x: string }> | Box<{ y: string }>;
+>BoxTypes : BoxTypes
+>x : string
+>y : string
+
+type BoxFactoryFactory<TBox> = TBox extends Box<infer T> ? {
+>BoxFactoryFactory : BoxFactoryFactory<TBox>
+
+  (arg: T): BoxFactory<TBox> | undefined
+>arg : T
+
+} : never;
+
+interface BoxFactory<A> {
+  getBox(): A,
+>getBox : () => A
+}
+
+declare const f: BoxFactoryFactory<BoxTypes>;
+>f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
+
+const b = f({ x: "", y: "" })?.getBox();
+>b : Box<{ x: string; }> | Box<{ y: string; }> | undefined
+>f({ x: "", y: "" })?.getBox() : Box<{ x: string; }> | Box<{ y: string; }> | undefined
+>f({ x: "", y: "" })?.getBox : (() => Box<{ y: string; }>) | (() => Box<{ x: string; }>) | undefined
+>f({ x: "", y: "" }) : BoxFactory<Box<{ x: string; }>> | BoxFactory<Box<{ y: string; }>> | undefined
+>f : ((arg: { x: string; }) => BoxFactory<Box<{ x: string; }>> | undefined) | ((arg: { y: string; }) => BoxFactory<Box<{ y: string; }>> | undefined)
+>{ x: "", y: "" } : { x: string; y: string; }
+>x : string
+>"" : ""
+>y : string
+>"" : ""
+>getBox : (() => Box<{ y: string; }>) | (() => Box<{ x: string; }>) | undefined
+
+if (b) {
+>b : Box<{ x: string; }> | Box<{ y: string; }> | undefined
+
+  const x = b.data;
+>x : { x: string; } | { y: string; }
+>b.data : { x: string; } | { y: string; }
+>b : Box<{ x: string; }> | Box<{ y: string; }>
+>data : { x: string; } | { y: string; }
+}
+

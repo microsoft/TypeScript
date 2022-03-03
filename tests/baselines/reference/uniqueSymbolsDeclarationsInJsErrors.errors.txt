@@ -1,0 +1,24 @@
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js(5,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js(14,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+
+
+==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js (2 errors) ====
+    class C {
+        /**
+         * @type {unique symbol}
+         */
+        static readwriteStaticType;
+               ~~~~~~~~~~~~~~~~~~~
+!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+        /**
+         * @type {unique symbol}
+         * @readonly
+         */
+        static readonlyType;
+        /**
+         * @type {unique symbol}
+         */
+        static readwriteType;
+               ~~~~~~~~~~~~~
+!!! error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
+    }

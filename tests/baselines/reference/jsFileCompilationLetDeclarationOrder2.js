@@ -17,3 +17,4 @@ b = 30;
 
 //// [out.d.ts]
 declare let b: number;
+declare let a: number;

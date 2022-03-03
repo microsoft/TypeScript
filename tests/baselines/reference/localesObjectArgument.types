@@ -1,0 +1,118 @@
+=== tests/cases/conformance/es2020/localesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Intl.Locale
+>new Intl.Locale("en-US") : Intl.Locale
+>Intl.Locale : new (tag?: string, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag?: string, options?: Intl.LocaleOptions) => Intl.Locale
+>"en-US" : "en-US"
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Intl.Locale
+>new Intl.Locale("de-DE") : Intl.Locale
+>Intl.Locale : new (tag?: string, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag?: string, options?: Intl.LocaleOptions) => Intl.Locale
+>"de-DE" : "de-DE"
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Intl.Locale
+>new Intl.Locale("ja-JP") : Intl.Locale
+>Intl.Locale : new (tag?: string, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag?: string, options?: Intl.LocaleOptions) => Intl.Locale
+>"ja-JP" : "ja-JP"
+
+const now = new Date();
+>now : Date
+>new Date() : Date
+>Date : DateConstructor
+
+const num = 1000;
+>num : 1000
+>1000 : 1000
+
+const bigint = 123456789123456789n;
+>bigint : 123456789123456789n
+>123456789123456789n : 123456789123456789n
+
+now.toLocaleString(enUS);
+>now.toLocaleString(enUS) : string
+>now.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>now : Date
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>enUS : Intl.Locale
+
+now.toLocaleDateString(enUS);
+>now.toLocaleDateString(enUS) : string
+>now.toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>now : Date
+>toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>enUS : Intl.Locale
+
+now.toLocaleTimeString(enUS);
+>now.toLocaleTimeString(enUS) : string
+>now.toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>now : Date
+>toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>enUS : Intl.Locale
+
+now.toLocaleString([deDE, jaJP]);
+>now.toLocaleString([deDE, jaJP]) : string
+>now.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>now : Date
+>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+
+now.toLocaleDateString([deDE, jaJP]);
+>now.toLocaleDateString([deDE, jaJP]) : string
+>now.toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>now : Date
+>toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+
+now.toLocaleTimeString([deDE, jaJP]);
+>now.toLocaleTimeString([deDE, jaJP]) : string
+>now.toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>now : Date
+>toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+
+num.toLocaleString(enUS);
+>num.toLocaleString(enUS) : string
+>num.toLocaleString : { (locales?: string | string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>num : 1000
+>toLocaleString : { (locales?: string | string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>enUS : Intl.Locale
+
+num.toLocaleString([deDE, jaJP]);
+>num.toLocaleString([deDE, jaJP]) : string
+>num.toLocaleString : { (locales?: string | string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>num : 1000
+>toLocaleString : { (locales?: string | string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+
+bigint.toLocaleString(enUS);
+>bigint.toLocaleString(enUS) : string
+>bigint.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigint : 123456789123456789n
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>enUS : Intl.Locale
+
+bigint.toLocaleString([deDE, jaJP]);
+>bigint.toLocaleString([deDE, jaJP]) : string
+>bigint.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigint : 123456789123456789n
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+

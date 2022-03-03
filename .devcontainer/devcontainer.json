@@ -1,0 +1,22 @@
+{
+    "name": "Node.js",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "VARIANT": "14"
+        }
+    },
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+            "bash": {
+                "path": "/bin/bash",
+                "icon": "terminal-bash",
+            },
+        },
+    },
+    "extensions": [
+        "dbaeumer.vscode-eslint"
+    ],
+    "remoteUser": "node"
+}

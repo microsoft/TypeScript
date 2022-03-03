@@ -5,9 +5,9 @@ tests/cases/compiler/overload1.ts(32,5): error TS2554: Expected 1-2 arguments, b
 tests/cases/compiler/overload1.ts(33,1): error TS2322: Type 'C' is not assignable to type 'string'.
 tests/cases/compiler/overload1.ts(34,3): error TS2769: No overload matches this call.
   Overload 1 of 2, '(s1: string, s2: number): string', gave the following error.
-    Argument of type '2' is not assignable to parameter of type 'string'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
   Overload 2 of 2, '(s1: number, s2: string): number', gave the following error.
-    Argument of type '2' is not assignable to parameter of type 'string'.
+    Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/overload1.ts (6 errors) ====
@@ -59,9 +59,9 @@ tests/cases/compiler/overload1.ts(34,3): error TS2769: No overload matches this 
       ~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(s1: string, s2: number): string', gave the following error.
-!!! error TS2769:     Argument of type '2' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
 !!! error TS2769:   Overload 2 of 2, '(s1: number, s2: string): number', gave the following error.
-!!! error TS2769:     Argument of type '2' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
     z=x.h("hello",0); // good
     
     var v=x.g;

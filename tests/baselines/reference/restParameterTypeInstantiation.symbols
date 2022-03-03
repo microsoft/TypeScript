@@ -1,0 +1,35 @@
+=== tests/cases/compiler/restParameterTypeInstantiation.ts ===
+// Repro from #33823
+
+interface TestGeneric<TG> {
+>TestGeneric : Symbol(TestGeneric, Decl(restParameterTypeInstantiation.ts, 0, 0))
+>TG : Symbol(TG, Decl(restParameterTypeInstantiation.ts, 2, 22))
+
+  f: string
+>f : Symbol(TestGeneric.f, Decl(restParameterTypeInstantiation.ts, 2, 27))
+
+  g: TG
+>g : Symbol(TestGeneric.g, Decl(restParameterTypeInstantiation.ts, 3, 11))
+>TG : Symbol(TG, Decl(restParameterTypeInstantiation.ts, 2, 22))
+}
+
+const removeF = <TX>({ f, ...rest }: TestGeneric<TX>) => {
+>removeF : Symbol(removeF, Decl(restParameterTypeInstantiation.ts, 7, 5))
+>TX : Symbol(TX, Decl(restParameterTypeInstantiation.ts, 7, 17))
+>f : Symbol(f, Decl(restParameterTypeInstantiation.ts, 7, 22))
+>rest : Symbol(rest, Decl(restParameterTypeInstantiation.ts, 7, 25))
+>TestGeneric : Symbol(TestGeneric, Decl(restParameterTypeInstantiation.ts, 0, 0))
+>TX : Symbol(TX, Decl(restParameterTypeInstantiation.ts, 7, 17))
+
+  return rest
+>rest : Symbol(rest, Decl(restParameterTypeInstantiation.ts, 7, 25))
+}
+
+const result: number = removeF<number>({ f: '', g: 3 }).g
+>result : Symbol(result, Decl(restParameterTypeInstantiation.ts, 11, 5))
+>removeF<number>({ f: '', g: 3 }).g : Symbol(TestGeneric.g, Decl(restParameterTypeInstantiation.ts, 3, 11))
+>removeF : Symbol(removeF, Decl(restParameterTypeInstantiation.ts, 7, 5))
+>f : Symbol(f, Decl(restParameterTypeInstantiation.ts, 11, 40))
+>g : Symbol(g, Decl(restParameterTypeInstantiation.ts, 11, 47))
+>g : Symbol(TestGeneric.g, Decl(restParameterTypeInstantiation.ts, 3, 11))
+

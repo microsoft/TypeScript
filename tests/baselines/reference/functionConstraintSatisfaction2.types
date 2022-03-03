@@ -7,18 +7,18 @@ function foo<T extends Function>(x: T): T { return x; }
 >x : T
 
 foo(1);
->foo(1) : any
+>foo(1) : Function
 >foo : <T extends Function>(x: T) => T
 >1 : 1
 
 foo(() => { }, 1);
->foo(() => { }, 1) : any
+>foo(() => { }, 1) : () => void
 >foo : <T extends Function>(x: T) => T
 >() => { } : () => void
 >1 : 1
 
 foo(1, () => { });
->foo(1, () => { }) : any
+>foo(1, () => { }) : Function
 >foo : <T extends Function>(x: T) => T
 >1 : 1
 >() => { } : () => void
@@ -52,29 +52,29 @@ var b2: { new <T>(x: T): T };
 >x : T
 
 var r = foo2(new Function());
->r : any
->foo2(new Function()) : any
+>r : (x: string) => string
+>foo2(new Function()) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >new Function() : Function
 >Function : FunctionConstructor
 
 var r2 = foo2((x: string[]) => x);
->r2 : any
->foo2((x: string[]) => x) : any
+>r2 : (x: string) => string
+>foo2((x: string[]) => x) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >(x: string[]) => x : (x: string[]) => string[]
 >x : string[]
 >x : string[]
 
 var r6 = foo2(C);
->r6 : any
->foo2(C) : any
+>r6 : (x: string) => string
+>foo2(C) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >C : typeof C
 
 var r7 = foo2(b);
->r7 : any
->foo2(b) : any
+>r7 : (x: string) => string
+>foo2(b) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >b : new (x: string) => string
 
@@ -87,8 +87,8 @@ var r8 = foo2(<U>(x: U) => x); // no error expected
 >x : U
 
 var r11 = foo2(<U, V>(x: U, y: V) => x);
->r11 : any
->foo2(<U, V>(x: U, y: V) => x) : any
+>r11 : (x: string) => string
+>foo2(<U, V>(x: U, y: V) => x) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
 >x : U
@@ -96,14 +96,14 @@ var r11 = foo2(<U, V>(x: U, y: V) => x);
 >x : U
 
 var r13 = foo2(C2);
->r13 : any
->foo2(C2) : any
+>r13 : (x: string) => string
+>foo2(C2) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >C2 : typeof C2
 
 var r14 = foo2(b2);
->r14 : any
->foo2(b2) : any
+>r14 : (x: string) => string
+>foo2(b2) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >b2 : new <T>(x: T) => T
 
@@ -114,8 +114,8 @@ var f2: F2;
 >f2 : F2
 
 var r16 = foo2(f2);
->r16 : any
->foo2(f2) : any
+>r16 : (x: string) => string
+>foo2(f2) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >f2 : F2
 
@@ -125,12 +125,12 @@ function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 >y : U
 
     foo2(x);
->foo2(x) : any
+>foo2(x) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >x : T
 
     foo2(y);
->foo2(y) : any
+>foo2(y) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >y : U
 }

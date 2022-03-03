@@ -19,7 +19,7 @@ verify.codeFix({
         "/dir/tsconfig.json":
 `{
     "compilerOptions": {
-        "experimentalDecorators": true,
+        "experimentalDecorators": true
     }
 }`,
     },

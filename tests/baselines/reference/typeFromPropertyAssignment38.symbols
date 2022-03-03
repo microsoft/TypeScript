@@ -1,0 +1,15 @@
+=== tests/cases/conformance/salsa/typeFromPropertyAssignment38.ts ===
+function F() {}
+>F : Symbol(F, Decl(typeFromPropertyAssignment38.ts, 0, 0), Decl(typeFromPropertyAssignment38.ts, 0, 15))
+
+F["prop"] = 3;
+>F : Symbol(F, Decl(typeFromPropertyAssignment38.ts, 0, 0), Decl(typeFromPropertyAssignment38.ts, 0, 15))
+>"prop" : Symbol(F["prop"], Decl(typeFromPropertyAssignment38.ts, 0, 15))
+
+const f = function () {};
+>f : Symbol(f, Decl(typeFromPropertyAssignment38.ts, 3, 5), Decl(typeFromPropertyAssignment38.ts, 3, 25))
+
+f["prop"] = 3;
+>f : Symbol(f, Decl(typeFromPropertyAssignment38.ts, 3, 5), Decl(typeFromPropertyAssignment38.ts, 3, 25))
+>"prop" : Symbol(f["prop"], Decl(typeFromPropertyAssignment38.ts, 3, 25))
+

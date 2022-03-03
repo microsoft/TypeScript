@@ -1,0 +1,11 @@
+tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolutionNone.ts(3,23): error TS2792: Cannot find module 'non-existent-module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+
+==== tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolutionNone.ts (1 errors) ====
+    // This would be classed as moduleResolutionKind: Classic
+    
+    import { thing } from "non-existent-module";
+                          ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2792: Cannot find module 'non-existent-module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    thing()
+    

@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/declarations/utils/index.js ===
+// issue arises here on compilation
+const errors = require("./errors");
+>errors : Symbol(errors, Decl(index.js, 1, 5))
+>require : Symbol(require)
+>"./errors" : Symbol(errors, Decl(errors.js, 0, 0))
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 1, 35))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+
+    errors
+>errors : Symbol(errors, Decl(index.js, 3, 18))
+
+};
+=== tests/cases/conformance/jsdoc/declarations/utils/errors.js ===
+class FancyError extends Error {
+>FancyError : Symbol(FancyError, Decl(errors.js, 0, 0))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    constructor(status) {
+>status : Symbol(status, Decl(errors.js, 1, 16))
+
+        super(`error with status ${status}`);
+>super : Symbol(ErrorConstructor, Decl(lib.es5.d.ts, --, --))
+>status : Symbol(status, Decl(errors.js, 1, 16))
+    }
+}
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(errors.js, 0, 0))
+>module : Symbol(module, Decl(errors.js, 4, 1))
+>exports : Symbol(module.exports, Decl(errors.js, 0, 0))
+
+    FancyError
+>FancyError : Symbol(FancyError, Decl(errors.js, 6, 18))
+
+};
+

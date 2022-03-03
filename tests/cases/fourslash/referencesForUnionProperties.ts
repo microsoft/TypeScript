@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface One {
-////    common: { [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}a|]: number;|] };
+////    common: { /*one*/a: number; };
 ////}
 ////
 ////interface Base {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 2 |}a|]: string;|]
+////    /*base*/a: string;
 ////    b: string;
 ////}
 ////
 ////interface HasAOrB extends Base {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 4 |}a|]: string;|]
+////    a: string;
 ////    b: string;
 ////}
 ////
@@ -20,21 +20,6 @@
 ////
 ////var x : One | Two;
 ////
-////x.common.[|a|];
+////x.common./*x*/a;
 
-const [oneDef, one, baseDef, base, hasAOrBDef, hasAOrB, x] = test.ranges();
-verify.referenceGroups(one, [
-    { definition: "(property) a: number", ranges: [one] },
-    { definition: "(property) a: string | number", ranges: [x] },
-]);
-verify.referenceGroups([base, hasAOrB], [
-    { definition: "(property) Base.a: string", ranges: [base] },
-    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
-    { definition: "(property) a: string | number", ranges: [x] },
-]);
-verify.referenceGroups(x, [
-    { definition: "(property) a: number", ranges: [one] },
-    { definition: "(property) Base.a: string", ranges: [base] },
-    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
-    { definition: "(property) a: string | number", ranges: [x] },
-]);
+verify.baselineFindAllReferences('one', 'base', 'x')

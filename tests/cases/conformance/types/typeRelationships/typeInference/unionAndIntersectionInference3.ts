@@ -54,3 +54,37 @@ let y1 = foo1(sx);  // string
 
 let x2 = foo2(sa);  // unknown
 let y2 = foo2(sx);  // { extra: number }
+
+// Repro from #33490
+
+declare class Component<P> { props: P }
+
+export type ComponentClass<P> = new (props: P) => Component<P>;
+export type FunctionComponent<P> = (props: P) => null;
+
+export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
+
+export interface RouteComponentProps { route: string }
+
+declare function withRouter<
+  P extends RouteComponentProps,
+  C extends ComponentType<P>
+>(
+  component: C & ComponentType<P>
+): ComponentClass<Omit<P, keyof RouteComponentProps>>;
+
+interface Props extends RouteComponentProps { username: string }
+
+declare const MyComponent: ComponentType<Props>;
+
+withRouter(MyComponent);
+
+// Repro from #33490
+
+type AB<T> = { a: T } | { b: T };
+
+// T & AB<U> normalizes to T & { a: U } | T & { b: U } below
+declare function foo<T, U>(obj: T & AB<U>): [T, U];
+declare let ab: AB<string>;
+
+let z = foo(ab);  // [AB<string>, string]

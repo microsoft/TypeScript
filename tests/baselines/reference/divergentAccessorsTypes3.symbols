@@ -1,0 +1,116 @@
+=== tests/cases/compiler/divergentAccessorsTypes3.ts ===
+class One {
+>One : Symbol(One, Decl(divergentAccessorsTypes3.ts, 0, 0))
+
+  get prop1(): string { return ""; }
+>prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes3.ts, 0, 11), Decl(divergentAccessorsTypes3.ts, 1, 36))
+
+  set prop1(s: string | number) { }
+>prop1 : Symbol(One.prop1, Decl(divergentAccessorsTypes3.ts, 0, 11), Decl(divergentAccessorsTypes3.ts, 1, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 2, 12))
+
+  get prop2(): string { return ""; }
+>prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes3.ts, 2, 35), Decl(divergentAccessorsTypes3.ts, 4, 36))
+
+  set prop2(s: string | number) { }
+>prop2 : Symbol(One.prop2, Decl(divergentAccessorsTypes3.ts, 2, 35), Decl(divergentAccessorsTypes3.ts, 4, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 5, 12))
+
+  prop3: number;
+>prop3 : Symbol(One.prop3, Decl(divergentAccessorsTypes3.ts, 5, 35))
+
+  get prop4(): string { return ""; }
+>prop4 : Symbol(One.prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36))
+
+  set prop4(s: string | number) { }
+>prop4 : Symbol(One.prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 10, 12))
+}
+
+class Two {
+>Two : Symbol(Two, Decl(divergentAccessorsTypes3.ts, 11, 1))
+
+  get prop1(): string { return ""; }
+>prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes3.ts, 13, 11), Decl(divergentAccessorsTypes3.ts, 14, 36))
+
+  set prop1(s: string | number) { }
+>prop1 : Symbol(Two.prop1, Decl(divergentAccessorsTypes3.ts, 13, 11), Decl(divergentAccessorsTypes3.ts, 14, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 15, 12))
+
+  get prop2(): string { return ""; }
+>prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes3.ts, 15, 35), Decl(divergentAccessorsTypes3.ts, 17, 36))
+
+  set prop2(s: string) { }
+>prop2 : Symbol(Two.prop2, Decl(divergentAccessorsTypes3.ts, 15, 35), Decl(divergentAccessorsTypes3.ts, 17, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 18, 12))
+
+  get prop3(): string { return ""; }
+>prop3 : Symbol(Two.prop3, Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+
+  set prop3(s: string | boolean) { }
+>prop3 : Symbol(Two.prop3, Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 21, 12))
+
+  get prop4(): string { return ""; }
+>prop4 : Symbol(Two.prop4, Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+
+  set prop4(s: string | boolean) { }
+>prop4 : Symbol(Two.prop4, Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+>s : Symbol(s, Decl(divergentAccessorsTypes3.ts, 24, 12))
+}
+
+declare const u1: One|Two;
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>One : Symbol(One, Decl(divergentAccessorsTypes3.ts, 0, 0))
+>Two : Symbol(Two, Decl(divergentAccessorsTypes3.ts, 11, 1))
+
+u1.prop1 = 42;
+>u1.prop1 : Symbol(prop1, Decl(divergentAccessorsTypes3.ts, 0, 11), Decl(divergentAccessorsTypes3.ts, 1, 36), Decl(divergentAccessorsTypes3.ts, 13, 11), Decl(divergentAccessorsTypes3.ts, 14, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes3.ts, 0, 11), Decl(divergentAccessorsTypes3.ts, 1, 36), Decl(divergentAccessorsTypes3.ts, 13, 11), Decl(divergentAccessorsTypes3.ts, 14, 36))
+
+u1.prop1 = "hello";
+>u1.prop1 : Symbol(prop1, Decl(divergentAccessorsTypes3.ts, 0, 11), Decl(divergentAccessorsTypes3.ts, 1, 36), Decl(divergentAccessorsTypes3.ts, 13, 11), Decl(divergentAccessorsTypes3.ts, 14, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop1 : Symbol(prop1, Decl(divergentAccessorsTypes3.ts, 0, 11), Decl(divergentAccessorsTypes3.ts, 1, 36), Decl(divergentAccessorsTypes3.ts, 13, 11), Decl(divergentAccessorsTypes3.ts, 14, 36))
+
+u1.prop2 = 42;
+>u1.prop2 : Symbol(prop2, Decl(divergentAccessorsTypes3.ts, 2, 35), Decl(divergentAccessorsTypes3.ts, 4, 36), Decl(divergentAccessorsTypes3.ts, 15, 35), Decl(divergentAccessorsTypes3.ts, 17, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes3.ts, 2, 35), Decl(divergentAccessorsTypes3.ts, 4, 36), Decl(divergentAccessorsTypes3.ts, 15, 35), Decl(divergentAccessorsTypes3.ts, 17, 36))
+
+u1.prop2 = "hello";
+>u1.prop2 : Symbol(prop2, Decl(divergentAccessorsTypes3.ts, 2, 35), Decl(divergentAccessorsTypes3.ts, 4, 36), Decl(divergentAccessorsTypes3.ts, 15, 35), Decl(divergentAccessorsTypes3.ts, 17, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop2 : Symbol(prop2, Decl(divergentAccessorsTypes3.ts, 2, 35), Decl(divergentAccessorsTypes3.ts, 4, 36), Decl(divergentAccessorsTypes3.ts, 15, 35), Decl(divergentAccessorsTypes3.ts, 17, 36))
+
+u1.prop3 = 42;
+>u1.prop3 : Symbol(prop3, Decl(divergentAccessorsTypes3.ts, 5, 35), Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop3 : Symbol(prop3, Decl(divergentAccessorsTypes3.ts, 5, 35), Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+
+u1.prop3 = "hello";
+>u1.prop3 : Symbol(prop3, Decl(divergentAccessorsTypes3.ts, 5, 35), Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop3 : Symbol(prop3, Decl(divergentAccessorsTypes3.ts, 5, 35), Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+
+u1.prop3 = true;
+>u1.prop3 : Symbol(prop3, Decl(divergentAccessorsTypes3.ts, 5, 35), Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop3 : Symbol(prop3, Decl(divergentAccessorsTypes3.ts, 5, 35), Decl(divergentAccessorsTypes3.ts, 18, 26), Decl(divergentAccessorsTypes3.ts, 20, 36))
+
+u1.prop4 = 42;
+>u1.prop4 : Symbol(prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36), Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36), Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+
+u1.prop4 = "hello";
+>u1.prop4 : Symbol(prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36), Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36), Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+
+u1.prop4 = true;
+>u1.prop4 : Symbol(prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36), Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+>u1 : Symbol(u1, Decl(divergentAccessorsTypes3.ts, 27, 13))
+>prop4 : Symbol(prop4, Decl(divergentAccessorsTypes3.ts, 7, 16), Decl(divergentAccessorsTypes3.ts, 9, 36), Decl(divergentAccessorsTypes3.ts, 21, 36), Decl(divergentAccessorsTypes3.ts, 23, 36))
+

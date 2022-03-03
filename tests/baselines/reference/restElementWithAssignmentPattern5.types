@@ -4,13 +4,13 @@ var s: string, s2: string;
 >s2 : string
 
 [...[s, s2]] = ["", ""];
->[...[s, s2]] = ["", ""] : string[]
->[...[s, s2]] : string[]
+>[...[s, s2]] = ["", ""] : [string, string]
+>[...[s, s2]] : [string, string]
 >...[s, s2] : string
 >[s, s2] : [string, string]
 >s : string
 >s2 : string
->["", ""] : string[]
+>["", ""] : [string, string]
 >"" : ""
 >"" : ""
 

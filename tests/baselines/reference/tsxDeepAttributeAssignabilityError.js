@@ -28,6 +28,7 @@ export const result = <MyComponent x="yes" y={{
 //// [my-component.js]
 "use strict";
 exports.__esModule = true;
+exports.MyComponent = void 0;
 var React = require("react");
 function MyComponent(_props) {
     return React.createElement("span", null, "my component");
@@ -36,6 +37,7 @@ exports.MyComponent = MyComponent;
 //// [file1.js]
 "use strict";
 exports.__esModule = true;
+exports.result = void 0;
 var React = require("react");
 var my_component_1 = require("./my-component");
 exports.result = React.createElement(my_component_1.MyComponent, { x: "yes", y: {

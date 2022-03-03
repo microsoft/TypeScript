@@ -1,0 +1,51 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesUseBeforeDef.ts, 0, 0))
+
+    #foo = this.#bar; // Error
+>#foo : Symbol(A.#foo, Decl(privateNamesUseBeforeDef.ts, 0, 9))
+>this.#bar : Symbol(A.#bar, Decl(privateNamesUseBeforeDef.ts, 1, 21))
+>this : Symbol(A, Decl(privateNamesUseBeforeDef.ts, 0, 0))
+
+    #bar = 3;
+>#bar : Symbol(A.#bar, Decl(privateNamesUseBeforeDef.ts, 1, 21))
+}
+
+class A2 {
+>A2 : Symbol(A2, Decl(privateNamesUseBeforeDef.ts, 3, 1))
+
+    #foo = this.#bar(); // No Error
+>#foo : Symbol(A2.#foo, Decl(privateNamesUseBeforeDef.ts, 5, 10))
+>this.#bar : Symbol(A2.#bar, Decl(privateNamesUseBeforeDef.ts, 6, 23))
+>this : Symbol(A2, Decl(privateNamesUseBeforeDef.ts, 3, 1))
+
+    #bar() { return 3 };
+>#bar : Symbol(A2.#bar, Decl(privateNamesUseBeforeDef.ts, 6, 23))
+}
+
+class A3 {
+>A3 : Symbol(A3, Decl(privateNamesUseBeforeDef.ts, 8, 1))
+
+    #foo = this.#bar; // No Error
+>#foo : Symbol(A3.#foo, Decl(privateNamesUseBeforeDef.ts, 10, 10))
+>this.#bar : Symbol(A3.#bar, Decl(privateNamesUseBeforeDef.ts, 11, 21))
+>this : Symbol(A3, Decl(privateNamesUseBeforeDef.ts, 8, 1))
+
+    get #bar() { return 3 };
+>#bar : Symbol(A3.#bar, Decl(privateNamesUseBeforeDef.ts, 11, 21))
+}
+
+class B {
+>B : Symbol(B, Decl(privateNamesUseBeforeDef.ts, 13, 1))
+
+    #foo = this.#bar; // Error
+>#foo : Symbol(B.#foo, Decl(privateNamesUseBeforeDef.ts, 15, 9))
+>this.#bar : Symbol(B.#bar, Decl(privateNamesUseBeforeDef.ts, 16, 21))
+>this : Symbol(B, Decl(privateNamesUseBeforeDef.ts, 13, 1))
+
+    #bar = this.#foo;
+>#bar : Symbol(B.#bar, Decl(privateNamesUseBeforeDef.ts, 16, 21))
+>this.#foo : Symbol(B.#foo, Decl(privateNamesUseBeforeDef.ts, 15, 9))
+>this : Symbol(B, Decl(privateNamesUseBeforeDef.ts, 13, 1))
+}
+

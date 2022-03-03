@@ -9,6 +9,14 @@
 ////f<I>({ /*f*/ });
 ////
 ////declare function g<T>(x: keyof T, y: number): void;
-////g<I>("/*g*/");
+////g<I>("[|/*g*/|]");
 
-verify.completions({ marker: test.markers(), exact: ["x", "y"] });
+verify.completions({ marker: "f", exact: [
+    { name: "x" },
+    { name: "y" },
+] });
+
+verify.completions({ marker: "g", exact: [
+    { name: "x", replacementSpan: test.ranges()[0] },
+    { name: "y", replacementSpan: test.ranges()[0] },
+] });

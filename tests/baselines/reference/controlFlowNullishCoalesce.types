@@ -1,0 +1,40 @@
+=== tests/cases/conformance/controlFlow/controlFlowNullishCoalesce.ts ===
+// assignments in shortcutting rhs
+let a: number;
+>a : number
+
+o ?? (a = 1);
+>o ?? (a = 1) : { x: number; } | 1
+>o : { x: number; } | undefined
+>(a = 1) : 1
+>a = 1 : 1
+>a : number
+>1 : 1
+
+a.toString();
+>a.toString() : string
+>a.toString : (radix?: number | undefined) => string
+>a : number
+>toString : (radix?: number | undefined) => string
+
+// assignment flow
+declare const o: { x: number } | undefined;
+>o : { x: number; } | undefined
+>x : number
+
+let x: { x: number } | boolean;
+>x : boolean | { x: number; }
+>x : number
+
+if (x = o ?? true) {
+>x = o ?? true : true | { x: number; }
+>x : boolean | { x: number; }
+>o ?? true : true | { x: number; }
+>o : { x: number; } | undefined
+>true : true
+
+    x;
+>x : true | { x: number; }
+}
+
+

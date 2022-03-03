@@ -94,13 +94,13 @@ function c0(_a) {
     var _b = _a.z, x = _b.x, j = _b.y.j;
 }
 function c1(_a) {
-    var z = (_a === void 0 ? { z: 10 } : _a).z;
+    var _b = _a === void 0 ? { z: 10 } : _a, z = _b.z;
 }
 function c2(_a) {
     var _b = _a.z, z = _b === void 0 ? 10 : _b;
 }
 function c3(_a) {
-    var b = (_a === void 0 ? { b: "hello" } : _a).b;
+    var _b = _a === void 0 ? { b: "hello" } : _a, b = _b.b;
 }
 function c4(_a, z) {
     var z = _a[0];

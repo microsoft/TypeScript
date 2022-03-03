@@ -16,6 +16,9 @@
 // @Filename: /a_reexport_2.ts
 ////export * from "./a";
 
+// @Filename: /a_reexport_3.ts
+////export { foo } from "./a_reexport";
+
 // @Filename: /b.ts
 ////fo/**/
 
@@ -40,7 +43,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from module "./a"`,
+    description: `Add import from "./a"`,
     newFileContent: `import { foo } from "./a";
 
 fo`,

@@ -9,6 +9,7 @@ export function f() {
 //// [indirectUniqueSymbolDeclarationEmit.js]
 "use strict";
 exports.__esModule = true;
+exports.f = exports.y = exports.x = void 0;
 exports.x = Symbol();
 exports.y = Symbol();
 function f() {

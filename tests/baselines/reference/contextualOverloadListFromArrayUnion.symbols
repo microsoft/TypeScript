@@ -1,0 +1,188 @@
+=== tests/cases/compiler/one.ts ===
+declare const y: never[] | string[];
+>y : Symbol(y, Decl(one.ts, 0, 13))
+
+export const yThen = y.map(item => item.length);
+>yThen : Symbol(yThen, Decl(one.ts, 1, 12))
+>y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(one.ts, 0, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(one.ts, 1, 27))
+>item.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(one.ts, 1, 27))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/compiler/two.ts ===
+declare const y: number[][] | string[];
+>y : Symbol(y, Decl(two.ts, 0, 13))
+
+export const yThen = y.map(item => item.length);
+>yThen : Symbol(yThen, Decl(two.ts, 1, 12))
+>y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(two.ts, 0, 13))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(two.ts, 1, 27))
+>item.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(two.ts, 1, 27))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/compiler/three.ts ===
+// #42504
+interface ResizeObserverCallback {
+>ResizeObserverCallback : Symbol(ResizeObserverCallback, Decl(three.ts, 0, 0), Decl(three.ts, 3, 1))
+
+    (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
+>entries : Symbol(entries, Decl(three.ts, 2, 5))
+>ResizeObserverEntry : Symbol(ResizeObserverEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>observer : Symbol(observer, Decl(three.ts, 2, 36))
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+interface ResizeObserverCallback { // duplicate for effect
+>ResizeObserverCallback : Symbol(ResizeObserverCallback, Decl(three.ts, 0, 0), Decl(three.ts, 3, 1))
+
+    (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
+>entries : Symbol(entries, Decl(three.ts, 5, 5))
+>ResizeObserverEntry : Symbol(ResizeObserverEntry, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>observer : Symbol(observer, Decl(three.ts, 5, 36))
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+
+const resizeObserver = new ResizeObserver(([entry]) => {
+>resizeObserver : Symbol(resizeObserver, Decl(three.ts, 8, 5))
+>ResizeObserver : Symbol(ResizeObserver, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>entry : Symbol(entry, Decl(three.ts, 8, 44))
+
+    entry
+>entry : Symbol(entry, Decl(three.ts, 8, 44))
+
+});
+// comment in #35501
+interface Callback<T> {
+>Callback : Symbol(Callback, Decl(three.ts, 10, 3))
+>T : Symbol(T, Decl(three.ts, 12, 19))
+
+    (error: null, result: T): unknown
+>error : Symbol(error, Decl(three.ts, 13, 5))
+>result : Symbol(result, Decl(three.ts, 13, 17))
+>T : Symbol(T, Decl(three.ts, 12, 19))
+
+    (error: Error, result: null): unknown
+>error : Symbol(error, Decl(three.ts, 14, 5))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(three.ts, 14, 18))
+}
+
+interface Task<T> {
+>Task : Symbol(Task, Decl(three.ts, 15, 1))
+>T : Symbol(T, Decl(three.ts, 17, 15))
+
+    (callback: Callback<T>): unknown
+>callback : Symbol(callback, Decl(three.ts, 18, 5))
+>Callback : Symbol(Callback, Decl(three.ts, 10, 3))
+>T : Symbol(T, Decl(three.ts, 17, 15))
+}
+
+export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
+>series : Symbol(series, Decl(three.ts, 19, 1))
+>T : Symbol(T, Decl(three.ts, 21, 23))
+>tasks : Symbol(tasks, Decl(three.ts, 21, 26))
+>Task : Symbol(Task, Decl(three.ts, 15, 1))
+>T : Symbol(T, Decl(three.ts, 21, 23))
+>callback : Symbol(callback, Decl(three.ts, 21, 43))
+>Callback : Symbol(Callback, Decl(three.ts, 10, 3))
+>T : Symbol(T, Decl(three.ts, 21, 23))
+
+    let index = 0
+>index : Symbol(index, Decl(three.ts, 22, 7))
+
+    let results: T[] = []
+>results : Symbol(results, Decl(three.ts, 23, 7))
+>T : Symbol(T, Decl(three.ts, 21, 23))
+
+    function next() {
+>next : Symbol(next, Decl(three.ts, 23, 25))
+
+        let task = tasks[index]
+>task : Symbol(task, Decl(three.ts, 26, 11))
+>tasks : Symbol(tasks, Decl(three.ts, 21, 26))
+>index : Symbol(index, Decl(three.ts, 22, 7))
+
+        if (!task) {
+>task : Symbol(task, Decl(three.ts, 26, 11))
+
+            callback(null, results)
+>callback : Symbol(callback, Decl(three.ts, 21, 43))
+>results : Symbol(results, Decl(three.ts, 23, 7))
+
+        } else {
+            task((error, result) => {
+>task : Symbol(task, Decl(three.ts, 26, 11))
+>error : Symbol(error, Decl(three.ts, 30, 18))
+>result : Symbol(result, Decl(three.ts, 30, 24))
+
+                if (error) {
+>error : Symbol(error, Decl(three.ts, 30, 18))
+
+                    callback(error, null)
+>callback : Symbol(callback, Decl(three.ts, 21, 43))
+>error : Symbol(error, Decl(three.ts, 30, 18))
+
+                } else {
+                    // must use postfix-!, since `error` and `result` don't have a
+                    // causal relationship when the overloads are combined
+                    results.push(result!)
+>results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(three.ts, 23, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(three.ts, 30, 24))
+
+                    next()
+>next : Symbol(next, Decl(three.ts, 23, 25))
+                }
+            })
+        }
+    }
+    next()
+>next : Symbol(next, Decl(three.ts, 23, 25))
+}
+
+series([
+>series : Symbol(series, Decl(three.ts, 19, 1))
+
+    cb => setTimeout(() => cb(null, 1), 300),
+>cb : Symbol(cb, Decl(three.ts, 45, 8))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
+>cb : Symbol(cb, Decl(three.ts, 45, 8))
+
+    cb => setTimeout(() => cb(null, 2), 200),
+>cb : Symbol(cb, Decl(three.ts, 46, 45))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
+>cb : Symbol(cb, Decl(three.ts, 46, 45))
+
+    cb => setTimeout(() => cb(null, 3), 100),
+>cb : Symbol(cb, Decl(three.ts, 47, 45))
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
+>cb : Symbol(cb, Decl(three.ts, 47, 45))
+
+], (error, results) => {
+>error : Symbol(error, Decl(three.ts, 49, 4))
+>results : Symbol(results, Decl(three.ts, 49, 10))
+
+    if (error) {
+>error : Symbol(error, Decl(three.ts, 49, 4))
+
+        console.error(error)
+>console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(error, Decl(three.ts, 49, 4))
+
+    } else {
+        console.log(results)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>results : Symbol(results, Decl(three.ts, 49, 10))
+    }
+})
+

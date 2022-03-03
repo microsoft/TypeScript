@@ -39,6 +39,7 @@ exports.__esModule = true;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.doSome = void 0;
 var MAP = {
     a: "a"
 };
@@ -61,6 +62,6 @@ declare type StringHash = Hash<string>;
 interface StringHash2 extends Hash<string> {
 }
 //// [a.d.ts]
-import { StringHash2 } from "./b";
+import { StringHash, StringHash2 } from "./b";
 export { doSome };
-declare function doSome(arg1: string, arg2?: import("./b").Hash<string>, arg3?: StringHash2): void;
+declare function doSome(arg1: string, arg2?: StringHash, arg3?: StringHash2): void;

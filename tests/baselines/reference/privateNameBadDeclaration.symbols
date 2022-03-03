@@ -1,0 +1,43 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameBadDeclaration.ts ===
+function A() { }
+>A : Symbol(A, Decl(privateNameBadDeclaration.ts, 0, 0))
+
+A.prototype = {
+>A.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(privateNameBadDeclaration.ts, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+  #x: 1,         // Error
+>#x : Symbol(#x, Decl(privateNameBadDeclaration.ts, 1, 15))
+
+  #m() {},       // Error
+>#m : Symbol(#m, Decl(privateNameBadDeclaration.ts, 2, 8))
+
+  get #p() { return "" } // Error
+>#p : Symbol(#p, Decl(privateNameBadDeclaration.ts, 3, 10))
+}
+class B { }
+>B : Symbol(B, Decl(privateNameBadDeclaration.ts, 5, 1))
+
+B.prototype = {
+>B.prototype : Symbol(B.prototype)
+>B : Symbol(B, Decl(privateNameBadDeclaration.ts, 5, 1))
+>prototype : Symbol(B.prototype)
+
+  #y: 2,         // Error
+>#y : Symbol(#y, Decl(privateNameBadDeclaration.ts, 7, 15))
+
+  #m() {},       // Error
+>#m : Symbol(#m, Decl(privateNameBadDeclaration.ts, 8, 8))
+
+  get #p() { return "" } // Error
+>#p : Symbol(#p, Decl(privateNameBadDeclaration.ts, 9, 10))
+}
+class C {
+>C : Symbol(C, Decl(privateNameBadDeclaration.ts, 11, 1))
+
+  constructor() {
+    this.#z = 3;
+>this : Symbol(C, Decl(privateNameBadDeclaration.ts, 11, 1))
+  }
+}

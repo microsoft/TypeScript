@@ -11,6 +11,7 @@ export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.foo = void 0;
     function foo(fn) {
         foo(fn); // Invocation is necessary to repro (!)
     }

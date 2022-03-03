@@ -24,3 +24,4 @@ Decorated = __decorate([
 ], Decorated);
 export default Decorated;
 //// [undecorated.js]
+export {};

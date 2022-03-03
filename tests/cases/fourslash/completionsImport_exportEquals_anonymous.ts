@@ -18,26 +18,26 @@ const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = {
     sourceDisplay: "./foo-bar",
     text: "(property) export=: 0",
     kind: "property",
+    kindModifiers: "export",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
 };
 verify.completions(
     {
         marker: "0",
-        exact: [
-            completion.globalThisEntry,
-            completion.undefinedVarEntry,
-            exportEntry,
-            ...completion.statementKeywordsWithTypes
-        ],
+        exact: completion.globalsPlus([], { noLib: true }),
         preferences
     },
-    { marker: "1", includes: exportEntry, preferences }
+    {
+        marker: "1",
+        exact: completion.globalsPlus([exportEntry], { noLib: true }),
+        preferences
+    }
 );
 verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",
     source: "/src/foo-bar",
-    description: `Import 'fooBar' from module "./foo-bar"`,
+    description: `Add import from "./foo-bar"`,
     newFileContent: `import fooBar = require("./foo-bar")
 
 exp

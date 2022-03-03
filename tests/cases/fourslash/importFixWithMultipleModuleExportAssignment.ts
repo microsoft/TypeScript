@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
 // @allowJs: true
 // @checkJs: true
 
@@ -16,6 +17,6 @@
 
 goTo.file("/c.js");
 verify.importFixAtPosition([
-`import { foo } from "./b";
+`const { foo } = require("./b");
 
 foo`]);

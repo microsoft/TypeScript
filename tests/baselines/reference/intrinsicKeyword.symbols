@@ -1,0 +1,63 @@
+=== tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts ===
+let e1: intrinsic;
+>e1 : Symbol(e1, Decl(intrinsicKeyword.ts, 0, 3))
+>intrinsic : Symbol(intrinsic)
+
+let e2: { intrinsic: intrinsic };
+>e2 : Symbol(e2, Decl(intrinsicKeyword.ts, 1, 3))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 1, 9))
+>intrinsic : Symbol(intrinsic)
+
+type TE1 = (intrinsic);
+>TE1 : Symbol(TE1, Decl(intrinsicKeyword.ts, 1, 33))
+>intrinsic : Symbol(intrinsic)
+
+type TE2<intrinsic> = intrinsic;
+>TE2 : Symbol(TE2, Decl(intrinsicKeyword.ts, 2, 23))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 3, 9))
+
+type TE3<T extends intrinsic> = T;
+>TE3 : Symbol(TE3, Decl(intrinsicKeyword.ts, 3, 32))
+>T : Symbol(T, Decl(intrinsicKeyword.ts, 4, 9))
+>intrinsic : Symbol(intrinsic)
+>T : Symbol(T, Decl(intrinsicKeyword.ts, 4, 9))
+
+type TE4<intrinsic extends intrinsic> = intrinsic;
+>TE4 : Symbol(TE4, Decl(intrinsicKeyword.ts, 4, 34))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 5, 9))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 5, 9))
+
+type TE5<intrinsic extends intrinsic> = (intrinsic);
+>TE5 : Symbol(TE5, Decl(intrinsicKeyword.ts, 5, 50))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 6, 9))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 6, 9))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 6, 9))
+
+function f1() {
+>f1 : Symbol(f1, Decl(intrinsicKeyword.ts, 6, 52))
+
+    let intrinsic: intrinsic.intrinsic;
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 9, 7))
+>intrinsic : Symbol(intrinsic)
+>intrinsic : Symbol(intrinsic.intrinsic)
+}
+
+function f2(intrinsic: string) {
+>f2 : Symbol(f2, Decl(intrinsicKeyword.ts, 10, 1))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 12, 12))
+
+    return intrinsic;
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 12, 12))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(intrinsicKeyword.ts, 14, 1))
+
+    type intrinsic = string;
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 16, 15))
+
+    let s1: intrinsic = 'ok';
+>s1 : Symbol(s1, Decl(intrinsicKeyword.ts, 18, 7))
+>intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 16, 15))
+}
+

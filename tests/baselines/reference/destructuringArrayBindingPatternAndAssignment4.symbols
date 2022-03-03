@@ -1,0 +1,11 @@
+=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment4.ts ===
+// #35497
+
+
+declare const data: number[] | null;
+>data : Symbol(data, Decl(destructuringArrayBindingPatternAndAssignment4.ts, 3, 13))
+
+const [value] = data; // Error
+>value : Symbol(value, Decl(destructuringArrayBindingPatternAndAssignment4.ts, 4, 7))
+>data : Symbol(data, Decl(destructuringArrayBindingPatternAndAssignment4.ts, 3, 13))
+

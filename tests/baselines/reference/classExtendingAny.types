@@ -67,9 +67,9 @@ class B extends Err {
 
         this.wat = 12
 >this.wat = 12 : 12
->this.wat : number
+>this.wat : any
 >this : this
->wat : number
+>wat : any
 >12 : 12
     }
     f() {

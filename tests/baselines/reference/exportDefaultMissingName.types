@@ -1,0 +1,4 @@
+=== tests/cases/compiler/exportDefaultMissingName.ts ===
+export default xyzzy;
+>xyzzy : any
+

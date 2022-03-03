@@ -1,0 +1,20 @@
+=== tests/cases/compiler/unreachable.ts ===
+const unreachable = (x: any): number => {
+>unreachable : Symbol(unreachable, Decl(unreachable.ts, 0, 5))
+>x : Symbol(x, Decl(unreachable.ts, 0, 21))
+
+    switch (typeof x) {
+>x : Symbol(x, Decl(unreachable.ts, 0, 21))
+
+        case 'string': return 0
+        case 'number': return 0
+        case 'bigint': return 0
+        case 'boolean': return 0
+        case 'symbol': return 0
+        case 'undefined': return 0
+        case 'object': return 0
+        case 'function': return 0
+    }
+    x;
+>x : Symbol(x, Decl(unreachable.ts, 0, 21))
+}

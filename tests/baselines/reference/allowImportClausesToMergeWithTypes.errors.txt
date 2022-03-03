@@ -1,5 +1,5 @@
 tests/cases/compiler/index.ts(4,1): error TS2693: 'zzz' only refers to a type, but is being used as a value here.
-tests/cases/compiler/index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here.
+tests/cases/compiler/index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?
 
 
 ==== tests/cases/compiler/b.ts (0 errors) ====
@@ -31,4 +31,4 @@ tests/cases/compiler/index.ts(9,10): error TS2749: 'originalZZZ' refers to a val
     
     const y: originalZZZ = x;
              ~~~~~~~~~~~
-!!! error TS2749: 'originalZZZ' refers to a value, but is being used as a type here.
+!!! error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?

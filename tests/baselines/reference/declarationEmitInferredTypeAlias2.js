@@ -23,6 +23,7 @@ exports.__esModule = true;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
+exports.bar = exports.v = void 0;
 var v = "str" || true;
 exports.v = v;
 function bar() {
