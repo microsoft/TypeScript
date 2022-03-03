@@ -758,6 +758,7 @@ namespace ts.server {
         readonly toCanonicalFileName: (f: string) => string;
 
         public readonly host: ServerHost;
+        public fs: vfs.FileSystem | undefined;
         public readonly logger: Logger;
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
@@ -3216,7 +3217,7 @@ namespace ts.server {
 
         /**
          * Open file whose contents is managed by the client
-         * @param filename is absolute pathname
+         * @param fileName is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult {
@@ -3650,7 +3651,7 @@ namespace ts.server {
 
         /**
          * Close file whose contents is managed by the client
-         * @param filename is absolute pathname
+         * @param uncheckedFileName is absolute pathname
          */
         closeClientFile(uncheckedFileName: string): void;
         /*@internal*/
@@ -3689,58 +3690,48 @@ namespace ts.server {
         updateFileSystem(createdFiles: Iterator<protocol.FileSystemRequestArgs> | undefined, updatedFiles?: Iterator<protocol.FileSystemRequestArgs>, deletedFiles?: string[]) {
             // TODO: Maybe it is somehow gauche or verboten to use protocol types but the translation in applyChangesInOpenFiles seems stupid
             // It is also WEIRD that we use iterators here not arrays
-            // TODO: Probably copy what vfsUtil does to hook up a virtual filesystem here. Maybe.
-            // ugggggggggg have to copy over all that stuff to here
-            // (though I probably need to create a vfs project anyway, so why not)
-            
-            // const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
-            //     files: {
-            //         [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
-            //         [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
-            //         [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
-            //         [srcFolder]: {}
-            //     },
-            //     cwd: srcFolder,
-            //     meta: { defaultLibLocation: builtFolder }
-            // })
-            // if (!this.fs)
-            //     this.fs = fs
-            // if (createdFiles) {
-            //     for (const document of Array.from(createdFiles)) {
-            //         fs.mkdirpSync(vpath.dirname(document.file));
-            //         fs.writeFileSync(document.file, document.text, "utf8");
-            //         fs.filemeta(document.file).set("document", document);
-            //         // Add symlinks
-            //         const symlink = document.meta.get("symlink");
-            //         if (symlink) {
-            //             for (const link of symlink.split(",").map(link => link.trim())) {
-            //                 fs.mkdirpSync(vpath.dirname(link));
-            //                 fs.symlinkSync(vpath.resolve(fs.cwd(), document.file), link);
-            //             }
-            //         }
-            //     }
-            // }
-
             // 1. set some internal tsserver state for mocked FS (if it hasn't already been set, this might not be the first message)
             //   - change this.host at least
             this.host // no, it's readonly, we get this from a parent object
             //   - ScriptInfo instances might need to update their host -- what is textStorage?
             //     - they deffo have FileWatcher instances
             //   - TextStorage.host needs to update
-            // 2. create
-            // 3. update
-            // 4. delete
-            //   - closeClientFile -> closeOpenFile -> ScriptInfo.close
-            // 5. ???
-            // 6. success!
-            if (createdFiles) {
+            if (!this.fs) {
+                this.fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+                    files: {
+                        "/": {}
+                    },
+                    cwd: "/", // maybe not needed
+                    meta: { } // probably not needed
+                })
+                ;(this.session as any).host = new fakes.FakeCompilerHost(this.fs, {}) // TODO: Grab the real current options
             }
+            if (createdFiles) {
+                let it
+                while (!(it = createdFiles.next()).done) {
+                    const document = it.value
+                    if (document.fileContent) {
+                        this.fs.mkdirpSync(vpath.dirname(document.file));
+                        this.fs.writeFileSync(document.file, document.fileContent, "utf8");
+                        this.fs.filemeta(document.file).set("document", document);
+                    }
+                }
+            }
+
             if (updatedFiles) {
+                const fileset: vfs.FileSet = {}
+                let it
+                while (!(it = updatedFiles.next()).done) {
+                    fileset[it.value.file] = it.value.fileContent
+                }
+                this.fs.apply(fileset)
             }
             if (deletedFiles) {
+                //  TODO:  - closeClientFile -> closeOpenFile -> ScriptInfo.close
+                // (maybe -- it may be enough to just delete it from the filesystem)
                 for (const file of deletedFiles) {
                     this.closeClientFile(file) // maybe copy stuff from applyChanges -- mostly I just want to leave a pointer to more code
-
+                    this.fs.rimrafSync(file)
                 }
             }
         }

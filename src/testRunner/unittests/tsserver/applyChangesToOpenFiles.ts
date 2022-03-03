@@ -17,26 +17,36 @@ namespace ts.projectSystem {
             file: "/a/b/app.ts",
             fileContent: "import { xyz } from './file3'; let x = xyz"
         };
+        const appFile: File = {
+            path: "/a/b/app.ts",
+            content: "import { xyz } from './file3'; let x = xyz"
+        };
         function fileContentWithComment(file: protocol.FileSystemRequestArgs | File) {
             return `// some copy right notice
 ${'content' in file ? file.content :  file.fileContent}`;
         }
         function verify({ applyChangesToOpen, openFile1Again }: Verify) {
             // TODO: Replace with createMemfsServerHost
-            const host = createServerHost([commonFile1, commonFile2, libFile]);
+            const host = createServerHost([appFile, file3File, commonFile1, commonFile2, libFile, configFile]);
+            // const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
             const session = createSession(host);
             session.executeCommandSeq<protocol.UpdateFileSystemRequest>({
                 command: protocol.CommandTypes.UpdateFileSystem,
                 arguments:{
                     fileSystem: 'memfs',
-                    created: [configFile, file3, app],
+                    created: [app, file3, file1, file2, libFile, configFile],
                     deleted: [], // string[];
                     updated: [], //FileSystemRequestArgs[];
                 }
             });
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: protocol.CommandTypes.Open,
+                arguments: { file: app.file }
+            });
             const service = session.getProjectService();
-            // session.host
             const project = service.configuredProjects.get(configFile.file)!;
+            const vfs = (session as any).host.vfs
+            assert.isDefined(vfs);
             assert.isDefined(project);
             verifyProjectVersion(project, 1);
             session.executeCommandSeq<protocol.OpenRequest>({

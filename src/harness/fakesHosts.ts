@@ -63,6 +63,7 @@ namespace fakes {
         }
 
     }
+
     function indentedText(indent: number, text: string) {
         if (!indent) return text;
         let indentText = "";
