@@ -25,6 +25,7 @@ namespace ts {
             parenthesizeExpressionForDisallowedComma,
             parenthesizeExpressionOfExpressionStatement,
             parenthesizeConciseBodyOfArrowFunction,
+            parenthesizeCheckTypeOfConditionalType,
             parenthesizeMemberOfConditionalType,
             parenthesizeMemberOfElementType,
             parenthesizeElementTypeOfArrayType,
@@ -388,6 +389,11 @@ namespace ts {
             return body;
         }
 
+        function parenthesizeCheckTypeOfConditionalType(member: TypeNode): TypeNode {
+            return isInferTypeNode(member) ? factory.createParenthesizedType(member) :
+                parenthesizeMemberOfConditionalType(member);
+        }
+
         function parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode {
             return member.kind === SyntaxKind.ConditionalType ? factory.createParenthesizedType(member) : member;
         }
@@ -446,6 +452,7 @@ namespace ts {
         parenthesizeExpressionForDisallowedComma: identity,
         parenthesizeExpressionOfExpressionStatement: identity,
         parenthesizeConciseBodyOfArrowFunction: identity,
+        parenthesizeCheckTypeOfConditionalType: identity,
         parenthesizeMemberOfConditionalType: identity,
         parenthesizeMemberOfElementType: identity,
         parenthesizeElementTypeOfArrayType: identity,

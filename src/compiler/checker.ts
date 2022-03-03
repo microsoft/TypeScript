@@ -35538,6 +35538,22 @@ namespace ts {
                 grammarErrorOnNode(node, Diagnostics.infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type);
             }
             checkSourceElement(node.typeParameter);
+            const symbol = getSymbolOfNode(node.typeParameter);
+            if (symbol.declarations && symbol.declarations.length > 1) {
+                const links = getSymbolLinks(symbol);
+                if (!links.typeParametersChecked) {
+                    links.typeParametersChecked = true;
+                    const typeParameter = getDeclaredTypeOfTypeParameter(symbol);
+                    const declarations: TypeParameterDeclaration[] = getDeclarationsOfKind(symbol, SyntaxKind.TypeParameter);
+                    if (!areTypeParametersIdentical(declarations, [typeParameter], decl => [decl])) {
+                        // Report an error on every conflicting declaration.
+                        const name = symbolToString(symbol);
+                        for (const declaration of declarations) {
+                            error(declaration.name, Diagnostics.All_declarations_of_0_must_have_identical_constraints, name);
+                        }
+                    }
+                }
+            }
             registerForUnusedIdentifiersCheck(node);
         }
 
@@ -39014,7 +39030,7 @@ namespace ts {
                 }
 
                 const type = getDeclaredTypeOfSymbol(symbol) as InterfaceType;
-                if (!areTypeParametersIdentical(declarations, type.localTypeParameters!)) {
+                if (!areTypeParametersIdentical(declarations, type.localTypeParameters!, getEffectiveTypeParameterDeclarations)) {
                     // Report an error on every conflicting declaration.
                     const name = symbolToString(symbol);
                     for (const declaration of declarations) {
@@ -39024,13 +39040,13 @@ namespace ts {
             }
         }
 
-        function areTypeParametersIdentical(declarations: readonly (ClassDeclaration | InterfaceDeclaration)[], targetParameters: TypeParameter[]) {
+        function areTypeParametersIdentical<T extends DeclarationWithTypeParameters | TypeParameterDeclaration>(declarations: readonly T[], targetParameters: TypeParameter[], getTypeParameterDeclarations: (node: T) => readonly TypeParameterDeclaration[]) {
             const maxTypeArgumentCount = length(targetParameters);
             const minTypeArgumentCount = getMinTypeArgumentCount(targetParameters);
 
             for (const declaration of declarations) {
                 // If this declaration has too few or too many type parameters, we report an error
-                const sourceParameters = getEffectiveTypeParameterDeclarations(declaration);
+                const sourceParameters = getTypeParameterDeclarations(declaration);
                 const numTypeParameters = sourceParameters.length;
                 if (numTypeParameters < minTypeArgumentCount || numTypeParameters > maxTypeArgumentCount) {
                     return false;

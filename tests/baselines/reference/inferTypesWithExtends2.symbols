@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/conditional/inferTypesWithExtends2.ts ===
+// infer twice with different constraints (same behavior as class/interface)
+type X10<T> =
+>X10 : Symbol(X10, Decl(inferTypesWithExtends2.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypesWithExtends2.ts, 1, 9))
+
+    T extends { a: infer U extends string, b: infer U extends number } ? U :
+>T : Symbol(T, Decl(inferTypesWithExtends2.ts, 1, 9))
+>a : Symbol(a, Decl(inferTypesWithExtends2.ts, 2, 15))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 2, 24), Decl(inferTypesWithExtends2.ts, 2, 51))
+>b : Symbol(b, Decl(inferTypesWithExtends2.ts, 2, 42))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 2, 24), Decl(inferTypesWithExtends2.ts, 2, 51))
+>U : Symbol(U, Decl(inferTypesWithExtends2.ts, 2, 24), Decl(inferTypesWithExtends2.ts, 2, 51))
+
+    never;
+
