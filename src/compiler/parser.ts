@@ -200,8 +200,11 @@ namespace ts {
                 return visitNode(cbNode, (node as InferTypeNode).typeParameter);
             case SyntaxKind.ImportType:
                 return visitNode(cbNode, (node as ImportTypeNode).argument) ||
+                    visitNode(cbNode, (node as ImportTypeNode).assertions) ||
                     visitNode(cbNode, (node as ImportTypeNode).qualifier) ||
                     visitNodes(cbNode, cbNodes, (node as ImportTypeNode).typeArguments);
+            case SyntaxKind.ImportTypeAssertionContainer:
+                return visitNode(cbNode, (node as ImportTypeAssertionContainer).assertClause);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
                 return visitNode(cbNode, (node as ParenthesizedTypeNode | TypeOperatorNode).type);
@@ -3645,6 +3648,26 @@ namespace ts {
             return token() === SyntaxKind.ImportKeyword;
         }
 
+        function parseImportTypeAssertions(): ImportTypeAssertionContainer {
+            const pos = getNodePos();
+            const openBracePosition = scanner.getTokenPos();
+            parseExpected(SyntaxKind.OpenBraceToken);
+            const multiLine = scanner.hasPrecedingLineBreak();
+            parseExpected(SyntaxKind.AssertKeyword);
+            parseExpected(SyntaxKind.ColonToken);
+            const clause = parseAssertClause(/*skipAssertKeyword*/ true);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
+            return finishNode(factory.createImportTypeAssertionContainer(clause, multiLine), pos);
+        }
+
         function parseImportType(): ImportTypeNode {
             sourceFlags |= NodeFlags.PossiblyContainsDynamicImport;
             const pos = getNodePos();
@@ -3652,10 +3675,14 @@ namespace ts {
             parseExpected(SyntaxKind.ImportKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const type = parseType();
+            let assertions: ImportTypeAssertionContainer | undefined;
+            if (parseOptional(SyntaxKind.CommaToken)) {
+                assertions = parseImportTypeAssertions();
+            }
             parseExpected(SyntaxKind.CloseParenToken);
             const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference() : undefined;
             const typeArguments = parseTypeArgumentsOfTypeReference();
-            return finishNode(factory.createImportTypeNode(type, qualifier, typeArguments, isTypeOf), pos);
+            return finishNode(factory.createImportTypeNode(type, assertions, qualifier, typeArguments, isTypeOf), pos);
         }
 
         function nextTokenIsNumericOrBigIntLiteral() {
@@ -7279,9 +7306,11 @@ namespace ts {
             return finishNode(factory.createAssertEntry(name, value), pos);
         }
 
-        function parseAssertClause() {
+        function parseAssertClause(skipAssertKeyword?: true) {
             const pos = getNodePos();
-            parseExpected(SyntaxKind.AssertKeyword);
+            if (!skipAssertKeyword) {
+                parseExpected(SyntaxKind.AssertKeyword);
+            }
             const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 const multiLine = scanner.hasPrecedingLineBreak();

@@ -293,6 +293,8 @@ namespace ts {
             updateAssertClause,
             createAssertEntry,
             updateAssertEntry,
+            createImportTypeAssertionContainer,
+            updateImportTypeAssertionContainer,
             createNamespaceImport,
             updateNamespaceImport,
             createNamespaceExport,
@@ -2038,9 +2040,24 @@ namespace ts {
         }
 
         // @api
-        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf = false) {
+        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        function createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        function createImportTypeNode(
+            argument: TypeNode,
+            qualifierOrAssertions?: EntityName | ImportTypeAssertionContainer,
+            typeArgumentsOrQualifier?: readonly TypeNode[] | EntityName,
+            isTypeOfOrTypeArguments?: boolean | readonly TypeNode[],
+            isTypeOf?: boolean
+        ) {
+            const assertion = qualifierOrAssertions && qualifierOrAssertions.kind === SyntaxKind.ImportTypeAssertionContainer ? qualifierOrAssertions : undefined;
+            const qualifier = qualifierOrAssertions && isEntityName(qualifierOrAssertions) ? qualifierOrAssertions
+                : typeArgumentsOrQualifier && !isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : undefined;
+            const typeArguments = isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : isArray(isTypeOfOrTypeArguments) ? isTypeOfOrTypeArguments : undefined;
+            isTypeOf = typeof isTypeOfOrTypeArguments === "boolean" ? isTypeOfOrTypeArguments : typeof isTypeOf === "boolean" ? isTypeOf : false;
+
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             node.argument = argument;
+            node.assertions = assertion;
             node.qualifier = qualifier;
             node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
             node.isTypeOf = isTypeOf;
@@ -2049,12 +2066,28 @@ namespace ts {
         }
 
         // @api
-        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf = node.isTypeOf) {
+        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean | undefined): ImportTypeNode;
+        function updateImportTypeNode(
+            node: ImportTypeNode,
+            argument: TypeNode,
+            qualifierOrAssertions: EntityName | ImportTypeAssertionContainer | undefined,
+            typeArgumentsOrQualifier: readonly TypeNode[] | EntityName | undefined,
+            isTypeOfOrTypeArguments: boolean | readonly TypeNode[] | undefined,
+            isTypeOf?: boolean | undefined
+        ) {
+            const assertion = qualifierOrAssertions && qualifierOrAssertions.kind === SyntaxKind.ImportTypeAssertionContainer ? qualifierOrAssertions : undefined;
+            const qualifier = qualifierOrAssertions && isEntityName(qualifierOrAssertions) ? qualifierOrAssertions
+                : typeArgumentsOrQualifier && !isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : undefined;
+            const typeArguments = isArray(typeArgumentsOrQualifier) ? typeArgumentsOrQualifier : isArray(isTypeOfOrTypeArguments) ? isTypeOfOrTypeArguments : undefined;
+            isTypeOf = typeof isTypeOfOrTypeArguments === "boolean" ? isTypeOfOrTypeArguments : typeof isTypeOf === "boolean" ? isTypeOf : node.isTypeOf;
+
             return node.argument !== argument
+                || node.assertions !== assertion
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
                 || node.isTypeOf !== isTypeOf
-                ? update(createImportTypeNode(argument, qualifier, typeArguments, isTypeOf), node)
+                ? update(createImportTypeNode(argument, assertion, qualifier, typeArguments, isTypeOf), node)
                 : node;
         }
 
@@ -4039,6 +4072,22 @@ namespace ts {
             return node.name !== name
                 || node.value !== value
                 ? update(createAssertEntry(name, value), node)
+                : node;
+        }
+
+        // @api
+        function createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
+            const node = createBaseNode<ImportTypeAssertionContainer>(SyntaxKind.ImportTypeAssertionContainer);
+            node.assertClause = clause;
+            node.multiLine = multiLine;
+            return node;
+        }
+
+        // @api
+        function updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
+            return node.assertClause !== clause
+                || node.multiLine !== multiLine
+                ? update(createImportTypeAssertionContainer(clause, multiLine), node)
                 : node;
         }
 
