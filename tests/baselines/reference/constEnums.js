@@ -38,6 +38,15 @@ const enum Enum1 {
     W5 = Enum1[`V`],
 }
 
+const enum Comments {
+    "//",
+    "/*",
+    "*/",
+    "///",
+    "#",
+    "<!--",
+    "-->",
+}
 
 module A {
     export module B {
@@ -155,6 +164,20 @@ function bar(e: A.B.C.E): number {
     }
 }
 
+function baz(c: Comments) {
+    switch (c) {
+        case Comments["//"]:
+        case Comments["/*"]:
+        case Comments["*/"]:
+        case Comments["///"]:
+        case Comments["#"]:
+        case Comments["<!--"]:
+        case Comments["-->"]:
+        break;
+    }
+}
+
+
 //// [constEnums.js]
 var A2;
 (function (A2) {
@@ -224,5 +247,17 @@ function bar(e) {
         case 1 /* V1 */: return 1;
         case 101 /* V2 */: return 1;
         case 64 /* V3 */: return 1;
+    }
+}
+function baz(c) {
+    switch (c) {
+        case 0 /* "//" */:
+        case 1 /* "/*" */:
+        case 2 /* "*_/" */:
+        case 3 /* "///" */:
+        case 4 /* "#" */:
+        case 5 /* "<!--" */:
+        case 6 /* "-->" */:
+            break;
     }
 }
