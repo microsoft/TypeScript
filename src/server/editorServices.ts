@@ -3223,8 +3223,10 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
+        // It's a bit of a hack, but we let the caller manage the cache because the ProjectService doesn't know
+        // when the operation (e.g. FAR or Rename) is done and the cache should be cleared.
         /*@internal*/
-        getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
+        getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition, configFileCache: ESMap<Path, NormalizedPath | undefined>): DocumentPosition | undefined {
             const isSourceOfProjectReferenceRedirect = project.isSourceOfProjectReferenceRedirect(location.fileName);
             const originalLocation = isSourceOfProjectReferenceRedirect ?
                 location :
@@ -3236,7 +3238,14 @@ namespace ts.server {
             if (!scriptInfo && !this.host.fileExists(fileName)) return undefined;
 
             const originalFileInfo: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
-            const configFileName = this.getConfigFileNameForFile(originalFileInfo);
+            let configFileName: NormalizedPath | undefined;
+            if (configFileCache.has(originalFileInfo.path)) {
+                configFileName = configFileCache.get(originalFileInfo.path);
+            } else {
+                configFileName = this.getConfigFileNameForFile(originalFileInfo);
+                configFileCache.set(originalFileInfo.path, configFileName);
+            }
+
             if (!configFileName) return undefined;
 
             let configuredProject: ConfiguredProject | undefined = this.findConfiguredProjectByProjectName(configFileName);

@@ -467,10 +467,17 @@ namespace ts.server {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
         const seenProjects = new Set<string>();
+
+        // When we see a file for the first time, we search the file system (possibly cached) for a tsconfig
+        // in a containing directory and ensure that the project, if any, is loaded.
+        // The default caching mechanism only handles open files, which our search results will frequently
+        // not be.  We supplement this with another cache tied to the lifetime of this user operation.
+        const configFileCache = new Map<Path, NormalizedPath | undefined>();
+
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
             // TLocation should be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
             const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
-            toDo = callbackProjectAndLocation(project, location, projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(project, location, projectService, toDo, seenProjects, configFileCache, cb);
         });
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
@@ -488,7 +495,7 @@ namespace ts.server {
                     if (!addToSeen(seenProjects, project)) return;
                     const definition = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (definition) {
-                        toDo = callbackProjectAndLocation<TLocation>(project, definition as TLocation, projectService, toDo, seenProjects, cb);
+                        toDo = callbackProjectAndLocation<TLocation>(project, definition as TLocation, projectService, toDo, seenProjects, configFileCache, cb);
                     }
                 });
             }
@@ -497,7 +504,7 @@ namespace ts.server {
         while (toDo && toDo.length) {
             const next = toDo.pop();
             Debug.assertIsDefined(next);
-            toDo = callbackProjectAndLocation(next.project, next.location, projectService, toDo, seenProjects, cb);
+            toDo = callbackProjectAndLocation(next.project, next.location, projectService, toDo, seenProjects, configFileCache, cb);
         }
     }
 
@@ -540,6 +547,7 @@ namespace ts.server {
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
         seenProjects: Set<string>,
+        configFileCache: ESMap<Path, NormalizedPath | undefined>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
@@ -547,7 +555,9 @@ namespace ts.server {
         if (isLocationProjectReferenceRedirect(project, location)) return toDo;
         cb(project, location, (innerProject, location) => {
             addToSeen(seenProjects, project);
-            const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(innerProject, location);
+            // getOriginalLocationEnsuringConfiguredProject searches for the nearest tsconfig,
+            // which is redundant if we've done it in a previous iteration
+            const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(innerProject, location, configFileCache);
             if (!originalLocation) return undefined;
 
             const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
