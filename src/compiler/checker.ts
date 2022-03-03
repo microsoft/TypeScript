@@ -28355,22 +28355,15 @@ namespace ts {
         }
 
         function getEnclosingClassFromThisParameter(node: Node): InterfaceType | undefined {
-            let thisType = getThisTypeFromNodeContext(node);
-
+            const thisParameter = getThisParameterFromNodeContext(node);
+            let thisType = thisParameter?.type && getTypeFromTypeNode(thisParameter.type);
             if (thisType && thisType.flags & TypeFlags.TypeParameter) {
                 thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
             }
-
             if (thisType && getObjectFlags(thisType) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
                 return getTargetType(thisType) as InterfaceType;
             }
-
             return undefined;
-        }
-
-        function getThisTypeFromNodeContext(node: Node) {
-            const thisParameter = getThisParameterFromNodeContext(node);
-            return thisParameter?.type && getTypeFromTypeNode(thisParameter.type);
         }
 
         function getThisParameterFromNodeContext(node: Node) {
