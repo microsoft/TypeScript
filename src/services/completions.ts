@@ -1076,7 +1076,6 @@ namespace ts.Completions {
         if (!originIsObjectLiteralMember(origin)) {
             return undefined;
         }
-        // >> TODO: check completion kind is memberlike
         // TODO: support JS files.
         if (isInJSFile(location)) {
             return undefined;
@@ -1087,14 +1086,11 @@ namespace ts.Completions {
             `type Foo = {
                 bar(x: number): void;
                 foo: (x: string) => string;
-                get prop(): number;
-                set prop(n: number);
             }`,
             `bar` will have symbol flag `Method`,
             `foo` will have symbol flag `Property`.
-            `prop` will have symbol flags `GetAccessor` and `SetAccessor`.
         */
-        if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
+        if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method))) {
             return undefined;
         }
 
@@ -1127,8 +1123,8 @@ namespace ts.Completions {
         const style = ObjectLiteralFunctionPropertyStyle.ArrowFunction; // >> TODO: Get this from somewhere
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
         const body = factory.createBlock([]);
-        const functionProps = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
-        if (!functionProps) {
+        const functionProp = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
+        if (!functionProp) {
             return undefined;
         }
 
@@ -1141,7 +1137,6 @@ namespace ts.Completions {
         });
 
         // insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
-        const format = ListFormat.CommaDelimited;
         // if (formatContext) {
         //     // >> TODO: this is breaking get/set pairs because they're on the same line when printing
         //     insertText = printer.printAndFormatSnippetList(format, factory.createNodeArray(functionProps), sourceFile, formatContext);
@@ -1149,7 +1144,8 @@ namespace ts.Completions {
         // else {
         //     insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
         // }
-        insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
+        // insertText = printer.printSnippet(format, factory.createNodeArray(functionProps), sourceFile);
+        insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
 
         return { isSnippet, insertText, importAdder };
     };
@@ -1164,7 +1160,7 @@ namespace ts.Completions {
         importAdder: codefix.ImportAdder,
         body: Block,
         style: ObjectLiteralFunctionPropertyStyle,
-    ): (PropertyAssignment | MethodDeclaration | AccessorDeclaration)[] | undefined {
+    ): PropertyAssignment | MethodDeclaration | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
@@ -1187,52 +1183,7 @@ namespace ts.Completions {
                     // We don't support overloads in object literals.
                     return undefined;
                 }
-                const prop = createFunctionFromType(type, style);
-                return prop && [prop];
-            }
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor: {
-                // >> TODO: confusing to return both accessors in a completion scenario? They're kinda different functions. Return in different entries
-                let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
-                const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
-                if (importableReference) {
-                    typeNode = importableReference.typeNode;
-                    codefix.importSymbols(importAdder, importableReference.symbols);
-                }
-                const accessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
-                // >> Why does the order matter? Or maybe it doesn't, and we're just trying to get all the accessors?
-                const orderedAccessors = accessors.secondAccessor ? [accessors.firstAccessor, accessors.secondAccessor] : [accessors.firstAccessor];
-                const nodes = [];
-                for (const accessor of orderedAccessors) {
-                    if (isGetAccessorDeclaration(accessor)) {
-                        nodes.push(factory.createGetAccessorDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            name,
-                            emptyArray,
-                            typeNode,
-                            body || factory.createBlock([])));
-                    }
-                    else {
-                        Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
-                        const accessorParameter = getSetAccessorValueParameter(accessor);
-                        const paramName = accessorParameter && isIdentifier(accessorParameter.name) ? idText(accessorParameter.name) : "arg";
-                        const newParameter = factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            /*dotDotDotToken*/ undefined,
-                            paramName,
-                            /*questionToken*/ undefined,
-                            typeNode);
-                        nodes.push(factory.createSetAccessorDeclaration(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            name,
-                            [newParameter],
-                            body || factory.createBlock([])));
-                    }
-                }
-                return nodes;
+                return createFunctionFromType(type, style);
             }
             default:
                 return undefined;
