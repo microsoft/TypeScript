@@ -5,7 +5,7 @@ namespace ts.projectSystem {
             applyChangesToOpen: (session: TestSession) => void;
             openFile1Again: (session: TestSession) => void;
         }
-        const configFile: protocol.FileSystemRequestArgs = {
+        const config: protocol.FileSystemRequestArgs = {
             file: "/a/b/tsconfig.json",
             fileContent: "{}"
         };
@@ -21,6 +21,37 @@ namespace ts.projectSystem {
             path: "/a/b/app.ts",
             content: "import { xyz } from './file3'; let x = xyz"
         };
+        const file3File: File = {
+            path: "/a/b/file3.ts",
+            content: "export let xyz = 1;"
+        }
+        const configFile: File = {
+            path: "/a/b/tsconfig.json",
+            content: "{}"
+        };
+        const file1: protocol.FileSystemRequestArgs = {
+            file: "/a/b/commonFile1.ts",
+            fileContent: "let x = 1"
+        };
+        const file2: protocol.FileSystemRequestArgs = {
+            file: "/a/b/commonFile2.ts",
+            fileContent: "let y = 1"
+        };
+        const libFileFile: protocol.FileSystemRequestArgs = {
+        file: "/a/lib/lib.d.ts",
+        fileContent: `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }`
+    };
+
         function fileContentWithComment(file: protocol.FileSystemRequestArgs | File) {
             return `// some copy right notice
 ${'content' in file ? file.content :  file.fileContent}`;
@@ -34,7 +65,7 @@ ${'content' in file ? file.content :  file.fileContent}`;
                 command: protocol.CommandTypes.UpdateFileSystem,
                 arguments:{
                     fileSystem: 'memfs',
-                    created: [app, file3, file1, file2, libFile, configFile],
+                    created: [app, file3, file1, file2, libFileFile, config],
                     deleted: [], // string[];
                     updated: [], //FileSystemRequestArgs[];
                 }
@@ -44,11 +75,13 @@ ${'content' in file ? file.content :  file.fileContent}`;
                 arguments: { file: app.file }
             });
             const service = session.getProjectService();
-            const project = service.configuredProjects.get(configFile.file)!;
+            const project = service.configuredProjects.get(config.file)!;
             const vfs = (session as any).host.vfs
             assert.isDefined(vfs);
             assert.isDefined(project);
             verifyProjectVersion(project, 1);
+            // for some reason I have here ... (but I think is duped from above, but maybe if I delete this I need to lower the expected projectVersion throughout?)
+            // PROBABLY
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
                 arguments: app
