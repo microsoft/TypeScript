@@ -19996,7 +19996,7 @@ namespace ts {
                 const requireOptionalProperties = (relation === subtypeRelation || relation === strictSubtypeRelation) && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
-                    if (reportErrors) {
+                    if (reportErrors && shouldReportUnmatchedPropertyError(source, target)) {
                         reportUnmatchedProperty(source, target, unmatchedProperty, requireOptionalProperties);
                     }
                     return Ternary.False;
@@ -20152,6 +20152,20 @@ namespace ts {
                     }
                 }
                 return result;
+            }
+
+            function shouldReportUnmatchedPropertyError(source: Type, target: Type): boolean {
+                const typeCallSignatures = getSignaturesOfStructuredType(source, SignatureKind.Call);
+                const typeConstructSignatures = getSignaturesOfStructuredType(source, SignatureKind.Construct);
+                const typeProperties = getPropertiesOfObjectType(source);
+                if ((typeCallSignatures.length || typeConstructSignatures.length) && !typeProperties.length) {
+                    if ((getSignaturesOfType(target, SignatureKind.Call).length && typeCallSignatures.length) ||
+                        (getSignaturesOfType(target, SignatureKind.Construct).length && typeConstructSignatures.length)) {
+                        return true; // target has similar signature kinds to source, still focus on the unmatched property
+                    }
+                    return false;
+                }
+                return true;
             }
 
             function reportIncompatibleCallSignatureReturn(siga: Signature, sigb: Signature) {
