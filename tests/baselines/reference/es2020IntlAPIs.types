@@ -207,3 +207,20 @@ console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '))
 >join : (separator?: string) => string
 >', ' : ", "
 
+new Intl.Locale(); // should error
+>new Intl.Locale() : Intl.Locale
+>Intl.Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+
+new Intl.Locale(new Intl.Locale('en-US'));
+>new Intl.Locale(new Intl.Locale('en-US')) : Intl.Locale
+>Intl.Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>new Intl.Locale('en-US') : Intl.Locale
+>Intl.Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>'en-US' : "en-US"
+
