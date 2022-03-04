@@ -30709,7 +30709,7 @@ namespace ts {
                 // then it cannot be instantiated.
                 // In the case of a merged class-module or class-interface declaration,
                 // only the class declaration node will have the Abstract flag set.
-                if (someSignatures(constructSignatures, signature => !!(signature.flags & SignatureFlags.Abstract))) {
+                if (someSignature(constructSignatures, signature => !!(signature.flags & SignatureFlags.Abstract))) {
                     error(node, Diagnostics.Cannot_create_an_instance_of_an_abstract_class);
                     return resolveErrorCall(node);
                 }
@@ -30744,12 +30744,11 @@ namespace ts {
             return resolveErrorCall(node);
         }
 
-        function someSignature(signature: Signature, f: (s: Signature) => boolean): boolean {
-            return signature.compositeKind === TypeFlags.Union ? some(signature.compositeSignatures, f) : f(signature);
-        }
-
-        function someSignatures(signatures: readonly Signature[], f: (s: Signature) => boolean): boolean {
-            return some(signatures, signature => someSignature(signature, f));
+        function someSignature(signatures: Signature | readonly Signature[], f: (s: Signature) => boolean): boolean {
+            if (isArray(signatures)) {
+                return some(signatures, signature => someSignature(signature, f));
+            }
+            return signatures.compositeKind === TypeFlags.Union ? some(signatures.compositeSignatures, f) : f(signatures);
         }
 
         function typeHasProtectedAccessibleBase(target: Symbol, type: InterfaceType): boolean {
