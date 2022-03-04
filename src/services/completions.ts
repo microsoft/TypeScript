@@ -80,14 +80,6 @@ namespace ts.Completions {
         SymbolMemberExport   = SymbolMember | Export,
     }
 
-    const enum ObjectLiteralFunctionPropertyStyle {
-        // Auto, // >> ?
-        Method,
-        FunctionExpression,
-        ArrowFunction,
-        BracelessArrowFunction,
-    }
-
     interface SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
         isDefaultExport?: boolean;
@@ -1120,10 +1112,20 @@ namespace ts.Completions {
         let isSnippet: true | undefined;
         let insertText: string = name;
 
-        const style = ObjectLiteralFunctionPropertyStyle.ArrowFunction; // >> TODO: Get this from somewhere
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
-        const body = factory.createBlock([]);
-        const functionProp = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body, style);
+
+        let body;
+        if (preferences.includeCompletionsWithSnippetText) {
+            isSnippet = true;
+            const emptyStmt = factory.createEmptyStatement();
+            body = factory.createBlock([emptyStmt], /* multiline */ true);
+            setSnippetElement(emptyStmt, { kind: SnippetKind.TabStop, order: 0 });
+        }
+        else {
+            body = factory.createBlock([], /* multiline */ true);
+        }
+
+        const functionProp = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body);
         if (!functionProp) {
             return undefined;
         }
@@ -1159,7 +1161,6 @@ namespace ts.Completions {
         preferences: UserPreferences,
         importAdder: codefix.ImportAdder,
         body: Block,
-        style: ObjectLiteralFunctionPropertyStyle,
     ): PropertyAssignment | MethodDeclaration | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
@@ -1183,63 +1184,29 @@ namespace ts.Completions {
                     // We don't support overloads in object literals.
                     return undefined;
                 }
-                return createFunctionFromType(type, style);
-            }
+                let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+                const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+                if (importableReference) {
+                    typeNode = importableReference.typeNode;
+                    codefix.importSymbols(importAdder, importableReference.symbols);
+                }
+                if (!typeNode) {
+                    return undefined;
+                }
+                Debug.assertNode(typeNode, isFunctionTypeNode);
+                return factory.createMethodDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeNode.typeParameters,
+                    typeNode.parameters,
+                    typeNode.type,
+                    body);
+                }
             default:
                 return undefined;
-        }
-
-        function createFunctionFromType(type: Type, style: ObjectLiteralFunctionPropertyStyle): PropertyAssignment | MethodDeclaration | undefined {
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
-            const importableReference = codefix.tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
-            if (importableReference) {
-                typeNode = importableReference.typeNode;
-                codefix.importSymbols(importAdder, importableReference.symbols);
-            }
-            if (!typeNode) {
-                return undefined;
-            }
-            Debug.assert(isFunctionTypeNode(typeNode), `Expected function type node, got node of kind ${typeNode.kind}`); // >> TODO: properly display kind
-            switch (style) {
-                case ObjectLiteralFunctionPropertyStyle.Method:
-                    return factory.createMethodDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
-                        /*asteriskToken*/ undefined,
-                        name,
-                        /*questionToken*/ undefined,
-                        typeNode.typeParameters,
-                        typeNode.parameters,
-                        typeNode.type,
-                        body);
-                case ObjectLiteralFunctionPropertyStyle.FunctionExpression:
-                    return factory.createPropertyAssignment(name, factory.createFunctionExpression(
-                        /*modifiers*/ undefined,
-                        /*asteriskToken*/ undefined,
-                        /*name*/ undefined,
-                        typeNode.typeParameters,
-                        typeNode.parameters,
-                        typeNode.type,
-                        body));
-                case ObjectLiteralFunctionPropertyStyle.ArrowFunction:
-                    return factory.createPropertyAssignment(name, factory.createArrowFunction(
-                        /*modifiers*/ undefined,
-                        typeNode.typeParameters,
-                        typeNode.parameters,
-                        typeNode.type,
-                        /*equalsGreaterThanToken*/ undefined,
-                        body));
-                case ObjectLiteralFunctionPropertyStyle.BracelessArrowFunction:
-                    return factory.createPropertyAssignment(name, factory.createArrowFunction(
-                        /*modifiers*/ undefined,
-                        typeNode.typeParameters,
-                        typeNode.parameters,
-                        typeNode.type,
-                        /*equalsGreaterThanToken*/ undefined,
-                        factory.createOmittedExpression())); // >> TODO: figure out expression
-                default:
-                    Debug.assertNever(style);
-            }
         }
     }
 

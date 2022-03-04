@@ -25,11 +25,10 @@
 ////const o: Overload = {
 ////    /*c*/
 ////}
-////interface Accessor {
-////    get prop(): number;
-////    set prop(n: number);
+////interface Prop {
+////    "space bar"(): string;
 ////}
-////const a: Accessor = {
+////const p: Prop = {
 ////    /*d*/
 ////}
 
@@ -44,7 +43,7 @@ verify.completions({
             name: "bar",
             sortText: completion.SortText.LocationPriority,
             source: "ObjectLiteralMethodSnippet/",
-            insertText: "bar: (x: number): void => { }",
+            insertText: "bar(x: number): void {\n}",
         },
         {
             name: "bar",
@@ -64,7 +63,7 @@ verify.completions({
             name: "bar",
             sortText: completion.SortText.LocationPriority,
             source: "ObjectLiteralMethodSnippet/",
-            insertText: "bar: (x: number): void => { }",
+            insertText: "bar(x: number): void {\n}",
         },
         {
             name: "bar",
@@ -75,7 +74,7 @@ verify.completions({
             name: "foo",
             sortText: completion.SortText.LocationPriority,
             source: "ObjectLiteralMethodSnippet/",
-            insertText: "foo: (x: string): string => { }",
+            insertText: "foo(x: string): string {\n}",
         },
         {
             name: "foo",
@@ -107,11 +106,31 @@ verify.completions({
     },
     includes: [
         {
-            name: "prop",
+            name: "\"space bar\"",
             sortText: completion.SortText.LocationPriority,
             source: "ObjectLiteralMethodSnippet/",
-            insertText: "get prop(): number { },set prop(n: number) { }",
+            insertText: "\"space bar\"(): string {\n}",
+        },
+        {
+            name: "\"space bar\"",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
         },
     ],
 });
-
+verify.completions({
+    marker: "a",
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
+    },
+    includes: [
+        {
+            name: "bar",
+            sortText: completion.SortText.LocationPriority,
+            source: "ObjectLiteralMethodSnippet/",
+            isSnippet: true,
+            insertText: "bar(x: number): void {\n    $0\n}",
+        },
+    ],
+});
