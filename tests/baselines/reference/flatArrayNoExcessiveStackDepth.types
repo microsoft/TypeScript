@@ -36,8 +36,8 @@ const repro_43249 = (value: unknown) => {
 >"No" : "No"
     }
     const match = value.match(/anything/) || [];
->match : RegExpMatchArray
->value.match(/anything/) || [] : RegExpMatchArray
+>match : RegExpMatchArray | never[]
+>value.match(/anything/) || [] : RegExpMatchArray | never[]
 >value.match(/anything/) : RegExpMatchArray | null
 >value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >value : string
@@ -48,7 +48,7 @@ const repro_43249 = (value: unknown) => {
     const [, extracted] = match;
 > : undefined
 >extracted : string
->match : RegExpMatchArray
+>match : RegExpMatchArray | never[]
 
 };
 

@@ -50,28 +50,28 @@ var c: { (x: number): number; (x: any): any; };
 >x : any
 
 var z = [a, b, c];
->z : { (x: number): number; (x: any): any; }[]
->[a, b, c] : { (x: number): number; (x: any): any; }[]
+>z : ({ (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; })[]
+>[a, b, c] : ({ (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; })[]
 >a : { (x: number): number; (x: string): string; }
 >b : { (x: number): number; (x: string): string; }
 >c : { (x: number): number; (x: any): any; }
 
 var r4 = z[0];
->r4 : { (x: number): number; (x: any): any; }
->z[0] : { (x: number): number; (x: any): any; }
->z : { (x: number): number; (x: any): any; }[]
+>r4 : { (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; }
+>z[0] : { (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; }
+>z : ({ (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; })[]
 >0 : 0
 
 var r5 = r4(''); // any not string
 >r5 : any
 >r4('') : any
->r4 : { (x: number): number; (x: any): any; }
+>r4 : { (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; }
 >'' : ""
 
 var r5b = r4(1);
 >r5b : number
 >r4(1) : number
->r4 : { (x: number): number; (x: any): any; }
+>r4 : { (x: number): number; (x: string): string; } | { (x: number): number; (x: any): any; }
 >1 : 1
 
 var a2: { <T>(x: T): number; (x: string): string;};

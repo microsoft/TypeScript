@@ -1,0 +1,103 @@
+=== tests/cases/compiler/strictSubtypeReductionStrictMode.ts ===
+// Repro from #41977
+
+class S1 {
+>S1 : S1
+
+    static f(a: number | string): void { }
+>f : (a: number | string) => void
+>a : string | number
+}
+
+class S2 {
+>S2 : S2
+
+    static f(a: number): void { }
+>f : (a: number) => void
+>a : number
+
+    static g(a: number): void { }
+>g : (a: number) => void
+>a : number
+}
+
+function f(a: number): void { }
+>f : (a: number) => void
+>a : number
+
+function g(a: number): void { }
+>g : (a: number) => void
+>a : number
+
+// Declaring the following type aliases should have no effect
+
+type T1 = typeof S2.g;
+>T1 : (a: number) => void
+>S2.g : (a: number) => void
+>S2 : typeof S2
+>g : (a: number) => void
+
+type T2 = typeof g;
+>T2 : (a: number) => void
+>g : (a: number) => void
+
+// All should have type ((a: number) => void)[]
+
+const y1 = [S1.f, f];
+>y1 : ((a: number) => void)[]
+>[S1.f, f] : ((a: number) => void)[]
+>S1.f : (a: string | number) => void
+>S1 : typeof S1
+>f : (a: string | number) => void
+>f : (a: number) => void
+
+const y2 = [S1.f, g];
+>y2 : ((a: number) => void)[]
+>[S1.f, g] : ((a: number) => void)[]
+>S1.f : (a: string | number) => void
+>S1 : typeof S1
+>f : (a: string | number) => void
+>g : (a: number) => void
+
+const y3 = [S1.f, S2.f];
+>y3 : ((a: number) => void)[]
+>[S1.f, S2.f] : ((a: number) => void)[]
+>S1.f : (a: string | number) => void
+>S1 : typeof S1
+>f : (a: string | number) => void
+>S2.f : (a: number) => void
+>S2 : typeof S2
+>f : (a: number) => void
+
+const y4 = [S1.f, S2.g];
+>y4 : ((a: number) => void)[]
+>[S1.f, S2.g] : ((a: number) => void)[]
+>S1.f : (a: string | number) => void
+>S1 : typeof S1
+>f : (a: string | number) => void
+>S2.g : (a: number) => void
+>S2 : typeof S2
+>g : (a: number) => void
+
+// All assignments should be errors
+
+const x1: ((ctrl: number | string) => void)[] = y1;
+>x1 : ((ctrl: number | string) => void)[]
+>ctrl : string | number
+>y1 : ((a: number) => void)[]
+
+const x2: ((ctrl: number | string) => void)[] = y2;
+>x2 : ((ctrl: number | string) => void)[]
+>ctrl : string | number
+>y2 : ((a: number) => void)[]
+
+const x3: ((ctrl: number | string) => void)[] = y3;
+>x3 : ((ctrl: number | string) => void)[]
+>ctrl : string | number
+>y3 : ((a: number) => void)[]
+
+const x4: ((ctrl: number | string) => void)[] = y4;
+>x4 : ((ctrl: number | string) => void)[]
+>ctrl : string | number
+>y4 : ((a: number) => void)[]
+

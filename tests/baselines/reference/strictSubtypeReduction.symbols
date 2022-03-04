@@ -1,0 +1,99 @@
+=== tests/cases/compiler/strictSubtypeReduction.ts ===
+// Repro from #41977
+
+class S1 {
+>S1 : Symbol(S1, Decl(strictSubtypeReduction.ts, 0, 0))
+
+    static f(a: number | string): void { }
+>f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>a : Symbol(a, Decl(strictSubtypeReduction.ts, 3, 13))
+}
+
+class S2 {
+>S2 : Symbol(S2, Decl(strictSubtypeReduction.ts, 4, 1))
+
+    static f(a: number): void { }
+>f : Symbol(S2.f, Decl(strictSubtypeReduction.ts, 6, 10))
+>a : Symbol(a, Decl(strictSubtypeReduction.ts, 7, 13))
+
+    static g(a: number): void { }
+>g : Symbol(S2.g, Decl(strictSubtypeReduction.ts, 7, 33))
+>a : Symbol(a, Decl(strictSubtypeReduction.ts, 8, 13))
+}
+
+function f(a: number): void { }
+>f : Symbol(f, Decl(strictSubtypeReduction.ts, 9, 1))
+>a : Symbol(a, Decl(strictSubtypeReduction.ts, 11, 11))
+
+function g(a: number): void { }
+>g : Symbol(g, Decl(strictSubtypeReduction.ts, 11, 31))
+>a : Symbol(a, Decl(strictSubtypeReduction.ts, 12, 11))
+
+// Declaring the following type aliases should have no effect
+
+type T1 = typeof S2.g;
+>T1 : Symbol(T1, Decl(strictSubtypeReduction.ts, 12, 31))
+>S2.g : Symbol(S2.g, Decl(strictSubtypeReduction.ts, 7, 33))
+>S2 : Symbol(S2, Decl(strictSubtypeReduction.ts, 4, 1))
+>g : Symbol(S2.g, Decl(strictSubtypeReduction.ts, 7, 33))
+
+type T2 = typeof g;
+>T2 : Symbol(T2, Decl(strictSubtypeReduction.ts, 16, 22))
+>g : Symbol(g, Decl(strictSubtypeReduction.ts, 11, 31))
+
+// All should have type ((a: number) => void)[]
+
+const y1 = [S1.f, f];
+>y1 : Symbol(y1, Decl(strictSubtypeReduction.ts, 21, 5))
+>S1.f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>S1 : Symbol(S1, Decl(strictSubtypeReduction.ts, 0, 0))
+>f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>f : Symbol(f, Decl(strictSubtypeReduction.ts, 9, 1))
+
+const y2 = [S1.f, g];
+>y2 : Symbol(y2, Decl(strictSubtypeReduction.ts, 22, 5))
+>S1.f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>S1 : Symbol(S1, Decl(strictSubtypeReduction.ts, 0, 0))
+>f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>g : Symbol(g, Decl(strictSubtypeReduction.ts, 11, 31))
+
+const y3 = [S1.f, S2.f];
+>y3 : Symbol(y3, Decl(strictSubtypeReduction.ts, 23, 5))
+>S1.f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>S1 : Symbol(S1, Decl(strictSubtypeReduction.ts, 0, 0))
+>f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>S2.f : Symbol(S2.f, Decl(strictSubtypeReduction.ts, 6, 10))
+>S2 : Symbol(S2, Decl(strictSubtypeReduction.ts, 4, 1))
+>f : Symbol(S2.f, Decl(strictSubtypeReduction.ts, 6, 10))
+
+const y4 = [S1.f, S2.g];
+>y4 : Symbol(y4, Decl(strictSubtypeReduction.ts, 24, 5))
+>S1.f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>S1 : Symbol(S1, Decl(strictSubtypeReduction.ts, 0, 0))
+>f : Symbol(S1.f, Decl(strictSubtypeReduction.ts, 2, 10))
+>S2.g : Symbol(S2.g, Decl(strictSubtypeReduction.ts, 7, 33))
+>S2 : Symbol(S2, Decl(strictSubtypeReduction.ts, 4, 1))
+>g : Symbol(S2.g, Decl(strictSubtypeReduction.ts, 7, 33))
+
+// All assignments should be errors in strict mode, but won't be without strict function types on
+
+const x1: ((ctrl: number | string) => void)[] = y1;
+>x1 : Symbol(x1, Decl(strictSubtypeReduction.ts, 28, 5))
+>ctrl : Symbol(ctrl, Decl(strictSubtypeReduction.ts, 28, 12))
+>y1 : Symbol(y1, Decl(strictSubtypeReduction.ts, 21, 5))
+
+const x2: ((ctrl: number | string) => void)[] = y2;
+>x2 : Symbol(x2, Decl(strictSubtypeReduction.ts, 29, 5))
+>ctrl : Symbol(ctrl, Decl(strictSubtypeReduction.ts, 29, 12))
+>y2 : Symbol(y2, Decl(strictSubtypeReduction.ts, 22, 5))
+
+const x3: ((ctrl: number | string) => void)[] = y3;
+>x3 : Symbol(x3, Decl(strictSubtypeReduction.ts, 30, 5))
+>ctrl : Symbol(ctrl, Decl(strictSubtypeReduction.ts, 30, 12))
+>y3 : Symbol(y3, Decl(strictSubtypeReduction.ts, 23, 5))
+
+const x4: ((ctrl: number | string) => void)[] = y4;
+>x4 : Symbol(x4, Decl(strictSubtypeReduction.ts, 31, 5))
+>ctrl : Symbol(ctrl, Decl(strictSubtypeReduction.ts, 31, 12))
+>y4 : Symbol(y4, Decl(strictSubtypeReduction.ts, 24, 5))
+

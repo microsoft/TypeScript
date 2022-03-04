@@ -69,8 +69,8 @@ var EmptyRCComp = RC3 || RC4;
 >RC4 : typeof RC4
 
 var PartRCComp = RC1 || RC4;
->PartRCComp : typeof RC4
->RC1 || RC4 : typeof RC4
+>PartRCComp : typeof RC1 | typeof RC4
+>RC1 || RC4 : typeof RC1 | typeof RC4
 >RC1 : typeof RC1
 >RC4 : typeof RC4
 
@@ -101,11 +101,11 @@ let a2 = <EmptyRCComp data-prop="hello" />;
 let b = <PartRCComp />
 >b : JSX.Element
 ><PartRCComp /> : JSX.Element
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1 | typeof RC4
 
 let c = <PartRCComp data-extra="hello" />
 >c : JSX.Element
 ><PartRCComp data-extra="hello" /> : JSX.Element
->PartRCComp : typeof RC4
+>PartRCComp : typeof RC1 | typeof RC4
 >data-extra : string
 

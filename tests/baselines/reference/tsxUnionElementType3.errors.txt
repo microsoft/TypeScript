@@ -1,7 +1,9 @@
 tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'string' is not assignable to type 'never'.
+tests/cases/conformance/jsx/file.tsx(35,10): error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: number; }'.
+tests/cases/conformance/jsx/file.tsx(36,10): error TS2741: Property 'x' is missing in type '{ "data-extra": string; }' but required in type '{ x: number; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     import React = require('react');
     
     class RC1 extends React.Component<{x : number}, {}> {
@@ -40,4 +42,10 @@ tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'string' is not 
     let a1 = <EmptyRCComp />;
     let a2 = <EmptyRCComp data-prop="hello" />;
     let b = <PartRCComp />
+             ~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: number; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:3:36: 'x' is declared here.
     let c = <PartRCComp data-extra="hello" />
+             ~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{ "data-extra": string; }' but required in type '{ x: number; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:3:36: 'x' is declared here.

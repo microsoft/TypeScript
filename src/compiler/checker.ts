@@ -17681,7 +17681,7 @@ namespace ts {
             target: Signature,
             ignoreReturnTypes: boolean): boolean {
             return compareSignaturesRelated(source, target, ignoreReturnTypes ? SignatureCheckMode.IgnoreReturnTypes : 0, /*reportErrors*/ false,
-                /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
+                /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined, assignableRelation) !== Ternary.False;
         }
 
         type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
@@ -17705,7 +17705,8 @@ namespace ts {
             errorReporter: ErrorReporter | undefined,
             incompatibleErrorReporter: ((source: Type, target: Type) => void) | undefined,
             compareTypes: TypeComparer,
-            reportUnreliableMarkers: TypeMapper | undefined): Ternary {
+            reportUnreliableMarkers: TypeMapper | undefined,
+            relation: typeof strictSubtypeRelation): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
                 return Ternary.True;
@@ -17735,8 +17736,8 @@ namespace ts {
             }
 
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
-                kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor;
+            const strictVariance = relation === strictSubtypeRelation || (!(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
+                kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor);
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
@@ -17776,7 +17777,7 @@ namespace ts {
                     const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                         (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                     let related = callbacks ?
-                        compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
+                        compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers, relation) :
                         !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                     // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
                     if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
@@ -20173,7 +20174,7 @@ namespace ts {
              */
             function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
                 return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                    relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, makeFunctionTypeMapper(reportUnreliableMarkers));
+                    relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, makeFunctionTypeMapper(reportUnreliableMarkers), relation);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {

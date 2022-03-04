@@ -305,14 +305,14 @@ module Errors {
 >r4arg : <T extends Derived>(...x: T[]) => T
 
     var r4a = [r4arg2, r4arg];
->r4a : ((...x: Base[]) => Base)[]
->[r4arg2, r4arg] : ((...x: Base[]) => Base)[]
+>r4a : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
+>[r4arg2, r4arg] : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
 >r4arg2 : (...x: Base[]) => Base
 >r4arg : <T extends Derived>(...x: T[]) => T
 
     var r4b = [r4arg, r4arg2];
->r4b : ((...x: Base[]) => Base)[]
->[r4arg, r4arg2] : ((...x: Base[]) => Base)[]
+>r4b : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
+>[r4arg, r4arg2] : ((<T extends Derived>(...x: T[]) => T) | ((...x: Base[]) => Base))[]
 >r4arg : <T extends Derived>(...x: T[]) => T
 >r4arg2 : (...x: Base[]) => Base
 
@@ -342,14 +342,14 @@ module Errors {
 >r5arg : <T extends Derived>(x: T, y: T) => T
 
     var r5a = [r5arg2, r5arg];
->r5a : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->[r5arg2, r5arg] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5a : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
+>[r5arg2, r5arg] : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >r5arg : <T extends Derived>(x: T, y: T) => T
 
     var r5b = [r5arg, r5arg2];
->r5b : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->[r5arg, r5arg2] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5b : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
+>[r5arg, r5arg2] : ((<T extends Derived>(x: T, y: T) => T) | ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
 >r5arg : <T extends Derived>(x: T, y: T) => T
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
