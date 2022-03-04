@@ -646,7 +646,6 @@ namespace ts.server {
         CommandNames.OrganizeImportsFull,
         CommandNames.GetEditsForFileRename,
         CommandNames.GetEditsForFileRenameFull,
-        CommandNames.ConfigurePlugin,
         CommandNames.PrepareCallHierarchy,
         CommandNames.ProvideCallHierarchyIncomingCalls,
         CommandNames.ProvideCallHierarchyOutgoingCalls,
