@@ -5532,6 +5532,13 @@ namespace ts {
         keyPropertyName?: __String;  // Property with unique unit type that exists in every object/intersection in union type
         /* @internal */
         constituentMap?: ESMap<TypeId, Type>;  // Constituents keyed by unit type discriminants
+        /**
+         * names of discriminant properties that are optional on at least one type
+         *
+         * These are grouped by the set of types they discriminate to speed up checks
+         * @internal
+         */
+        discriminantOptionalPropertyNames?: __String[][];
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {

@@ -26853,34 +26853,107 @@ namespace ts {
             return false;
         }
 
-        function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
-            return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(contextualType,
-                concatenate(
-                    map(
-                        filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.PropertyAssignment && isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName)),
-                        prop => ([() => getContextFreeTypeOfExpression((prop as PropertyAssignment).initializer), prop.symbol.escapedName] as [() => Type, __String])
-                    ),
-                    map(
-                        filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                        s => [() => undefinedType, s.escapedName] as [() => Type, __String]
-                    )
+        /**
+         * get discriminators for missing properties on node that are optional for any member of the union context type
+         *
+         * Because we know in advance which types each member can potentially
+         * discriminate against, we only have to choose one property among the
+         * set that discriminates between the same types in the union.
+         *
+         * @internal
+         */
+        function getOptionalPropertyDiscriminators(node: ObjectLiteralExpression | JsxAttributes, contextualType: UnionType): [() => Type, __String][] | undefined {
+            const nodeSymbolMembers = node?.symbol?.members;
+            if (!nodeSymbolMembers) {
+                return undefined;
+            }
+
+            let discriminantNames = contextualType.discriminantOptionalPropertyNames;
+            if (!discriminantNames) {
+                const optionalNames = new Map<__String, number[]>();
+                let index = 0;
+                for (const memberType of contextualType.types) {
+                    for (const s of getPropertiesOfType(memberType)) {
+                      if (s.flags & SymbolFlags.Optional) {
+                          const name = s.escapedName;
+                          const inds = optionalNames.get(name);
+                          inds ? inds.push(index) : optionalNames.set(name, [index]);
+                      }
+                    }
+                    ++index;
+                }
+
+                const grouped = new Map<string, __String[]>();
+                optionalNames.forEach((inds, escapedName) => {
+                    const key = inds.join(" ");
+                    const names = grouped.get(key);
+                    names ? names.push(escapedName) : grouped.set(key, [escapedName]);
+                });
+                const names: __String[][] = [];
+                grouped.forEach(nameGroup => names.push(nameGroup));
+                discriminantNames = contextualType.discriminantOptionalPropertyNames = names;
+            }
+
+            return map(
+                filter(
+                    map(discriminantNames, names => names.find(name => !nodeSymbolMembers.has(name))),
+                    name => !!name // remove undefineds to select only missing members
                 ),
-                isTypeAssignableTo,
-                contextualType
+                name => [() => undefinedType, name] as [() => Type, __String],
+            );
+        }
+
+        function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
+            return (
+                getMatchingUnionConstituentForObjectLiteral(contextualType, node) ||
+                discriminateTypeByDiscriminableItems(
+                    contextualType,
+                    concatenate(
+                        map(
+                            filter(
+                                node.properties,
+                                p =>
+                                    !!p.symbol &&
+                                    p.kind === SyntaxKind.PropertyAssignment &&
+                                    isPossiblyDiscriminantValue(p.initializer) &&
+                                    isDiscriminantProperty(contextualType, p.symbol.escapedName)
+                            ),
+                            prop =>
+                                [
+                                    () => getContextFreeTypeOfExpression((prop as PropertyAssignment).initializer),
+                                    prop.symbol.escapedName,
+                                ] as [() => Type, __String]
+                        ),
+                        getOptionalPropertyDiscriminators(node, contextualType),
+                    ),
+                    isTypeAssignableTo,
+                    contextualType
+                )
             );
         }
 
         function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
-            return discriminateTypeByDiscriminableItems(contextualType,
+            return discriminateTypeByDiscriminableItems(
+                contextualType,
                 concatenate(
                     map(
-                        filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
-                        prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as [() => Type, __String])
+                        filter(
+                            node.properties,
+                            p =>
+                                !!p.symbol &&
+                                p.kind === SyntaxKind.JsxAttribute &&
+                                isDiscriminantProperty(contextualType, p.symbol.escapedName) &&
+                                (!p.initializer || isPossiblyDiscriminantValue(p.initializer))
+                        ),
+                        prop =>
+                            [
+                                !(prop as JsxAttribute).initializer
+                                    ? () => trueType
+                                    : () => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!),
+                                prop.symbol.escapedName,
+                            ] as [() => Type, __String]
                     ),
-                    map(
-                        filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                        s => [() => undefinedType, s.escapedName] as [() => Type, __String]
-                    )
+                    getOptionalPropertyDiscriminators(node, contextualType),
                 ),
                 isTypeAssignableTo,
                 contextualType
