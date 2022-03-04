@@ -1,0 +1,12 @@
+tests/cases/conformance/importAssertion/importAssertion5.ts(1,20): error TS2307: Cannot find module './first' or its corresponding type declarations.
+tests/cases/conformance/importAssertion/importAssertion5.ts(2,1): error TS1005: '}' expected.
+
+
+==== tests/cases/conformance/importAssertion/importAssertion5.ts (2 errors) ====
+    import * as f from "./first" assert {
+                       ~~~~~~~~~
+!!! error TS2307: Cannot find module './first' or its corresponding type declarations.
+    
+    
+!!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/importAssertion/importAssertion5.ts:1:37: The parser expected to find a '}' to match the '{' token here.

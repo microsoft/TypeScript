@@ -11,9 +11,7 @@
 
 verify.completions({
   marker: "",
-  exact: [
-    completion.globalThisEntry,
-    completion.undefinedVarEntry,
+  exact: completion.globalsPlus([
     {
       name: "someModule",
       source: "/someModule",
@@ -34,8 +32,7 @@ verify.completions({
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     },
-    ...completion.statementKeywordsWithTypes
-  ],
+  ], { noLib: true }),
   preferences: {
     includeCompletionsForModuleExports: true
   }
@@ -45,7 +42,7 @@ verify.applyCodeActionFromCompletion("", {
   name: "someModule",
   source: "/someModule",
   data: { exportName: "default", fileName: "/someModule.ts" },
-  description: `Import default 'someModule' from module "./someModule"`,
+  description: `Add import from "./someModule"`,
   newFileContent: `import someModule from "./someModule";
 
 someMo`

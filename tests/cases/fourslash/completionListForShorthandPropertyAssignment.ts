@@ -2,4 +2,4 @@
 
 //// var person: {name:string; id: number} = { n/**/
 
-verify.completions({ marker: "", exact: ["name", "id"] });
+verify.completions({ marker: "", exact: ["id", "name"] });

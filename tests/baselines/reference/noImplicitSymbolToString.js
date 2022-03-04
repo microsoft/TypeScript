@@ -51,32 +51,32 @@ function getKey2<S extends string>(key: S) {
 // Fix #19666
 var symbol;
 var str = "hello ";
-var templateStr = "hello " + symbol;
+var templateStr = "hello ".concat(symbol);
 var appendStr = "hello " + symbol;
 str += symbol;
 var symbolUnionNumber;
 var symbolUnionString;
-var templateStrUnion = "union with number " + symbolUnionNumber + " and union with string " + symbolUnionString;
+var templateStrUnion = "union with number ".concat(symbolUnionNumber, " and union with string ").concat(symbolUnionString);
 function getKey(key) {
-    return key + " is the key";
+    return "".concat(key, " is the key");
 }
 function getKey1(key) {
     var s1;
-    "" + s1;
+    "".concat(s1);
     s1 + '';
     +s1;
     var s2;
-    "" + s2;
+    "".concat(s2);
     s2 + '';
     +s2;
 }
 function getKey2(key) {
     var s1;
-    "" + s1;
+    "".concat(s1);
     s1 + '';
     +s1;
     var s2;
-    "" + s2;
+    "".concat(s2);
     s2 + '';
     +s2;
 }

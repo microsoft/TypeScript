@@ -15,11 +15,11 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-var a = "" + (123 + 456);
-var b = "leading " + (123 + 456);
-var c = 123 + 456 + " trailing";
-var d = "Hello " + 123 + " World";
+var a = "".concat(123 + 456);
+var b = "leading ".concat(123 + 456);
+var c = "".concat(123 + 456, " trailing");
+var d = "Hello ".concat(123, " World");
 var e = "Hello";
-var f = 1 + (1 + " end of string");
+var f = 1 + "".concat(1, " end of string");
 var g = tag(__makeTemplateObject(["Hello ", " World"], ["Hello ", " World"]), 123);
 var h = tag(__makeTemplateObject(["Hello"], ["Hello"]));

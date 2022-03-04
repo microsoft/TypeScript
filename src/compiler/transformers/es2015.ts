@@ -169,6 +169,8 @@ namespace ts {
         ForStatement = 1 << 11,                 // Enclosing block-scoped container is a ForStatement
         ForInOrForOfStatement = 1 << 12,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
         ConstructorWithCapturedSuper = 1 << 13, // Enclosed in a constructor that captures 'this' for use with 'super'
+        StaticInitializer = 1 << 14,            // Enclosed in a static initializer
+
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
         // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
@@ -176,7 +178,7 @@ namespace ts {
         // Ancestor masks
         //
 
-        AncestorFactsMask = (ConstructorWithCapturedSuper << 1) - 1,
+        AncestorFactsMask = (StaticInitializer << 1) - 1,
 
         // We are always in *some* kind of block scope, but only specific block-scope containers are
         // top-level or Blocks.
@@ -189,7 +191,7 @@ namespace ts {
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer | StaticInitializer,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
@@ -225,12 +227,15 @@ namespace ts {
         IterationStatementBlockIncludes = IterationStatementBlock,
         IterationStatementBlockExcludes = BlockScopeExcludes,
 
+        StaticInitializerIncludes = FunctionIncludes | StaticInitializer,
+        StaticInitializerExcludes = FunctionExcludes,
+
         //
         // Subtree facts
         //
 
-        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
-        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
+        NewTarget = 1 << 15,                            // Contains a 'new.target' meta-property
+        CapturedLexicalThis = 1 << 16,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
@@ -375,6 +380,23 @@ namespace ts {
 
         function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
+        }
+
+        function classWrapperStatementVisitor(node: Node): VisitResult<Node> {
+            if (shouldVisitNode(node)) {
+                const original = getOriginalNode(node);
+                if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
+                    const ancestorFacts = enterSubtree(
+                        HierarchyFacts.StaticInitializerExcludes,
+                        HierarchyFacts.StaticInitializerIncludes
+                    );
+                    const result = visitorWorker(node, /*expressionResultIsUnused*/ false);
+                    exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
+                    return result;
+                }
+                return visitorWorker(node, /*expressionResultIsUnused*/ false);
+            }
+            return node;
         }
 
         function callExpressionVisitor(node: Node): VisitResult<Node> {
@@ -602,7 +624,7 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
-            if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
+            if (hierarchyFacts & HierarchyFacts.ArrowFunction && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
             if (convertedLoopState) {
@@ -995,31 +1017,35 @@ namespace ts {
             const statements: Statement[] = [];
             resumeLexicalEnvironment();
 
+            // In derived classes, there may be code before the necessary super() call
+            // We'll remove pre-super statements to be tacked on after the rest of the body
+            const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
+            const { superCall, superStatementIndex } = findSuperCallAndStatementIndex(constructor.body.statements, existingPrologue);
+            const postSuperStatementsStart = superStatementIndex === -1 ? existingPrologue.length : superStatementIndex + 1;
+
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
             // The assumption is that no prior step in the pipeline has added any prologue directives.
-            let statementOffset = 0;
-            if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, /*ensureUseStrict*/ false);
-            addDefaultValueAssignmentsIfNeeded(statements, constructor);
-            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
-            if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor);
+            let statementOffset = postSuperStatementsStart;
+            if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, statementOffset, /*ensureUseStrict*/ false);
+            if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
-            // If the first statement is a call to `super()`, visit the statement directly
+            // If there already exists a call to `super()`, visit the statement directly
             let superCallExpression: Expression | undefined;
             if (hasSynthesizedSuper) {
                 superCallExpression = createDefaultSuperCallOrThis();
             }
-            else if (isDerivedClass && statementOffset < constructor.body.statements.length) {
-                const firstStatement = constructor.body.statements[statementOffset];
-                if (isExpressionStatement(firstStatement) && isSuperCall(firstStatement.expression)) {
-                    superCallExpression = visitImmediateSuperCallInBody(firstStatement.expression);
-                }
+            else if (superCall) {
+                superCallExpression = visitSuperCallInBody(superCall);
             }
 
             if (superCallExpression) {
                 hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
-                statementOffset++; // skip this statement, we will add it after visiting the rest of the body.
             }
+
+            // Add parameter defaults at the beginning of the output, with prologue statements
+            addDefaultValueAssignmentsIfNeeded(prologue, constructor);
+            addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
 
             // visit the remaining statements
             addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
@@ -1027,8 +1053,8 @@ namespace ts {
             factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
-            if (isDerivedClass) {
-                if (superCallExpression && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+            if (isDerivedClass || superCallExpression) {
+                if (superCallExpression && postSuperStatementsStart === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                     // following representation:
                     //
@@ -1077,9 +1103,19 @@ namespace ts {
                     // })(Base);
                     // ```
 
-                    // Since the `super()` call was the first statement, we insert the `this` capturing call to
-                    // `super()` at the top of the list of `statements` (after any pre-existing custom prologues).
-                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                    // If the super() call is the first statement, we can directly create and assign its result to `_this`
+                    if (superStatementIndex <= existingPrologue.length) {
+                        insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                    }
+                    // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
+                    // * A prologue `var _this = this;`, in case the constructor accesses this before super()
+                    // * If it exists, a reassignment to that `_this` of the super() call
+                    else {
+                        insertCaptureThisForNode(prologue, constructor, createActualThis());
+                        if (superCallExpression) {
+                            insertSuperThisCaptureThisForNode(statements, superCallExpression);
+                        }
+                    }
 
                     if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
                         statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
@@ -1104,19 +1140,41 @@ namespace ts {
                 insertCaptureThisForNodeIfNeeded(prologue, constructor);
             }
 
-            const block = factory.createBlock(
+            const body = factory.createBlock(
                 setTextRange(
                     factory.createNodeArray(
-                        concatenate(prologue, statements)
+                        [
+                            ...existingPrologue,
+                            ...prologue,
+                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex)),
+                            ...statements
+                        ]
                     ),
                     /*location*/ constructor.body.statements
                 ),
                 /*multiLine*/ true
             );
 
-            setTextRange(block, constructor.body);
+            setTextRange(body, constructor.body);
+            return body;
+        }
 
-            return block;
+        function findSuperCallAndStatementIndex(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
+            for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
+                const superCall = getSuperCallFromStatement(originalBodyStatements[i]);
+                if (superCall) {
+                    // With a super() call, split the statements into pre-super() and 'body' (post-super())
+                    return {
+                        superCall,
+                        superStatementIndex: i,
+                    };
+                }
+            }
+
+            // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
+            return {
+                superStatementIndex: -1,
+            };
         }
 
         /**
@@ -1489,6 +1547,25 @@ namespace ts {
             return false;
         }
 
+        /**
+         * Assigns the `this` in a constructor to the result of its `super()` call.
+         *
+         * @param statements Statements in the constructor body.
+         * @param superExpression Existing `super()` call for the constructor.
+         */
+        function insertSuperThisCaptureThisForNode(statements: Statement[], superExpression: Expression): void {
+            enableSubstitutionsForCapturedThis();
+            const assignSuperExpression = factory.createExpressionStatement(
+                factory.createBinaryExpression(
+                    factory.createThis(),
+                    SyntaxKind.EqualsToken,
+                    superExpression
+                )
+            );
+            insertStatementAfterCustomPrologue(statements, assignSuperExpression);
+            setCommentRange(assignSuperExpression, getOriginalNode(superExpression).parent);
+        }
+
         function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = factory.createVariableStatement(
@@ -1610,6 +1687,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
                         // Constructors are handled in visitClassExpression/visitClassDeclaration
                         break;
 
@@ -1749,7 +1827,7 @@ namespace ts {
          * @param node An ArrowFunction node.
          */
         function visitArrowFunction(node: ArrowFunction) {
-            if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+            if (node.transformFlags & TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
 
@@ -1768,10 +1846,6 @@ namespace ts {
             setTextRange(func, node);
             setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
-
-            if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis) {
-                enableSubstitutionsForCapturedThis();
-            }
 
             // If an arrow function contains
             exitSubtree(ancestorFacts, HierarchyFacts.ArrowFunctionSubtreeExcludes, HierarchyFacts.None);
@@ -1852,7 +1926,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !isStatic(node)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -1900,7 +1974,7 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
-                statementOffset = factory.copyStandardPrologue(body.statements, prologue, /*ensureUseStrict*/ false);
+                statementOffset = factory.copyStandardPrologue(body.statements, prologue, 0, /*ensureUseStrict*/ false);
                 statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedFunction);
                 statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedVariableStatement);
             }
@@ -2880,9 +2954,11 @@ namespace ts {
             // variables declared in the loop initializer that will be changed inside the loop
             const loopOutParameters: LoopOutParameter[] = [];
             if (loopInitializer && (getCombinedNodeFlags(loopInitializer) & NodeFlags.BlockScoped)) {
-                const hasCapturedBindingsInForInitializer = shouldConvertInitializerOfForStatement(node);
+                const hasCapturedBindingsInForHead = shouldConvertInitializerOfForStatement(node) ||
+                    shouldConvertConditionOfForStatement(node) ||
+                    shouldConvertIncrementorOfForStatement(node);
                 for (const decl of loopInitializer.declarations) {
-                    processLoopVariableDeclaration(node, decl, loopParameters, loopOutParameters, hasCapturedBindingsInForInitializer);
+                    processLoopVariableDeclaration(node, decl, loopParameters, loopOutParameters, hasCapturedBindingsInForHead);
                 }
             }
 
@@ -3360,26 +3436,32 @@ namespace ts {
             });
         }
 
-        function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForInitializer: boolean) {
+        function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForHead: boolean) {
             const name = decl.name;
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
                     if (!isOmittedExpression(element)) {
-                        processLoopVariableDeclaration(container, element, loopParameters, loopOutParameters, hasCapturedBindingsInForInitializer);
+                        processLoopVariableDeclaration(container, element, loopParameters, loopOutParameters, hasCapturedBindingsInForHead);
                     }
                 }
             }
             else {
                 loopParameters.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 const checkFlags = resolver.getNodeCheckFlags(decl);
-                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForInitializer) {
+                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
                     const outParamName = factory.createUniqueName("out_" + idText(name));
                     let flags: LoopOutParameterFlags = 0;
                     if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter) {
                         flags |= LoopOutParameterFlags.Body;
                     }
-                    if (isForStatement(container) && container.initializer && resolver.isBindingCapturedByNode(container.initializer, decl)) {
-                        flags |= LoopOutParameterFlags.Initializer;
+                    if (isForStatement(container)) {
+                        if (container.initializer && resolver.isBindingCapturedByNode(container.initializer, decl)) {
+                            flags |= LoopOutParameterFlags.Initializer;
+                        }
+                        if (container.condition && resolver.isBindingCapturedByNode(container.condition, decl) ||
+                            container.incrementor && resolver.isBindingCapturedByNode(container.incrementor, decl)) {
+                            flags |= LoopOutParameterFlags.Body;
+                        }
                     }
                     loopOutParameters.push({ flags, originalName: name, outParamName });
                 }
@@ -3687,7 +3769,7 @@ namespace ts {
             // visit the class body statements outside of any converted loop body.
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const bodyStatements = visitNodes(body.statements, visitor, isStatement);
+            const bodyStatements = visitNodes(body.statements, classWrapperStatementVisitor, isStatement);
             convertedLoopState = savedConvertedLoopState;
 
             const classStatements = filter(bodyStatements, isVariableStatementWithInitializer);
@@ -3714,7 +3796,10 @@ namespace ts {
             //      return C;
             //  }())
             //
-            const aliasAssignment = tryCast(initializer, isAssignmentExpression);
+            let aliasAssignment = tryCast(initializer, isAssignmentExpression);
+            if (!aliasAssignment && isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.CommaToken) {
+                aliasAssignment = tryCast(initializer.left, isAssignmentExpression);
+            }
 
             // The underlying call (3) is another IIFE that may contain a '_super' argument.
             const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
@@ -3800,7 +3885,7 @@ namespace ts {
             );
         }
 
-        function visitImmediateSuperCallInBody(node: CallExpression) {
+        function visitSuperCallInBody(node: CallExpression) {
             return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ false);
         }
 
@@ -4080,86 +4165,22 @@ namespace ts {
          * @param node A TemplateExpression node.
          */
         function visitTemplateExpression(node: TemplateExpression): Expression {
-            const expressions: Expression[] = [];
-            addTemplateHead(expressions, node);
-            addTemplateSpans(expressions, node);
-
-            // createAdd will check if each expression binds less closely than binary '+'.
-            // If it does, it wraps the expression in parentheses. Otherwise, something like
-            //    `abc${ 1 << 2 }`
-            // becomes
-            //    "abc" + 1 << 2 + ""
-            // which is really
-            //    ("abc" + 1) << (2 + "")
-            // rather than
-            //    "abc" + (1 << 2) + ""
-            const expression = reduceLeft(expressions, factory.createAdd)!;
-            if (nodeIsSynthesized(expression)) {
-                setTextRange(expression, node);
-            }
-
-            return expression;
-        }
-
-        /**
-         * Gets a value indicating whether we need to include the head of a TemplateExpression.
-         *
-         * @param node A TemplateExpression node.
-         */
-        function shouldAddTemplateHead(node: TemplateExpression) {
-            // If this expression has an empty head literal and the first template span has a non-empty
-            // literal, then emitting the empty head literal is not necessary.
-            //     `${ foo } and ${ bar }`
-            // can be emitted as
-            //     foo + " and " + bar
-            // This is because it is only required that one of the first two operands in the emit
-            // output must be a string literal, so that the other operand and all following operands
-            // are forced into strings.
-            //
-            // If the first template span has an empty literal, then the head must still be emitted.
-            //     `${ foo }${ bar }`
-            // must still be emitted as
-            //     "" + foo + bar
-
-            // There is always atleast one templateSpan in this code path, since
-            // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
-            Debug.assert(node.templateSpans.length !== 0);
-
-            return node.head.text.length !== 0 || node.templateSpans[0].literal.text.length === 0;
-        }
-
-        /**
-         * Adds the head of a TemplateExpression to an array of expressions.
-         *
-         * @param expressions An array of expressions.
-         * @param node A TemplateExpression node.
-         */
-        function addTemplateHead(expressions: Expression[], node: TemplateExpression): void {
-            if (!shouldAddTemplateHead(node)) {
-                return;
-            }
-
-            expressions.push(factory.createStringLiteral(node.head.text));
-        }
-
-        /**
-         * Visits and adds the template spans of a TemplateExpression to an array of expressions.
-         *
-         * @param expressions An array of expressions.
-         * @param node A TemplateExpression node.
-         */
-        function addTemplateSpans(expressions: Expression[], node: TemplateExpression): void {
+            let expression: Expression = factory.createStringLiteral(node.head.text);
             for (const span of node.templateSpans) {
-                expressions.push(visitNode(span.expression, visitor, isExpression));
+                const args = [visitNode(span.expression, visitor, isExpression)];
 
-                // Only emit if the literal is non-empty.
-                // The binary '+' operator is left-associative, so the first string concatenation
-                // with the head will force the result up to this point to be a string.
-                // Emitting a '+ ""' has no semantic effect for middles and tails.
-                if (span.literal.text.length !== 0) {
-                    expressions.push(factory.createStringLiteral(span.literal.text));
+                if (span.literal.text.length > 0) {
+                    args.push(factory.createStringLiteral(span.literal.text));
                 }
+
+                expression = factory.createCallExpression(
+                    factory.createPropertyAccessExpression(expression, "concat"),
+                    /*typeArguments*/ undefined,
+                    args,
+                );
             }
+
+            return setTextRange(expression, node);
         }
 
         /**
@@ -4357,7 +4378,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
+            return isStatic(member)
                 ? factory.getInternalName(node)
                 : factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
         }

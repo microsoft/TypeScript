@@ -8,9 +8,9 @@ tests/cases/compiler/tile1.ts(21,2): error TS2416: Property 'view' in type 'C' i
       Type 'Vnode<MyAttrs, this>' is not assignable to type 'Vnode<MyAttrs, Lifecycle<MyAttrs, any>>'.
         Type 'this' is not assignable to type 'Lifecycle<MyAttrs, any>'.
           Type 'C' is not assignable to type 'Lifecycle<MyAttrs, any>'.
-            Index signature is missing in type 'C'.
+            Index signature for type 'number' is missing in type 'C'.
 tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
-  Index signature is missing in type 'C'.
+  Index signature for type 'number' is missing in type 'C'.
 
 
 ==== tests/cases/compiler/tile1.ts (5 errors) ====
@@ -48,13 +48,13 @@ tests/cases/compiler/tile1.ts(24,7): error TS2322: Type 'C' is not assignable to
 !!! error TS2416:       Type 'Vnode<MyAttrs, this>' is not assignable to type 'Vnode<MyAttrs, Lifecycle<MyAttrs, any>>'.
 !!! error TS2416:         Type 'this' is not assignable to type 'Lifecycle<MyAttrs, any>'.
 !!! error TS2416:           Type 'C' is not assignable to type 'Lifecycle<MyAttrs, any>'.
-!!! error TS2416:             Index signature is missing in type 'C'.
+!!! error TS2416:             Index signature for type 'number' is missing in type 'C'.
     }
     
     const test8: ClassComponent<any> = new C();
           ~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'ClassComponent<any>'.
-!!! error TS2322:   Index signature is missing in type 'C'.
+!!! error TS2322:   Index signature for type 'number' is missing in type 'C'.
 ==== tests/cases/compiler/file1.js (1 errors) ====
     /** @type {ClassComponent<any>} */
     const test9 = new C();

@@ -175,7 +175,7 @@ namespace ts {
         return true;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ESMap<string, T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ModeAwareCache<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file!);
@@ -184,21 +184,22 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(mapsAreEqual(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(mapEqualToCache(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
     /** True if the maps have the same keys and values. */
-    function mapsAreEqual<T>(left: ESMap<string, T>, right: ESMap<string, T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
-        if (left === right) return true;
+    function mapEqualToCache<T>(left: ESMap<string, T>, right: ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+        if (left as any === right) return true; // given the type mismatch (the tests never pass a cache), this'll never be true
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
-            if (!right.has(leftKey)) return true;
-            const rightValue = right.get(leftKey)!;
+            if (!right.has(leftKey, /*mode*/ undefined)) return true;
+            const rightValue = right.get(leftKey, /*mode*/ undefined)!;
             return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
         });
         if (someInLeftHasNoMatch) return false;
-        const someInRightHasNoMatch = forEachKey(right, rightKey => !left.has(rightKey));
+        let someInRightHasNoMatch = false;
+        right.forEach((_, rightKey) => someInRightHasNoMatch = someInRightHasNoMatch || !left.has(rightKey));
         return !someInRightHasNoMatch;
     }
 
@@ -233,7 +234,7 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
@@ -244,7 +245,26 @@ namespace ts {
             });
             assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
-            const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
+            assert.equal(program1Diagnostics.length, program2Diagnostics.length);
+        });
+
+        it("successful if change affects a single module of a package", () => {
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "import {b} from 'b'", "var a = b;") },
+                { name: "/node_modules/b/index.d.ts", text: SourceText.New("", "export * from './internal';", "") },
+                { name: "/node_modules/b/internal.d.ts", text: SourceText.New("", "", "export const b = 1;") },
+                { name: "/node_modules/b/package.json", text: SourceText.New("", "", JSON.stringify({ name: "b", version: "1.2.3" })) },
+            ];
+
+            const options: CompilerOptions = { target, moduleResolution: ModuleResolutionKind.NodeJs };
+            const program1 = newProgram(files, ["/a.ts"], options);
+            const program2 = updateProgram(program1, ["/a.ts"], options, files => {
+                files[2].text = files[2].text.updateProgram("export const b = 2;");
+            });
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
+            const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
+            const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
@@ -383,7 +403,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram('import * as aa from "a";');
             });
-            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a", /*mode*/ undefined), "'a' is not an unresolved module after re-use");
         });
 
         it("works with updated SourceFiles", () => {
@@ -406,7 +426,7 @@ namespace ts {
                 }
             };
             const program2 = createProgram(["/a.ts"], options, updateHost, program1);
-            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a", /*mode*/ undefined), "'a' is not an unresolved module after re-use");
             assert.strictEqual(sourceFile.statements[2].getSourceFile(), sourceFile, "parent pointers are not altered");
         });
 

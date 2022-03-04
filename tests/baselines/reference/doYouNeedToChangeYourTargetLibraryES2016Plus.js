@@ -22,6 +22,7 @@ const testAsyncGenerator: AsyncGenerator<any> = null as any;
 const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
 const testAsyncIterable: AsyncIterable<any> = null as any;
 const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
+const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 
 // es2019
 const testArrayFlat = [].flat();
@@ -44,7 +45,6 @@ const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
 
 // esnext
-const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 
 
 //// [doYouNeedToChangeYourTargetLibraryES2016Plus.js]
@@ -69,6 +69,7 @@ var testAsyncGenerator = null;
 var testAsyncGeneratorFunction = null;
 var testAsyncIterable = null;
 var testAsyncIterableIterator = null;
+var testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 // es2019
 var testArrayFlat = [].flat();
 var testArrayFlatMap = [].flatMap();
@@ -87,4 +88,3 @@ var testBigInt = BigInt(123);
 var testPromiseAny = Promise.any([]);
 var testStringReplaceAll = "".replaceAll();
 // esnext
-var testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();

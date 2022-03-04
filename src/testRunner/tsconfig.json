@@ -2,7 +2,6 @@
     "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "outFile": "../../built/local/run.js",
-        "moduleResolution": "node",
         "composite": false,
         "declaration": false,
         "declarationMap": false,
@@ -23,7 +22,8 @@
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },
-        { "path": "../harness", "prepend": true }
+        { "path": "../harness", "prepend": true },
+        { "path": "../loggedIO", "prepend": true }
     ],
 
     "files": [
@@ -93,10 +93,14 @@
         "unittests/evaluation/asyncGenerator.ts",
         "unittests/evaluation/awaiter.ts",
         "unittests/evaluation/destructuring.ts",
+        "unittests/evaluation/externalModules.ts",
         "unittests/evaluation/forAwaitOf.ts",
         "unittests/evaluation/forOf.ts",
         "unittests/evaluation/optionalCall.ts",
         "unittests/evaluation/objectRest.ts",
+        "unittests/evaluation/superInStaticInitializer.ts",
+        "unittests/evaluation/templateLiteral.ts",
+        "unittests/evaluation/updateExpressionInModule.ts",
         "unittests/services/cancellableLanguageServiceOperations.ts",
         "unittests/services/colorization.ts",
         "unittests/services/convertToAsyncFunction.ts",
@@ -153,6 +157,7 @@
         "unittests/tsc/runWithoutArgs.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
+        "unittests/tscWatch/nodeNextWatch.ts",
         "unittests/tscWatch/emitAndErrorUpdates.ts",
         "unittests/tscWatch/forceConsistentCasingInFileNames.ts",
         "unittests/tscWatch/incremental.ts",
@@ -168,6 +173,7 @@
         "unittests/tsserver/cancellationToken.ts",
         "unittests/tsserver/compileOnSave.ts",
         "unittests/tsserver/completions.ts",
+        "unittests/tsserver/completionsIncomplete.ts",
         "unittests/tsserver/configFileSearch.ts",
         "unittests/tsserver/configuredProjects.ts",
         "unittests/tsserver/declarationFileMaps.ts",
@@ -187,6 +193,7 @@
         "unittests/tsserver/getExportReferences.ts",
         "unittests/tsserver/getFileReferences.ts",
         "unittests/tsserver/importHelpers.ts",
+        "unittests/tsserver/inlayHints.ts",
         "unittests/tsserver/inferredProjects.ts",
         "unittests/tsserver/jsdocTag.ts",
         "unittests/tsserver/languageService.ts",

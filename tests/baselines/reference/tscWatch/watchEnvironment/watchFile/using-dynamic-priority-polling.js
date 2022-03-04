@@ -36,6 +36,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/username/project/typescript.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/username/project/typescript.ts (used version)
+
 WatchedFiles::
 
 FsWatches::
@@ -104,6 +108,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/username/project/typescript.ts
+
+Shape signatures in builder refreshed for::
+/a/username/project/typescript.ts (computed .d.ts)
 
 WatchedFiles::
 

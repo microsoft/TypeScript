@@ -23,4 +23,4 @@
 ////    }
 ////}
 
-verify.completions({ marker: test.markers(), exact: ["count", "isEmpty", "fileCount"] });
+verify.completions({ marker: test.markers(), exact: ["count", "fileCount", "isEmpty"] });

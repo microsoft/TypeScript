@@ -28,7 +28,7 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
@@ -49,6 +49,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (used version)
+/a/b/commonfile2.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -91,7 +96,7 @@ Output::
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
@@ -112,6 +117,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/commonfile2.ts (computed .d.ts)
+/a/b/commonfile1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -150,7 +159,7 @@ Output::
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
@@ -166,6 +175,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/commonfile1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -199,7 +211,7 @@ Output::
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
@@ -220,6 +232,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/commonfile2.ts (computed .d.ts)
+/a/b/commonfile1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

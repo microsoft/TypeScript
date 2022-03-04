@@ -5,8 +5,8 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/12.ts(1,2): erro
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts(1,3): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts(1,4): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts(1,5): error TS6188: Numeric separators are not allowed here.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts(1,1): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts(1,1): error TS2304: Cannot find name '_0'.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts(1,3): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts(1,6): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts(1,3): error TS6189: Multiple consecutive numeric separators are not permitted.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts(1,5): error TS6189: Multiple consecutive numeric separators are not permitted.
@@ -20,8 +20,8 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts(1,2): erro
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts(1,3): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts(1,4): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/28.ts(1,6): error TS6188: Numeric separators are not allowed here.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts(1,1): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts(1,1): error TS2304: Cannot find name '_0'.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts(1,3): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts(1,3): error TS6189: Multiple consecutive numeric separators are not permitted.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts(1,7): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/31.ts(1,3): error TS6189: Multiple consecutive numeric separators are not permitted.
@@ -36,8 +36,8 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts(1,3): erro
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts(1,2): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/40.ts(1,4): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts(1,6): error TS6188: Numeric separators are not allowed here.
+tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts(1,1): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts(1,1): error TS2304: Cannot find name '_0'.
-tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts(1,3): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts(1,7): error TS6188: Numeric separators are not allowed here.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/44.ts(1,3): error TS6189: Multiple consecutive numeric separators are not permitted.
 tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts(1,5): error TS6189: Multiple consecutive numeric separators are not permitted.
@@ -136,9 +136,9 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts(1,3): error
 ==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts (2 errors) ====
     _0.0e0
     ~~
+!!! error TS1434: Unexpected keyword or identifier.
+    ~~
 !!! error TS2304: Cannot find name '_0'.
-      ~~~~
-!!! error TS1005: ';' expected.
     
 ==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts (1 errors) ====
     0.0e0_
@@ -203,9 +203,9 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts(1,3): error
 ==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts (2 errors) ====
     _0.0e+0
     ~~
+!!! error TS1434: Unexpected keyword or identifier.
+    ~~
 !!! error TS2304: Cannot find name '_0'.
-      ~~~~~
-!!! error TS1005: ';' expected.
     
 ==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts (1 errors) ====
     0.0e+0_
@@ -270,9 +270,9 @@ tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts(1,3): error
 ==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts (2 errors) ====
     _0.0e-0
     ~~
+!!! error TS1434: Unexpected keyword or identifier.
+    ~~
 !!! error TS2304: Cannot find name '_0'.
-      ~~~~~
-!!! error TS1005: ';' expected.
     
 ==== tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts (1 errors) ====
     0.0e-0_

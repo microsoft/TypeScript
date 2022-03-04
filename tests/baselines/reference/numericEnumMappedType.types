@@ -41,14 +41,14 @@ const e2: E2 = E2.ONE;
 
 b1[1] = "a";
 >b1[1] = "a" : "a"
->b1[1] : string
+>b1[1] : string | undefined
 >b1 : Bins1
 >1 : 1
 >"a" : "a"
 
 b1[e1] = "b";
 >b1[e1] = "b" : "b"
->b1[e1] : string
+>b1[e1] : string | undefined
 >b1 : Bins1
 >e1 : E1.ONE
 >"b" : "b"

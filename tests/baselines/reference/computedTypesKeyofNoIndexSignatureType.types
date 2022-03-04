@@ -39,5 +39,5 @@ type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: stri
 >WithIndexKey : string | number
 
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
->WithoutIndexKey : number | "foo" | "bar"
+>WithoutIndexKey : "foo" | "bar"
 

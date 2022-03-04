@@ -2,9 +2,9 @@
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 >f : (a: number, b: string) => false
 >Object.freeze(function foo(a: number, b: string) { return false; }) : (a: number, b: string) => false
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >function foo(a: number, b: string) { return false; } : (a: number, b: string) => false
 >foo : (a: number, b: string) => false
 >a : number
@@ -26,9 +26,9 @@ class C { constructor(a: number) { } }
 const c = Object.freeze(C);
 >c : typeof C
 >Object.freeze(C) : typeof C
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >C : typeof C
 
 new c(1);
@@ -39,9 +39,9 @@ new c(1);
 const a = Object.freeze([1, 2, 3]);
 >a : readonly number[]
 >Object.freeze([1, 2, 3]) : readonly number[]
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
@@ -60,26 +60,26 @@ a[0] = a[2].toString();
 >toString : (radix?: number) => string
 
 const o = Object.freeze({ a: 1, b: "string" });
->o : Readonly<{ a: number; b: string; }>
->Object.freeze({ a: 1, b: "string" }) : Readonly<{ a: number; b: string; }>
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>o : Readonly<{ a: 1; b: "string"; }>
+>Object.freeze({ a: 1, b: "string" }) : Readonly<{ a: 1; b: "string"; }>
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
->{ a: 1, b: "string" } : { a: number; b: string; }
->a : number
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>{ a: 1, b: "string" } : { a: 1; b: "string"; }
+>a : 1
 >1 : 1
->b : string
+>b : "string"
 >"string" : "string"
 
 o.b = o.a.toString();
 >o.b = o.a.toString() : string
 >o.b : any
->o : Readonly<{ a: number; b: string; }>
+>o : Readonly<{ a: 1; b: "string"; }>
 >b : any
 >o.a.toString() : string
 >o.a.toString : (radix?: number) => string
->o.a : number
->o : Readonly<{ a: number; b: string; }>
->a : number
+>o.a : 1
+>o : Readonly<{ a: 1; b: "string"; }>
+>a : 1
 >toString : (radix?: number) => string
 

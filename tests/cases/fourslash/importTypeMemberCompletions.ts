@@ -43,11 +43,11 @@
 verify.completions(
     { marker: "1", exact: "Foo" },
     { marker: "2", exact: "Bar" },
-    { marker: "3", exact: ["Baz", "a"] },
+    { marker: "3", exact: ["a", "Baz"] },
     { marker: "4", exact: "Foo" },
     { marker: "5", exact: "Bar" },
-    { marker: "6", exact: ["Baz", "Bat"] },
+    { marker: "6", exact: ["Bat", "Baz"] },
     { marker: "7", exact: "a" },
     { marker: "8", exact: "Bat" },
-    { marker: "9", exact: ["prototype", "bar"] },
+    { marker: "9", exact: ["bar", "prototype"] },
 );

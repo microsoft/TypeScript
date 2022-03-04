@@ -1,0 +1,36 @@
+// === /tests/cases/fourslash/Foo.js ===
+// /** @type {function (this: string, string): string} */
+// var f = function (s) { return /*FIND ALL REFS*/[|this|] + s; }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "kind": "var",
+      "name": "this",
+      "textSpan": {
+        "start": 85,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "this",
+          "kind": "text"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 85,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/Foo.js",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

@@ -238,6 +238,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/core/utilities.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/animals/animal.ts (used version)
+/user/username/projects/demo/animals/dog.ts (used version)
+/user/username/projects/demo/animals/index.ts (used version)
+/user/username/projects/demo/core/utilities.ts (used version)
+
 WatchedFiles::
 /user/username/projects/demo/core/tsconfig.json:
   {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
@@ -245,6 +252,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+/user/username/projects/demo/animals/package.json:
+  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
@@ -501,6 +510,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/demo/animals/index.ts
 /user/username/projects/demo/core/utilities.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/demo/core/utilities.ts (computed .d.ts)
+/user/username/projects/demo/animals/dog.ts (computed .d.ts)
+/user/username/projects/demo/animals/index.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/demo/core/tsconfig.json:
   {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
@@ -508,6 +522,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+/user/username/projects/demo/animals/package.json:
+  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
