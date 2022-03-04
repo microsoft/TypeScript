@@ -88,10 +88,10 @@ const x = {};
 >{} : {}
 
 Object.defineProperty(x, "name", { value: "Charles", writable: true });
->Object.defineProperty(x, "name", { value: "Charles", writable: true }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(x, "name", { value: "Charles", writable: true }) : typeof x
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"name" : "name"
 >{ value: "Charles", writable: true } : { value: string; writable: true; }
@@ -101,10 +101,10 @@ Object.defineProperty(x, "name", { value: "Charles", writable: true });
 >true : true
 
 Object.defineProperty(x, "middleInit", { value: "H" });
->Object.defineProperty(x, "middleInit", { value: "H" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(x, "middleInit", { value: "H" }) : typeof x
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"middleInit" : "middleInit"
 >{ value: "H" } : { value: string; }
@@ -112,10 +112,10 @@ Object.defineProperty(x, "middleInit", { value: "H" });
 >"H" : "H"
 
 Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
->Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : typeof x
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"lastName" : "lastName"
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
@@ -125,10 +125,10 @@ Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 >false : false
 
 Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof x
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"zip" : "zip"
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
@@ -138,10 +138,10 @@ Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } 
 >_ : any
 
 Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
->Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : typeof x
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"houseNumber" : "houseNumber"
 >{ get() { return 21.75 } } : { get(): number; }
@@ -149,10 +149,10 @@ Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 >21.75 : 21.75
 
 Object.defineProperty(x, "zipStr", {
->Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : typeof x
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : typeof x
 >"zipStr" : "zipStr"
 >{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
@@ -249,7 +249,7 @@ match(() => expected, (x = expected) => void 0);
 module.exports = x;
 >module.exports = x : typeof x
 >module.exports : typeof x
->module : { "\"tests/cases/conformance/jsdoc/index\"": typeof x; }
+>module : { exports: typeof x; }
 >exports : typeof x
 >x : typeof x
 

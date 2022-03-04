@@ -8,7 +8,7 @@ const createScopedActionType = <S extends string>(scope: S) => <T extends string
 ><T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <T extends string>(type: T) => `${S}/${T}`
 >type : T
 >`${scope}/${type}` as `${S}/${T}` : `${S}/${T}`
->`${scope}/${type}` : string
+>`${scope}/${type}` : `${S}/${T}`
 >scope : S
 >type : T
 
@@ -76,11 +76,11 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 
     let s1: string = name;
 >s1 : string
->name : `get${Capitalize<T>}`
+>name : "getFoo" | "getBar"
 
     let s2: 'getFoo' | 'getBar' = name;
 >s2 : "getFoo" | "getBar"
->name : `get${Capitalize<T>}`
+>name : "getFoo" | "getBar"
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
@@ -419,7 +419,7 @@ type Foo<T> = T extends `*${infer S}*` ? S : never;
 >Foo : Foo<T>
 
 type TF1 = Foo<any>;      // never
->TF1 : never
+>TF1 : string
 
 type TF2 = Foo<string>;   // never
 >TF2 : never
@@ -514,4 +514,108 @@ type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 
 type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
 >T100000 : any
+
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+>IsNegative : IsNegative<T>
+>true : true
+>false : false
+
+type AA<T extends number, Q extends number> =
+>AA : AA<T, Q>
+
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+>true : true
+>true : true
+
+type BB = AA<-2, -2>;
+>BB : "Every thing is ok!"
+>-2 : -2
+>2 : 2
+>-2 : -2
+>2 : 2
+
+// Repro from #40970
+
+type PathKeys<T> =
+>PathKeys : PathKeys<T>
+
+    T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+    T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+    never;
+
+type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+>SubKeys : SubKeys<T, K>
+
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+>getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
+>obj : T
+>path : P
+
+const obj2 = {
+>obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>{    name: 'John',    age: 42,    cars: [        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ]} as const : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>{    name: 'John',    age: 42,    cars: [        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ]} : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+
+    name: 'John',
+>name : "John"
+>'John' : "John"
+
+    age: 42,
+>age : 42
+>42 : 42
+
+    cars: [
+>cars : readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]
+>[        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ] : readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]
+
+        { make: 'Ford', age: 10 },
+>{ make: 'Ford', age: 10 } : { readonly make: "Ford"; readonly age: 10; }
+>make : "Ford"
+>'Ford' : "Ford"
+>age : 10
+>10 : 10
+
+        { make: 'Trabant', age: 35 }
+>{ make: 'Trabant', age: 35 } : { readonly make: "Trabant"; readonly age: 35; }
+>make : "Trabant"
+>'Trabant' : "Trabant"
+>age : 35
+>35 : 35
+
+    ]
+} as const;
+
+let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+>make : "Trabant"
+>getProp2(obj2, 'cars.1.make') : "Trabant"
+>getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
+>obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>'cars.1.make' : "cars.1.make"
+
+// Repro from #46480
+
+export type Spacing =
+>Spacing : Spacing
+
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+>spacing : Spacing
+>"s12" : "s12"
+
+export type SpacingShorthand =
+>SpacingShorthand : any
+
+    | `${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing}`
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+
+const test1: SpacingShorthand = "0 0 0";
+>test1 : any
+>"0 0 0" : "0 0 0"
 

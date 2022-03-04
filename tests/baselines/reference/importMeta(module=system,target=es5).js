@@ -112,8 +112,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            exports_1("x", x = (context_1.meta));
-            exports_1("y", y = (import.metal));
+            exports_1("x", x = context_1.meta);
+            exports_1("y", y = import.metal);
             exports_1("z", z = import.import.import.malkovich);
         }
     };
@@ -126,8 +126,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            globalA = (context_1.meta);
-            globalB = (import.metal);
+            globalA = context_1.meta;
+            globalB = import.metal;
             globalC = import.import.import.malkovich;
         }
     };

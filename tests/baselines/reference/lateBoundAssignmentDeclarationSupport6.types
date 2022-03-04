@@ -51,9 +51,9 @@ F.prototype.defsAClass = true;
 
 Object.defineProperty(F.prototype, _str, {value: "ok"});
 >Object.defineProperty(F.prototype, _str, {value: "ok"}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >F.prototype : any
 >F : typeof F
 >prototype : any
@@ -64,9 +64,9 @@ Object.defineProperty(F.prototype, _str, {value: "ok"});
 
 Object.defineProperty(F.prototype, _sym, {value: "ok"});
 >Object.defineProperty(F.prototype, _sym, {value: "ok"}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >F.prototype : any
 >F : typeof F
 >prototype : any
@@ -95,18 +95,18 @@ const _z = inst[_sym];
 module.exports.F = F;
 >module.exports.F = F : typeof F
 >module.exports.F : typeof F
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >F : typeof F
 >F : typeof F
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >S : unique symbol
 >_sym : unique symbol
 

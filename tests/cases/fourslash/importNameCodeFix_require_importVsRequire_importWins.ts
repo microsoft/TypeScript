@@ -26,7 +26,7 @@ goTo.file("addToExisting.js");
 verify.codeFix({
   index: 0,
   errorCode: ts.Diagnostics.Cannot_find_name_0.code,
-  description: `Add default import 'Blah' to existing import declaration from "./blah"`,
+  description: `Update import from "./blah"`,
   newFileContent: 
 `const { Named2 } = require('./blah')
 import Blah, { Named1 } from './blah'
@@ -41,7 +41,7 @@ goTo.file("newImport.js");
 verify.codeFix({
   index: 0,
   errorCode: ts.Diagnostics.Cannot_find_name_0.code,
-  description: `Import default 'Blah' from module "./blah"`,
+  description: `Add import from "./blah"`,
   newFileContent: 
 `import fs from 'fs';
 import Blah from './blah';

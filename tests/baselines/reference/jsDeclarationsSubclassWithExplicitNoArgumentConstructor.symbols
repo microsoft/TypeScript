@@ -1,0 +1,22 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export class Super {
+>Super : Symbol(Super, Decl(index.js, 0, 0))
+
+    /**
+     * @param {string} firstArg
+     * @param {string} secondArg
+     */
+    constructor(firstArg, secondArg) { }
+>firstArg : Symbol(firstArg, Decl(index.js, 5, 16))
+>secondArg : Symbol(secondArg, Decl(index.js, 5, 25))
+}
+
+export class Sub extends Super {
+>Sub : Symbol(Sub, Decl(index.js, 6, 1))
+>Super : Symbol(Super, Decl(index.js, 0, 0))
+
+    constructor() {
+        super('first', 'second');
+>super : Symbol(Super, Decl(index.js, 0, 0))
+    }
+}

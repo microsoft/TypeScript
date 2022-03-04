@@ -1,0 +1,14 @@
+// === /project/b.ts ===
+// import [|"./a"|];
+
+[
+  {
+    "textSpan": {
+      "start": 7,
+      "length": 5
+    },
+    "fileName": "/project/b.ts",
+    "isWriteAccess": false,
+    "isDefinition": false
+  }
+]

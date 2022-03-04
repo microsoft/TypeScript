@@ -36,6 +36,7 @@ Output::
 
 Program root files: ["/a/c/f2.ts","/a/c/f3.ts"]
 Program options: {"watch":true,"project":"/a/c/tsconfig.json","configFilePath":"/a/c/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -47,6 +48,12 @@ Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
 /a/c/f2.ts
 /a/c/f3.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f1.ts (used version)
+/a/c/f2.ts (used version)
+/a/c/f3.ts (used version)
 
 WatchedFiles::
 /a/c/tsconfig.json:

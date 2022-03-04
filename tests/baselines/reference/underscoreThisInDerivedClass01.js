@@ -19,7 +19,9 @@ class C {
 class D extends C {
     constructor() {
         var _this = "uh-oh?";
+        console.log("ruh-roh...");
         super();
+        console.log("d'oh!");
     }
 }
 
@@ -33,6 +35,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -57,7 +61,9 @@ var D = /** @class */ (function (_super) {
     function D() {
         var _this_1 = this;
         var _this = "uh-oh?";
+        console.log("ruh-roh...");
         _this_1 = _super.call(this) || this;
+        console.log("d'oh!");
         return _this_1;
     }
     return D;

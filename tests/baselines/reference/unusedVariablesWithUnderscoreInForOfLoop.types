@@ -1,6 +1,6 @@
 === tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts ===
-function f() {
->f : () => void
+function t1() {
+>t1 : () => void
 
     for (const [_a, b] of [['key', 1]]) {
 >_a : string | number
@@ -37,6 +37,69 @@ function f() {
     for (const [_a, _b] of [['key', 1]]) {}
 >_a : string | number
 >_b : string | number
+>[['key', 1]] : (string | number)[][]
+>['key', 1] : (string | number)[]
+>'key' : "key"
+>1 : 1
+}
+
+
+function t2() {
+>t2 : () => void
+
+    for (const [_a, b] of [['key', 1]]) {}
+>_a : string | number
+>b : string | number
+>[['key', 1]] : (string | number)[][]
+>['key', 1] : (string | number)[]
+>'key' : "key"
+>1 : 1
+
+    for (const [a, _b] of [['key', 1]]) {}
+>a : string | number
+>_b : string | number
+>[['key', 1]] : (string | number)[][]
+>['key', 1] : (string | number)[]
+>'key' : "key"
+>1 : 1
+
+    for (const [a, b] of [['key', 1]]) {}
+>a : string | number
+>b : string | number
+>[['key', 1]] : (string | number)[][]
+>['key', 1] : (string | number)[]
+>'key' : "key"
+>1 : 1
+}
+
+function t3() {
+>t3 : () => void
+
+    for (const [[[_a, b]]] of [[[['key', 1]]]]) {}
+>_a : string | number
+>b : string | number
+>[[[['key', 1]]]] : (string | number)[][][][]
+>[[['key', 1]]] : (string | number)[][][]
+>[['key', 1]] : (string | number)[][]
+>['key', 1] : (string | number)[]
+>'key' : "key"
+>1 : 1
+
+    for (const [[[a, _b]]] of [[[['key', 1]]]]) {}
+>a : string | number
+>_b : string | number
+>[[[['key', 1]]]] : (string | number)[][][][]
+>[[['key', 1]]] : (string | number)[][][]
+>[['key', 1]] : (string | number)[][]
+>['key', 1] : (string | number)[]
+>'key' : "key"
+>1 : 1
+
+    for (const [[[a, b]]] of [[[['key', 1]]]]) {}
+>a : string | number
+>b : string | number
+>[[[['key', 1]]]] : (string | number)[][][][]
+>[[['key', 1]]] : (string | number)[][][]
 >[['key', 1]] : (string | number)[][]
 >['key', 1] : (string | number)[]
 >'key' : "key"

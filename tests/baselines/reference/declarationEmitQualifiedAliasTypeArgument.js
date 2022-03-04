@@ -32,10 +32,11 @@ export const fun2 = create<Q>();
 exports.__esModule = true;
 exports.fun2 = exports.fun = void 0;
 var bbb_1 = require("./bbb");
-exports.fun = bbb_1.create();
-exports.fun2 = bbb_1.create();
+exports.fun = (0, bbb_1.create)();
+exports.fun2 = (0, bbb_1.create)();
 
 
 //// [index.d.ts]
-export declare const fun: () => import("./bbb").INode<import("./lib").G<import("./lib").E>>;
-export declare const fun2: () => import("./bbb").INode<import("./lib").G<import("./lib").E.A>>;
+import { T, Q } from "./lib";
+export declare const fun: () => import("./bbb").INode<T>;
+export declare const fun2: () => import("./bbb").INode<Q>;

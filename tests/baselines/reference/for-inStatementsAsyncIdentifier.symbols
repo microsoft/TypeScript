@@ -1,0 +1,9 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsAsyncIdentifier.ts ===
+var async;
+>async : Symbol(async, Decl(for-inStatementsAsyncIdentifier.ts, 0, 3))
+
+for (async in { a: 1, b: 2 }) {}
+>async : Symbol(async, Decl(for-inStatementsAsyncIdentifier.ts, 0, 3))
+>a : Symbol(a, Decl(for-inStatementsAsyncIdentifier.ts, 1, 15))
+>b : Symbol(b, Decl(for-inStatementsAsyncIdentifier.ts, 1, 21))
+

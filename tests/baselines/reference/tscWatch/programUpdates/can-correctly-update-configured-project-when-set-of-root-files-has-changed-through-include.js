@@ -30,6 +30,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/Project/file1.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
@@ -37,6 +38,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/project/file1.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/project/tsconfig.json:
@@ -83,6 +88,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/Project/file1.ts","/user/username/projects/myproject/Project/file2.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
@@ -90,6 +96,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/Project/file2.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/project/file2.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/project/tsconfig.json:

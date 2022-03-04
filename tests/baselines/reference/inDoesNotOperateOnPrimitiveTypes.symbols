@@ -1,0 +1,162 @@
+=== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts ===
+const validHasKey = <T extends object>(
+>validHasKey : Symbol(validHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 5))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))
+
+  thing: T,
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 39))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))
+
+  key: string,
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 1, 11))
+
+): boolean => {
+  return key in thing; // Ok
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 1, 11))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 39))
+
+};
+
+const alsoValidHasKey = <T>(
+>alsoValidHasKey : Symbol(alsoValidHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 5))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 25))
+
+  thing: T,
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 28))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 25))
+
+  key: string,
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 8, 11))
+
+): boolean => {
+  return key in thing; // Ok (as T may be instantiated with a valid type)
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 8, 11))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 28))
+
+};
+
+function invalidHasKey<T extends string | number>(
+>invalidHasKey : Symbol(invalidHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 12, 2))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 23))
+
+  thing: T,
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 50))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 23))
+
+  key: string,
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 15, 11))
+
+): boolean {
+  return key in thing; // Error (because all possible instantiations are errors)
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 15, 11))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 50))
+}
+
+function union1<T extends string | number, U extends boolean>(thing: T | U) {
+>union1 : Symbol(union1, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 19, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 21, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 21, 42))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 21, 62))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 21, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 21, 42))
+
+  "key" in thing; // Error (because all possible instantiations are errors)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 21, 62))
+}
+
+function union2<T extends object, U extends string | number>(thing: T | U) {
+>union2 : Symbol(union2, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 23, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 33))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 61))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 33))
+
+  "key" in thing; // Error (because narrowing is possible)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 61))
+
+  if (typeof thing === "object") {
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 61))
+
+    "key" in thing; // Ok
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 25, 61))
+  }
+}
+
+function union3<T>(thing: T | string | number) {
+>union3 : Symbol(union3, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 30, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 16))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 19))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 16))
+
+  "key" in thing; // Error (because narrowing is possible)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 19))
+
+  if (typeof thing !== "string" && typeof thing !== "number") {
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 19))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 19))
+
+    "key" in thing; // Ok (because further narrowing is impossible)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 32, 19))
+  }
+}
+
+function union4<T extends object | "hello">(thing: T) {
+>union4 : Symbol(union4, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 37, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 39, 16))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 39, 44))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 39, 16))
+
+  "key" in thing; // Ok (because narrowing is impossible)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 39, 44))
+}
+
+function union5<T extends object | string, U extends object | number>(p: T | U) {
+>union5 : Symbol(union5, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 41, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 42))
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 42))
+
+    // For consistency, this should probably not be an error, because useful
+    // narrowing is impossible. However, this is exceptionally strange input,
+    // and it adds a lot of complexity to distinguish between a `T | U` where
+    // one constraint is non-primitive and the other is primitive and a `T | U`
+    // like this where both constraints have primitive and non-primitive
+    // constitutents. Also, the strictly sound behavior would be to error
+    // here, which is what's happening, so "fixing" this by suppressing the
+    // error seems very low-value.
+    "key" in p;
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+
+    if (typeof p === "object") {
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+
+        "key" in p;
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+    }
+}
+
+function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
+>intersection1 : Symbol(intersection1, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 56, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 23))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 40))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 62))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 23))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 40))
+
+  "key" in thing; // Error (because all possible instantiations are errors)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 62))
+}
+
+function intersection2<T>(thing: T & (0 | 1 | 2)) {
+>intersection2 : Symbol(intersection2, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 60, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 23))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 26))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 23))
+
+  "key" in thing; // Error (because all possible instantations are errors)
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 26))
+}
+

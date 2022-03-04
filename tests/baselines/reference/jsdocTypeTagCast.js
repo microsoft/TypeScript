@@ -74,7 +74,10 @@ if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 }
 
 
-
+var asConst1 = /** @type {const} */(1);
+var asConst2 = /** @type {const} */({
+    x: 1
+});
 
 //// [a.js]
 var W;
@@ -87,6 +90,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -152,3 +157,7 @@ var str;
 if ( /** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
     str = numOrStr; // Error, no narrowing occurred
 }
+var asConst1 = /** @type {const} */ (1);
+var asConst2 = /** @type {const} */ ({
+    x: 1
+});

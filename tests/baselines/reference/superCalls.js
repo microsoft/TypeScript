@@ -39,6 +39,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -72,10 +74,8 @@ var OtherBase = /** @class */ (function () {
 var OtherDerived = /** @class */ (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
-        var _this = this;
         var p = '';
-        _this = _super.call(this) || this;
-        return _this;
+        return _super.call(this) || this;
     }
     return OtherDerived;
 }(OtherBase));

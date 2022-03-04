@@ -127,7 +127,7 @@ function b2(z, o) {
     if (o === void 0) { o = { x: 0, y: undefined }; }
 }
 function b3(_a) {
-    var _b = (_a === void 0 ? { z: { x: "hi", y: { j: 1 } } } : _a).z, x = _b.x, j = _b.y.j;
+    var _b = _a === void 0 ? { z: { x: "hi", y: { j: 1 } } } : _a, _c = _b.z, x = _c.x, j = _c.y.j;
 }
 function b6(_a) {
     var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
@@ -149,13 +149,13 @@ function c0(_a) {
     var _b = _a.z, x = _b.x, j = _b.y.j;
 }
 function c1(_a) {
-    var z = (_a === void 0 ? { z: 10 } : _a).z;
+    var _b = _a === void 0 ? { z: 10 } : _a, z = _b.z;
 }
 function c2(_a) {
     var _b = _a.z, z = _b === void 0 ? 10 : _b;
 }
 function c3(_a) {
-    var b = (_a === void 0 ? { b: "hello" } : _a).b;
+    var _b = _a === void 0 ? { b: "hello" } : _a, b = _b.b;
 }
 function c5(_a) {
     var a = _a[0], b = _a[1], c = _a[2][0][0];

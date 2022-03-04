@@ -5,9 +5,9 @@ var maybeArray: number | number[];
 
 if (Array.isArray(maybeArray)) {
 >Array.isArray(maybeArray) : boolean
->Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>isArray : (arg: any) => arg is any[]
 >maybeArray : number | number[]
 
     maybeArray.length; // OK

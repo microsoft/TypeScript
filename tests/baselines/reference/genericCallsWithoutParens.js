@@ -11,7 +11,7 @@ var c = new C<number>; // parse error
 
 //// [genericCallsWithoutParens.js]
 function f() { }
-var r = f(); // parse error
+var r = (f); // parse error
 var C = /** @class */ (function () {
     function C() {
     }

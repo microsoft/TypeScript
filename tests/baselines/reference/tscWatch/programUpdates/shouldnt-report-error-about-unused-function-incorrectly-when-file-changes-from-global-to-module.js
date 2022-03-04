@@ -32,6 +32,7 @@ Output::
 
 Program root files: ["/a/b/file.ts"]
 Program options: {"watch":true,"noUnusedLocals":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/file.ts
@@ -39,6 +40,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/file.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/file.ts (used version)
 
 WatchedFiles::
 /a/b/file.ts:
@@ -84,12 +89,16 @@ Output::
 
 Program root files: ["/a/b/file.ts"]
 Program options: {"watch":true,"noUnusedLocals":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/file.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/b/file.ts
+
+Shape signatures in builder refreshed for::
+/a/b/file.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/file.ts:

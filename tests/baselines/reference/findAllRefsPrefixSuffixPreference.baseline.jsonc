@@ -1,0 +1,1069 @@
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const /*FIND ALL REFS*/[|q|] = 1;
+// export { [|q|] };
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// import { [|q|] } from "./file1";
+// log([|q|] + 1);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "const",
+      "name": "const q: 1",
+      "textSpan": {
+        "start": 54,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 54,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 61,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file2.ts",
+      "kind": "alias",
+      "name": "(alias) const q: 1\nimport q",
+      "textSpan": {
+        "start": 57,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 28
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 57,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 28
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 81,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const [|q|] = 1;
+// export { /*FIND ALL REFS*/[|q|] };
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// import { [|q|] } from "./file1";
+// log([|q|] + 1);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "const",
+      "name": "const q: 1",
+      "textSpan": {
+        "start": 54,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 54,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 61,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file2.ts",
+      "kind": "alias",
+      "name": "(alias) const q: 1\nimport q",
+      "textSpan": {
+        "start": 57,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 28
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 57,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 28
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 81,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const [|q|] = 1;
+// export { [|q|] };
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// import { /*FIND ALL REFS*/[|q|] } from "./file1";
+// log([|q|] + 1);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file2.ts",
+      "kind": "alias",
+      "name": "(alias) const q: 1\nimport q",
+      "textSpan": {
+        "start": 57,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 28
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 57,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 28
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 81,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "const",
+      "name": "const q: 1",
+      "textSpan": {
+        "start": 54,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 54,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 61,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const [|q|] = 1;
+// export { [|q|] };
+// const x = {
+//     z: 'value'
+// }
+// const { z } = x;
+// log(z);
+
+// === /file2.ts ===
+// declare function log(s: string | number): void;
+// import { [|q|] } from "./file1";
+// log(/*FIND ALL REFS*/[|q|] + 1);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file2.ts",
+      "kind": "alias",
+      "name": "(alias) const q: 1\nimport q",
+      "textSpan": {
+        "start": 57,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 28
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 57,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 28
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 81,
+          "length": 1
+        },
+        "fileName": "/file2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "const",
+      "name": "const q: 1",
+      "textSpan": {
+        "start": 54,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "q",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 54,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 48,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 70,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 61,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     /*FIND ALL REFS*/[|z|]: 'value'
+// }
+// const { [|z|] } = x;
+// log(z);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "property",
+      "name": "(property) z: string",
+      "textSpan": {
+        "start": 91,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "z",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 91,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 91,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 91,
+          "length": 10
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 112,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 104,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     [|z|]: 'value'
+// }
+// const { /*FIND ALL REFS*/[|z|] } = x;
+// log([|z|]);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "property",
+      "name": "(property) z: string",
+      "textSpan": {
+        "start": 91,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "z",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 91,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 91,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 91,
+          "length": 10
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "const",
+      "name": "const z: string",
+      "textSpan": {
+        "start": 112,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "z",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 104,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 112,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 104,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 125,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /file1.ts ===
+// declare function log(s: string | number): void;
+// const q = 1;
+// export { q };
+// const x = {
+//     z: 'value'
+// }
+// const { [|z|] } = x;
+// log(/*FIND ALL REFS*/[|z|]);
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/file1.ts",
+      "kind": "const",
+      "name": "const z: string",
+      "textSpan": {
+        "start": 112,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "z",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 104,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 112,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "contextSpan": {
+          "start": 104,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 125,
+          "length": 1
+        },
+        "fileName": "/file1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

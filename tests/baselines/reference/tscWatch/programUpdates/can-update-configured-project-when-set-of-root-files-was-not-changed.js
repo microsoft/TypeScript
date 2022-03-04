@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -42,6 +43,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/f1.ts
 /a/b/f2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f1.ts (used version)
+/a/b/f2.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -87,12 +93,15 @@ Output::
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
 Program options: {"outFile":"/a/b/out.js","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
 /a/b/f2.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/tsconfig.json:

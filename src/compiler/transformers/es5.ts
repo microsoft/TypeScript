@@ -48,7 +48,7 @@ namespace ts {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxClosingElement:
                 case SyntaxKind.JsxSelfClosingElement:
-                    const tagName = (<JsxOpeningElement | JsxClosingElement | JsxSelfClosingElement>node).tagName;
+                    const tagName = (node as JsxOpeningElement | JsxClosingElement | JsxSelfClosingElement).tagName;
                     noSubstitution[getOriginalNodeId(tagName)] = true;
                     break;
             }

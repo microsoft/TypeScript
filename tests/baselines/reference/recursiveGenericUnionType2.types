@@ -8,7 +8,7 @@ declare module Test1 {
 
     };
     export type IStringContainer = Container<string>;
->IStringContainer : Container<string>
+>IStringContainer : IStringContainer
 }
 
 declare module Test2 {
@@ -20,7 +20,7 @@ declare module Test2 {
 
     };
     export type IStringContainer = Container<string>;
->IStringContainer : Container<string>
+>IStringContainer : IStringContainer
 }
 
 var x: Test1.Container<number>;
@@ -28,20 +28,20 @@ var x: Test1.Container<number>;
 >Test1 : any
 
 var s1: Test1.IStringContainer;
->s1 : Test1.Container<string>
+>s1 : Test1.IStringContainer
 >Test1 : any
 
 var s2: Test2.IStringContainer;
->s2 : Test2.Container<string>
+>s2 : Test2.IStringContainer
 >Test2 : any
 
 s1 = s2;
->s1 = s2 : Test2.Container<string>
->s1 : Test1.Container<string>
->s2 : Test2.Container<string>
+>s1 = s2 : Test2.IStringContainer
+>s1 : Test1.IStringContainer
+>s2 : Test2.IStringContainer
 
 s2 = s1;
->s2 = s1 : Test1.Container<string>
->s2 : Test2.Container<string>
->s1 : Test1.Container<string>
+>s2 = s1 : Test1.IStringContainer
+>s2 : Test2.IStringContainer
+>s1 : Test1.IStringContainer
 

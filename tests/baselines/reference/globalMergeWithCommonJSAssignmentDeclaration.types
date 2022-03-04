@@ -14,7 +14,7 @@ window.console; // should not have error: Property 'console' does not exist on t
 module.exports = 'anything';
 >module.exports = 'anything' : string
 >module.exports : string
->module : { "\"tests/cases/conformance/salsa/bug27099\"": string; }
+>module : { exports: string; }
 >exports : string
 >'anything' : "anything"
 

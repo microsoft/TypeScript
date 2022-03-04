@@ -31,7 +31,7 @@ type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // never
 >sym1 : unique symbol
 
 type T10 = string & ('a' | 'b');  // 'a' | 'b'
->T10 : "a" | "b"
+>T10 : T10
 
 type T11 = (string | number) & ('a' | 10);  // 'a' | 10
 >T11 : "a" | 10
@@ -143,7 +143,7 @@ type K1 = keyof (A & B);  // string | number | symbol
 >K1 : string | number | symbol
 
 type K2 = keyof A | keyof B;  // 'kind' | 'foo'
->K2 : "kind" | "foo"
+>K2 : K2
 
 type Merge1<T, U> = { [P in keyof (T & U)]: P extends keyof T ? T[P] : U[P & keyof U] }
 >Merge1 : Merge1<T, U>
@@ -159,14 +159,14 @@ type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 >c : 3
 
 type M2 = Merge1<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // {}
->M2 : Merge1<{ a: 1; b: 2; }, { a: 2; c: 3; }>
+>M2 : M2
 >a : 1
 >b : 2
 >a : 2
 >c : 3
 
 type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
->M3 : Merge2<{ a: 1; b: 2; }, { a: 2; c: 3; }>
+>M3 : M3
 >a : 1
 >b : 2
 >a : 2

@@ -42,6 +42,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -57,6 +58,14 @@ Semantic diagnostics in builder refreshed for::
 /a/b/file1Consumer2.ts
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/file1consumer1.ts (used version)
+/a/b/file1consumer2.ts (used version)
+/a/b/globalfile3.ts (used version)
+/a/b/modulefile2.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -135,6 +144,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -145,6 +155,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile1.ts (computed .d.ts)
+/a/b/file1consumer1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

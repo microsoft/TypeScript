@@ -86,3 +86,19 @@ declare const s: unique symbol;
 declare const symbolMap: { [s]: string };
 const e15: string = symbolMap[s]; // Should OK
 symbolMap[s] = undefined; // Should error
+
+// Variadic tuples
+declare const nonEmptyStringArray: [string, ...string[]];
+const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
+const variadicError1: string = nonEmptyStringArray[1]; // Should error
+
+// Generic index type
+declare const myRecord1: { a: string; b: string };
+declare const myRecord2: { a: string; b: string, [key: string]: string };
+const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
+const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
+const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+    myRecord2[key] = undefined; // Should error
+    const v: string = myRecord2[key]; // Should error
+};
+

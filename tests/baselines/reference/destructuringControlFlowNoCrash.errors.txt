@@ -1,0 +1,34 @@
+error TS2468: Cannot find global value 'Promise'.
+tests/cases/compiler/destructuringControlFlowNoCrash.ts(3,3): error TS2339: Property 'date' does not exist on type '(inspectedElement: any) => number'.
+tests/cases/compiler/destructuringControlFlowNoCrash.ts(10,3): error TS2339: Property 'date2' does not exist on type '(inspectedElement: any) => any'.
+tests/cases/compiler/destructuringControlFlowNoCrash.ts(11,28): error TS1005: '=>' expected.
+tests/cases/compiler/destructuringControlFlowNoCrash.ts(16,25): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+
+
+!!! error TS2468: Cannot find global value 'Promise'.
+==== tests/cases/compiler/destructuringControlFlowNoCrash.ts (4 errors) ====
+    // legal JS, if nonsensical, which also triggers the issue
+    const {
+      date,
+      ~~~~
+!!! error TS2339: Property 'date' does not exist on type '(inspectedElement: any) => number'.
+    } = (inspectedElement: any) => 0;
+    
+    date.toISOString();
+    
+    // Working flow code
+    const {
+      date2,
+      ~~~~~
+!!! error TS2339: Property 'date2' does not exist on type '(inspectedElement: any) => any'.
+    } = (inspectedElement: any).props;
+                               ~
+!!! error TS1005: '=>' expected.
+    
+    date2.toISOString();
+    
+    // It could also be an async function
+    const { constructor } = async () => {};
+                            ~~~~~~~~~~~~~~
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
+    

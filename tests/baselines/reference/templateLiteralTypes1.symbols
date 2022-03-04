@@ -508,6 +508,7 @@ let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 136, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 136, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 136, 34))
+>const : Symbol(const)
 
 let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >p2 : Symbol(p2, Decl(templateLiteralTypes1.ts, 137, 3))
@@ -516,6 +517,7 @@ let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 137, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 137, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 137, 34))
+>const : Symbol(const)
 
 let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >p3 : Symbol(p3, Decl(templateLiteralTypes1.ts, 138, 3))
@@ -524,6 +526,7 @@ let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 138, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 138, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 138, 34))
+>const : Symbol(const)
 
 type PropType<T, Path extends string> =
 >PropType : Symbol(PropType, Decl(templateLiteralTypes1.ts, 138, 69))
@@ -842,4 +845,146 @@ type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  //
 >TDigits : Symbol(TDigits, Decl(templateLiteralTypes1.ts, 200, 63))
 >TDigits : Symbol(TDigits, Decl(templateLiteralTypes1.ts, 200, 63))
 >TDigits : Symbol(TDigits, Decl(templateLiteralTypes1.ts, 200, 63))
+
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 208, 16))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 208, 16))
+
+type AA<T extends number, Q extends number> =
+>AA : Symbol(AA, Decl(templateLiteralTypes1.ts, 208, 79))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 210, 8))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 210, 25))
+
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 210, 8))
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 210, 25))
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 210, 8))
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 210, 25))
+
+type BB = AA<-2, -2>;
+>BB : Symbol(BB, Decl(templateLiteralTypes1.ts, 211, 123))
+>AA : Symbol(AA, Decl(templateLiteralTypes1.ts, 208, 79))
+
+// Repro from #40970
+
+type PathKeys<T> =
+>PathKeys : Symbol(PathKeys, Decl(templateLiteralTypes1.ts, 213, 21))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+
+    T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 220, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+
+    T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 220, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+
+    never;
+
+type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+>SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 220, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 222, 13))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 222, 13))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+>PathKeys : Symbol(PathKeys, Decl(templateLiteralTypes1.ts, 213, 21))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 222, 13))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+>getProp2 : Symbol(getProp2, Decl(templateLiteralTypes1.ts, 222, 89))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 224, 28))
+>PathKeys : Symbol(PathKeys, Decl(templateLiteralTypes1.ts, 213, 21))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>obj : Symbol(obj, Decl(templateLiteralTypes1.ts, 224, 52))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>path : Symbol(path, Decl(templateLiteralTypes1.ts, 224, 59))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 224, 28))
+>PropType : Symbol(PropType, Decl(templateLiteralTypes1.ts, 138, 69))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 224, 28))
+
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(templateLiteralTypes1.ts, 226, 5))
+
+    name: 'John',
+>name : Symbol(name, Decl(templateLiteralTypes1.ts, 226, 14))
+
+    age: 42,
+>age : Symbol(age, Decl(templateLiteralTypes1.ts, 227, 17))
+
+    cars: [
+>cars : Symbol(cars, Decl(templateLiteralTypes1.ts, 228, 12))
+
+        { make: 'Ford', age: 10 },
+>make : Symbol(make, Decl(templateLiteralTypes1.ts, 230, 9))
+>age : Symbol(age, Decl(templateLiteralTypes1.ts, 230, 23))
+
+        { make: 'Trabant', age: 35 }
+>make : Symbol(make, Decl(templateLiteralTypes1.ts, 231, 9))
+>age : Symbol(age, Decl(templateLiteralTypes1.ts, 231, 26))
+
+    ]
+} as const;
+>const : Symbol(const)
+
+let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+>make : Symbol(make, Decl(templateLiteralTypes1.ts, 235, 3))
+>getProp2 : Symbol(getProp2, Decl(templateLiteralTypes1.ts, 222, 89))
+>obj2 : Symbol(obj2, Decl(templateLiteralTypes1.ts, 226, 5))
+
+// Repro from #46480
+
+export type Spacing =
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `0`
+    | `${number}px`
+    | `${number}rem`
+    | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+
+const spacing: Spacing = "s12"
+>spacing : Symbol(spacing, Decl(templateLiteralTypes1.ts, 245, 5))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+export type SpacingShorthand =
+>SpacingShorthand : Symbol(SpacingShorthand, Decl(templateLiteralTypes1.ts, 245, 30))
+
+    | `${Spacing} ${Spacing}`
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `${Spacing} ${Spacing} ${Spacing}`
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+    | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+>Spacing : Symbol(Spacing, Decl(templateLiteralTypes1.ts, 235, 41))
+
+const test1: SpacingShorthand = "0 0 0";
+>test1 : Symbol(test1, Decl(templateLiteralTypes1.ts, 252, 5))
+>SpacingShorthand : Symbol(SpacingShorthand, Decl(templateLiteralTypes1.ts, 245, 30))
 

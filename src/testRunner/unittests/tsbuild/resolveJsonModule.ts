@@ -13,21 +13,21 @@ namespace ts {
             scenario: "resolveJsonModule",
             subScenario: "include only",
             fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig_withInclude.json"],
+            commandLineArgs: ["--b", "/src/tsconfig_withInclude.json", "--v", "--explainFiles"],
         });
 
         verifyTsc({
             scenario: "resolveJsonModule",
             subScenario: "include of json along with other include",
             fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig_withIncludeOfJson.json"],
+            commandLineArgs: ["--b", "/src/tsconfig_withIncludeOfJson.json", "--v", "--explainFiles"],
         });
 
         verifyTsc({
             scenario: "resolveJsonModule",
             subScenario: "include of json along with other include and file name matches ts file",
             fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig_withIncludeOfJson.json"],
+            commandLineArgs: ["--b", "/src/tsconfig_withIncludeOfJson.json", "--v", "--explainFiles"],
             modifyFs: fs => {
                 fs.rimrafSync("/src/src/hello.json");
                 fs.writeFileSync("/src/src/index.json", JSON.stringify({ hello: "world" }));
@@ -41,21 +41,21 @@ export default hello.hello`);
             scenario: "resolveJsonModule",
             subScenario: "files containing json file",
             fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig_withFiles.json"],
+            commandLineArgs: ["--b", "/src/tsconfig_withFiles.json", "--v", "--explainFiles"],
         });
 
         verifyTsc({
             scenario: "resolveJsonModule",
             subScenario: "include and files",
             fs: () => projFs,
-            commandLineArgs: ["--b", "/src/tsconfig_withIncludeAndFiles.json"],
+            commandLineArgs: ["--b", "/src/tsconfig_withIncludeAndFiles.json", "--v", "--explainFiles"],
         });
 
         verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "sourcemap",
             fs: () => projFs,
-            commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose"],
+            commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose", "--explainFiles"],
             modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"composite": true,`, `"composite": true, "sourceMap": true,`),
             incrementalScenarios: noChangeOnlyRuns
         });
@@ -75,7 +75,7 @@ export default hello.hello`);
             scenario: "resolveJsonModule",
             subScenario: "importing json module from project reference",
             fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),
-            commandLineArgs: ["--b", "src/tsconfig.json", "--verbose"],
+            commandLineArgs: ["--b", "src/tsconfig.json", "--verbose", "--explainFiles"],
             incrementalScenarios: noChangeOnlyRuns
         });
     });

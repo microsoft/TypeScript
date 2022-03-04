@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/user/someone/projects/myproject/file3.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts
@@ -44,6 +45,12 @@ Semantic diagnostics in builder refreshed for::
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/someone/projects/myproject/file1.ts (used version)
+/user/someone/projects/myproject/file2.ts (used version)
+/user/someone/projects/myproject/file3.ts (used version)
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
@@ -74,7 +81,7 @@ exports.__esModule = true;
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
-var v = 1 /* V */;
+var v = 1 /* E2.V */;
 
 
 
@@ -95,6 +102,7 @@ Output::
 
 Program root files: ["/user/someone/projects/myproject/file3.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts
@@ -103,6 +111,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/someone/projects/myproject/file3.ts
+
+Shape signatures in builder refreshed for::
+/user/someone/projects/myproject/file3.ts (computed .d.ts)
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
@@ -123,7 +134,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
-var v = 1 /* V */;
+var v = 1 /* E2.V */;
 function foo2() { return 2; }
 
 

@@ -1,0 +1,49 @@
+=== tests/cases/conformance/salsa/main.js ===
+const { hardline } = require('./second').nested;
+>hardline : { type: string; }
+>require('./second').nested : typeof import("tests/cases/conformance/salsa/first")
+>require('./second') : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+>require : any
+>'./second' : "./second"
+>nested : typeof import("tests/cases/conformance/salsa/first")
+
+hardline
+>hardline : { type: string; }
+
+=== tests/cases/conformance/salsa/first.js ===
+// #41422, based on prettier's exports
+
+const hardline = { type: "hard" }
+>hardline : { type: string; }
+>{ type: "hard" } : { type: string; }
+>type : string
+>"hard" : "hard"
+
+module.exports = {
+>module.exports = {  hardline} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{  hardline} : { hardline: { type: string; }; }
+
+  hardline
+>hardline : { type: string; }
+}
+
+
+=== tests/cases/conformance/salsa/second.js ===
+module.exports = {
+>module.exports = {  nested: require('./first')} : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+>module.exports : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+>module : { exports: { nested: typeof import("tests/cases/conformance/salsa/first"); }; }
+>exports : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+>{  nested: require('./first')} : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+
+  nested: require('./first')
+>nested : typeof import("tests/cases/conformance/salsa/first")
+>require('./first') : typeof import("tests/cases/conformance/salsa/first")
+>require : any
+>'./first' : "./first"
+
+};
+

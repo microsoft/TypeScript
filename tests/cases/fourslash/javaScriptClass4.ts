@@ -18,4 +18,4 @@
 
 goTo.marker();
 edit.insert('.baz.');
-verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });
+verify.completions({ includes: { name: "substring", kind: "method", kindModifiers: "declare" } });

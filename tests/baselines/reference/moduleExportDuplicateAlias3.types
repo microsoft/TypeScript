@@ -1,0 +1,68 @@
+=== tests/cases/conformance/salsa/test.js ===
+const { apply } = require('./moduleExportAliasDuplicateAlias')
+>apply : number
+>require('./moduleExportAliasDuplicateAlias') : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>require : any
+>'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
+
+const result = apply.toFixed()
+>result : string
+>apply.toFixed() : string
+>apply.toFixed : (fractionDigits?: number | undefined) => string
+>apply : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+=== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
+exports.apply = undefined;
+>exports.apply = undefined : undefined
+>exports.apply : string | number | (() => void) | undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : string | number | (() => void) | undefined
+>undefined : undefined
+
+exports.apply = undefined;
+>exports.apply = undefined : undefined
+>exports.apply : string | number | (() => void) | undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : string | number | (() => void) | undefined
+>undefined : undefined
+
+function a() { }
+>a : () => void
+
+exports.apply = a;
+>exports.apply = a : () => void
+>exports.apply : string | number | (() => void) | undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : string | number | (() => void) | undefined
+>a : () => void
+
+exports.apply()
+>exports.apply() : void
+>exports.apply : () => void
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : () => void
+
+exports.apply = 'ok'
+>exports.apply = 'ok' : "ok"
+>exports.apply : string | number | (() => void) | undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : string | number | (() => void) | undefined
+>'ok' : "ok"
+
+var OK = exports.apply.toUpperCase()
+>OK : string
+>exports.apply.toUpperCase() : string
+>exports.apply.toUpperCase : () => string
+>exports.apply : string
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : string
+>toUpperCase : () => string
+
+exports.apply = 1
+>exports.apply = 1 : 1
+>exports.apply : string | number | (() => void) | undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : string | number | (() => void) | undefined
+>1 : 1
+

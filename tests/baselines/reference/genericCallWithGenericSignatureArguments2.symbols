@@ -289,6 +289,8 @@ module TU {
 >T : Symbol(T, Decl(genericCallWithGenericSignatureArguments2.ts, 66, 18))
 >b : Symbol(b, Decl(genericCallWithGenericSignatureArguments2.ts, 66, 42))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments2.ts, 66, 47))
+>U : Symbol(U)
+>U : Symbol(U)
 
         var r: (x: T) => T;
 >r : Symbol(r, Decl(genericCallWithGenericSignatureArguments2.ts, 67, 11))

@@ -35,7 +35,7 @@ type T2 = {
 }
 
 type K3 = number | string;
->K3 : K
+>K3 : K3
 
 type T3 = {
 >T3 : T3
@@ -46,7 +46,7 @@ type T3 = {
 }
 
 type K4 = number | string;
->K4 : K
+>K4 : K4
 
 type T4 = {
 >T4 : T4

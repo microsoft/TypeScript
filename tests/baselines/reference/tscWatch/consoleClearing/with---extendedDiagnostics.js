@@ -33,6 +33,7 @@ FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"extendedDiagnostics":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -40,6 +41,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /f.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/f.ts (used version)
 
 WatchedFiles::
 /f.ts:
@@ -68,9 +73,9 @@ Output::
 FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
+Synchronizing program
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
-Synchronizing program
 CreatingProgramWith::
   roots: ["/f.ts"]
   options: {"watch":true,"extendedDiagnostics":true}
@@ -80,12 +85,16 @@ CreatingProgramWith::
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"extendedDiagnostics":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /f.ts
 
 Semantic diagnostics in builder refreshed for::
 /f.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 WatchedFiles::
 /f.ts:

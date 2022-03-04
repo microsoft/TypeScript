@@ -412,5 +412,14 @@ namespace ts {
                 Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
                 /*noLocation*/ true);
         });
+
+        it("parses wildcard directories even when parent directories have dots", () => {
+            const parsed = parseConfigFileTextToJson("/foo.bar/tsconfig.json", JSON.stringify({
+                include: ["src"]
+            }));
+
+            const parsedCommand = parseJsonConfigFileContent(parsed.config, sys, "/foo.bar");
+            assert.deepEqual(parsedCommand.wildcardDirectories, { "/foo.bar/src": WatchDirectoryFlags.Recursive });
+        });
     });
 }

@@ -57,15 +57,15 @@ exports.f = exports.g = function fg(n) {
 module.exports.h = module.exports.i = function hi(mom) {
 >module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.h : (mom: string) => string
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod")
->module : { "\"tests/cases/conformance/jsdoc/mod\"": typeof import("tests/cases/conformance/jsdoc/mod"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >h : (mom: string) => string
 >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.i : (mom: string) => string
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod")
->module : { "\"tests/cases/conformance/jsdoc/mod\"": typeof import("tests/cases/conformance/jsdoc/mod"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >i : (mom: string) => string
 >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >hi : (mom: string) => string

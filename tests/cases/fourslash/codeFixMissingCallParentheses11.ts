@@ -7,12 +7,14 @@
 ////        if (this.#test) {
 ////            console.log('test')
 ////        }
+////        this.#test && console.log('test');
 ////    }
 ////}
 ////
 ////function foo() {
 ////    function test() { return Math.random() > 0.5; }
 ////    test ? console.log('test') : undefined;
+////    test && console.log('test');
 ////}
 ////
 ////function foo() {
@@ -23,6 +25,7 @@
 ////    }
 ////    x.foo.bar ? console.log('test') : undefined;
 ////    if (x.foo.bar) {}
+////    x.foo.bar && console.log('test');
 ////}
 
 verify.codeFixAll({
@@ -35,12 +38,14 @@ verify.codeFixAll({
         if (this.#test()) {
             console.log('test')
         }
+        this.#test() && console.log('test');
     }
 }
 
 function foo() {
     function test() { return Math.random() > 0.5; }
     test() ? console.log('test') : undefined;
+    test() && console.log('test');
 }
 
 function foo() {
@@ -51,5 +56,6 @@ function foo() {
     }
     x.foo.bar() ? console.log('test') : undefined;
     if (x.foo.bar()) {}
+    x.foo.bar() && console.log('test');
 }`,
 });

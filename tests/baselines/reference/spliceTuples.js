@@ -25,22 +25,24 @@ k6 = [1, ...sbb_];
 
 
 //// [spliceTuples.js]
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var k1;
-k1 = __spreadArrays([1], sb);
+k1 = __spreadArray([1], sb, true);
 var k2;
-k2 = __spreadArrays([1], sb, [1]);
+k2 = __spreadArray(__spreadArray([1], sb, true), [1], false);
 var k3;
-k3 = __spreadArrays([1], sb_);
+k3 = __spreadArray([1], sb_, true);
 var k4;
-k4 = __spreadArrays([1], sbb_);
+k4 = __spreadArray([1], sbb_, true);
 var k5;
-k5 = __spreadArrays([1], sbb_);
+k5 = __spreadArray([1], sbb_, true);
 var k6;
-k6 = __spreadArrays([1], sbb_);
+k6 = __spreadArray([1], sbb_, true);

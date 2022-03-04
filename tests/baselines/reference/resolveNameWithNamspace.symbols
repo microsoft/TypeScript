@@ -1,0 +1,40 @@
+=== tests/cases/compiler/node.d.ts ===
+declare function require(moduleName: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>moduleName : Symbol(moduleName, Decl(node.d.ts, 0, 25))
+
+declare module "assert" {
+>"assert" : Symbol("assert", Decl(node.d.ts, 0, 50))
+
+    export function equal(actual: any, expected: any, message?: string | Error): void;
+>equal : Symbol(equal, Decl(node.d.ts, 2, 25))
+>actual : Symbol(actual, Decl(node.d.ts, 3, 26))
+>expected : Symbol(expected, Decl(node.d.ts, 3, 38))
+>message : Symbol(message, Decl(node.d.ts, 3, 53))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+=== tests/cases/compiler/ns.ts ===
+/// <reference path="node.d.ts"/>
+namespace myAssert {
+>myAssert : Symbol(myAssert, Decl(ns.ts, 0, 0), Decl(ns.ts, 4, 3))
+
+    export type cool = 'cool'
+>cool : Symbol(cool, Decl(ns.ts, 1, 20))
+}
+var myAssert = require('assert')
+>myAssert : Symbol(myAssert, Decl(ns.ts, 0, 0), Decl(ns.ts, 4, 3))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+
+=== tests/cases/compiler/app.js ===
+exports.equal = myAssert.equal
+>exports.equal : Symbol(equal, Decl(app.js, 0, 0))
+>exports : Symbol(equal, Decl(app.js, 0, 0))
+>equal : Symbol(equal, Decl(app.js, 0, 0))
+>myAssert : Symbol(myAssert, Decl(ns.ts, 0, 0), Decl(ns.ts, 4, 3))
+
+exports.equal()
+>exports.equal : Symbol(equal, Decl(app.js, 0, 0))
+>exports : Symbol("tests/cases/compiler/app", Decl(app.js, 0, 0))
+>equal : Symbol(equal, Decl(app.js, 0, 0))
+

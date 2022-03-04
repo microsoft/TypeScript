@@ -1,0 +1,102 @@
+=== tests/cases/compiler/unusedPrivateStaticMembers.ts ===
+class Test1 {
+>Test1 : Symbol(Test1, Decl(unusedPrivateStaticMembers.ts, 0, 0))
+
+    private static m1() {}
+>m1 : Symbol(Test1.m1, Decl(unusedPrivateStaticMembers.ts, 0, 13))
+
+    public static test() {
+>test : Symbol(Test1.test, Decl(unusedPrivateStaticMembers.ts, 1, 26))
+
+        Test1.m1();
+>Test1.m1 : Symbol(Test1.m1, Decl(unusedPrivateStaticMembers.ts, 0, 13))
+>Test1 : Symbol(Test1, Decl(unusedPrivateStaticMembers.ts, 0, 0))
+>m1 : Symbol(Test1.m1, Decl(unusedPrivateStaticMembers.ts, 0, 13))
+    }
+}
+
+class Test2 {
+>Test2 : Symbol(Test2, Decl(unusedPrivateStaticMembers.ts, 5, 1))
+
+    private static p1 = 0
+>p1 : Symbol(Test2.p1, Decl(unusedPrivateStaticMembers.ts, 7, 13))
+
+    public static test() {
+>test : Symbol(Test2.test, Decl(unusedPrivateStaticMembers.ts, 8, 25))
+
+        Test2.p1;
+>Test2.p1 : Symbol(Test2.p1, Decl(unusedPrivateStaticMembers.ts, 7, 13))
+>Test2 : Symbol(Test2, Decl(unusedPrivateStaticMembers.ts, 5, 1))
+>p1 : Symbol(Test2.p1, Decl(unusedPrivateStaticMembers.ts, 7, 13))
+    }
+}
+
+class Test3 {
+>Test3 : Symbol(Test3, Decl(unusedPrivateStaticMembers.ts, 12, 1))
+
+    private static p1 = 0;
+>p1 : Symbol(Test3.p1, Decl(unusedPrivateStaticMembers.ts, 14, 13))
+
+    private static m1() {}
+>m1 : Symbol(Test3.m1, Decl(unusedPrivateStaticMembers.ts, 15, 26))
+}
+
+class Test4 {
+>Test4 : Symbol(Test4, Decl(unusedPrivateStaticMembers.ts, 17, 1))
+
+    private static m1(n: number): number {
+>m1 : Symbol(Test4.m1, Decl(unusedPrivateStaticMembers.ts, 19, 13))
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 20, 22))
+
+        return (n === 0) ? 1 : (n * Test4.m1(n - 1));
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 20, 22))
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 20, 22))
+>Test4.m1 : Symbol(Test4.m1, Decl(unusedPrivateStaticMembers.ts, 19, 13))
+>Test4 : Symbol(Test4, Decl(unusedPrivateStaticMembers.ts, 17, 1))
+>m1 : Symbol(Test4.m1, Decl(unusedPrivateStaticMembers.ts, 19, 13))
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 20, 22))
+    }
+
+    private static m2(n: number): number {
+>m2 : Symbol(Test4.m2, Decl(unusedPrivateStaticMembers.ts, 22, 5))
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 24, 22))
+
+        return (n === 0) ? 1 : (n * Test4["m2"](n - 1));
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 24, 22))
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 24, 22))
+>Test4 : Symbol(Test4, Decl(unusedPrivateStaticMembers.ts, 17, 1))
+>"m2" : Symbol(Test4.m2, Decl(unusedPrivateStaticMembers.ts, 22, 5))
+>n : Symbol(n, Decl(unusedPrivateStaticMembers.ts, 24, 22))
+    }
+}
+
+class Test5 {
+>Test5 : Symbol(Test5, Decl(unusedPrivateStaticMembers.ts, 27, 1))
+
+    private static m1() {}
+>m1 : Symbol(Test5.m1, Decl(unusedPrivateStaticMembers.ts, 29, 13))
+
+    public static test() {
+>test : Symbol(Test5.test, Decl(unusedPrivateStaticMembers.ts, 30, 26))
+
+        Test5["m1"]();
+>Test5 : Symbol(Test5, Decl(unusedPrivateStaticMembers.ts, 27, 1))
+>"m1" : Symbol(Test5.m1, Decl(unusedPrivateStaticMembers.ts, 29, 13))
+    }
+}
+
+class Test6 {
+>Test6 : Symbol(Test6, Decl(unusedPrivateStaticMembers.ts, 34, 1))
+
+    private static p1 = 0;
+>p1 : Symbol(Test6.p1, Decl(unusedPrivateStaticMembers.ts, 36, 13))
+
+    public static test() {
+>test : Symbol(Test6.test, Decl(unusedPrivateStaticMembers.ts, 37, 26))
+
+        Test6["p1"];
+>Test6 : Symbol(Test6, Decl(unusedPrivateStaticMembers.ts, 34, 1))
+>"p1" : Symbol(Test6.p1, Decl(unusedPrivateStaticMembers.ts, 36, 13))
+    }
+}
+

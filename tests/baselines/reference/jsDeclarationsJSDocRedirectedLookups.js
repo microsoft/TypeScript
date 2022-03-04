@@ -74,9 +74,52 @@
 /** @type {Object<string, string>} */ declare const k: {
     [x: string]: string;
 };
-/** @type {class} */ declare const l: any;
-/** @type {bool} */ declare const m: any;
-/** @type {int} */ declare const n: any;
-/** @type {float} */ declare const o: any;
-/** @type {integer} */ declare const p: any;
+/** @type {class} */ declare const l: class;
+/** @type {bool} */ declare const m: bool;
+/** @type {int} */ declare const n: int;
+/** @type {float} */ declare const o: float;
+/** @type {integer} */ declare const p: integer;
 /** @type {event} */ declare const q: Event | undefined;
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(14,39): error TS2304: Cannot find name 'class'.
+out/index.d.ts(15,38): error TS2304: Cannot find name 'bool'.
+out/index.d.ts(16,37): error TS2304: Cannot find name 'int'.
+out/index.d.ts(17,39): error TS2304: Cannot find name 'float'.
+out/index.d.ts(18,41): error TS2304: Cannot find name 'integer'.
+
+
+==== ./out/index.d.ts (5 errors) ====
+    /** @type {String} */ declare const a: string;
+    /** @type {Number} */ declare const b: number;
+    /** @type {Boolean} */ declare const c: boolean;
+    /** @type {Void} */ declare const d: void;
+    /** @type {Undefined} */ declare const e: undefined;
+    /** @type {Null} */ declare const f: null;
+    /** @type {Function} */ declare const g: Function;
+    /** @type {function} */ declare const h: Function;
+    /** @type {array} */ declare const i: any[];
+    /** @type {promise} */ declare const j: Promise<any>;
+    /** @type {Object<string, string>} */ declare const k: {
+        [x: string]: string;
+    };
+    /** @type {class} */ declare const l: class;
+                                          ~~~~~
+!!! error TS2304: Cannot find name 'class'.
+    /** @type {bool} */ declare const m: bool;
+                                         ~~~~
+!!! error TS2304: Cannot find name 'bool'.
+    /** @type {int} */ declare const n: int;
+                                        ~~~
+!!! error TS2304: Cannot find name 'int'.
+    /** @type {float} */ declare const o: float;
+                                          ~~~~~
+!!! error TS2304: Cannot find name 'float'.
+    /** @type {integer} */ declare const p: integer;
+                                            ~~~~~~~
+!!! error TS2304: Cannot find name 'integer'.
+    /** @type {event} */ declare const q: Event | undefined;
+    

@@ -38,6 +38,7 @@ Output::
 
 Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
 Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/projects/myProject/node_modules/module1/index.js
@@ -50,6 +51,12 @@ Semantic diagnostics in builder refreshed for::
 /a/b/projects/myProject/src/file1.ts
 /a/b/projects/myProject/src/file2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/projects/myproject/node_modules/module1/index.js (used version)
+/a/b/projects/myproject/src/file1.ts (used version)
+/a/b/projects/myproject/src/file2.ts (used version)
+
 WatchedFiles::
 /a/b/projects/myproject/src/tsconfig.json:
   {"fileName":"/a/b/projects/myProject/src/tsconfig.json","pollingInterval":250}
@@ -61,6 +68,8 @@ WatchedFiles::
   {"fileName":"/a/b/projects/myProject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/projects/myproject/node_modules/module1/package.json:
+  {"fileName":"/a/b/projects/myproject/node_modules/module1/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -112,6 +121,7 @@ Output::
 
 Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
 Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/projects/myProject/node_modules/module1/index.js
@@ -120,6 +130,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/b/projects/myProject/src/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/projects/myproject/src/file1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/projects/myproject/src/tsconfig.json:

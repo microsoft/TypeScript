@@ -4,9 +4,9 @@ class C1 {
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : () => { x: string; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
         return { x: "" };
 >{ x: "" } : { x: string; }

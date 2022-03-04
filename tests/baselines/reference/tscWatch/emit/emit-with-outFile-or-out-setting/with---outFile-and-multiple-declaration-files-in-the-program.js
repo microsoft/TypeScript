@@ -44,6 +44,7 @@ Output::
 
 Program root files: ["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]
 Program options: {"outFile":"/a/b/output/common.js","target":1,"watch":true,"project":"/a/b/project/tsconfig.json","configFilePath":"/a/b/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/output/AnotherDependency/file1.d.ts
@@ -52,6 +53,8 @@ Program files::
 /a/b/project/src/main2.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project/tsconfig.json:

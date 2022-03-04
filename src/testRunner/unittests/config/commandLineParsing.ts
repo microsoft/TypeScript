@@ -46,6 +46,23 @@ namespace ts {
                 });
         });
 
+        it("Handles 'may only be used with --build' flags", () => {
+            const buildFlags = ["--clean", "--dry", "--force", "--verbose"];
+
+            assertParseResult(buildFlags, {
+                errors: buildFlags.map(buildFlag => ({
+                    messageText: `Compiler option '${buildFlag}' may only be used with '--build'.`,
+                    category: Diagnostics.Compiler_option_0_may_only_be_used_with_build.category,
+                    code: Diagnostics.Compiler_option_0_may_only_be_used_with_build.code,
+                    file: undefined,
+                    start: undefined,
+                    length: undefined
+                })),
+                fileNames: [],
+                options: {}
+            });
+        });
+
         it("Handles 'did you mean?' for misspelt flags", () => {
             // --declarations --allowTS
             assertParseResult(["--declarations", "--allowTS"], {
@@ -142,7 +159,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'esnext'.",
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext', 'node12', 'nodenext'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -194,7 +211,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'.",
+                        messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'es2021', 'es2022', 'esnext'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -220,7 +237,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
+                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic', 'node12', 'nodenext'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -509,14 +526,15 @@ namespace ts {
                     nonNullValue,
                     diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line,
                     workerDiagnostic: () => {
-                        const optionDeclarations = [
+                        const optionDeclarations: CommandLineOption[] = [
                             ...compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
                             {
                                 name: "optionName",
                                 type: type(),
                                 isTSConfigOnly: true,
-                                category: Diagnostics.Basic_Options,
+                                category: Diagnostics.Backwards_Compatibility,
                                 description: Diagnostics.Enable_project_compilation,
+                                defaultValueDescription: undefined,
                             }
                         ];
                         return {
@@ -650,7 +668,7 @@ namespace ts {
                                 length: undefined
                             },
                             {
-                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority'.",
+                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority', 'fixedchunksize'.",
                                 category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                                 code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                                 file: undefined,
@@ -661,6 +679,64 @@ namespace ts {
                         fileNames: ["0.ts"],
                         options: {},
                         watchOptions: { fallbackPolling: undefined }
+                    });
+            });
+
+            it("parse --excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/temp", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeDirectories: ["**/temp"] }
+                    });
+            });
+
+            it("errors on invalid excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/../*", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeDirectories: [] }
+                    });
+            });
+
+            it("parse --excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/temp/*.ts", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeFiles: ["**/temp/*.ts"] }
+                    });
+            });
+
+            it("errors on invalid excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/../*", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeFiles: [] }
                     });
             });
         });
@@ -732,9 +808,9 @@ namespace ts {
             assertParseResult(["--listFilesOnly"],
                 {
                     errors: [{
-                        messageText: "Unknown build option '--listFilesOnly'.",
-                        category: Diagnostics.Unknown_build_option_0.category,
-                        code: Diagnostics.Unknown_build_option_0.code,
+                        messageText: "Compiler option '--listFilesOnly' may not be used with '--build'.",
+                        category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                        code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                         file: undefined,
                         start: undefined,
                         length: undefined,
@@ -805,9 +881,9 @@ namespace ts {
             assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"],
                 {
                     errors: [{
-                        messageText: "Unknown build option '--tsBuildInfoFile'.",
-                        category: Diagnostics.Unknown_build_option_0.category,
-                        code: Diagnostics.Unknown_build_option_0.code,
+                        messageText: "Compiler option '--tsBuildInfoFile' may not be used with '--build'.",
+                        category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                        code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                         file: undefined,
                         start: undefined,
                         length: undefined
@@ -816,6 +892,24 @@ namespace ts {
                     buildOptions: {},
                     watchOptions: undefined,
                 });
+        });
+
+        it("reports other common 'may not be used with --build' flags", () => {
+            const buildFlags = ["--declaration", "--strict"];
+
+            assertParseResult(buildFlags, {
+                errors: buildFlags.map(buildFlag => ({
+                    messageText: `Compiler option '${buildFlag}' may not be used with '--build'.`,
+                    category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                    code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
+                    file: undefined,
+                    start: undefined,
+                    length: undefined
+                })),
+                buildOptions: {},
+                projects: ["."],
+                watchOptions: undefined,
+            });
         });
 
         describe("Combining options that make no sense together", () => {
@@ -899,7 +993,7 @@ namespace ts {
                                 length: undefined
                             },
                             {
-                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority'.",
+                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority', 'fixedchunksize'.",
                                 category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                                 code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                                 file: undefined,
@@ -910,6 +1004,54 @@ namespace ts {
                         projects: ["."],
                         buildOptions: { verbose: true },
                         watchOptions: { fallbackPolling: undefined }
+                    });
+            });
+
+            it("errors on invalid excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/../*"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeDirectories: [] }
+                    });
+            });
+
+            it("parse --excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/temp/*.ts"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeFiles: ["**/temp/*.ts"] }
+                    });
+            });
+
+            it("errors on invalid excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/../*"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeFiles: [] }
                     });
             });
         });

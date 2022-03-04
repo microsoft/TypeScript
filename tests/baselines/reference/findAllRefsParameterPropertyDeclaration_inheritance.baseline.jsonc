@@ -1,0 +1,769 @@
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
+// class C {
+// 	constructor(public /*FIND ALL REFS*/[|x|]: string) {
+// 		[|x|];
+// 	}
+// }
+// class D extends C {
+// 	constructor(public [|x|]: string) {
+// 		super([|x|]);
+// 	}
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "property",
+      "name": "(property) C.x: string",
+      "textSpan": {
+        "start": 30,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 23,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "contextSpan": {
+          "start": 23,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "parameter",
+      "name": "(parameter) x: string",
+      "textSpan": {
+        "start": 30,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 23,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 45,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "property",
+      "name": "(property) D.x: string",
+      "textSpan": {
+        "start": 93,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 114,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
+// class C {
+// 	constructor(public [|x|]: string) {
+// 		/*FIND ALL REFS*/[|x|];
+// 	}
+// }
+// class D extends C {
+// 	constructor(public x: string) {
+// 		super(x);
+// 	}
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "property",
+      "name": "(property) C.x: string",
+      "textSpan": {
+        "start": 30,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 23,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "contextSpan": {
+          "start": 23,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "parameter",
+      "name": "(parameter) x: string",
+      "textSpan": {
+        "start": 30,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 23,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 45,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
+// class C {
+// 	constructor(public [|x|]: string) {
+// 		[|x|];
+// 	}
+// }
+// class D extends C {
+// 	constructor(public /*FIND ALL REFS*/[|x|]: string) {
+// 		super([|x|]);
+// 	}
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "property",
+      "name": "(property) C.x: string",
+      "textSpan": {
+        "start": 30,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 23,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "contextSpan": {
+          "start": 23,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 45,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "property",
+      "name": "(property) D.x: string",
+      "textSpan": {
+        "start": 93,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "parameter",
+      "name": "(parameter) x: string",
+      "textSpan": {
+        "start": 93,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 114,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts ===
+// class C {
+// 	constructor(public x: string) {
+// 		x;
+// 	}
+// }
+// class D extends C {
+// 	constructor(public [|x|]: string) {
+// 		super(/*FIND ALL REFS*/[|x|]);
+// 	}
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "property",
+      "name": "(property) D.x: string",
+      "textSpan": {
+        "start": 93,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "contextSpan": {
+          "start": 86,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+      "kind": "parameter",
+      "name": "(parameter) x: string",
+      "textSpan": {
+        "start": 93,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 86,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 114,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration_inheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

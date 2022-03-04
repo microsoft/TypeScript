@@ -13,3 +13,9 @@ import type A, { B, C } from './a';
 // @Filename: /a.js
 import type A from './a';
 export type { A };
+
+// @Filename: /c.ts
+namespace ns {
+  export class Foo {}
+}
+import type Foo = ns.Foo;

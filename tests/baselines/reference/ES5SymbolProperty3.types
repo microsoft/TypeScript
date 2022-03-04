@@ -13,7 +13,7 @@ class C {
 }
 
 (new C)[Symbol.iterator]
->(new C)[Symbol.iterator] : any
+>(new C)[Symbol.iterator] : error
 >(new C) : C
 >new C : C
 >C : typeof C

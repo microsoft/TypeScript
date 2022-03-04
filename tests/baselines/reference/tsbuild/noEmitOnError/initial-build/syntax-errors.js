@@ -58,6 +58,7 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -65,6 +66,8 @@ Program files::
 /src/src/other.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 
 
@@ -91,6 +94,7 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -98,6 +102,8 @@ Program files::
 /src/src/other.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 
 
@@ -117,6 +123,7 @@ Output::
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -128,6 +135,12 @@ Semantic diagnostics in builder refreshed for::
 /src/shared/types/db.ts
 /src/src/main.ts
 /src/src/other.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/shared/types/db.ts (used version)
+/src/src/main.ts (used version)
+/src/src/other.ts (used version)
 
 
 //// [/src/dev-build/shared/types/db.js]

@@ -59,13 +59,9 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            const session = createSession(host, { canUseEvents: true });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([{ file: loggerFile, projectRootPath: tscWatch.projectRoot }], session);
-            const service = session.getProjectService();
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            const project = service.configuredProjects.get(tsconfig.path)!;
-            checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
-            verifyGetErrRequestNoErrors({ session, host, files: [loggerFile] });
+            verifyGetErrRequest({ session, host, files: [loggerFile] });
 
             const newLoggerPath = loggerFile.path.toLowerCase();
             host.renameFile(loggerFile.path, newLoggerPath);
@@ -91,7 +87,8 @@ namespace ts.projectSystem {
             });
 
             // Check errors in both files
-            verifyGetErrRequestNoErrors({ session, host, files: [newLoggerPath, anotherFile] });
+            verifyGetErrRequest({ session, host, files: [newLoggerPath, anotherFile] });
+            baselineTsserverLogs("forceConsistentCasingInFileNames", "works when renaming file with different casing", session);
         });
 
         it("when changing module name with different casing", () => {
@@ -111,13 +108,9 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-            const session = createSession(host, { canUseEvents: true });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
-            const service = session.getProjectService();
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            const project = service.configuredProjects.get(tsconfig.path)!;
-            checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
-            verifyGetErrRequestNoErrors({ session, host, files: [anotherFile] });
+            verifyGetErrRequest({ session, host, files: [anotherFile] });
 
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,
@@ -135,23 +128,9 @@ namespace ts.projectSystem {
                 }
             });
 
-            const location = protocolTextSpanFromSubstring(anotherFile.content, `"./Logger"`);
             // Check errors in both files
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [{
-                    file: anotherFile.path,
-                    syntax: [],
-                    semantic: [createDiagnostic(
-                        location.start,
-                        location.end,
-                        Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                        [loggerFile.path.toLowerCase(), loggerFile.path]
-                    )],
-                    suggestion: []
-                }]
-            });
+            verifyGetErrRequest({ host, session, files: [anotherFile] });
+            baselineTsserverLogs("forceConsistentCasingInFileNames", "when changing module name with different casing", session);
         });
     });
 }

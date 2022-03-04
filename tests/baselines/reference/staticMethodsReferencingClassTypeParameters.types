@@ -3,7 +3,7 @@ class C<T> {
 >C : C<T>
 
     static s(p: T) { return p; }
->s : (p: any) => any
->p : any
->p : any
+>s : (p: T) => T
+>p : T
+>p : T
 }

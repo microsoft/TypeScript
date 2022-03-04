@@ -5,6 +5,7 @@
 // @checkJs: true
 // @filename: uniqueSymbolsDeclarationsInJs.js
 // @out: uniqueSymbolsDeclarationsInJs-out.js
+// @useDefineForClassFields: false
 
 // classes
 class C {

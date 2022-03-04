@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file2.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/file2.ts
@@ -42,6 +43,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/src/file2.ts (used version)
+/user/username/projects/myproject/src/file1.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -124,6 +130,8 @@ Output::
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
+  The file is in the program because:
+    Matched by include pattern '**/*' in '/user/username/projects/myproject/tsconfig.json'
 
 [[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
 
@@ -131,12 +139,16 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/file2.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -183,6 +195,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts","/user/username/projects/myproject/src/renamed.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/dist","watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
@@ -191,6 +204,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/renamed.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/src/renamed.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

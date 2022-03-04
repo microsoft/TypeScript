@@ -468,14 +468,14 @@ function ff4(verify: boolean, contentMatches: boolean) {
 
     const action : Action = verify ? `verify` : `write`;
 >action : Action
->verify ? `verify` : `write` : Action
+>verify ? `verify` : `write` : "verify" | "write"
 >verify : boolean
 >`verify` : "verify"
 >`write` : "write"
 
     const contentMatch: ContentMatch = contentMatches ? `match` : `nonMatch`;
 >contentMatch : ContentMatch
->contentMatches ? `match` : `nonMatch` : ContentMatch
+>contentMatches ? `match` : `nonMatch` : "match" | "nonMatch"
 >contentMatches : boolean
 >`match` : "match"
 >`nonMatch` : "nonMatch"
@@ -498,14 +498,14 @@ function ff5(verify: boolean, contentMatches: boolean) {
 
     const action = verify ? `verify` : `write`;
 >action : "verify" | "write"
->verify ? `verify` : `write` : Action
+>verify ? `verify` : `write` : "verify" | "write"
 >verify : boolean
 >`verify` : "verify"
 >`write` : "write"
 
     const contentMatch = contentMatches ? `match` : `nonMatch`;
 >contentMatch : "match" | "nonMatch"
->contentMatches ? `match` : `nonMatch` : ContentMatch
+>contentMatches ? `match` : `nonMatch` : "match" | "nonMatch"
 >contentMatches : boolean
 >`match` : "match"
 >`nonMatch` : "nonMatch"
@@ -514,8 +514,8 @@ function ff5(verify: boolean, contentMatches: boolean) {
 >outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
 >`${action}_${contentMatch}` as const : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
 >`${action}_${contentMatch}` : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
->action : Action
->contentMatch : ContentMatch
+>action : "verify" | "write"
+>contentMatch : "match" | "nonMatch"
 
     return outcome;
 >outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"

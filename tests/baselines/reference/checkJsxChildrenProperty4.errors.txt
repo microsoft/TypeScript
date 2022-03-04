@@ -1,8 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
-tests/cases/conformance/jsx/file.tsx(36,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'string | number | boolean | any[] | ReactElement<any>'.
-  Type '(user: IUser) => Element' is not assignable to type 'ReactElement<any>'.
-tests/cases/conformance/jsx/file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'string | number | boolean | any[] | ReactElement<any>'.
-  Type '(user: IUser) => Element' is not assignable to type 'ReactElement<any>'.
+tests/cases/conformance/jsx/file.tsx(36,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
+tests/cases/conformance/jsx/file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -50,8 +48,7 @@ tests/cases/conformance/jsx/file.tsx(39,15): error TS2322: Type '(user: IUser) =
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ) }
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'string | number | boolean | any[] | ReactElement<any>'.
-!!! error TS2322:   Type '(user: IUser) => Element' is not assignable to type 'ReactElement<any>'.
+!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 !!! related TS6212 tests/cases/conformance/jsx/file.tsx:36:15: Did you mean to call this expression?
                 { user => (
                   ~~~~~~~~~
@@ -59,8 +56,7 @@ tests/cases/conformance/jsx/file.tsx(39,15): error TS2322: Type '(user: IUser) =
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ) }
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'string | number | boolean | any[] | ReactElement<any>'.
-!!! error TS2322:   Type '(user: IUser) => Element' is not assignable to type 'ReactElement<any>'.
+!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 !!! related TS6212 tests/cases/conformance/jsx/file.tsx:39:15: Did you mean to call this expression?
             </FetchUser>
         );

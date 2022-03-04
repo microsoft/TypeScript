@@ -22,7 +22,7 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(<BinaryExpression>node);
+                    return visitBinaryExpression(node as BinaryExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }

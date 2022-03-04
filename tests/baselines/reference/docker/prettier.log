@@ -1,0 +1,28 @@
+Exit Code: 0
+Standard output:
+yarn run vX.X.X
+$ node --max-old-space-size=3072 ./scripts/build/build.js
+ Building packages 
+index.js.......................   DONE  
+doc.js.........................   DONE  
+standalone.js..................   DONE  
+bin-prettier.js................   DONE  
+third-party.js.................   DONE  
+parser-babel.js................   DONE  
+parser-flow.js.................   DONE  
+parser-typescript.js...........   DONE  
+parser-espree.js...............   DONE  
+parser-meriyah.js..............   DONE  
+parser-angular.js..............   DONE  
+parser-postcss.js..............   DONE  
+esm/parser-postcss.mjs.........   DONE  
+parser-graphql.js..............   DONE  
+parser-markdown.js.............   DONE  
+parser-glimmer.js..............   DONE  
+parser-html.js.................   DONE  
+parser-yaml.js.................   DONE  
+Done in ?s.
+
+
+
+Standard error:

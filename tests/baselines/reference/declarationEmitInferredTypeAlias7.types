@@ -8,11 +8,11 @@ let obj: Data = true;
 
 === tests/cases/compiler/1.ts ===
 let v = "str" || true;
->v : import("tests/cases/compiler/0").Data
+>v : string | boolean
 >"str" || true : true | "str"
 >"str" : "str"
 >true : true
 
 export { v }
->v : import("tests/cases/compiler/0").Data
+>v : string | boolean
 

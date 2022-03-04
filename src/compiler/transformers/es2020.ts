@@ -21,18 +21,22 @@ namespace ts {
                 return node;
             }
             switch (node.kind) {
+                case SyntaxKind.CallExpression: {
+                    const updated = visitNonOptionalCallExpression(node as CallExpression, /*captureThisArg*/ false);
+                    Debug.assertNotNode(updated, isSyntheticReference);
+                    return updated;
+                }
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.CallExpression:
-                    if (node.flags & NodeFlags.OptionalChain) {
-                        const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false, /*isDelete*/ false);
+                    if (isOptionalChain(node)) {
+                        const updated = visitOptionalExpression(node, /*captureThisArg*/ false, /*isDelete*/ false);
                         Debug.assertNotNode(updated, isSyntheticReference);
                         return updated;
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.BinaryExpression:
-                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
-                        return transformNullishCoalescingExpression(<BinaryExpression>node);
+                    if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                        return transformNullishCoalescingExpression(node as BinaryExpression);
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.DeleteExpression:
@@ -77,7 +81,6 @@ namespace ts {
                 if (!isSimpleCopiableExpression(expression)) {
                     thisArg = factory.createTempVariable(hoistVariableDeclaration);
                     expression = factory.createAssignment(thisArg, expression);
-                    // if (inParameterInitializer) tempVariableInParameter = true;
                 }
                 else {
                     thisArg = expression;
@@ -95,6 +98,15 @@ namespace ts {
                 // If `node` is an optional chain, then it is the outermost chain of an optional expression.
                 return visitOptionalExpression(node, captureThisArg, /*isDelete*/ false);
             }
+            if (isParenthesizedExpression(node.expression) && isOptionalChain(skipParentheses(node.expression))) {
+                // capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
+                const expression = visitNonOptionalParenthesizedExpression(node.expression, /*captureThisArg*/ true, /*isDelete*/ false);
+                const args = visitNodes(node.arguments, visitor, isExpression);
+                if (isSyntheticReference(expression)) {
+                    return setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
+                }
+                return factory.updateCallExpression(node, expression, /*typeArguments*/ undefined, args);
+            }
             return visitEachChild(node, visitor, context);
         }
 
@@ -110,14 +122,13 @@ namespace ts {
 
         function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean): Expression {
             const { expression, chain } = flattenChain(node);
-            const left = visitNonOptionalExpression(expression, isCallChain(chain[0]), /*isDelete*/ false);
-            const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
-            let leftExpression = isSyntheticReference(left) ? left.expression : left;
-            let capturedLeft: Expression = leftExpression;
-            if (!isSimpleCopiableExpression(leftExpression)) {
+            const left = visitNonOptionalExpression(skipPartiallyEmittedExpressions(expression), isCallChain(chain[0]), /*isDelete*/ false);
+            let leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
+            let capturedLeft = isSyntheticReference(left) ? left.expression : left;
+            let leftExpression = factory.restoreOuterExpressions(expression, capturedLeft, OuterExpressionKinds.PartiallyEmittedExpressions);
+            if (!isSimpleCopiableExpression(capturedLeft)) {
                 capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
                 leftExpression = factory.createAssignment(capturedLeft, leftExpression);
-                // if (inParameterInitializer) tempVariableInParameter = true;
             }
             let rightExpression = capturedLeft;
             let thisArg: Expression | undefined;
@@ -130,7 +141,6 @@ namespace ts {
                             if (!isSimpleCopiableExpression(rightExpression)) {
                                 thisArg = factory.createTempVariable(hoistVariableDeclaration);
                                 rightExpression = factory.createAssignment(thisArg, rightExpression);
-                                // if (inParameterInitializer) tempVariableInParameter = true;
                             }
                             else {
                                 thisArg = rightExpression;
@@ -142,6 +152,10 @@ namespace ts {
                         break;
                     case SyntaxKind.CallExpression:
                         if (i === 0 && leftThisArg) {
+                            if (!isGeneratedIdentifier(leftThisArg)) {
+                                leftThisArg = factory.cloneNode(leftThisArg);
+                                addEmitFlags(leftThisArg, EmitFlags.NoComments);
+                            }
                             rightExpression = factory.createFunctionCallCall(
                                 rightExpression,
                                 leftThisArg.kind === SyntaxKind.SuperKeyword ? factory.createThis() : leftThisArg,
@@ -163,6 +177,7 @@ namespace ts {
             const target = isDelete
                 ? factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createTrue(), /*colonToken*/ undefined, factory.createDeleteExpression(rightExpression))
                 : factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
+            setTextRange(target, node);
             return thisArg ? factory.createSyntheticReferenceExpression(target, thisArg) : target;
         }
 
@@ -188,15 +203,14 @@ namespace ts {
             if (!isSimpleCopiableExpression(left)) {
                 right = factory.createTempVariable(hoistVariableDeclaration);
                 left = factory.createAssignment(right, left);
-                // if (inParameterInitializer) tempVariableInParameter = true;
             }
-            return factory.createConditionalExpression(
+            return setTextRange(factory.createConditionalExpression(
                 createNotNullCondition(left, right),
                 /*questionToken*/ undefined,
                 right,
                 /*colonToken*/ undefined,
                 visitNode(node.right, visitor, isExpression),
-            );
+            ), node);
         }
 
         function visitDeleteExpression(node: DeleteExpression) {

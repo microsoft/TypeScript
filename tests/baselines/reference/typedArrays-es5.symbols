@@ -1,0 +1,73 @@
+=== tests/cases/compiler/typedArrays-es5.ts ===
+const float32Array = new Float32Array(1);
+>float32Array : Symbol(float32Array, Decl(typedArrays-es5.ts, 0, 5))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...float32Array];
+>float32Array : Symbol(float32Array, Decl(typedArrays-es5.ts, 0, 5))
+
+const float64Array = new Float64Array(1);
+>float64Array : Symbol(float64Array, Decl(typedArrays-es5.ts, 3, 5))
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...float64Array];
+>float64Array : Symbol(float64Array, Decl(typedArrays-es5.ts, 3, 5))
+
+const int16Array = new Int16Array(1);
+>int16Array : Symbol(int16Array, Decl(typedArrays-es5.ts, 6, 5))
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...int16Array];
+>int16Array : Symbol(int16Array, Decl(typedArrays-es5.ts, 6, 5))
+
+const int32Array = new Int32Array(1);
+>int32Array : Symbol(int32Array, Decl(typedArrays-es5.ts, 9, 5))
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...int32Array];
+>int32Array : Symbol(int32Array, Decl(typedArrays-es5.ts, 9, 5))
+
+const int8Array = new Int8Array(1);
+>int8Array : Symbol(int8Array, Decl(typedArrays-es5.ts, 12, 5))
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...int8Array];
+>int8Array : Symbol(int8Array, Decl(typedArrays-es5.ts, 12, 5))
+
+const nodeList = new NodeList();
+>nodeList : Symbol(nodeList, Decl(typedArrays-es5.ts, 15, 5))
+>NodeList : Symbol(NodeList, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+[...nodeList];
+>nodeList : Symbol(nodeList, Decl(typedArrays-es5.ts, 15, 5))
+
+const uint16Array = new Uint16Array(1);
+>uint16Array : Symbol(uint16Array, Decl(typedArrays-es5.ts, 18, 5))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...uint16Array];
+>uint16Array : Symbol(uint16Array, Decl(typedArrays-es5.ts, 18, 5))
+
+const uint32Array = new Uint32Array(1);
+>uint32Array : Symbol(uint32Array, Decl(typedArrays-es5.ts, 21, 5))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...uint32Array];
+>uint32Array : Symbol(uint32Array, Decl(typedArrays-es5.ts, 21, 5))
+
+const uint8Array = new Uint8Array(1);
+>uint8Array : Symbol(uint8Array, Decl(typedArrays-es5.ts, 24, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...uint8Array];
+>uint8Array : Symbol(uint8Array, Decl(typedArrays-es5.ts, 24, 5))
+
+const uint8ClampedArray = new Uint8ClampedArray(1);
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(typedArrays-es5.ts, 27, 5))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+[...uint8ClampedArray];
+>uint8ClampedArray : Symbol(uint8ClampedArray, Decl(typedArrays-es5.ts, 27, 5))
+
+
+

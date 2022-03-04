@@ -32,6 +32,7 @@ Output::
 
 Program root files: ["/a/b/file1.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/file1.ts
@@ -39,6 +40,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/file1.ts (used version)
 
 WatchedFiles::
 /a/b/file1.ts:
@@ -79,6 +84,7 @@ Output::
 
 Program root files: ["/a/b/file1.ts"]
 Program options: {"watch":true}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile.ts
@@ -87,6 +93,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile.ts
 /a/b/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile.ts (computed .d.ts)
+/a/b/file1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/file1.ts:

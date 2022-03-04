@@ -1,0 +1,12 @@
+=== tests/cases/compiler/spellingSuggestionGlobal2.ts ===
+export {}
+declare global { const x: any }
+>global : Symbol(global, Decl(spellingSuggestionGlobal2.ts, 0, 9))
+>x : Symbol(x, Decl(spellingSuggestionGlobal2.ts, 1, 22))
+
+const globals = { x: true }
+>globals : Symbol(globals, Decl(spellingSuggestionGlobal2.ts, 2, 5))
+>x : Symbol(x, Decl(spellingSuggestionGlobal2.ts, 2, 17))
+
+global.x // should suggest `globals` (GH#42209)
+

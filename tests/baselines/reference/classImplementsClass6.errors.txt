@@ -1,5 +1,5 @@
 tests/cases/compiler/classImplementsClass6.ts(20,3): error TS2339: Property 'bar' does not exist on type 'C'.
-tests/cases/compiler/classImplementsClass6.ts(21,4): error TS2576: Property 'bar' is a static member of type 'C2'.
+tests/cases/compiler/classImplementsClass6.ts(21,4): error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?
 
 
 ==== tests/cases/compiler/classImplementsClass6.ts (2 errors) ====
@@ -27,4 +27,4 @@ tests/cases/compiler/classImplementsClass6.ts(21,4): error TS2576: Property 'bar
 !!! error TS2339: Property 'bar' does not exist on type 'C'.
     c2.bar(); // should error
        ~~~
-!!! error TS2576: Property 'bar' is a static member of type 'C2'.
+!!! error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?

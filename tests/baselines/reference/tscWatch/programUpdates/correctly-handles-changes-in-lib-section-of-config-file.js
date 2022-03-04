@@ -28,7 +28,7 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
+[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
 
 [7m1[0m var x: Promise<string>;
 [7m [0m [91m       ~~~~~~~[0m
@@ -39,6 +39,7 @@ Output::
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /compiler/lib.es5.d.ts
 /src/app.ts
@@ -46,6 +47,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /compiler/lib.es5.d.ts
 /src/app.ts
+
+Shape signatures in builder refreshed for::
+/compiler/lib.es5.d.ts (used version)
+/src/app.ts (used version)
 
 WatchedFiles::
 /src/tsconfig.json:
@@ -87,6 +92,7 @@ Output::
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts","lib.es2015.promise.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /compiler/lib.es5.d.ts
 /compiler/lib.es2015.promise.d.ts
@@ -96,6 +102,10 @@ Semantic diagnostics in builder refreshed for::
 /compiler/lib.es5.d.ts
 /compiler/lib.es2015.promise.d.ts
 /src/app.ts
+
+Shape signatures in builder refreshed for::
+/compiler/lib.es2015.promise.d.ts (used version)
+/src/app.ts (computed .d.ts)
 
 WatchedFiles::
 /src/tsconfig.json:
@@ -110,10 +120,10 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/src:
-  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /src/node_modules/@types:
   {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/src:
+  {"directoryName":"/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

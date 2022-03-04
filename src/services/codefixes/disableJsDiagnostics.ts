@@ -9,7 +9,7 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions(context) {
+        getCodeActions: function getCodeActionsToDisableJsDiagnostics(context) {
             const { sourceFile, program, span, host, formatContext } = context;
 
             if (!isInJSFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {

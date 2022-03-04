@@ -21,7 +21,7 @@ console.log(value)
 module.exports = {
 >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
 >module.exports : { x: { y: string; }; }
->module : { "\"tests/cases/conformance/salsa/mod\"": { x: { y: string; }; }; }
+>module : { exports: { x: { y: string; }; }; }
 >exports : { x: { y: string; }; }
 >{    x: {        y: "value"    }} : { x: { y: string; }; }
 

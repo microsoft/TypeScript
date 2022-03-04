@@ -26,6 +26,7 @@ Output::
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"preserveWatchOutput":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -33,6 +34,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /f.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/f.ts (used version)
 
 WatchedFiles::
 /f.ts:
@@ -66,12 +71,16 @@ Output::
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"preserveWatchOutput":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /f.ts
 
 Semantic diagnostics in builder refreshed for::
 /f.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 WatchedFiles::
 /f.ts:

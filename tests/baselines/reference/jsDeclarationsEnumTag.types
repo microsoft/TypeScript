@@ -72,7 +72,7 @@ export function consume(t,s,f) {
 >consume : (t: Target, s: Second, f: Fs) => void
 >t : string
 >s : number
->f : (arg0: number) => number
+>f : Fs
 
     /** @type {string} */
     var str = t
@@ -87,7 +87,7 @@ export function consume(t,s,f) {
     /** @type {(n: number) => number} */
     var fun = f
 >fun : (n: number) => number
->f : (arg0: number) => number
+>f : Fs
 
     /** @type {Target} */
     var v = Target.START

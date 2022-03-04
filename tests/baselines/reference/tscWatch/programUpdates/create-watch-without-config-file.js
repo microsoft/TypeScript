@@ -32,7 +32,7 @@ Output::
 [7m2[0m                 import {f} from "./module"
 [7m [0m [91m                        ~[0m
 
-[96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+[96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
 [7m3[0m                 console.log(f)
 [7m [0m [91m                ~~~~~~~[0m
@@ -43,6 +43,7 @@ Output::
 
 Program root files: ["/a/b/c/app.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/c/module.d.ts
@@ -52,6 +53,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/c/module.d.ts
 /a/b/c/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/c/module.d.ts (used version)
+/a/b/c/app.ts (used version)
 
 WatchedFiles::
 /a/b/c/app.ts:

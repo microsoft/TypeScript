@@ -209,4 +209,18 @@ if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 }
 
 
+var asConst1 = /** @type {const} */(1);
+>asConst1 : 1
+>(1) : 1
+>1 : 1
 
+var asConst2 = /** @type {const} */({
+>asConst2 : { readonly x: 1; }
+>({    x: 1}) : { readonly x: 1; }
+>{    x: 1} : { readonly x: 1; }
+
+    x: 1
+>x : 1
+>1 : 1
+
+});

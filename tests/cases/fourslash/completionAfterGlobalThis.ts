@@ -4,9 +4,14 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    unsorted: [
         completion.globalThisEntry,
         ...completion.globalsVars,
         completion.undefinedVarEntry
-    ].map(e => ({ ...e, sortText: completion.SortText.LocationPriority }))
+    ].map(e => {
+        if (e.sortText === completion.SortText.DeprecatedGlobalsOrKeywords) {
+            return { ...e, sortText: completion.SortText.DeprecatedLocationPriority };
+        }
+        return { ...e, sortText: completion.SortText.LocationPriority };
+    })
 });

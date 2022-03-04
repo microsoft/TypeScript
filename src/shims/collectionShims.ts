@@ -9,7 +9,7 @@ namespace ts {
 
     type IteratorResultShim<T> =
         | { value: T, done?: false }
-        | { value: never, done: true };
+        | { value: void, done: true };
 
     interface IteratorShim<T> {
         next(): IteratorResultShim<T>;
