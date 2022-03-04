@@ -1107,7 +1107,7 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         options: CompilerOptions,
         preferences: UserPreferences,
-        _formatContext: formatting.FormatContext | undefined,
+        formatContext: formatting.FormatContext | undefined,
     ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder } | undefined {
         let isSnippet: true | undefined;
         let insertText: string = name;
@@ -1134,20 +1134,16 @@ namespace ts.Completions {
             removeComments: true,
             module: options.module,
             target: options.target,
-            omitTrailingSemicolon: false, // >> ??
+            omitTrailingSemicolon: false,
             newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
         });
 
-        // insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
-        // if (formatContext) {
-        //     // >> TODO: this is breaking get/set pairs because they're on the same line when printing
-        //     insertText = printer.printAndFormatSnippetList(format, factory.createNodeArray(functionProps), sourceFile, formatContext);
-        // }
-        // else {
-        //     insertText = printer.printSnippetList(format, factory.createNodeArray(functionProps), sourceFile);
-        // }
-        // insertText = printer.printSnippet(format, factory.createNodeArray(functionProps), sourceFile);
-        insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
+        if (formatContext) {
+            insertText = printer.printAndFormatSnippet(EmitHint.Unspecified, functionProp, sourceFile, formatContext);
+        }
+        else {
+            insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
+        }
 
         return { isSnippet, insertText, importAdder };
     };
@@ -1231,8 +1227,8 @@ namespace ts.Completions {
             printSnippetList,
             printAndFormatSnippetList,
             printSnippet,
+            printAndFormatSnippet,
         };
-
 
         /* Snippet-escaping version of `printer.printList`. */
         function printSnippetList(
@@ -1275,7 +1271,6 @@ namespace ts.Completions {
             return textChanges.applyChanges(syntheticFile.text, changes);
         }
 
-        // >> TODO: will we need this?
         function printSnippet(
             hint: EmitHint,
             node: Node,
@@ -1285,6 +1280,36 @@ namespace ts.Completions {
             printer.writeNode(hint, node, sourceFile, writer);
             return writer.getText();
         }
+
+        function printAndFormatSnippet(
+            hint: EmitHint,
+            node: Node,
+            sourceFile: SourceFile,
+            formatContext: formatting.FormatContext,
+        ): string {
+            const syntheticFile = {
+                text: printSnippet(
+                    hint,
+                    node,
+                    sourceFile),
+                getLineAndCharacterOfPosition(pos: number) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                },
+            };
+
+            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+
+            const nodeWithPos = textChanges.assignPositionsToNode(node);
+            const changes = formatting.formatNodeGivenIndentation(
+                nodeWithPos,
+                syntheticFile,
+                sourceFile.languageVariant,
+                /* indentation */ 0,
+                /* delta */ 0,
+                { ...formatContext, options: formatOptions });
+            return textChanges.applyChanges(syntheticFile.text, changes);
+        }
+
     }
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport): CompletionEntryData | undefined {
