@@ -12762,6 +12762,10 @@ namespace ts {
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
+            if (isInJSFile(declaration)) {
+                const signature = getSignatureOfTypeTag(declaration);
+                if (signature) return signature;
+            }
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 const parameters: Symbol[] = [];
