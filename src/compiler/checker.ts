@@ -19996,7 +19996,7 @@ namespace ts {
                 const requireOptionalProperties = (relation === subtypeRelation || relation === strictSubtypeRelation) && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
-                    if (reportErrors && !typeOnlyHasCallOrConstructSignatures(source)) {
+                    if (reportErrors && shouldReportUnmatchedPropertyError(source, target)) {
                         reportUnmatchedProperty(source, target, unmatchedProperty, requireOptionalProperties);
                     }
                     return Ternary.False;
@@ -20154,14 +20154,18 @@ namespace ts {
                 return result;
             }
 
-            function typeOnlyHasCallOrConstructSignatures(type: Type): boolean {
-                const typeCallSignatures = getSignaturesOfStructuredType(type, SignatureKind.Call);
-                const typeConstructSignatures = getSignaturesOfStructuredType(type, SignatureKind.Construct);
-                const typeProperties = getPropertiesOfObjectType(type);
+            function shouldReportUnmatchedPropertyError(source: Type, target: Type): boolean {
+                const typeCallSignatures = getSignaturesOfStructuredType(source, SignatureKind.Call);
+                const typeConstructSignatures = getSignaturesOfStructuredType(source, SignatureKind.Construct);
+                const typeProperties = getPropertiesOfObjectType(source);
                 if ((typeCallSignatures.length || typeConstructSignatures.length) && !typeProperties.length) {
-                    return true;
+                    if ((getSignaturesOfType(target, SignatureKind.Call).length && typeCallSignatures.length) ||
+                        (getSignaturesOfType(target, SignatureKind.Construct).length && typeConstructSignatures.length)) {
+                        return true; // target has similar signature kinds to source, still focus on the unmatched property
+                    }
+                    return false;
                 }
-                return false;
+                return true;
             }
 
             function reportIncompatibleCallSignatureReturn(siga: Signature, sigb: Signature) {
