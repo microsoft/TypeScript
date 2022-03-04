@@ -108,7 +108,7 @@ Output::
 [[90m12:01:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/anotherModule.ts
   Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/index.ts
@@ -120,7 +120,7 @@ src/core/some_decl.d.ts
 [[90m12:01:00 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/index.d.ts
   Imported via '../core/index' from file 'src/logic/index.ts'
   File is output of project reference source 'src/core/index.ts'
@@ -134,7 +134,7 @@ src/logic/index.ts
 [[90m12:01:00 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/index.d.ts
   Imported via '../core/index' from file 'src/tests/index.ts'
   File is output of project reference source 'src/core/index.ts'
@@ -450,7 +450,7 @@ Output::
 [[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/anotherModule.ts
   Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/index.ts
@@ -462,7 +462,7 @@ src/core/some_decl.d.ts
 [[90m12:04:00 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/index.d.ts
   Imported via '../core/index' from file 'src/logic/index.ts'
   File is output of project reference source 'src/core/index.ts'
@@ -476,7 +476,7 @@ src/logic/index.ts
 [[90m12:04:00 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/index.d.ts
   Imported via '../core/index' from file 'src/tests/index.ts'
   File is output of project reference source 'src/core/index.ts'
@@ -753,7 +753,7 @@ Output::
 [[90m12:07:00 AM[0m] Updating unchanged output timestamps of project '/src/core/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/core/anotherModule.ts
   Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/index.ts

@@ -120,6 +120,120 @@ interface Test {
     bar?: string | undefined;  // Error
 }
 
+// Strict optional properties and inference
+
+declare let ox1: { p: string };
+declare let ox2: { p: string | undefined };
+declare let ox3: { p?: string };
+declare let ox4: { p?: string | undefined };
+
+declare let tx1: [string];
+declare let tx2: [string | undefined];
+declare let tx3: [string?];
+declare let tx4: [(string | undefined)?];
+
+declare function f11<T>(x: { p?: T }): T;
+
+f11(ox1);  // string
+f11(ox2);  // string | undefined
+f11(ox3);  // string
+f11(ox4);  // string | undefined
+
+declare function f12<T>(x: [T?]): T;
+
+f12(tx1);  // string
+f12(tx2);  // string | undefined
+f12(tx3);  // string
+f12(tx4);  // string | undefined
+
+declare function f13<T>(x: Partial<T>): T;
+
+f13(ox1);  // { p: string }
+f13(ox2);  // { p: string | undefined }
+f13(ox3);  // { p: string }
+f13(ox4);  // { p: string | undefined }
+
+f13(tx1);  // [string]
+f13(tx2);  // [string | undefined]
+f13(tx3);  // [string]
+f13(tx4);  // [string | undefined]
+
+// Repro from #44388
+
+type Undefinable<T> = T | undefined;
+
+function expectNotUndefined<T>(value: Undefinable<T>): T {
+    if (value === undefined) {
+        throw new TypeError('value is undefined');
+    }
+    return value;
+}
+
+interface Bar {
+    bar?: number;
+}
+
+function aa(input: Bar): void {
+    const notUndefinedVal = expectNotUndefined(input.bar);
+    bb(notUndefinedVal);
+}
+
+declare function bb(input: number): void;
+
+interface U1 {
+    name: string
+    email?: string | number | undefined
+}
+interface U2 {
+    name: string
+    email?: string | number
+}
+declare const e: string | boolean | undefined
+declare const u1: U1
+declare let u2: U2
+u1.email = e // error, but only because boolean isn't in email's type
+u2.email = e // error, and suggest adding undefined
+u2 = {
+    name: 'hi',
+    email: undefined
+}
+
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+declare var b: {a: number, b: string}
+declare var c: {a: number, b?: string}
+declare var d: {a: number, b: string | undefined }
+declare var e: {a: number, b?: string | undefined }
+
+a = b;
+a = c;
+a = d;  // Error
+a = e;  // Error
+
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+type UB = { x?: never }['x'];  // undefined from missing property
+
+type UC = UA & UB;  // undefined
+
 
 //// [strictOptionalProperties1.js]
 "use strict";
@@ -223,6 +337,42 @@ var t4 = [1, undefined, undefined];
 // Example from #13195
 var x = { foo: undefined };
 var y = __assign({ foo: 123 }, x);
+f11(ox1); // string
+f11(ox2); // string | undefined
+f11(ox3); // string
+f11(ox4); // string | undefined
+f12(tx1); // string
+f12(tx2); // string | undefined
+f12(tx3); // string
+f12(tx4); // string | undefined
+f13(ox1); // { p: string }
+f13(ox2); // { p: string | undefined }
+f13(ox3); // { p: string }
+f13(ox4); // { p: string | undefined }
+f13(tx1); // [string]
+f13(tx2); // [string | undefined]
+f13(tx3); // [string]
+f13(tx4); // [string | undefined]
+function expectNotUndefined(value) {
+    if (value === undefined) {
+        throw new TypeError('value is undefined');
+    }
+    return value;
+}
+function aa(input) {
+    var notUndefinedVal = expectNotUndefined(input.bar);
+    bb(notUndefinedVal);
+}
+u1.email = e; // error, but only because boolean isn't in email's type
+u2.email = e; // error, and suggest adding undefined
+u2 = {
+    name: 'hi',
+    email: undefined
+};
+a = b;
+a = c;
+a = d; // Error
+a = e; // Error
 
 
 //// [strictOptionalProperties1.d.ts]
@@ -268,3 +418,76 @@ interface Test {
     foo?: string;
     bar?: string | undefined;
 }
+declare let ox1: {
+    p: string;
+};
+declare let ox2: {
+    p: string | undefined;
+};
+declare let ox3: {
+    p?: string;
+};
+declare let ox4: {
+    p?: string | undefined;
+};
+declare let tx1: [string];
+declare let tx2: [string | undefined];
+declare let tx3: [string?];
+declare let tx4: [(string | undefined)?];
+declare function f11<T>(x: {
+    p?: T;
+}): T;
+declare function f12<T>(x: [T?]): T;
+declare function f13<T>(x: Partial<T>): T;
+declare type Undefinable<T> = T | undefined;
+declare function expectNotUndefined<T>(value: Undefinable<T>): T;
+interface Bar {
+    bar?: number;
+}
+declare function aa(input: Bar): void;
+declare function bb(input: number): void;
+interface U1 {
+    name: string;
+    email?: string | number | undefined;
+}
+interface U2 {
+    name: string;
+    email?: string | number;
+}
+declare const e: string | boolean | undefined;
+declare const u1: U1;
+declare let u2: U2;
+declare var a: {
+    [x: string]: number | string;
+};
+declare var b: {
+    a: number;
+    b: string;
+};
+declare var c: {
+    a: number;
+    b?: string;
+};
+declare var d: {
+    a: number;
+    b: string | undefined;
+};
+declare var e: {
+    a: number;
+    b?: string | undefined;
+};
+interface PropsFromReact {
+    onClick?: () => void;
+}
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+declare type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+declare type UA = undefined;
+declare type UB = {
+    x?: never;
+}['x'];
+declare type UC = UA & UB;

@@ -26,7 +26,7 @@ class C extends A {
     f(a: number, b: string): this;
     f(a: string, b: number): Function;
     f(a: string): Function;
-    f(a: any, b?: any): boolean | Function | this {
+    f(a: unknown, b?: unknown): boolean | Function | this {
         throw new Error("Method not implemented.");
     }
     foo(): number {

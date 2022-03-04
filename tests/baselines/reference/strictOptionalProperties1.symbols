@@ -298,18 +298,23 @@ function f6() {
 
     const t1 = [1, 2] as const;
 >t1 : Symbol(t1, Decl(strictOptionalProperties1.ts, 78, 9))
+>const : Symbol(const)
 
     const t2 = [1, 2, ,] as const;
 >t2 : Symbol(t2, Decl(strictOptionalProperties1.ts, 79, 9))
+>const : Symbol(const)
 
     const t3 = [1, 2, , ,] as const;
 >t3 : Symbol(t3, Decl(strictOptionalProperties1.ts, 80, 9))
+>const : Symbol(const)
 
     const t4 = [1, , 2] as const;
 >t4 : Symbol(t4, Decl(strictOptionalProperties1.ts, 81, 9))
+>const : Symbol(const)
 
     const t5 = [1, , , 2] as const;
 >t5 : Symbol(t5, Decl(strictOptionalProperties1.ts, 82, 9))
+>const : Symbol(const)
 }
 
 // Example from #13195
@@ -399,4 +404,312 @@ interface Test {
     bar?: string | undefined;  // Error
 >bar : Symbol(Test.bar, Decl(strictOptionalProperties1.ts, 117, 17))
 }
+
+// Strict optional properties and inference
+
+declare let ox1: { p: string };
+>ox1 : Symbol(ox1, Decl(strictOptionalProperties1.ts, 123, 11))
+>p : Symbol(p, Decl(strictOptionalProperties1.ts, 123, 18))
+
+declare let ox2: { p: string | undefined };
+>ox2 : Symbol(ox2, Decl(strictOptionalProperties1.ts, 124, 11))
+>p : Symbol(p, Decl(strictOptionalProperties1.ts, 124, 18))
+
+declare let ox3: { p?: string };
+>ox3 : Symbol(ox3, Decl(strictOptionalProperties1.ts, 125, 11))
+>p : Symbol(p, Decl(strictOptionalProperties1.ts, 125, 18))
+
+declare let ox4: { p?: string | undefined };
+>ox4 : Symbol(ox4, Decl(strictOptionalProperties1.ts, 126, 11))
+>p : Symbol(p, Decl(strictOptionalProperties1.ts, 126, 18))
+
+declare let tx1: [string];
+>tx1 : Symbol(tx1, Decl(strictOptionalProperties1.ts, 128, 11))
+
+declare let tx2: [string | undefined];
+>tx2 : Symbol(tx2, Decl(strictOptionalProperties1.ts, 129, 11))
+
+declare let tx3: [string?];
+>tx3 : Symbol(tx3, Decl(strictOptionalProperties1.ts, 130, 11))
+
+declare let tx4: [(string | undefined)?];
+>tx4 : Symbol(tx4, Decl(strictOptionalProperties1.ts, 131, 11))
+
+declare function f11<T>(x: { p?: T }): T;
+>f11 : Symbol(f11, Decl(strictOptionalProperties1.ts, 131, 41))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 133, 21))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 133, 24))
+>p : Symbol(p, Decl(strictOptionalProperties1.ts, 133, 28))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 133, 21))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 133, 21))
+
+f11(ox1);  // string
+>f11 : Symbol(f11, Decl(strictOptionalProperties1.ts, 131, 41))
+>ox1 : Symbol(ox1, Decl(strictOptionalProperties1.ts, 123, 11))
+
+f11(ox2);  // string | undefined
+>f11 : Symbol(f11, Decl(strictOptionalProperties1.ts, 131, 41))
+>ox2 : Symbol(ox2, Decl(strictOptionalProperties1.ts, 124, 11))
+
+f11(ox3);  // string
+>f11 : Symbol(f11, Decl(strictOptionalProperties1.ts, 131, 41))
+>ox3 : Symbol(ox3, Decl(strictOptionalProperties1.ts, 125, 11))
+
+f11(ox4);  // string | undefined
+>f11 : Symbol(f11, Decl(strictOptionalProperties1.ts, 131, 41))
+>ox4 : Symbol(ox4, Decl(strictOptionalProperties1.ts, 126, 11))
+
+declare function f12<T>(x: [T?]): T;
+>f12 : Symbol(f12, Decl(strictOptionalProperties1.ts, 138, 9))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 140, 21))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 140, 24))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 140, 21))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 140, 21))
+
+f12(tx1);  // string
+>f12 : Symbol(f12, Decl(strictOptionalProperties1.ts, 138, 9))
+>tx1 : Symbol(tx1, Decl(strictOptionalProperties1.ts, 128, 11))
+
+f12(tx2);  // string | undefined
+>f12 : Symbol(f12, Decl(strictOptionalProperties1.ts, 138, 9))
+>tx2 : Symbol(tx2, Decl(strictOptionalProperties1.ts, 129, 11))
+
+f12(tx3);  // string
+>f12 : Symbol(f12, Decl(strictOptionalProperties1.ts, 138, 9))
+>tx3 : Symbol(tx3, Decl(strictOptionalProperties1.ts, 130, 11))
+
+f12(tx4);  // string | undefined
+>f12 : Symbol(f12, Decl(strictOptionalProperties1.ts, 138, 9))
+>tx4 : Symbol(tx4, Decl(strictOptionalProperties1.ts, 131, 11))
+
+declare function f13<T>(x: Partial<T>): T;
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 147, 21))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 147, 24))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 147, 21))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 147, 21))
+
+f13(ox1);  // { p: string }
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>ox1 : Symbol(ox1, Decl(strictOptionalProperties1.ts, 123, 11))
+
+f13(ox2);  // { p: string | undefined }
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>ox2 : Symbol(ox2, Decl(strictOptionalProperties1.ts, 124, 11))
+
+f13(ox3);  // { p: string }
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>ox3 : Symbol(ox3, Decl(strictOptionalProperties1.ts, 125, 11))
+
+f13(ox4);  // { p: string | undefined }
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>ox4 : Symbol(ox4, Decl(strictOptionalProperties1.ts, 126, 11))
+
+f13(tx1);  // [string]
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>tx1 : Symbol(tx1, Decl(strictOptionalProperties1.ts, 128, 11))
+
+f13(tx2);  // [string | undefined]
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>tx2 : Symbol(tx2, Decl(strictOptionalProperties1.ts, 129, 11))
+
+f13(tx3);  // [string]
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>tx3 : Symbol(tx3, Decl(strictOptionalProperties1.ts, 130, 11))
+
+f13(tx4);  // [string | undefined]
+>f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
+>tx4 : Symbol(tx4, Decl(strictOptionalProperties1.ts, 131, 11))
+
+// Repro from #44388
+
+type Undefinable<T> = T | undefined;
+>Undefinable : Symbol(Undefinable, Decl(strictOptionalProperties1.ts, 157, 9))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 161, 17))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 161, 17))
+
+function expectNotUndefined<T>(value: Undefinable<T>): T {
+>expectNotUndefined : Symbol(expectNotUndefined, Decl(strictOptionalProperties1.ts, 161, 36))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 163, 28))
+>value : Symbol(value, Decl(strictOptionalProperties1.ts, 163, 31))
+>Undefinable : Symbol(Undefinable, Decl(strictOptionalProperties1.ts, 157, 9))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 163, 28))
+>T : Symbol(T, Decl(strictOptionalProperties1.ts, 163, 28))
+
+    if (value === undefined) {
+>value : Symbol(value, Decl(strictOptionalProperties1.ts, 163, 31))
+>undefined : Symbol(undefined)
+
+        throw new TypeError('value is undefined');
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return value;
+>value : Symbol(value, Decl(strictOptionalProperties1.ts, 163, 31))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(strictOptionalProperties1.ts, 168, 1))
+
+    bar?: number;
+>bar : Symbol(Bar.bar, Decl(strictOptionalProperties1.ts, 170, 15))
+}
+
+function aa(input: Bar): void {
+>aa : Symbol(aa, Decl(strictOptionalProperties1.ts, 172, 1))
+>input : Symbol(input, Decl(strictOptionalProperties1.ts, 174, 12))
+>Bar : Symbol(Bar, Decl(strictOptionalProperties1.ts, 168, 1))
+
+    const notUndefinedVal = expectNotUndefined(input.bar);
+>notUndefinedVal : Symbol(notUndefinedVal, Decl(strictOptionalProperties1.ts, 175, 9))
+>expectNotUndefined : Symbol(expectNotUndefined, Decl(strictOptionalProperties1.ts, 161, 36))
+>input.bar : Symbol(Bar.bar, Decl(strictOptionalProperties1.ts, 170, 15))
+>input : Symbol(input, Decl(strictOptionalProperties1.ts, 174, 12))
+>bar : Symbol(Bar.bar, Decl(strictOptionalProperties1.ts, 170, 15))
+
+    bb(notUndefinedVal);
+>bb : Symbol(bb, Decl(strictOptionalProperties1.ts, 177, 1))
+>notUndefinedVal : Symbol(notUndefinedVal, Decl(strictOptionalProperties1.ts, 175, 9))
+}
+
+declare function bb(input: number): void;
+>bb : Symbol(bb, Decl(strictOptionalProperties1.ts, 177, 1))
+>input : Symbol(input, Decl(strictOptionalProperties1.ts, 179, 20))
+
+interface U1 {
+>U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
+
+    name: string
+>name : Symbol(U1.name, Decl(strictOptionalProperties1.ts, 181, 14))
+
+    email?: string | number | undefined
+>email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+}
+interface U2 {
+>U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
+
+    name: string
+>name : Symbol(U2.name, Decl(strictOptionalProperties1.ts, 185, 14))
+
+    email?: string | number
+>email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+}
+declare const e: string | boolean | undefined
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+declare const u1: U1
+>u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
+>U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
+
+declare let u2: U2
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+>U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
+
+u1.email = e // error, but only because boolean isn't in email's type
+>u1.email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+>u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
+>email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+u2.email = e // error, and suggest adding undefined
+>u2.email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+>email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+u2 = {
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+
+    name: 'hi',
+>name : Symbol(name, Decl(strictOptionalProperties1.ts, 194, 6))
+
+    email: undefined
+>email : Symbol(email, Decl(strictOptionalProperties1.ts, 195, 15))
+>undefined : Symbol(undefined)
+}
+
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 201, 17))
+
+declare var b: {a: number, b: string}
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 202, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 26))
+
+declare var c: {a: number, b?: string}
+>c : Symbol(c, Decl(strictOptionalProperties1.ts, 203, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 203, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 203, 26))
+
+declare var d: {a: number, b: string | undefined }
+>d : Symbol(d, Decl(strictOptionalProperties1.ts, 204, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 204, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 204, 26))
+
+declare var e: {a: number, b?: string | undefined }
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 205, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 205, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 205, 26))
+
+a = b;
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 11))
+
+a = c;
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>c : Symbol(c, Decl(strictOptionalProperties1.ts, 203, 11))
+
+a = d;  // Error
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>d : Symbol(d, Decl(strictOptionalProperties1.ts, 204, 11))
+
+a = e;  // Error
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+// Repro from #46004
+
+interface PropsFromReact {
+>PropsFromReact : Symbol(PropsFromReact, Decl(strictOptionalProperties1.ts, 210, 6))
+
+    onClick?: () => void;
+>onClick : Symbol(PropsFromReact.onClick, Decl(strictOptionalProperties1.ts, 214, 26))
+}
+
+interface PropsFromMaterialUI {
+>PropsFromMaterialUI : Symbol(PropsFromMaterialUI, Decl(strictOptionalProperties1.ts, 216, 1))
+
+    onClick?: (() => void) | undefined;
+>onClick : Symbol(PropsFromMaterialUI.onClick, Decl(strictOptionalProperties1.ts, 218, 31))
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+>TheTypeFromMaterialUI : Symbol(TheTypeFromMaterialUI, Decl(strictOptionalProperties1.ts, 220, 1))
+>PropsFromReact : Symbol(PropsFromReact, Decl(strictOptionalProperties1.ts, 210, 6))
+>PropsFromMaterialUI : Symbol(PropsFromMaterialUI, Decl(strictOptionalProperties1.ts, 216, 1))
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+>NavBottomListItem : Symbol(NavBottomListItem, Decl(strictOptionalProperties1.ts, 222, 66))
+>TheTypeFromMaterialUI : Symbol(TheTypeFromMaterialUI, Decl(strictOptionalProperties1.ts, 220, 1))
+
+    value: string;
+>value : Symbol(NavBottomListItem.value, Decl(strictOptionalProperties1.ts, 224, 59))
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+>UA : Symbol(UA, Decl(strictOptionalProperties1.ts, 226, 1))
+
+type UB = { x?: never }['x'];  // undefined from missing property
+>UB : Symbol(UB, Decl(strictOptionalProperties1.ts, 230, 20))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 231, 11))
+
+type UC = UA & UB;  // undefined
+>UC : Symbol(UC, Decl(strictOptionalProperties1.ts, 231, 29))
+>UA : Symbol(UA, Decl(strictOptionalProperties1.ts, 226, 1))
+>UB : Symbol(UB, Decl(strictOptionalProperties1.ts, 230, 20))
 

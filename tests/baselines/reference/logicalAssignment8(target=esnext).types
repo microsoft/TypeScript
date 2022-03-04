@@ -1,6 +1,6 @@
 === tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts ===
 declare const bar: { value?: number[] } | undefined
->bar : { value?: number[]; } | undefined
+>bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
 
 function foo1(results: number[] | undefined) {
@@ -15,7 +15,7 @@ function foo1(results: number[] | undefined) {
 >results : number[] | undefined
 >bar?.value ?? [] : number[]
 >bar?.value : number[] | undefined
->bar : { value?: number[]; } | undefined
+>bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
 >[] : never[]
 >push : (...items: number[]) => number
@@ -34,7 +34,7 @@ function foo2(results: number[] | undefined) {
 >results : number[] | undefined
 >bar?.value ?? [] : number[]
 >bar?.value : number[] | undefined
->bar : { value?: number[]; } | undefined
+>bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
 >[] : never[]
 >push : (...items: number[]) => number
@@ -53,7 +53,7 @@ function foo3(results: number[] | undefined) {
 >results : number[] | undefined
 >bar?.value ?? [] : number[]
 >bar?.value : number[] | undefined
->bar : { value?: number[]; } | undefined
+>bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
 >[] : never[]
 >push : (...items: number[]) => number

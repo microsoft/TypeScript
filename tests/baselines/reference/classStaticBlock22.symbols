@@ -1,0 +1,130 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts ===
+let await: "any";
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock22.ts, 0, 17))
+
+  static {
+    let await: any; // illegal, cannot declare a new binding for await
+>await : Symbol(await, Decl(classStaticBlock22.ts, 3, 7))
+  }
+  static {
+    let { await } = {} as any; // illegal, cannot declare a new binding for await
+>await : Symbol(await, Decl(classStaticBlock22.ts, 6, 9))
+  }
+  static {
+    let { await: other } = {} as any; // legal
+>other : Symbol(other, Decl(classStaticBlock22.ts, 9, 9))
+  }
+  static {
+    let await; // illegal, cannot declare a new binding for await
+>await : Symbol(await, Decl(classStaticBlock22.ts, 12, 7))
+  }
+  static {
+    function await() { }; // illegal
+>await : Symbol(await, Decl(classStaticBlock22.ts, 14, 10))
+  }
+  static {
+    class await { }; // illegal
+>await : Symbol(await, Decl(classStaticBlock22.ts, 17, 10))
+  }
+
+  static {
+    class D {
+>D : Symbol(D, Decl(classStaticBlock22.ts, 21, 10))
+
+      await = 1; // legal
+>await : Symbol(D.await, Decl(classStaticBlock22.ts, 22, 13))
+
+      x = await; // legal (initializers have an implicit function boundary)
+>x : Symbol(D.x, Decl(classStaticBlock22.ts, 23, 16))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+    };
+  }
+  static {
+    (function await() { }); // legal, 'await' in function expression name not bound inside of static block
+>await : Symbol(await, Decl(classStaticBlock22.ts, 28, 5))
+  }
+  static {
+    (class await { }); // legal, 'await' in class expression name not bound inside of static block
+>await : Symbol(await, Decl(classStaticBlock22.ts, 31, 5))
+  }
+  static {
+    (function () { return await; }); // legal, 'await' is inside of a new function boundary
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+  }
+  static {
+    (() => await); // legal, 'await' is inside of a new function boundary
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+  }
+
+  static {
+    class E {
+>E : Symbol(E, Decl(classStaticBlock22.ts, 40, 10))
+
+      constructor() { await; }
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+      method() { await; }
+>method : Symbol(E.method, Decl(classStaticBlock22.ts, 42, 30))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+      get accessor() {
+>accessor : Symbol(E.accessor, Decl(classStaticBlock22.ts, 43, 25), Decl(classStaticBlock22.ts, 47, 7))
+
+        await;
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+        return 1;
+      }
+      set accessor(v: any) {
+>accessor : Symbol(E.accessor, Decl(classStaticBlock22.ts, 43, 25), Decl(classStaticBlock22.ts, 47, 7))
+>v : Symbol(v, Decl(classStaticBlock22.ts, 48, 19))
+
+        await;
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+      }
+      propLambda = () => { await; }
+>propLambda : Symbol(E.propLambda, Decl(classStaticBlock22.ts, 50, 7))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+      propFunc = function () { await; }
+>propFunc : Symbol(E.propFunc, Decl(classStaticBlock22.ts, 51, 35))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+    }
+  }
+  static {
+    class S {
+>S : Symbol(S, Decl(classStaticBlock22.ts, 55, 10))
+
+      static method() { await; }
+>method : Symbol(S.method, Decl(classStaticBlock22.ts, 56, 13))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+      static get accessor() {
+>accessor : Symbol(S.accessor, Decl(classStaticBlock22.ts, 57, 32), Decl(classStaticBlock22.ts, 61, 7))
+
+        await;
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+        return 1;
+      }
+      static set accessor(v: any) {
+>accessor : Symbol(S.accessor, Decl(classStaticBlock22.ts, 57, 32), Decl(classStaticBlock22.ts, 61, 7))
+>v : Symbol(v, Decl(classStaticBlock22.ts, 62, 26))
+
+        await;
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+      }
+      static propLambda = () => { await; }
+>propLambda : Symbol(S.propLambda, Decl(classStaticBlock22.ts, 64, 7))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+
+      static propFunc = function () { await; }
+>propFunc : Symbol(S.propFunc, Decl(classStaticBlock22.ts, 65, 42))
+>await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
+    }
+  }
+}

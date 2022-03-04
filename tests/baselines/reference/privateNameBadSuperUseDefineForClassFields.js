@@ -3,7 +3,7 @@ class B {};
 class A extends B {
     #x;
     constructor() {
-        void 0; // Error: 'super' call must  come first
+        void 0;
         super();
     }
 }
@@ -16,7 +16,7 @@ class B {
 class A extends B {
     #x;
     constructor() {
-        void 0; // Error: 'super' call must  come first
+        void 0;
         super();
     }
 }

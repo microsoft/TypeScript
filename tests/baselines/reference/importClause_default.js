@@ -7,6 +7,7 @@ export default class A { a!: string }
 import type A from './a';
 new A();
 let a: A = { a: '' };
+let b = { A };
 
 
 //// [a.js]
@@ -23,3 +24,4 @@ exports["default"] = A;
 exports.__esModule = true;
 new A();
 var a = { a: '' };
+var b = { A: A };

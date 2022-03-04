@@ -126,7 +126,6 @@ console.log(b.c.d);`
                     ],
                 });
             }
-
             describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.ts`,
@@ -144,12 +143,11 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import file changes",
+                    "errors for .ts change",
                     bFile,
                     cFile
                 );
             });
-
             describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.d.ts`,
@@ -167,7 +165,7 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import through declaration file changes",
+                    "errors for .d.ts change",
                     bFile,
                     cFile
                 );
@@ -236,7 +234,6 @@ getPoint().c.x;`
                 ]
             });
         });
-
         describe("updates errors when file transitively exported file changes", () => {
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
@@ -287,7 +284,7 @@ export class Data {
 
             function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
                 verifyEmitAndErrorUpdates({
-                    subScenario: `updates errors when file transitively exported file changes/${subScenario}`,
+                    subScenario: `transitive exports/${subScenario}`,
                     files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
                     configFile: () => config,
                     changes: [
@@ -311,11 +308,10 @@ export class Data {
             }
             describe("when there are no circular import and exports", () => {
                 verifyTransitiveExports(
-                    "when there are no circular import and exports",
+                    "no circular import/export",
                     [lib2Data]
                 );
             });
-
             describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
                     path: `${projectRoot}/lib2/data.ts`,
@@ -337,7 +333,7 @@ export class Data2 {
 }`
                 };
                 verifyTransitiveExports(
-                    "when there are circular import and exports",
+                    "yes circular import/exports",
                     [lib2Data, lib2Data2]
                 );
             });

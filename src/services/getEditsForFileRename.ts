@@ -59,16 +59,16 @@ namespace ts {
                 case "include":
                 case "exclude": {
                     const foundExactMatch = updatePaths(property);
-                    if (!foundExactMatch && propertyName === "include" && isArrayLiteralExpression(property.initializer)) {
-                        const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
-                        const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
-                        // If there isn't some include for this, add a new one.
-                        if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                            !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
-                            changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
-                        }
+                    if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
+                    const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
+                    if (includes.length === 0) return;
+                    const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
+                    // If there isn't some include for this, add a new one.
+                    if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                        !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                        changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                     }
-                    break;
+                    return;
                 }
                 case "compilerOptions":
                     forEachProperty(property.initializer, (property, propertyName) => {
@@ -85,13 +85,12 @@ namespace ts {
                             });
                         }
                     });
-                    break;
+                    return;
             }
         });
 
         function updatePaths(property: PropertyAssignment): boolean {
-            // Type annotation needed due to #7294
-            const elements: readonly Expression[] = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
+            const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];
             let foundExactMatch = false;
             for (const element of elements) {
                 foundExactMatch = tryUpdateString(element) || foundExactMatch;
@@ -157,7 +156,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                         : undefined;
                 });
         }
@@ -190,9 +189,10 @@ namespace ts {
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
+            const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
             const resolved = host.resolveModuleNames
-                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
-                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
+                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
+                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
             return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
         }
     }

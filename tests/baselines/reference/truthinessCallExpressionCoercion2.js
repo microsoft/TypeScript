@@ -63,7 +63,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 function checksConsole() {
     // error
     typeof window !== 'undefined' && window.console &&
-        ((window.console as any).firebug || (window.console.exception && window.console.table));
+        ((window.console as any).firebug || (window.console.error && window.console.table));
 }
 
 function checksPropertyAccess() {
@@ -166,7 +166,7 @@ function test(required1, required2, b, optional) {
 function checksConsole() {
     // error
     typeof window !== 'undefined' && window.console &&
-        (window.console.firebug || (window.console.exception && window.console.table));
+        (window.console.firebug || (window.console.error && window.console.table));
 }
 function checksPropertyAccess() {
     var x = {

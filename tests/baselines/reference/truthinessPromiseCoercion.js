@@ -2,6 +2,7 @@
 declare const p: Promise<number>
 declare const p2: null | Promise<number>
 declare const obj: { p: Promise<unknown> }
+declare function pf(): Promise<boolean>
 
 async function f() {
     if (p) {} // err
@@ -36,6 +37,16 @@ async function h() {
     if (obj.p && await obj.p) {} // ok
 }
 
+async function i(): Promise<string> {
+    if (pf()) { // error
+        return "true";
+    }
+    if (pf()) { // error
+        pf().then();
+    }
+    return "false";
+}
+
 
 //// [truthinessPromiseCoercion.js]
 async function f() {
@@ -66,4 +77,13 @@ async function h() {
         await obj.p;
     }
     if (obj.p && await obj.p) { } // ok
+}
+async function i() {
+    if (pf()) { // error
+        return "true";
+    }
+    if (pf()) { // error
+        pf().then();
+    }
+    return "false";
 }

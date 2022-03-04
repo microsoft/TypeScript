@@ -66,6 +66,10 @@ Semantic diagnostics in builder refreshed for::
 /lib/lib.d.ts
 /src/shared/index.ts
 
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/shared/index.ts (used version)
+
 Program root files: ["/src/webpack/index.ts"]
 Program options: {"composite":true,"configFilePath":"/src/webpack/tsconfig.json"}
 Program structureReused: Not
@@ -76,6 +80,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /lib/lib.d.ts
 /src/webpack/index.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/webpack/index.ts (used version)
 
 
 //// [/src/shared/index.d.ts]

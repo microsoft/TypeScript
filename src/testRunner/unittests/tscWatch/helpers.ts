@@ -204,13 +204,18 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    export function checkNormalBuildErrors(host: WatchedSystem, errors: readonly Diagnostic[] | readonly string[], reportErrorSummary?: boolean) {
+    export function checkNormalBuildErrors(
+        host: WatchedSystem,
+        errors: readonly Diagnostic[] | readonly string[],
+        files: readonly ReportFileInError[],
+        reportErrorSummary?: boolean
+    ) {
         checkOutputErrors(
             host,
             [
                 ...map(errors, hostOutputDiagnostic),
                 ...reportErrorSummary ?
-                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, host.newLine))] :
+                    [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, files, host.newLine, host))] :
                     emptyArray
             ]
         );
@@ -468,6 +473,7 @@ namespace ts.tscWatch {
         if (!builderProgram) return;
         if (builderProgram !== oldProgram?.[1]) {
             const state = builderProgram.getState();
+            const internalState = state as unknown as BuilderState;
             if (state.semanticDiagnosticsPerFile?.size) {
                 baseline.push("Semantic diagnostics in builder refreshed for::");
                 for (const file of program.getSourceFiles()) {
@@ -478,6 +484,24 @@ namespace ts.tscWatch {
             }
             else {
                 baseline.push("No cached semantic diagnostics in the builder::");
+            }
+            if (internalState) {
+                baseline.push("");
+                if (internalState.hasCalledUpdateShapeSignature?.size) {
+                    baseline.push("Shape signatures in builder refreshed for::");
+                    internalState.hasCalledUpdateShapeSignature.forEach((path: Path) => {
+                        const info = state.fileInfos.get(path);
+                        if(info?.version === info?.signature || !info?.signature) {
+                            baseline.push(path + " (used version)");
+                        }
+                        else {
+                            baseline.push(path + " (computed .d.ts)");
+                        }
+                    });
+                }
+                else {
+                    baseline.push("No shapes updated in the builder::");
+                }
             }
             baseline.push("");
             if (!baselineDependencies) return;

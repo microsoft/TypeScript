@@ -59,7 +59,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -86,6 +86,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/modulec.ts (used version)
+/user/username/projects/myproject/modulea.ts (used version)
+/user/username/projects/myproject/moduleb.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -168,7 +174,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -192,6 +198,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/moduleA.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/modulea.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

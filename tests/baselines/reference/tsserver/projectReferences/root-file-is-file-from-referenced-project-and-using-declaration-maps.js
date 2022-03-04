@@ -39,7 +39,7 @@ Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'input/keyboard.test.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'
@@ -116,7 +116,7 @@ Project '/user/username/projects/project/src/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../out/input/keyboard.d.ts
 	  Imported via 'common/input/keyboard' from file 'terminal.ts'
 	  Imported via 'common/input/keyboard' from file 'common/input/keyboard.test.ts'
@@ -145,9 +145,11 @@ Open files:
 		Projects: /user/username/projects/project/src/tsconfig.json
 response:{"responseRequired":false}
 request:{"command":"references","arguments":{"file":"/user/username/projects/project/src/common/input/keyboard.ts","line":2,"offset":17},"seq":1,"type":"request"}
+Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/out/input/keyboard.d.ts.map 500 undefined WatchType: Closed Script info
+Finding references to /user/username/projects/project/out/input/keyboard.d.ts position 24 in project /user/username/projects/project/src/tsconfig.json
 Search path: /user/username/projects/project/src/common/input
 For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Search path: /user/username/projects/project/src/common/input
 For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-response:{"response":{"refs":[{"file":"/user/username/projects/project/src/common/input/keyboard.ts","start":{"line":2,"offset":17},"end":{"line":2,"offset":38},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":44},"lineText":"export function evaluateKeyboardEvent() { }","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/project/src/common/input/keyboard.test.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":31},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":63},"lineText":"import { evaluateKeyboardEvent } from 'common/input/keyboard';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/project/src/common/input/keyboard.test.ts","start":{"line":3,"offset":12},"end":{"line":3,"offset":33},"lineText":"    return evaluateKeyboardEvent();","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/project/src/terminal.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":31},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":63},"lineText":"import { evaluateKeyboardEvent } from 'common/input/keyboard';","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/project/src/terminal.ts","start":{"line":3,"offset":12},"end":{"line":3,"offset":33},"lineText":"    return evaluateKeyboardEvent();","isWriteAccess":false,"isDefinition":false}],"symbolName":"evaluateKeyboardEvent","symbolStartOffset":17,"symbolDisplayString":"function evaluateKeyboardEvent(): void"},"responseRequired":true}
+response:{"response":{"refs":[{"file":"/user/username/projects/project/src/common/input/keyboard.ts","start":{"line":2,"offset":17},"end":{"line":2,"offset":38},"contextStart":{"line":2,"offset":1},"contextEnd":{"line":2,"offset":44},"lineText":"export function evaluateKeyboardEvent() { }","isWriteAccess":true,"isDefinition":true},{"file":"/user/username/projects/project/src/common/input/keyboard.test.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":31},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":63},"lineText":"import { evaluateKeyboardEvent } from 'common/input/keyboard';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/project/src/common/input/keyboard.test.ts","start":{"line":3,"offset":12},"end":{"line":3,"offset":33},"lineText":"    return evaluateKeyboardEvent();","isWriteAccess":false,"isDefinition":false},{"file":"/user/username/projects/project/src/terminal.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":31},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":63},"lineText":"import { evaluateKeyboardEvent } from 'common/input/keyboard';","isWriteAccess":true,"isDefinition":false},{"file":"/user/username/projects/project/src/terminal.ts","start":{"line":3,"offset":12},"end":{"line":3,"offset":33},"lineText":"    return evaluateKeyboardEvent();","isWriteAccess":false,"isDefinition":false}],"symbolName":"evaluateKeyboardEvent","symbolStartOffset":17,"symbolDisplayString":"function evaluateKeyboardEvent(): void"},"responseRequired":true}

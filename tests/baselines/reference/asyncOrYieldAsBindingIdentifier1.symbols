@@ -1,0 +1,84 @@
+=== tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts ===
+function f_let () {
+>f_let : Symbol(f_let, Decl(asyncOrYieldAsBindingIdentifier1.ts, 0, 0))
+
+    let await = 1
+>await : Symbol(await, Decl(asyncOrYieldAsBindingIdentifier1.ts, 1, 7))
+}
+
+function f1_var () {
+>f1_var : Symbol(f1_var, Decl(asyncOrYieldAsBindingIdentifier1.ts, 2, 1))
+
+    var await = 1
+>await : Symbol(await, Decl(asyncOrYieldAsBindingIdentifier1.ts, 5, 7))
+}
+
+function f1_const () {
+>f1_const : Symbol(f1_const, Decl(asyncOrYieldAsBindingIdentifier1.ts, 6, 1))
+
+    const await = 1
+>await : Symbol(await, Decl(asyncOrYieldAsBindingIdentifier1.ts, 9, 9))
+}
+
+async function f2_let () {
+>f2_let : Symbol(f2_let, Decl(asyncOrYieldAsBindingIdentifier1.ts, 10, 1))
+
+    let await = 1
+>await : Symbol(await, Decl(asyncOrYieldAsBindingIdentifier1.ts, 13, 7))
+}
+
+async function f2_var () {
+>f2_var : Symbol(f2_var, Decl(asyncOrYieldAsBindingIdentifier1.ts, 14, 1))
+
+    var await = 1
+>await : Symbol(await, Decl(asyncOrYieldAsBindingIdentifier1.ts, 17, 7))
+}
+
+async function f2_const () {
+>f2_const : Symbol(f2_const, Decl(asyncOrYieldAsBindingIdentifier1.ts, 18, 1))
+
+    const await = 1
+>await : Symbol(await, Decl(asyncOrYieldAsBindingIdentifier1.ts, 21, 9))
+}
+
+function f3_let () {
+>f3_let : Symbol(f3_let, Decl(asyncOrYieldAsBindingIdentifier1.ts, 22, 1))
+
+    let yield = 2
+>yield : Symbol(yield, Decl(asyncOrYieldAsBindingIdentifier1.ts, 25, 7))
+}
+
+function f3_var () {
+>f3_var : Symbol(f3_var, Decl(asyncOrYieldAsBindingIdentifier1.ts, 26, 1))
+
+    var yield = 2
+>yield : Symbol(yield, Decl(asyncOrYieldAsBindingIdentifier1.ts, 29, 7))
+}
+
+function f3_const () {
+>f3_const : Symbol(f3_const, Decl(asyncOrYieldAsBindingIdentifier1.ts, 30, 1))
+
+    const yield = 2
+>yield : Symbol(yield, Decl(asyncOrYieldAsBindingIdentifier1.ts, 33, 9))
+}
+
+function * f4_let () {
+>f4_let : Symbol(f4_let, Decl(asyncOrYieldAsBindingIdentifier1.ts, 34, 1))
+
+    let yield = 2;
+>yield : Symbol(yield, Decl(asyncOrYieldAsBindingIdentifier1.ts, 37, 7))
+}
+
+function * f4_var () {
+>f4_var : Symbol(f4_var, Decl(asyncOrYieldAsBindingIdentifier1.ts, 38, 1))
+
+    var yield = 2;
+>yield : Symbol(yield, Decl(asyncOrYieldAsBindingIdentifier1.ts, 41, 7))
+}
+
+function * f4_const () {
+>f4_const : Symbol(f4_const, Decl(asyncOrYieldAsBindingIdentifier1.ts, 42, 1))
+
+    const yield = 2;
+>yield : Symbol(yield, Decl(asyncOrYieldAsBindingIdentifier1.ts, 45, 9))
+}

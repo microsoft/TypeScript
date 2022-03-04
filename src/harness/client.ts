@@ -138,6 +138,13 @@ namespace ts.server {
             this.processResponse(request, /*expectEmptyBody*/ true);
         }
 
+        /*@internal*/
+        setCompilerOptionsForInferredProjects(options: protocol.CompilerOptions) {
+            const args: protocol.SetCompilerOptionsForInferredProjectsArgs = { options };
+            const request = this.processRequest(CommandNames.CompilerOptionsForInferredProjects, args);
+            this.processResponse(request, /*expectEmptyBody*/ false);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
@@ -643,6 +650,20 @@ namespace ts.server {
         getCombinedCodeFix = notImplemented;
 
         applyCodeActionCommand = notImplemented;
+
+        provideInlayHints(file: string, span: TextSpan): InlayHint[] {
+            const { start, length } = span;
+            const args: protocol.InlayHintsRequestArgs = { file, start, length };
+
+            const request = this.processRequest<protocol.InlayHintsRequest>(CommandNames.ProvideInlayHints, args);
+            const response = this.processResponse<protocol.InlayHintsResponse>(request);
+
+            return response.body!.map(item => ({ // TODO: GH#18217
+                ...item,
+                kind: item.kind as InlayHintKind,
+                position: this.lineOffsetToPosition(file, item.position),
+            }));
+        }
 
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"

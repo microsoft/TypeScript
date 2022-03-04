@@ -21,7 +21,7 @@ export function foo<T>(p: Promise<T>) {
 
     p[FOO_SYMBOL] = 3;
 >p[FOO_SYMBOL] = 3 : 3
->p[FOO_SYMBOL] : number
+>p[FOO_SYMBOL] : number | undefined
 >p : Promise<T>
 >FOO_SYMBOL : unique symbol
 >3 : 3
