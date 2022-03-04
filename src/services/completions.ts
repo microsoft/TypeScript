@@ -1139,10 +1139,10 @@ namespace ts.Completions {
         });
 
         if (formatContext) {
-            insertText = printer.printAndFormatSnippet(EmitHint.Unspecified, functionProp, sourceFile, formatContext);
+            insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([functionProp], /*hasTrailingComma*/ true), sourceFile, formatContext);
         }
         else {
-            insertText = printer.printSnippet(EmitHint.Unspecified, functionProp, sourceFile);
+            insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([functionProp], /*hasTrailingComma*/ true), sourceFile);
         }
 
         return { isSnippet, insertText, importAdder };
@@ -1271,6 +1271,7 @@ namespace ts.Completions {
             return textChanges.applyChanges(syntheticFile.text, changes);
         }
 
+        // >> TODO: do we need this?
         function printSnippet(
             hint: EmitHint,
             node: Node,
