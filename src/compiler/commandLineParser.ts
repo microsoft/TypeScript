@@ -950,7 +950,8 @@ namespace ts {
             name: "jsxFragmentFactory",
             type: "string",
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment
+            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment,
+            defaultValueDescription: "React.Fragment",
         },
         {
             name: "jsxImportSource",
