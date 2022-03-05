@@ -2395,6 +2395,14 @@ namespace ts {
         });
     }
 
+    export function nodeToDisplayParts(node: Node, enclosingDeclaration: Node): SymbolDisplayPart[] {
+        const file = enclosingDeclaration.getSourceFile();
+        return mapToDisplayParts(writer => {
+            const printer = createPrinter({ removeComments: true, omitTrailingSemicolon: true });
+            printer.writeNode(EmitHint.Unspecified, node, file, writer);
+        });
+    }
+
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }

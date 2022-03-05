@@ -789,7 +789,7 @@ namespace ts.Completions {
             if (!entry) {
                 return undefined;
             }
-            ({ insertText, isSnippet, importAdder } = entry);
+            ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
             source = CompletionSource.ObjectLiteralMethodSnippet; // >> Needed for disambiguiation from normal completions (with just the method name).
             if (importAdder?.hasFixes()) {
                 hasAction = true; // >> TODO: implement this computation in `getCompletionEntryDetails`.
@@ -1108,7 +1108,7 @@ namespace ts.Completions {
         options: CompilerOptions,
         preferences: UserPreferences,
         formatContext: formatting.FormatContext | undefined,
-    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder } | undefined {
+    ): { insertText: string, isSnippet?: true, importAdder: codefix.ImportAdder, sourceDisplay: SymbolDisplayPart[] } | undefined {
         let isSnippet: true | undefined;
         let insertText: string = name;
 
@@ -1125,8 +1125,8 @@ namespace ts.Completions {
             body = factory.createBlock([], /* multiline */ true);
         }
 
-        const functionProp = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body);
-        if (!functionProp) {
+        const method = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body);
+        if (!method) {
             return undefined;
         }
 
@@ -1137,15 +1137,24 @@ namespace ts.Completions {
             omitTrailingSemicolon: false,
             newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
         });
-
         if (formatContext) {
-            insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([functionProp], /*hasTrailingComma*/ true), sourceFile, formatContext);
+            insertText = printer.printAndFormatSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile, formatContext);
         }
         else {
-            insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([functionProp], /*hasTrailingComma*/ true), sourceFile);
+            insertText = printer.printSnippetList(ListFormat.CommaDelimited | ListFormat.AllowTrailingComma, factory.createNodeArray([method], /*hasTrailingComma*/ true), sourceFile);
         }
 
-        return { isSnippet, insertText, importAdder };
+        const methodSignature = factory.createMethodSignature(
+            method.modifiers,
+            method.name,
+            method.questionToken,
+            method.typeParameters,
+            method.parameters,
+            method.type);
+        const sourceDisplay = nodeToDisplayParts(methodSignature, enclosingDeclaration);
+
+        return { isSnippet, insertText, importAdder, sourceDisplay };
+
     };
 
     function createObjectLiteralFunctionProperty(
@@ -1157,7 +1166,7 @@ namespace ts.Completions {
         preferences: UserPreferences,
         importAdder: codefix.ImportAdder,
         body: Block,
-    ): PropertyAssignment | MethodDeclaration | undefined {
+    ): MethodDeclaration | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
