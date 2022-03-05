@@ -859,6 +859,7 @@ declare namespace completion {
         ThisProperty = "ThisProperty/",
         ClassMemberSnippet = "ClassMemberSnippet/",
         TypeOnlyAlias = "TypeOnlyAlias/",
+        ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

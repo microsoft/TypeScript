@@ -60,10 +60,10 @@ namespace ts.Completions {
         ThisProperty = "ThisProperty/",
         /** Auto-import that comes attached to a class member snippet */
         ClassMemberSnippet = "ClassMemberSnippet/",
-        /** Auto-import that comes attached to an object literal method snippet */
-        ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
         /** A type-only import that needs to be promoted in order to be used at the completion location */
         TypeOnlyAlias = "TypeOnlyAlias/",
+        /** Auto-import that comes attached to an object literal method snippet */
+        ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
     }
 
     const enum SymbolOriginInfoKind {
@@ -785,7 +785,7 @@ namespace ts.Completions {
         const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, origin, location, contextToken, program.getTypeChecker());
         if (objLit) {
             let importAdder;
-            const entry = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, sourceFile, program, host, options, preferences, formatContext);
+            const entry = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, program, host, options, preferences, formatContext);
             if (!entry) {
                 return undefined;
             }
@@ -1102,7 +1102,6 @@ namespace ts.Completions {
         symbol: Symbol,
         name: string,
         enclosingDeclaration: ObjectLiteralExpression,
-        sourceFile: SourceFile,
         program: Program,
         host: LanguageServiceHost,
         options: CompilerOptions,
@@ -1112,6 +1111,7 @@ namespace ts.Completions {
         let isSnippet: true | undefined;
         let insertText: string = name;
 
+        const sourceFile = enclosingDeclaration.getSourceFile();
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
         let body;
@@ -1652,7 +1652,10 @@ namespace ts.Completions {
         return firstDefined(symbols, (symbol, index): SymbolCompletion | undefined => {
             const origin = symbolToOriginInfoMap[index];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, getEmitScriptTarget(compilerOptions), origin, completionKind, completionData.isJsxIdentifierExpected);
-            return info && info.name === entryId.name && (entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember || getSourceFromOrigin(origin) === entryId.source)
+            return info && info.name === entryId.name && (
+                entryId.source === CompletionSource.ClassMemberSnippet && symbol.flags & SymbolFlags.ClassMember
+                || entryId.source === CompletionSource.ObjectLiteralMethodSnippet && symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)
+                || getSourceFromOrigin(origin) === entryId.source)
                 ? { type: "symbol" as const, symbol, location, origin, contextToken, previousToken, isJsxInitializer, isTypeOnlyLocation }
                 : undefined;
         }) || { type: "none" };
@@ -1786,6 +1789,27 @@ namespace ts.Completions {
                     }],
                 };
             }
+        }
+
+        if (source === CompletionSource.ObjectLiteralMethodSnippet) {
+            const enclosingDeclaration = tryGetObjectLikeCompletionContainer(contextToken) as ObjectLiteralExpression;
+            const { importAdder } = getEntryForObjectLiteralFunctionCompletion(
+                symbol,
+                name,
+                enclosingDeclaration,
+                program,
+                host,
+                compilerOptions,
+                preferences,
+                formatContext)!;
+            const changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, importAdder.writeFixes);
+            return {
+                sourceDisplay: undefined,
+                codeActions: [{
+                    changes,
+                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                }],
+            };
         }
 
         if (originIsTypeOnlyAlias(origin)) {
