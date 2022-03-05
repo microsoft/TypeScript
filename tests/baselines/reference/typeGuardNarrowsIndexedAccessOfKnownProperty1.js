@@ -1,4 +1,4 @@
-//// [typeGuardNarrowsIndexedAccessOfKnownProperty.ts]
+//// [typeGuardNarrowsIndexedAccessOfKnownProperty1.ts]
 interface Square {
     ["dash-ok"]: "square";
     ["square-size"]: number;
@@ -80,7 +80,7 @@ export function g(pair: [number, string?]): string {
 }
 
 
-//// [typeGuardNarrowsIndexedAccessOfKnownProperty.js]
+//// [typeGuardNarrowsIndexedAccessOfKnownProperty1.js]
 "use strict";
 exports.__esModule = true;
 exports.g = void 0;
