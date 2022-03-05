@@ -192,72 +192,72 @@ var A2;
 })(A2 || (A2 = {}));
 var I2 = A2.B;
 function foo0(e) {
-    if (e === 1 /* V1 */) {
+    if (e === 1 /* I.V1 */) {
     }
-    else if (e === 101 /* V2 */) {
+    else if (e === 101 /* I.V2 */) {
     }
 }
 function foo1(e) {
-    if (e === 10 /* V1 */) {
+    if (e === 10 /* I1.C.E.V1 */) {
     }
-    else if (e === 110 /* V2 */) {
+    else if (e === 110 /* I1.C.E.V2 */) {
     }
 }
 function foo2(e) {
-    if (e === 10 /* V1 */) {
+    if (e === 10 /* I2.C.E.V1 */) {
     }
-    else if (e === 110 /* V2 */) {
+    else if (e === 110 /* I2.C.E.V2 */) {
     }
 }
 function foo(x) {
     switch (x) {
-        case 0 /* A */:
-        case 1 /* B */:
-        case 10 /* C */:
-        case 1 /* D */:
-        case 1 /* E */:
-        case 1 /* F */:
-        case 1 /* G */:
-        case -2 /* H */:
-        case 0 /* I */:
-        case 0 /* J */:
-        case -6 /* K */:
-        case -2 /* L */:
-        case 2 /* M */:
-        case 2 /* N */:
-        case 0 /* O */:
-        case 0 /* P */:
-        case 1 /* PQ */:
-        case -1 /* Q */:
-        case 0 /* R */:
-        case 0 /* S */:
-        case 11 /* "T" */:
-        case 11 /* `U` */:
-        case 11 /* V */:
-        case 11 /* W */:
-        case 100 /* W1 */:
-        case 100 /* W2 */:
-        case 100 /* W3 */:
-        case 11 /* W4 */:
+        case 0 /* Enum1.A */:
+        case 1 /* Enum1.B */:
+        case 10 /* Enum1.C */:
+        case 1 /* Enum1.D */:
+        case 1 /* Enum1.E */:
+        case 1 /* Enum1.F */:
+        case 1 /* Enum1.G */:
+        case -2 /* Enum1.H */:
+        case 0 /* Enum1.I */:
+        case 0 /* Enum1.J */:
+        case -6 /* Enum1.K */:
+        case -2 /* Enum1.L */:
+        case 2 /* Enum1.M */:
+        case 2 /* Enum1.N */:
+        case 0 /* Enum1.O */:
+        case 0 /* Enum1.P */:
+        case 1 /* Enum1.PQ */:
+        case -1 /* Enum1.Q */:
+        case 0 /* Enum1.R */:
+        case 0 /* Enum1.S */:
+        case 11 /* Enum1["T"] */:
+        case 11 /* Enum1[`U`] */:
+        case 11 /* Enum1.V */:
+        case 11 /* Enum1.W */:
+        case 100 /* Enum1.W1 */:
+        case 100 /* Enum1.W2 */:
+        case 100 /* Enum1.W3 */:
+        case 11 /* Enum1.W4 */:
             break;
     }
 }
 function bar(e) {
     switch (e) {
-        case 1 /* V1 */: return 1;
-        case 101 /* V2 */: return 1;
-        case 64 /* V3 */: return 1;
+        case 1 /* A.B.C.E.V1 */: return 1;
+        case 101 /* A.B.C.E.V2 */: return 1;
+        case 64 /* A.B.C.E.V3 */: return 1;
     }
 }
 function baz(c) {
     switch (c) {
-        case 0 /* "//" */:
-        case 1 /* "/*" */:
-        case 2 /* "*_/" */:
-        case 3 /* "///" */:
-        case 4 /* "#" */:
-        case 5 /* "<!--" */:
-        case 6 /* "-->" */:
+        case 0 /* Comments["//"] */:
+        case 1 /* Comments["/*"] */:
+        case 2 /* Comments["*_/"] */:
+        case 3 /* Comments["///"] */:
+        case 4 /* Comments["#"] */:
+        case 5 /* Comments["<!--"] */:
+        case 6 /* Comments["-->"] */:
             break;
     }
 }

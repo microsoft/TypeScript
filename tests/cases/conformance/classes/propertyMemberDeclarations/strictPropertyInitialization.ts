@@ -1,5 +1,5 @@
 // @strict: true
-// @target:es2015
+// @target: es2015
 // @declaration: true
 
 // Properties with non-undefined types require initialization
@@ -133,5 +133,20 @@ class C11 {
     constructor() {
         this.a = someValue();
         this.#b = someValue();
+    }
+}
+
+const a = 'a';
+const b = Symbol();
+
+class C12 {
+    [a]: number;
+    [b]: number;
+    ['c']: number;
+
+    constructor() {
+        this[a] = 1;
+        this[b] = 1;
+        this['c'] = 1;
     }
 }
