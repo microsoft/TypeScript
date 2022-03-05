@@ -2,7 +2,7 @@
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
-    export const enum FourSlashTestType {
+    export enum FourSlashTestType {
         Native,
         Shims,
         ShimsWithPreprocess,
@@ -80,7 +80,7 @@ namespace FourSlash {
     // Name of testcase metadata including ts.CompilerOptions properties that will be used by globalOptions
     // To add additional option, add property into the testOptMetadataNames, refer the property in either globalMetadataNames or fileMetadataNames
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
-    const enum MetadataOptionNames {
+    enum MetadataOptionNames {
         baselineFile = "baselinefile",
         emitThisFile = "emitthisfile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
         fileName = "filename",
@@ -150,7 +150,7 @@ namespace FourSlash {
         return ts.ScriptSnapshot.fromString(sourceText);
     }
 
-    const enum CallHierarchyItemDirection {
+    enum CallHierarchyItemDirection {
         Root,
         Incoming,
         Outgoing
@@ -4292,7 +4292,7 @@ namespace FourSlash {
         return undefined;
     }
 
-    const enum State {
+    enum State {
         none,
         inSlashStarMarker,
         inObjectMarker

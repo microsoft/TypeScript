@@ -124,7 +124,7 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    const enum StringLiteralCompletionKind { Paths, Properties, Types }
+    enum StringLiteralCompletionKind { Paths, Properties, Types }
     interface StringLiteralCompletionsFromProperties {
         readonly kind: StringLiteralCompletionKind.Properties;
         readonly symbols: readonly Symbol[];
@@ -412,7 +412,7 @@ namespace ts.Completions.StringCompletions {
         return flatMap(baseDirectories, baseDirectory => getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude));
     }
 
-    const enum IncludeExtensionsOption {
+    enum IncludeExtensionsOption {
         Exclude,
         Include,
         ModuleSpecifierCompletion,

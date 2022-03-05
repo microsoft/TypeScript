@@ -5,7 +5,7 @@
  */
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
-    export const enum CommandTypes {
+    export enum CommandTypes {
         JsxClosingTag = "jsxClosingTag",
         Brace = "brace",
         /* @internal */
@@ -1546,7 +1546,7 @@ namespace ts.server.protocol {
         watchOptions?: WatchOptions;
     }
 
-    export const enum WatchFileKind {
+    export enum WatchFileKind {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
@@ -1555,14 +1555,14 @@ namespace ts.server.protocol {
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
     }
 
-    export const enum WatchDirectoryKind {
+    export enum WatchDirectoryKind {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
         FixedChunkSizePolling = "FixedChunkSizePolling",
     }
 
-    export const enum PollingWatchKind {
+    export enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
         DynamicPriority = "DynamicPriority",
@@ -2146,7 +2146,7 @@ namespace ts.server.protocol {
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
-    export const enum CompletionTriggerKind {
+    export enum CompletionTriggerKind {
         /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
         Invoked = 1,
 
@@ -3328,7 +3328,7 @@ namespace ts.server.protocol {
         readonly body: CallHierarchyOutgoingCall[];
     }
 
-    export const enum IndentStyle {
+    export enum IndentStyle {
         None = "None",
         Block = "Block",
         Smart = "Smart",
@@ -3503,14 +3503,14 @@ namespace ts.server.protocol {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    export const enum JsxEmit {
+    export enum JsxEmit {
         None = "None",
         Preserve = "Preserve",
         ReactNative = "ReactNative",
         React = "React",
     }
 
-    export const enum ModuleKind {
+    export enum ModuleKind {
         None = "None",
         CommonJS = "CommonJS",
         AMD = "AMD",
@@ -3521,17 +3521,17 @@ namespace ts.server.protocol {
         ESNext = "ESNext"
     }
 
-    export const enum ModuleResolutionKind {
+    export enum ModuleResolutionKind {
         Classic = "Classic",
         Node = "Node",
     }
 
-    export const enum NewLineKind {
+    export enum NewLineKind {
         Crlf = "Crlf",
         Lf = "Lf",
     }
 
-    export const enum ScriptTarget {
+    export enum ScriptTarget {
         ES3 = "ES3",
         ES5 = "ES5",
         ES6 = "ES6",
@@ -3546,7 +3546,7 @@ namespace ts.server.protocol {
         ESNext = "ESNext"
     }
 
-    export const enum ClassificationType {
+    export enum ClassificationType {
         comment = 1,
         identifier = 2,
         keyword = 3,

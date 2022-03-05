@@ -27,7 +27,7 @@ namespace ts.Completions {
         DeprecatedAutoImportSuggestions = "24"
     }
 
-    const enum SortTextId {
+    enum SortTextId {
         LocalDeclarationPriority = 10,
         LocationPriority = 11,
         OptionalMember = 12,
@@ -64,7 +64,7 @@ namespace ts.Completions {
         TypeOnlyAlias = "TypeOnlyAlias/",
     }
 
-    const enum SymbolOriginInfoKind {
+    enum SymbolOriginInfoKind {
         ThisType            = 1 << 0,
         SymbolMember        = 1 << 1,
         Export              = 1 << 2,
@@ -153,7 +153,7 @@ namespace ts.Completions {
     /** Map from symbol id -> SortTextId. */
     type SymbolSortTextIdMap = (SortTextId | undefined)[];
 
-    const enum KeywordCompletionFilters {
+    enum KeywordCompletionFilters {
         None,                           // No keywords
         All,                            // Every possible keyword (TODO: This is never appropriate)
         ClassElementKeywords,           // Keywords inside class body
@@ -166,7 +166,7 @@ namespace ts.Completions {
         Last = TypeKeywords
     }
 
-    const enum GlobalsSearch { Continue, Success, Fail }
+    enum GlobalsSearch { Continue, Success, Fail }
 
     interface ModuleSpecifierResolutioContext {
         tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
@@ -1609,7 +1609,7 @@ namespace ts.Completions {
         return completion.type === "symbol" ? completion.symbol : undefined;
     }
 
-    const enum CompletionDataKind { Data, JsDocTagName, JsDocTag, JsDocParameterName, Keywords }
+    enum CompletionDataKind { Data, JsDocTagName, JsDocTag, JsDocParameterName, Keywords }
     /** true: after the `=` sign but no identifier has been typed yet. Else is the Identifier after the initializer. */
     type IsJsxInitializer = boolean | Identifier;
     interface CompletionData {
@@ -1642,7 +1642,7 @@ namespace ts.Completions {
         | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag }
         | { readonly kind: CompletionDataKind.Keywords, keywordCompletions: readonly CompletionEntry[], isNewIdentifierLocation: boolean };
 
-    export const enum CompletionKind {
+    export enum CompletionKind {
         ObjectPropertyDeclaration,
         Global,
         PropertyAccess,

@@ -1,9 +1,9 @@
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
 namespace ts.moduleSpecifiers {
-    const enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
+    enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
     // See UserPreferences#importPathEnding
-    const enum Ending { Minimal, Index, JsExtension }
+    enum Ending { Minimal, Index, JsExtension }
 
     // Processed preferences
     interface Preferences {
@@ -582,7 +582,7 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    const enum MatchingMode {
+    enum MatchingMode {
         Exact,
         Directory,
         Pattern

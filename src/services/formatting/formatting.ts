@@ -28,7 +28,7 @@ namespace ts.formatting {
         return textRangeWithKind;
     }
 
-    const enum Constants {
+    enum Constants {
         Unknown = -1
     }
 
@@ -1250,7 +1250,7 @@ namespace ts.formatting {
         }
     }
 
-    const enum LineAction { None, LineAdded, LineRemoved }
+    enum LineAction { None, LineAdded, LineRemoved }
 
     /**
      * @param precedingToken pass `null` if preceding token was already computed and result was `undefined`.

@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.SignatureHelp {
-    const enum InvocationKind { Call, TypeArgs, Contextual }
+    enum InvocationKind { Call, TypeArgs, Contextual }
     interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }
     interface TypeArgsInvocation { readonly kind: InvocationKind.TypeArgs; readonly called: Identifier; }
     interface ContextualInvocation {
@@ -60,7 +60,7 @@ namespace ts.SignatureHelp {
                 : createTypeHelpItems(candidateInfo.symbol, argumentInfo, sourceFile, typeChecker));
     }
 
-    const enum CandidateOrTypeKind { Candidate, Type }
+    enum CandidateOrTypeKind { Candidate, Type }
     interface CandidateInfo {
         readonly kind: CandidateOrTypeKind.Candidate;
         readonly candidates: readonly Signature[];

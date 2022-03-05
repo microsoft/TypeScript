@@ -1,5 +1,5 @@
 namespace Harness {
-    export const enum CompilerTestType {
+    export enum CompilerTestType {
         Conformance,
         Regressions,
         Test262

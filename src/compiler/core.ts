@@ -1654,7 +1654,7 @@ namespace ts {
         }
     }
 
-    export const enum AssertionLevel {
+    export enum AssertionLevel {
         None = 0,
         Normal = 1,
         Aggressive = 2,

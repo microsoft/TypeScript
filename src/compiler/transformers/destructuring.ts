@@ -14,7 +14,7 @@ namespace ts {
         visitor?: (node: Node) => VisitResult<Node>;
     }
 
-    export const enum FlattenLevel {
+    export enum FlattenLevel {
         All,
         ObjectRest,
     }

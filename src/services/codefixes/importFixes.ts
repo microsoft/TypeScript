@@ -236,12 +236,12 @@ namespace ts.codefix {
     }
 
     // Sorted with the preferred fix coming first.
-    const enum ImportFixKind { UseNamespace, JsdocTypeImport, AddToExisting, AddNew, PromoteTypeOnly }
+    enum ImportFixKind { UseNamespace, JsdocTypeImport, AddToExisting, AddNew, PromoteTypeOnly }
     // These should not be combined as bitflags, but are given powers of 2 values to
     // easily detect conflicts between `NotAllowed` and `Required` by giving them a unique sum.
     // They're also ordered in terms of increasing priority for a fix-all scenario (see
     // `reduceAddAsTypeOnlyValues`).
-    const enum AddAsTypeOnly {
+    enum AddAsTypeOnly {
         Allowed    = 1 << 0,
         Required   = 1 << 1,
         NotAllowed = 1 << 2,

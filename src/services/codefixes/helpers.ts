@@ -37,7 +37,7 @@ namespace ts.codefix {
 
     type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
 
-    export const enum PreserveOptionalFlags {
+    export enum PreserveOptionalFlags {
         Method  = 1 << 0,
         Property = 1 << 1,
         All     = Method | Property

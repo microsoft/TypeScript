@@ -76,7 +76,7 @@ namespace ts {
         hasReusableDiagnostic?: true;
     }
 
-    export const enum BuilderFileEmit {
+    export enum BuilderFileEmit {
         DtsOnly,
         Full
     }

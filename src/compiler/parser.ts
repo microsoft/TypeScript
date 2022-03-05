@@ -1,5 +1,5 @@
 namespace ts {
-    const enum SignatureFlags {
+    enum SignatureFlags {
         None = 0,
         Yield = 1 << 0,
         Await = 1 << 1,
@@ -8,7 +8,7 @@ namespace ts {
         JSDoc = 1 << 5,
     }
 
-    const enum SpeculationKind {
+    enum SpeculationKind {
         TryParse,
         Lookahead,
         Reparse
@@ -7610,7 +7610,7 @@ namespace ts {
             return isMetaProperty(node) && node.keywordToken === SyntaxKind.ImportKeyword && node.name.escapedText === "meta";
         }
 
-        const enum ParsingContext {
+        enum ParsingContext {
             SourceElements,            // Elements in source file
             BlockStatements,           // Statements in block
             SwitchClauses,             // Clauses in switch statement
@@ -7639,7 +7639,7 @@ namespace ts {
             Count                      // Number of parsing contexts
         }
 
-        const enum Tristate {
+        enum Tristate {
             False,
             True,
             Unknown
@@ -7727,14 +7727,14 @@ namespace ts {
                 return comment;
             }
 
-            const enum JSDocState {
+            enum JSDocState {
                 BeginningOfLine,
                 SawAsterisk,
                 SavingComments,
                 SavingBackticks, // NOTE: Only used when parsing tag comments
             }
 
-            const enum PropertyLikeParse {
+            enum PropertyLikeParse {
                 Property = 1 << 0,
                 Parameter = 1 << 1,
                 CallbackParameter = 1 << 2,
@@ -9307,7 +9307,7 @@ namespace ts {
             }
         }
 
-        const enum InvalidPosition {
+        enum InvalidPosition {
             Value = -1
         }
     }

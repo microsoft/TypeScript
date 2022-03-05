@@ -5,7 +5,7 @@ namespace ts {
      */
     const USE_NEW_TYPE_METADATA_FORMAT = false;
 
-    const enum TypeScriptSubstitutionFlags {
+    enum TypeScriptSubstitutionFlags {
         /** Enables substitutions for decorated classes. */
         ClassAliases = 1 << 0,
         /** Enables substitutions for namespace exports. */
@@ -14,7 +14,7 @@ namespace ts {
         NonQualifiedEnumMembers = 1 << 3
     }
 
-    const enum ClassFacts {
+    enum ClassFacts {
         None = 0,
         HasStaticInitializedProperties = 1 << 0,
         HasConstructorDecorators = 1 << 1,

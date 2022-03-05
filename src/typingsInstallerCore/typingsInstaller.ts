@@ -79,7 +79,7 @@ namespace ts.server.typingsInstaller {
         return a === b || (!caseSensitive && compareStringsCaseInsensitive(a, b) === Comparison.EqualTo);
     }
 
-    const enum ProjectWatcherType {
+    enum ProjectWatcherType {
         FileWatcher = "FileWatcher",
         DirectoryWatcher = "DirectoryWatcher"
     }

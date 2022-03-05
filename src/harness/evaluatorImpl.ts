@@ -188,7 +188,7 @@ namespace evaluator {
         error?: any;
     }
 
-    const enum SystemModuleState {
+    enum SystemModuleState {
         // Instantiation phases:
         Uninstantiated,
         Instantiated,

@@ -141,7 +141,6 @@ const buildServices = (() => {
     const createTypescriptServicesDts = () => src("built/local/typescriptServices.out.d.ts")
         .pipe(newer("built/local/typescriptServices.d.ts"))
         .pipe(prependFile(copyright))
-        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
         .pipe(rename("typescriptServices.d.ts"))
         .pipe(dest("built/local"));
 
@@ -265,7 +264,6 @@ const buildLssl = (() => {
     const createServerLibraryDts = () => src("built/local/tsserverlibrary.out.d.ts")
         .pipe(newer("built/local/tsserverlibrary.d.ts"))
         .pipe(prependFile(copyright))
-        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
         .pipe(append("\nexport = ts;\nexport as namespace ts;"))
         .pipe(rename("tsserverlibrary.d.ts"))
         .pipe(dest("built/local"));

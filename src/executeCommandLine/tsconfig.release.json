@@ -3,7 +3,6 @@
     "compilerOptions": {
         "outFile": "../../built/local/executeCommandLine.release.js",
         "removeComments": true,
-        "preserveConstEnums": false
     },
     "references": [
         { "path": "../compiler/tsconfig.release.json" }

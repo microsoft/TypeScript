@@ -1,8 +1,8 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile::", () => {
         let outFileFs: vfs.FileSystem;
-        const enum Ext { js, jsmap, dts, dtsmap, buildinfo }
-        const enum Project { first, second, third }
+        enum Ext { js, jsmap, dts, dtsmap, buildinfo }
+        enum Project { first, second, third }
         type OutputFile = [string, string, string, string, string];
         function relName(path: string) {
             return path.slice(1);
@@ -32,8 +32,8 @@ namespace ts {
         ];
         const relOutputFiles = outputFiles.map(v => v.map(relName)) as [OutputFile, OutputFile, OutputFile];
         type Sources = [string, readonly string[]];
-        const enum Source { config, ts }
-        const enum Part { one, two, three }
+        enum Source { config, ts }
+        enum Part { one, two, three }
         const sources: [Sources, Sources, Sources] = [
             [
                 "/src/first/tsconfig.json",

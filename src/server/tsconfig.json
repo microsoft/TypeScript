@@ -3,7 +3,6 @@
     "compilerOptions": {
         "removeComments": false,
         "outFile": "../../built/local/server.js",
-        "preserveConstEnums": true,
         "types": [
             "node"
         ]

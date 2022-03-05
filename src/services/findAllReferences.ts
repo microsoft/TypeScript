@@ -5,7 +5,7 @@ namespace ts.FindAllReferences {
         readonly references: readonly Entry[];
     }
 
-    export const enum DefinitionKind { Symbol, Label, Keyword, This, String, TripleSlashReference }
+    export enum DefinitionKind { Symbol, Label, Keyword, This, String, TripleSlashReference }
     export type Definition =
         | { readonly type: DefinitionKind.Symbol; readonly symbol: Symbol }
         | { readonly type: DefinitionKind.Label; readonly node: Identifier }
@@ -14,7 +14,7 @@ namespace ts.FindAllReferences {
         | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike }
         | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: FileReference, readonly file: SourceFile };
 
-    export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
+    export enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
     export type Entry = NodeEntry | SpanEntry;
     export interface ContextWithStartAndEndNode {
@@ -173,7 +173,7 @@ namespace ts.FindAllReferences {
             undefined;
     }
 
-    export const enum FindReferencesUse {
+    export enum FindReferencesUse {
         /**
          * When searching for references to a symbol, the location will not be adjusted (this is the default behavior when not specified).
          */
@@ -1021,7 +1021,7 @@ namespace ts.FindAllReferences {
             includes(symbol: Symbol): boolean;
         }
 
-        const enum SpecialSearchKind {
+        enum SpecialSearchKind {
             None,
             Constructor,
             Class,

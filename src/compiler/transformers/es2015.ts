@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-    const enum ES2015SubstitutionFlags {
+    enum ES2015SubstitutionFlags {
         /** Enables substitutions for captured `this` */
         CapturedThis = 1 << 0,
         /** Enables substitutions for block-scoped bindings. */
@@ -51,17 +51,17 @@ namespace ts {
         outParamName: Identifier;
     }
 
-    const enum LoopOutParameterFlags {
+    enum LoopOutParameterFlags {
         Body = 1 << 0,          // Modified in the body of the iteration statement
         Initializer = 1 << 1,   // Set in the initializer of a ForStatement
     }
 
-    const enum CopyDirection {
+    enum CopyDirection {
         ToOriginal,
         ToOutParameter
     }
 
-    const enum Jump {
+    enum Jump {
         Break       = 1 << 1,
         Continue    = 1 << 2,
         Return      = 1 << 3
@@ -148,7 +148,7 @@ namespace ts {
     type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
     // Facts we track as we traverse the tree
-    const enum HierarchyFacts {
+    enum HierarchyFacts {
         None = 0,
 
         //
@@ -247,7 +247,7 @@ namespace ts {
         FunctionSubtreeExcludes = NewTarget | CapturedLexicalThis,
     }
 
-    const enum SpreadSegmentKind {
+    enum SpreadSegmentKind {
         None,           // Not a spread segment
         UnpackedSpread, // A spread segment that must be packed (i.e., converting `[...[1, , 2]]` into `[1, undefined, 2]`)
         PackedSpread,   // A spread segment that is known to already be packed (i.e., `[...[1, 2]]` or `[...__read(a)]`)

@@ -17,14 +17,14 @@ namespace ts {
         }
     }
 
-    const enum TransformationState {
+    enum TransformationState {
         Uninitialized,
         Initialized,
         Completed,
         Disposed
     }
 
-    const enum SyntaxKindFeatureFlags {
+    enum SyntaxKindFeatureFlags {
         Substitution = 1 << 0,
         EmitNotifications = 1 << 1,
     }

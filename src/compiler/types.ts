@@ -18,7 +18,7 @@ namespace ts {
 
     // token > SyntaxKind.Identifier => token is a keyword
     // Also, If you add a new SyntaxKind be sure to keep the `Markers` section at the bottom in sync
-    export const enum SyntaxKind {
+    export enum SyntaxKind {
         Unknown,
         EndOfFileToken,
         SingleLineCommentTrivia,
@@ -739,7 +739,7 @@ namespace ts {
         | KeywordSyntaxKind
         ;
 
-    export const enum NodeFlags {
+    export enum NodeFlags {
         None               = 0,
         Let                = 1 << 0,  // Variable declaration
         Const              = 1 << 1,  // Variable declaration
@@ -798,7 +798,7 @@ namespace ts {
         /* @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
     }
 
-    export const enum ModifierFlags {
+    export enum ModifierFlags {
         None =               0,
         Export =             1 << 0,  // Declarations
         Ambient =            1 << 1,  // Declarations
@@ -827,7 +827,7 @@ namespace ts {
         All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override
     }
 
-    export const enum JsxFlags {
+    export enum JsxFlags {
         None = 0,
         /** An element from a named property of the JSX.IntrinsicElements interface */
         IntrinsicNamedElement = 1 << 0,
@@ -838,7 +838,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum RelationComparisonResult {
+    export enum RelationComparisonResult {
         Succeeded           = 1 << 0, // Should be truthy
         Failed              = 1 << 1,
         Reported            = 1 << 2,
@@ -1108,7 +1108,7 @@ namespace ts {
 
     export type ModifiersArray = NodeArray<Modifier>;
 
-    export const enum GeneratedIdentifierFlags {
+    export enum GeneratedIdentifierFlags {
         // Kinds
         None = 0,                           // Not automatically generated.
         /*@internal*/ Auto = 1,             // Automatically generated identifier.
@@ -2167,7 +2167,7 @@ namespace ts {
         templateFlags?: TokenFlags;
     }
 
-    export const enum TokenFlags {
+    export enum TokenFlags {
         None = 0,
         /* @internal */
         PrecedingLineBreak = 1 << 0,
@@ -3423,7 +3423,7 @@ namespace ts {
     }
 
     // NOTE: Ensure this is up-to-date with src/debug/debug.ts
-    export const enum FlowFlags {
+    export enum FlowFlags {
         Unreachable    = 1 << 0,  // Unreachable code
         Start          = 1 << 1,  // Start of flow graph
         BranchLabel    = 1 << 2,  // Non-looping junction
@@ -3680,7 +3680,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum CommentDirectiveType {
+    export enum CommentDirectiveType {
         ExpectError,
         Ignore,
     }
@@ -3917,7 +3917,7 @@ namespace ts {
         AutomaticTypeDirectiveFile;
 
     /*@internal*/
-    export const enum FilePreprocessingDiagnosticsKind {
+    export enum FilePreprocessingDiagnosticsKind {
         FilePreprocessingReferencedDiagnostic,
         FilePreprocessingFileExplainingDiagnostic
     }
@@ -4068,7 +4068,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum StructureIsReused {
+    export enum StructureIsReused {
         Not,
         SafeModules,
         Completely,
@@ -4431,21 +4431,21 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum MemberOverrideStatus {
+    export enum MemberOverrideStatus {
         Ok,
         NeedsOverride,
         HasInvalidOverride
     }
 
     /* @internal */
-    export const enum UnionReduction {
+    export enum UnionReduction {
         None = 0,
         Literal,
         Subtype,
     }
 
     /* @internal */
-    export const enum ContextFlags {
+    export enum ContextFlags {
         None           = 0,
         Signature      = 1 << 0, // Obtaining contextual signature
         NoConstraints  = 1 << 1, // Don't obtain type variable constraints
@@ -4454,7 +4454,7 @@ namespace ts {
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
-    export const enum NodeBuilderFlags {
+    export enum NodeBuilderFlags {
         None                                    = 0,
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
@@ -4500,7 +4500,7 @@ namespace ts {
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
-    export const enum TypeFormatFlags {
+    export enum TypeFormatFlags {
         None                                    = 0,
         NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
         WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
@@ -4542,7 +4542,7 @@ namespace ts {
             UseSingleQuotesForStringLiteralType | NoTypeReduction,
     }
 
-    export const enum SymbolFormatFlags {
+    export enum SymbolFormatFlags {
         None = 0x00000000,
 
         // Write symbols's type argument if it is instantiated symbol
@@ -4592,19 +4592,19 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum SymbolAccessibility {
+    export enum SymbolAccessibility {
         Accessible,
         NotAccessible,
         CannotBeNamed
     }
 
     /* @internal */
-    export const enum SyntheticSymbolKind {
+    export enum SyntheticSymbolKind {
         UnionOrIntersection,
         Spread
     }
 
-    export const enum TypePredicateKind {
+    export enum TypePredicateKind {
         This,
         Identifier,
         AssertsThis,
@@ -4810,7 +4810,7 @@ namespace ts {
         isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     }
 
-    export const enum SymbolFlags {
+    export enum SymbolFlags {
         None                    = 0,
         FunctionScopedVariable  = 1 << 0,   // Variable (var) or parameter
         BlockScopedVariable     = 1 << 1,   // A block-scoped variable (let or const)
@@ -4972,13 +4972,13 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum EnumKind {
+    export enum EnumKind {
         Numeric,                            // Numeric enum (each member has a TypeFlags.Enum type)
         Literal                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
     }
 
     /* @internal */
-    export const enum CheckFlags {
+    export enum CheckFlags {
         Instantiated      = 1 << 0,         // Instantiated symbol
         SyntheticProperty = 1 << 1,         // Property in union or intersection type
         SyntheticMethod   = 1 << 2,         // Method in union or intersection type
@@ -5023,7 +5023,7 @@ namespace ts {
         constraintType: IndexType;
     }
 
-    export const enum InternalSymbolName {
+    export enum InternalSymbolName {
         Call = "__call", // Call signatures
         Constructor = "__constructor", // Constructor implementations
         New = "__new", // Constructor signatures
@@ -5072,7 +5072,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum NodeCheckFlags {
+    export enum NodeCheckFlags {
         TypeChecked                              = 0x00000001,  // Node has been type checked
         LexicalThis                              = 0x00000002,  // Lexical 'this' reference
         CaptureThis                              = 0x00000004,  // Lexical 'this' used in body
@@ -5130,7 +5130,7 @@ namespace ts {
         serializedTypes?: ESMap<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location
     }
 
-    export const enum TypeFlags {
+    export enum TypeFlags {
         Any             = 1 << 0,
         Unknown         = 1 << 1,
         String          = 1 << 2,
@@ -5302,7 +5302,7 @@ namespace ts {
     // Types included in TypeFlags.ObjectFlagsType have an objectFlags property. Some ObjectFlags
     // are specific to certain types and reuse the same bit position. Those ObjectFlags require a check
     // for a certain TypeFlags value to determine their meaning.
-    export const enum ObjectFlags {
+    export enum ObjectFlags {
         Class            = 1 << 0,  // Class
         Interface        = 1 << 1,  // Interface
         Reference        = 1 << 2,  // Generic type reference
@@ -5445,7 +5445,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum VarianceFlags {
+    export enum VarianceFlags {
         Invariant     =      0,  // Neither covariant nor contravariant
         Covariant     = 1 << 0,  // Covariant
         Contravariant = 1 << 1,  // Contravariant
@@ -5465,7 +5465,7 @@ namespace ts {
         variances?: VarianceFlags[];  // Variance of each type parameter
     }
 
-    export const enum ElementFlags {
+    export enum ElementFlags {
         Required    = 1 << 0,  // T
         Optional    = 1 << 1,  // T?
         Rest        = 1 << 2,  // ...T[]
@@ -5642,7 +5642,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum AccessFlags {
+    export enum AccessFlags {
         None = 0,
         IncludeUndefined = 1 << 0,
         NoIndexSignatures = 1 << 1,
@@ -5729,19 +5729,19 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum JsxReferenceKind {
+    export enum JsxReferenceKind {
         Component,
         Function,
         Mixed
     }
 
-    export const enum SignatureKind {
+    export enum SignatureKind {
         Call,
         Construct,
     }
 
     /* @internal */
-    export const enum SignatureFlags {
+    export enum SignatureFlags {
         None = 0,
 
         // Propagating flags
@@ -5804,7 +5804,7 @@ namespace ts {
         instantiations?: ESMap<string, Signature>;    // Generic signature instantiation cache
     }
 
-    export const enum IndexKind {
+    export enum IndexKind {
         String,
         Number,
     }
@@ -5817,7 +5817,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum TypeMapKind {
+    export enum TypeMapKind {
         Simple,
         Array,
         Function,
@@ -5832,7 +5832,7 @@ namespace ts {
         | { kind: TypeMapKind.Function, func: (t: Type) => Type }
         | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
-    export const enum InferencePriority {
+    export enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
         SpeculativeTuple             = 1 << 1,  // Speculative tuple inference
         SubstituteSource             = 1 << 2,  // Source of inference originated within a substitution type's substitute
@@ -5863,7 +5863,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum InferenceFlags {
+    export enum InferenceFlags {
         None            =      0,  // No special inference behaviors
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
@@ -5879,7 +5879,7 @@ namespace ts {
      * a distinction because we don't want to cache circular variance check results.
      */
     /* @internal */
-    export const enum Ternary {
+    export enum Ternary {
         False = 0,
         Unknown = 1,
         Maybe = 3,
@@ -5910,7 +5910,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum AssignmentDeclarationKind {
+    export enum AssignmentDeclarationKind {
         None,
         /// exports.name = expr
         /// module.exports.name = expr
@@ -6236,7 +6236,7 @@ namespace ts {
         NodeNext = 199,
     }
 
-    export const enum JsxEmit {
+    export enum JsxEmit {
         None = 0,
         Preserve = 1,
         React = 2,
@@ -6245,13 +6245,13 @@ namespace ts {
         ReactJSXDev = 5,
     }
 
-    export const enum ImportsNotUsedAsValues {
+    export enum ImportsNotUsedAsValues {
         Remove,
         Preserve,
         Error,
     }
 
-    export const enum NewLineKind {
+    export enum NewLineKind {
         CarriageReturnLineFeed = 0,
         LineFeed = 1
     }
@@ -6265,7 +6265,7 @@ namespace ts {
         character: number;
     }
 
-    export const enum ScriptKind {
+    export enum ScriptKind {
         Unknown = 0,
         JS = 1,
         JSX = 2,
@@ -6280,7 +6280,7 @@ namespace ts {
         Deferred = 7
     }
 
-    export const enum ScriptTarget {
+    export enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
         ES2015 = 2,
@@ -6296,7 +6296,7 @@ namespace ts {
         Latest = ESNext,
     }
 
-    export const enum LanguageVariant {
+    export enum LanguageVariant {
         Standard,
         JSX
     }
@@ -6314,7 +6314,7 @@ namespace ts {
         compileOnSave?: boolean;
     }
 
-    export const enum WatchDirectoryFlags {
+    export enum WatchDirectoryFlags {
         None = 0,
         Recursive = 1 << 0,
     }
@@ -6429,7 +6429,7 @@ namespace ts {
     export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
-    export const enum CharacterCodes {
+    export enum CharacterCodes {
         nullCharacter = 0,
         maxAsciiCharacter = 0x7F,
 
@@ -6637,7 +6637,7 @@ namespace ts {
         version: string;
     }
 
-    export const enum Extension {
+    export enum Extension {
         Ts = ".ts",
         Tsx = ".tsx",
         Dts = ".d.ts",
@@ -6742,7 +6742,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum TransformFlags {
+    export enum TransformFlags {
         None = 0,
 
         // Facts
@@ -6875,14 +6875,14 @@ namespace ts {
 
     // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
     /* @internal */
-    export const enum SnippetKind {
+    export enum SnippetKind {
         TabStop,                                // `$1`, `$2`
         Placeholder,                            // `${1:foo}`
         Choice,                                 // `${1|one,two,three|}`
         Variable,                               // `$name`, `${name:default}`
     }
 
-    export const enum EmitFlags {
+    export enum EmitFlags {
         None = 0,
         SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 1,              // The printer should invoke the onEmitNode callback when printing this node.
@@ -6950,7 +6950,7 @@ namespace ts {
      * checked.
      */
     /* @internal */
-    export const enum ExternalEmitHelpers {
+    export enum ExternalEmitHelpers {
         Extends = 1 << 0,               // __extends (used by the ES2015 class transformation)
         Assign = 1 << 1,                // __assign (used by Jsx and ESNext object spread transformations)
         Rest = 1 << 2,                  // __rest (used by ESNext object rest transformation)
@@ -6993,7 +6993,7 @@ namespace ts {
         SpreadIncludes = Read | SpreadArray,
     }
 
-    export const enum EmitHint {
+    export enum EmitHint {
         SourceFile,          // Emitting a SourceFile
         Expression,          // Emitting an Expression
         IdentifierName,      // Emitting an IdentifierName
@@ -7043,7 +7043,7 @@ namespace ts {
         set?: Expression;
     }
 
-    export const enum OuterExpressionKinds {
+    export enum OuterExpressionKinds {
         Parentheses = 1 << 0,
         TypeAssertions = 1 << 1,
         NonNullAssertions = 1 << 2,
@@ -7874,7 +7874,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum LexicalEnvironmentFlags {
+    export enum LexicalEnvironmentFlags {
         None = 0,
         InParameters = 1 << 0, // currently visiting a parameter list
         VariablesHoistedInParameters = 1 << 1 // a temp variable was hoisted while visiting a parameter list
@@ -8068,7 +8068,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export const enum BundleFileSectionKind {
+    export enum BundleFileSectionKind {
         Prologue = "prologue",
         EmitHelpers = "emitHelpers",
         NoDefaultLib = "no-default-lib",
@@ -8466,7 +8466,7 @@ namespace ts {
         _children: Node[];
     }
 
-    export const enum ListFormat {
+    export enum ListFormat {
         None = 0,
 
         // Line separators
@@ -8554,7 +8554,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum PragmaKindFlags {
+    export enum PragmaKindFlags {
         None            =      0,
         /**
          * Triple slash comment of the form

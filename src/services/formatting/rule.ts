@@ -11,7 +11,7 @@ namespace ts.formatting {
     export type ContextPredicate = (context: FormattingContext) => boolean;
     export const anyContext: readonly ContextPredicate[] = emptyArray;
 
-    export const enum RuleAction {
+    export enum RuleAction {
         StopProcessingSpaceActions = 1 << 0,
         StopProcessingTokenActions = 1 << 1,
         InsertSpace                = 1 << 2,
@@ -25,7 +25,7 @@ namespace ts.formatting {
         ModifyTokenAction = DeleteToken | InsertTrailingSemicolon,
     }
 
-    export const enum RuleFlags {
+    export enum RuleFlags {
         None,
         CanDeleteNewLines,
     }

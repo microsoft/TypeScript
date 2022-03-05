@@ -16,7 +16,7 @@ namespace ts.formatting {
         skipToStartOf(node: Node): void;
     }
 
-    const enum ScanAction {
+    enum ScanAction {
         Scan,
         RescanGreaterThanToken,
         RescanSlashToken,

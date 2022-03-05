@@ -1,6 +1,6 @@
 namespace ts {
 
-    const enum ChangedPart {
+    enum ChangedPart {
         references = 1 << 0,
         importsAndExports = 1 << 1,
         program = 1 << 2

@@ -14,7 +14,7 @@ namespace ts {
     //#region
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
-    export const enum SemanticMeaning {
+    export enum SemanticMeaning {
         None = 0x0,
         Value = 0x1,
         Type = 0x2,
@@ -1945,7 +1945,7 @@ namespace ts {
         return factory.createStringLiteral(text, quotePreference === QuotePreference.Single);
     }
 
-    export const enum QuotePreference { Single, Double }
+    export enum QuotePreference { Single, Double }
 
     export function quotePreferenceFromString(str: StringLiteral, sourceFile: SourceFile): QuotePreference {
         return isStringDoubleQuoted(str, sourceFile) ? QuotePreference.Double : QuotePreference.Single;

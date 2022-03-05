@@ -781,7 +781,7 @@ namespace ts {
     export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
 
     /*@internal*/
-    export const enum FileSystemEntryKind {
+    export enum FileSystemEntryKind {
         File,
         Directory,
     }

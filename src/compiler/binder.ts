@@ -1,7 +1,7 @@
 
 /* @internal */
 namespace ts {
-    export const enum ModuleInstanceState {
+    export enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated = 1,
         ConstEnumOnly = 2
@@ -138,7 +138,7 @@ namespace ts {
         return ModuleInstanceState.Instantiated; // Couldn't locate, assume could refer to a value
     }
 
-    const enum ContainerFlags {
+    enum ContainerFlags {
         // The current node is not a container, and no container manipulation should happen before
         // recursing into it.
         None = 0,
@@ -2039,7 +2039,7 @@ namespace ts {
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
-            const enum ElementKind {
+            enum ElementKind {
                 Property = 1,
                 Accessor = 2
             }

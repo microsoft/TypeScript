@@ -432,11 +432,11 @@ export var x = Foo();`
                 const currentDirectory = "/user/someone/projects/myproject";
                 const file1: File = {
                     path: `${currentDirectory}/file1.ts`,
-                    content: "export const enum E1 { V = 1 }"
+                    content: "export enum E1 { V = 1 }"
                 };
                 const file2: File = {
                     path: `${currentDirectory}/file2.ts`,
-                    content: `import { E1 } from "./file1"; export const enum E2 { V = E1.V }`
+                    content: `import { E1 } from "./file1"; export enum E2 { V = E1.V }`
                 };
                 const file3: File = {
                     path: `${currentDirectory}/file3.ts`,

@@ -8,7 +8,7 @@ namespace ts {
     let nextMergeId = 1;
     let nextFlowId = 1;
 
-    const enum IterationUse {
+    enum IterationUse {
         AllowsSyncIterablesFlag = 1 << 0,
         AllowsAsyncIterablesFlag = 1 << 1,
         AllowsStringInputFlag = 1 << 2,
@@ -34,7 +34,7 @@ namespace ts {
 
     }
 
-    const enum IterationTypeKind {
+    enum IterationTypeKind {
         Yield,
         Return,
         Next,
@@ -54,14 +54,14 @@ namespace ts {
         mustHaveAValueDiagnostic: DiagnosticMessage;
     }
 
-    const enum WideningKind {
+    enum WideningKind {
         Normal,
         FunctionReturn,
         GeneratorNext,
         GeneratorYield,
     }
 
-    const enum TypeFacts {
+    enum TypeFacts {
         None = 0,
         TypeofEQString = 1 << 0,      // typeof x === "string"
         TypeofEQNumber = 1 << 1,      // typeof x === "number"
@@ -163,7 +163,7 @@ namespace ts {
 
     type TypeSystemEntity = Node | Symbol | Type | Signature;
 
-    const enum TypeSystemPropertyName {
+    enum TypeSystemPropertyName {
         Type,
         ResolvedBaseConstructorType,
         DeclaredType,
@@ -174,7 +174,7 @@ namespace ts {
         ResolvedBaseTypes,
     }
 
-    const enum CheckMode {
+    enum CheckMode {
         Normal = 0,                        // Normal type checking
         Contextual = 1 << 0,               // Explicitly assigned contextual type, therefore not cacheable
         Inferential = 1 << 1,              // Inferential typing
@@ -186,7 +186,7 @@ namespace ts {
                                            //   we need to preserve generic types instead of substituting them for constraints
     }
 
-    const enum SignatureCheckMode {
+    enum SignatureCheckMode {
         BivariantCallback = 1 << 0,
         StrictCallback    = 1 << 1,
         IgnoreReturnTypes = 1 << 2,
@@ -194,7 +194,7 @@ namespace ts {
         Callback          = BivariantCallback | StrictCallback,
     }
 
-    const enum IntersectionState {
+    enum IntersectionState {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
@@ -202,33 +202,33 @@ namespace ts {
         InPropertyCheck = 1 << 3,
     }
 
-    const enum RecursionFlags {
+    enum RecursionFlags {
         None = 0,
         Source = 1 << 0,
         Target = 1 << 1,
         Both = Source | Target,
     }
 
-    const enum MappedTypeModifiers {
+    enum MappedTypeModifiers {
         IncludeReadonly = 1 << 0,
         ExcludeReadonly = 1 << 1,
         IncludeOptional = 1 << 2,
         ExcludeOptional = 1 << 3,
     }
 
-    const enum ExpandingFlags {
+    enum ExpandingFlags {
         None = 0,
         Source = 1,
         Target = 1 << 1,
         Both = Source | Target,
     }
 
-    const enum MembersOrExportsResolutionKind {
+    enum MembersOrExportsResolutionKind {
         resolvedExports = "resolvedExports",
         resolvedMembers = "resolvedMembers"
     }
 
-    const enum UnusedKind {
+    enum UnusedKind {
         Local,
         Parameter,
     }
@@ -238,7 +238,7 @@ namespace ts {
 
     const isNotOverloadAndNotAccessor = and(isNotOverload, isNotAccessor);
 
-    const enum DeclarationMeaning {
+    enum DeclarationMeaning {
         GetAccessor = 1,
         SetAccessor = 2,
         PropertyAssignment = 4,
@@ -248,20 +248,20 @@ namespace ts {
         PropertyAssignmentOrMethod = PropertyAssignment | Method,
     }
 
-    const enum DeclarationSpaces {
+    enum DeclarationSpaces {
         None = 0,
         ExportValue = 1 << 0,
         ExportType = 1 << 1,
         ExportNamespace = 1 << 2,
     }
 
-    const enum MinArgumentCountFlags {
+    enum MinArgumentCountFlags {
         None = 0,
         StrongArityForUntypedJS = 1 << 0,
         VoidIsNonOptional = 1 << 1,
     }
 
-    const enum IntrinsicTypeKind {
+    enum IntrinsicTypeKind {
         Uppercase,
         Lowercase,
         Capitalize,

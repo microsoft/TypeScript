@@ -1,12 +1,12 @@
 /*@internal*/
 namespace ts {
-    const enum ESNextSubstitutionFlags {
+    enum ESNextSubstitutionFlags {
         /** Enables substitutions for async methods with `super` calls. */
         AsyncMethodsWithSuper = 1 << 0
     }
 
     // Facts we track as we traverse the tree
-    const enum HierarchyFacts {
+    enum HierarchyFacts {
         None = 0,
 
         //

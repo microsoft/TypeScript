@@ -121,7 +121,7 @@
 namespace ts {
     type Label = number;
 
-    const enum OpCode {
+    enum OpCode {
         Nop,                    // No operation, used to force a new case in the state machine
         Statement,              // A regular javascript statement
         Assign,                 // An assignment
@@ -138,13 +138,13 @@ namespace ts {
     type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression | undefined] | [Expression, Expression];
 
     // whether a generated code block is opening or closing at the current operation for a FunctionBuilder
-    const enum BlockAction {
+    enum BlockAction {
         Open,
         Close,
     }
 
     // the kind for a generated code block in a FunctionBuilder
-    const enum CodeBlockKind {
+    enum CodeBlockKind {
         Exception,
         With,
         Switch,
@@ -153,7 +153,7 @@ namespace ts {
     }
 
     // the state for a generated code exception block
-    const enum ExceptionBlockState {
+    enum ExceptionBlockState {
         Try,
         Catch,
         Finally,
@@ -206,7 +206,7 @@ namespace ts {
     }
 
     // NOTE: changes to this enum should be reflected in the __generator helper.
-    const enum Instruction {
+    enum Instruction {
         Next = 0,
         Throw = 1,
         Return = 2,

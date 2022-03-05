@@ -1,12 +1,12 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         let outFileFs: vfs.FileSystem;
-        const enum Project { lib, app }
+        enum Project { lib, app }
         function relName(path: string) {
             return path.slice(1);
         }
         type Sources = [string, readonly string[]];
-        const enum Source { config, ts }
+        enum Source { config, ts }
         const sources: [Sources, Sources] = [
             [
                 "/src/lib/tsconfig.json",

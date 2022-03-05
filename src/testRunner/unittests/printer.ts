@@ -40,7 +40,7 @@ namespace ts {
                             first
                         }
 
-                        const enum E2 {
+                        enum E2 {
                             second
                         }
 

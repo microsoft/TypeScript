@@ -26,9 +26,9 @@ namespace ts.FindAllReferences {
         exportKind: ExportKind;
     }
 
-    export const enum ExportKind { Named, Default, ExportEquals }
+    export enum ExportKind { Named, Default, ExportEquals }
 
-    export const enum ImportExport { Import, Export }
+    export enum ImportExport { Import, Export }
 
     interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
     type SourceFileLike = SourceFile | AmbientModuleDeclaration;

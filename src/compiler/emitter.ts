@@ -841,7 +841,7 @@ namespace ts {
         return outputFiles;
     }
 
-    const enum PipelinePhase {
+    enum PipelinePhase {
         Notification,
         Substitution,
         Comments,
@@ -5883,7 +5883,7 @@ namespace ts {
     }
 
     // Flags enum to track count of temp variables and a few dedicated names
-    const enum TempFlags {
+    enum TempFlags {
         Auto = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
         _i = 0x10000000,  // Use/preference flag for '_i'

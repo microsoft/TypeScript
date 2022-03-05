@@ -420,7 +420,7 @@ namespace ts.refactor.extractSymbol {
 
         // Verifies whether we can actually extract this node or not.
         function checkNode(nodeToCheck: Node): Diagnostic[] | undefined {
-            const enum PermittedJumps {
+            enum PermittedJumps {
                 None = 0,
                 Break = 1 << 0,
                 Continue = 1 << 1,
@@ -822,7 +822,7 @@ namespace ts.refactor.extractSymbol {
             : scope.externalModuleIndicator ? SpecialScope.Module : SpecialScope.Global;
     }
 
-    const enum SpecialScope {
+    enum SpecialScope {
         Module,
         Global,
     }
@@ -1559,7 +1559,7 @@ namespace ts.refactor.extractSymbol {
             : targetRange.range;
     }
 
-    const enum Usage {
+    enum Usage {
         // value should be passed to extracted method
         Read = 1,
         // value should be passed to extracted method and propagated back

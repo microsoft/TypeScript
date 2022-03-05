@@ -143,7 +143,7 @@ namespace Debug {
     }
 
     export function formatControlFlowGraph(flowNode: FlowNode) {
-        const enum BoxCharacter {
+        enum BoxCharacter {
             lr = "─",
             ud = "│",
             dr = "╭",
@@ -157,7 +157,7 @@ namespace Debug {
             udlr = "╫",
         }
 
-        const enum Connection {
+        enum Connection {
             Up = 1 << 0,
             Down = 1 << 1,
             Left = 1 << 2,

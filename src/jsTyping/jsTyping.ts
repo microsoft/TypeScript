@@ -330,7 +330,7 @@ namespace ts.JsTyping {
         }
     }
 
-    export const enum NameValidationResult {
+    export enum NameValidationResult {
         Ok,
         EmptyName,
         NameTooLong,

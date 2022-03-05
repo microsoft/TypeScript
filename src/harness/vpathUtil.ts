@@ -31,7 +31,7 @@ namespace vpath {
     const invalidNonNavigableComponentWithWildcardsRegExp = /^\.{1,2}$|[:"<>|]/;
     const extRegExp = /\.\w+$/;
 
-    export const enum ValidationFlags {
+    export enum ValidationFlags {
         None = 0,
 
         RequireRoot = 1 << 0,

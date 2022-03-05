@@ -1,13 +1,13 @@
 /*@internal*/
 namespace ts {
-    export const enum ImportKind {
+    export enum ImportKind {
         Named,
         Default,
         Namespace,
         CommonJS,
     }
 
-    export const enum ExportKind {
+    export enum ExportKind {
         Named,
         Default,
         ExportEquals,

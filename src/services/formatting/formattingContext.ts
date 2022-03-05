@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.formatting {
-    export const enum FormattingRequestKind {
+    export enum FormattingRequestKind {
         FormatDocument,
         FormatSelection,
         FormatOnEnter,

@@ -284,7 +284,7 @@ interface Array<T> {}`
         }
     }
 
-    const enum ConvertToAsyncTestFlags {
+    enum ConvertToAsyncTestFlags {
         None,
         IncludeLib = 1 << 0,
         IncludeModule = 1 << 1,

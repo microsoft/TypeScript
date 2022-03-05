@@ -1,16 +1,16 @@
 /** @internal */
 namespace ts.classifier.v2020 {
 
-    export const enum TokenEncodingConsts {
+    export enum TokenEncodingConsts {
         typeOffset = 8,
         modifierMask = (1 << typeOffset) - 1
     }
 
-    export const enum TokenType {
+    export enum TokenType {
         class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member
     }
 
-    export const enum TokenModifier {
+    export enum TokenModifier {
         declaration, static, async, readonly, defaultLibrary, local
     }
 

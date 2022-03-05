@@ -103,7 +103,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
             }
         }
 
-        export const enum Phase {
+        export enum Phase {
             Parse = "parse",
             Program = "program",
             Bind = "bind",

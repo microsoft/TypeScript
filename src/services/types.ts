@@ -188,7 +188,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum PackageJsonDependencyGroup {
+    export enum PackageJsonDependencyGroup {
         Dependencies         = 1 << 0,
         DevDependencies      = 1 << 1,
         PeerDependencies     = 1 << 2,
@@ -214,7 +214,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum PackageJsonAutoImportPreference {
+    export enum PackageJsonAutoImportPreference {
         Off,
         On,
         Auto,
@@ -325,7 +325,7 @@ namespace ts {
 
     export type WithMetadata<T> = T & { metadata?: unknown; };
 
-    export const enum SemanticClassificationFormat {
+    export enum SemanticClassificationFormat {
         Original = "original",
         TwentyTwenty = "2020"
     }
@@ -561,7 +561,7 @@ namespace ts {
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
-    export const enum CompletionTriggerKind {
+    export enum CompletionTriggerKind {
         /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
         Invoked = 1,
 
@@ -708,7 +708,7 @@ namespace ts {
         fromSpans: TextSpan[];
     }
 
-    export const enum InlayHintKind {
+    export enum InlayHintKind {
         Type = "Type",
         Parameter = "Parameter",
         Enum = "Enum",
@@ -890,7 +890,7 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export const enum HighlightSpanKind {
+    export enum HighlightSpanKind {
         none = "none",
         definition = "definition",
         reference = "reference",
@@ -1277,7 +1277,7 @@ namespace ts {
         kind: OutliningSpanKind;
     }
 
-    export const enum OutliningSpanKind {
+    export enum OutliningSpanKind {
         /** Single or multi-line comments */
         Comment = "comment",
 
@@ -1291,13 +1291,13 @@ namespace ts {
         Imports = "imports"
     }
 
-    export const enum OutputFileType {
+    export enum OutputFileType {
         JavaScript,
         SourceMap,
         Declaration
     }
 
-    export const enum EndOfLineState {
+    export enum EndOfLineState {
         None,
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
@@ -1355,7 +1355,7 @@ namespace ts {
         getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
 
-    export const enum ScriptElementKind {
+    export enum ScriptElementKind {
         unknown = "",
         warning = "warning",
 
@@ -1468,7 +1468,7 @@ namespace ts {
         linkText = "link text",
     }
 
-    export const enum ScriptElementKindModifier {
+    export enum ScriptElementKindModifier {
         none = "",
         publicMemberModifier = "public",
         privateMemberModifier = "private",
@@ -1495,7 +1495,7 @@ namespace ts {
         cjsModifier = ".cjs",
     }
 
-    export const enum ClassificationTypeNames {
+    export enum ClassificationTypeNames {
         comment = "comment",
         identifier = "identifier",
         keyword = "keyword",
@@ -1524,7 +1524,7 @@ namespace ts {
         jsxAttributeStringLiteralValue = "jsx attribute string literal value",
     }
 
-    export const enum ClassificationType {
+    export enum ClassificationType {
         comment = 1,
         identifier = 2,
         keyword = 3,

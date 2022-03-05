@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-    const enum ClassPropertySubstitutionFlags {
+    enum ClassPropertySubstitutionFlags {
         /**
          * Enables substitutions for class expressions with static fields
          * which have initializers that reference the class name.
@@ -12,7 +12,7 @@ namespace ts {
          */
         ClassStaticThisOrSuperReference = 1 << 1,
     }
-    export const enum PrivateIdentifierKind {
+    export enum PrivateIdentifierKind {
         Field = "f",
         Method = "m",
         Accessor = "a"
@@ -104,7 +104,7 @@ namespace ts {
         privateIdentifierEnvironment: PrivateIdentifierEnvironment | undefined;
     }
 
-    const enum ClassFacts {
+    enum ClassFacts {
         None = 0,
         ClassWasDecorated = 1 << 0,
         NeedsClassConstructorReference = 1 << 1,

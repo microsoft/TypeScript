@@ -2,7 +2,7 @@
 namespace ts.formatting {
     export namespace SmartIndenter {
 
-        const enum Value {
+        enum Value {
             Unknown = -1
         }
 
@@ -282,7 +282,7 @@ namespace ts.formatting {
             return findColumnForFirstNonWhitespaceCharacterInLine(currentLineAndChar, sourceFile, options);
         }
 
-        const enum NextTokenKind {
+        enum NextTokenKind {
             Unknown,
             OpenBrace,
             CloseBrace

@@ -16,7 +16,7 @@ namespace ts.tscWatch {
 
         const scenario = "programUpdates";
         const project = "sample1";
-        const enum SubProject {
+        enum SubProject {
             core = "core",
             logic = "logic",
             tests = "tests",

@@ -14,7 +14,7 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker())),
     });
 
-    const enum SynthBindingNameKind {
+    enum SynthBindingNameKind {
         Identifier,
         BindingPattern,
     }

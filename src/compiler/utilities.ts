@@ -648,7 +648,7 @@ namespace ts {
         };
     }
 
-    export const enum GetLiteralTextFlags {
+    export enum GetLiteralTextFlags {
         None = 0,
         NeverAsciiEscape = 1 << 0,
         JsxAttributeEscape = 1 << 1,
@@ -2862,7 +2862,7 @@ namespace ts {
         return !!(node as HasTypeArguments).typeArguments;
     }
 
-    export const enum AssignmentKind {
+    export enum AssignmentKind {
         None, Definite, Compound
     }
 
@@ -3261,7 +3261,7 @@ namespace ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
-    export const enum FunctionFlags {
+    export enum FunctionFlags {
         Normal = 0,             // Function is a normal function
         Generator = 1 << 0,     // Function is a generator function or async generator function
         Async = 1 << 1,         // Function is an async function or an async generator function
@@ -3446,7 +3446,7 @@ namespace ts {
         return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
     }
 
-    export const enum Associativity {
+    export enum Associativity {
         Left,
         Right
     }
@@ -3514,7 +3514,7 @@ namespace ts {
         }
     }
 
-    export const enum OperatorPrecedence {
+    export enum OperatorPrecedence {
         // Expression:
         //     AssignmentExpression
         //     Expression `,` AssignmentExpression
@@ -5545,7 +5545,7 @@ namespace ts {
         return accessKind(node) !== AccessKind.Read;
     }
 
-    const enum AccessKind {
+    enum AccessKind {
         /** Only reads from a variable. */
         Read,
         /** Only writes to a variable without using the result. E.g.: `x++;`. */
@@ -7530,7 +7530,7 @@ namespace ts {
         let packageRootIndex = 0;
         let fileNameIndex = 0;
 
-        const enum States {
+        enum States {
             BeforeNodeModules,
             NodeModules,
             Scope,

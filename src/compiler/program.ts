@@ -1690,7 +1690,7 @@ namespace ts {
             }
 
             const oldSourceFiles = oldProgram.getSourceFiles();
-            const enum SeenPackageName { Exists, Modified }
+            enum SeenPackageName { Exists, Modified }
             const seenPackageNames = new Map<string, SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {

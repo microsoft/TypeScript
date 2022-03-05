@@ -2,7 +2,7 @@ namespace ts {
     let nextAutoGenerateId = 0;
 
     /* @internal */
-    export const enum NodeFactoryFlags {
+    export enum NodeFactoryFlags {
         None = 0,
         // Disables the parenthesizer rules for the factory.
         NoParenthesizerRules = 1 << 0,

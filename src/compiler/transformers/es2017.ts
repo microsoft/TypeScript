@@ -2,12 +2,12 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
-    const enum ES2017SubstitutionFlags {
+    enum ES2017SubstitutionFlags {
         /** Enables substitutions for async methods with `super` calls. */
         AsyncMethodsWithSuper = 1 << 0
     }
 
-    const enum ContextFlags {
+    enum ContextFlags {
         NonTopLevel = 1 << 0,
         HasLexicalThis = 1 << 1
     }

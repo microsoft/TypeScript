@@ -22,7 +22,6 @@
         "skipLibCheck": true,
 
         "alwaysStrict": true,
-        "preserveConstEnums": true,
         "newLine": "lf",
 
         "types": []

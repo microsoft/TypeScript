@@ -107,7 +107,7 @@ namespace ts.codefix {
         },
     });
 
-    const enum InfoKind { Enum, ClassOrInterface, Function, ObjectLiteral, JsxAttributes }
+    enum InfoKind { Enum, ClassOrInterface, Function, ObjectLiteral, JsxAttributes }
     type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo;
 
     interface EnumInfo {
