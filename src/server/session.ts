@@ -798,7 +798,7 @@ namespace ts.server {
                     );
                     break;
                 default:
-                    throw new Error("never");
+                    Debug.assertNever(this.projectService.serverMode);
             }
         }
 
@@ -1516,8 +1516,8 @@ namespace ts.server {
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
             if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
-                // @ts-ignore
-                this.projectService.logErrorForScriptInfoNotFound(args.file ?? args.projectFileName);
+                // use `any` to avoid type narrow
+                this.projectService.logErrorForScriptInfoNotFound((args as any).file ?? args.projectFileName);
                 return Errors.ThrowNoProject();
             }
             return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217

@@ -31734,7 +31734,7 @@ namespace ts {
                     const type = checkNewTargetMetaProperty(node);
                     return isErrorType(type) ? errorType : createNewTargetExpressionType(type);
                 default:
-                    throw new Error("never");
+                    Debug.assertNever(node.keywordToken);
             }
         }
 
@@ -40442,8 +40442,8 @@ namespace ts {
                 // If we hit an export assignment in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
-            // @ts-ignore
-            const container = node.parent.kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent as ModuleDeclaration;
+            // use any to avoid type narrow
+            const container = (node.parent as any).kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent as ModuleDeclaration;
             if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
                 if (node.isExportEquals) {
                     error(node, Diagnostics.An_export_assignment_cannot_be_used_in_a_namespace);

@@ -1283,8 +1283,8 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-            const realpathSync = _fs.realpathSync.native;
-
+            // Use `any` to avoid type narrow.
+            const realpathSync = (_fs as any).realpathSync.native ?? _fs.realpathSync;
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
