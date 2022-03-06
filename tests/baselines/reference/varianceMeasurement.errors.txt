@@ -1,5 +1,9 @@
 tests/cases/compiler/varianceMeasurement.ts(10,7): error TS2322: Type 'Foo1<string>' is not assignable to type 'Foo1<"a">'.
-  Type 'string' is not assignable to type '"a"'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type '"a"'.
+tests/cases/compiler/varianceMeasurement.ts(11,7): error TS2322: Type 'Foo1<string>' is not assignable to type 'Foo1<unknown>'.
+  The types of 'y.x' are incompatible between these types.
+    Type '(arg: string) => void' is not assignable to type '(arg: unknown) => void'.
 tests/cases/compiler/varianceMeasurement.ts(21,7): error TS2322: Type 'Foo2<string>' is not assignable to type 'Foo2<"a">'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"a"'.
@@ -9,7 +13,11 @@ tests/cases/compiler/varianceMeasurement.ts(22,7): error TS2322: Type 'Foo2<stri
       Types of parameters 'arg' and 'arg' are incompatible.
         Type 'unknown' is not assignable to type 'string'.
 tests/cases/compiler/varianceMeasurement.ts(33,7): error TS2322: Type 'Foo3<string>' is not assignable to type 'Foo3<"a">'.
-  Type 'string' is not assignable to type '"a"'.
+  Types of property 'x' are incompatible.
+    Type 'string' is not assignable to type '"a"'.
+tests/cases/compiler/varianceMeasurement.ts(34,7): error TS2322: Type 'Foo3<string>' is not assignable to type 'Foo3<unknown>'.
+  The types of 'y.x' are incompatible between these types.
+    Type '(arg: string) => void' is not assignable to type '(arg: unknown) => void'.
 tests/cases/compiler/varianceMeasurement.ts(44,7): error TS2322: Type 'Foo4<string>' is not assignable to type 'Foo4<"a">'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"a"'.
@@ -26,7 +34,7 @@ tests/cases/compiler/varianceMeasurement.ts(75,7): error TS2322: Type 'C<unknown
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/varianceMeasurement.ts (9 errors) ====
+==== tests/cases/compiler/varianceMeasurement.ts (11 errors) ====
     // The type below should be invariant in T but is measured as covariant because
     // we don't analyze recursive references.
     
@@ -39,8 +47,13 @@ tests/cases/compiler/varianceMeasurement.ts(75,7): error TS2322: Type 'C<unknown
     const f11: Foo1<'a'> = f10;
           ~~~
 !!! error TS2322: Type 'Foo1<string>' is not assignable to type 'Foo1<"a">'.
-!!! error TS2322:   Type 'string' is not assignable to type '"a"'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"a"'.
     const f12: Foo1<unknown> = f10;
+          ~~~
+!!! error TS2322: Type 'Foo1<string>' is not assignable to type 'Foo1<unknown>'.
+!!! error TS2322:   The types of 'y.x' are incompatible between these types.
+!!! error TS2322:     Type '(arg: string) => void' is not assignable to type '(arg: unknown) => void'.
     
     // The type below is invariant in T and is measured as such.
     
@@ -75,8 +88,13 @@ tests/cases/compiler/varianceMeasurement.ts(75,7): error TS2322: Type 'C<unknown
     const f31: Foo3<'a'> = f30;
           ~~~
 !!! error TS2322: Type 'Foo3<string>' is not assignable to type 'Foo3<"a">'.
-!!! error TS2322:   Type 'string' is not assignable to type '"a"'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"a"'.
     const f32: Foo3<unknown> = f30;
+          ~~~
+!!! error TS2322: Type 'Foo3<string>' is not assignable to type 'Foo3<unknown>'.
+!!! error TS2322:   The types of 'y.x' are incompatible between these types.
+!!! error TS2322:     Type '(arg: string) => void' is not assignable to type '(arg: unknown) => void'.
     
     // The type below is invariant in T and is measured as such.
     

@@ -2654,14 +2654,13 @@ declare namespace ts {
         ObjectLiteralPatternWithComputedProperties = 512,
         ReverseMapped = 1024,
         JsxAttributes = 2048,
-        MarkerType = 4096,
-        JSLiteral = 8192,
-        FreshLiteral = 16384,
-        ArrayLiteral = 32768,
+        JSLiteral = 4096,
+        FreshLiteral = 8192,
+        ArrayLiteral = 16384,
         ClassOrInterface = 3,
-        ContainsSpread = 4194304,
-        ObjectRestType = 8388608,
-        InstantiationExpressionType = 16777216,
+        ContainsSpread = 2097152,
+        ObjectRestType = 4194304,
+        InstantiationExpressionType = 8388608,
     }
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;

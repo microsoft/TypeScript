@@ -36,7 +36,7 @@ tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'string' is not 
     let a = <RCComp x="Hi" />;
                     ~
 !!! error TS2322: Type 'string' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; } & { children?: ReactNode; }'
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; }'
     let a1 = <EmptyRCComp />;
     let a2 = <EmptyRCComp data-prop="hello" />;
     let b = <PartRCComp />

@@ -2244,7 +2244,7 @@
             },
             {
               "text": "join",
-              "kind": "propertyName"
+              "kind": "methodName"
             },
             {
               "text": "(",
@@ -5906,7 +5906,7 @@
             },
             {
               "text": "toLocaleString",
-              "kind": "propertyName"
+              "kind": "methodName"
             },
             {
               "text": "(",
@@ -5980,7 +5980,7 @@
             },
             {
               "text": "toString",
-              "kind": "propertyName"
+              "kind": "methodName"
             },
             {
               "text": "(",
