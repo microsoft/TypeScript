@@ -136,6 +136,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
@@ -164,7 +166,11 @@ export interface Session {
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -329,6 +335,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
@@ -484,6 +492,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 

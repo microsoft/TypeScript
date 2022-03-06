@@ -155,6 +155,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/b/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/b/package.json","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/transitivereferences:
@@ -362,6 +366,10 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/nrefs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/nrefs/a.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/b/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/b/package.json","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/transitivereferences:
@@ -451,6 +459,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/b/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/b/package.json","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
 
@@ -799,6 +811,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/b/index.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/a/index.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/a/index.d.ts","pollingInterval":250}
+/user/username/projects/transitivereferences/a/package.json:
+  {"fileName":"/user/username/projects/transitivereferences/a/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/transitivereferences:

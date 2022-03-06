@@ -6,8 +6,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,5): error TS2322
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,20): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS1117: An object literal cannot have multiple properties with the same name.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS1117: An object literal cannot have multiple properties with the same name.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,7): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
@@ -73,9 +73,9 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
 !!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
 !!! related TS2785 tests/cases/conformance/types/spread/objectSpreadNegative.ts:28:30: This spread always overwrites this property.
                                        ~
-!!! error TS2300: Duplicate identifier 'b'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
                                                         ~
-!!! error TS2300: Duplicate identifier 'b'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     let duplicatedSpread = { ...o, ...o }
     // Note: ignore changes the order that properties are printed
     let ignore: { a: number, b: string } =

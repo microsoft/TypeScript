@@ -93,7 +93,7 @@ f3 = f1;
 >f3 : (x: string, y: number, z: boolean) => void
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 
-f4 = f1;  // Error, misaligned complex rest types
+f4 = f1;
 >f4 = f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
@@ -108,7 +108,7 @@ f1 = f3;  // Error
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >f3 : (x: string, y: number, z: boolean) => void
 
-f1 = f4;  // Error, misaligned complex rest types
+f1 = f4;
 >f1 = f4 : (...args: [string, string] | [string, number, boolean]) => void
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >f4 : (...args: [string, string] | [string, number, boolean]) => void
@@ -226,4 +226,55 @@ foo2(...x2);
 >foo2 : (...args: string[] | number[]) => void
 >...x2 : string
 >x2 : readonly string[]
+
+// Repros from #47754
+
+type RestParams = [y: string] | [y: number];
+>RestParams : RestParams
+
+type Signature = (x: string, ...rest: RestParams) => void;
+>Signature : Signature
+>x : string
+>rest : RestParams
+
+type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
+>MergedParams : [x: string, y: string] | [x: string, y: number]
+
+declare let ff1: (...rest: [string, string] | [string, number]) => void;
+>ff1 : (...rest: [string, string] | [string, number]) => void
+>rest : [string, string] | [string, number]
+
+declare let ff2: (x: string, ...rest: [string] | [number]) => void;
+>ff2 : (x: string, ...rest: [string] | [number]) => void
+>x : string
+>rest : [string] | [number]
+
+ff1 = ff2;
+>ff1 = ff2 : (x: string, ...rest: [string] | [number]) => void
+>ff1 : (...rest: [string, string] | [string, number]) => void
+>ff2 : (x: string, ...rest: [string] | [number]) => void
+
+ff2 = ff1;
+>ff2 = ff1 : (...rest: [string, string] | [string, number]) => void
+>ff2 : (x: string, ...rest: [string] | [number]) => void
+>ff1 : (...rest: [string, string] | [string, number]) => void
+
+function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
+>ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
+>s1 : (...args: [x: string, ...rest: A | [number]]) => void
+>args : [string, number] | [x: string, ...rest: A]
+>s2 : (x: string, ...rest: A | [number]) => void
+>x : string
+>rest : [number] | A
+
+    s1 = s2;
+>s1 = s2 : (x: string, ...rest: [number] | A) => void
+>s1 : (...args: [string, number] | [x: string, ...rest: A]) => void
+>s2 : (x: string, ...rest: [number] | A) => void
+
+    s2 = s1;
+>s2 = s1 : (...args: [string, number] | [x: string, ...rest: A]) => void
+>s2 : (x: string, ...rest: [number] | A) => void
+>s1 : (...args: [string, number] | [x: string, ...rest: A]) => void
+}
 

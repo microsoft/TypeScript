@@ -17,6 +17,6 @@ export module c {
 }
 
 var x: c.b;
->x : any
+>x : c.b
 >c : any
 

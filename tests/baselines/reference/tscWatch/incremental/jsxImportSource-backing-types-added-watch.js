@@ -75,7 +75,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
 exports.App = App;
 
 
@@ -183,6 +183,10 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/react/jsx-runtime/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
+/users/username/projects/project/node_modules/react/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
 
 FsWatches::
 

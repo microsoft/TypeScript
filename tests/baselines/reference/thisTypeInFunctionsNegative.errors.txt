@@ -86,8 +86,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,37): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,38): error TS1109: Expression expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,39): error TS1005: ';' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,40): error TS1128: Declaration or statement expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,42): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,42): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,49): error TS1005: ';' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,23): error TS2730: An arrow function cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,16): error TS2730: An arrow function cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(177,19): error TS2730: An arrow function cannot have a 'this' parameter.
@@ -422,9 +422,9 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                                            ~
 !!! error TS1128: Declaration or statement expected.
                                              ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                                             ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.
-                                                    ~
-!!! error TS1005: ';' expected.
     
     // can't name parameters 'this' in a lambda.
     c.explicitProperty = (this, m) => m + this.n;

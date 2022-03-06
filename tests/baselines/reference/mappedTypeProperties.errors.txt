@@ -1,0 +1,87 @@
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(3,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(9,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(14,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(18,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(23,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(27,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(31,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(34,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(37,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(40,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(40,6): error TS2304: Cannot find name 'P'.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(40,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(40,11): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(40,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeProperties.ts (14 errors) ====
+    export type PlaceType = 'openSky' | 'roofed' | 'garage'
+    type Before = {
+        model: 'hour' | 'day';
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+        [placeType in PlaceType]: void;
+    }
+    
+    type After = {
+        [placeType in PlaceType]: void;
+        model: 'hour' | 'day'
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    
+    type AfterQuestion = {
+        [placeType in PlaceType]?: void;
+        model: 'hour' | 'day';
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    type AfterMethod = {
+        [placeType in PlaceType]?: void;
+        model(duration: number): 'hour' | 'day';
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    
+    type AfterImplicit = {
+        [placeType in PlaceType]
+        model: 'hour' | 'day';
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    type AfterImplicitQ = {
+        [placeType in PlaceType]?
+        model: 'hour' | 'day'
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    
+    interface I {
+        [P in PlaceType]: any
+        ~~~~~~~~~~~~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    class C {
+        [P in PlaceType]: any
+        ~~~~~~~~~~~~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    const D = class {
+        [P in PlaceType]: any
+        ~~~~~~~~~~~~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    const E = class {
+        [P in 'a' | 'b']: any
+        ~~~~~~~~~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+         ~
+!!! error TS2304: Cannot find name 'P'.
+         ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+              ~~~
+!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+                    ~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    }
+    

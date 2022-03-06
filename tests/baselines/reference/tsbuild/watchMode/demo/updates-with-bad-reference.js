@@ -252,6 +252,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+/user/username/projects/demo/animals/package.json:
+  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
@@ -520,6 +522,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+/user/username/projects/demo/animals/package.json:
+  {"fileName":"/user/username/projects/demo/animals/package.json","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:

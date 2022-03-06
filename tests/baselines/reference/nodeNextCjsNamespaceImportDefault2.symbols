@@ -1,0 +1,30 @@
+=== tests/cases/compiler/src/a.cts ===
+export const a: number = 1;
+>a : Symbol(a, Decl(a.cts, 0, 12))
+
+export default 'string';
+=== tests/cases/compiler/src/foo.mts ===
+import d, {a} from './a.cjs';
+>d : Symbol(d, Decl(foo.mts, 0, 6))
+>a : Symbol(a, Decl(foo.mts, 0, 11))
+
+import * as ns from './a.cjs';
+>ns : Symbol(ns, Decl(foo.mts, 1, 6))
+
+export {d, a, ns};
+>d : Symbol(d, Decl(foo.mts, 2, 8))
+>a : Symbol(a, Decl(foo.mts, 2, 10))
+>ns : Symbol(ns, Decl(foo.mts, 2, 13))
+
+d.a;
+>d.a : Symbol(d.a, Decl(a.cts, 0, 12))
+>d : Symbol(d, Decl(foo.mts, 0, 6))
+>a : Symbol(d.a, Decl(a.cts, 0, 12))
+
+ns.default.a;
+>ns.default.a : Symbol(d.a, Decl(a.cts, 0, 12))
+>ns.default : Symbol(d.default)
+>ns : Symbol(ns, Decl(foo.mts, 1, 6))
+>default : Symbol(d.default)
+>a : Symbol(d.a, Decl(a.cts, 0, 12))
+

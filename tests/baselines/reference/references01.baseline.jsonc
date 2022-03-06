@@ -1,0 +1,66 @@
+// === /referencesForGlobals_1.ts ===
+// class [|globalClass|] {
+//     public f() { }
+// }
+
+// === /referencesForGlobals_2.ts ===
+// ///<reference path="referencesForGlobals_1.ts" />
+// var c = /*FIND ALL REFS*/[|globalClass|]();
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/referencesForGlobals_1.ts",
+      "kind": "class",
+      "name": "class globalClass",
+      "textSpan": {
+        "start": 6,
+        "length": 11
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "globalClass",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 40
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 6,
+          "length": 11
+        },
+        "fileName": "/referencesForGlobals_1.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 40
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 11
+        },
+        "fileName": "/referencesForGlobals_2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

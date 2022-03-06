@@ -81,7 +81,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var _a, _b, _c, _d, _e, _f, _g;
 function foo(x, y) {

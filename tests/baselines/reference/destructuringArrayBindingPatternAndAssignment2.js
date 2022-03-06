@@ -42,7 +42,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or

@@ -77,11 +77,13 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
+    /** @internal */
+    export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
         abstract: SyntaxKind.AbstractKeyword,
         any: SyntaxKind.AnyKeyword,
         as: SyntaxKind.AsKeyword,
         asserts: SyntaxKind.AssertsKeyword,
+        assert: SyntaxKind.AssertKeyword,
         bigint: SyntaxKind.BigIntKeyword,
         boolean: SyntaxKind.BooleanKeyword,
         break: SyntaxKind.BreakKeyword,
@@ -2046,8 +2048,15 @@ namespace ts {
                             pos++;
                             return token = SyntaxKind.Unknown;
                         }
-                        pos++;
-                        scanIdentifier(codePointAt(text, pos), languageVersion);
+
+                        if (isIdentifierStart(codePointAt(text, pos + 1), languageVersion)) {
+                            pos++;
+                            scanIdentifier(codePointAt(text, pos), languageVersion);
+                        }
+                        else {
+                            tokenValue = String.fromCharCode(codePointAt(text, pos));
+                            error(Diagnostics.Invalid_character, pos++, charSize(ch));
+                        }
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
                         const identifierKind = scanIdentifier(ch, languageVersion);
@@ -2365,6 +2374,7 @@ namespace ts {
                     tokenValue = tokenValue.slice(0, -1);
                     pos--;
                 }
+                return getIdentifierToken();
             }
             return token;
         }

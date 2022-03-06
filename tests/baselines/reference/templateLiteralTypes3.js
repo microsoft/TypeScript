@@ -117,6 +117,79 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 }
 
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+
+chain("a");
+
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+    if (x === y) {
+        x;  // `foo-${string}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+    if (x === y) {
+        x;  // `foo-${T}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+    if (x === y) {
+        x;  // `foo-${string}` | 'bar'
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+    if (x === 'foo-test') {
+        x;  // 'foo-test'
+    }
+    if (y === 'foo-test') {
+        y;  // 'foo-test'
+    }
+}
+
+// Repro from #46045
+
+type Action =
+    | { type: `${string}_REQUEST` }
+    | { type: `${string}_SUCCESS`, response: string };
+
+function reducer(action: Action) {
+    if (action.type === 'FOO_SUCCESS') {
+        action.type;
+        action.response;
+    }
+}
+
+// Repro from #46768
+
+type DotString = `${string}.${string}.${string}`;
+
+declare function noSpread<P extends DotString>(args: P[]): P;
+declare function spread<P extends DotString>(...args: P[]): P;
+
+noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
+noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
+
+spread(`1.${'2'}.3`, `1.${'2'}.4`);
+spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
+
+function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
+    spread(`1.${t}.3`, `1.${t}.4`);
+    spread(`1.${u}.3`, `1.${u}.4`);
+    spread(u1, u2);
+}
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
@@ -125,11 +198,11 @@ function f1(s, n, b, t) {
     var x1 = foo1('hello'); // Error
     var x2 = foo1('*hello*');
     var x3 = foo1('**hello**');
-    var x4 = foo1("*" + s + "*");
-    var x5 = foo1("*" + n + "*");
-    var x6 = foo1("*" + b + "*");
-    var x7 = foo1("*" + t + "*");
-    var x8 = foo1("**" + s + "**");
+    var x4 = foo1("*".concat(s, "*"));
+    var x5 = foo1("*".concat(n, "*"));
+    var x6 = foo1("*".concat(b, "*"));
+    var x7 = foo1("*".concat(t, "*"));
+    var x8 = foo1("**".concat(s, "**"));
 }
 function f2() {
     var x;
@@ -147,27 +220,71 @@ function f3(s, n, b, t) {
     x = 'hello'; // Error
     x = '*hello*';
     x = '**hello**';
-    x = "*" + s + "*";
-    x = "*" + n + "*";
-    x = "*" + b + "*";
-    x = "*" + t + "*";
-    x = "**" + s + "**";
+    x = "*".concat(s, "*");
+    x = "*".concat(n, "*");
+    x = "*".concat(b, "*");
+    x = "*".concat(t, "*");
+    x = "**".concat(s, "**");
 }
 function f4(s, n, b, t) {
     var x;
     x = '123'; // Error
     x = '*123*';
     x = '**123**'; // Error
-    x = "*" + s + "*"; // Error
-    x = "*" + n + "*";
-    x = "*" + b + "*"; // Error
-    x = "*" + t + "*";
+    x = "*".concat(s, "*"); // Error
+    x = "*".concat(n, "*");
+    x = "*".concat(b, "*"); // Error
+    x = "*".concat(t, "*");
 }
 var value1 = "abc";
-var templated1 = value1 + " abc";
+var templated1 = "".concat(value1, " abc");
 // Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
 var value2 = "abc";
-var templated2 = value2 + " abc";
+var templated2 = "".concat(value2, " abc");
+chain("a");
+// Repro from #46125
+function ff1(x, y, z) {
+    if (x === y) {
+        x; // `foo-${string}`
+    }
+    if (x === z) { // Error
+    }
+}
+function ff2(x, y, z) {
+    if (x === y) {
+        x; // `foo-${T}`
+    }
+    if (x === z) { // Error
+    }
+}
+function ff3(x, y) {
+    if (x === y) {
+        x; // `foo-${string}` | 'bar'
+    }
+}
+function ff4(x, y) {
+    if (x === 'foo-test') {
+        x; // 'foo-test'
+    }
+    if (y === 'foo-test') {
+        y; // 'foo-test'
+    }
+}
+function reducer(action) {
+    if (action.type === 'FOO_SUCCESS') {
+        action.type;
+        action.response;
+    }
+}
+noSpread(["1.".concat('2', ".3"), "1.".concat('2', ".4")]);
+noSpread(["1.".concat('2', ".3"), "1.".concat('2', ".4")]);
+spread("1.".concat('2', ".3"), "1.".concat('2', ".4"));
+spread("1.".concat('2', ".3"), "1.".concat('2', ".4"));
+function ft1(t, u, u1, u2) {
+    spread("1.".concat(t, ".3"), "1.".concat(t, ".4"));
+    spread("1.".concat(u, ".3"), "1.".concat(u, ".4"));
+    spread(u1, u2);
+}
 
 
 //// [templateLiteralTypes3.d.ts]
@@ -216,3 +333,26 @@ declare type PrefixData<P extends Prefixes> = `${P}:baz`;
 interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 }
+declare type Schema = {
+    a: {
+        b: {
+            c: number;
+        };
+    };
+};
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+declare function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`): void;
+declare function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`): void;
+declare function ff3(x: string, y: `foo-${string}` | 'bar'): void;
+declare function ff4(x: string, y: `foo-${string}`): void;
+declare type Action = {
+    type: `${string}_REQUEST`;
+} | {
+    type: `${string}_SUCCESS`;
+    response: string;
+};
+declare function reducer(action: Action): void;
+declare type DotString = `${string}.${string}.${string}`;
+declare function noSpread<P extends DotString>(args: P[]): P;
+declare function spread<P extends DotString>(...args: P[]): P;
+declare function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>): void;

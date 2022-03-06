@@ -43,7 +43,7 @@ var x: Entity;
 var y: Entity.I;
 >y : Symbol(y, Decl(m2.ts, 5, 3))
 >Entity : Symbol(Entity, Decl(m2.ts, 0, 6))
->I : Symbol(Entity)
+>I : Symbol(Entity.I)
 
 Entity.x;
 >Entity : Symbol(Entity, Decl(m2.ts, 0, 6))

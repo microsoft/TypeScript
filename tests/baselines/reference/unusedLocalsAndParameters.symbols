@@ -133,6 +133,7 @@ namespace N {
 
 for (let x: y) {
 >x : Symbol(x, Decl(unusedLocalsAndParameters.ts, 82, 8))
+>y : Symbol(y)
 
     z(x);
 >z : Symbol(z, Decl(unusedLocalsAndParameters.ts, 82, 16))

@@ -48,6 +48,11 @@ namespace ts {
          */
         readonly exportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
 
+        previousCache?: {
+            id: number,
+            version: number,
+        };
+
         /**
          * true if file version is used as signature
          * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
@@ -77,9 +82,11 @@ namespace ts {
             readonly version: string;
             signature: string | undefined;
             affectsGlobalScope: boolean | undefined;
+            impliedFormat: number | undefined;
         }
 
         export interface ReadonlyManyToManyPathMap {
+            readonly id: number;
             clone(): ManyToManyPathMap;
             forEach(action: (v: ReadonlySet<Path>, k: Path) => void): void;
             getKeys(v: Path): ReadonlySet<Path> | undefined;
@@ -96,13 +103,18 @@ namespace ts {
         }
 
         export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
+            version(): number; // Incremented each time the contents are changed
             deleteKey(k: Path): boolean;
             set(k: Path, v: ReadonlySet<Path>): void;
         }
 
+        let manyToManyPathMapCount = 0;
         export function createManyToManyPathMap(): ManyToManyPathMap {
             function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
+                let version = 0;
                 const map: ManyToManyPathMap = {
+                    id: manyToManyPathMapCount++,
+                    version: () => version,
                     clone: () => create(new Map(forward), new Map(reverse), deleted && new Set(deleted)),
                     forEach: fn => forward.forEach(fn),
                     getKeys: v => reverse.get(v),
@@ -121,25 +133,32 @@ namespace ts {
 
                         set.forEach(v => deleteFromMultimap(reverse, v, k));
                         forward.delete(k);
+                        version++;
                         return true;
                     },
                     set: (k, vSet) => {
-                        deleted?.delete(k);
+                        let changed = !!deleted?.delete(k);
 
                         const existingVSet = forward.get(k);
                         forward.set(k, vSet);
 
                         existingVSet?.forEach(v => {
                             if (!vSet.has(v)) {
+                                changed = true;
                                 deleteFromMultimap(reverse, v, k);
                             }
                         });
 
                         vSet.forEach(v => {
                             if (!existingVSet?.has(v)) {
+                                changed = true;
                                 addToMultimap(reverse, v, k);
                             }
                         });
+
+                        if (changed) {
+                            version++;
+                        }
 
                         return map;
                     },
@@ -178,22 +197,16 @@ namespace ts {
          */
         export type ComputeHash = ((data: string) => string) | undefined;
 
-        /**
-         * Get the referencedFile from the imported module symbol
-         */
-        function getReferencedFileFromImportedModuleSymbol(symbol: Symbol) {
-            if (symbol.declarations && symbol.declarations[0]) {
-                const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-                return declarationSourceFile && declarationSourceFile.resolvedPath;
-            }
+        function getReferencedFilesFromImportedModuleSymbol(symbol: Symbol): Path[] {
+            return mapDefined(symbol.declarations, declaration => getSourceFileOfNode(declaration)?.resolvedPath);
         }
 
         /**
-         * Get the referencedFile from the import name node from file
+         * Get the module source file and all augmenting files from the import name node from file
          */
-        function getReferencedFileFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike) {
+        function getReferencedFilesFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike): Path[] | undefined {
             const symbol = checker.getSymbolAtLocation(importName);
-            return symbol && getReferencedFileFromImportedModuleSymbol(symbol);
+            return symbol && getReferencedFilesFromImportedModuleSymbol(symbol);
         }
 
         /**
@@ -215,10 +228,8 @@ namespace ts {
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
-                    const declarationSourceFilePath = getReferencedFileFromImportLiteral(checker, importName);
-                    if (declarationSourceFilePath) {
-                        addReferencedFile(declarationSourceFilePath);
-                    }
+                    const declarationSourceFilePaths = getReferencedFilesFromImportLiteral(checker, importName);
+                    declarationSourceFilePaths?.forEach(addReferencedFile);
                 }
             }
 
@@ -248,9 +259,9 @@ namespace ts {
             if (sourceFile.moduleAugmentations.length) {
                 const checker = program.getTypeChecker();
                 for (const moduleName of sourceFile.moduleAugmentations) {
-                    if (!isStringLiteral(moduleName)) { continue; }
+                    if (!isStringLiteral(moduleName)) continue;
                     const symbol = checker.getSymbolAtLocation(moduleName);
-                    if (!symbol) { continue; }
+                    if (!symbol) continue;
 
                     // Add any file other than our own as reference
                     addReferenceFromAmbientModule(symbol);
@@ -322,7 +333,7 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined, impliedFormat: sourceFile.impliedNodeFormat });
             }
 
             return {
@@ -423,7 +434,7 @@ namespace ts {
                 );
                 const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
-                    Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
+                    Debug.assert(fileExtensionIsOneOf(firstDts.name, [Extension.Dts, Extension.Dmts, Extension.Dcts]), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
                     latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
                     if (exportedModulesMapCache && latestSignature !== prevSignature) {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
@@ -458,7 +469,7 @@ namespace ts {
             }
 
             let exportedModules: Set<Path> | undefined;
-            exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
+            exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFilesFromImportedModuleSymbol(symbol)));
             if (exportedModules) {
                 exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules);
             }
@@ -466,12 +477,12 @@ namespace ts {
                 exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
             }
 
-            function addExportedModule(exportedModulePath: Path | undefined) {
-                if (exportedModulePath) {
+            function addExportedModule(exportedModulePaths: Path[] | undefined) {
+                if (exportedModulePaths?.length) {
                     if (!exportedModules) {
                         exportedModules = new Set();
                     }
-                    exportedModules.add(exportedModulePath);
+                    exportedModulePaths.forEach(path => exportedModules!.add(path));
                 }
             }
         }
@@ -483,6 +494,22 @@ namespace ts {
         export function updateExportedFilesMapFromCache(state: BuilderState, exportedModulesMapCache: ManyToManyPathMap | undefined) {
             if (exportedModulesMapCache) {
                 Debug.assert(!!state.exportedModulesMap);
+
+                const cacheId = exportedModulesMapCache.id;
+                const cacheVersion = exportedModulesMapCache.version();
+                if (state.previousCache) {
+                    if (state.previousCache.id === cacheId && state.previousCache.version === cacheVersion) {
+                        // If this is the same cache at the same version as last time this BuilderState
+                        // was updated, there's no need to update again
+                        return;
+                    }
+                    state.previousCache.id = cacheId;
+                    state.previousCache.version = cacheVersion;
+                }
+                else {
+                    state.previousCache = { id: cacheId, version: cacheVersion };
+                }
+
                 exportedModulesMapCache.deletedKeys()?.forEach(path => state.exportedModulesMap!.deleteKey(path));
                 exportedModulesMapCache.forEach((exportedModules, path) => state.exportedModulesMap!.set(path, exportedModules));
             }

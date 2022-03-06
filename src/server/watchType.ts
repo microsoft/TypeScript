@@ -8,7 +8,6 @@ namespace ts {
         MissingSourceMapFile: "Missing source map file",
         NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
         MissingGeneratedFile: "Missing generated file",
-        PackageJsonFile: "package.json file for import suggestions",
         NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     }
     WatchType.ClosedScriptInfo = "Closed Script info";
@@ -17,5 +16,4 @@ namespace ts {
     WatchType.MissingSourceMapFile = "Missing source map file";
     WatchType.NoopConfigFileForInferredRoot = "Noop Config file for the inferred project root";
     WatchType.MissingGeneratedFile = "Missing generated file";
-    WatchType.PackageJsonFile = "package.json file for import suggestions";
 }

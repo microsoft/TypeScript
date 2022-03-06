@@ -68,6 +68,8 @@ WatchedFiles::
   {"fileName":"/a/b/projects/myProject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/projects/myproject/node_modules/module1/package.json:
+  {"fileName":"/a/b/projects/myproject/node_modules/module1/package.json","pollingInterval":250}
 
 FsWatches::
 

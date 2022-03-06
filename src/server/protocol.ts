@@ -2289,7 +2289,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source`.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
         /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
@@ -2562,11 +2562,7 @@ namespace ts.server.protocol {
         body?: SignatureHelpItems;
     }
 
-    export const enum InlayHintKind {
-        Type = "Type",
-        Parameter = "Parameter",
-        Enum = "Enum",
-    }
+    export type InlayHintKind = "Type" | "Parameter" | "Enum";
 
     export interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
@@ -2587,7 +2583,7 @@ namespace ts.server.protocol {
     export interface InlayHintItem {
         text: string;
         position: Location;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -3203,14 +3199,32 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
-    /*
-     * __GDPR__
-     * "typingsinstalled" : {
-     *     "${include}": ["${TypeScriptCommonProperties}"],
-     *     "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
-     *     "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
-     *     "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
-     * }
+    // A __GDPR__FRAGMENT__ has no meaning until it is ${include}d by a __GDPR__ comment, at which point
+    // the included properties are effectively inlined into the __GDPR__ declaration.  In this case, for
+    // example, any __GDPR__ comment including the TypeScriptCommonProperties will be updated with an
+    // additional version property with the classification below.  Obviously, the purpose of such a construct
+    // is to reduce duplication and keep multiple use sites consistent (e.g. by making sure that all reflect
+    // any newly added TypeScriptCommonProperties).  Unfortunately, the system has limits - in particular,
+    // these reusable __GDPR__FRAGMENT__s are not accessible across repo boundaries.  Therefore, even though
+    // the code for adding the common properties (i.e. version), along with the corresponding __GDPR__FRAGMENT__,
+    // lives in the VS Code repo (see https://github.com/microsoft/vscode/blob/main/extensions/typescript-language-features/src/utils/telemetry.ts)
+    // we have to duplicate it here.  It would be nice to keep them in sync, but the only likely failure mode
+    // is adding a property to the VS Code repro but not here and the only consequence would be having that
+    // property suppressed on the events (i.e. __GDPT__ comments) in this repo that reference the out-of-date
+    // local __GDPR__FRAGMENT__.
+    /* __GDPR__FRAGMENT__
+        "TypeScriptCommonProperties" : {
+            "version" : { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
+    */
+
+    /* __GDPR__
+        "typingsinstalled" : {
+            "${include}": ["${TypeScriptCommonProperties}"],
+            "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+            "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+            "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+        }
      */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
@@ -3385,6 +3399,13 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
+        /**
+         * If enabled, completions for class members (e.g. methods and properties) will include
+         * a whole declaration for the member.
+         * E.g., `class A { f| }` could be completed to `class A { foo(): number {} }`, instead of
+         * `class A { foo }`.
+         */
+        readonly includeCompletionsWithClassMemberSnippets?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -3395,9 +3416,18 @@ namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
 
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
+
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export interface CompilerOptions {
@@ -3512,6 +3542,7 @@ namespace ts.server.protocol {
         ES2019 = "ES2019",
         ES2020 = "ES2020",
         ES2021 = "ES2021",
+        ES2022 = "ES2022",
         ESNext = "ESNext"
     }
 

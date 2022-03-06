@@ -19,7 +19,9 @@ class C {
 class D extends C {
     constructor() {
         var _this = "uh-oh?";
+        console.log("ruh-roh...");
         super();
+        console.log("d'oh!");
     }
 }
 
@@ -59,7 +61,9 @@ var D = /** @class */ (function (_super) {
     function D() {
         var _this_1 = this;
         var _this = "uh-oh?";
+        console.log("ruh-roh...");
         _this_1 = _super.call(this) || this;
+        console.log("d'oh!");
         return _this_1;
     }
     return D;

@@ -63,6 +63,8 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/tslib/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -81,7 +83,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.x = void 0;
 var tslib_1 = require("tslib");
-exports.x = (0, tslib_1.__assign)({});
+exports.x = tslib_1.__assign({});
 
 
 
@@ -126,6 +128,8 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/index.tsx","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
 
 FsWatches::
 

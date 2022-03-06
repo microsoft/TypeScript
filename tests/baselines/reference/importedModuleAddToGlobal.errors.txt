@@ -1,4 +1,4 @@
-tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2503: Cannot find namespace 'b'.
+tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
 
 
 ==== tests/cases/compiler/importedModuleAddToGlobal.ts (1 errors) ====
@@ -18,5 +18,6 @@ tests/cases/compiler/importedModuleAddToGlobal.ts(15,23): error TS2503: Cannot f
         import a = A;
         function hello(): b.B { return null; }
                           ~
-!!! error TS2503: Cannot find namespace 'b'.
+!!! error TS2833: Cannot find namespace 'b'. Did you mean 'B'?
+!!! related TS2728 tests/cases/compiler/importedModuleAddToGlobal.ts:8:8: 'B' is declared here.
     }

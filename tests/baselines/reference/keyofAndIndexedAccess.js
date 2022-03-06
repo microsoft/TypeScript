@@ -681,7 +681,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var Shape = /** @class */ (function () {
     function Shape() {
@@ -1040,10 +1040,8 @@ var SampleClass = /** @class */ (function () {
 var AnotherSampleClass = /** @class */ (function (_super) {
     __extends(AnotherSampleClass, _super);
     function AnotherSampleClass(props) {
-        var _this = this;
         var foo = { foo: "bar" };
-        _this = _super.call(this, merge(props, foo)) || this;
-        return _this;
+        return _super.call(this, merge(props, foo)) || this;
     }
     AnotherSampleClass.prototype.brokenMethod = function () {
         this.props.foo.concat;

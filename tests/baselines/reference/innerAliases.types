@@ -39,13 +39,13 @@ module D {
 }
 
 var c: D.inner.Class1;
->c : any
+>c : D.inner.Class1
 >D : any
 >inner : any
 
 c = new D.inner.Class1();
 >c = new D.inner.Class1() : any
->c : any
+>c : D.inner.Class1
 >new D.inner.Class1() : any
 >D.inner.Class1 : any
 >D.inner : any

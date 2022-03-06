@@ -14,5 +14,14 @@ namespace ts {
             fs: () => loadProjectFromFiles({}),
             commandLineArgs: [],
         });
+
+        verifyTsc({
+            scenario: "runWithoutArgs",
+            subScenario: "does not add color when NO_COLOR is set",
+            fs: () => loadProjectFromFiles({}),
+            commandLineArgs: [],
+            environmentVariables: { NO_COLOR: "true" }
+        });
+
     });
 }

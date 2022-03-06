@@ -39,15 +39,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_0_modifier_cannot_be_used_with_an_interface_declaration_1045" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A '{0}' modifier cannot be used with an interface declaration.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 修飾子とインターフェイス宣言は同時に使用できません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";A_0_parameter_must_be_the_first_parameter_2680" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A '{0}' parameter must be the first parameter.]]></Val>
@@ -141,15 +132,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_class_may_only_extend_another_class_2311" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A class may only extend another class.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[クラスで拡張できるのは別のクラスだけです。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";A_class_member_cannot_have_the_0_keyword_1248" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A class member cannot have the '{0}' keyword.]]></Val>
@@ -227,15 +209,6 @@
           <Val><![CDATA[A computed property name must be of type 'string', 'number', 'symbol', or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[計算されたプロパティ名は 'string' 型、'number' 型、'symbol' 型、または 'any' 型のいずれかでなければなりません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";A_computed_property_name_of_the_form_0_must_be_of_type_symbol_2471" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A computed property name of the form '{0}' must be of type 'symbol'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[形式 '{0}' の計算されたプロパティ名は 'symbol' 型でなければなりません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -495,6 +468,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_mapped_type_may_not_declare_properties_or_methods_7061" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A mapped type may not declare properties or methods.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[マップされた型では、プロパティまたはメソッドを宣言しない場合があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_memb_2651" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
@@ -555,20 +537,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_namespace_declaration_is_only_allowed_in_a_namespace_or_module_1235" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_namespace_declaration_is_only_allowed_at_the_top_level_of_a_namespace_or_module_1235" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A namespace declaration is only allowed in a namespace or module.]]></Val>
+          <Val><![CDATA[A namespace declaration is only allowed at the top level of a namespace or module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[名前空間宣言は、名前空間かモジュールでのみ使用できます。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";A_new_expression_with_type_arguments_must_always_be_followed_by_a_parenthesized_argument_list_1384" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A 'new' expression with type arguments must always be followed by a parenthesized argument list.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型引数を伴う 'new' 式の後には常に、かっこで囲んだ引数リストを指定しなければなりません。]]></Val>
+            <Val><![CDATA[名前空間宣言は、名前空間またはモジュールの最上位レベルでのみ許可されます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -641,15 +614,6 @@
           <Val><![CDATA[A parameter property may not be declared using a binding pattern.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[パラメーター プロパティは、バインド パターンを使用して宣言することはできません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not_18001" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A path in an 'extends' option must be relative or rooted, but '{0}' is not.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['拡張' オプション内のパスは相対パスまたはルート パスである必要がありますが、'{0}' の場合は、その必要はありません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -873,15 +837,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_signature_with_an_implementation_cannot_use_a_string_literal_type_2381" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A signature with an implementation cannot use a string literal type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[実装のシグネチャには文字列リテラル型は使用できません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";A_spread_argument_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter_2556" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A spread argument must either have a tuple type or be passed to a rest parameter.]]></Val>
@@ -891,15 +846,21 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_proper_2376" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";A_super_call_must_be_a_root_level_statement_within_a_constructor_of_a_derived_class_that_contains_in_2401" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.]]></Val>
+          <Val><![CDATA[A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['super' の呼び出しは、初期化されたプロパティ、パラメーターのプロパティ、private 識別子がクラスに含まれている場合は、コンストラクターの最初のステートメントである必要があります。]]></Val>
+            <Val><![CDATA['super' の呼び出しは、初期化されたプロパティ、パラメーターのプロパティ、private 識別子が派生クラスに含まれている場合は、コンストラクターのルートレベルのステートメントである必要があります。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.]]></Val>
-          </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_super_call_must_be_the_first_statement_in_the_constructor_to_refer_to_super_or_this_when_a_derived_2376" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['super' の呼び出しは、初期化されたプロパティ、パラメーターのプロパティ、private 識別子が派生クラスに含まれている場合は、'super' や 'this' を参照するコンストラクターの最初のステートメントである必要があります。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1074,18 +1035,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_0_to_existing_import_declaration_from_1_90015" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add '{0}' to existing import declaration from "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["{1}" から既存のインポート宣言に '{0}' を追加する]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Add '{0}' to existing import declaration from "{1}".]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Add_0_to_unresolved_variable_90008" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '{0}.' to unresolved variable]]></Val>
@@ -1109,6 +1058,15 @@
           <Val><![CDATA[Add all missing 'async' modifiers]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[不足しているすべての 'async' 修飾子を追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_all_missing_attributes_95168" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing attributes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不足しているすべての属性を追加する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1230,15 +1188,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add '@class' tag]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['@class' タグの追加]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Add_const_to_all_unresolved_variables_95082" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'const' to all unresolved variables]]></Val>
@@ -1253,15 +1202,6 @@
           <Val><![CDATA[Add 'const' to unresolved variable]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[未解決の変数に 'const' を追加する]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_default_import_0_to_existing_import_declaration_from_1_90033" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add default import '{0}' to existing import declaration from "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[既定のインポート '{0}' を "{1}" からの既存のインポート宣言に追加する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1293,6 +1233,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_import_from_0_90057" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add import from "{0}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" からのインポートの追加]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_index_signature_for_property_0_90017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add index signature for property '{0}']]></Val>
@@ -1319,6 +1268,15 @@
           <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[初期化されていないすべてのプロパティに初期化子を追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_missing_attributes_95167" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing attributes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不足している属性の追加]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1443,24 +1401,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add 'this' parameter.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['this' パラメーターを追加します。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add '@this' tag]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['@this' タグの追加]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Add_to_all_uncalled_decorators_95044" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add '()' to all uncalled decorators]]></Val>
@@ -1484,6 +1424,15 @@
           <Val><![CDATA[Add `undefined` to a type when accessed using an index.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[インデックスを使用してアクセスした場合は、'undefined' を型に追加します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_undefined_to_optional_property_type_95169" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'undefined' to optional property type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[省略可能なプロパティ型に 'undefined' を追加します]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1800,15 +1749,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_async_function_or_method_must_have_a_valid_awaitable_return_type_1057" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[An async function or method must have a valid awaitable return type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非同期関数または非同期メソッドには、有効で待機可能な戻り値の型を指定する必要があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_in_2697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.]]></Val>
@@ -1911,11 +1851,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_export_declaration_can_only_be_used_in_a_module_1233" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_export_declaration_can_only_be_used_at_the_top_level_of_a_module_1474" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An export declaration can only be used in a module.]]></Val>
+          <Val><![CDATA[An export declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポート宣言はモジュールでのみ使用可能です。]]></Val>
+            <Val><![CDATA[エクスポート宣言は、モジュールの最上位レベルでのみ使用できます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_export_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module_1233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An export declaration can only be used at the top level of a namespace or module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[エクスポート宣言は、名前空間またはモジュールの最上位レベルでのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1995,11 +1944,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_import_declaration_can_only_be_used_in_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_import_declaration_can_only_be_used_at_the_top_level_of_a_module_1473" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An import declaration can only be used in a namespace or module.]]></Val>
+          <Val><![CDATA[An import declaration can only be used at the top level of a module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インポート宣言は名前空間またはモジュールでのみ使用可能です。]]></Val>
+            <Val><![CDATA[インポート宣言は、モジュールの最上位レベルでのみ使用できます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_import_declaration_can_only_be_used_at_the_top_level_of_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An import declaration can only be used at the top level of a namespace or module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート宣言は、名前空間またはモジュールの最上位レベルでのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2018,15 +1976,6 @@
           <Val><![CDATA[An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[インポート パスの末尾を拡張子 '{0}' にすることはできません。代わりに '{1}' のインポートをご検討ください。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";An_index_expression_argument_must_be_of_type_string_number_symbol_or_any_2342" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックス式の引数の型は、'string'、'number'、'symbol' または 'any' である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2175,11 +2124,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode_1117" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_object_literal_cannot_have_multiple_properties_with_the_same_name_1117" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An object literal cannot have multiple properties with the same name in strict mode.]]></Val>
+          <Val><![CDATA[An object literal cannot have multiple properties with the same name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[厳格モードでは、オブジェクト リテラルに同じ名前の複数のプロパティを指定することはできません。]]></Val>
+            <Val><![CDATA[オブジェクト リテラルに同じ名前の複数のプロパティを指定することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2265,15 +2214,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Annotate_with_types_from_JSDoc_95010" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Annotate with types from JSDoc]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc の型で注釈を付けます]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Another_export_default_is_here_2753" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Another export default is here.]]></Val>
@@ -2313,11 +2253,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Argument_of_dynamic_import_cannot_be_spread_element_1325" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Argument of dynamic import cannot be spread element.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[動的インポートの引数にスプレッド要素は指定できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_2345" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Argument of type '{0}' is not assignable to parameter of type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[型 '{0}' の引数を型 '{1}' のパラメーターに割り当てることはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_tr_2379" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' の引数を、'exactOptionalPropertyTypes: true' が指定されている型 '{1}' のパラメーターに割り当てることはできません。ターゲットのプロパティの型に 'undefined' を追加することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2961,6 +2919,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_find_name_0_Did_you_mean_to_write_this_in_an_async_function_2311" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find name '{0}'. Did you mean to write this in an async function?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[名前 '{0}' が見つかりません。これを非同期関数に書き込むということですか?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2583" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to '{1}' or later.]]></Val>
@@ -3053,6 +3020,15 @@
           <Val><![CDATA[Cannot find namespace '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[名前空間 '{0}' が見つかりません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_namespace_0_Did_you_mean_1_2833" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find namespace '{0}'. Did you mean '{1}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' という名前空間は見つかりません。'{1}' ですか?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3216,6 +3192,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_start_a_function_call_in_a_type_annotation_1441" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot start a function call in a type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型の注釈で関数呼び出しを開始することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_update_output_of_project_0_because_there_was_error_reading_file_1_6376" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot update output of project '{0}' because there was error reading file '{1}']]></Val>
@@ -3230,6 +3215,15 @@
           <Val><![CDATA[Cannot use JSX unless the '--jsx' flag is provided.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['--jsx' フラグが指定されていないと、JSX を使用できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_use_export_import_on_a_type_or_type_only_namespace_when_the_isolatedModules_flag_is_provided_1269" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['--isolatedModules' フラグが指定されている場合、型または型専用の名前空間で 'export import' を使用することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3564,20 +3558,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Classes_containing_abstract_methods_must_be_marked_abstract_2514" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Classes containing abstract methods must be marked abstract.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[抽象メソッドを含むクラスは abstract に指定する必要があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Classes_may_not_have_a_field_named_constructor_18006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Classes may not have a field named 'constructor'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[クラスに 'constructor' という名前のフィールドを含めることはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of__1210" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[クラスに含まれるコードは JavaScript の厳格モードで評価されます。このモードでは、'{0}' の使用は許可されません。詳細については、「https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode」を参照してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3636,6 +3630,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Compiler_option_0_of_value_1_is_unstable_Use_nightly_TypeScript_to_silence_this_error_Try_updating_w_4124" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[値 '{1}' のコンパイラ オプション '{0}' が不安定です。夜間 TypeScript を使用して、このエラーを無効にします。'npm install -D typescript@next' を使用して更新してみてください。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Compiler_option_0_requires_a_value_of_type_1_5024" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compiler option '{0}' requires a value of type {1}.]]></Val>
@@ -3656,10 +3659,13 @@
       </Item>
       <Item ItemId=";Compiles_the_TypeScript_project_located_at_the_specified_path_6927" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Compiles the TypeScript project located at the specified path]]></Val>
+          <Val><![CDATA[Compiles the TypeScript project located at the specified path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[指定されたパスにある TypeScript プロジェクトのコンパイル]]></Val>
+            <Val><![CDATA[指定されたパスにある TypeScript プロジェクトをコンパイルします。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Compiles the TypeScript project located at the specified path]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3674,10 +3680,13 @@
       </Item>
       <Item ItemId=";Compiles_the_current_project_with_additional_settings_6929" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Compiles the current project, with additional settings]]></Val>
+          <Val><![CDATA[Compiles the current project, with additional settings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[追加の設定を使用して、現在のプロジェクトをコンパイルします]]></Val>
+            <Val><![CDATA[追加の設定を使用して、現在のプロジェクトをコンパイルします。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Compiles the current project, with additional settings]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4005,15 +4014,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Convert_function_0_to_class_95002" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Convert function '{0}' to class]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[関数 '{0}' をクラスに変換します]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Convert_function_declaration_0_to_arrow_function_95106" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert function declaration '{0}' to arrow function]]></Val>
@@ -4055,6 +4055,15 @@
           <Val><![CDATA[Convert named export to default export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[名前付きエクスポートを既定のエクスポートに変換する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_named_imports_to_default_import_95170" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert named imports to default import]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[名前付きインポートを既定のインポートに変換する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4104,11 +4113,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Convert_to_ES6_module_95017" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Convert_to_ES_module_95017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Convert to ES6 module]]></Val>
+          <Val><![CDATA[Convert to ES module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ES6 モジュールに変換します]]></Val>
+            <Val><![CDATA[ES モジュールに変換する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4542,6 +4551,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Decorator_function_return_type_0_is_not_assignable_to_type_1_1270" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorator function return type '{0}' is not assignable to type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[デコレーター関数の戻り値の型 '{0}' は、型 '{1}' に割り当てられません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Decorator_function_return_type_is_0_but_is_expected_to_be_void_or_any_1271" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorator function return type is '{0}' but is expected to be 'void' or 'any'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[デコレーター関数の戻り値の型は '{0}' ですが、"void" または "any" である必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Decorators_are_not_valid_here_1206" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Decorators are not valid here.]]></Val>
@@ -4565,6 +4592,15 @@
           <Val><![CDATA[Decorators may not be applied to 'this' parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[デコレーターを ' this ' パラメーターに適用することができない場合があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Decorators_must_precede_the_name_and_all_keywords_of_property_declarations_1436" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorators must precede the name and all keywords of property declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[デコレーターは、プロパティ宣言の名前とすべてのキーワードの前に置く必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4623,11 +4659,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Delete_all_unused_param_tags_95172" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused '@param' tags]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[未使用の '@param' タグをすべて削除します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[すべてのプロジェクトの出力を削除します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Delete_unused_param_tag_0_95171" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete unused '@param' tag '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[未使用の '@param' タグ '{0}' を削除します]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4713,15 +4767,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Did_you_mean_to_parenthesize_this_function_type_1360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Did you mean to parenthesize this function type?]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[この関数型をかっこで囲むことを意図していましたか?]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_1312" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.]]></Val>
@@ -4754,6 +4799,15 @@
           <Val><![CDATA[Directory '{0}' does not exist, skipping all lookups in it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[ディレクトリ '{0}' は存在していません。ディレクトリ内のすべての参照をスキップしています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Directory_0_has_no_containing_package_json_scope_Imports_will_not_resolve_6270" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Directory '{0}' has no containing package.json scope. Imports will not resolve.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ディレクトリ '{0}' には package.json のスコープが含まれません。インポートは解決されません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4797,11 +4851,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Disable_emitting_file_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Disable_emitting_files_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable emitting file from a compilation.]]></Val>
+          <Val><![CDATA[Disable emitting files from a compilation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[コンパイルからのファイルの生成を無効にします。]]></Val>
+            <Val><![CDATA[コンパイルからのファイルの出力を無効にします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5139,6 +5193,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Duplicate_identifier_0_Compiler_reserves_name_1_when_emitting_super_references_in_static_initializer_2818" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[識別子 '{0}' が重複しています。静的初期化子で 'super' 参照を出力するときに、コンパイラは名前 '{1}' を予約します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions_2520" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.]]></Val>
@@ -5171,15 +5234,6 @@
           <Val><![CDATA[Duplicate identifier '_newTarget'. Compiler uses variable declaration '_newTarget' to capture 'new.target' meta-property reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[識別子 '_newTarget' が重複しています。コンパイラは変数宣言 '_newTarget' を使用して、'new.target' メタプロパティの参照をキャプチャします。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Duplicate_identifier_super_Compiler_uses_super_to_capture_base_class_reference_2401" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[識別子 '_super' が重複しています。コンパイラは '_super' を使用して基底クラスの参照をキャプチャします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5235,15 +5289,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_import_must_have_one_specifier_as_an_argument_1324" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Dynamic import must have one specifier as an argument.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[動的インポートには、引数として 1 つの指定子を指定する必要があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0_7036" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import's specifier must be of type 'string', but here has type '{0}'.]]></Val>
@@ -5253,11 +5298,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system__1323" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[動的インポートは、'--module' フラグが 'es2020'、'esnext'、'commonjs'、'amd'、'system'、'umd' に設定されている場合にのみサポートされます。]]></Val>
+            <Val><![CDATA[動的インポートは、'--module' フラグが 'es2022'、'es2020'、'esnext'、'commonjs'、'amd'、'system'、'umd'、'node12'、'nodenext' に設定されている場合にのみサポートされます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments_1450" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dynamic imports can only accept a module specifier and an optional assertion as arguments]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[動的インポートでは、引数として、モジュール指定子とオプションのアサーションのみを受け取ることができます]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_or_nodenext_1324" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['--module' オプションが 'esnext' または 'nodenext' に設定されている場合、動的インポートは 2 番目の引数のみをサポートします。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5424,11 +5487,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enable_color_and_formatting_in_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable color and formatting in output to make compiler errors easier to read]]></Val>
+          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[コンパイラ エラーを読みやすくするために出力の色と書式設定を有効にします]]></Val>
+            <Val><![CDATA[TypeScript の出力で色と書式設定を有効にして、コンパイラ エラーを読みやすくする]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5613,15 +5676,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enables_experimental_support_for_ES7_async_functions_6068" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enables experimental support for ES7 async functions.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ES7 非同期関数用の実験的なサポートを有効にします。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Enables_experimental_support_for_ES7_decorators_6065" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enables experimental support for ES7 decorators.]]></Val>
@@ -5778,20 +5832,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enum_type_0_circularly_references_itself_2586" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enum type '{0}' circularly references itself.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[列挙型 '{0}' は、それ自体を循環参照します。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Enum_type_0_has_members_with_initializers_that_are_not_literals_2535" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enum type '{0}' has members with initializers that are not literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[列挙型 '{0}' に、リテラルではない初期化子を持つメンバーがあります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Errors_Files_6041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Errors  Files]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[エラーの発生したファイル]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5886,6 +5940,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_for_property_initializer_1442" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected '=' for property initializer.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[プロパティ初期化子には '=' を期待しています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_type_of_0_field_in_package_json_to_be_1_got_2_6105" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.]]></Val>
@@ -5964,20 +6027,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_2656" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Export_specifier_0_does_not_exist_in_package_json_scope_at_path_1_6276" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.]]></Val>
+          <Val><![CDATA[Export specifier '{0}' does not exist in package.json scope at path '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた外部パッケージの型指定のファイル '{0}' はモジュールではありません。パッケージ定義を更新する場合は、パッケージの作成者にお問い合わせください。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_pack_2654" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[エクスポートされた外部パッケージの型指定のファイルにトリプルスラッシュ参照を含めることはできません。パッケージ定義を更新する場合は、パッケージの作成者にお問い合わせください。]]></Val>
+            <Val><![CDATA[エクスポート指定子 '{0}' がパス '{1}' の package.json のスコープに存在しません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6077,15 +6131,6 @@
           <Val><![CDATA[Expression resolves to '_super' that compiler uses to capture base class reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[式は、コンパイラが基底クラスの参照をキャプチャするために使用する '_super' に解決されます。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions_2521" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Expression resolves to variable declaration '{0}' that compiler uses to support async functions.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[式は、コンパイラが非同期関数をサポートするために使用する変数宣言 '{0}' に解決されます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6342,11 +6387,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module_80001" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[File is a CommonJS module; it may be converted to an ES6 module.]]></Val>
+          <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ファイルは CommonJS モジュールです。ES6 モジュールに変換される可能性があります。]]></Val>
+            <Val><![CDATA[ファイルは CommonJS モジュールです。ES モジュールに変換される可能性があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6582,6 +6627,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Found_0_errors_in_1_files_6261" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found {0} errors in {1} files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{1} ファイルに {0} 件のエラーが見つかりました。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_0_errors_in_the_same_file_starting_at_Colon_1_6260" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found {0} errors in the same file, starting at: {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[同じファイル内に {0} 件のエラーが見つかりました。{1} から開始します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Found_1_error_6216" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found 1 error.]]></Val>
@@ -6596,6 +6659,15 @@
           <Val><![CDATA[Found 1 error. Watching for file changes.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[1 件のエラーが見つかりました。ファイルの変更をモニタリングしています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Found_1_error_in_1_6259" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Found 1 error in {1}]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{1} で 1 件のエラーが見つかりました]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6834,15 +6906,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher_1220" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Generators are only available when targeting ECMAScript 2015 or higher.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ジェネレーターは、ECMAScript 2015 以上を対象にする場合のみ使用できます。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Generic_type_0_requires_1_type_argument_s_2314" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generic type '{0}' requires {1} type argument(s).]]></Val>
@@ -7011,6 +7074,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_decl_7058" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' パッケージが実際にこのモジュールを公開する場合は、'declare module '{1}';' を含む新しい宣言 (d.ts) ファイルを追加してみてください。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Ignore this error message]]></Val>
@@ -7025,10 +7097,13 @@
       </Item>
       <Item ItemId=";Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options_6924" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
+          <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[tsconfig.json を無視し、既定のコンパイラ オプションを使用して指定されたファイルをコンパイルします]]></Val>
+            <Val><![CDATA[tsconfig.json を無視し、既定のコンパイラ オプションを使用して指定されたファイルをコンパイルします。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7092,15 +7167,48 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_0_from_module_1_90013" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_0_from_1_90013" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import '{0}' from module "{1}"]]></Val>
+          <Val><![CDATA[Import '{0}' from "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール "{1}" から '{0}' をインポートする]]></Val>
+            <Val><![CDATA["{1}" から `{0}` をインポートします。]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Import '{0}' from module "{1}".]]></Val>
-          </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertion_values_must_be_string_literal_expressions_2837" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertion values must be string literal expressions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート アサーションの値は、文字列リテラル式である必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertions_are_not_allowed_on_statements_that_transpile_to_commonjs_require_calls_2836" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertions are not allowed on statements that transpile to commonjs 'require' calls.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート アサーションは、commonjs 'require' 呼び出しに変換するステートメントでは許可されません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext_2821" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート アサーションは、'--module' オプションが 'esnext' または 'nodenext' に設定されている場合にのみサポートされます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertions_cannot_be_used_with_type_only_imports_or_exports_2822" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertions cannot be used with type-only imports or exports.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート アサーションは、型のみのインポートまたはエクスポートでは使用できません。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7143,15 +7251,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_default_0_from_module_1_90032" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール "{1}" から既定の '{0}' をインポートする]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Import_emit_helpers_from_tslib_6139" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Import emit helpers from 'tslib'.]]></Val>
@@ -7187,6 +7286,15 @@
           <Val><![CDATA[Import or export declaration in an ambient module declaration cannot reference module through relative module name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[アンビエント モジュール宣言内のインポート宣言またはエクスポート宣言は、相対モジュール名を通してモジュールを参照することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_specifier_0_does_not_exist_in_package_json_scope_at_path_1_6271" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import specifier '{0}' does not exist in package.json scope at path '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インポート指定子 '{0}' がパス '{1}' の package.json のスコープに存在しません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7313,6 +7421,15 @@
           <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[インデックス署名の結果に '未定義' を含めます]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Includes_imports_of_types_referenced_by_0_90054" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Includes imports of types referenced by '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' によって参照される型のインポートを含む]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7527,6 +7644,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interface_must_be_given_a_name_1438" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Interface must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インターフェイスに名前を指定する必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interface_name_cannot_be_0_2427" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Interface name cannot be '{0}'.]]></Val>
@@ -7566,6 +7692,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Invalid_import_specifier_0_has_no_possible_resolutions_6272" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid import specifier '{0}' has no possible resolutions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[無効なインポート指定子 '{0}' には解決策がありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augm_2665" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Invalid module name in augmentation. Module '{0}' resolves to an untyped module at '{1}', which cannot be augmented.]]></Val>
@@ -7589,15 +7724,6 @@
           <Val><![CDATA[Invalid 'reference' directive syntax.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[無効な 'reference' ディレクティブ構文です。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode_1210" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Invalid use of '{0}'. Class definitions are automatically in strict mode.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' の使用が無効です。クラス定義は自動的に厳格モードになります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7737,15 +7863,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSDoc_type_0_circularly_references_itself_2587" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSDoc type '{0}' circularly references itself.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSDoc 型 '{0}' は、それ自体を循環参照します。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags_8021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>
@@ -7773,11 +7890,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSX_attribute_expected_17003" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";JSON_imports_are_experimental_in_ES_module_mode_imports_7062" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[JSX attribute expected.]]></Val>
+          <Val><![CDATA[JSON imports are experimental in ES module mode imports.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSX 属性が必要です。]]></Val>
+            <Val><![CDATA[JSON インポートは、ES モジュール モードのインポートでは試験的な機能です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7796,15 +7913,6 @@
           <Val><![CDATA[JSX element '{0}' has no corresponding closing tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[JSX 要素 '{0}' には対応する終了タグがありません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSX_element_attributes_type_0_may_not_be_a_union_type_2600" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX element attributes type '{0}' may not be a union type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSX 要素属性の型 '{0}' は共用体型ではありません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7847,15 +7955,6 @@
           <Val><![CDATA[JSX element type '{0}' does not have any construct or call signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[JSX 要素型 '{0}' にはコンストラクトも呼び出しシグネチャも含まれていません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements_2605" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX element type '{0}' is not a constructor function for JSX elements.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSX 要素型 '{0}' は JSX 要素のコンストラクター関数ではありません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7967,15 +8066,6 @@
           <Val><![CDATA[Language and Environment]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[言語と環境]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Language_service_is_disabled_9004" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Language service is disabled.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[言語サービスが無効になっています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8271,6 +8361,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール '{0}' はこのコンストラクトではインポートできません。指定子は ES モジュールに対してのみ解決されるため、同期的にインポートすることはできません。代わりに動的インポートを使用します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Module_0_declares_1_locally_but_it_is_exported_as_2_2460" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' declares '{1}' locally, but it is exported as '{2}'.]]></Val>
@@ -8409,6 +8508,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Module_declaration_names_may_only_use_or_quoted_strings_1443" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module declaration names may only use ' or " quoted strings.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[モジュール宣言名で使用できるのは、' または "引用符で囲まれた文字列のみです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Module_name_0_matched_pattern_1_6092" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module name '{0}', matched pattern '{1}'.]]></Val>
@@ -8543,6 +8651,24 @@
           <Val><![CDATA[Namespace '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[名前空間 '{0}' にエクスポートされたメンバー '{1}' がありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Namespace_must_be_given_a_name_1437" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Namespace must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[名前空間に名前を指定する必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Namespace_name_cannot_be_0_2819" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Namespace name cannot be '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[名前空間名を '{0}' にすることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8898,18 +9024,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_clas_9002" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[クラス 'extends' 句で現在サポートされているのは、オプションの型引数が指定された ID/完全修飾名のみです。]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
@@ -9045,15 +9159,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Option_0_should_have_array_of_strings_as_a_value_6103" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' should have array of strings as a value.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[オプション '{0}' には、値として文字列の配列を指定する必要があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Option_build_must_be_the_first_command_line_argument_6369" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '--build' must be the first command line argument.]]></Val>
@@ -9089,6 +9194,15 @@
           <Val><![CDATA[Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['isolatedModules' が有効になっているときは、オプション 'preserveConstEnums' を無効にできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[オプションの "preserveValueImports" は "module" が "es2015" か、またはそれ以降に設定されている時のみ、使用することができます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9678,6 +9792,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed_1449" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Preserve unused imported values in the JavaScript output that would otherwise be removed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[さもなければ削除されてしまう JavaScript のアウトプット中の使われていないインポートされた値を保持します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Print_all_of_the_files_read_during_the_compilation_6653" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Print all of the files read during the compilation.]]></Val>
@@ -9791,6 +9914,15 @@
           <Val><![CDATA[Private identifiers are not allowed outside class bodies.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[private 識別子は、クラス本体の外では許可されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member__1451" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[プライベート識別子はクラス本体でのみ許可され、クラス メンバー宣言、プロパティ アクセス、または 'in' 式の左側でのみ使用できます]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9951,15 +10083,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Projects_to_reference_6300" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Projects to reference]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[参照するプロジェクト]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Property_0_cannot_have_an_initializer_because_it_is_marked_abstract_1267" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' cannot have an initializer because it is marked abstract.]]></Val>
@@ -9974,15 +10097,6 @@
           <Val><![CDATA[Property '{0}' comes from an index signature, so it must be accessed with ['{0}']5D;.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[プロパティ '{0}' はインデックス シグネチャに基づいているため、['{0}']5D; を使用してアクセスする必要があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_does_not_exist_on_const_enum_1_2479" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' が 'const' 列挙型 '{1}' に存在しません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10137,15 +10251,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Property_0_is_incompatible_with_rest_element_type_2573" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' is incompatible with rest element type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プロパティ '{0}' は rest 要素の型と互換性がありません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Property_0_is_missing_in_type_1_2324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' is missing in type '{1}'.]]></Val>
@@ -10250,15 +10355,6 @@
           <Val><![CDATA[Property '{0}' is used before its initialization.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[プロパティ '{0}' が初期化前に使用されています。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_may_not_be_used_in_a_static_property_s_initializer_in_the_same_class_when_target_is_esnex_2810" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[' target ' が ' esnext ' で、' useesb Forclassfields ' が ' false ' の場合、プロパティ ' {0} ' を同じクラスにある静的プロパティの初期化子で使用することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10376,15 +10472,6 @@
           <Val><![CDATA[Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['for-of' の iterable、spread、'ES5' や 'ES3' をターゲットとする場合は destructuring に対してフル サポートを提供します。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Provides_a_root_package_name_when_using_outFile_with_declarations_1390" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Provides a root package name when using outFile with declarations.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣言で outFile を使用する場合、ルート パッケージ名を指定します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10587,6 +10674,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2834" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[相対インポート パスでは、'--moduleResolution' が 'node12' または 'nodenext' の場合、EcmaScript インポートに明示的なファイル拡張子が必要です。インポート パスに拡張機能を追加することを検討してください。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Relative_import_paths_need_explicit_file_extensions_in_EcmaScript_imports_when_moduleResolution_is_n_2835" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[相対インポート パスでは、'--moduleResolution' が 'node12' または 'nodenext' の場合、EcmaScript インポートに明示的なファイル拡張子が必要です。'{0}' ということですか?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_a_list_of_directories_from_the_watch_process_6628" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove a list of directories from the watch process.]]></Val>
@@ -10713,6 +10818,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Remove_type_from_import_declaration_from_0_90055" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove 'type' from import declaration from "{0}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" からインポート宣言から `type` を削除します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_type_from_import_of_0_from_1_90056" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove 'type' from import of '{0}' from "{1}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{1}" から `{0}` のインポートから `type` を削除します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Remove_type_parameters_90012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove type parameters]]></Val>
@@ -10781,6 +10904,15 @@
           <Val><![CDATA[Remove variable statement]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[変数のステートメントを削除します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Rename_param_tag_name_0_to_1_95173" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rename '@param' tag name '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['@param' タグ名の名前を '{0}' から '{1}' に変更します]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10902,20 +11034,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolution_modes_are_only_supported_when_moduleResolution_is_node12_or_nodenext_1452" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[解決モードは、"moduleResolution" が "node12" または "nodenext" の場合にのみサポートされます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols_6195" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['keyof' を文字列値のプロパティ名のみに解決します (数字または記号なし)。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Resolving_from_node_modules_folder_6118" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolving from node_modules folder...]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[node_modules フォルダーから解決しています...]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10995,15 +11127,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolving_using_primary_search_paths_6117" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolving using primary search paths...]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[プライマリ検索パスを使用して解決しています...]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Resolving_with_primary_search_path_0_6121" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolving with primary search path '{0}'.]]></Val>
@@ -11030,15 +11153,6 @@
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[rest パラメーター '{0}' の型は暗黙的に 'any[]5D;' 型ですが、使い方からより良い型を推論する場合があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Rest_signatures_are_incompatible_2572" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Rest signatures are incompatible.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[rest シグネチャには互換性がありません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11679,24 +11793,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature_2382" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Specialized overload signature is not assignable to any non-specialized signature.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[特殊化されたオーバーロード シグネチャは、特殊化されていないシグネチャに割り当てることはできません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Specifier_of_dynamic_import_cannot_be_spread_element_1325" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Specifier of dynamic import cannot be spread element.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[動的インポートの指定子にはスプレッド要素を指定できません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Specify_ECMAScript_target_version_6015" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify ECMAScript target version.]]></Val>
@@ -12168,15 +12264,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Static_fields_with_private_names_can_t_have_initializers_when_the_useDefineForClassFields_flag_is_no_2805" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--useDefineForClassFields' フラグに 'esnext' の '--target' が指定されていない場合、プライベート名を持つ静的フィールドに初期化子を指定することはできません。'--useDefineForClassFields' フラグを追加することをご検討ください。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Static_members_cannot_reference_class_type_parameters_2302" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Static members cannot reference class type parameters.]]></Val>
@@ -12333,15 +12420,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object_2470" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['Symbol' reference does not refer to the global Symbol constructor object.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['Symbol' 参照は、グローバル シンボル コンストラクター オブジェクトを参照しません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_supp_6704" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.]]></Val>
@@ -12474,18 +12552,6 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['if' ステートメントの本文を空のステートメントにすることはできません。]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_de_1391" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The 'bundledPackageName' option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣言の生成で outFile とノード モジュールの解決を使用する場合、'bundledPackageName' オプションを指定する必要があります。]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12645,11 +12711,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['import.meta' メタプロパティは、'--module' オプションが 'es2020'、'esnext'、または 'system' の場合にのみ許可されます。]]></Val>
+            <Val><![CDATA['import.meta' メタプロパティは、CommonJS 出力にビルドするファイルでは許可されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['import.meta' メタプロパティは、'--module' オプションが 'es2020'、'es2022'、'esnext'、'system'、'node12'、または 'nodenext' の場合にのみ許可されます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12852,11 +12927,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol_2360" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or__2360" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.]]></Val>
+          <Val><![CDATA[The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['in' 式の左辺の型は 'any'、'string'、'number'、または 'symbol' でなければなりません。]]></Val>
+            <Val><![CDATA['in' 式の左側は、プライベート識別子であるか、'any'、'string'、'number'、または 'symbol' 型である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12965,15 +13040,6 @@
           <Val><![CDATA[The property '{0}' cannot be accessed on type '{1}' within this class because it is shadowed by another private identifier with the same spelling.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[同じスペルの別の private 識別子によってシャドウされているため、このクラス内の型 '{1}' ではプロパティ '{0}' にアクセスできません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";The_return_type_of_a_JSX_element_constructor_must_return_an_object_type_2601" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The return type of a JSX element constructor must return an object type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[JSX 要素コンストラクターの戻り値の型は、オブジェクト型を返す必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13107,15 +13173,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_target_of_an_assignment_must_be_a_variable_or_a_property_access_2541" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The target of an assignment must be a variable or a property access.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[代入式のターゲットは、変数またはプロパティ アクセスである必要があります。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_target_of_an_object_rest_assignment_may_not_be_an_optional_property_access_2778" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment may not be an optional property access.]]></Val>
@@ -13161,11 +13218,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_typ_2453" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.]]></Val>
+          <Val><![CDATA[The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型パラメーター '{0}' の型引数を使用法から推論することはできません。型引数を明示的に指定してください。]]></Val>
+            <Val><![CDATA[名前付きエクスポートで、export ステートメントに 'export type' が使用されている場合、'type' 修飾子は使用できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[名前付きインポートで、import ステートメントに 'import type' が使用されている場合、'type' 修飾子は使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13175,6 +13241,15 @@
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[関数の宣言の型は、関数のシグネチャと一致する必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The type of this node cannot be serialized because its property '{0}' cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このノードの種類は、そのプロパティ '{0}' をシリアル化できないため、シリアル化できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13359,6 +13434,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base__4122" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このメンバーは、基底クラス '{0}' で宣言されていないため、このメンバーに '@override' タグを含む JSDoc コメントを指定することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base__4123" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このメンバーは、基底クラス '{0}' で宣言されていないため、このメンバーに 'override' タグを含む JSDoc コメントを指定することはできません。'{1}' ということですか?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_containing_class_0_does_not_4121" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このメンバーを含んでいるクラス '{0}' が別のクラスを拡張していないため、このメンバーに '@override' タグを含む JSDoc コメントを指定することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_4113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.]]></Val>
@@ -13382,6 +13484,15 @@
           <Val><![CDATA[This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[このメンバーを含んでいるクラス '{0}' が別のクラスを拡張していないため、このメンバーに 'override' 修飾子を指定することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_4119" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このメンバーには、基底クラス '{0}' のメンバーをオーバーライドするため、'@override' タグを含む JSDoc コメントが必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13440,6 +13551,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_parameter_property_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_4120" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このパラメーター プロパティには、基底クラス '{0}' のメンバーをオーバーライドするため、'@override' タグを含む JSDoc コメントが必要です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0_4115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This parameter property must have an 'override' modifier because it overrides a member in base class '{0}'.]]></Val>
@@ -13454,6 +13574,24 @@
           <Val><![CDATA[This spread always overwrites this property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[このスプレッドは、常にこのプロパティを上書きします。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_cons_7060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[この構文は、拡張子が .mts または .cts のファイルで予約されています。末尾のコンマまたは明示的な制約を追加します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead_7059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[この構文は、拡張子が .mts または .cts のファイルで予約されています。代わりに `as` 式を使用してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13485,11 +13623,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_t_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[トップレベルの 'await' 式は、'module' オプションが 'esnext' または 'system' に設定されていて、'target' オプションが 'es2017' 以上に設定されている場合にのみ使用できます。]]></Val>
+            <Val><![CDATA[トップレベルの 'await' 式は、'module' オプションが 'es2022'、'esnext'、'system'、または 'nodenext' に設定されていて、'target' オプションが 'es2017' 以上に設定されている場合にのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13503,11 +13641,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or__1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[トップレベルの 'for await' ループは、'module' オプションが 'esnext' または 'system' に設定されていて、'target' オプションが 'es2017' 以上に設定されている場合にのみ使用できます。]]></Val>
+            <Val><![CDATA[トップレベルの 'for await' ループは、'module' オプションが 'es2022'、'esnext'、'system'、または 'nodenext' に設定されていて、'target' オプションが 'es2017' 以上に設定されている場合にのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13659,6 +13797,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_0_has_no_signatures_for_which_the_type_argument_list_is_applicable_2635" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' has no signatures for which the type argument list is applicable.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' には、型引数リストを適用できるシグネチャがありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_0_is_missing_the_following_properties_from_type_1_Colon_2_2739" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
@@ -13749,11 +13896,38 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_Did_you_mean_2_2820" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' を型 '{1}' に割り当てることはできません。'{2}' でよろしいですか?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated_2719" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is not assignable to type '{1}'. Two different types with this name exist, but they are unrelated.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[型 '{0}' は型 '{1}' に割り当てられません。同じ名前で 2 つの異なる型が存在しますが、これは関連していません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefi_2375" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' を、'exactOptionalPropertyTypes: true' が指定されている型 '{1}' に割り当てることはできません。ターゲットのプロパティの型に 'undefined' を追加することを検討してください。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefi_2412" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' を、'exactOptionalPropertyTypes: true' が指定されている型 '{1}' に割り当てることはできません。ターゲットの型に 'undefined' を追加することを検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13833,6 +14007,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_alias_must_be_given_a_name_1439" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type alias must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型のエイリアスには名前を指定する必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_alias_name_cannot_be_0_2457" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type alias name cannot be '{0}'.]]></Val>
@@ -13868,15 +14051,6 @@
           <Val><![CDATA[Type annotations can only be used in TypeScript files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[型の注釈は、TypeScript ファイルでのみ使用できます。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0_2455" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型引数の候補 '{1}' は、候補 '{0}' のスーパータイプではないため、有効な型引数ではありません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13976,6 +14150,15 @@
           <Val><![CDATA[Type expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[型が必要です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_import_assertions_should_have_exactly_one_key_resolution_mode_with_value_import_or_require_1456" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型インポート アサーションには、キー `resolution-mode` が 1 つだけ必要です。値は `import` または `require` です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14370,6 +14553,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unexpected_keyword_or_identifier_1434" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unexpected keyword or identifier.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[予期しないキーワードまたは識別子です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Unexpected_token_1012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token.]]></Val>
@@ -14460,6 +14652,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unknown_keyword_or_identifier_Did_you_mean_0_1435" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unknown keyword or identifier. Did you mean '{0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[不明なキーワードまたは識別子。'{0}' を意味していましたか?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Unknown_option_excludes_Did_you_mean_exclude_6114" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Unknown option 'excludes'. Did you mean 'exclude'?]]></Val>
@@ -14510,15 +14711,6 @@
           <Val><![CDATA[Unreachable code detected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[到達できないコードが検出されました。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Unsupported_locale_0_6049" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Unsupported locale '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[ロケール '{0}' はサポートされていません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14591,6 +14783,15 @@
           <Val><![CDATA[Unused '@ts-expect-error' directive.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['@ts-expect-error' ディレクティブが使用されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Update_import_from_0_90058" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Update import from "{0}"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" からのインポートの更新]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14766,6 +14967,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Variable_declaration_not_allowed_at_this_location_1440" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variable declaration not allowed at this location.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[変数の宣言はこの場所では許可されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Variadic_element_at_position_0_in_source_does_not_match_element_at_position_1_in_target_2625" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Variadic element at position {0} in source does not match element at position {1} in target.]]></Val>
@@ -14784,11 +14994,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file_95110" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Visit https://aka.ms/tsconfig.json to read more about this file]]></Val>
+          <Val><![CDATA[Visit https://aka.ms/tsconfig to read more about this file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[このファイルの詳細については、https://aka.ms/tsconfig.json をご覧ください]]></Val>
+            <Val><![CDATA[このファイルの詳細については、https://aka.ms/tsconfig をご覧ください]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15171,6 +15381,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" は型であり、"preserveValueImports" と "isolatedModules" の両方が有効な場合、型に限定したインポートを使用してインポートされる必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
@@ -15246,6 +15465,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_not_allowed_as_a_parameter_name_1390" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not allowed as a parameter name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' はパラメーター名として使用できません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_not_allowed_as_a_variable_declaration_name_1389" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not allowed as a variable declaration name.]]></Val>
@@ -15305,15 +15533,6 @@
           <Val><![CDATA['{0}' modifier cannot appear on a constructor declaration.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 修飾子はコンストラクター宣言では使用できません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";_0_modifier_cannot_appear_on_a_data_property_1043" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot appear on a data property.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 修飾子はデータ プロパティでは使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15386,15 +15605,6 @@
           <Val><![CDATA['{0}' modifier cannot be used with '{1}' modifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 修飾子と '{1}' 修飾子は同時に使用できません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";_0_modifier_cannot_be_used_with_a_class_declaration_1041" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot be used with a class declaration.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' 修飾子とクラス宣言は同時に使用できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15486,20 +15696,38 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveVa_1446" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" は型に限定した宣言を解決するため、"preserveValueImports" と "isolatedModules" の両方が有効な場合、型に限定したインポートを使用してインポートする必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_isol_1448" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" は型に限定した宣言を解決するため、" isolatedModules" が有効になっているときは、型に限定した再エクスポートを使用して再エクスポートされる必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file_6258" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' should be set inside the 'compilerOptions' object of the config json file]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[config json ファイル の 'compilerOptions' オブジェクト内に '{0}' を設定する必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_tag_already_specified_1223" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' tag already specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' タグは既に指定されています。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";_0_tag_cannot_be_used_independently_as_a_top_level_JSDoc_tag_1253" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' tag cannot be used independently as a top level JSDoc tag.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' タグはトップ レベルの JSDoc タグとして個別に使用することはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15642,11 +15870,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";class_expressions_are_not_currently_supported_9003" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";catch_or_finally_expected_1472" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['class' expressions are not currently supported.]]></Val>
+          <Val><![CDATA['catch' or 'finally' expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['class' 式は現在サポートされていません。]]></Val>
+            <Val><![CDATA['catch' または 'finally' が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15743,15 +15971,6 @@
           <Val><![CDATA['delete' cannot be called on an identifier in strict mode.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[厳格モードでは 'delete' を識別子で呼び出すことはできません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";delete_this_Project_0_is_up_to_date_because_it_was_previously_built_6360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[delete this - Project '{0}' is up to date because it was previously built]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[これを削除します - プロジェクト '{0}' は、以前にビルドされているため、最新の状態です]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15869,15 +16088,6 @@
           <Val><![CDATA['for await' loops are only allowed within async functions and at the top levels of modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['for await' ループは、非同期関数内と、モジュールのトップ レベルでのみ許可されます。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";get_and_set_accessor_must_have_the_same_this_type_2682" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['get' and 'set' accessor must have the same 'this' type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['get' アクセサーおよび 'set' アクセサーには、同じ 'this' 型が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16089,6 +16299,33 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";package_json_scope_0_explicitly_maps_specifier_1_to_null_6274" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' explicitly maps specifier '{1}' to null.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[package.json のスコープ '{0}' は、指定子 '{1}' を明示的に null にマッピングします。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_has_invalid_type_for_target_of_specifier_1_6275" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' has invalid type for target of specifier '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[package.json のスコープ '{0}' は、指定子 '{1}' のターゲットに無効な型です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_has_no_imports_defined_6273" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' has no imports defined.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[package.json のスコープ '{0}' にはインポートが定義されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0_6091" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['paths' option is specified, looking for a pattern to match module name '{0}'.]]></Val>
@@ -16121,6 +16358,33 @@
           <Val><![CDATA['require' call may be converted to an import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['require' の呼び出しはインポートに変換される可能性があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_can_only_be_set_for_type_only_imports_1454" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`resolution-mode` can only be set for type-only imports.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`resolution-mode` は、型のみのインポートに対してのみ設定できます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_is_the_only_valid_key_for_type_import_assertions_1455" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`resolution-mode` is the only valid key for type import assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`resolution-mode` は、型インポート アサーションの唯一の有効なキーです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";resolution_mode_should_be_either_require_or_import_1453" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`resolution-mode` should be either `require` or `import`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["resolution-mode" は "require" または "import" のいずれかにする必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16277,6 +16541,15 @@
           <Val><![CDATA['this' implicitly has type 'any' because it does not have a type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['this' は型として注釈を持たないため、暗黙的に型 'any' になります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";true_for_ES2022_and_above_including_ESNext_6930" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`true` for ES2022 and above, including ESNext.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ESNext を含む ES2022 以降の場合は 'true' です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

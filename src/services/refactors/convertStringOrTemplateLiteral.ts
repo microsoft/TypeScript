@@ -10,11 +10,11 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     };
     registerRefactor(refactorName, {
         kinds: [convertStringAction.kind],
-        getEditsForAction,
-        getAvailableActions
+        getEditsForAction: getRefactorEditsToConvertToTemplateString,
+        getAvailableActions: getRefactorActionsToConvertToTemplateString
     });
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+    function getRefactorActionsToConvertToTemplateString(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
@@ -48,7 +48,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return node;
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertToTemplateString(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
 
@@ -147,61 +147,84 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         }
     };
 
-    function concatConsecutiveString(index: number, nodes: readonly Expression[]): [number, string, number[]] {
+    function escapeRawStringForTemplate(s: string) {
+        // Escaping for $s in strings that are to be used in template strings
+        // Naive implementation: replace \x by itself and otherwise $ and ` by \$ and \`.
+        // But to complicate it a bit, this should work for raw strings too.
+        return s.replace(/\\.|[$`]/g, m => m[0] === "\\" ? m : "\\" + m);
+        // Finally, a less-backslash-happy version can work too, doing only ${ instead of all $s:
+        //     s.replace(/\\.|\${|`/g, m => m[0] === "\\" ? m : "\\" + m);
+        // but `\$${foo}` is likely more clear than the more-confusing-but-still-working `$${foo}`.
+    }
+
+    function getRawTextOfTemplate(node: TemplateHead | TemplateMiddle | TemplateTail) {
+        // in these cases the right side is ${
+        const rightShaving = isTemplateHead(node) || isTemplateMiddle(node) ? -2 : -1;
+        return getTextOfNode(node).slice(1, rightShaving);
+    }
+
+    function concatConsecutiveString(index: number, nodes: readonly Expression[]): [nextIndex: number, text: string, rawText: string, usedIndexes: number[]] {
         const indexes = [];
-        let text = "";
+        let text = "", rawText = "";
         while (index < nodes.length) {
             const node = nodes[index];
             if (isStringLiteralLike(node)) { // includes isNoSubstitutionTemplateLiteral(node)
-                text = text + node.text;
+                text += node.text;
+                rawText += escapeRawStringForTemplate(getTextOfNode(node).slice(1, -1));
                 indexes.push(index);
                 index++;
             }
             else if (isTemplateExpression(node)) {
-                text = text + node.head.text;
+                text += node.head.text;
+                rawText += getRawTextOfTemplate(node.head);
                 break;
             }
             else {
                 break;
             }
         }
-        return [index, text, indexes];
+        return [index, text, rawText, indexes];
     }
 
     function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[], operators: Token<BinaryOperator>[] }, file: SourceFile) {
         const copyOperatorComments = copyTrailingOperatorComments(operators, file);
         const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
-        const [begin, headText, headIndexes] = concatConsecutiveString(0, nodes);
+        const [begin, headText, rawHeadText, headIndexes] = concatConsecutiveString(0, nodes);
 
         if (begin === nodes.length) {
-            const noSubstitutionTemplateLiteral = factory.createNoSubstitutionTemplateLiteral(headText);
+            const noSubstitutionTemplateLiteral = factory.createNoSubstitutionTemplateLiteral(headText, rawHeadText);
             copyCommentFromStringLiterals(headIndexes, noSubstitutionTemplateLiteral);
             return noSubstitutionTemplateLiteral;
         }
 
         const templateSpans: TemplateSpan[] = [];
-        const templateHead = factory.createTemplateHead(headText);
+        const templateHead = factory.createTemplateHead(headText, rawHeadText);
         copyCommentFromStringLiterals(headIndexes, templateHead);
 
         for (let i = begin; i < nodes.length; i++) {
             const currentNode = getExpressionFromParenthesesOrExpression(nodes[i]);
             copyOperatorComments(i, currentNode);
 
-            const [newIndex, subsequentText, stringIndexes] = concatConsecutiveString(i + 1, nodes);
+            const [newIndex, subsequentText, rawSubsequentText, stringIndexes] = concatConsecutiveString(i + 1, nodes);
             i = newIndex - 1;
             const isLast = i === nodes.length - 1;
 
             if (isTemplateExpression(currentNode)) {
                 const spans = map(currentNode.templateSpans, (span, index) => {
                     copyExpressionComments(span);
-                    const nextSpan = currentNode.templateSpans[index + 1];
-                    const text = span.literal.text + (nextSpan ? "" : subsequentText);
-                    return factory.createTemplateSpan(span.expression, isLast ? factory.createTemplateTail(text) : factory.createTemplateMiddle(text));
+                    const isLastSpan = index === currentNode.templateSpans.length - 1;
+                    const text = span.literal.text + (isLastSpan ? subsequentText : "");
+                    const rawText = getRawTextOfTemplate(span.literal) + (isLastSpan ? rawSubsequentText : "");
+                    return factory.createTemplateSpan(span.expression, isLast && isLastSpan
+                        ? factory.createTemplateTail(text, rawText)
+                        : factory.createTemplateMiddle(text, rawText));
                 });
                 templateSpans.push(...spans);
             }
             else {
-                const templatePart = isLast ? factory.createTemplateTail(subsequentText) : factory.createTemplateMiddle(subsequentText);
+                const templatePart = isLast
+                    ? factory.createTemplateTail(subsequentText, rawSubsequentText)
+                    : factory.createTemplateMiddle(subsequentText, rawSubsequentText);
                 copyCommentFromStringLiterals(stringIndexes, templatePart);
                 templateSpans.push(factory.createTemplateSpan(currentNode, templatePart));
             }

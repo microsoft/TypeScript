@@ -45,7 +45,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
   Imported via "./Xy" from file 'b.ts'
@@ -151,7 +151,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
   Imported via "./Xy" from file 'b.ts'
