@@ -661,7 +661,7 @@ namespace ts {
                     !(node as FunctionLikeDeclaration).asteriskToken && !!getImmediatelyInvokedFunctionExpression(node);
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
-                if (!isIIFE) {
+                if (!isIIFE && node.kind !== SyntaxKind.ClassStaticBlockDeclaration) {
                     currentFlow = initFlowNode({ flags: FlowFlags.Start });
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
                         currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
