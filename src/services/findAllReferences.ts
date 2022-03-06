@@ -1525,7 +1525,7 @@ namespace ts.FindAllReferences {
                     addClassStaticThisReferences(referenceLocation, search, state);
                     break;
                 default:
-                    throw new Error("never");
+                    Debug.assertNever(state.specialSearchKind);
             }
 
             // Use the parent symbol if the location is commonjs require syntax on javascript files only.
