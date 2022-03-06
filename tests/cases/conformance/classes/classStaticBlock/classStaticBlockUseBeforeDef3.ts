@@ -41,3 +41,5 @@ class CFA {
         u;  // should be "BAR"
     }
 }
+
+u;  // should be "BAR"

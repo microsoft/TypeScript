@@ -80,6 +80,10 @@ class CFA {
 
     static {
         u;  // should be "BAR"
->u : "FOO" | "BAR"
+>u : "BAR"
     }
 }
+
+u;  // should be "BAR"
+>u : "BAR"
+
