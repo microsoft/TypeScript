@@ -346,9 +346,6 @@ namespace ts {
         let instantiationCount = 0;
         let instantiationDepth = 0;
         let inlineLevel = 0;
-        let varianceLevel = 0;
-        let nestedVarianceSymbols: Symbol[] | undefined;
-        let incompleteVariancesObserved = false;
         let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
@@ -16629,6 +16626,7 @@ namespace ts {
             return result;
         }
 
+
         function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
             const declaration = type.objectFlags & ObjectFlags.Reference ? (type as TypeReference).node! :
                 type.objectFlags & ObjectFlags.InstantiationExpressionType ? (type as InstantiationExpressionType).node :
@@ -16686,15 +16684,16 @@ namespace ts {
         }
 
         function isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node) {
-            // If the type parameter doesn't have exactly one declaration, if there are invening statement blocks
-            // between the node and the type parameter declaration, if the node contains actual references to the
-            // type parameter, or if the node contains type queries, we consider the type parameter possibly referenced.
-            if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
-                const container = tp.symbol.declarations[0].parent;
-                for (let n = node; n !== container; n = n.parent) {
+            // If there are intervening statement blocks between the node and the type parameter declaration, if the node
+            // contains actual references to the type parameter, or if the node contains type queries, we consider the
+            // type parameter possibly referenced.
+            if (tp.symbol && tp.symbol.declarations) {
+                let n = node;
+                while (!some(tp.symbol.declarations, d => n === d.parent)) {
                     if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((n as ConditionalTypeNode).extendsType, containsReference)) {
                         return true;
                     }
+                    n = n.parent;
                 }
                 return containsReference(node);
             }
@@ -19052,16 +19051,13 @@ namespace ts {
                 // We limit alias variance probing to only object and conditional types since their alias behavior
                 // is more predictable than other, interned types, which may or may not have an alias depending on
                 // the order in which things were checked.
-                if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
-                    source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
+                if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
                     const variances = getAliasVariances(source.aliasSymbol);
-                    if (variances === emptyArray) {
-                        return Ternary.Unknown;
-                    }
-                    const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
-                    if (varianceResult !== undefined) {
-                        return varianceResult;
+                    if (variances !== emptyArray) {
+                        const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
+                        if (varianceResult !== undefined) {
+                            return varianceResult;
+                        }
                     }
                 }
 
@@ -19432,26 +19428,21 @@ namespace ts {
                     else if (isGenericMappedType(source)) {
                         return Ternary.False;
                     }
-                    if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target &&
-                        !isTupleType(source) && !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
+                    if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (source as TypeReference).target === (target as TypeReference).target && !isTupleType(source)) {
                         // When strictNullChecks is disabled, the element type of the empty array literal is undefinedWideningType,
                         // and an empty array literal wouldn't be assignable to a `never[]` without this check.
                         if (isEmptyArrayLiteralType(source)) {
                             return Ternary.True;
                         }
-                        // We have type references to the same generic type, and the type references are not marker
-                        // type references (which are intended by be compared structurally). Obtain the variance
-                        // information for the type parameters and relate the type arguments accordingly.
+                        // We have type references to the same generic type. Obtain the variance information for the type
+                        // parameters and relate the type arguments accordingly. If variance information for the type is in
+                        // the process of being computed, fall through and relate the type references structurally.
                         const variances = getVariances((source as TypeReference).target);
-                        // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
-                        // effectively means we measure variance only from type parameter occurrences that aren't nested in
-                        // recursive instantiations of the generic type.
-                        if (variances === emptyArray) {
-                            return Ternary.Unknown;
-                        }
-                        const varianceResult = relateVariances(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), variances, intersectionState);
-                        if (varianceResult !== undefined) {
-                            return varianceResult;
+                        if (variances !== emptyArray) {
+                            const varianceResult = relateVariances(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), variances, intersectionState);
+                            if (varianceResult !== undefined) {
+                                return varianceResult;
+                            }
                         }
                     }
                     else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
@@ -20371,29 +20362,13 @@ namespace ts {
 
         function getVariances(type: GenericType): VarianceFlags[] {
             // Arrays and tuples are known to be covariant, no need to spend time computing this.
-            if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
-                return arrayVariances;
-            }
-            return getVariancesWorker(type.symbol, type.typeParameters, getMarkerTypeReference);
-        }
-
-        // Return a type reference where the source type parameter is replaced with the target marker
-        // type, and flag the result as a marker type reference.
-        function getMarkerTypeReference(symbol: Symbol, source: TypeParameter, target: Type) {
-            const type = getDeclaredTypeOfSymbol(symbol) as GenericType;
-            const result = createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
-            result.objectFlags |= ObjectFlags.MarkerType;
-            return result;
+            return type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple ?
+                arrayVariances :
+                getVariancesWorker(type.symbol, type.typeParameters);
         }
 
         function getAliasVariances(symbol: Symbol) {
-            return getVariancesWorker(symbol, getSymbolLinks(symbol).typeParameters, getMarkerTypeAliasReference);
-        }
-
-        function getMarkerTypeAliasReference(symbol: Symbol, source: TypeParameter, target: Type) {
-            const result = getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, makeUnaryTypeMapper(source, target)));
-            result.aliasTypeArgumentsContainsMarker = true;
-            return result;
+            return getVariancesWorker(symbol, getSymbolLinks(symbol).typeParameters);
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
@@ -20401,15 +20376,10 @@ namespace ts {
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton when invoked recursively for the given generic type.
-        function getVariancesWorker(symbol: Symbol, typeParameters: readonly TypeParameter[] = emptyArray, createMarkerType: (symbol: Symbol, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
+        function getVariancesWorker(symbol: Symbol, typeParameters: readonly TypeParameter[] = emptyArray): VarianceFlags[] {
             const links = getSymbolLinks(symbol);
             if (!links.variances) {
                 tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getSymbolId(symbol) });
-                if (varianceLevel > 0) {
-                    nestedVarianceSymbols = append(nestedVarianceSymbols, symbol);
-                }
-                varianceLevel++;
-                // The emptyArray singleton is used to signal a recursive invocation.
                 links.variances = emptyArray;
                 const variances = [];
                 for (const tp of typeParameters) {
@@ -20443,26 +20413,18 @@ namespace ts {
                     variances.push(variance);
                 }
                 links.variances = variances;
-                varianceLevel--;
-                // Recursive invocations of getVariancesWorker occur when two or more types circularly reference each
-                // other. In such cases, the nested invocations might observe in-process variance computations, i.e.
-                // cases where getVariancesWorker returns emptyArray. If that happens we clear (and thus re-compute) the
-                // results of nested variance computations and only permanently record the outermost result. See #44572.
-                if (varianceLevel === 0) {
-                    if (nestedVarianceSymbols && incompleteVariancesObserved) {
-                        for (const sym of nestedVarianceSymbols) {
-                            getSymbolLinks(sym).variances = undefined;
-                        }
-                    }
-                    nestedVarianceSymbols = undefined;
-                    incompleteVariancesObserved = false;
-                }
                 tracing?.pop();
             }
-            else {
-                incompleteVariancesObserved ||= links.variances === emptyArray;
-            }
             return links.variances;
+        }
+
+        function createMarkerType(symbol: Symbol, source: TypeParameter, target: Type) {
+            const mapper = makeUnaryTypeMapper(source, target);
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getTypeAliasInstantiation(symbol, instantiateTypes(getSymbolLinks(symbol).typeParameters!, mapper));
+            }
+            const type = getDeclaredTypeOfSymbol(symbol) as GenericType;
+            return createTypeReference(type, instantiateTypes(type.typeParameters, mapper));
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
