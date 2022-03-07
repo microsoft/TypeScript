@@ -1518,7 +1518,7 @@ namespace ts {
         }
 
         const set: Set<TElement> = {
-            has: function (element: TElement): boolean {
+            has(element: TElement): boolean {
                 const hash = getHashCode(element);
                 const candidates = multiMap.get(hash);
                 if (candidates) {
@@ -1531,7 +1531,7 @@ namespace ts {
 
                 return false;
             },
-            add: function (element: TElement): Set<TElement> {
+            add(element: TElement): Set<TElement> {
                 const hash = getHashCode(element);
                 const values = multiMap.get(hash);
                 if (values) {
@@ -1542,11 +1542,12 @@ namespace ts {
                 }
                 else {
                     multiMap.set(hash, [ element ]);
+                    size++;
                 }
 
                 return this;
             },
-            delete: function (element: TElement): boolean {
+            delete(element: TElement): boolean {
                 const hash = getHashCode(element);
                 const candidates = multiMap.get(hash);
                 if (candidates) {
@@ -1566,32 +1567,32 @@ namespace ts {
 
                 return false;
             },
-            clear: function (): void {
+            clear(): void {
                 multiMap.clear();
                 size = 0;
             },
             get size() {
                 return size;
             },
-            forEach: function (action: (value: TElement, key: TElement) => void): void {
+            forEach(action: (value: TElement, key: TElement) => void): void {
                 for (const elements of arrayFrom(multiMap.values())) {
                     for (const element of elements) {
                         action(element, element);
                     }
                 }
             },
-            keys: function (): Iterator<TElement> {
+            keys(): Iterator<TElement> {
                 return getElementIterator();
             },
-            values: function (): Iterator<TElement> {
+            values(): Iterator<TElement> {
                 return getElementIterator();
             },
-            entries: function (): Iterator<[TElement, TElement]> {
+            entries(): Iterator<[TElement, TElement]> {
                 const it = getElementIterator();
                 return {
                     next: () => {
                         const n = it.next();
-                        return n.done ? n : { value: [ n.value, n.value ] }
+                        return n.done ? n : { value: [ n.value, n.value ] };
                     }
                 };
             },
