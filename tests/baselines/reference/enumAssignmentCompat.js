@@ -56,15 +56,15 @@ var W;
 var x = W;
 var y = W;
 var z = W; // error
-var a = W.a;
-var b = W.a; // error
-var c = W.a;
+var a = 0 /* W.a */;
+var b = 0 /* W.a */; // error
+var c = 0 /* W.a */;
 var d = 3; // error
 var e = 4;
-var f = W.a; // error
+var f = 0 /* W.a */; // error
 var g = 5; // error
 var h = 3;
-var i = W.a;
-i = W.a;
+var i = 0 /* W.a */;
+i = 0 /* W.a */;
 W.D;
 var p;

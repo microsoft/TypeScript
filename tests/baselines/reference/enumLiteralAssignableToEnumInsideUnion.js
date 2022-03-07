@@ -62,9 +62,9 @@ var Ka;
         Foo[Foo["B"] = 2048] = "B";
     })(Foo = Ka.Foo || (Ka.Foo = {}));
 })(Ka || (Ka = {}));
-var e0 = Y.Foo.A; // ok
-var e1 = Z.Foo.A; // not legal, Z is computed
-var e2 = Z.Foo.A; // still not legal
-var e3 = Z.Foo.A; // not legal
-var e4 = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
-var e5 = Z.Foo.A; // ok
+var e0 = 0 /* Y.Foo.A */; // ok
+var e1 = 2 /* Z.Foo.A */; // not legal, Z is computed
+var e2 = 2 /* Z.Foo.A */; // still not legal
+var e3 = 2 /* Z.Foo.A */; // not legal
+var e4 = 2 /* Z.Foo.A */; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
+var e5 = 2 /* Z.Foo.A */; // ok

@@ -57,9 +57,9 @@ export var AppStyle;
     AppStyle[AppStyle["PivotTable"] = 4] = "PivotTable";
 })(AppStyle || (AppStyle = {}));
 const appTypeStylesWithError = new Map([
-    [AppType.Standard, [AppStyle.Standard, AppStyle.MiniApp]],
-    [AppType.Relationship, [AppStyle.Standard, AppStyle.Tree, AppStyle.TreeEntity]],
-    [AppType.AdvancedList, [AppStyle.Standard, AppStyle.MiniApp]]
+    ["Standard" /* AppType.Standard */, [2 /* AppStyle.Standard */, 3 /* AppStyle.MiniApp */]],
+    ["Relationship" /* AppType.Relationship */, [2 /* AppStyle.Standard */, 0 /* AppStyle.Tree */, 1 /* AppStyle.TreeEntity */]],
+    ["AdvancedList" /* AppType.AdvancedList */, [2 /* AppStyle.Standard */, 3 /* AppStyle.MiniApp */]]
 ]);
 let b1 = foo({ x: true }, { x: false });
 let b2 = foo([true], [false]);

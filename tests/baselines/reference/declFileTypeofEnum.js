@@ -24,7 +24,7 @@ var days;
     days[days["saturday"] = 5] = "saturday";
     days[days["sunday"] = 6] = "sunday";
 })(days || (days = {}));
-var weekendDay = days.saturday;
+var weekendDay = 5 /* days.saturday */;
 var daysOfMonth = days;
 var daysOfYear;
 

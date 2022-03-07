@@ -31,12 +31,12 @@ var MouseButton;
     MouseButton[MouseButton["NO_BUTTON"] = 0] = "NO_BUTTON";
 })(MouseButton = exports.MouseButton || (exports.MouseButton = {}));
 exports.DOMMouseButton = {
-    '-1': MouseButton.NO_BUTTON,
-    "0": MouseButton.LEFT_BUTTON,
-    "1": MouseButton.MIDDLE_BUTTON,
-    "2": MouseButton.RIGHT_BUTTON,
-    "3": MouseButton.XBUTTON1_BUTTON,
-    "4": MouseButton.XBUTTON2_BUTTON
+    '-1': 0 /* MouseButton.NO_BUTTON */,
+    "0": 1 /* MouseButton.LEFT_BUTTON */,
+    "1": 4 /* MouseButton.MIDDLE_BUTTON */,
+    "2": 2 /* MouseButton.RIGHT_BUTTON */,
+    "3": 5 /* MouseButton.XBUTTON1_BUTTON */,
+    "4": 6 /* MouseButton.XBUTTON2_BUTTON */
 };
 
 

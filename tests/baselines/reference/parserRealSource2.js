@@ -510,8 +510,8 @@ var TypeScript;
     })(ModuleGenTarget = TypeScript.ModuleGenTarget || (TypeScript.ModuleGenTarget = {}));
     // Compiler defaults to generating ES5-compliant code for
     //  - getters and setters
-    TypeScript.codeGenTarget = CodeGenTarget.ES3;
-    TypeScript.moduleGenTarget = ModuleGenTarget.Synchronous;
+    TypeScript.codeGenTarget = 0 /* CodeGenTarget.ES3 */;
+    TypeScript.moduleGenTarget = 0 /* ModuleGenTarget.Synchronous */;
     TypeScript.optimizeModuleCodeGen = true;
     function flagsToString(e, flags) {
         var builder = "";

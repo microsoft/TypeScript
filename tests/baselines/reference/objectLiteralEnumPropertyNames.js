@@ -62,12 +62,12 @@ var Strs;
     Strs["B"] = "b";
 })(Strs || (Strs = {}));
 var x = (_a = {},
-    _a[Strs.A] = 'xo',
-    _a[Strs.B] = 'xe',
+    _a["a" /* Strs.A */] = 'xo',
+    _a["b" /* Strs.B */] = 'xe',
     _a);
 var ux = (_b = {},
-    _b[Strs.A] = 'xo',
-    _b[Strs.B] = 'xe',
+    _b["a" /* Strs.A */] = 'xo',
+    _b["b" /* Strs.B */] = 'xe',
     _b);
 var y = (_c = {},
     _c['a'] = 'yo',
@@ -89,12 +89,12 @@ var Nums;
     Nums[Nums["B"] = 1] = "B";
 })(Nums || (Nums = {}));
 var n = (_f = {},
-    _f[Nums.A] = 1,
-    _f[Nums.B] = 2,
+    _f[0 /* Nums.A */] = 1,
+    _f[1 /* Nums.B */] = 2,
     _f);
 var un = (_g = {},
-    _g[Nums.A] = 3,
-    _g[Nums.B] = 4,
+    _g[0 /* Nums.A */] = 3,
+    _g[1 /* Nums.B */] = 4,
     _g);
 var an = 0;
 var bn = 1;

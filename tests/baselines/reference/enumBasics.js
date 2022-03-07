@@ -89,13 +89,13 @@ var E1;
     E1[E1["C"] = 2] = "C";
 })(E1 || (E1 = {}));
 // Enum type is a subtype of Number
-var x = E1.A;
+var x = 0 /* E1.A */;
 // Enum object type is anonymous with properties of the enum type and numeric indexer
 var e = E1;
 var e;
 var e;
 // Reverse mapping of enum returns string name of property 
-var s = E1[e.A];
+var s = E1[0 /* e.A */];
 var s;
 // Enum with only constant members
 var E2;
@@ -150,9 +150,9 @@ var E9;
 // (refer to .js to validate)
 // Enum constant members are propagated
 var doNotPropagate = [
-    E8.B, E7.A, E4.Z, E3.X, E3.Y, E3.Z
+    E8.B, E7.A, E4.Z, E3.X, 7 /* E3.Y */, E3.Z
 ];
 // Enum computed members are not propagated
 var doPropagate = [
-    E9.A, E9.B, E6.B, E6.C, E6.A, E5.A, E5.B, E5.C
+    0 /* E9.A */, 0 /* E9.B */, 0 /* E6.B */, 1 /* E6.C */, 0 /* E6.A */, 0 /* E5.A */, 3 /* E5.B */, 4 /* E5.C */
 ];

@@ -22,13 +22,13 @@ var User;
     User[User["A"] = 0] = "A";
     User[User["B"] = 1] = "B";
 })(User || (User = {}));
-var user = User.A;
+var user = 0 /* User.A */;
 label: while (true) {
     switch (user) {
-        case User.A:
-            user = User.B;
+        case 0 /* User.A */:
+            user = 1 /* User.B */;
             continue label;
-        case User.B:
+        case 1 /* User.B */:
             break label;
     }
 }

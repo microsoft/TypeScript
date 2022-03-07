@@ -54,7 +54,7 @@ var F;
 (function (F) {
     F[F["A"] = 0] = "A";
 })(F || (F = {}));
-var r6 = foo(E.A, function (x) { return E.A; }, function (x) { return F.A; }); // number => number 
+var r6 = foo(0 /* E.A */, function (x) { return 0 /* E.A */; }, function (x) { return 0 /* F.A */; }); // number => number 
 function foo2(x, a, b) {
     var r;
     return r;

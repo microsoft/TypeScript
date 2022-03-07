@@ -12,4 +12,4 @@ var E;
     E[E["a"] = 0] = "a";
 })(E || (E = {}));
 var x = E;
-var x = E.a;
+var x = 0 /* E.a */;

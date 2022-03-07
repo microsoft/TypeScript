@@ -40,8 +40,8 @@ var Bar;
     Bar[Bar["A"] = 0] = "A";
     Bar[Bar["B"] = 1] = "B";
 })(Bar || (Bar = {}));
-let foo = Foo.A;
-let bar = Bar.A;
+let foo = 0 /* Foo.A */;
+let bar = 0 /* Bar.A */;
 //// [ns.js]
 "use strict";
 var ns;
@@ -50,11 +50,11 @@ var ns;
     (function (Foo) {
         Foo[Foo["X"] = 0] = "X";
     })(Foo = ns.Foo || (ns.Foo = {}));
-    ns.Foo.X;
+    0 /* ns.Foo.X */;
 })(ns || (ns = {}));
 //// [more.js]
 export var Foo;
 (function (Foo) {
     Foo[Foo["X"] = 0] = "X";
 })(Foo || (Foo = {}));
-(Foo).X;
+0 /* (Foo).X */;

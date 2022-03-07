@@ -21,7 +21,7 @@ var E;
     E[E["thing"] = 1] = "thing";
 })(E || (E = {}));
 ;
-var c = +E.some;
+var c = +0 /* E.some */;
 // also allowed, used to be errors
 var x = +"3"; //should be valid
 var y = -"3"; // should be valid

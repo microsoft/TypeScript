@@ -47,7 +47,7 @@ var d = {
     m: { mod: m1 },
     mc: { cl: m1.c },
     me: { en: m1.e },
-    mh: m1.e.holiday
+    mh: 2 /* m1.e.holiday */
 };
 
 

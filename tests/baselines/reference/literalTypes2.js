@@ -191,7 +191,7 @@ function f1(p1, p2, p3, p4) {
     if (p1 === void 0) { p1 = 1; }
     if (p2 === void 0) { p2 = "abc"; }
     if (p3 === void 0) { p3 = true; }
-    if (p4 === void 0) { p4 = E.A; }
+    if (p4 === void 0) { p4 = 0 /* E.A */; }
     var v1 = 1;
     var v2 = -123;
     var v3 = 3 + 4;
@@ -199,7 +199,7 @@ function f1(p1, p2, p3, p4) {
     var v5 = "";
     var v6 = "abc" + "def";
     var v7 = true;
-    var v8 = E.A;
+    var v8 = 0 /* E.A */;
     var x1 = 1;
     var x2 = -123;
     var x3 = 3 + 4;
@@ -207,7 +207,7 @@ function f1(p1, p2, p3, p4) {
     var x5 = "";
     var x6 = "abc" + "def";
     var x7 = true;
-    var x8 = E.A;
+    var x8 = 0 /* E.A */;
     var c1 = 1;
     var c2 = -123;
     var c3 = 3 + 4;
@@ -215,28 +215,28 @@ function f1(p1, p2, p3, p4) {
     var c5 = "";
     var c6 = "abc" + "def";
     var c7 = true;
-    var c8 = E.A;
+    var c8 = 0 /* E.A */;
 }
 function f2(p1, p2, p3, p4) {
     if (p1 === void 0) { p1 = 1; }
     if (p2 === void 0) { p2 = "abc"; }
     if (p3 === void 0) { p3 = true; }
-    if (p4 === void 0) { p4 = E.A; }
+    if (p4 === void 0) { p4 = 0 /* E.A */; }
     var v1 = 1;
     var v2 = -123;
     var v3 = "abc";
     var v4 = true;
-    var v5 = E.A;
+    var v5 = 0 /* E.A */;
     var x1 = 1;
     var x2 = -123;
     var x3 = "abc";
     var x4 = true;
-    var x5 = E.A;
+    var x5 = 0 /* E.A */;
 }
 function f3() {
     var c1 = cond ? 1 : 2;
     var c2 = cond ? 1 : "two";
-    var c3 = cond ? E.A : cond ? true : 123;
+    var c3 = cond ? 0 /* E.A */ : cond ? true : 123;
     var c4 = cond ? "abc" : null;
     var c5 = cond ? 456 : undefined;
     var c6 = { kind: 123 };
@@ -260,7 +260,7 @@ var C1 = /** @class */ (function () {
         this.x5 = "";
         this.x6 = "abc" + "def";
         this.x7 = true;
-        this.x8 = E.A;
+        this.x8 = 0 /* E.A */;
         this.c1 = 1;
         this.c2 = -123;
         this.c3 = 3 + 4;
@@ -268,7 +268,7 @@ var C1 = /** @class */ (function () {
         this.c5 = "";
         this.c6 = "abc" + "def";
         this.c7 = true;
-        this.c8 = E.A;
+        this.c8 = 0 /* E.A */;
     }
     return C1;
 }());
@@ -319,7 +319,7 @@ function f20() {
     var f1 = function () { return 0; };
     var f2 = function () { return "hello"; };
     var f3 = function () { return true; };
-    var f4 = function () { return E.C; };
+    var f4 = function () { return 2 /* E.C */; };
     var f5 = function () { return "foo"; };
     var f6 = function () { return "bar"; };
     var f7 = function () { return "bar"; };

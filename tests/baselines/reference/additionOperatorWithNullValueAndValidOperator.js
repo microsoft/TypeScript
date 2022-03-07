@@ -49,13 +49,13 @@ var r2 = a + null;
 var r3 = null + b;
 var r4 = null + 1;
 var r5 = null + c;
-var r6 = null + E.a;
-var r7 = null + E['a'];
+var r6 = null + 0 /* E.a */;
+var r7 = null + 0 /* E['a'] */;
 var r8 = b + null;
 var r9 = 1 + null;
 var r10 = c + null;
-var r11 = E.a + null;
-var r12 = E['a'] + null;
+var r11 = 0 /* E.a */ + null;
+var r12 = 0 /* E['a'] */ + null;
 // null + string
 var r13 = null + d;
 var r14 = null + '';

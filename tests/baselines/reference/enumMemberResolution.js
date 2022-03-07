@@ -15,4 +15,4 @@ var Position2;
 var x = IgnoreRulesSpecific.
 ; // error
 var y = 1;
-var z = Position2.IgnoreRulesSpecific; // no error
+var z = 0 /* Position2.IgnoreRulesSpecific */; // no error

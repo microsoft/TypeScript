@@ -974,7 +974,7 @@ var TypeScript;
     /// Return the stack of AST nodes containing "position"
     ///
     function getAstPathToPosition(script, pos, options) {
-        if (options === void 0) { options = GetAstPathOptions.Default; }
+        if (options === void 0) { options = 0 /* GetAstPathOptions.Default */; }
         var lookInComments = function (comments) {
             if (comments && comments.length > 0) {
                 for (var i = 0; i < comments.length; i++) {
@@ -998,7 +998,7 @@ var TypeScript;
                 //  bar
                 //  0123
                 // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid
-                var inclusive = hasFlag(options, GetAstPathOptions.EdgeInclusive) ||
+                var inclusive = hasFlag(options, 1 /* GetAstPathOptions.EdgeInclusive */) ||
                     cur.nodeType === TypeScript.NodeType.Name ||
                     pos === script.limChar; // Special "EOF" case
                 var minChar = cur.minChar;
@@ -1021,7 +1021,7 @@ var TypeScript;
                 if (pos >= minChar) {
                     lookInComments(cur.postComments);
                 }
-                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {
+                if (!hasFlag(options, 2 /* GetAstPathOptions.DontPruneSearchBasedOnPosition */)) {
                     // Don't go further down the tree if pos is outside of [minChar, limChar]
                     walker.options.goChildren = (minChar <= pos && pos <= limChar);
                 }

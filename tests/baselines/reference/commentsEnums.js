@@ -20,8 +20,8 @@ var Colors;
     /** Fancy name for 'pink'*/
     Colors[Colors["FancyPink"] = 1] = "FancyPink";
 })(Colors || (Colors = {})); // trailing comment
-var x = Colors.Cornflower;
-x = Colors.FancyPink;
+var x = 0 /* Colors.Cornflower */;
+x = 1 /* Colors.FancyPink */;
 
 
 //// [commentsEnums.d.ts]

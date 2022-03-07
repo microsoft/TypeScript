@@ -11,7 +11,7 @@ type C = A<number> & {
 enum E1 {
     first
 }
-const enum E2 {
+enum E2 {
     second
 }
 console.log(1 + 2);

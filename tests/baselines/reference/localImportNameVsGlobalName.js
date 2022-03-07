@@ -29,7 +29,7 @@ var App;
     var Key = Keyboard.Key;
     function foo(key) { }
     App.foo = foo;
-    foo(Key.UP);
-    foo(Key.DOWN);
-    foo(Key.LEFT);
+    foo(0 /* Key.UP */);
+    foo(1 /* Key.DOWN */);
+    foo(2 /* Key.LEFT */);
 })(App || (App = {}));

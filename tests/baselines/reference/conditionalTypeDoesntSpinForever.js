@@ -130,8 +130,8 @@ const buildNameFieldConstructor = (soFar) => ("name" in soFar ? {} : {
     name: (instance = undefined) => buildPubSubRecordType(Object.assign({}, soFar, { name: instance }))
 });
 const buildStoredAsConstructor = (soFar) => ("storedAs" in soFar ? {} : {
-    storedAsJsonEncodedRedisString: () => buildPubSubRecordType(Object.assign({}, soFar, { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString })),
-    storedAsRedisHash: () => buildPubSubRecordType(Object.assign({}, soFar, { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash })),
+    storedAsJsonEncodedRedisString: () => buildPubSubRecordType(Object.assign({}, soFar, { storedAs: "jsonEncodedRedisString" /* PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString */ })),
+    storedAsRedisHash: () => buildPubSubRecordType(Object.assign({}, soFar, { storedAs: "redisHash" /* PubSubRecordIsStoredInRedisAsA.redisHash */ })),
 });
 const buildIdentifierFieldConstructor = (soFar) => ("identifier" in soFar || (!("record" in soFar)) ? {} : {
     identifier: (instance = undefined) => buildPubSubRecordType(Object.assign({}, soFar, { identifier: instance }))

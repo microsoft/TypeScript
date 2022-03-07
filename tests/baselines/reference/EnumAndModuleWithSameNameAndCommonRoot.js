@@ -33,6 +33,6 @@ var enumdule;
     enumdule.Point = Point;
 })(enumdule || (enumdule = {}));
 var x;
-var x = enumdule.Red;
+var x = 0 /* enumdule.Red */;
 var y;
 var y = new enumdule.Point(0, 0);

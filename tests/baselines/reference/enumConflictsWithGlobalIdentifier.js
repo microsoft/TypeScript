@@ -13,4 +13,4 @@ var Position;
 })(Position || (Position = {}));
 var x = IgnoreRulesSpecific.
 ;
-var y = Position.IgnoreRulesSpecific;
+var y = 0 /* Position.IgnoreRulesSpecific */;

@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";
     exports.__esModule = true;
-    if (foo.E1.A === 0) {
+    if (0 /* foo.E1.A */ === 0) {
         // Should cause runtime import - interesting optimization possibility, as gets inlined to 0.
     }
 });

@@ -18,7 +18,7 @@ enum E1 {
     // comment8
     first
 }
-const enum E2 {
+enum E2 {
     second
 }
 // comment9

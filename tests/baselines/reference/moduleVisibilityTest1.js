@@ -116,11 +116,11 @@ var M;
 })(M || (M = {}));
 (function (M) {
     M.c = M.x;
-    M.meb = M.E.B;
+    M.meb = 1 /* M.E.B */;
 })(M || (M = {}));
 var cprime = null;
 var c = new M.C();
 var z = M.x;
-var alpha = M.E.A;
+var alpha = 0 /* M.E.A */;
 var omega = M.exported_var;
 c.someMethodThatCallsAnOuterMethod();

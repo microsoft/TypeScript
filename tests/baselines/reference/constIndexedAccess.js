@@ -42,5 +42,5 @@ var numbersNotConst;
     numbersNotConst[numbersNotConst["zero"] = 0] = "zero";
     numbersNotConst[numbersNotConst["one"] = 1] = "one";
 })(numbersNotConst || (numbersNotConst = {}));
-var s3 = test[numbersNotConst.zero];
-var n3 = test[numbersNotConst.one];
+var s3 = test[0 /* numbersNotConst.zero */];
+var n3 = test[1 /* numbersNotConst.one */];

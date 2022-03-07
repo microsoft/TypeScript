@@ -17,6 +17,6 @@ var K;
 })(K || (K = {}));
 var _a = (function () {
     var _a;
-    return _a = {}, _a[K.a] = 1, _a[K.b] = 1, _a;
-})(), _b = K.a, aVal = _a[_b], _c = K.b, bVal = _a[_c];
+    return _a = {}, _a["a" /* K.a */] = 1, _a["b" /* K.b */] = 1, _a;
+})(), _b = "a" /* K.a */, aVal = _a[_b], _c = "b" /* K.b */, bVal = _a[_c];
 console.log(aVal, bVal);

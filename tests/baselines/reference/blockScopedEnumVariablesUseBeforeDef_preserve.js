@@ -11,7 +11,7 @@ function foo2() {
 
 //// [blockScopedEnumVariablesUseBeforeDef_preserve.js]
 function foo1() {
-    return E.A;
+    return 0 /* E.A */;
     var E;
     (function (E) {
         E[E["A"] = 0] = "A";

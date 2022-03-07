@@ -24,7 +24,7 @@ var Enum;
 exports.__esModule = true;
 exports.value = void 0;
 var provider = require("./provider");
-exports.value = provider.Enum.Value1;
+exports.value = 0 /* provider.Enum.Value1 */;
 
 
 //// [provider.d.ts]

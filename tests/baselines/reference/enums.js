@@ -42,7 +42,7 @@ var SyntaxKind;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-SyntaxKind.ImportClause;
+0 /* SyntaxKind.ImportClause */;
 "Type" /* SymbolFlags.Type */;
 var kind;
 var flags;

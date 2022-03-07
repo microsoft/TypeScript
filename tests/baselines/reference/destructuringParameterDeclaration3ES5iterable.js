@@ -141,5 +141,5 @@ function foo1() {
         a[_i] = arguments[_i];
     }
 }
-foo1(1, 2, 3, E.a);
-foo1(1, 2, 3, 0 /* E1.a */, E.b);
+foo1(1, 2, 3, 0 /* E.a */);
+foo1(1, 2, 3, 0 /* E1.a */, 1 /* E.b */);

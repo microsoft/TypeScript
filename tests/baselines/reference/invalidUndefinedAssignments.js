@@ -28,7 +28,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 E = x;
-E.A = x;
+0 /* E.A */ = x;
 var C = /** @class */ (function () {
     function C() {
     }

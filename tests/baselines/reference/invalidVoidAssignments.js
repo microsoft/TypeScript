@@ -58,5 +58,5 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 x = E;
-x = E.A;
+x = 0 /* E.A */;
 x = { f: function () { } };

@@ -357,5 +357,5 @@ var E;
     E[E["while"] = 61] = "while";
     E[E["with"] = 62] = "with";
 })(E || (E = {}));
-var r7 = E.abstract;
-var r8 = E.as;
+var r7 = 0 /* E.abstract */;
+var r8 = 1 /* E.as */;

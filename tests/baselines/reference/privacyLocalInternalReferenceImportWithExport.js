@@ -225,8 +225,8 @@ var import_public;
     // Usage of privacy error imports
     var privateUse_im_public_c_private = new import_public.im_public_c_private();
     import_public.publicUse_im_public_c_private = new import_public.im_public_c_private();
-    var privateUse_im_public_e_private = import_public.im_public_e_private.Happy;
-    import_public.publicUse_im_public_e_private = import_public.im_public_e_private.Grumpy;
+    var privateUse_im_public_e_private = 0 /* im_public_e_private.Happy */;
+    import_public.publicUse_im_public_e_private = 1 /* im_public_e_private.Grumpy */;
     var privateUse_im_public_f_private = import_public.im_public_f_private();
     import_public.publicUse_im_public_f_private = import_public.im_public_f_private();
     var privateUse_im_public_v_private = import_public.im_public_v_private;
@@ -244,8 +244,8 @@ var import_public;
     // Usage of above
     var privateUse_im_public_c_public = new import_public.im_public_c_public();
     import_public.publicUse_im_public_c_public = new import_public.im_public_c_public();
-    var privateUse_im_public_e_public = import_public.im_public_e_public.Happy;
-    import_public.publicUse_im_public_e_public = import_public.im_public_e_public.Grumpy;
+    var privateUse_im_public_e_public = 0 /* im_public_e_public.Happy */;
+    import_public.publicUse_im_public_e_public = 1 /* im_public_e_public.Grumpy */;
     var privateUse_im_public_f_public = import_public.im_public_f_public();
     import_public.publicUse_im_public_f_public = import_public.im_public_f_public();
     var privateUse_im_public_v_public = import_public.im_public_v_public;
@@ -266,8 +266,8 @@ var import_private;
     // Usage of above decls
     var privateUse_im_private_c_private = new import_private.im_private_c_private();
     import_private.publicUse_im_private_c_private = new import_private.im_private_c_private();
-    var privateUse_im_private_e_private = import_private.im_private_e_private.Happy;
-    import_private.publicUse_im_private_e_private = import_private.im_private_e_private.Grumpy;
+    var privateUse_im_private_e_private = 0 /* im_private_e_private.Happy */;
+    import_private.publicUse_im_private_e_private = 1 /* im_private_e_private.Grumpy */;
     var privateUse_im_private_f_private = import_private.im_private_f_private();
     import_private.publicUse_im_private_f_private = import_private.im_private_f_private();
     var privateUse_im_private_v_private = import_private.im_private_v_private;
@@ -285,8 +285,8 @@ var import_private;
     // Usage of no privacy error imports
     var privateUse_im_private_c_public = new import_private.im_private_c_public();
     import_private.publicUse_im_private_c_public = new import_private.im_private_c_public();
-    var privateUse_im_private_e_public = import_private.im_private_e_public.Happy;
-    import_private.publicUse_im_private_e_public = import_private.im_private_e_public.Grumpy;
+    var privateUse_im_private_e_public = 0 /* im_private_e_public.Happy */;
+    import_private.publicUse_im_private_e_public = 1 /* im_private_e_public.Grumpy */;
     var privateUse_im_private_f_public = import_private.im_private_f_public();
     import_private.publicUse_im_private_f_public = import_private.im_private_f_public();
     var privateUse_im_private_v_public = import_private.im_private_v_public;

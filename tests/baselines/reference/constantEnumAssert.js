@@ -71,15 +71,15 @@ var E5 = {
     a: 'a',
     b: 'b'
 };
-var foo1 = { a: E1.a };
-var foo2 = { a: E2.a };
-var foo3 = { a: E1.a };
-var foo4 = { a: E2.a };
-var foo5 = { a: E3.a };
+var foo1 = { a: 0 /* E1.a */ };
+var foo2 = { a: "a" /* E2.a */ };
+var foo3 = { a: 0 /* E1.a */ };
+var foo4 = { a: "a" /* E2.a */ };
+var foo5 = { a: 1 /* E3.a */ };
 var foo6 = { a: 0 /* E4.a */ };
 var foo7 = { a: E5.a };
-var foo8 = { a: E1.a };
-var foo9 = { a: E2.a };
-var foo10 = { a: E3.a };
+var foo8 = { a: 0 /* E1.a */ };
+var foo9 = { a: "a" /* E2.a */ };
+var foo10 = { a: 1 /* E3.a */ };
 var foo11 = { a: 0 /* E4.a */ };
 var foo12 = { a: E5.a };

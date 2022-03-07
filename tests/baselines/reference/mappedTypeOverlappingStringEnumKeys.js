@@ -52,8 +52,8 @@ var AlienAnimalTypes;
 ;
 var catMap = {
     cat: [
-        { type: TerrestrialAnimalTypes.CAT, address: "" },
-        { type: AlienAnimalTypes.CAT, planet: "" }
+        { type: "cat" /* TerrestrialAnimalTypes.CAT */, address: "" },
+        { type: "cat" /* AlienAnimalTypes.CAT */, planet: "" }
     ],
     dog: []
 };

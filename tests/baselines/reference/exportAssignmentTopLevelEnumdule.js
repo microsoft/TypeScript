@@ -36,7 +36,7 @@ define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";
     exports.__esModule = true;
     var color;
-    if (color === foo.green) {
+    if (color === 1 /* foo.green */) {
         color = foo.answer;
     }
 });

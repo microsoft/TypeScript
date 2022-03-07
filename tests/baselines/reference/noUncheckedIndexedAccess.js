@@ -129,12 +129,12 @@ var e4 = strMap[0];
 var e5 = strMap[0];
 var e6 = strMap[0];
 var e7 = strMap["foo"];
-var e8 = strMap[NumericEnum1.A];
-var e9 = strMap[NumericEnum2.A];
-var e10 = strMap[StringEnum1.A];
-var e11 = strMap[StringEnum1.A];
-var e12 = strMap[NumericEnum1.A];
-var e13 = strMap[NumericEnum2.A];
+var e8 = strMap[0 /* NumericEnum1.A */];
+var e9 = strMap[0 /* NumericEnum2.A */];
+var e10 = strMap["Alpha" /* StringEnum1.A */];
+var e11 = strMap["Alpha" /* StringEnum1.A */];
+var e12 = strMap[0 /* NumericEnum1.A */];
+var e13 = strMap[0 /* NumericEnum2.A */];
 var e14 = strMap[null];
 // Should be OK
 var ok1 = strMap["foo"];
@@ -148,8 +148,8 @@ strMap[null] = undefined;
 var num_ok1 = numMap[0];
 var num_ok2 = numMap[0];
 var num_ok3 = numMap[0];
-var num_ok4 = numMap[NumericEnum1.A];
-var num_ok5 = numMap[NumericEnum2.A];
+var num_ok4 = numMap[0 /* NumericEnum1.A */];
+var num_ok5 = numMap[0 /* NumericEnum2.A */];
 // Generics
 function generic1(arg) {
     // Should error

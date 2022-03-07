@@ -296,7 +296,7 @@ var State;
     State[State["A"] = 0] = "A";
     State[State["B"] = 1] = "B";
 })(State || (State = {}));
-let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
+let x = bar(() => !!true ? [{ state: 0 /* State.A */ }] : [{ state: 1 /* State.B */ }]); // Error
 // Repros from #31443
 var Enum;
 (function (Enum) {
@@ -308,8 +308,8 @@ class ClassWithConvert {
     convert(converter) { }
 }
 function fn(arg, f) { }
-fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
-baz(makeFoo(Enum.A), makeFoo(Enum.A));
+fn(new ClassWithConvert(0 /* Enum.A */), () => new ClassWithConvert(0 /* Enum.A */));
+baz(makeFoo(0 /* Enum.A */), makeFoo(0 /* Enum.A */));
 
 
 //// [inferFromGenericFunctionReturnTypes3.d.ts]

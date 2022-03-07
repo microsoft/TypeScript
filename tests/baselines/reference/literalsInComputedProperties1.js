@@ -87,6 +87,6 @@ var X;
     X[X["foo"] = 5] = "foo";
     X[X["bar"] = 6] = "bar";
 })(X || (X = {}));
-var a = X["foo"];
-var a0 = X["bar"];
+var a = 5 /* X["foo"] */;
+var a0 = 6 /* X["bar"] */;
 // TODO: make sure that enum still disallow template literals as member names

@@ -48,7 +48,7 @@ var E1;
 })(E1 || (E1 = {}));
 var b1 = {};
 var b2 = {};
-var e1 = E1.ONE;
+var e1 = 0 /* E1.ONE */;
 var e2 = E2.ONE;
 b1[1] = "a";
 b1[e1] = "b";

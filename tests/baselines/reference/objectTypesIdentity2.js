@@ -87,7 +87,7 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-var b = { foo: E.A };
+var b = { foo: 0 /* E.A */ };
 function foo5(x) { }
 function foo5b(x) { }
 function foo6(x) { }

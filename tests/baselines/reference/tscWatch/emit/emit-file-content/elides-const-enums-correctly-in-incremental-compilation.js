@@ -1,9 +1,9 @@
 Input::
 //// [/user/someone/projects/myproject/file1.ts]
-export const enum E1 { V = 1 }
+export enum E1 { V = 1 }
 
 //// [/user/someone/projects/myproject/file2.ts]
-import { E1 } from "./file1"; export const enum E2 { V = E1.V }
+import { E1 } from "./file1"; export enum E2 { V = E1.V }
 
 //// [/user/someone/projects/myproject/file3.ts]
 import { E2 } from "./file2"; const v: E2 = E2.V;
@@ -71,16 +71,28 @@ exitCode:: ExitStatus.undefined
 //// [/user/someone/projects/myproject/file1.js]
 "use strict";
 exports.__esModule = true;
+exports.E1 = void 0;
+var E1;
+(function (E1) {
+    E1[E1["V"] = 1] = "V";
+})(E1 = exports.E1 || (exports.E1 = {}));
 
 
 //// [/user/someone/projects/myproject/file2.js]
 "use strict";
 exports.__esModule = true;
+exports.E2 = void 0;
+var file1_1 = require("./file1");
+var E2;
+(function (E2) {
+    E2[E2["V"] = 1] = "V";
+})(E2 = exports.E2 || (exports.E2 = {}));
 
 
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
+var file2_1 = require("./file2");
 var v = 1 /* E2.V */;
 
 
@@ -134,6 +146,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
+var file2_1 = require("./file2");
 var v = 1 /* E2.V */;
 function foo2() { return 2; }
 

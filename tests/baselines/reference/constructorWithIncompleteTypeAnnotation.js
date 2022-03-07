@@ -375,7 +375,7 @@ var BasicFeatures = /** @class */ (function () {
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
         var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, "instanceof": function () { return 'objLit{42}'; } };
-        var weekday = Weekdays.Monday;
+        var weekday = 0 /* Weekdays.Monday */;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
         var any = 0 ^=

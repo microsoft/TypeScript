@@ -41,7 +41,7 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-E.A = null; // error
+0 /* E.A */ = null; // error
 var C = /** @class */ (function () {
     function C() {
     }

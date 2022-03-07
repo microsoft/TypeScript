@@ -290,11 +290,11 @@ var Types;
 function func2(inst) {
     while (true) {
         switch (inst.type) {
-            case Types.Str: {
+            case 1 /* Types.Str */: {
                 inst.value.length;
                 break;
             }
-            case Types.Num: {
+            case 2 /* Types.Num */: {
                 inst.value.toExponential;
                 break;
             }

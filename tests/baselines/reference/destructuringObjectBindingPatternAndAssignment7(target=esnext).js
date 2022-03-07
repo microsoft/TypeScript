@@ -15,7 +15,7 @@ var K;
     K["a"] = "a";
     K["b"] = "b";
 })(K || (K = {}));
-const { [K.a]: aVal, [K.b]: bVal } = (() => {
-    return { [K.a]: 1, [K.b]: 1 };
+const { ["a" /* K.a */]: aVal, ["b" /* K.b */]: bVal } = (() => {
+    return { ["a" /* K.a */]: 1, ["b" /* K.b */]: 1 };
 })();
 console.log(aVal, bVal);

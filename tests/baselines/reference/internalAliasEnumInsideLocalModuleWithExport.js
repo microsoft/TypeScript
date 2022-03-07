@@ -29,7 +29,7 @@ var a;
 var c;
 (function (c) {
     c.b = a.weekend;
-    c.bVal = c.b.Sunday;
+    c.bVal = 2 /* b.Sunday */;
 })(c = exports.c || (exports.c = {}));
 
 

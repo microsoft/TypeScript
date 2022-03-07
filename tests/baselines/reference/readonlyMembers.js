@@ -113,7 +113,7 @@ var E;
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
 })(E || (E = {}));
-E.A = 1; // Error
+0 /* E.A */ = 1; // Error
 var N;
 (function (N) {
     N.a = 1;

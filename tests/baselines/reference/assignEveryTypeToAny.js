@@ -77,8 +77,8 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-x = E.A;
-var f = E.A;
+x = 0 /* E.A */;
+var f = 0 /* E.A */;
 x = f;
 var g;
 x = g;

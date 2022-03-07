@@ -31,7 +31,7 @@ var M;
         MyEnum[MyEnum["BAR"] = 0] = "BAR";
     })(MyEnum = M.MyEnum || (M.MyEnum = {}));
     M.object2 = {
-        foo: MyEnum.BAR
+        foo: 0 /* MyEnum.BAR */
     };
 })(M || (M = {}));
 var N;
@@ -42,7 +42,7 @@ var N;
     })(MyEnum = N.MyEnum || (N.MyEnum = {}));
     ;
     N.object1 = {
-        foo: MyEnum.FOO
+        foo: 0 /* MyEnum.FOO */
     };
 })(N || (N = {}));
 var broken = [

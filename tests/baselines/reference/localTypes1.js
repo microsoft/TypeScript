@@ -169,7 +169,7 @@ function f1() {
         return C;
     }());
     var a = [new C()];
-    a[0].x = E.B;
+    a[0].x = 1 /* E.B */;
     return a;
 }
 function f2() {
@@ -186,7 +186,7 @@ function f2() {
             return C;
         }());
         var a = [new C()];
-        a[0].x = E.B;
+        a[0].x = 1 /* E.B */;
         return a;
     }
     return g();
@@ -206,7 +206,7 @@ function f3(b) {
                 return C;
             }());
             var a = [new C()];
-            a[0].x = E.B;
+            a[0].x = 1 /* E.B */;
             return a;
         }
         else {
@@ -216,7 +216,7 @@ function f3(b) {
                 return A;
             }());
             var c = [new A_1()];
-            c[0].x = E.B;
+            c[0].x = 1 /* E.B */;
             return c;
         }
     }

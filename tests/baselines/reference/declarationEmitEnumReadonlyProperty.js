@@ -18,7 +18,7 @@ var E;
 })(E || (E = {}));
 var C = /** @class */ (function () {
     function C() {
-        this.type = E.A;
+        this.type = "a" /* E.A */;
     }
     return C;
 }());

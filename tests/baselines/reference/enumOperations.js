@@ -21,7 +21,7 @@ var Enum;
 (function (Enum) {
     Enum[Enum["None"] = 0] = "None";
 })(Enum || (Enum = {}));
-var enumType = Enum.None;
+var enumType = 0 /* Enum.None */;
 var numberType = 0;
 var anyType = 0;
 enumType ^ numberType;

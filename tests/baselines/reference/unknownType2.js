@@ -326,32 +326,32 @@ var StringEnum;
 if (u === NumberEnum || u === StringEnum) {
     var enumObj = u;
 }
-if (u === NumberEnum.A) {
+if (u === 0 /* NumberEnum.A */) {
     var a = u;
 }
-if (u === StringEnum.B) {
+if (u === "B" /* StringEnum.B */) {
     var b = u;
 }
 function switchTestEnum(x) {
     switch (x) {
-        case StringEnum.A:
+        case "A" /* StringEnum.A */:
             var a = x;
             break;
-        case StringEnum.B:
+        case "B" /* StringEnum.B */:
             var b = x;
             break;
-        case StringEnum.C:
+        case "C" /* StringEnum.C */:
             var c = x;
             break;
     }
 }
 function switchTestCollectEnum(x) {
     switch (x) {
-        case StringEnum.A:
+        case "A" /* StringEnum.A */:
             var a = x;
-        case StringEnum.B:
+        case "B" /* StringEnum.B */:
             var b = x;
-        case StringEnum.C:
+        case "C" /* StringEnum.C */:
             var c = x;
             var all = x;
             return;
@@ -437,16 +437,16 @@ function notNotEquals(u) {
     else {
         var o = u;
     }
-    if (u !== NumberEnum.A) { }
+    if (u !== 0 /* NumberEnum.A */) { }
     else {
         var a = u;
     }
-    if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
+    if (u !== 0 /* NumberEnum.A */ && u !== 1 /* NumberEnum.B */ && u !== "A" /* StringEnum.A */) { }
     else {
         var aOrB = u;
     }
     // equivalent to
-    if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
+    if (!(u === 0 /* NumberEnum.A */ || u === 1 /* NumberEnum.B */ || u === "A" /* StringEnum.A */)) { }
     else {
         var aOrB = u;
     }

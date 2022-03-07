@@ -48,10 +48,10 @@ function isBoth(x) {
 var foo = undefined;
 if (isBoth(foo)) {
     switch (foo.kind) {
-        case Kind.A:
+        case 0 /* Kind.A */:
             var myA = foo; // Should not be an error
             break;
-        case Kind.B:
+        case 1 /* Kind.B */:
             var myB = foo;
             break;
     }

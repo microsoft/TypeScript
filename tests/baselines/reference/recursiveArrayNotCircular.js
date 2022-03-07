@@ -49,16 +49,16 @@ function assertNever(a) {
 }
 function reducer(action) {
     switch (action.type) {
-        case ActionType.Bar:
+        case 1 /* ActionType.Bar */:
             var x = action.payload;
             break;
-        case ActionType.Baz:
+        case 2 /* ActionType.Baz */:
             var y = action.payload;
             break;
-        case ActionType.Foo:
+        case 0 /* ActionType.Foo */:
             var z = action.payload;
             break;
-        case ActionType.Batch:
+        case 3 /* ActionType.Batch */:
             action.payload.map(reducer);
             break;
         default: return assertNever(action);

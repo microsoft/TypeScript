@@ -28,6 +28,6 @@ var Bar;
 (function (Bar) {
     Bar[Bar["a"] = (1).valueOf()] = "a";
     Bar[Bar["b"] = 2] = "b";
-    Bar[Bar["c"] = Foo.a.valueOf()] = "c";
-    Bar[Bar["d"] = Foo.a.a] = "d";
+    Bar[Bar["c"] = 2 /* Foo.a */.valueOf()] = "c";
+    Bar[Bar["d"] = 2 /* Foo.a */.a] = "d";
 })(Bar || (Bar = {}));

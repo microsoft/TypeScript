@@ -291,8 +291,8 @@ var E;
 })(E || (E = {}));
 function f(e) {
     switch (e) {
-        case E.A: return 0;
-        case E.B: return 1;
+        case 0 /* E.A */: return 0;
+        case 1 /* E.B */: return 1;
     }
 }
 function g(e) {
@@ -300,8 +300,8 @@ function g(e) {
         return -1;
     else
         switch (e) {
-            case E.A: return 0;
-            case E.B: return 1;
+            case 0 /* E.A */: return 0;
+            case 1 /* E.B */: return 1;
         }
 }
 function area(s) {
@@ -343,10 +343,10 @@ var MyEnum;
 function thisGivesError(e) {
     var s;
     switch (e) {
-        case MyEnum.A:
+        case 0 /* MyEnum.A */:
             s = "it was A";
             break;
-        case MyEnum.B:
+        case 1 /* MyEnum.B */:
             s = "it was B";
             break;
     }
@@ -355,10 +355,10 @@ function thisGivesError(e) {
 function good1(e) {
     var s;
     switch (e) {
-        case MyEnum.A:
+        case 0 /* MyEnum.A */:
             s = "it was A";
             break;
-        case MyEnum.B:
+        case 1 /* MyEnum.B */:
             s = "it was B";
             break;
         default:
@@ -369,8 +369,8 @@ function good1(e) {
 }
 function good2(e) {
     switch (e) {
-        case MyEnum.A: return "it was A";
-        case MyEnum.B: return "it was B";
+        case 0 /* MyEnum.A */: return "it was A";
+        case 1 /* MyEnum.B */: return "it was B";
     }
 }
 // Repro from #18362
@@ -382,11 +382,11 @@ var Level;
 var doSomethingWithLevel = function (level) {
     var next;
     switch (level) {
-        case Level.One:
-            next = Level.Two;
+        case 0 /* Level.One */:
+            next = 1 /* Level.Two */;
             break;
-        case Level.Two:
-            next = Level.One;
+        case 1 /* Level.Two */:
+            next = 0 /* Level.One */;
             break;
     }
     return next;
@@ -440,9 +440,9 @@ var Animal;
 })(Animal || (Animal = {}));
 function expression() {
     var _a;
-    switch ((_a = zoo === null || zoo === void 0 ? void 0 : zoo.animal) !== null && _a !== void 0 ? _a : Animal.DOG) {
-        case Animal.DOG: return Animal.DOG;
-        case Animal.CAT: return Animal.CAT;
+    switch ((_a = zoo === null || zoo === void 0 ? void 0 : zoo.animal) !== null && _a !== void 0 ? _a : 0 /* Animal.DOG */) {
+        case 0 /* Animal.DOG */: return 0 /* Animal.DOG */;
+        case 1 /* Animal.CAT */: return 1 /* Animal.CAT */;
     }
 }
 // Repro from #34840

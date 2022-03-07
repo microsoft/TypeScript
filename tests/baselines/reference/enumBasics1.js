@@ -63,7 +63,7 @@ class C {
 
 var e = E; // shouldn't error
 */
-E.A.A; // should error
+1 /* E.A */.A; // should error
 var E2;
 (function (E2) {
     E2[E2["A"] = 0] = "A";

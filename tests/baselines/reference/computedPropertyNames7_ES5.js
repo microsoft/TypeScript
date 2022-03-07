@@ -13,5 +13,5 @@ var E;
     E[E["member"] = 0] = "member";
 })(E || (E = {}));
 var v = (_a = {},
-    _a[E.member] = 0,
+    _a[0 /* E.member */] = 0,
     _a);

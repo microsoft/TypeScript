@@ -55,11 +55,11 @@ var MyEmusEnum;
 // Should be okay; should be a string.
 var strRepresentation1 = MyEmusEnum[0];
 // Should be okay; should be a string.
-var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu];
+var strRepresentation2 = MyEmusEnum[0 /* MyEmusEnum.emu */];
 // Should be okay, as we suppress implicit 'any' property access checks
 var strRepresentation3 = MyEmusEnum["monehh"];
 // Should be okay; should be a MyEmusEnum
-var strRepresentation4 = MyEmusEnum["emu"];
+var strRepresentation4 = 0 /* MyEmusEnum["emu"] */;
 // Should be okay, as we suppress implicit 'any' property access checks
 var x = {}["hi"];
 // Should be okay, as we suppress implicit 'any' property access checks
@@ -75,6 +75,6 @@ var m = {
     "2": 2,
     "Okay that's enough for today.": NaN
 };
-var mResult1 = m[MyEmusEnum.emu];
-var mResult2 = m[MyEmusEnum[MyEmusEnum.emu]];
+var mResult1 = m[0 /* MyEmusEnum.emu */];
+var mResult2 = m[MyEmusEnum[0 /* MyEmusEnum.emu */]];
 var mResult3 = m[hi];

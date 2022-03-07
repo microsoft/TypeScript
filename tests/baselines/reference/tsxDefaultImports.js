@@ -31,4 +31,4 @@ exports["default"] = SomeClass;
 "use strict";
 exports.__esModule = true;
 var a_1 = require("./a");
-var a = a_1["default"].E.one;
+var a = 0 /* Def.E.one */;
