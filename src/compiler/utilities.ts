@@ -1005,9 +1005,7 @@ namespace ts {
     }
 
     export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
-        const text = tryGetTextOfPropertyName(name);
-        Debug.assertIsDefined(text);
-        return text;
+        return Debug.checkDefined(tryGetTextOfPropertyName(name));
     }
 
     export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDocMemberName | JsxTagNameExpression | PrivateIdentifier): string {
