@@ -19059,6 +19059,9 @@ namespace ts {
                             return varianceResult;
                         }
                     }
+                    else if (!someContainsMarkerType(source.aliasTypeArguments) && !someContainsMarkerType(target.aliasTypeArguments)) {
+                        return Ternary.Unknown;
+                    }
                 }
 
                 // For a generic type T and a type U that is assignable to T, [...U] is assignable to T, U is assignable to readonly [...T],
@@ -19436,13 +19439,17 @@ namespace ts {
                         }
                         // We have type references to the same generic type. Obtain the variance information for the type
                         // parameters and relate the type arguments accordingly. If variance information for the type is in
-                        // the process of being computed, fall through and relate the type references structurally.
+                        // the process of being computed, structurally relate references that contain marker types in their
+                        // type arguments, but otherwise return Ternary.Unknown (the non-cached version of Ternary.Maybe).
                         const variances = getVariances((source as TypeReference).target);
                         if (variances !== emptyArray) {
                             const varianceResult = relateVariances(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), variances, intersectionState);
                             if (varianceResult !== undefined) {
                                 return varianceResult;
                             }
+                        }
+                        else if (!someContainsMarkerType(getTypeArguments(source as TypeReference)) && !someContainsMarkerType(getTypeArguments(target as TypeReference))) {
+                            return Ternary.Unknown;
                         }
                     }
                     else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
@@ -20425,6 +20432,49 @@ namespace ts {
             }
             const type = getDeclaredTypeOfSymbol(symbol) as GenericType;
             return createTypeReference(type, instantiateTypes(type.typeParameters, mapper));
+        }
+
+        // Check if any of the given types contain marker types. We visit type arguments of generic classes, interfaces, and
+        // type aliases, members of anonymous type literals and mapped types, constituents of union, intersection, and
+        // template literal types, and targets of index types and string mapping types. This is by design a limited set of
+        // types to avoid excessive fan out. In deferred (and thus possibly circular) locations we limit the traversal to
+        // four levels of depth.
+        function someContainsMarkerType(types: readonly Type[] | undefined, maxDepth = 4) {
+            return some(types, t => containsMarkerType(t, maxDepth));
+        }
+
+        function containsMarkerType(type: Type, maxDepth: number): boolean {
+            return maxDepth > 0 && (
+                type.flags & TypeFlags.TypeParameter ? type === markerSubType || type === markerSubType || type === markerOtherType :
+                type.aliasSymbol ? someContainsMarkerType(type.aliasTypeArguments, maxDepth) :
+                type.flags & TypeFlags.Object ? objectTypeContainsMarkerType(type as ObjectType, maxDepth) :
+                type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && !(type.flags & TypeFlags.EnumLiteral) ? someContainsMarkerType((type as UnionOrIntersectionType | TemplateLiteralType).types, maxDepth) :
+                type.flags & (TypeFlags.Index | TypeFlags.StringMapping) ? containsMarkerType((type as IndexType | StringMappingType).type, maxDepth) :
+                false);
+        }
+
+        function objectTypeContainsMarkerType(type: ObjectType, maxDepth: number): boolean {
+            const objectFlags = getObjectFlags(type);
+            if (objectFlags & ObjectFlags.Reference) {
+                return someContainsMarkerType(getTypeArguments(type as TypeReference), maxDepth - ((type as TypeReference).node ? 1 : 0));
+            }
+            if (objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
+                const resolved = resolveStructuredTypeMembers(type);
+                return some(resolved.properties, prop => containsMarkerType(getTypeOfSymbol(prop), maxDepth - 1)) ||
+                    some(resolved.callSignatures, sig => signatureContainsMarkerType(sig, maxDepth)) ||
+                    some(resolved.constructSignatures, sig => signatureContainsMarkerType(sig, maxDepth)) ||
+                    some(resolved.indexInfos, info => containsMarkerType(info.type, maxDepth - 1));
+            }
+            if (objectFlags & ObjectFlags.Mapped) {
+                return containsMarkerType(getConstraintTypeFromMappedType(type as MappedType), maxDepth - 1) ||
+                    containsMarkerType(getTemplateTypeFromMappedType(type as MappedType), maxDepth - 1);
+            }
+            return false;
+        }
+
+        function signatureContainsMarkerType(sig: Signature, maxDepth: number): boolean {
+            return some(sig.parameters, param => containsMarkerType(getTypeOfSymbol(param), maxDepth - 1)) ||
+                containsMarkerType(getReturnTypeOfSignature(sig), maxDepth - 1);
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
