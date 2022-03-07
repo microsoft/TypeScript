@@ -782,20 +782,19 @@ namespace ts.Completions {
             }
         }
 
-        if (preferences.includeCompletionsWithObjectLiteralMethodSnippets &&
-            preferences.includeCompletionsWithInsertText) {
-            const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, origin, location, contextToken, program.getTypeChecker());
-            if (objLit) {
-                let importAdder;
-                const entry = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, program, host, options, preferences, formatContext);
-                if (!entry) {
-                    return undefined;
-                }
-                ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
-                source = CompletionSource.ObjectLiteralMethodSnippet; // >> Needed for disambiguiation from normal completions (with just the method name).
-                if (importAdder?.hasFixes()) {
-                    hasAction = true;
-                }
+        if (preferences.includeCompletionsWithObjectLiteralMethodSnippets
+            && preferences.includeCompletionsWithInsertText
+            && origin && originIsObjectLiteralMethod(origin)) {
+            const objectLiteral = cast(tryGetObjectLikeCompletionContainer(contextToken), isObjectLiteralExpression);
+            let importAdder;
+            const entry = getEntryForObjectLiteralMethodCompletion(symbol, name, objectLiteral, program, host, options, preferences, formatContext);
+            if (!entry) {
+                return undefined;
+            }
+            ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
+            source = CompletionSource.ObjectLiteralMethodSnippet;
+            if (importAdder.hasFixes()) {
+                hasAction = true;
             }
         }
 
@@ -1067,41 +1066,7 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, origin: SymbolOriginInfo | undefined, location: Node, contextToken: Node | undefined, checker: TypeChecker): ObjectLiteralExpression | undefined {
-        if (!originIsObjectLiteralMethod(origin)) {
-            return undefined;
-        }
-        // TODO: support JS files.
-        if (isInJSFile(location)) {
-            return undefined;
-        }
-
-        /*
-            For an object type
-            `type Foo = {
-                bar(x: number): void;
-                foo: (x: string) => string;
-            }`,
-            `bar` will have symbol flag `Method`,
-            `foo` will have symbol flag `Property`.
-        */
-        if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method))) {
-            return undefined;
-        }
-
-        if (symbol.flags & SymbolFlags.Property) {
-            const type = checker.getTypeOfSymbol(symbol);
-            // We ignore non-function properties.
-            if (!type.getCallSignatures().length) {
-                return undefined;
-            }
-        }
-        // Check if we are in a position for object literal completion.
-        const objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken);
-        return objectLikeContainer && tryCast(objectLikeContainer, isObjectLiteralExpression);
-    }
-
-    function getEntryForObjectLiteralFunctionCompletion(
+    function getEntryForObjectLiteralMethodCompletion(
         symbol: Symbol,
         name: string,
         enclosingDeclaration: ObjectLiteralExpression,
@@ -1128,7 +1093,7 @@ namespace ts.Completions {
             body = factory.createBlock([], /* multiline */ true);
         }
 
-        const method = createObjectLiteralFunctionProperty(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body);
+        const method = createObjectLiteralMethod(symbol, enclosingDeclaration, sourceFile, program, host, preferences, importAdder, /*body*/ body);
         if (!method) {
             return undefined;
         }
@@ -1160,7 +1125,7 @@ namespace ts.Completions {
 
     };
 
-    function createObjectLiteralFunctionProperty(
+    function createObjectLiteralMethod(
         symbol: Symbol,
         enclosingDeclaration: ObjectLiteralExpression,
         sourceFile: SourceFile,
@@ -1238,8 +1203,6 @@ namespace ts.Completions {
         return {
             printSnippetList,
             printAndFormatSnippetList,
-            printSnippet,
-            printAndFormatSnippet,
         };
 
         /* Snippet-escaping version of `printer.printList`. */
@@ -1282,47 +1245,6 @@ namespace ts.Completions {
             });
             return textChanges.applyChanges(syntheticFile.text, changes);
         }
-
-        // >> TODO: do we need this?
-        function printSnippet(
-            hint: EmitHint,
-            node: Node,
-            sourceFile: SourceFile | undefined,
-        ): string {
-            writer.clear();
-            printer.writeNode(hint, node, sourceFile, writer);
-            return writer.getText();
-        }
-
-        function printAndFormatSnippet(
-            hint: EmitHint,
-            node: Node,
-            sourceFile: SourceFile,
-            formatContext: formatting.FormatContext,
-        ): string {
-            const syntheticFile = {
-                text: printSnippet(
-                    hint,
-                    node,
-                    sourceFile),
-                getLineAndCharacterOfPosition(pos: number) {
-                    return getLineAndCharacterOfPosition(this, pos);
-                },
-            };
-
-            const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
-
-            const nodeWithPos = textChanges.assignPositionsToNode(node);
-            const changes = formatting.formatNodeGivenIndentation(
-                nodeWithPos,
-                syntheticFile,
-                sourceFile.languageVariant,
-                /* indentation */ 0,
-                /* delta */ 0,
-                { ...formatContext, options: formatOptions });
-            return textChanges.applyChanges(syntheticFile.text, changes);
-        }
-
     }
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport | SymbolOriginInfoResolvedExport): CompletionEntryData | undefined {
@@ -1796,7 +1718,7 @@ namespace ts.Completions {
 
         if (source === CompletionSource.ObjectLiteralMethodSnippet) {
             const enclosingDeclaration = tryGetObjectLikeCompletionContainer(contextToken) as ObjectLiteralExpression;
-            const { importAdder } = getEntryForObjectLiteralFunctionCompletion(
+            const { importAdder } = getEntryForObjectLiteralMethodCompletion(
                 symbol,
                 name,
                 enclosingDeclaration,
@@ -2847,13 +2769,42 @@ namespace ts.Completions {
 
         /* Mutates `symbols` and `symbolToOriginInfoMap`. */
         function collectObjectLiteralMethodSymbols(members: Symbol[]) {
-            // >> TODO: move symbol for method checks here instead of later, if possible
+            // TODO: support JS files.
+            if (isInJSFile(location)) {
+                return false;
+            }
             members = members.slice(); // Needed in case `symbol` and `members` are the same array.
             for (const member of members) {
+                if (!isObjectLiteralMethodSymbol(member)) {
+                    continue;
+                }
                 const origin = { kind: SymbolOriginInfoKind.ObjectLiteralMethod };
                 symbolToOriginInfoMap[symbols.length] = origin;
                 symbols.push(member);
             }
+        }
+
+        function isObjectLiteralMethodSymbol(symbol: Symbol): boolean {
+            /*
+                For an object type
+                `type Foo = {
+                    bar(x: number): void;
+                    foo: (x: string) => string;
+                }`,
+                `bar` will have symbol flag `Method`,
+                `foo` will have symbol flag `Property`.
+            */
+            if (!(symbol.flags & (SymbolFlags.Property | SymbolFlags.Method))) {
+                return false;
+            }
+            if (symbol.flags & SymbolFlags.Property) {
+                const type = program.getTypeChecker().getTypeOfSymbol(symbol);
+                // We ignore non-function properties.
+                if (!type.getCallSignatures().length) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /**

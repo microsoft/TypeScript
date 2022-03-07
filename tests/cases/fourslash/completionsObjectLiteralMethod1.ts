@@ -92,13 +92,12 @@ verify.completions({
         includeCompletionsWithSnippetText: false,
         includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
-    includes: [
+    exact: [
         {
             name: "buzz",
             sortText: completion.SortText.LocationPriority,
             // no declaration insert text, because this property has overloads
             insertText: undefined,
-            // >> TODO: use `exact` instead of `includes` here
         },
     ],
 });
