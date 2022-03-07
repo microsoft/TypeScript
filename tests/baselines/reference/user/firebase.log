@@ -1,7 +1,0 @@
-Exit Code: 2
-Standard output:
-index.ts(1,27): error TS2307: Cannot find module 'firebase' or its corresponding type declarations.
-
-
-
-Standard error:
