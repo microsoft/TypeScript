@@ -80,11 +80,12 @@ ${'content' in file ? file.content :  file.fileContent}`;
             assert.isDefined(vfs);
             assert.isDefined(project);
             verifyProjectVersion(project, 1);
-            // for some reason I have here ... (but I think is duped from above, but maybe if I delete this I need to lower the expected projectVersion throughout?)
-            // PROBABLY
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
-                arguments: app
+                arguments: {
+                    file: file3.file,
+                    fileContent: fileContentWithComment(file3)
+                }
             });
             verifyProjectVersion(project, 2);
 
@@ -103,7 +104,7 @@ ${'content' in file ? file.content :  file.fileContent}`;
             // Open file contents
             verifyText(service, commonFile1.path, fileContentWithComment(commonFile1));
             verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
-            verifyText(service, app.file, "let zzz = 10;let zz = 10;let z = 1;");
+            verifyText(service, app.file, "let zzz = 10;let zz = 10;import { xyz } from './file3'; let x = xyz");
             verifyText(service, file3.file, file3.fileContent!);
 
             // Open file1 again
@@ -114,7 +115,7 @@ ${'content' in file ? file.content :  file.fileContent}`;
             verifyProjectVersion(project, 4);
             verifyText(service, commonFile1.path, commonFile1.content);
             verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
-            verifyText(service, app.file, "let zzz = 10;let zz = 10;let z = 1;");
+            verifyText(service, app.file, "let zzz = 10;let zz = 10;import { xyz } from './file3'; let x = xyz");
             verifyText(service, file3.file, file3.fileContent!);
         }
 
