@@ -20386,7 +20386,7 @@ namespace ts {
         function getVariancesWorker(symbol: Symbol, typeParameters: readonly TypeParameter[] = emptyArray): VarianceFlags[] {
             const links = getSymbolLinks(symbol);
             if (!links.variances) {
-                tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getSymbolId(symbol) });
+                tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getTypeId(getDeclaredTypeOfSymbol(symbol)) });
                 links.variances = emptyArray;
                 const variances = [];
                 for (const tp of typeParameters) {
