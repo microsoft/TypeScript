@@ -74,7 +74,7 @@ namespace ts.Completions {
         Nullable            = 1 << 4,
         ResolvedExport      = 1 << 5,
         TypeOnlyAlias       = 1 << 6,
-        ObjectLiteralMember = 1 << 7,
+        ObjectLiteralMethod = 1 << 7,
 
         SymbolMemberNoExport = SymbolMember,
         SymbolMemberExport   = SymbolMember | Export,
@@ -142,8 +142,8 @@ namespace ts.Completions {
         return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
     }
 
-    function originIsObjectLiteralMember(origin: SymbolOriginInfo | undefined): boolean {
-        return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMember);
+    function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): boolean {
+        return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMethod);
     }
 
     interface UniqueNameSet {
@@ -782,17 +782,20 @@ namespace ts.Completions {
             }
         }
 
-        const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, origin, location, contextToken, program.getTypeChecker());
-        if (objLit) {
-            let importAdder;
-            const entry = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, program, host, options, preferences, formatContext);
-            if (!entry) {
-                return undefined;
-            }
-            ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
-            source = CompletionSource.ObjectLiteralMethodSnippet; // >> Needed for disambiguiation from normal completions (with just the method name).
-            if (importAdder?.hasFixes()) {
-                hasAction = true; // >> TODO: implement this computation in `getCompletionEntryDetails`.
+        if (preferences.includeCompletionsWithObjectLiteralMethodSnippets &&
+            preferences.includeCompletionsWithInsertText) {
+            const objLit = isObjectLiteralFunctionPropertyCompletion(symbol, origin, location, contextToken, program.getTypeChecker());
+            if (objLit) {
+                let importAdder;
+                const entry = getEntryForObjectLiteralFunctionCompletion(symbol, name, objLit, program, host, options, preferences, formatContext);
+                if (!entry) {
+                    return undefined;
+                }
+                ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
+                source = CompletionSource.ObjectLiteralMethodSnippet; // >> Needed for disambiguiation from normal completions (with just the method name).
+                if (importAdder?.hasFixes()) {
+                    hasAction = true;
+                }
             }
         }
 
@@ -1065,7 +1068,7 @@ namespace ts.Completions {
     }
 
     function isObjectLiteralFunctionPropertyCompletion(symbol: Symbol, origin: SymbolOriginInfo | undefined, location: Node, contextToken: Node | undefined, checker: TypeChecker): ObjectLiteralExpression | undefined {
-        if (!originIsObjectLiteralMember(origin)) {
+        if (!originIsObjectLiteralMethod(origin)) {
             return undefined;
         }
         // TODO: support JS files.
@@ -1464,7 +1467,7 @@ namespace ts.Completions {
             const symbol = symbols[i];
             const origin = symbolToOriginInfoMap?.[i];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
-            if (!info || uniques.get(info.name) || kind === CompletionKind.Global && symbolToSortTextIdMap && !shouldIncludeSymbol(symbol, symbolToSortTextIdMap)) {
+            if (!info || (uniques.get(info.name) && (!origin || !originIsObjectLiteralMethod(origin))) || kind === CompletionKind.Global && symbolToSortTextIdMap && !shouldIncludeSymbol(symbol, symbolToSortTextIdMap)) {
                 continue;
             }
 
@@ -2843,10 +2846,11 @@ namespace ts.Completions {
         }
 
         /* Mutates `symbols` and `symbolToOriginInfoMap`. */
-        function collectObjectLiteralSymbols(members: Symbol[]) {
-            // >> TODO: only do this if user preferences for this completion scenario is enabled
+        function collectObjectLiteralMethodSymbols(members: Symbol[]) {
+            // >> TODO: move symbol for method checks here instead of later, if possible
+            members = members.slice(); // Needed in case `symbol` and `members` are the same array.
             for (const member of members) {
-                const origin = { kind: SymbolOriginInfoKind.ObjectLiteralMember };
+                const origin = { kind: SymbolOriginInfoKind.ObjectLiteralMethod };
                 symbolToOriginInfoMap[symbols.length] = origin;
                 symbols.push(member);
             }
@@ -3083,10 +3087,11 @@ namespace ts.Completions {
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
                 const filteredMembers = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
-                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                    collectObjectLiteralSymbols(filteredMembers);
-                }
                 symbols = concatenate(symbols, filteredMembers);
+                if (preferences.includeCompletionsWithObjectLiteralMethodSnippets
+                    && objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                    collectObjectLiteralMethodSymbols(filteredMembers);
+                }
             }
             setSortTextToOptionalMember();
 

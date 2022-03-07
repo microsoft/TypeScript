@@ -37,18 +37,19 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
             name: "bar",
             sortText: completion.SortText.LocationPriority,
-            source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "bar(x: number): void {\n},",
+            insertText: undefined,
         },
         {
             name: "bar",
             sortText: completion.SortText.LocationPriority,
-            insertText: undefined,
+            source: completion.CompletionSource.ObjectLiteralMethodSnippet,
+            insertText: "bar(x: number): void {\n},",
         },
     ],
 });
@@ -57,8 +58,14 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
+        {
+            name: "bar",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
+        },
         {
             name: "bar",
             sortText: completion.SortText.LocationPriority,
@@ -66,7 +73,7 @@ verify.completions({
             insertText: "bar(x: number): void {\n},",
         },
         {
-            name: "bar",
+            name: "foo",
             sortText: completion.SortText.LocationPriority,
             insertText: undefined,
         },
@@ -76,11 +83,6 @@ verify.completions({
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(x: string): string {\n},",
         },
-        {
-            name: "foo",
-            sortText: completion.SortText.LocationPriority,
-            insertText: undefined,
-        }
     ],
 });
 verify.completions({
@@ -88,6 +90,7 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
@@ -95,6 +98,7 @@ verify.completions({
             sortText: completion.SortText.LocationPriority,
             // no declaration insert text, because this property has overloads
             insertText: undefined,
+            // >> TODO: use `exact` instead of `includes` here
         },
     ],
 });
@@ -103,18 +107,19 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
         {
             name: "\"space bar\"",
             sortText: completion.SortText.LocationPriority,
-            source: completion.CompletionSource.ObjectLiteralMethodSnippet,
-            insertText: "\"space bar\"(): string {\n},",
+            insertText: undefined,
         },
         {
             name: "\"space bar\"",
             sortText: completion.SortText.LocationPriority,
-            insertText: undefined,
+            source: completion.CompletionSource.ObjectLiteralMethodSnippet,
+            insertText: "\"space bar\"(): string {\n},",
         },
     ],
 });
@@ -123,8 +128,14 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: true,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
+        {
+            name: "bar",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
+        },
         {
             name: "bar",
             sortText: completion.SortText.LocationPriority,

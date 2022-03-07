@@ -23,8 +23,14 @@ verify.completions({
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            insertText: undefined,
+        },
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
@@ -39,6 +45,7 @@ verify.applyCodeActionFromCompletion("a", {
     preferences: {
         includeCompletionsWithInsertText: true,
         includeCompletionsWithSnippetText: false,
+        includeCompletionsWithObjectLiteralMethodSnippets: true,
     },
     name: "foo",
     source: completion.CompletionSource.ObjectLiteralMethodSnippet,
