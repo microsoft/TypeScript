@@ -1,0 +1,14 @@
+Exit Code: 2
+Standard output:
+node_modules/@babel/parser/typings/babel-parser.d.ts(14,23): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@babel/parser/typings/babel-parser.d.ts(22,23): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@vue/compiler-core/dist/compiler-core.d.ts(1,57): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@vue/compiler-core/dist/compiler-core.d.ts(2,45): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@vue/compiler-core/dist/compiler-core.d.ts(4,33): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@vue/compiler-core/dist/compiler-core.d.ts(5,37): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@vue/compiler-core/dist/compiler-core.d.ts(6,37): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+node_modules/@vue/compiler-core/dist/compiler-core.d.ts(8,30): error TS2307: Cannot find module '@babel/types' or its corresponding type declarations.
+
+
+
+Standard error:

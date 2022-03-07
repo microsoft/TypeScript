@@ -1,0 +1,10 @@
+Exit Code: 2
+Standard output:
+node_modules/vuex/types/helpers.d.ts(1,10): error TS2614: Module '"vue"' has no exported member 'ComponentPublicInstance'. Did you mean to use 'import ComponentPublicInstance from "vue"' instead?
+node_modules/vuex/types/index.d.ts(1,10): error TS2614: Module '"vue"' has no exported member 'App'. Did you mean to use 'import App from "vue"' instead?
+node_modules/vuex/types/index.d.ts(1,29): error TS2614: Module '"vue"' has no exported member 'InjectionKey'. Did you mean to use 'import InjectionKey from "vue"' instead?
+node_modules/vuex/types/vue.d.ts(5,10): error TS2614: Module '"vue"' has no exported member 'ComponentCustomOptions'. Did you mean to use 'import ComponentCustomOptions from "vue"' instead?
+
+
+
+Standard error:

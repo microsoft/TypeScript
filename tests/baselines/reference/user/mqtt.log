@@ -1,0 +1,8 @@
+Exit Code: 2
+Standard output:
+node_modules/mqtt/types/lib/client-options.d.ts(3,31): error TS7016: Could not find a declaration file for module 'ws'. 'E:/Github/TypeScript/tests/cases/user/mqtt/node_modules/ws/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/ws` if it exists or add a new declaration (.d.ts) file containing `declare module 'ws';`
+
+
+
+Standard error:
