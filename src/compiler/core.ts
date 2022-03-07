@@ -1488,6 +1488,118 @@ namespace ts {
         return createMultiMap() as UnderscoreEscapedMultiMap<T>;
     }
 
+    export function createSet<TElement, THash = number>(getHashCode: (element: TElement) => THash, equals: EqualityComparer<TElement>): Set<TElement> {
+        const multiMap = new Map<THash, TElement[]>();
+        let size = 0;
+
+        function getElementIterator(): Iterator<TElement> {
+            const valueIt = multiMap.values();
+            let arrayIt: Iterator<TElement> | undefined;
+            return {
+                next: () => {
+                    while (true) {
+                        if (arrayIt) {
+                            const n = arrayIt.next();
+                            if (!n.done) {
+                                return { value: n.value };
+                            }
+                            arrayIt = undefined;
+                        }
+                        else {
+                            const n = valueIt.next();
+                            if (n.done) {
+                                return { value: undefined, done: true };
+                            }
+                            arrayIt = arrayIterator(n.value);
+                        }
+                    }
+                }
+            };
+        }
+
+        const set: Set<TElement> = {
+            has: function (element: TElement): boolean {
+                const hash = getHashCode(element);
+                const candidates = multiMap.get(hash);
+                if (candidates) {
+                    for (const candidate of candidates) {
+                        if (equals(candidate, element)) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            },
+            add: function (element: TElement): Set<TElement> {
+                const hash = getHashCode(element);
+                const values = multiMap.get(hash);
+                if (values) {
+                    if (!contains(values, element, equals)) {
+                        values.push(element);
+                        size++;
+                    }
+                }
+                else {
+                    multiMap.set(hash, [ element ]);
+                }
+
+                return this;
+            },
+            delete: function (element: TElement): boolean {
+                const hash = getHashCode(element);
+                const candidates = multiMap.get(hash);
+                if (candidates) {
+                    for (let i = 0; i < candidates.length; i++) {
+                        if (equals(candidates[i], element)) {
+                            if (candidates.length === 1) {
+                                multiMap.delete(hash);
+                            }
+                            else {
+                                unorderedRemoveItemAt(candidates, i);
+                            }
+                            size--;
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            },
+            clear: function (): void {
+                multiMap.clear();
+                size = 0;
+            },
+            get size() {
+                return size;
+            },
+            forEach: function (action: (value: TElement, key: TElement) => void): void {
+                for (const elements of arrayFrom(multiMap.values())) {
+                    for (const element of elements) {
+                        action(element, element);
+                    }
+                }
+            },
+            keys: function (): Iterator<TElement> {
+                return getElementIterator();
+            },
+            values: function (): Iterator<TElement> {
+                return getElementIterator();
+            },
+            entries: function (): Iterator<[TElement, TElement]> {
+                const it = getElementIterator();
+                return {
+                    next: () => {
+                        const n = it.next();
+                        return n.done ? n : { value: [ n.value, n.value ] }
+                    }
+                };
+            },
+        };
+
+        return set;
+    }
+
     /**
      * Tests whether a value is an array.
      */
