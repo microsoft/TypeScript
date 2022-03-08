@@ -1727,14 +1727,16 @@ namespace ts.Completions {
                 compilerOptions,
                 preferences,
                 formatContext)!;
-            const changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, importAdder.writeFixes);
-            return {
-                sourceDisplay: undefined,
-                codeActions: [{
-                    changes,
-                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
-                }],
-            };
+            if (importAdder.hasFixes()) {
+                const changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, importAdder.writeFixes);
+                return {
+                    sourceDisplay: undefined,
+                    codeActions: [{
+                        changes,
+                        description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                    }],
+                };
+            }
         }
 
         if (originIsTypeOnlyAlias(origin)) {
