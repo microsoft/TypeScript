@@ -3353,7 +3353,7 @@
         "category": "Error",
         "code": 2814
     },
-    "'arguments' cannot be referenced in property initializers.": {
+    "'arguments' cannot be referenced in property initializers or class static initialization block.": {
         "category": "Error",
         "code": 2815
     },

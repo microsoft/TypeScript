@@ -25347,8 +25347,8 @@ namespace ts {
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol) {
-                if (isInPropertyInitializerOrClassStaticBlock(node)) {
-                    error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers);
+                if (isArgumentsInPropertyInitializerOrClassStaticBlock(node)) {
+                    error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_block);
                     return errorType;
                 }
 
@@ -28894,6 +28894,20 @@ namespace ts {
                         return isBlock(node.parent) && isClassStaticBlockDeclaration(node.parent.parent) ? true : "quit";
                     default:
                         return isExpressionNode(node) ? false : "quit";
+                }
+            });
+        }
+
+        function isArgumentsInPropertyInitializerOrClassStaticBlock(node: Node): boolean {
+            return !!findAncestor(node, node => {
+                switch(node.kind) {
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                        return true;
+                    case SyntaxKind.ArrowFunction:
+                        return false;
+                    default:
+                        return isFunctionLikeDeclaration(node) ? "quit" : false;
                 }
             });
         }
