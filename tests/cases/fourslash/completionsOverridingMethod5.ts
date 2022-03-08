@@ -12,8 +12,8 @@
 ////
 ////abstract class Abc extends Ab {
 ////    /*a*/
-////    abstract /*b*/
-////    abstract m/*c*/
+////    [|abstract|] /*b*/
+////    [|abstract m|]/*c*/
 ////}
 
 
@@ -29,21 +29,11 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "met(n: string): void {\n}",
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "met2(n: number): void {\n}",
         }
     ],
@@ -61,22 +51,14 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met(n: string): void;",
+            replacementSpan: test.ranges()[0],
+            insertText: "abstract met(n: string): void;",
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met2(n: number): void;",
+            replacementSpan: test.ranges()[0],
+            insertText: "abstract met2(n: number): void;",
         }
     ],
 });
@@ -93,22 +75,14 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met(n: string): void;",
+            replacementSpan: test.ranges()[1],
+            insertText: "abstract met(n: string): void;",
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met2(n: number): void;",
+            replacementSpan: test.ranges()[1],
+            insertText: "abstract met2(n: number): void;",
         }
     ],
 });

@@ -10,11 +10,11 @@
 ////}
 ////
 ////abstract class B extends A {
-////    public abstract /*b*/
+////    [|public abstract|] /*b*/
 ////}
 ////
 ////class C extends A {
-////    public override m/*a*/
+////    [|public override m|]/*a*/
 ////}
 ////
 ////interface D {
@@ -23,7 +23,7 @@
 ////}
 ////
 ////class E implements D {
-////    public f/*c*/
+////    [|public f|]/*c*/
 ////}
 
 verify.completions({
@@ -38,12 +38,8 @@ verify.completions({
         {
             name: "method",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "method(): number {\n}",
+            replacementSpan: test.ranges()[1],
+            insertText: "public override method(): number {\n}",
         },
     ],
 });
@@ -60,12 +56,8 @@ verify.completions({
         {
             name: "method",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "method(): number;",
+            replacementSpan: test.ranges()[0],
+            insertText: "public abstract method(): number;",
         },
     ],
 });
@@ -82,13 +74,9 @@ verify.completions({
         {
             name: "fun",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            replacementSpan: test.ranges()[2],
             insertText:
-`fun(a: number): number;
+`public fun(a: number): number;
 public fun(a: undefined, b: string): number;
 public fun(a: unknown, b?: unknown): number {
 }`,

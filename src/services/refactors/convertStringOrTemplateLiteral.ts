@@ -215,7 +215,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                     const isLastSpan = index === currentNode.templateSpans.length - 1;
                     const text = span.literal.text + (isLastSpan ? subsequentText : "");
                     const rawText = getRawTextOfTemplate(span.literal) + (isLastSpan ? rawSubsequentText : "");
-                    return factory.createTemplateSpan(span.expression, isLast
+                    return factory.createTemplateSpan(span.expression, isLast && isLastSpan
                         ? factory.createTemplateTail(text, rawText)
                         : factory.createTemplateMiddle(text, rawText));
                 });

@@ -344,6 +344,7 @@ namespace ts {
         CatchClause,
         AssertClause,
         AssertEntry,
+        ImportTypeAssertionContainer,
 
         // Property assignments
         PropertyAssignment,
@@ -1568,10 +1569,18 @@ namespace ts {
         readonly kind: TKind;
     }
 
+    export interface ImportTypeAssertionContainer extends Node {
+        readonly kind: SyntaxKind.ImportTypeAssertionContainer;
+        readonly parent: ImportTypeNode;
+        readonly assertClause: AssertClause;
+        readonly multiLine?: boolean;
+    }
+
     export interface ImportTypeNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.ImportType;
         readonly isTypeOf: boolean;
         readonly argument: TypeNode;
+        readonly assertions?: ImportTypeAssertionContainer;
         readonly qualifier?: EntityName;
     }
 
@@ -3515,12 +3524,12 @@ namespace ts {
         name?: string;
     }
 
-    /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
      */
     export interface SourceFileLike {
         readonly text: string;
+        /* @internal */
         lineMap?: readonly number[];
         /* @internal */
         getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
@@ -6846,6 +6855,7 @@ namespace ts {
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
         snippetElement?: SnippetElement;         // Snippet element of the node
+        typeNode?: TypeNode;                         // VariableDeclaration type
     }
 
     /* @internal */
@@ -7272,8 +7282,12 @@ namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
+        /*@deprecated*/
         createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        /*@deprecated*/
         updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
         createThisTypeNode(): ThisTypeNode;
@@ -7459,6 +7473,8 @@ namespace ts {
         updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
         createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
         updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+        createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
         createNamespaceExport(name: Identifier): NamespaceExport;
@@ -8383,11 +8399,16 @@ namespace ts {
     }
 
     /* @internal */
+    export interface ModuleSpecifierOptions {
+        overrideImportMode?: SourceFile["impliedNodeFormat"];
+    }
+
+    /* @internal */
     export interface ModuleSpecifierCache {
-        get(fromFileName: Path, toFileName: Path, preferences: UserPreferences): Readonly<ResolvedModuleSpecifierInfo> | undefined;
-        set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, isAutoImportable: boolean): void;
-        setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[]): void;
+        get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
+        set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
+        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isAutoImportable: boolean): void;
+        setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;
     }

@@ -1,4 +1,4 @@
-tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2741: Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo' but required in type 'C'.
+tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
 
 
 ==== tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts (1 errors) ====
@@ -12,6 +12,5 @@ tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): e
     }
     var a: D = foo("hi", []);
         ~
-!!! error TS2741: Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo' but required in type 'C'.
-!!! related TS2728 tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts:2:13: 'x' is declared here.
+!!! error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
     

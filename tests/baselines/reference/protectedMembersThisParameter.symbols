@@ -1,0 +1,338 @@
+=== tests/cases/compiler/protectedMembersThisParameter.ts ===
+class Message {
+>Message : Symbol(Message, Decl(protectedMembersThisParameter.ts, 0, 0))
+
+  protected secret(): void {}
+>secret : Symbol(Message.secret, Decl(protectedMembersThisParameter.ts, 0, 15))
+}
+class MessageWrapper {
+>MessageWrapper : Symbol(MessageWrapper, Decl(protectedMembersThisParameter.ts, 2, 1))
+
+  message: Message = new Message();
+>message : Symbol(MessageWrapper.message, Decl(protectedMembersThisParameter.ts, 3, 22))
+>Message : Symbol(Message, Decl(protectedMembersThisParameter.ts, 0, 0))
+>Message : Symbol(Message, Decl(protectedMembersThisParameter.ts, 0, 0))
+
+  wrap<T>() {
+>wrap : Symbol(MessageWrapper.wrap, Decl(protectedMembersThisParameter.ts, 4, 35))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 5, 7))
+
+    let m = this.message;
+>m : Symbol(m, Decl(protectedMembersThisParameter.ts, 6, 7))
+>this.message : Symbol(MessageWrapper.message, Decl(protectedMembersThisParameter.ts, 3, 22))
+>this : Symbol(MessageWrapper, Decl(protectedMembersThisParameter.ts, 2, 1))
+>message : Symbol(MessageWrapper.message, Decl(protectedMembersThisParameter.ts, 3, 22))
+
+    let f = function(this: T) {
+>f : Symbol(f, Decl(protectedMembersThisParameter.ts, 7, 7))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 7, 21))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 5, 7))
+
+      m.secret(); // should error
+>m.secret : Symbol(Message.secret, Decl(protectedMembersThisParameter.ts, 0, 15))
+>m : Symbol(m, Decl(protectedMembersThisParameter.ts, 6, 7))
+>secret : Symbol(Message.secret, Decl(protectedMembersThisParameter.ts, 0, 15))
+    }
+  }
+}
+
+class A {
+>A : Symbol(A, Decl(protectedMembersThisParameter.ts, 11, 1))
+
+  protected a() {}
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+}
+class B extends A {
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+>A : Symbol(A, Decl(protectedMembersThisParameter.ts, 11, 1))
+
+  protected b() {}
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+class C extends A {
+>C : Symbol(C, Decl(protectedMembersThisParameter.ts, 18, 1))
+>A : Symbol(A, Decl(protectedMembersThisParameter.ts, 11, 1))
+
+  protected c() {}
+>c : Symbol(C.c, Decl(protectedMembersThisParameter.ts, 19, 19))
+}
+class Z {
+>Z : Symbol(Z, Decl(protectedMembersThisParameter.ts, 21, 1))
+
+  protected z() {}
+>z : Symbol(Z.z, Decl(protectedMembersThisParameter.ts, 22, 9))
+}
+
+function bA<T extends A>(this: T, arg: B) {
+>bA : Symbol(bA, Decl(protectedMembersThisParameter.ts, 24, 1))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 26, 12))
+>A : Symbol(A, Decl(protectedMembersThisParameter.ts, 11, 1))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 26, 25))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 26, 12))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 26, 33))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+
+  this.a();
+>this.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 26, 25))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.a();
+>arg.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 26, 33))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.b(); // should error to avoid cross-hierarchy protected access https://www.typescriptlang.org/docs/handbook/2/classes.html#cross-hierarchy-protected-access
+>arg.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 26, 33))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+function bB<T extends B>(this: T, arg: B) {
+>bB : Symbol(bB, Decl(protectedMembersThisParameter.ts, 30, 1))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 31, 12))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 31, 25))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 31, 12))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 31, 33))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+
+  this.a();
+>this.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 31, 25))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  this.b();
+>this.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 31, 25))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+
+  arg.a();
+>arg.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 31, 33))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.b();
+>arg.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 31, 33))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+function bC<T extends C>(this: T, arg: B) {
+>bC : Symbol(bC, Decl(protectedMembersThisParameter.ts, 36, 1))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 37, 12))
+>C : Symbol(C, Decl(protectedMembersThisParameter.ts, 18, 1))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 37, 25))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 37, 12))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 37, 33))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+
+  this.a();
+>this.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 37, 25))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  this.c();
+>this.c : Symbol(C.c, Decl(protectedMembersThisParameter.ts, 19, 19))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 37, 25))
+>c : Symbol(C.c, Decl(protectedMembersThisParameter.ts, 19, 19))
+
+  arg.a(); // should error
+>arg.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 37, 33))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.b(); // should error
+>arg.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 37, 33))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+function bZ<T extends Z>(this: T, arg: B) {
+>bZ : Symbol(bZ, Decl(protectedMembersThisParameter.ts, 42, 1))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 43, 12))
+>Z : Symbol(Z, Decl(protectedMembersThisParameter.ts, 21, 1))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 43, 25))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 43, 12))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 43, 33))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+
+  this.z();
+>this.z : Symbol(Z.z, Decl(protectedMembersThisParameter.ts, 22, 9))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 43, 25))
+>z : Symbol(Z.z, Decl(protectedMembersThisParameter.ts, 22, 9))
+
+  arg.a(); // should error
+>arg.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 43, 33))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.b(); // should error
+>arg.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 43, 33))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+function bString<T extends string>(this: T, arg: B) {
+>bString : Symbol(bString, Decl(protectedMembersThisParameter.ts, 47, 1))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 48, 17))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 48, 35))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 48, 17))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 48, 43))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+
+  this.toLowerCase();
+>this.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 48, 35))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+  arg.a(); // should error
+>arg.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 48, 43))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.b(); // should error
+>arg.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 48, 43))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+function bAny<T>(this: T, arg: B) {
+>bAny : Symbol(bAny, Decl(protectedMembersThisParameter.ts, 52, 1))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 53, 14))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 53, 17))
+>T : Symbol(T, Decl(protectedMembersThisParameter.ts, 53, 14))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 53, 25))
+>B : Symbol(B, Decl(protectedMembersThisParameter.ts, 15, 1))
+
+  arg.a(); // should error
+>arg.a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 53, 25))
+>a : Symbol(A.a, Decl(protectedMembersThisParameter.ts, 13, 9))
+
+  arg.b(); // should error
+>arg.b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 53, 25))
+>b : Symbol(B.b, Decl(protectedMembersThisParameter.ts, 16, 19))
+}
+
+class D {
+>D : Symbol(D, Decl(protectedMembersThisParameter.ts, 56, 1))
+
+  protected d() {}
+>d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+
+  derived1(arg: D1) {
+>derived1 : Symbol(D.derived1, Decl(protectedMembersThisParameter.ts, 59, 18))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 61, 11))
+>D1 : Symbol(D1, Decl(protectedMembersThisParameter.ts, 86, 1))
+
+    arg.d();
+>arg.d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 61, 11))
+>d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+
+    arg.d1(); // should error
+>arg.d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 61, 11))
+>d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+  }
+  derived1ThisD(this: D, arg: D1) {
+>derived1ThisD : Symbol(D.derived1ThisD, Decl(protectedMembersThisParameter.ts, 64, 3))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 65, 16))
+>D : Symbol(D, Decl(protectedMembersThisParameter.ts, 56, 1))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 65, 24))
+>D1 : Symbol(D1, Decl(protectedMembersThisParameter.ts, 86, 1))
+
+    arg.d();
+>arg.d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 65, 24))
+>d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+
+    arg.d1(); // should error
+>arg.d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 65, 24))
+>d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+  }
+  derived1ThisD1(this: D1, arg: D1) {
+>derived1ThisD1 : Symbol(D.derived1ThisD1, Decl(protectedMembersThisParameter.ts, 68, 3))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 69, 17))
+>D1 : Symbol(D1, Decl(protectedMembersThisParameter.ts, 86, 1))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 69, 26))
+>D1 : Symbol(D1, Decl(protectedMembersThisParameter.ts, 86, 1))
+
+    arg.d();
+>arg.d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 69, 26))
+>d : Symbol(D.d, Decl(protectedMembersThisParameter.ts, 58, 9))
+
+    arg.d1();
+>arg.d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 69, 26))
+>d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+  }
+
+  derived2(arg: D2) {
+>derived2 : Symbol(D.derived2, Decl(protectedMembersThisParameter.ts, 72, 3))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 74, 11))
+>D2 : Symbol(D2, Decl(protectedMembersThisParameter.ts, 89, 1))
+
+    arg.d(); // should error because of overridden method in D2
+>arg.d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 74, 11))
+>d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+
+    arg.d2(); // should error
+>arg.d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 74, 11))
+>d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+  }
+  derived2ThisD(this: D, arg: D2) {
+>derived2ThisD : Symbol(D.derived2ThisD, Decl(protectedMembersThisParameter.ts, 77, 3))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 78, 16))
+>D : Symbol(D, Decl(protectedMembersThisParameter.ts, 56, 1))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 78, 24))
+>D2 : Symbol(D2, Decl(protectedMembersThisParameter.ts, 89, 1))
+
+    arg.d(); // should error because of overridden method in D2
+>arg.d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 78, 24))
+>d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+
+    arg.d2(); // should error
+>arg.d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 78, 24))
+>d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+  }
+  derived2ThisD2(this: D2, arg: D2) {
+>derived2ThisD2 : Symbol(D.derived2ThisD2, Decl(protectedMembersThisParameter.ts, 81, 3))
+>this : Symbol(this, Decl(protectedMembersThisParameter.ts, 82, 17))
+>D2 : Symbol(D2, Decl(protectedMembersThisParameter.ts, 89, 1))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 82, 26))
+>D2 : Symbol(D2, Decl(protectedMembersThisParameter.ts, 89, 1))
+
+    arg.d();
+>arg.d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 82, 26))
+>d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+
+    arg.d2();
+>arg.d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+>arg : Symbol(arg, Decl(protectedMembersThisParameter.ts, 82, 26))
+>d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+  }
+}
+class D1 extends D {
+>D1 : Symbol(D1, Decl(protectedMembersThisParameter.ts, 86, 1))
+>D : Symbol(D, Decl(protectedMembersThisParameter.ts, 56, 1))
+
+  protected d1() {}
+>d1 : Symbol(D1.d1, Decl(protectedMembersThisParameter.ts, 87, 20))
+}
+class D2 extends D {
+>D2 : Symbol(D2, Decl(protectedMembersThisParameter.ts, 89, 1))
+>D : Symbol(D, Decl(protectedMembersThisParameter.ts, 56, 1))
+
+  protected d() {}
+>d : Symbol(D2.d, Decl(protectedMembersThisParameter.ts, 90, 20))
+
+  protected d2() {}
+>d2 : Symbol(D2.d2, Decl(protectedMembersThisParameter.ts, 91, 18))
+}
+
+

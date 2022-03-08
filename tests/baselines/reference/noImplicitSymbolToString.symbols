@@ -30,3 +30,86 @@ const templateStrUnion = `union with number ${symbolUnionNumber} and union with 
 >symbolUnionNumber : Symbol(symbolUnionNumber, Decl(noImplicitSymbolToString.ts, 9, 3))
 >symbolUnionString : Symbol(symbolUnionString, Decl(noImplicitSymbolToString.ts, 10, 3))
 
+
+// Fix #44462
+
+type StringOrSymbol = string | symbol;
+>StringOrSymbol : Symbol(StringOrSymbol, Decl(noImplicitSymbolToString.ts, 12, 109))
+
+function getKey<S extends StringOrSymbol>(key: S) {
+>getKey : Symbol(getKey, Decl(noImplicitSymbolToString.ts, 17, 38))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 19, 16))
+>StringOrSymbol : Symbol(StringOrSymbol, Decl(noImplicitSymbolToString.ts, 12, 109))
+>key : Symbol(key, Decl(noImplicitSymbolToString.ts, 19, 42))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 19, 16))
+
+    return `${key} is the key`;
+>key : Symbol(key, Decl(noImplicitSymbolToString.ts, 19, 42))
+}
+
+function getKey1<S extends symbol>(key: S) {
+>getKey1 : Symbol(getKey1, Decl(noImplicitSymbolToString.ts, 21, 1))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 23, 17))
+>key : Symbol(key, Decl(noImplicitSymbolToString.ts, 23, 35))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 23, 17))
+
+    let s1!: S;
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 24, 7))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 23, 17))
+
+    `${s1}`;
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 24, 7))
+
+    s1 + '';
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 24, 7))
+
+    +s1;
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 24, 7))
+
+    let s2!: S | string;
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 29, 7))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 23, 17))
+
+    `${s2}`;
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 29, 7))
+
+    s2 + '';
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 29, 7))
+
+    +s2;
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 29, 7))
+}
+
+function getKey2<S extends string>(key: S) {
+>getKey2 : Symbol(getKey2, Decl(noImplicitSymbolToString.ts, 33, 1))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 35, 17))
+>key : Symbol(key, Decl(noImplicitSymbolToString.ts, 35, 35))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 35, 17))
+
+    let s1!: S;
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 36, 7))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 35, 17))
+
+    `${s1}`;
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 36, 7))
+
+    s1 + '';
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 36, 7))
+
+    +s1;
+>s1 : Symbol(s1, Decl(noImplicitSymbolToString.ts, 36, 7))
+
+    let s2!: S | symbol;
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 41, 7))
+>S : Symbol(S, Decl(noImplicitSymbolToString.ts, 35, 17))
+
+    `${s2}`;
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 41, 7))
+
+    s2 + '';
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 41, 7))
+
+    +s2;
+>s2 : Symbol(s2, Decl(noImplicitSymbolToString.ts, 41, 7))
+}
+

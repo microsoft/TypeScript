@@ -68,11 +68,13 @@ namespace ts {
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
         ["es2020.bigint", "lib.es2020.bigint.d.ts"],
+        ["es2020.date", "lib.es2020.date.d.ts"],
         ["es2020.promise", "lib.es2020.promise.d.ts"],
         ["es2020.sharedmemory", "lib.es2020.sharedmemory.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
+        ["es2020.number", "lib.es2020.number.d.ts"],
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
@@ -948,7 +950,8 @@ namespace ts {
             name: "jsxFragmentFactory",
             type: "string",
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment
+            description: Diagnostics.Specify_the_JSX_Fragment_reference_used_for_fragments_when_targeting_React_JSX_emit_e_g_React_Fragment_or_Fragment,
+            defaultValueDescription: "React.Fragment",
         },
         {
             name: "jsxImportSource",
@@ -2498,7 +2501,7 @@ namespace ts {
             const result: string[] = [];
             result.push(`{`);
             result.push(`${tab}"compilerOptions": {`);
-            result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_json_to_read_more_about_this_file)} */`);
+            result.push(`${tab}${tab}/* ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)} */`);
             result.push("");
             // Print out each row, aligning all the descriptions on the same column.
             for (const entry of entries) {
@@ -2753,7 +2756,7 @@ namespace ts {
         function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
             if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
                 if (isArray(raw[prop])) {
-                    const result = raw[prop];
+                    const result = raw[prop] as T[];
                     if (!sourceFile && !every(result, validateElement)) {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                     }

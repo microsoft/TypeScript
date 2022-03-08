@@ -93,7 +93,7 @@
 ////
 ////class HSub extends HBase {
 ////    /*h1*/
-////    static /*h2*/
+////    [|static|] /*h2*/
 ////}
 
 // @Filename: i.ts
@@ -124,11 +124,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "foo(param1: string, param2: boolean): Promise<void> {\n}",
         }
     ],
@@ -146,11 +141,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "foo(a: string, b: string): string {\n}",
         }
     ],
@@ -168,11 +158,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -190,11 +175,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -212,11 +192,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -234,11 +209,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -256,11 +226,6 @@ verify.completions({
         {
             name: "foo",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText:
 `foo(a: string): string;
 foo(a: undefined, b: number): string;
@@ -292,12 +257,8 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
-            insertText: "met(n: number): number {\n}",
+            replacementSpan: test.ranges()[0],
+            insertText: "static met(n: number): number {\n}",
         }
     ],
 });
@@ -314,21 +275,11 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "met<T>(t: T): T {\n}",
         },
         {
             name: "metcons",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
             insertText: "metcons<T extends string | number>(t: T): T {\n}",
         }
     ],

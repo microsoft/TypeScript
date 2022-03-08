@@ -286,6 +286,8 @@ namespace ts.projectSystem {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
             assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                // Keep the .d.ts file since the .ts file no longer exists
+                // (otherwise it would be treated as not in the project)
                 {
                     ...protocolFileSpanFromSubstring({
                         file: bDts,
@@ -308,20 +310,9 @@ namespace ts.projectSystem {
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
                 },
-                {
-                    ...protocolFileSpanFromSubstring({
-                        file: aTs,
-                        text: "export function fnA() {}"
-                    }),
-                    name: "fnA",
-                    matchKind: "prefix",
-                    isCaseSensitive: true,
-                    kind: ScriptElementKind.functionElement,
-                    kindModifiers: "export",
-                },
             ]);
 
-            verifyATsConfigOriginalProject(session);
+            verifySingleInferredProject(session);
         });
 
         it("navigateToAll -- when neither file nor project is specified", () => {

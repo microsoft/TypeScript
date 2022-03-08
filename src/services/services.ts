@@ -1724,6 +1724,9 @@ namespace ts {
             if (isNamedTupleMember(node.parent) && node.pos === node.parent.pos) {
                 return node.parent;
             }
+            if (isImportMeta(node.parent) && node.parent.name === node) {
+                return node.parent;
+            }
             return node;
         }
 
@@ -1740,6 +1743,8 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.NamedTupleMember:
                     return true;
+                case SyntaxKind.MetaProperty:
+                    return isImportMeta(node);
                 default:
                     return false;
             }

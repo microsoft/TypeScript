@@ -12,7 +12,7 @@ if (var1.constructor === String) {
 }
 if (var1.constructor === Number) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 
     var1; // Number
 >var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))

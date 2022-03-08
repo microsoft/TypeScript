@@ -593,9 +593,17 @@ namespace ts {
                 Debug.type<ImportTypeNode>(node);
                 return factory.updateImportTypeNode(node,
                     nodeVisitor(node.argument, visitor, isTypeNode),
+                    nodeVisitor(node.assertions, visitor, isNode),
                     nodeVisitor(node.qualifier, visitor, isEntityName),
                     visitNodes(node.typeArguments, visitor, isTypeNode),
                     node.isTypeOf
+                );
+
+            case SyntaxKind.ImportTypeAssertionContainer:
+                Debug.type<ImportTypeAssertionContainer>(node);
+                return factory.updateImportTypeAssertionContainer(node,
+                    nodeVisitor(node.assertClause, visitor, isNode),
+                    node.multiLine
                 );
 
             case SyntaxKind.NamedTupleMember:
