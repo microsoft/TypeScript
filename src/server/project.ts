@@ -1545,7 +1545,7 @@ namespace ts.server {
             return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
         }
 
-        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
+        protected async enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): Promise<void> {
             const host = this.projectService.host;
 
             if (!host.require) {
@@ -1555,9 +1555,9 @@ namespace ts.server {
 
             // Search any globally-specified probe paths, then our peer node_modules
             const searchPaths = [
-              ...this.projectService.pluginProbeLocations,
-              // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-              combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
+                ...this.projectService.pluginProbeLocations,
+                // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+                combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
             ];
 
             if (this.projectService.globalPlugins) {
@@ -1572,12 +1572,12 @@ namespace ts.server {
                     // Provide global: true so plugins can detect why they can't find their config
                     this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
 
-                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
+                    await this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
                 }
             }
         }
 
-        protected async enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
+        protected async enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<void> {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
             if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
                 this.projectService.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
@@ -1593,21 +1593,20 @@ namespace ts.server {
             let resolvedModule: any | undefined;
             if (this.projectService.host.importServicePlugin) {
                 for (const searchPath of searchPaths) {
-                    try {
-                        resolvedModule = await this.projectService.host.importServicePlugin(searchPath, pluginConfigEntry.name);
+                    const result = await this.projectService.host.importServicePlugin(searchPath, pluginConfigEntry.name);
+                    if (result.error) {
+                        logError(result.error.toString());
                     }
-                    catch (e) {
-                        // TODO: log this?
-                        continue;
-                    }
-                    if (resolvedModule) {
+                    else {
+                        resolvedModule = result.module;
                         break;
                     }
+
                 }
             }
             else {
                 resolvedModule = firstDefined(searchPaths, searchPath =>
-                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
+                    Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             }
 
             if (resolvedModule) {
@@ -2290,7 +2289,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined) {
+        async enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): Promise<void> {
             const host = this.projectService.host;
 
             if (!host.require) {
@@ -2311,11 +2310,11 @@ namespace ts.server {
             // Enable tsconfig-specified plugins
             if (options.plugins) {
                 for (const pluginConfigEntry of options.plugins) {
-                    this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
+                    await this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
                 }
             }
 
-            this.enableGlobalPlugins(options, pluginConfigOverrides);
+            return this.enableGlobalPlugins(options, pluginConfigOverrides);
         }
 
         /**

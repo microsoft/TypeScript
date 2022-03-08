@@ -6,6 +6,8 @@ declare namespace ts.server {
     }
 
     export type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
+    export type ImportPluginResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message: string } };
+
     export interface ServerHost extends System {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -16,6 +18,6 @@ declare namespace ts.server {
         gc?(): void;
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
-        importServicePlugin?(root: string, moduleName: string): Promise<any>;
+        importServicePlugin?(root: string, moduleName: string): Promise<ImportPluginResult>;
     }
 }

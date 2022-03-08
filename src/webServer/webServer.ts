@@ -139,21 +139,34 @@ namespace ts.server {
             /* eslint-enable no-restricted-globals */
 
             require: () => ({ module: undefined, error: new Error("Not implemented") }),
-            importServicePlugin: async (root: string, moduleName: string) => {
+            importServicePlugin: async (root: string, moduleName: string): Promise<ImportPluginResult> => {
                 const packageRoot = combinePaths(root, "node_modules", moduleName);
 
-                const packageJsonResponse = await fetch(combinePaths(packageRoot, "package.json"));
-                const packageJson = await packageJsonResponse.json();
+                let packageJson: any | undefined;
+                try {
+                    const packageJsonResponse = await fetch(combinePaths(packageRoot, "package.json"));
+                    packageJson = await packageJsonResponse.json();
+                }
+                catch (e) {
+                    return { module: undefined, error: new Error("Could not load plugin. Could not load 'package.json'.") };
+                }
+
                 const browser = packageJson.browser;
                 if (!browser) {
-                    throw new Error("Could not load plugin. No 'browser' field found in package.json.");
+                    return { module: undefined, error: new Error("Could not load plugin. No 'browser' field found in package.json.") };
                 }
 
                 const scriptPath = combinePaths(packageRoot, browser);
 
                 // TODO: TS rewrites `import(...)` to `require`. Use eval to bypass this
                 // eslint-disable-next-line no-eval
-                return (await eval(`import(${JSON.stringify(scriptPath)})`)).default;
+                try {
+                    const module = (await eval(`import(${JSON.stringify(scriptPath)})`)).default;
+                    return { module, error: undefined };
+                }
+                catch (e) {
+                    return { module: undefined, error: e };
+                }
             },
             exit: notImplemented,
 
