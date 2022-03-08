@@ -14393,11 +14393,17 @@ namespace ts {
         }
 
         function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
+            // [] and [T] immediately reduce to [] and [T] respectively
+            if (types.length < 2) {
+                return types;
+            }
+
             const id = getTypeListId(types);
             const match = subtypeReductionCache.get(id);
             if (match) {
                 return match;
             }
+
             // We assume that redundant primitive types have already been removed from the types array and that there
             // are no any and unknown types in the array. Thus, the only possible supertypes for primitive types are empty
             // object types, and if none of those are present we can exclude primitive types from the subtype check.
