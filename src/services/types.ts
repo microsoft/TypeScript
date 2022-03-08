@@ -1033,6 +1033,7 @@ namespace ts {
         /* @internal */ isLocal?: boolean;
         /* @internal */ isAmbient?: boolean;
         /* @internal */ isAliasTarget?: boolean;
+        /* @internal */ failedAliasResolution?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {

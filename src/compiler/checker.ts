@@ -9003,7 +9003,7 @@ namespace ts {
                         }
                     }
                     const sourceTypes = some(constructorTypes, t => !!(t.flags & ~TypeFlags.Nullable)) ? constructorTypes : types; // TODO: GH#18217
-                    type = getUnionType(sourceTypes!, UnionReduction.Subtype);
+                    type = getUnionType(sourceTypes!);
                 }
             }
             const widened = getWidenedType(addOptionality(type, /*isProperty*/ false, definedInMethod && !definedInConstructor));

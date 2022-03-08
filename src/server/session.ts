@@ -1233,6 +1233,8 @@ namespace ts.server {
                     containerName: info.containerName,
                     kind: info.kind,
                     name: info.name,
+                    isAliasTarget: info.isAliasTarget,
+                    failedAliasResolution: info.failedAliasResolution,
                     ...info.unverified && { unverified: info.unverified },
                 };
             });
@@ -1283,7 +1285,7 @@ namespace ts.server {
             }
 
             let definitions = this.mapDefinitionInfoLocations(unmappedDefinitionAndBoundSpan.definitions, project).slice();
-            const needsJsResolution = every(definitions.filter(d => d.isAliasTarget), d => !!d.isAmbient);
+            const needsJsResolution = every(definitions.filter(d => d.isAliasTarget), d => !!d.isAmbient) || some(definitions, d => !!d.failedAliasResolution);
             if (needsJsResolution) {
                 project.withAuxiliaryProjectForFiles([file], auxiliaryProject => {
                     const jsDefinitions = auxiliaryProject.getLanguageService().getDefinitionAndBoundSpan(file, position);
@@ -1293,7 +1295,7 @@ namespace ts.server {
                 });
             }
 
-            definitions = definitions.filter(d => !d.isAmbient);
+            definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
             const { textSpan } = unmappedDefinitionAndBoundSpan;
 
             if (simplifiedResult) {
