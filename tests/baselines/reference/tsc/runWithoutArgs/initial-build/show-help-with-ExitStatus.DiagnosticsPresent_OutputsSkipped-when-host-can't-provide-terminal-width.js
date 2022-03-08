@@ -62,7 +62,7 @@ Print the final configuration instead of building.
 [1mCOMMON COMPILER OPTIONS[22m
 
 [94m--pretty[39m
-Enable color and formatting in TypeScript's output to make compiler errors easier to read
+Enable color and formatting in TypeScript's output to make compiler errors easier to read.
 type: boolean
 default: true
 
@@ -82,7 +82,7 @@ one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021
 default: undefined
 
 [94m--allowJs[39m
-Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.
+Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.
 type: boolean
 default: false
 
@@ -117,7 +117,7 @@ type: boolean
 default: false
 
 [94m--outFile[39m
-Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.
+Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.
 
 [94m--outDir[39m
 Specify an output folder for all emitted files.
@@ -141,7 +141,7 @@ default: false
 Specify type package names to be included without being referenced in a source file.
 
 [94m--esModuleInterop[39m
-Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
+Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility.
 type: boolean
 default: false
 
