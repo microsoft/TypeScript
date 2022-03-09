@@ -33,7 +33,7 @@ verify.completions({
         },
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.OptionalMember,
             source: completion.CompletionSource.ObjectLiteralMethodSnippet,
             insertText: "foo(f: IFoo): void {\n},",
             hasAction: true,

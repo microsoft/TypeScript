@@ -793,6 +793,7 @@ namespace ts.Completions {
             }
             ({ insertText, isSnippet, importAdder, sourceDisplay } = entry);
             source = CompletionSource.ObjectLiteralMethodSnippet;
+            sortText = (parseInt(sortText, 10) + 1).toString() as SortText;
             if (importAdder.hasFixes()) {
                 hasAction = true;
             }
