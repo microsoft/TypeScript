@@ -1,0 +1,94 @@
+=== /src/node_modules/@types/node/index.d.ts ===
+/// <reference path="events.d.ts" />
+No type information for this code.=== /src/node_modules/@types/node/events.d.ts ===
+declare module "events" {
+>"events" : Symbol("events", Decl(events.d.ts, 0, 0))
+
+    namespace EventEmitter {
+>EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 0, 25))
+
+        class EventEmitter {
+>EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 1, 28))
+
+            constructor();
+        }
+    }
+    export = EventEmitter;
+>EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 0, 25))
+}
+declare module "nestNamespaceModule" {
+>"nestNamespaceModule" : Symbol("nestNamespaceModule", Decl(events.d.ts, 7, 1))
+
+    namespace a1.a2 {
+>a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
+>a2 : Symbol(a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
+
+        class d { }
+>d : Symbol(d, Decl(events.d.ts, 9, 21))
+    }
+
+    namespace a1.a2.n3 {
+>a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
+>a2 : Symbol(a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
+>n3 : Symbol(n3, Decl(events.d.ts, 13, 20))
+
+        class c { }
+>c : Symbol(c, Decl(events.d.ts, 13, 24))
+    }
+    export = a1.a2;
+>a1.a2 : Symbol(a1.a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
+>a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
+>a2 : Symbol(a1.a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
+}
+declare module "renameModule" {
+>"renameModule" : Symbol("renameModule", Decl(events.d.ts, 17, 1))
+
+    namespace a.b {
+>a : Symbol(a, Decl(events.d.ts, 18, 31))
+>b : Symbol(b, Decl(events.d.ts, 19, 16))
+
+        class c { }
+>c : Symbol(c, Decl(events.d.ts, 19, 19))
+    }
+    import d = a.b;
+>d : Symbol(d, Decl(events.d.ts, 21, 5))
+>a : Symbol(a, Decl(events.d.ts, 18, 31))
+>b : Symbol(d, Decl(events.d.ts, 19, 16))
+
+    export = d;
+>d : Symbol(d, Decl(events.d.ts, 21, 5))
+}
+
+=== /src/b.js ===
+import { EventEmitter } from 'events';
+>EventEmitter : Symbol(EventEmitter, Decl(b.js, 0, 8))
+
+import { n3, d } from 'nestNamespaceModule';
+>n3 : Symbol(n3, Decl(b.js, 1, 8))
+>d : Symbol(d, Decl(b.js, 1, 12))
+
+import { c } from 'renameModule';
+>c : Symbol(c, Decl(b.js, 2, 8))
+
+export class Foo extends EventEmitter {
+>Foo : Symbol(Foo, Decl(b.js, 2, 33))
+>EventEmitter : Symbol(EventEmitter, Decl(b.js, 0, 8))
+}
+
+export class Foo2 extends n3.c {
+>Foo2 : Symbol(Foo2, Decl(b.js, 5, 1))
+>n3.c : Symbol(n3.c, Decl(events.d.ts, 13, 24))
+>n3 : Symbol(n3, Decl(b.js, 1, 8))
+>c : Symbol(n3.c, Decl(events.d.ts, 13, 24))
+}
+
+export class Foo3 extends d {
+>Foo3 : Symbol(Foo3, Decl(b.js, 8, 1))
+>d : Symbol(d, Decl(b.js, 1, 12))
+}
+
+export class Foo4 extends c {
+>Foo4 : Symbol(Foo4, Decl(b.js, 11, 1))
+>c : Symbol(c, Decl(b.js, 2, 8))
+
+}

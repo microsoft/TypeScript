@@ -113,9 +113,9 @@ var o = {
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->Symbol.hasInstance : symbol
+>Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
->hasInstance : symbol
+>hasInstance : unique symbol
 >value : any
 
         return false;
@@ -124,12 +124,12 @@ var o = {
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : (v: string | number | symbol) => boolean
+>o.hasOwnProperty : (v: PropertyKey) => boolean
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : (v: string | number | symbol) => boolean
->Symbol.hasInstance : symbol
+>hasOwnProperty : (v: PropertyKey) => boolean
+>Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
->hasInstance : symbol
+>hasInstance : unique symbol
 
 // Using ES6 promise
 async function out() {
@@ -221,9 +221,9 @@ const o1 = {
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->Symbol.hasInstance : symbol
+>Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
->hasInstance : symbol
+>hasInstance : unique symbol
 >value : any
 
         return false;

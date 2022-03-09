@@ -55,27 +55,36 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -p pkg3 --listFiles
+/a/lib/tsc.js -p pkg3 --explainFiles
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-/a/lib/lib.d.ts
-/user/username/projects/myproject/pkg1/dist/types.d.ts
-/user/username/projects/myproject/pkg1/dist/index.d.ts
-/user/username/projects/myproject/pkg2/dist/types.d.ts
-/user/username/projects/myproject/pkg2/dist/index.d.ts
-/user/username/projects/myproject/pkg3/src/keys.ts
-/user/username/projects/myproject/pkg3/src/index.ts
+../../../../a/lib/lib.d.ts
+  Default library for target 'es5'
+pkg1/dist/types.d.ts
+  Imported via './types' from file 'pkg1/dist/index.d.ts'
+pkg1/dist/index.d.ts
+  Imported via '@raymondfeng/pkg1' from file 'pkg2/dist/types.d.ts' with packageId '@raymondfeng/pkg1/dist/index.d.ts@1.0.0'
+pkg2/dist/types.d.ts
+  Imported via './types' from file 'pkg2/dist/index.d.ts'
+pkg2/dist/index.d.ts
+  Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts' with packageId '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
+pkg3/src/keys.ts
+  Imported via './keys' from file 'pkg3/src/index.ts'
+  Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
+pkg3/src/index.ts
+  Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
 
-Found 1 error.
+Found 1 error in pkg3/src/keys.ts[90m:2[0m
 
 
 
 Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","listFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","explainFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/pkg1/dist/types.d.ts
@@ -105,7 +114,11 @@ exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];

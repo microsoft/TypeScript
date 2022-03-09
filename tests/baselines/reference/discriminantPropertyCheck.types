@@ -404,9 +404,9 @@ export function foo(obj: Obj) {
 >obj : Obj
 
     switch (obj.key) {
->obj.key : "+" | "-" | "*" | "/"
+>obj.key : Additive | Multiplicative
 >obj : Obj
->key : "+" | "-" | "*" | "/"
+>key : Additive | Multiplicative
 
         case '+': {
 >'+' : "+"
@@ -464,18 +464,18 @@ type TypeBar2 = { type: BarEnum.bar2 };
 
 function func3(value: Partial<UnionOfBar>) {
 >func3 : (value: Partial<UnionOfBar>) => void
->value : Partial<TypeBar1> | Partial<TypeBar2>
+>value : Partial<UnionOfBar>
 
     if (value.type !== undefined) {
 >value.type !== undefined : boolean
 >value.type : BarEnum | undefined
->value : Partial<TypeBar1> | Partial<TypeBar2>
+>value : Partial<UnionOfBar>
 >type : BarEnum | undefined
 >undefined : undefined
 
         switch (value.type) {
 >value.type : BarEnum
->value : Partial<TypeBar1> | Partial<TypeBar2>
+>value : Partial<UnionOfBar>
 >type : BarEnum
 
             case BarEnum.bar1:
@@ -495,7 +495,7 @@ function func3(value: Partial<UnionOfBar>) {
 >never(value.type) : never
 >never : (value: never) => never
 >value.type : never
->value : Partial<TypeBar1> | Partial<TypeBar2>
+>value : Partial<UnionOfBar>
 >type : never
         }
     }
@@ -596,12 +596,12 @@ type AllTests = TestA | TestB;
 >AllTests : AllTests
 
 type MapOfAllTests = Record<string, AllTests>;
->MapOfAllTests : Record<string, AllTests>
+>MapOfAllTests : MapOfAllTests
 
 const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void
 >(mapOfTests: MapOfAllTests, ids: string[]) => {    ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    });} : (mapOfTests: MapOfAllTests, ids: string[]) => void
->mapOfTests : Record<string, AllTests>
+>mapOfTests : MapOfAllTests
 >ids : string[]
 
     ids.forEach(id => {
@@ -619,7 +619,7 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >test = mapOfTests[id] : AllTests
 >test : any
 >mapOfTests[id] : AllTests
->mapOfTests : Record<string, AllTests>
+>mapOfTests : MapOfAllTests
 >id : string
 
         if (test.type === 'testA') {
@@ -640,7 +640,7 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
         }
         switch (test.type) {
 >test.type : "testA" | "testB"
->test : AllTests
+>test : TestA | TestB
 >type : "testA" | "testB"
 
             case 'testA': {

@@ -1,0 +1,94 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/**
+ * @callback FunctionReturningPromise
+ * @returns {Promise<number>}
+ */
+
+/** @type {FunctionReturningPromise} */
+function testPromise1() {
+>testPromise1 : () => Promise<number>
+
+    console.log("Nope");
+>console.log("Nope") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"Nope" : "Nope"
+}
+
+/** @type {FunctionReturningPromise} */
+async function testPromise2() {
+>testPromise2 : () => Promise<number>
+
+    return "asd";
+>"asd" : "asd"
+}
+
+var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
+>testPromise3 : FunctionReturningPromise
+>function() {    console.log("test")} : () => Promise<number>
+
+    console.log("test")
+>console.log("test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"test" : "test"
+}
+
+/** @type {FunctionReturningPromise} */
+var testPromise4 = function() {
+>testPromise4 : FunctionReturningPromise
+>function() {    console.log("test")} : () => Promise<number>
+
+    console.log("test")
+>console.log("test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"test" : "test"
+}
+
+/**
+ * @callback FunctionReturningNever
+ * @returns {never}
+ */
+
+/** @type {FunctionReturningNever} */
+function testNever1() {
+>testNever1 : () => never
+
+}
+
+/** @type {FunctionReturningNever} */
+async function testNever2() {
+>testNever2 : () => never
+
+    return "asd";
+>"asd" : "asd"
+}
+
+var testNever3 = /** @type {FunctionReturningNever} */ function() {
+>testNever3 : FunctionReturningNever
+>function() {    console.log("test")} : () => never
+
+    console.log("test")
+>console.log("test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"test" : "test"
+}
+
+/** @type {FunctionReturningNever} */
+var testNever4 = function() {
+>testNever4 : FunctionReturningNever
+>function() {    console.log("test")} : () => never
+
+    console.log("test")
+>console.log("test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"test" : "test"
+}

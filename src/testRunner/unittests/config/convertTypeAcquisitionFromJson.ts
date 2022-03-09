@@ -67,7 +67,7 @@ namespace ts {
                         include: ["0.d.ts", "1.d.ts"],
                         exclude: ["0.js", "1.js"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 }
             );
         });
@@ -90,7 +90,7 @@ namespace ts {
                         include: ["0.d.ts", "1.d.ts"],
                         exclude: ["0.js", "1.js"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -131,7 +131,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -150,7 +150,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -172,7 +172,7 @@ namespace ts {
                         include: ["0.d.ts"],
                         exclude: ["0.js"]
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -185,7 +185,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
 
@@ -232,7 +232,7 @@ namespace ts {
                         include: [],
                         exclude: []
                     },
-                    errors: <Diagnostic[]>[]
+                    errors: [] as Diagnostic[]
                 });
         });
     });

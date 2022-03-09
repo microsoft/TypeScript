@@ -14,14 +14,15 @@ class D<T> {
 //// [superCallInConstructorWithNoBaseType.js]
 var C = /** @class */ (function () {
     function C() {
-        _this = _super.call(this) || this; // error
+        return _super.call(this) || this;
     }
     return C;
 }());
 var D = /** @class */ (function () {
     function D(x) {
-        _this = _super.call(this) || this; // error
+        var _this = _super.call(this) || this;
         this.x = x;
+        return _this;
     }
     return D;
 }());

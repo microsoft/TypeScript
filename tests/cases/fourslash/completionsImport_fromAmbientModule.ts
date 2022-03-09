@@ -13,7 +13,7 @@
 verify.applyCodeActionFromCompletion("", {
     name: "x",
     source: "m",
-    description: `Import 'x' from module "m"`,
+    description: `Add import from "m"`,
     newFileContent: `import { x } from "m";
 
 `,

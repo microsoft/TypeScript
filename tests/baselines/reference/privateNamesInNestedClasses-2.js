@@ -18,28 +18,27 @@ class A {
 
 //// [privateNamesInNestedClasses-2.js]
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _x;
+var _a, _A_x;
 class A {
     constructor() {
-        var _x_1;
+        var _B_x;
         class B {
             constructor() {
-                _x_1.set(this, 5);
+                _B_x.set(this, 5);
                 class C {
                     constructor() {
-                        __classPrivateFieldGet(A, _x_1); // error
+                        __classPrivateFieldGet(A, _B_x, "f"); // error
                     }
                 }
             }
         }
-        _x_1 = new WeakMap();
+        _B_x = new WeakMap();
     }
 }
-_x = new WeakMap();
-_x.set(A, 5);
+_a = A;
+_A_x = { value: 5 };

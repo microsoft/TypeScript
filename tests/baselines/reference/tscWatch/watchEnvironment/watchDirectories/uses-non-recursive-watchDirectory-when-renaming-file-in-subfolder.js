@@ -30,6 +30,7 @@ Output::
 
 Program root files: ["/a/username/project/src/file1.ts"]
 Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/username/project/src/file1.ts
@@ -37,6 +38,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/username/project/src/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/username/project/src/file1.ts (used version)
 
 WatchedFiles::
 /a/username/project/tsconfig.json:
@@ -80,12 +85,16 @@ Output::
 
 Program root files: ["/a/username/project/src/file2.ts"]
 Program options: {"watch":true,"project":"/a/username/project/tsconfig.json","configFilePath":"/a/username/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/username/project/src/file2.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/username/project/src/file2.ts
+
+Shape signatures in builder refreshed for::
+/a/username/project/src/file2.ts (used version)
 
 WatchedFiles::
 /a/username/project/tsconfig.json:

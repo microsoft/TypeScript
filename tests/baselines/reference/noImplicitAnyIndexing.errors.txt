@@ -1,8 +1,6 @@
 tests/cases/compiler/noImplicitAnyIndexing.ts(12,37): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
-tests/cases/compiler/noImplicitAnyIndexing.ts(19,9): error TS7053: Element implicitly has an 'any' type because expression of type '"hi"' can't be used to index type '{}'.
-  Property 'hi' does not exist on type '{}'.
-tests/cases/compiler/noImplicitAnyIndexing.ts(22,9): error TS7053: Element implicitly has an 'any' type because expression of type '10' can't be used to index type '{}'.
-  Property '10' does not exist on type '{}'.
+tests/cases/compiler/noImplicitAnyIndexing.ts(19,9): error TS2339: Property 'hi' does not exist on type '{}'.
+tests/cases/compiler/noImplicitAnyIndexing.ts(22,9): error TS2339: Property '10' does not exist on type '{}'.
 tests/cases/compiler/noImplicitAnyIndexing.ts(30,10): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
 
 
@@ -29,14 +27,12 @@ tests/cases/compiler/noImplicitAnyIndexing.ts(30,10): error TS7053: Element impl
     // Should report an implicit 'any'.
     var x = {}["hi"];
             ~~~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type '"hi"' can't be used to index type '{}'.
-!!! error TS7053:   Property 'hi' does not exist on type '{}'.
+!!! error TS2339: Property 'hi' does not exist on type '{}'.
     
     // Should report an implicit 'any'.
     var y = {}[10];
             ~~~~~~
-!!! error TS7053: Element implicitly has an 'any' type because expression of type '10' can't be used to index type '{}'.
-!!! error TS7053:   Property '10' does not exist on type '{}'.
+!!! error TS2339: Property '10' does not exist on type '{}'.
     
     
     var hi: any = "hi";

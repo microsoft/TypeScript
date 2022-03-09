@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js ===
+/** @return {T} */
+const dedupingMixin = function(mixin) {};
+>dedupingMixin : Symbol(dedupingMixin, Decl(jsdocOuterTypeParameters1.js, 1, 5))
+>mixin : Symbol(mixin, Decl(jsdocOuterTypeParameters1.js, 1, 31))
+
+ /** @template {T} */
+const PropertyAccessors = dedupingMixin(() => {
+>PropertyAccessors : Symbol(PropertyAccessors, Decl(jsdocOuterTypeParameters1.js, 4, 5))
+>dedupingMixin : Symbol(dedupingMixin, Decl(jsdocOuterTypeParameters1.js, 1, 5))
+
+  class Bar {
+>Bar : Symbol(Bar, Decl(jsdocOuterTypeParameters1.js, 4, 47))
+
+    static bar() { this.prototype.foo(); }
+>bar : Symbol(Bar.bar, Decl(jsdocOuterTypeParameters1.js, 5, 13))
+>this.prototype : Symbol(Bar.prototype)
+>this : Symbol(Bar, Decl(jsdocOuterTypeParameters1.js, 4, 47))
+>prototype : Symbol(Bar.prototype)
+  }
+});
+
+

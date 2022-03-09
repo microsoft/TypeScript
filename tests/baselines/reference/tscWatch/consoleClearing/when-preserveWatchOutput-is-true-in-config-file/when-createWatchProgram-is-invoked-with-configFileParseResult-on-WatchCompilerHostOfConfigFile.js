@@ -29,6 +29,7 @@ Output::
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /f.ts
 /a/lib/lib.d.ts
@@ -36,6 +37,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /f.ts
 /a/lib/lib.d.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (used version)
+/a/lib/lib.d.ts (used version)
 
 WatchedFiles::
 /tsconfig.json:
@@ -73,12 +78,16 @@ Output::
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /f.ts
 /a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
 /f.ts
+
+Shape signatures in builder refreshed for::
+/f.ts (computed .d.ts)
 
 WatchedFiles::
 /tsconfig.json:

@@ -77,6 +77,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -115,7 +117,7 @@ exports.default = func;
 
 
 //// [index1.d.ts]
-declare var _default: 12;
+declare const _default: 12;
 export default _default;
 //// [index2.d.ts]
 export default function foo(): typeof foo;
@@ -135,7 +137,7 @@ declare class Bar extends Fab {
 import Fab from "./index3";
 //// [index5.d.ts]
 type _default = string | number;
-declare var _default: 12;
+declare const _default: 12;
 export default _default;
 //// [index6.d.ts]
 declare function func(): void;

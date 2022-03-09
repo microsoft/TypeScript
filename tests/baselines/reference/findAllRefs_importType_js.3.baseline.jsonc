@@ -1,0 +1,164 @@
+// === /a.js ===
+// module.exports = class C {};
+// module.exports.D = class /*FIND ALL REFS*/[|D|] {};
+
+// === /b.js ===
+// /** @type {import("./a")} */
+// const x = 0;
+// /** @type {import("./a").[|D|]} */
+// const y = 0;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.js",
+      "kind": "local class",
+      "name": "(local class) module.exports.D",
+      "textSpan": {
+        "start": 54,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "local class",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "module",
+          "kind": "localName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "exports",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "D",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 48,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 54,
+          "length": 1
+        },
+        "fileName": "/a.js",
+        "contextSpan": {
+          "start": 48,
+          "length": 10
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.js",
+      "kind": "alias",
+      "name": "(alias) (local class) D\nimport D",
+      "textSpan": {
+        "start": 44,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "local class",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "aliasName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "D",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 29,
+        "length": 16
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 67,
+          "length": 1
+        },
+        "fileName": "/b.js",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

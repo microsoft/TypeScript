@@ -1,0 +1,15 @@
+=== tests/cases/compiler/declarationEmitSpreadStringlyKeyedEnum.ts ===
+enum AgeGroups { "0-17" , "18-22" , "23-27" , "28-34" , "35-44" , "45-59" , "60-150" }
+>AgeGroups : Symbol(AgeGroups, Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 0))
+>"0-17" : Symbol(AgeGroups["0-17"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 16))
+>"18-22" : Symbol(AgeGroups["18-22"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 25))
+>"23-27" : Symbol(AgeGroups["23-27"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 35))
+>"28-34" : Symbol(AgeGroups["28-34"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 45))
+>"35-44" : Symbol(AgeGroups["35-44"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 55))
+>"45-59" : Symbol(AgeGroups["45-59"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 65))
+>"60-150" : Symbol(AgeGroups["60-150"], Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 75))
+
+export const SpotifyAgeGroupEnum = { ...AgeGroups };
+>SpotifyAgeGroupEnum : Symbol(SpotifyAgeGroupEnum, Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 1, 12))
+>AgeGroups : Symbol(AgeGroups, Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 0))
+

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/salsa/x.js ===
+exports.fn1();
+>exports : Symbol("tests/cases/conformance/salsa/x", Decl(x.js, 0, 0))
+
+exports.fn2 = Math.min;
+>exports.fn2 : Symbol(fn2, Decl(x.js, 0, 14))
+>exports : Symbol(fn2, Decl(x.js, 0, 14))
+>fn2 : Symbol(fn2, Decl(x.js, 0, 14))
+>Math.min : Symbol(fn2, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>min : Symbol(fn2, Decl(lib.es5.d.ts, --, --))
+

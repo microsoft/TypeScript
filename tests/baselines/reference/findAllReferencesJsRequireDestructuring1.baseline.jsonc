@@ -1,0 +1,87 @@
+// === /Y.js ===
+// const { /*FIND ALL REFS*/[|x|]: { y } } = require("./X");
+
+// === /X.js ===
+// module.exports = { [|x|]: 1 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/X.js",
+      "kind": "property",
+      "name": "(property) x: number",
+      "textSpan": {
+        "start": 19,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 19,
+        "length": 4
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 19,
+          "length": 1
+        },
+        "fileName": "/X.js",
+        "contextSpan": {
+          "start": 19,
+          "length": 4
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 8,
+          "length": 1
+        },
+        "fileName": "/Y.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 36
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

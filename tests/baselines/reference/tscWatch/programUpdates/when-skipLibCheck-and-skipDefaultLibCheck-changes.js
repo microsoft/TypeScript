@@ -55,6 +55,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -64,6 +65,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/b.d.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -111,6 +117,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"skipLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -119,6 +126,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -168,6 +177,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -176,6 +186,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -230,6 +242,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -237,6 +250,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -286,6 +301,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -293,6 +309,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -337,6 +355,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"skipLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -345,6 +364,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -399,6 +420,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -407,6 +429,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/b.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

@@ -1,0 +1,55 @@
+/**
+ * @this {/**/Foo}
+ * @param {*} e
+ */
+function callback(e) {
+}
+
+
+          Foo 
+
+
+   @this {Foo}
+
+
+/**
+ * @this {Foo}
+ * @param {*} e
+ */
+
+
+/**
+ * @this {Foo}
+ * @param {*} e
+ */
+function callback(e) {
+}
+
+================================================================================
+
+/**
+ * @this {Foo}
+ * @param {/**/*} e
+ */
+function callback(e) {
+}
+
+
+           *   
+
+
+   @param {*} e
+
+
+/**
+ * @this {Foo}
+ * @param {*} e
+ */
+
+
+/**
+ * @this {Foo}
+ * @param {*} e
+ */
+function callback(e) {
+}

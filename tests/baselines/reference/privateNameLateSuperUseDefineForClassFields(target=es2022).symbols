@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameLateSuperUseDefineForClassFields.ts ===
+class B {}
+>B : Symbol(B, Decl(privateNameLateSuperUseDefineForClassFields.ts, 0, 0))
+
+class A extends B {
+>A : Symbol(A, Decl(privateNameLateSuperUseDefineForClassFields.ts, 0, 10))
+>B : Symbol(B, Decl(privateNameLateSuperUseDefineForClassFields.ts, 0, 0))
+
+    #x;
+>#x : Symbol(A.#x, Decl(privateNameLateSuperUseDefineForClassFields.ts, 1, 19))
+
+    constructor() {
+        void 0;
+        super();
+>super : Symbol(B, Decl(privateNameLateSuperUseDefineForClassFields.ts, 0, 0))
+    }
+}
+

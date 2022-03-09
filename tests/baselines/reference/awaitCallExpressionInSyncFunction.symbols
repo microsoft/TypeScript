@@ -1,0 +1,14 @@
+=== tests/cases/compiler/awaitCallExpressionInSyncFunction.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(awaitCallExpressionInSyncFunction.ts, 0, 0))
+
+   const foo = await(Promise.resolve(1));
+>foo : Symbol(foo, Decl(awaitCallExpressionInSyncFunction.ts, 1, 8))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+   return foo;
+>foo : Symbol(foo, Decl(awaitCallExpressionInSyncFunction.ts, 1, 8))
+}
+

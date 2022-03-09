@@ -1,0 +1,20 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "removeComments": false,
+        "outFile": "../../built/local/webServer.js",
+        "preserveConstEnums": true,
+        "types": [
+            "node"
+        ]
+    },
+    "references": [
+        { "path": "../compiler" },
+        { "path": "../jsTyping" },
+        { "path": "../services" },
+        { "path": "../server" }
+    ],
+    "files": [
+        "webServer.ts",
+    ]
+}

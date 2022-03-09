@@ -41,6 +41,7 @@ Output::
 
 Program root files: ["/a/b/file1.ts"]
 Program options: {"moduleResolution":2,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/node_modules/module1.ts
@@ -51,6 +52,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/node_modules/module1.ts
 /a/b/file1.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/node_modules/module1.ts (used version)
+/a/b/file1.ts (used version)
+
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
@@ -60,6 +66,8 @@ WatchedFiles::
   {"fileName":"/a/b/node_modules/module1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/module1/package.json:
+  {"fileName":"/a/b/node_modules/module1/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -99,6 +107,7 @@ Output::
 
 Program root files: ["/a/b/file1.ts"]
 Program options: {"moduleResolution":1,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/module1.ts
@@ -107,6 +116,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/module1.ts
 /a/b/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/module1.ts (computed .d.ts)
+/a/b/file1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

@@ -1,0 +1,38 @@
+// === /packages/client/index.ts ===
+// import "[|@shared/referenced|]";
+
+// === /packages/server/index.js ===
+// const mod = require("[|../shared/src/referenced|]");
+
+// === /packages/server/router.js ===
+// const blah = require("[|../shared/dist/referenced|]");
+
+[
+  {
+    "fileName": "/packages/server/index.js",
+    "textSpan": {
+      "start": 21,
+      "length": 24
+    },
+    "isWriteAccess": false,
+    "isDefinition": false
+  },
+  {
+    "fileName": "/packages/server/router.js",
+    "textSpan": {
+      "start": 22,
+      "length": 25
+    },
+    "isWriteAccess": false,
+    "isDefinition": false
+  },
+  {
+    "fileName": "/packages/client/index.ts",
+    "textSpan": {
+      "start": 8,
+      "length": 18
+    },
+    "isWriteAccess": false,
+    "isDefinition": false
+  }
+]

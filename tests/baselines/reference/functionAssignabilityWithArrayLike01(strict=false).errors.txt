@@ -1,0 +1,10 @@
+tests/cases/compiler/functionAssignabilityWithArrayLike01.ts(2,7): error TS2322: Type '() => void' is not assignable to type 'ArrayLike<any>'.
+  Index signature for type 'number' is missing in type '() => void'.
+
+
+==== tests/cases/compiler/functionAssignabilityWithArrayLike01.ts (1 errors) ====
+    function func() {}
+    const array: ArrayLike<any> = func;
+          ~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'ArrayLike<any>'.
+!!! error TS2322:   Index signature for type 'number' is missing in type '() => void'.

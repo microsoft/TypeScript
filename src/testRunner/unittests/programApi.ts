@@ -11,7 +11,7 @@ namespace ts {
         assert.equal(notFound.length, 0, `Not found ${notFound} in actual: ${missingPaths} expected: ${expected}`);
     }
 
-    describe("unittests:: Program.getMissingFilePaths", () => {
+    describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
 
         const options: CompilerOptions = {
             noLib: true,
@@ -123,7 +123,7 @@ namespace ts {
             const program = createProgram(["test.ts"], { module: ModuleKind.ES2015 }, host);
             assert(program.getSourceFiles().length === 1, "expected 'getSourceFiles' length to be 1");
             assert(program.getMissingFilePaths().length === 0, "expected 'getMissingFilePaths' length to be 0");
-            assert(program.getFileProcessingDiagnostics().getDiagnostics().length === 0, "expected 'getFileProcessingDiagnostics' length to be 0");
+            assert((program.getFileProcessingDiagnostics()?.length || 0) === 0, "expected 'getFileProcessingDiagnostics' length to be 0");
         });
     });
 

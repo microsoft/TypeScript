@@ -30,12 +30,13 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
@@ -45,6 +46,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
 /user/username/projects/solution/app/fileWithoutError.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/solution/app/filewitherror.ts (used version)
+/user/username/projects/solution/app/filewithouterror.ts (used version)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
@@ -100,8 +106,16 @@ export declare class myClass {
 
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","-11785903855-export class myClass { }"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./filewitherror.ts",
+      "./filewithouterror.ts"
+    ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -110,19 +124,15 @@ export declare class myClass {
       },
       "./filewitherror.ts": {
         "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
-        "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n",
-        "affectsGlobalScope": false
+        "signature": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };"
       },
       "./filewithouterror.ts": {
         "version": "-11785903855-export class myClass { }",
-        "signature": "-7432826827-export declare class myClass {\n}\n",
-        "affectsGlobalScope": false
+        "signature": "-11785903855-export class myClass { }"
       }
     },
     "options": {
-      "composite": true,
-      "watch": true,
-      "configFilePath": "./tsconfig.json"
+      "composite": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -132,7 +142,8 @@ export declare class myClass {
       "./filewithouterror.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 782
 }
 
 
@@ -148,19 +159,20 @@ export var myClassWithError = class {
 
 Output::
 >> Screen clear
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
 [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
@@ -168,6 +180,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/solution/app/fileWithError.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
@@ -198,14 +213,15 @@ export var myClassWithError = class {
 
 Output::
 >> Screen clear
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
@@ -213,6 +229,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/solution/app/fileWithError.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
@@ -234,4 +253,44 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/solution/app/fileWithError.d.ts] file written with same contents
 //// [/user/username/projects/solution/app/fileWithoutError.js] file changed its modified time
 //// [/user/username/projects/solution/app/fileWithoutError.d.ts] file changed its modified time
-//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"},"-11785903855-export class myClass { }"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./filewitherror.ts",
+      "./filewithouterror.ts"
+    ],
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./filewitherror.ts": {
+        "version": "-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };",
+        "signature": "6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n"
+      },
+      "./filewithouterror.ts": {
+        "version": "-11785903855-export class myClass { }",
+        "signature": "-11785903855-export class myClass { }"
+      }
+    },
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "./filewitherror.ts",
+      "./filewithouterror.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 910
+}
+

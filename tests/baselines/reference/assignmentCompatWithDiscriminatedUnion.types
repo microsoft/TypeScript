@@ -155,58 +155,58 @@ namespace Example5 {
     //       3 discriminant properties with 3 types a piece
     //       is 27 possible combinations.
     type N = 0 | 1 | 2;
->N : 0 | 2 | 1
+>N : N
 
     type S = { a: N, b: N, c: N };
 >S : S
->a : 0 | 2 | 1
->b : 0 | 2 | 1
->c : 0 | 2 | 1
+>a : N
+>b : N
+>c : N
 
     type T = { a: 0, b: N, c: N }
 >T : T
 >a : 0
->b : 0 | 2 | 1
->c : 0 | 2 | 1
+>b : N
+>c : N
 
            | { a: 1, b: N, c: N }
 >a : 1
->b : 0 | 2 | 1
->c : 0 | 2 | 1
+>b : N
+>c : N
 
            | { a: 2, b: N, c: N }
 >a : 2
->b : 0 | 2 | 1
->c : 0 | 2 | 1
+>b : N
+>c : N
 
            | { a: N, b: 0, c: N }
->a : 0 | 2 | 1
+>a : N
 >b : 0
->c : 0 | 2 | 1
+>c : N
 
            | { a: N, b: 1, c: N }
->a : 0 | 2 | 1
+>a : N
 >b : 1
->c : 0 | 2 | 1
+>c : N
 
            | { a: N, b: 2, c: N }
->a : 0 | 2 | 1
+>a : N
 >b : 2
->c : 0 | 2 | 1
+>c : N
 
            | { a: N, b: N, c: 0 }
->a : 0 | 2 | 1
->b : 0 | 2 | 1
+>a : N
+>b : N
 >c : 0
 
            | { a: N, b: N, c: 1 }
->a : 0 | 2 | 1
->b : 0 | 2 | 1
+>a : N
+>b : N
 >c : 1
 
            | { a: N, b: N, c: 2 };
->a : 0 | 2 | 1
->b : 0 | 2 | 1
+>a : N
+>b : N
 >c : 2
 
     declare let s: S;
@@ -359,9 +359,9 @@ namespace GH12052 {
 
     good.type = getAxisType();
 >good.type = getAxisType() : IAxisType
->good.type : IAxisType
+>good.type : "linear" | "categorical"
 >good : IAxis
->type : IAxisType
+>type : "linear" | "categorical"
 >getAxisType() : IAxisType
 >getAxisType : () => IAxisType
 }
@@ -473,17 +473,17 @@ namespace GH39357 {
 >A : A
 
     type B = "a" | "b" | "c";
->B : "a" | "b" | "c"
+>B : B
 
     declare const b: B;
->b : "a" | "b" | "c"
+>b : B
 
     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
 >a : A
 >b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["a" | "b", number] | ["c", string]
 >b === "a" || b === "b" : boolean
 >b === "a" : boolean
->b : "a" | "b" | "c"
+>b : B
 >"a" : "a"
 >b === "b" : boolean
 >b : "b" | "c"

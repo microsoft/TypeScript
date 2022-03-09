@@ -44,6 +44,7 @@ Output::
 
 Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts
@@ -53,6 +54,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/foo.ts
 /a/b/bar.d.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/foo.ts (used version)
+/a/b/bar.d.ts (used version)
 
 WatchedFiles::
 /a/b/foo.ts:
@@ -107,6 +113,7 @@ Output::
 
 Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts
@@ -115,6 +122,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/foo.ts
 /a/b/bar.d.ts
+
+Shape signatures in builder refreshed for::
+/a/b/bar.d.ts (used version)
+/a/b/foo.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/foo.ts:

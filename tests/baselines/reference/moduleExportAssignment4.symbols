@@ -6,7 +6,7 @@ exports.default = { m: 1, a: 1 }
 >a : Symbol(a, Decl(async.js, 0, 25))
 
 module.exports = exports['default'];
->module.exports : Symbol("tests/cases/conformance/salsa/async", Decl(async.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(async.js, 0, 0))
 >module : Symbol(export=, Decl(async.js, 0, 32))
 >exports : Symbol(export=, Decl(async.js, 0, 32))
 >exports : Symbol("tests/cases/conformance/salsa/async", Decl(async.js, 0, 0))

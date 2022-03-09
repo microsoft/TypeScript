@@ -27,7 +27,7 @@ switch (x) {
     default:
 }
 
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 class C { id: number; }
 class D extends C { name: string }
 
@@ -64,6 +64,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -97,7 +99,7 @@ switch (x) {
     case (function (x) { return ''; })(2):
     default:
 }
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 var C = /** @class */ (function () {
     function C() {
     }

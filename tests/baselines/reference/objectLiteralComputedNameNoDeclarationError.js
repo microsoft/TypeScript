@@ -21,10 +21,6 @@ exports.Baa = (_a = {},
 
 
 //// [objectLiteralComputedNameNoDeclarationError.d.ts]
-declare const Foo: {
-    BANANA: "banana";
-};
 export declare const Baa: {
     banana: number;
 };
-export {};

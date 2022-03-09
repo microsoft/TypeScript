@@ -41,6 +41,7 @@ Output::
 
 Program root files: ["/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/referenceFile1.ts
@@ -48,6 +49,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/referenceFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/referencefile1.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -111,12 +116,16 @@ Output::
 
 Program root files: ["/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/referenceFile1.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/b/referenceFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/referencefile1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -175,6 +184,7 @@ Output::
 
 Program root files: ["/a/b/moduleFile2.ts","/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile2.ts
@@ -183,6 +193,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile2.ts
 /a/b/referenceFile1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile2.ts (computed .d.ts)
+/a/b/referencefile1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

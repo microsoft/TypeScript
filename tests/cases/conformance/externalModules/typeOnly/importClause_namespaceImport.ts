@@ -12,3 +12,4 @@ let v: types.Value;
 const a: types.A = {};
 const b: types.B = {};
 const c: types.C<string> = "";
+const d = { types };

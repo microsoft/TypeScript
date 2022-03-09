@@ -1,0 +1,39 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/callChainInference.ts ===
+// Repro from #42404
+
+interface Y {
+>Y : Symbol(Y, Decl(callChainInference.ts, 0, 0))
+
+    foo<T>(this: T, arg: keyof T): void;
+>foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
+>T : Symbol(T, Decl(callChainInference.ts, 3, 8))
+>this : Symbol(this, Decl(callChainInference.ts, 3, 11))
+>T : Symbol(T, Decl(callChainInference.ts, 3, 8))
+>arg : Symbol(arg, Decl(callChainInference.ts, 3, 19))
+>T : Symbol(T, Decl(callChainInference.ts, 3, 8))
+
+    a: number;
+>a : Symbol(Y.a, Decl(callChainInference.ts, 3, 40))
+
+    b: string;
+>b : Symbol(Y.b, Decl(callChainInference.ts, 4, 14))
+}
+
+declare const value: Y | undefined;
+>value : Symbol(value, Decl(callChainInference.ts, 8, 13))
+>Y : Symbol(Y, Decl(callChainInference.ts, 0, 0))
+
+if (value) {
+>value : Symbol(value, Decl(callChainInference.ts, 8, 13))
+
+    value?.foo("a");
+>value?.foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
+>value : Symbol(value, Decl(callChainInference.ts, 8, 13))
+>foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
+}
+
+value?.foo("a");
+>value?.foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
+>value : Symbol(value, Decl(callChainInference.ts, 8, 13))
+>foo : Symbol(Y.foo, Decl(callChainInference.ts, 2, 13))
+

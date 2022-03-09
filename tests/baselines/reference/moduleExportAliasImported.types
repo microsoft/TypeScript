@@ -12,7 +12,7 @@ function alias() { }
 module.exports = alias
 >module.exports = alias : typeof alias
 >module.exports : typeof alias
->module : { "\"tests/cases/conformance/salsa/bug28014\"": typeof alias; }
+>module : { exports: typeof alias; }
 >exports : typeof alias
 >alias : typeof alias
 

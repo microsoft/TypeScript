@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -42,6 +43,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/f1.ts
 /a/b/f2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f1.ts (used version)
+/a/b/f2.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -78,9 +84,6 @@ Input::
 //// [/a/b/tsconfig.json] deleted
 
 Output::
->> Screen clear
-[[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
-
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
 
 

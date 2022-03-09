@@ -1,6 +1,5 @@
 // @declaration: true
 // @outFile: mylib.js
-// @bundledPackageName: mylib
 // @filename: extensions.ts
 /// <reference no-default-lib="true"/>
 class Foo {

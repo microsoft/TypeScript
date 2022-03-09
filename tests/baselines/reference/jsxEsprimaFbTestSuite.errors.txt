@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,1): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,17): error TS1005: '{' expected.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS1005: ';' expected.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS2304: Cannot find name 'right'.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,57): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,1): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,17): error TS1005: '{' expected.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,23): error TS1005: ';' expected.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,23): error TS2304: Cannot find name 'right'.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,57): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,58): error TS1109: Expression expected.
 
 
 ==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (7 errors) ====
@@ -15,12 +15,13 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expr
     declare var x;
     declare var a;
     declare var props;
+    declare var value;
     
     <a />;
     
-    //<n:a n:v />; Namespace unsuported
+    <n:a n:v />;
     
-    //<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
+    <a n:foo="bar"> {value} <b><c /></b></a>;
     
     <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
     

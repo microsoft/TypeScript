@@ -841,3 +841,19 @@ gg(ff);
 >gg : Symbol(gg, Decl(conditionalTypes2.ts, 234, 43))
 >ff : Symbol(ff, Decl(conditionalTypes2.ts, 230, 2))
 
+// Repro from #41613
+
+type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } } ? true : false;
+>Wat : Symbol(Wat, Decl(conditionalTypes2.ts, 237, 7))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 241, 9))
+>x : Symbol(x, Decl(conditionalTypes2.ts, 241, 30))
+>y : Symbol(y, Decl(conditionalTypes2.ts, 241, 35))
+>z : Symbol(z, Decl(conditionalTypes2.ts, 241, 41))
+>x : Symbol(x, Decl(conditionalTypes2.ts, 241, 60))
+>P : Symbol(P, Decl(conditionalTypes2.ts, 241, 67))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 241, 9))
+ 
+type Huh = Wat<"y">;  // true
+>Huh : Symbol(Huh, Decl(conditionalTypes2.ts, 241, 97))
+>Wat : Symbol(Wat, Decl(conditionalTypes2.ts, 237, 7))
+

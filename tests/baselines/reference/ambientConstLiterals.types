@@ -12,7 +12,7 @@ enum E { A, B, C, "non identifier" }
 >A : E.A
 >B : E.B
 >C : E.C
->"non identifier" : E.non identifier
+>"non identifier" : typeof E["non identifier"]
 
 const c1 = "abc";
 >c1 : "abc"
@@ -54,8 +54,8 @@ const c8 = E.A;
 >A : E.A
 
 const c8b = E["non identifier"];
->c8b : E.non identifier
->E["non identifier"] : E.non identifier
+>c8b : typeof E["non identifier"]
+>E["non identifier"] : typeof E["non identifier"]
 >E : typeof E
 >"non identifier" : "non identifier"
 

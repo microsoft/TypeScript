@@ -1,0 +1,25 @@
+=== /a.js ===
+class A {
+>A : A
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : any
+>{} : {}
+
+		/**
+		 * @type object
+		 */
+		this.arguments = foo;
+>this.arguments = foo : any
+>this.arguments : any
+>this : this
+>arguments : any
+>foo : any
+	}
+}
+

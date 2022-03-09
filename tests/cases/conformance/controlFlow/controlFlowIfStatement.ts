@@ -52,3 +52,12 @@ function d<T extends string>(data: string | T): never {
         return data;
     }
 }
+
+interface I<T> {
+  p: T;
+}
+function e(x: I<"A" | "B">) {
+    if (x.p === "A") {
+        let a: "A" = (null as unknown as typeof x.p)
+    }
+}

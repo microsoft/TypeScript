@@ -11,5 +11,5 @@ exports.customSymbol2 = Symbol("custom");
 
 
 //// [file.d.ts]
+export const customSymbol2: unique symbol;
 export const customSymbol: unique symbol;
-export declare const customSymbol2: unique symbol;

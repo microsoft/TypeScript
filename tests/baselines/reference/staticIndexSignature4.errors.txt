@@ -1,0 +1,57 @@
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts(12,5): error TS1071: 'static' modifier cannot appear on an index signature.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts(13,5): error TS1071: 'static' modifier cannot appear on an index signature.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts(19,5): error TS2542: Index signature in type 'typeof B' only permits reading.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts(20,5): error TS2542: Index signature in type 'typeof B' only permits reading.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts(25,5): error TS2542: Index signature in type 'typeof B' only permits reading.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts(26,5): error TS2542: Index signature in type 'typeof B' only permits reading.
+
+
+==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature4.ts (6 errors) ====
+    class B {
+        static readonly [s: string]: number;
+        static readonly [s: number]: 42 | 233
+    }
+    
+    class D {
+        static [s: string]: number;
+        static [s: number]: 42 | 233
+    }
+    
+    interface IB {
+        static [s: string]: number;
+        ~~~~~~
+!!! error TS1071: 'static' modifier cannot appear on an index signature.
+        static [s: number]: 42 | 233;
+        ~~~~~~
+!!! error TS1071: 'static' modifier cannot appear on an index signature.
+    }
+    
+    declare const v: number
+    declare const i: IB
+    if (v === 0) {
+        B.a = D.a
+        ~~~
+!!! error TS2542: Index signature in type 'typeof B' only permits reading.
+        B[2] = D[2]
+        ~~~~
+!!! error TS2542: Index signature in type 'typeof B' only permits reading.
+    } else if (v === 1) {
+        D.a = B.a
+        D[2] = B[2]
+    } else if (v === 2) {
+        B.a = i.a
+        ~~~
+!!! error TS2542: Index signature in type 'typeof B' only permits reading.
+        B[2] = i[2]
+        ~~~~
+!!! error TS2542: Index signature in type 'typeof B' only permits reading.
+        D.a = i.a
+        D[2] = i [2]
+    } else if (v === 3) {
+        i.a = B.a
+        i[2] = B[2]
+    } else if (v === 4) {
+        i.a = D.a
+        i[2] = B[2]
+    }
+    

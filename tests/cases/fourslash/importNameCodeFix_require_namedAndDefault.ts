@@ -3,7 +3,7 @@
 // @allowJs: true
 // @checkJs: true
 
-// @Filename: blah.js
+// @Filename: blah.ts
 ////export default class Blah {}
 ////export const Named1 = 0;
 ////export const Named2 = 1;

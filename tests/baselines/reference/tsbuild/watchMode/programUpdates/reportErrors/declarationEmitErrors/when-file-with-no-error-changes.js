@@ -41,6 +41,7 @@ Output::
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
@@ -50,6 +51,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
 /user/username/projects/solution/app/fileWithoutError.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/solution/app/filewitherror.ts (used version)
+/user/username/projects/solution/app/filewithouterror.ts (used version)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
@@ -90,6 +96,7 @@ Output::
 
 Program root files: ["/user/username/projects/solution/app/fileWithError.ts","/user/username/projects/solution/app/fileWithoutError.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/solution/app/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/solution/app/fileWithError.ts
@@ -97,6 +104,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/solution/app/fileWithoutError.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/solution/app/filewithouterror.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:

@@ -34,6 +34,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
 Program options: {"isolatedModules":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -43,6 +44,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -101,6 +107,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
 Program options: {"isolatedModules":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -109,6 +116,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

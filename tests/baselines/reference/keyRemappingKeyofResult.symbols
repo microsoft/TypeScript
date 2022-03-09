@@ -1,0 +1,193 @@
+=== tests/cases/compiler/keyRemappingKeyofResult.ts ===
+const sym = Symbol("")
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+type Orig = { [k: string]: any, str: any, [sym]: any }
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 0, 22))
+>k : Symbol(k, Decl(keyRemappingKeyofResult.ts, 1, 15))
+>str : Symbol(str, Decl(keyRemappingKeyofResult.ts, 1, 31))
+>[sym] : Symbol([sym], Decl(keyRemappingKeyofResult.ts, 1, 41))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+
+type Okay = Exclude<keyof Orig, never>
+>Okay : Symbol(Okay, Decl(keyRemappingKeyofResult.ts, 1, 54))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 0, 22))
+
+// type Okay = string | number | typeof sym
+
+type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+>Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 3, 38))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 6, 19))
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 0, 22))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 6, 19))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 6, 19))
+
+/* type Remapped = {
+    str: any;
+    [sym]: any;
+} */
+// no string index signature, right?
+
+type Oops = Exclude<keyof Remapped, never>
+>Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 6, 83))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 3, 38))
+
+declare let x: Oops;
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 14, 11))
+>Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 6, 83))
+
+x = sym;
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 14, 11))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+
+x = "str";
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 14, 11))
+
+// type Oops = typeof sym <-- what happened to "str"?
+
+// equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
+function f<T>() {
+>f : Symbol(f, Decl(keyRemappingKeyofResult.ts, 16, 10))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 20, 11))
+
+    type Orig = { [k: string]: any, str: any, [sym]: any } & T;
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 20, 17))
+>k : Symbol(k, Decl(keyRemappingKeyofResult.ts, 21, 19))
+>str : Symbol(str, Decl(keyRemappingKeyofResult.ts, 21, 35))
+>[sym] : Symbol([sym], Decl(keyRemappingKeyofResult.ts, 21, 45))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 20, 11))
+    
+    type Okay = keyof Orig;
+>Okay : Symbol(Okay, Decl(keyRemappingKeyofResult.ts, 21, 63))
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 20, 17))
+
+    let a: Okay;
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 24, 7))
+>Okay : Symbol(Okay, Decl(keyRemappingKeyofResult.ts, 21, 63))
+
+    a = "str";
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 24, 7))
+
+    a = sym;
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 24, 7))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+
+    a = "whatever";
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 24, 7))
+
+    // type Okay = string | number | typeof sym
+    
+    type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+>Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 27, 19))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 30, 23))
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 20, 17))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 30, 23))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 30, 23))
+
+    /* type Remapped = {
+        str: any;
+        [sym]: any;
+    } */
+    // no string index signature, right?
+    
+    type Oops = keyof Remapped;
+>Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 30, 87))
+>Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 27, 19))
+
+    let x: Oops;
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 38, 7))
+>Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 30, 87))
+
+    x = sym;
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 38, 7))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+
+    x = "str";
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 38, 7))
+}
+
+// and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
+function g<T>() {
+>g : Symbol(g, Decl(keyRemappingKeyofResult.ts, 41, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 44, 11))
+
+    type Orig = { [k: string]: any, str: any, [sym]: any } & T;
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 44, 17))
+>k : Symbol(k, Decl(keyRemappingKeyofResult.ts, 45, 19))
+>str : Symbol(str, Decl(keyRemappingKeyofResult.ts, 45, 35))
+>[sym] : Symbol([sym], Decl(keyRemappingKeyofResult.ts, 45, 45))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 44, 11))
+    
+    type Okay = keyof Orig;
+>Okay : Symbol(Okay, Decl(keyRemappingKeyofResult.ts, 45, 63))
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 44, 17))
+
+    let a: Okay;
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 48, 7))
+>Okay : Symbol(Okay, Decl(keyRemappingKeyofResult.ts, 45, 63))
+
+    a = "str";
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 48, 7))
+
+    a = sym;
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 48, 7))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+
+    a = "whatever";
+>a : Symbol(a, Decl(keyRemappingKeyofResult.ts, 48, 7))
+
+    // type Okay = string | number | typeof sym
+
+    type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
+>NonIndex : Symbol(NonIndex, Decl(keyRemappingKeyofResult.ts, 51, 19))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 54, 18))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 54, 18))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 54, 18))
+
+    type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
+>DistributiveNonIndex : Symbol(DistributiveNonIndex, Decl(keyRemappingKeyofResult.ts, 54, 81))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 55, 30))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 55, 30))
+>NonIndex : Symbol(NonIndex, Decl(keyRemappingKeyofResult.ts, 51, 19))
+>T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 55, 30))
+    
+    type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
+>Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 55, 95))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 57, 23))
+>Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 44, 17))
+>DistributiveNonIndex : Symbol(DistributiveNonIndex, Decl(keyRemappingKeyofResult.ts, 54, 81))
+>K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 57, 23))
+
+    /* type Remapped = {
+        str: any;
+        [sym]: any;
+    } */
+    // no string index signature, right?
+    
+    type Oops = keyof Remapped;
+>Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 57, 73))
+>Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 55, 95))
+
+    let x: Oops;
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
+>Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 57, 73))
+
+    x = sym;
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
+>sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
+
+    x = "str";
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
+}
+
+export {};

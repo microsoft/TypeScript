@@ -1,0 +1,38 @@
+=== tests/cases/compiler/truthinessCallExpressionCoercion3.ts ===
+// from #41640, based on an example in ant-design
+interface I {
+>I : Symbol(I, Decl(truthinessCallExpressionCoercion3.ts, 0, 0))
+
+    always(): void
+>always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+}
+
+function f(result: unknown) {
+>f : Symbol(f, Decl(truthinessCallExpressionCoercion3.ts, 3, 1))
+>result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 5, 11))
+
+    if ((result as I).always) {
+>(result as I).always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 5, 11))
+>I : Symbol(I, Decl(truthinessCallExpressionCoercion3.ts, 0, 0))
+>always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+
+        return result
+>result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 5, 11))
+    }
+}
+function g(result: unknown) {
+>g : Symbol(g, Decl(truthinessCallExpressionCoercion3.ts, 9, 1))
+>result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 10, 11))
+
+    if (((result as I)).always) {
+>((result as I)).always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+>result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 10, 11))
+>I : Symbol(I, Decl(truthinessCallExpressionCoercion3.ts, 0, 0))
+>always : Symbol(I.always, Decl(truthinessCallExpressionCoercion3.ts, 1, 13))
+
+        return result
+>result : Symbol(result, Decl(truthinessCallExpressionCoercion3.ts, 10, 11))
+    }
+}
+

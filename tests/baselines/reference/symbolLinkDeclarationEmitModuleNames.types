@@ -3,7 +3,7 @@ import { Constructor } from "@loopback/context";
 >Constructor : any
 
 export type ControllerClass = Constructor<any>;
->ControllerClass : Constructor<any>
+>ControllerClass : ControllerClass
 
 === tests/cases/compiler/monorepo/core/src/usage.ts ===
 import { ControllerClass } from './application';
@@ -13,8 +13,8 @@ import { BindingKey } from '@loopback/context';
 >BindingKey : typeof BindingKey
 
 export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
->CONTROLLER_CLASS : BindingKey<import("tests/cases/compiler/monorepo/context/index").Constructor<any>>
->BindingKey.create<ControllerClass>(null as any) : BindingKey<import("tests/cases/compiler/monorepo/context/index").Constructor<any>>
+>CONTROLLER_CLASS : BindingKey<ControllerClass>
+>BindingKey.create<ControllerClass>(null as any) : BindingKey<ControllerClass>
 >BindingKey.create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
 >BindingKey : typeof BindingKey
 >create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>

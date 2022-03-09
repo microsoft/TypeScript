@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/another.ts","/user/username/projects/myproject/logger.ts"]
 Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/logger.ts
@@ -42,6 +43,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/logger.ts
 /user/username/projects/myproject/another.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/logger.ts (used version)
+/user/username/projects/myproject/another.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -95,6 +101,9 @@ Output::
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
 [96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Logger.ts' differs from file name '/user/username/projects/myproject/logger.ts' only in casing.
+  The file is in the program because:
+    Imported via "./Logger" from file '/user/username/projects/myproject/another.ts'
+    Matched by include pattern '**/*' in '/user/username/projects/myproject/tsconfig.json'
 
 [7m1[0m import { logger } from "./Logger"; new logger();
 [7m [0m [91m                       ~~~~~~~~~~[0m
@@ -105,6 +114,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/another.ts","/user/username/projects/myproject/logger.ts"]
 Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/Logger.ts
@@ -112,6 +122,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/another.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/another.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

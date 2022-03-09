@@ -25,7 +25,9 @@ function g(t?: { a: number } | null): void {
 
     let c: number = b.a;  // might not have 'a'
 >c : Symbol(c, Decl(spreadUnion3.ts, 8, 7))
+>b.a : Symbol(a, Decl(spreadUnion3.ts, 6, 16))
 >b : Symbol(b, Decl(spreadUnion3.ts, 7, 7))
+>a : Symbol(a, Decl(spreadUnion3.ts, 6, 16))
 }
 g()
 >g : Symbol(g, Decl(spreadUnion3.ts, 3, 12))

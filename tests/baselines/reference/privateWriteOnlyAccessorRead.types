@@ -1,0 +1,160 @@
+=== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts ===
+class Test {
+>Test : Test
+
+  set #value(v: { foo: { bar: number } }) {}
+>#value : { foo: {    bar: number;}; }
+>v : { foo: {    bar: number;}; }
+>foo : { bar: number; }
+>bar : number
+
+  set #valueRest(v: number[]) {}
+>#valueRest : number[]
+>v : number[]
+
+  set #valueOne(v: number) {}
+>#valueOne : number
+>v : number
+
+  set #valueCompound(v: number) {}
+>#valueCompound : number
+>v : number
+
+  m() {
+>m : () => void
+
+    const foo = { bar: 1 };
+>foo : { bar: number; }
+>{ bar: 1 } : { bar: number; }
+>bar : number
+>1 : 1
+
+    console.log(this.#value); // error
+>console.log(this.#value) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#value : { foo: { bar: number; }; }
+>this : this
+
+    this.#value = { foo }; // ok
+>this.#value = { foo } : { foo: { bar: number; }; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>{ foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+
+    this.#value = { foo }; // ok
+>this.#value = { foo } : { foo: { bar: number; }; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>{ foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+
+    this.#value.foo = foo; // error
+>this.#value.foo = foo : { bar: number; }
+>this.#value.foo : { bar: number; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>foo : { bar: number; }
+>foo : { bar: number; }
+
+    ({ o: this.#value } = { o: { foo } }); //ok
+>({ o: this.#value } = { o: { foo } }) : { o: { foo: { bar: number; }; }; }
+>{ o: this.#value } = { o: { foo } } : { o: { foo: { bar: number; }; }; }
+>{ o: this.#value } : { o: { foo: { bar: number; }; }; }
+>o : { foo: { bar: number; }; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>{ o: { foo } } : { o: { foo: { bar: number; }; }; }
+>o : { foo: { bar: number; }; }
+>{ foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+
+    ({ ...this.#value } = { foo }); //ok
+>({ ...this.#value } = { foo }) : { foo: { bar: number; }; }
+>{ ...this.#value } = { foo } : { foo: { bar: number; }; }
+>{ ...this.#value } : { foo: { bar: number; }; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>{ foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+
+    ({ foo: this.#value.foo } = { foo }); //error
+>({ foo: this.#value.foo } = { foo }) : { foo: { bar: number; }; }
+>{ foo: this.#value.foo } = { foo } : { foo: { bar: number; }; }
+>{ foo: this.#value.foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+>this.#value.foo : { bar: number; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>foo : { bar: number; }
+>{ foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+
+    ({
+>({      foo: { ...this.#value.foo },    } = { foo }) : { foo: { bar: number; }; }
+>{      foo: { ...this.#value.foo },    } = { foo } : { foo: { bar: number; }; }
+>{      foo: { ...this.#value.foo },    } : { foo: { bar: number; }; }
+
+      foo: { ...this.#value.foo },
+>foo : { bar: number; }
+>{ ...this.#value.foo } : { bar: number; }
+>this.#value.foo : { bar: number; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+>foo : { bar: number; }
+
+    } = { foo }); //error
+>{ foo } : { foo: { bar: number; }; }
+>foo : { bar: number; }
+
+    let r = { o: this.#value }; //error
+>r : { o: { foo: { bar: number; }; }; }
+>{ o: this.#value } : { o: { foo: { bar: number; }; }; }
+>o : { foo: { bar: number; }; }
+>this.#value : { foo: { bar: number; }; }
+>this : this
+
+    [this.#valueOne, ...this.#valueRest] = [1, 2, 3];
+>[this.#valueOne, ...this.#valueRest] = [1, 2, 3] : [number, number, number]
+>[this.#valueOne, ...this.#valueRest] : [number, ...number[]]
+>this.#valueOne : number
+>this : this
+>...this.#valueRest : number
+>this.#valueRest : number[]
+>this : this
+>[1, 2, 3] : [number, number, number]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    let arr = [
+>arr : number[]
+>[        this.#valueOne,        ...this.#valueRest    ] : number[]
+
+        this.#valueOne,
+>this.#valueOne : number
+>this : this
+
+        ...this.#valueRest
+>...this.#valueRest : number
+>this.#valueRest : number[]
+>this : this
+
+    ];
+
+    this.#valueCompound += 3;
+>this.#valueCompound += 3 : number
+>this.#valueCompound : number
+>this : this
+>3 : 3
+  }
+}
+new Test().m();
+>new Test().m() : void
+>new Test().m : () => void
+>new Test() : Test
+>Test : typeof Test
+>m : () => void
+

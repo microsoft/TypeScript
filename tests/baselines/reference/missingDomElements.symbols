@@ -1,0 +1,43 @@
+=== tests/cases/compiler/missingDomElements.ts ===
+interface Element {}
+>Element : Symbol(Element, Decl(missingDomElements.ts, 0, 0))
+
+interface EventTarget {}
+>EventTarget : Symbol(EventTarget, Decl(missingDomElements.ts, 0, 20))
+
+interface HTMLElement {}
+>HTMLElement : Symbol(HTMLElement, Decl(missingDomElements.ts, 1, 24))
+
+interface HTMLInputElement {}
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(missingDomElements.ts, 2, 24))
+
+({} as any as Element).textContent;
+>Element : Symbol(Element, Decl(missingDomElements.ts, 0, 0))
+
+({} as any as HTMLElement).textContent;
+>HTMLElement : Symbol(HTMLElement, Decl(missingDomElements.ts, 1, 24))
+
+({} as any as HTMLInputElement).textContent;
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(missingDomElements.ts, 2, 24))
+
+({} as any as EventTarget & HTMLInputElement).textContent
+>EventTarget : Symbol(EventTarget, Decl(missingDomElements.ts, 0, 20))
+>HTMLInputElement : Symbol(HTMLInputElement, Decl(missingDomElements.ts, 2, 24))
+
+interface HTMLElementFake {}
+>HTMLElementFake : Symbol(HTMLElementFake, Decl(missingDomElements.ts, 8, 57))
+
+interface Node {
+>Node : Symbol(Node, Decl(missingDomElements.ts, 10, 28))
+
+    actuallyNotTheSame: number;    
+>actuallyNotTheSame : Symbol(Node.actuallyNotTheSame, Decl(missingDomElements.ts, 11, 16))
+
+};
+
+({} as any as HTMLElementFake).textContent;
+>HTMLElementFake : Symbol(HTMLElementFake, Decl(missingDomElements.ts, 8, 57))
+
+({} as any as Node).textContent;
+>Node : Symbol(Node, Decl(missingDomElements.ts, 10, 28))
+

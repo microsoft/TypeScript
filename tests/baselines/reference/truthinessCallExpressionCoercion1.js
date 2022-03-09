@@ -48,6 +48,21 @@ function checksPropertyAccess() {
 
     // ok
     x.foo.bar ? x.foo.bar : undefined;
+
+    var chrome = {
+        platformKeys: {
+            subtleCrypto() {
+                return {
+                    sign() {},
+                    exportKey() { return true }
+                }
+            }
+        }
+    }
+    // ok
+    if (chrome.platformKeys.subtleCrypto().exportKey) {
+        chrome.platformKeys.subtleCrypto().exportKey
+    }
 }
 
 class Foo {
@@ -110,6 +125,20 @@ function checksPropertyAccess() {
     x.foo.bar ? console.log('x.foo.bar') : undefined;
     // ok
     x.foo.bar ? x.foo.bar : undefined;
+    var chrome = {
+        platformKeys: {
+            subtleCrypto: function () {
+                return {
+                    sign: function () { },
+                    exportKey: function () { return true; }
+                };
+            }
+        }
+    };
+    // ok
+    if (chrome.platformKeys.subtleCrypto().exportKey) {
+        chrome.platformKeys.subtleCrypto().exportKey;
+    }
 }
 var Foo = /** @class */ (function () {
     function Foo() {

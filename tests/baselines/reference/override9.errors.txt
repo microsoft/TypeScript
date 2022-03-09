@@ -1,0 +1,21 @@
+tests/cases/conformance/override/override9.ts(8,5): error TS1070: 'override' modifier cannot appear on a type member.
+tests/cases/conformance/override/override9.ts(10,5): error TS1070: 'override' modifier cannot appear on a type member.
+
+
+==== tests/cases/conformance/override/override9.ts (2 errors) ====
+    interface B {
+        foo (): void
+        bar (): void
+    }
+    
+    interface D extends B {
+        foo (): void;
+        override bar(): void;
+        ~~~~~~~~
+!!! error TS1070: 'override' modifier cannot appear on a type member.
+        baz(): void;
+        override bazz(): void;
+        ~~~~~~~~
+!!! error TS1070: 'override' modifier cannot appear on a type member.
+    }
+    

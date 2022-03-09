@@ -30,6 +30,7 @@ Output::
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a.ts
 /a/lib/lib.d.ts
@@ -37,6 +38,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a.ts
 /a/lib/lib.d.ts
+
+Shape signatures in builder refreshed for::
+/a.ts (used version)
+/a/lib/lib.d.ts (used version)
 
 WatchedFiles::
 /tsconfig.json:
@@ -81,6 +86,7 @@ Output::
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a.ts
 /a/lib/lib.d.ts
@@ -88,6 +94,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a.ts
 /a/lib/lib.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /tsconfig.json:
@@ -123,6 +131,7 @@ Output::
 
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a.ts
 /a/lib/lib.d.ts
@@ -130,6 +139,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a.ts
 /a/lib/lib.d.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /tsconfig.json:

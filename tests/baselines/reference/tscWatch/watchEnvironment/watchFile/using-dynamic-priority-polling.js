@@ -27,6 +27,7 @@ Output::
 
 Program root files: ["/a/username/project/typescript.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/username/project/typescript.ts
@@ -34,6 +35,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/username/project/typescript.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/username/project/typescript.ts (used version)
 
 WatchedFiles::
 
@@ -95,6 +100,7 @@ Output::
 
 Program root files: ["/a/username/project/typescript.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/username/project/typescript.ts
@@ -102,6 +108,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/username/project/typescript.ts
+
+Shape signatures in builder refreshed for::
+/a/username/project/typescript.ts (computed .d.ts)
 
 WatchedFiles::
 

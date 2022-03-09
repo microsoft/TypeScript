@@ -1,0 +1,13 @@
+tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyPropCustomImport.tsx(3,11): error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyPropCustomImport.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    const props = { answer: 42 }
+    const a = <div key="foo" {...props}>text</div>;
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+    const b = <div {...props} key="bar">text</div>;
+    
+    export {};
+    

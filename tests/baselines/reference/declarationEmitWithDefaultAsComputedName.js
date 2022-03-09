@@ -41,7 +41,6 @@ declare type Experiment<Name> = {
 declare const _default: Experiment<"foo">;
 export default _default;
 //// [main.d.ts]
-import other from "./other";
 export declare const obj: {
     foo: number;
 };

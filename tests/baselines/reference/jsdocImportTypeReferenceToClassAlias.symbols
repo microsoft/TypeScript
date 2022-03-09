@@ -9,7 +9,7 @@ module.exports.C = C
 >module.exports.C : Symbol(C, Decl(mod1.js, 2, 1))
 >module.exports : Symbol(C, Decl(mod1.js, 2, 1))
 >module : Symbol(module, Decl(mod1.js, 2, 1))
->exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >C : Symbol(C, Decl(mod1.js, 2, 1))
 >C : Symbol(C, Decl(mod1.js, 0, 0))
 

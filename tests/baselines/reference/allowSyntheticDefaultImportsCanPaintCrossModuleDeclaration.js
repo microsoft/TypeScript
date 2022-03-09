@@ -23,7 +23,7 @@ exports.__esModule = true;
 exports.__esModule = true;
 exports.A = void 0;
 var file1_1 = require("./file1");
-exports.A = file1_1.styled();
+exports.A = (0, file1_1.styled)();
 
 
 //// [color.d.ts]

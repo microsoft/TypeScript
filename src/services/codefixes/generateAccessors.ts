@@ -4,7 +4,8 @@ namespace ts.codefix {
     type AcceptedNameType = Identifier | StringLiteral;
     type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
-    interface Info {
+    type Info = AccessorInfo | refactor.RefactorErrorInfo;
+    interface AccessorInfo {
         readonly container: ContainerDeclaration;
         readonly isStatic: boolean;
         readonly isReadonly: boolean;
@@ -16,20 +17,12 @@ namespace ts.codefix {
         readonly renameAccessor: boolean;
     }
 
-    type InfoOrError = {
-        info: Info,
-        error?: never
-    } | {
-        info?: never,
-        error: string
-    };
-
-    export function generateAccessorFromProperty(file: SourceFile, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
-        const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, start, end);
-        if (!fieldInfo || !fieldInfo.info) return undefined;
+    export function generateAccessorFromProperty(file: SourceFile, program: Program, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
+        const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, program, start, end);
+        if (!fieldInfo || refactor.isRefactorErrorInfo(fieldInfo)) return undefined;
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo.info;
+        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(accessorName);
@@ -51,7 +44,7 @@ namespace ts.codefix {
             }
         }
 
-        updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers);
+        updateFieldDeclaration(changeTracker, file, declaration, type, fieldName, fieldModifiers);
 
         const getAccessor = generateGetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
         suppressLeadingAndTrailingTrivia(getAccessor);
@@ -59,7 +52,7 @@ namespace ts.codefix {
 
         if (isReadonly) {
             // readonly modifier only existed in classLikeDeclaration
-            const constructor = getFirstConstructorWithBody(<ClassLikeDeclaration>container);
+            const constructor = getFirstConstructorWithBody(container as ClassLikeDeclaration);
             if (constructor) {
                 updateReadonlyPropertyInitializerStatementConstructor(changeTracker, file, constructor, fieldName.text, originalName);
             }
@@ -86,12 +79,8 @@ namespace ts.codefix {
     }
 
     function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
-        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : factory.createThis(); // TODO: GH#18217
+        const leftHead = isStatic ? (container as ClassLikeDeclaration).name! : factory.createThis(); // TODO: GH#18217
         return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
-    }
-
-    function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
-        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
     }
 
     function prepareModifierFlagsForAccessor(modifierFlags: ModifierFlags): ModifierFlags {
@@ -112,7 +101,7 @@ namespace ts.codefix {
         return modifierFlags;
     }
 
-    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, start: number, end: number, considerEmptySpans = true): InfoOrError | undefined {
+    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): Info | undefined {
         const node = getTokenAtPosition(file, start);
         const cursorRequest = start === end && considerEmptySpans;
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
@@ -142,17 +131,15 @@ namespace ts.codefix {
         const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
         const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
-            info: {
-                isStatic: hasStaticModifier(declaration),
-                isReadonly: hasEffectiveReadonlyModifier(declaration),
-                type: getTypeAnnotationNode(declaration),
-                container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
-                originalName: (<AcceptedNameType>declaration.name).text,
-                declaration,
-                fieldName,
-                accessorName,
-                renameAccessor: startWithUnderscore
-            }
+            isStatic: hasStaticModifier(declaration),
+            isReadonly: hasEffectiveReadonlyModifier(declaration),
+            type: getDeclarationType(declaration, program),
+            container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
+            originalName: (declaration.name as AcceptedNameType).text,
+            declaration,
+            fieldName,
+            accessorName,
+            renameAccessor: startWithUnderscore
         };
     }
 
@@ -195,14 +182,14 @@ namespace ts.codefix {
         );
     }
 
-    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
+    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
         const property = factory.updatePropertyDeclaration(
             declaration,
             declaration.decorators,
             modifiers,
             fieldName,
             declaration.questionToken || declaration.exclamationToken,
-            declaration.type,
+            type,
             declaration.initializer
         );
         changeTracker.replaceNode(file, declaration, property);
@@ -213,9 +200,9 @@ namespace ts.codefix {
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
-    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
+    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
         if (isPropertyDeclaration(declaration)) {
-            updatePropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers);
+            updatePropertyDeclaration(changeTracker, file, declaration, type, fieldName, modifiers);
         }
         else if (isPropertyAssignment(declaration)) {
             updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
@@ -227,7 +214,7 @@ namespace ts.codefix {
     }
 
     function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
-        isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor) :
+        isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertNodeAtClassStart(file, container as ClassLikeDeclaration, accessor) :
             isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
             changeTracker.insertNodeAfter(file, declaration, accessor);
     }
@@ -251,6 +238,19 @@ namespace ts.codefix {
         });
     }
 
+    function getDeclarationType(declaration: AcceptedDeclaration, program: Program): TypeNode | undefined {
+        const typeNode = getTypeAnnotationNode(declaration);
+        if (isPropertyDeclaration(declaration) && typeNode && declaration.questionToken) {
+            const typeChecker = program.getTypeChecker();
+            const type = typeChecker.getTypeFromTypeNode(typeNode);
+            if (!typeChecker.isTypeAssignableTo(typeChecker.getUndefinedType(), type)) {
+                const types = isUnionTypeNode(typeNode) ? typeNode.types : [typeNode];
+                return factory.createUnionTypeNode([...types, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+            }
+        }
+        return typeNode;
+    }
+
     export function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
         const res: ClassLikeDeclaration[] = [];
         while (decl) {
@@ -258,7 +258,7 @@ namespace ts.codefix {
             const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
             if (!superSymbol) break;
             const symbol = superSymbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(superSymbol) : superSymbol;
-            const superDecl = find(symbol.declarations, isClassLike);
+            const superDecl = symbol.declarations && find(symbol.declarations, isClassLike);
             if (!superDecl) break;
             res.push(superDecl);
             decl = superDecl;

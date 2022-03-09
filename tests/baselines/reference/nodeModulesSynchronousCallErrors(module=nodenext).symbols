@@ -1,0 +1,58 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+import {h} from "../index.js";
+>h : Symbol(h, Decl(index.ts, 1, 8))
+
+import mod = require("../index.js");
+>mod : Symbol(mod, Decl(index.ts, 1, 30))
+
+import {f as _f} from "./index.js";
+>f : Symbol(f, Decl(index.ts, 4, 36))
+>_f : Symbol(_f, Decl(index.ts, 3, 8))
+
+import mod2 = require("./index.js");
+>mod2 : Symbol(mod2, Decl(index.ts, 3, 35))
+
+export async function f() {
+>f : Symbol(f, Decl(index.ts, 4, 36))
+
+    const mod3 = await import ("../index.js");
+>mod3 : Symbol(mod3, Decl(index.ts, 6, 9))
+>"../index.js" : Symbol(mod, Decl(index.ts, 0, 0))
+
+    const mod4 = await import ("./index.js");
+>mod4 : Symbol(mod4, Decl(index.ts, 7, 9))
+>"./index.js" : Symbol(mod2, Decl(index.ts, 0, 0))
+
+    h();
+>h : Symbol(h, Decl(index.ts, 1, 8))
+}
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import {h as _h} from "./index.js";
+>h : Symbol(h, Decl(index.ts, 4, 46))
+>_h : Symbol(_h, Decl(index.ts, 1, 8))
+
+import mod = require("./index.js");
+>mod : Symbol(mod, Decl(index.ts, 1, 35))
+
+import {f} from "./subfolder/index.js";
+>f : Symbol(f, Decl(index.ts, 3, 8))
+
+import mod2 = require("./subfolder/index.js");
+>mod2 : Symbol(mod2, Decl(index.ts, 3, 39))
+
+export async function h() {
+>h : Symbol(h, Decl(index.ts, 4, 46))
+
+    const mod3 = await import ("./index.js");
+>mod3 : Symbol(mod3, Decl(index.ts, 6, 9))
+>"./index.js" : Symbol(mod, Decl(index.ts, 0, 0))
+
+    const mod4 = await import ("./subfolder/index.js");
+>mod4 : Symbol(mod4, Decl(index.ts, 7, 9))
+>"./subfolder/index.js" : Symbol(mod2, Decl(index.ts, 0, 0))
+
+    f();
+>f : Symbol(f, Decl(index.ts, 3, 8))
+}

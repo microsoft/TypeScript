@@ -41,9 +41,12 @@ Output::
 
 Program root files: []
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program structureReused: Not
 Program files::
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/tsconfig.json:

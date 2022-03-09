@@ -1,6 +1,0 @@
-=== tests/cases/compiler/jsxFactoryAndFragment.tsx ===
-declare var h: any;
->h : Symbol(h, Decl(jsxFactoryAndFragment.tsx, 0, 11))
-
-<></>;
-<><span>1</span><><span>2.1</span><span>2.2</span></></>;

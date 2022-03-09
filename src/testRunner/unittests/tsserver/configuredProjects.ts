@@ -810,12 +810,12 @@ namespace ts.projectSystem {
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
             const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand({
                 seq: 0,
                 type: "request",
                 command: "open",
                 arguments: { file: f1.path }
-            });
+            } as protocol.OpenRequest);
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -879,9 +879,10 @@ declare var console: {
 };`
             };
             const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
-            const session = createSession(host, { canUseEvents: true, });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([fooIndex, barIndex], session);
-            verifyGetErrRequestNoErrors({ session, host, files: [barIndex, fooIndex] });
+            verifyGetErrRequest({ session, host, files: [barIndex, fooIndex] });
+            baselineTsserverLogs("configuredProjects", "when multiple projects are open detects correct default project", session);
         });
 
         it("when file name starts with ^", () => {
@@ -921,7 +922,7 @@ declare var console: {
                 path: `${tscWatch.projectRoot}/src/sub/fooBar.ts`,
                 content: "export function fooBar() { }"
             };
-            function verifySessionWorker({ withExclude, openFileBeforeCreating, checkProjectBeforeError, checkProjectAfterError, }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+            function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
                 const host = createServerHost([
                     foo, bar, libFile, { path: `${tscWatch.projectRoot}/src/sub` },
                     withExclude ?
@@ -935,7 +936,8 @@ declare var console: {
                         config
                 ]);
                 const session = createSession(host, {
-                    canUseEvents: true
+                    canUseEvents: true,
+                    logger: createLoggerWithInMemoryLogs(),
                 });
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: protocol.CommandTypes.Open,
@@ -959,9 +961,7 @@ declare var console: {
                 if (openFileBeforeCreating) {
                     host.writeFile(fooBar.path, fooBar.content);
                 }
-                const service = session.getProjectService();
-                checkProjectBeforeError(service);
-                verifyGetErrRequestNoErrors({
+                verifyGetErrRequest({
                     session,
                     host,
                     files: errorOnNewFileBeforeOldFile ?
@@ -969,13 +969,11 @@ declare var console: {
                         [foo, fooBar],
                     existingTimeouts: withExclude ? 0 : 2
                 });
-                checkProjectAfterError(service);
+                baselineTsserverLogs("configuredProjects", `creating new file and then open it ${openFileBeforeCreating ? "before" : "after"} watcher is invoked, ask errors on it ${errorOnNewFileBeforeOldFile ? "before" : "after"} old one${withExclude ? " without file being in config" : ""}`, session);
             }
             interface VerifySession {
                 withExclude?: boolean;
                 openFileBeforeCreating: boolean;
-                checkProjectBeforeError: (service: server.ProjectService) => void;
-                checkProjectAfterError: (service: server.ProjectService) => void;
             }
             function verifySession(input: VerifySession) {
                 it("when error on new file are asked before old one", () => {
@@ -986,27 +984,14 @@ declare var console: {
                     verifySessionWorker(input, /*errorOnNewFileBeforeOldFile*/ false);
                 });
             }
-            function checkFooBarInInferredProject(service: server.ProjectService) {
-                checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, libFile.path, config.path]);
-                checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
-            }
-            function checkFooBarInConfiguredProject(service: server.ProjectService) {
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
-            }
             describe("when new file creation directory watcher is invoked before file is opened in editor", () => {
                 verifySession({
                     openFileBeforeCreating: false,
-                    checkProjectBeforeError: checkFooBarInConfiguredProject,
-                    checkProjectAfterError: checkFooBarInConfiguredProject
                 });
                 describe("when new file is excluded from config", () => {
                     verifySession({
                         withExclude: true,
                         openFileBeforeCreating: false,
-                        checkProjectBeforeError: checkFooBarInInferredProject,
-                        checkProjectAfterError: checkFooBarInInferredProject
                     });
                 });
             });
@@ -1014,23 +999,11 @@ declare var console: {
             describe("when new file creation directory watcher is invoked after file is opened in editor", () => {
                 verifySession({
                     openFileBeforeCreating: true,
-                    checkProjectBeforeError: checkFooBarInInferredProject,
-                    checkProjectAfterError: service => {
-                        // Both projects exist but fooBar is in configured project after the update
-                        // Inferred project is yet to be updated so still has fooBar
-                        checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
-                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
-                        checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
-                        assert.isTrue(service.inferredProjects[0].dirty);
-                        assert.equal(service.inferredProjects[0].getRootFilesMap().size, 0);
-                    }
                 });
                 describe("when new file is excluded from config", () => {
                     verifySession({
                         withExclude: true,
                         openFileBeforeCreating: true,
-                        checkProjectBeforeError: checkFooBarInInferredProject,
-                        checkProjectAfterError: checkFooBarInInferredProject
                     });
                 });
             });
@@ -1093,6 +1066,137 @@ foo();`
             });
             assert.equal(service.tryGetDefaultProjectForFile(server.toNormalizedPath(fooDts)), service.configuredProjects.get(barConfig.path));
         });
+
+        describe("watches extended config files", () => {
+            function getService(additionalFiles?: File[]) {
+                const alphaExtendedConfig: File = {
+                    path: `${tscWatch.projectRoot}/extended/alpha.tsconfig.json`,
+                    content: "{}"
+                };
+                const bravoExtendedConfig: File = {
+                    path: `${tscWatch.projectRoot}/extended/bravo.tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json"
+                    })
+                };
+                const aConfig: File = {
+                    path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "../extended/alpha.tsconfig.json",
+                        files: ["a.ts"]
+                    })
+                };
+                const aFile: File = {
+                    path: `${tscWatch.projectRoot}/a/a.ts`,
+                    content: `let a = 1;`
+                };
+                const bConfig: File = {
+                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "../extended/bravo.tsconfig.json",
+                        files: ["b.ts"]
+                    })
+                };
+                const bFile: File = {
+                    path: `${tscWatch.projectRoot}/b/b.ts`,
+                    content: `let b = 1;`
+                };
+
+                const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || emptyArray)]);
+                const projectService = createProjectService(host);
+                return { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
+            }
+
+            it("should watch the extended configs of multiple projects", () => {
+                const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService();
+
+                projectService.openClientFile(aFile.path);
+                projectService.openClientFile(bFile.path);
+                checkNumberOfConfiguredProjects(projectService, 2);
+                const aProject = projectService.configuredProjects.get(aConfig.path)!;
+                const bProject = projectService.configuredProjects.get(bConfig.path)!;
+                checkProjectActualFiles(aProject, [aFile.path, aConfig.path, alphaExtendedConfig.path]);
+                checkProjectActualFiles(bProject, [bFile.path, bConfig.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+                assert.isUndefined(aProject.getCompilerOptions().strict);
+                assert.isUndefined(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+                host.writeFile(alphaExtendedConfig.path, JSON.stringify({
+                    compilerOptions: {
+                        strict: true
+                    }
+                }));
+                assert.isTrue(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(3);
+                assert.isTrue(aProject.getCompilerOptions().strict);
+                assert.isTrue(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+                host.writeFile(bravoExtendedConfig.path, JSON.stringify({
+                    extends: "./alpha.tsconfig.json",
+                    compilerOptions: {
+                        strict: false
+                    }
+                }));
+                assert.isFalse(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(2);
+                assert.isTrue(aProject.getCompilerOptions().strict);
+                assert.isFalse(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+                host.writeFile(bConfig.path, JSON.stringify({
+                    extends: "../extended/alpha.tsconfig.json",
+                }));
+                assert.isFalse(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(2);
+                assert.isTrue(aProject.getCompilerOptions().strict);
+                assert.isTrue(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, alphaExtendedConfig.path]);
+
+                host.writeFile(alphaExtendedConfig.path, "{}");
+                assert.isTrue(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(3);
+                assert.isUndefined(aProject.getCompilerOptions().strict);
+                assert.isUndefined(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, alphaExtendedConfig.path]);
+            });
+
+            it("should stop watching the extended configs of closed projects", () => {
+                const dummy: File = {
+                    path: `${tscWatch.projectRoot}/dummy/dummy.ts`,
+                    content: `let dummy = 1;`
+                };
+                const dummyConfig: File = {
+                    path: `${tscWatch.projectRoot}/dummy/tsconfig.json`,
+                    content: "{}"
+                };
+                const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService([dummy, dummyConfig]);
+
+                projectService.openClientFile(aFile.path);
+                projectService.openClientFile(bFile.path);
+                projectService.openClientFile(dummy.path);
+                checkNumberOfConfiguredProjects(projectService, 3);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path, dummyConfig.path]);
+
+                projectService.closeClientFile(bFile.path);
+                projectService.closeClientFile(dummy.path);
+                projectService.openClientFile(dummy.path);
+
+                checkNumberOfConfiguredProjects(projectService, 2);
+                checkWatchedFiles(host, [aConfig.path, libFile.path, alphaExtendedConfig.path, dummyConfig.path]);
+
+                projectService.closeClientFile(aFile.path);
+                projectService.closeClientFile(dummy.path);
+                projectService.openClientFile(dummy.path);
+
+                checkNumberOfConfiguredProjects(projectService, 1);
+                checkWatchedFiles(host, [libFile.path, dummyConfig.path]);
+            });
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {
@@ -1117,8 +1221,8 @@ foo();`
             // Since file1 refers to config file as the default project, it needs to be kept alive
             checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             const inferredProject = projectService.inferredProjects[0];
-            assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
-            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(<server.NormalizedPath>file1.path));
+            assert.isTrue(inferredProject.containsFile(file1.path as server.NormalizedPath));
+            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(file1.path as server.NormalizedPath));
         });
 
         it("should be able to handle @types if input file list is empty", () => {

@@ -6,11 +6,11 @@ type Maybe<T> = T | undefined;
 
 declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
 >concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
->args : (T | Maybe<T>[] | undefined)[]
+>args : (Maybe<T> | Maybe<T>[])[]
 
 concatMaybe([1, 2, 3], 4);
 >concatMaybe([1, 2, 3], 4) : number[]
->concatMaybe : <T>(...args: (T | Maybe<T>[] | undefined)[]) => T[]
+>concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
@@ -163,7 +163,7 @@ declare function withRouter<
   C extends ComponentType<P>
 >(
   component: C & ComponentType<P>
->component : (C & FunctionComponent<P>) | (C & ComponentClass<P>)
+>component : C & ComponentType<P>
 
 ): ComponentClass<Omit<P, keyof RouteComponentProps>>;
 
@@ -174,8 +174,8 @@ declare const MyComponent: ComponentType<Props>;
 >MyComponent : ComponentType<Props>
 
 withRouter(MyComponent);
->withRouter(MyComponent) : ComponentClass<Pick<Props, "username">>
->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: (C & FunctionComponent<P>) | (C & ComponentClass<P>)) => ComponentClass<Pick<P, Exclude<keyof P, "route">>>
+>withRouter(MyComponent) : ComponentClass<Omit<Props, "route">>
+>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, "route">>
 >MyComponent : ComponentType<Props>
 
 // Repro from #33490
@@ -188,14 +188,14 @@ type AB<T> = { a: T } | { b: T };
 // T & AB<U> normalizes to T & { a: U } | T & { b: U } below
 declare function foo<T, U>(obj: T & AB<U>): [T, U];
 >foo : <T, U>(obj: T & AB<U>) => [T, U]
->obj : (T & { a: U; }) | (T & { b: U; })
+>obj : T & AB<U>
 
 declare let ab: AB<string>;
 >ab : AB<string>
 
 let z = foo(ab);  // [AB<string>, string]
->z : [AB<string>, string]
->foo(ab) : [AB<string>, string]
->foo : <T, U>(obj: (T & { a: U; }) | (T & { b: U; })) => [T, U]
+>z : [{ a: string; } | { b: string; }, string]
+>foo(ab) : [{ a: string; } | { b: string; }, string]
+>foo : <T, U>(obj: T & AB<U>) => [T, U]
 >ab : AB<string>
 

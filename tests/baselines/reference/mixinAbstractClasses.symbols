@@ -1,0 +1,88 @@
+=== tests/cases/conformance/classes/mixinAbstractClasses.ts ===
+interface Mixin {
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
+
+    mixinMethod(): void;
+>mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.ts, 0, 17))
+}
+
+function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
+>TBaseClass : Symbol(TBaseClass, Decl(mixinAbstractClasses.ts, 4, 15))
+>args : Symbol(args, Decl(mixinAbstractClasses.ts, 4, 48))
+>baseClass : Symbol(baseClass, Decl(mixinAbstractClasses.ts, 4, 70))
+>TBaseClass : Symbol(TBaseClass, Decl(mixinAbstractClasses.ts, 4, 15))
+>TBaseClass : Symbol(TBaseClass, Decl(mixinAbstractClasses.ts, 4, 15))
+>args : Symbol(args, Decl(mixinAbstractClasses.ts, 4, 122))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
+
+    abstract class MixinClass extends baseClass implements Mixin {
+>MixinClass : Symbol(MixinClass, Decl(mixinAbstractClasses.ts, 4, 147))
+>baseClass : Symbol(baseClass, Decl(mixinAbstractClasses.ts, 4, 70))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
+
+        mixinMethod() {
+>mixinMethod : Symbol(MixinClass.mixinMethod, Decl(mixinAbstractClasses.ts, 5, 66))
+        }
+    }
+    return MixinClass;
+>MixinClass : Symbol(MixinClass, Decl(mixinAbstractClasses.ts, 4, 147))
+}
+
+class ConcreteBase {
+>ConcreteBase : Symbol(ConcreteBase, Decl(mixinAbstractClasses.ts, 10, 1))
+
+    baseMethod() {}
+>baseMethod : Symbol(ConcreteBase.baseMethod, Decl(mixinAbstractClasses.ts, 12, 20))
+}
+
+abstract class AbstractBase {
+>AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClasses.ts, 14, 1))
+
+    abstract abstractBaseMethod(): void;
+>abstractBaseMethod : Symbol(AbstractBase.abstractBaseMethod, Decl(mixinAbstractClasses.ts, 16, 29))
+}
+
+class DerivedFromConcrete extends Mixin(ConcreteBase) {
+>DerivedFromConcrete : Symbol(DerivedFromConcrete, Decl(mixinAbstractClasses.ts, 18, 1))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
+>ConcreteBase : Symbol(ConcreteBase, Decl(mixinAbstractClasses.ts, 10, 1))
+}
+
+const wasConcrete = new DerivedFromConcrete();
+>wasConcrete : Symbol(wasConcrete, Decl(mixinAbstractClasses.ts, 23, 5))
+>DerivedFromConcrete : Symbol(DerivedFromConcrete, Decl(mixinAbstractClasses.ts, 18, 1))
+
+wasConcrete.baseMethod();
+>wasConcrete.baseMethod : Symbol(ConcreteBase.baseMethod, Decl(mixinAbstractClasses.ts, 12, 20))
+>wasConcrete : Symbol(wasConcrete, Decl(mixinAbstractClasses.ts, 23, 5))
+>baseMethod : Symbol(ConcreteBase.baseMethod, Decl(mixinAbstractClasses.ts, 12, 20))
+
+wasConcrete.mixinMethod();
+>wasConcrete.mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.ts, 0, 17))
+>wasConcrete : Symbol(wasConcrete, Decl(mixinAbstractClasses.ts, 23, 5))
+>mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.ts, 0, 17))
+
+class DerivedFromAbstract extends Mixin(AbstractBase) {
+>DerivedFromAbstract : Symbol(DerivedFromAbstract, Decl(mixinAbstractClasses.ts, 25, 26))
+>Mixin : Symbol(Mixin, Decl(mixinAbstractClasses.ts, 2, 1), Decl(mixinAbstractClasses.ts, 0, 0))
+>AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClasses.ts, 14, 1))
+
+    abstractBaseMethod() {}
+>abstractBaseMethod : Symbol(DerivedFromAbstract.abstractBaseMethod, Decl(mixinAbstractClasses.ts, 27, 55))
+}
+
+const wasAbstract = new DerivedFromAbstract();
+>wasAbstract : Symbol(wasAbstract, Decl(mixinAbstractClasses.ts, 31, 5))
+>DerivedFromAbstract : Symbol(DerivedFromAbstract, Decl(mixinAbstractClasses.ts, 25, 26))
+
+wasAbstract.abstractBaseMethod();
+>wasAbstract.abstractBaseMethod : Symbol(DerivedFromAbstract.abstractBaseMethod, Decl(mixinAbstractClasses.ts, 27, 55))
+>wasAbstract : Symbol(wasAbstract, Decl(mixinAbstractClasses.ts, 31, 5))
+>abstractBaseMethod : Symbol(DerivedFromAbstract.abstractBaseMethod, Decl(mixinAbstractClasses.ts, 27, 55))
+
+wasAbstract.mixinMethod();
+>wasAbstract.mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.ts, 0, 17))
+>wasAbstract : Symbol(wasAbstract, Decl(mixinAbstractClasses.ts, 31, 5))
+>mixinMethod : Symbol(Mixin.mixinMethod, Decl(mixinAbstractClasses.ts, 0, 17))
+

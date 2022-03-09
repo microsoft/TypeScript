@@ -9,7 +9,7 @@ exports = module.exports = webpack;
 >exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
 >module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
 >module.exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
->module : { "\"tests/cases/conformance/salsa/bug24754\"": { (): void; WebpackOptionsDefaulter: number; version: 1001; }; }
+>module : { exports: { (): void; WebpackOptionsDefaulter: number; version: 1001; }; }
 >exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
 

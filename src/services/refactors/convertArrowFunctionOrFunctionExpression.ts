@@ -3,15 +3,30 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     const refactorName = "Convert arrow function or function expression";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
-    const toAnonymousFunctionActionName = "Convert to anonymous function";
-    const toNamedFunctionActionName = "Convert to named function";
-    const toArrowFunctionActionName = "Convert to arrow function";
-
-    const toAnonymousFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_anonymous_function);
-    const toNamedFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_named_function);
-    const toArrowFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function);
-
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const toAnonymousFunctionAction = {
+        name: "Convert to anonymous function",
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_anonymous_function),
+        kind: "refactor.rewrite.function.anonymous",
+    };
+    const toNamedFunctionAction = {
+        name: "Convert to named function",
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_named_function),
+        kind: "refactor.rewrite.function.named",
+    };
+    const toArrowFunctionAction = {
+        name: "Convert to arrow function",
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function),
+        kind: "refactor.rewrite.function.arrow",
+    };
+    registerRefactor(refactorName, {
+        kinds: [
+            toAnonymousFunctionAction.kind,
+            toNamedFunctionAction.kind,
+            toArrowFunctionAction.kind
+        ],
+        getEditsForAction: getRefactorEditsToConvertFunctionExpressions,
+        getAvailableActions: getRefactorActionsToConvertFunctionExpressions
+    });
 
     interface FunctionInfo {
         readonly selectedVariableDeclaration: boolean;
@@ -25,43 +40,55 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         readonly name: Identifier;
     }
 
-    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition, program } = context;
+    function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+        const { file, startPosition, program, kind } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
         if (!info) return emptyArray;
         const { selectedVariableDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
-
-        if (selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent))) {
-            possibleActions.push({
-                name: toNamedFunctionActionName,
-                description: toNamedFunctionActionDescription
-            });
+        const errors: RefactorActionInfo[] = [];
+        if (refactorKindBeginsWith(toNamedFunctionAction.kind, kind)) {
+            const error = selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent)) ?
+                undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_named_function);
+            if (error) {
+                errors.push({ ...toNamedFunctionAction, notApplicableReason: error });
+            }
+            else {
+                possibleActions.push(toNamedFunctionAction);
+            }
         }
 
-        if (!selectedVariableDeclaration && isArrowFunction(func)) {
-            possibleActions.push({
-                name: toAnonymousFunctionActionName,
-                description: toAnonymousFunctionActionDescription
-            });
+        if (refactorKindBeginsWith(toAnonymousFunctionAction.kind, kind)) {
+            const error = !selectedVariableDeclaration && isArrowFunction(func) ?
+                undefined: getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
+            if (error) {
+                errors.push({ ...toAnonymousFunctionAction, notApplicableReason: error });
+            }
+            else {
+                possibleActions.push(toAnonymousFunctionAction);
+            }
         }
 
-        if (isFunctionExpression(func)) {
-            possibleActions.push({
-                name: toArrowFunctionActionName,
-                description: toArrowFunctionActionDescription
-            });
+        if (refactorKindBeginsWith(toArrowFunctionAction.kind, kind)) {
+            const error = isFunctionExpression(func) ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
+            if (error) {
+                errors.push({ ...toArrowFunctionAction, notApplicableReason: error });
+            }
+            else {
+                possibleActions.push(toArrowFunctionAction);
+            }
         }
 
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: possibleActions
+            actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason ?
+                errors : possibleActions
         }];
     }
 
-    function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
+    function getRefactorEditsToConvertFunctionExpressions(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition, program } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
@@ -70,18 +97,18 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const edits: FileTextChanges[] = [];
 
         switch (actionName) {
-            case toAnonymousFunctionActionName:
+            case toAnonymousFunctionAction.name:
                 edits.push(...getEditInfoForConvertToAnonymousFunction(context, func));
                 break;
 
-            case toNamedFunctionActionName:
+            case toNamedFunctionAction.name:
                 const variableInfo = getVariableInfo(func);
                 if (!variableInfo) return undefined;
 
                 edits.push(...getEditInfoForConvertToNamedFunction(context, func, variableInfo));
                 break;
 
-            case toArrowFunctionActionName:
+            case toArrowFunctionAction.name:
                 if (!isFunctionExpression(func)) return undefined;
                 edits.push(...getEditInfoForConvertToArrowFunction(context, func));
                 break;
@@ -112,20 +139,21 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function getFunctionInfo(file: SourceFile, startPosition: number, program: Program): FunctionInfo | undefined {
         const token = getTokenAtPosition(file, startPosition);
-
-        const arrowFunc = getArrowFunctionFromVariableDeclaration(token.parent);
-        if (arrowFunc && !containingThis(arrowFunc.body)) return { selectedVariableDeclaration: true, func: arrowFunc };
+        const typeChecker = program.getTypeChecker();
+        const func = tryGetFunctionFromVariableDeclaration(file, typeChecker, token.parent);
+        if (func && !containingThis(func.body) && !typeChecker.containsArgumentsReference(func)) {
+            return { selectedVariableDeclaration: true, func };
+        }
 
         const maybeFunc = getContainingFunction(token);
-        const typeChecker = program.getTypeChecker();
-
         if (
             maybeFunc &&
             (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) &&
             !rangeContainsRange(maybeFunc.body, token) &&
-            !containingThis(maybeFunc.body)
+            !containingThis(maybeFunc.body) &&
+            !typeChecker.containsArgumentsReference(maybeFunc)
         ) {
-            if ((isFunctionExpression(maybeFunc) && maybeFunc.name && FindAllReferences.Core.isSymbolReferencedInFile(maybeFunc.name, typeChecker, file))) return undefined;
+            if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
             return { selectedVariableDeclaration: false, func: maybeFunc };
         }
 
@@ -136,18 +164,25 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1);
     }
 
-    function getArrowFunctionFromVariableDeclaration(parent: Node): ArrowFunction | undefined {
-        if (!isSingleVariableDeclaration(parent)) return undefined;
-        const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
-
+    function tryGetFunctionFromVariableDeclaration(sourceFile: SourceFile, typeChecker: TypeChecker, parent: Node): ArrowFunction | FunctionExpression | undefined {
+        if (!isSingleVariableDeclaration(parent)) {
+            return undefined;
+        }
+        const variableDeclaration = isVariableDeclaration(parent) ? parent : first(parent.declarations);
         const initializer = variableDeclaration.initializer;
-        if (!initializer || !isArrowFunction(initializer)) return undefined;
-        return initializer;
+        if (initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))) {
+            return initializer;
+        }
+        return undefined;
     }
 
     function convertToBlock(body: ConciseBody): Block {
         if (isExpression(body)) {
-            return factory.createBlock([factory.createReturnStatement(body)], /* multiLine */ true);
+            const returnStatement = factory.createReturnStatement(body);
+            const file = body.getSourceFile();
+            suppressLeadingAndTrailingTrivia(returnStatement);
+            copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
+            return factory.createBlock([returnStatement], /* multiLine */ true);
         }
         else {
             return body;
@@ -178,7 +213,10 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
         const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
         suppressLeadingTrivia(statement);
-        const newNode = factory.createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
+
+        const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) | getEffectiveModifierFlags(func);
+        const modifiers = factory.createModifiersFromModifierFlags(modifiersFlags);
+        const newNode = factory.createFunctionDeclaration(func.decorators, length(modifiers) ? modifiers : undefined, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
 
         if (variableDeclarationList.declarations.length === 1) {
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
@@ -212,5 +250,9 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
         return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression));
+    }
+
+    function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {
+        return !!node.name && FindAllReferences.Core.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
     }
 }

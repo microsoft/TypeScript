@@ -1,0 +1,19 @@
+=== tests/cases/compiler/js/versions.static.js ===
+export default {
+    "@a/b": "1.0.0",
+>"@a/b" : Symbol("@a/b", Decl(versions.static.js, 0, 16))
+
+    "@a/c": "1.2.3"
+>"@a/c" : Symbol("@a/c", Decl(versions.static.js, 1, 20))
+
+};
+=== tests/cases/compiler/js/index.js ===
+import versions from './versions.static.js';
+>versions : Symbol(versions, Decl(index.js, 0, 6))
+
+export {
+    versions
+>versions : Symbol(versions, Decl(index.js, 2, 8))
+
+};
+

@@ -6,10 +6,10 @@ type Diff<T extends keyof any, U extends keyof any> =
 >x : string
 
 type Omit<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>
->Omit : Pick<U, Diff<keyof U, K>>
+>Omit : Omit<U, K>
 
 type Omit1<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>;
->Omit1 : Pick<U, Diff<keyof U, K>>
+>Omit1 : Omit1<U, K>
 
 // is in fact an equivalent of
 
@@ -17,12 +17,12 @@ type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
 >Omit2 : Omit2<T, K>
 
 type O = Omit<{ a: number, b: string }, 'a'>
->O : Pick<{ a: number; b: string; }, "b">
+>O : O
 >a : number
 >b : string
 
 export const o: O = { b: '' }
->o : Pick<{ a: number; b: string; }, "b">
+>o : O
 >{ b: '' } : { b: string; }
 >b : string
 >'' : ""

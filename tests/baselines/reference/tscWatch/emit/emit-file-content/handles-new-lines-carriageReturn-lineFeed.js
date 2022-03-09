@@ -28,6 +28,7 @@ Output::
 
 Program root files: ["/a/app.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/app.ts
@@ -35,6 +36,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/app.ts (used version)
 
 WatchedFiles::
 /a/app.ts:
@@ -73,6 +78,7 @@ Output::
 
 Program root files: ["/a/app.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/app.ts
@@ -80,6 +86,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/app.ts
+
+Shape signatures in builder refreshed for::
+/a/app.ts (computed .d.ts)
 
 WatchedFiles::
 /a/app.ts:

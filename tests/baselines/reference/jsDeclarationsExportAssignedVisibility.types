@@ -22,7 +22,7 @@ class Container {
 module.exports = Container;
 >module.exports = Container : typeof Container
 >module.exports : typeof Container
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof Container; }
+>module : { exports: typeof Container; }
 >exports : typeof Container
 >Container : typeof Container
 
@@ -30,7 +30,7 @@ module.exports = Container;
 module.exports = class Obj {
 >module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
->module : { "\"tests/cases/conformance/jsdoc/declarations/obj\"": typeof import("tests/cases/conformance/jsdoc/declarations/obj"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/obj"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
 >class Obj {    constructor() {        this.x = 12;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
 >Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")

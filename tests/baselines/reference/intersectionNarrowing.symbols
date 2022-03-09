@@ -1,0 +1,89 @@
+=== tests/cases/conformance/types/intersection/intersectionNarrowing.ts ===
+// Repros from #43130
+
+function f1<T>(x: T & string | T & undefined) {
+>f1 : Symbol(f1, Decl(intersectionNarrowing.ts, 0, 0))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 2, 12))
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 2, 15))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 2, 12))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 2, 12))
+
+    if (x) {
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 2, 15))
+
+        x;  // Should narrow to T & string
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 2, 15))
+    }
+}
+
+function f2<T>(x: T & string | T & undefined) {
+>f2 : Symbol(f2, Decl(intersectionNarrowing.ts, 6, 1))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 8, 12))
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 8, 15))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 8, 12))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 8, 12))
+
+    if (x !== undefined) {
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 8, 15))
+>undefined : Symbol(undefined)
+
+        x;  // Should narrow to T & string
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 8, 15))
+    }
+    else {
+        x;  // Should narrow to T & undefined
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 8, 15))
+    }
+}
+
+function f3<T>(x: T & string | T & number) {
+>f3 : Symbol(f3, Decl(intersectionNarrowing.ts, 15, 1))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 17, 12))
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 17, 15))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 17, 12))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 17, 12))
+
+    if (typeof x === "string") {
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 17, 15))
+
+        x;  // Should narrow to T & string
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 17, 15))
+    }
+    else {
+        x;  // Should narrow to T & number
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 17, 15))
+    }
+}
+
+function f4<T>(x: T & 1 | T & 2) {
+>f4 : Symbol(f4, Decl(intersectionNarrowing.ts, 24, 1))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 26, 12))
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 26, 15))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 26, 12))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 26, 12))
+
+    switch (x) {
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 26, 15))
+
+        case 1: x; break;  // T & 1
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 26, 15))
+
+        case 2: x; break;  // T & 2
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 26, 15))
+
+        default: x;  // Should narrow to never
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 26, 15))
+    }
+}
+
+function f5<T extends string | number>(x: T & number) {
+>f5 : Symbol(f5, Decl(intersectionNarrowing.ts, 32, 1))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 34, 12))
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 34, 39))
+>T : Symbol(T, Decl(intersectionNarrowing.ts, 34, 12))
+
+    const t1 = x === "hello";  // Should be an error
+>t1 : Symbol(t1, Decl(intersectionNarrowing.ts, 35, 9))
+>x : Symbol(x, Decl(intersectionNarrowing.ts, 34, 39))
+}
+

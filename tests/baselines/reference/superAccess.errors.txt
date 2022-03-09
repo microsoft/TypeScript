@@ -1,4 +1,4 @@
-tests/cases/compiler/superAccess.ts(9,24): error TS2576: Property 'S1' is a static member of type 'MyBase'.
+tests/cases/compiler/superAccess.ts(9,24): error TS2576: Property 'S1' does not exist on type 'MyBase'. Did you mean to access the static member 'MyBase.S1' instead?
 tests/cases/compiler/superAccess.ts(10,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/compiler/superAccess.ts(11,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
@@ -14,7 +14,7 @@ tests/cases/compiler/superAccess.ts(11,24): error TS2340: Only public and protec
         foo() {
             var l3 = super.S1;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
                            ~~
-!!! error TS2576: Property 'S1' is a static member of type 'MyBase'.
+!!! error TS2576: Property 'S1' does not exist on type 'MyBase'. Did you mean to access the static member 'MyBase.S1' instead?
             var l4 = super.S2;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
                            ~~
 !!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.

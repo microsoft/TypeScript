@@ -52,7 +52,7 @@ module.exports.bothBefore = 'string'
 >module.exports.bothBefore = 'string' : "string"
 >module.exports.bothBefore : number | "string"
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
->module : { "\"tests/cases/conformance/salsa/mod1\"": { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 >bothBefore : number | "string"
 >'string' : "string"
@@ -60,7 +60,7 @@ module.exports.bothBefore = 'string'
 module.exports = {
 >module.exports = {    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
->module : { "\"tests/cases/conformance/salsa/mod1\"": { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 >{    justExport: 1,    bothBefore: 2,    bothAfter: 3,} : { justExport: number; bothBefore: number; bothAfter: number; }
 
@@ -80,7 +80,7 @@ module.exports.bothAfter = 'string'
 >module.exports.bothAfter = 'string' : "string"
 >module.exports.bothAfter : number | "string"
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
->module : { "\"tests/cases/conformance/salsa/mod1\"": { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 >bothAfter : number | "string"
 >'string' : "string"
@@ -89,7 +89,7 @@ module.exports.justProperty = 'string'
 >module.exports.justProperty = 'string' : "string"
 >module.exports.justProperty : "string"
 >module.exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
->module : { "\"tests/cases/conformance/salsa/mod1\"": { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
+>module : { exports: { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }; }
 >exports : { justExport: number; bothBefore: number | "string"; bothAfter: number | "string"; justProperty: "string"; }
 >justProperty : "string"
 >'string' : "string"
