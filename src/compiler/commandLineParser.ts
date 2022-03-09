@@ -884,6 +884,17 @@ namespace ts {
             description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
             defaultValueDescription: false,
         },
+        {
+            name: "moduleSuffixes",
+            type: "list",
+            element: {
+                name: "suffix",
+                type: "string"
+            },
+            affectsModuleResolution: true,
+            category: Diagnostics.Modules,
+            description: Diagnostics.List_of_file_name_suffixes_to_search_when_resolving_a_module,
+        },
 
         // Source Maps
         {
