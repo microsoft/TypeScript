@@ -782,8 +782,7 @@ namespace ts.Completions {
             }
         }
 
-        if (preferences.includeCompletionsWithInsertText
-            && origin && originIsObjectLiteralMethod(origin)) {
+        if (origin && originIsObjectLiteralMethod(origin)) {
             const objectLiteral = cast(tryGetObjectLikeCompletionContainer(contextToken), isObjectLiteralExpression);
             let importAdder;
             const entry = getEntryForObjectLiteralMethodCompletion(symbol, name, objectLiteral, program, host, options, preferences, formatContext);
@@ -2771,10 +2770,10 @@ namespace ts.Completions {
         }
 
         /* Mutates `symbols` and `symbolToOriginInfoMap`. */
-        function collectObjectLiteralMethodSymbols(members: Symbol[]) {
+        function collectObjectLiteralMethodSymbols(members: Symbol[]): void {
             // TODO: support JS files.
             if (isInJSFile(location)) {
-                return false;
+                return;
             }
             members = members.slice(); // Needed in case `symbol` and `members` are the same array.
             for (const member of members) {
@@ -3042,7 +3041,7 @@ namespace ts.Completions {
                 // Add filtered items to the completion list
                 const filteredMembers = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
                 symbols = concatenate(symbols, filteredMembers);
-                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+                if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression && preferences.includeCompletionsWithInsertText) {
                     collectObjectLiteralMethodSymbols(filteredMembers);
                 }
             }
